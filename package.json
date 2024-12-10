@@ -1,0 +1,62 @@
+{
+  "name": "reactie",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "files": [
+    "dist/**/*",
+    "esm/**/*"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier:fix": "prettier --write .",
+    "test": "vitest run",
+    "test:coverage": "yarn vitest run --coverage",
+    "prepack": "tsup"
+  },
+  "publishConfig": {
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "module": "./esm/index.mjs",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./esm/index.mjs",
+        "require": "./dist/index.js"
+      },
+      "./package.json": "./package.json"
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.1.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.0",
+    "@types/react": "^19.0.1",
+    "@vitest/coverage-v8": "^2.1.8",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "globals": "^15.13.0",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.4.2",
+    "prettier-plugin-sort-re-exports": "^0.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vitest": "^2.1.8"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "packageManager": "yarn@4.5.3"
+}
