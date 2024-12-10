@@ -1,0 +1,21 @@
+# yarn
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# build
+dist
+esm
+
+# caches
+node_modules
+
+# output of 'npm pack'
+*.tgz
+
+# output of 'vitest run --coverage'
+coverage
