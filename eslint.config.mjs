@@ -21,6 +21,7 @@ export default [
       '**/*.tgz',
       'node_modules/**',
       'vitest.*',
+      'docs',
     ],
   },
   {

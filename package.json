@@ -6,6 +6,9 @@
     "dist/**/*",
     "esm/**/*"
   ],
+  "workspaces": [
+    "docs"
+  ],
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -32,6 +35,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
+    "@types/node": "^22.10.2",
     "@types/react": "^19.0.1",
     "@vitest/coverage-v8": "^2.1.8",
     "esbuild": "^0.24.0",
