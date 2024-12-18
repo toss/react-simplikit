@@ -1,12 +1,17 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import usePrevious from './usePrevious.ts';
+import { usePrevious } from './usePrevious.ts';
 
 describe('usePrevious', () => {
   it('should return undefined on first mount', () => {
     const { result } = renderHook(() => usePrevious(1));
     expect(result.current).toBeUndefined();
+  });
+
+  it('should return initial value on first mount when options.withInitialValue is true', () => {
+    const { result } = renderHook(() => usePrevious(1, { withInitialValue: true }));
+    expect(result.current).toBe(1);
   });
 
   it('should return previous state after update', () => {
