@@ -34,9 +34,9 @@ import {
   version,
   watch,
   watchEffect
-} from "./chunk-7LZIPHER.js";
+} from "./chunk-62X3TRIT.js";
 
-// ../.yarn/__virtual__/vitepress-virtual-69e2839e35/4/.yarn/berry/cache/vitepress-npm-1.5.0-aeabe3c15f-10c0.zip/node_modules/vitepress/lib/vue-demi.mjs
+// ../.yarn/__virtual__/vitepress-virtual-69e2839e35/3/.yarn/berry/cache/vitepress-npm-1.5.0-aeabe3c15f-10c0.zip/node_modules/vitepress/lib/vue-demi.mjs
 var isVue2 = false;
 var isVue3 = true;
 function set(target, key, val) {
@@ -56,7 +56,7 @@ function del(target, key) {
   delete target[key];
 }
 
-// ../../../../.yarn/berry/cache/@vueuse-shared-npm-11.3.0-3a6a224d9e-10c0.zip/node_modules/@vueuse/shared/index.mjs
+// ../../../.yarn/berry/cache/@vueuse-shared-npm-11.3.0-3a6a224d9e-10c0.zip/node_modules/@vueuse/shared/index.mjs
 function computedEager(fn, options) {
   var _a;
   const result = shallowRef();
@@ -1560,7 +1560,7 @@ function whenever(source, cb, options) {
   return stop;
 }
 
-// ../../../../.yarn/berry/cache/@vueuse-core-npm-11.3.0-99d734ff8e-10c0.zip/node_modules/@vueuse/core/index.mjs
+// ../../../.yarn/berry/cache/@vueuse-core-npm-11.3.0-99d734ff8e-10c0.zip/node_modules/@vueuse/core/index.mjs
 function computedAsync(evaluationCallback, initialState, optionsOrRef) {
   let options;
   if (isRef(optionsOrRef)) {
