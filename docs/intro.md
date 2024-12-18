@@ -1,9 +1,9 @@
-# reactie 소개
+# About reactie
 
-reactie는 리액트 유틸리티 라이브러리예요.
+reactie is React utility library.
 
-## 링크
+## Links
 
-이 프로젝트에 대해서 더 많은 정보를 얻기 위해서는 아래 링크를 참고하세요.
+Please refer to the following links for more information about this project.
 
 - [GitHub](https://github.com/toss/reactie)
