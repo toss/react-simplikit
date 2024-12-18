@@ -1,14 +1,14 @@
 ---
-description: reactie을 사용하는 방법
+description: How to use reactie
 ---
 
-# 설치 및 사용하기
+# Installation & Usage
 
-Node.js나 Bun을 사용하는 경우, [npm](https://npmjs.com/package/reactie)에서 설치할 수 있어요.
+reactie is available via [npm](https://npmjs.com/package/reactie) for Node.js and Bun.
 
 ## Node.js
 
-reactie는 Node.js 18 또는 이후 버전을 지원해요. reactie을 설치하기 위해서는 아래 명령어를 사용해주세요.
+reactie supports Node.js 18 or later. Install reactie with the following command:
 
 ::: code-group
 

@@ -1,46 +1,45 @@
 # useBooleanState
 
-`useBooleanState`는 `boolean` 상태를 쉽게 관리할 수 있도록 도와주는 React 훅이에요. `true`로 설정, `false`로 설정, 상태를 토글하는 기능을 제공해요.
+useBooleanState is a React hook that helps manage a boolean state easily. It provides functionalities to set the state to true, set it to false, and toggle the state.
 
-## 인터페이스
+## Interface
 
 ```ts
 function useBooleanState(defaultValue?: boolean): readonly [
-  boolean, // 현재 상태 값
-  () => void, // 상태를 true로 설정하는 함수
-  () => void, // 상태를 false로 설정하는 함수
-  () => void, // 상태를 토글하는 함수
+  boolean, // Current state value
+  () => void, // Function to set the state to true
+  () => void, // Function to set the state to false
+  () => void, // Function to toggle the state
 ];
 ```
 
-### 파라미터
+### Parameters
 
-- `defaultValue` (`boolean`): 상태의 초기 값이에요. 기본값은 `false`예요.
+- `defaultValue` (`boolean`): It's the initial value of the state. The default value is false.
 
 ### 반환 값
 
-`readonly [boolean, () => void, () => void, () => void]` 형태의 튜플을 반환해요:
+Returns a `readonly [boolean, () => void, () => void, () => void]` tuple:
 
-1. boolean: 현재 상태 값이에요.
-2. () => void: 상태를 true로 설정하는 함수예요.
-3. () => void: 상태를 false로 설정하는 함수예요.
-4. () => void: 상태를 토글하는 함수예요.
+1. boolean: The current state value.
+2. () => void: A function to set the state to true.
+3. () => void: A function to set the state to false.
+4. () => void: A function to toggle the state.
 
-## 예시
+## Examples
 
 ```tsx
 import { useBooleanState } from 'reactie';
 
 function Component() {
-  // useBooleanState 훅을 사용해 상태를 관리해요.
   const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
 
   return (
     <div>
-      <p>Bottom Sheet 상태: {open ? '열림' : '닫힘'}</p>
-      <button onClick={openBottomSheet}>열기</button>
-      <button onClick={closeBottomSheet}>닫기</button>
-      <button onClick={toggleBottomSheet}>토글</button>
+      <p>Bottom Sheet state: {open ? 'opened' : 'closed'}</p>
+      <button onClick={openBottomSheet}>Open</button>
+      <button onClick={closeBottomSheet}>Close</button>
+      <button onClick={toggleBottomSheet}>Toggle</button>
     </div>
   );
 }
