@@ -40,6 +40,7 @@ export default [
     },
     rules: {
       ...hooksPlugin.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off',
       'import/extensions': [
         'error',
         {
