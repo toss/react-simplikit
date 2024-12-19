@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest';
 import usePrevious from './usePrevious.ts';
 
 describe('usePrevious', () => {
-  it('should return undefined on first mount', () => {
+  it('should return initial value of state on first mount', () => {
     const { result } = renderHook(() => usePrevious(1));
-    expect(result.current).toBeUndefined();
+    expect(result.current).toBe(1);
   });
 
   it('should return previous state after update', () => {
@@ -14,7 +14,7 @@ describe('usePrevious', () => {
       initialProps: { state: 1 },
     });
 
-    expect(result.current).toBeUndefined();
+    expect(result.current).toBe(1);
 
     rerender({ state: 2 });
     expect(result.current).toBe(1);
@@ -28,14 +28,14 @@ describe('usePrevious', () => {
       initialProps: { state: 1, otherState: 1 },
     });
 
-    rerender({ state: 1, otherState: 1 });
-    expect(result.current).toBeUndefined();
-
     rerender({ state: 2, otherState: 1 });
     expect(result.current).toBe(1);
 
     rerender({ state: 2, otherState: 2 });
     expect(result.current).toBe(1);
+
+    rerender({ state: 3, otherState: 2 });
+    expect(result.current).toBe(2);
   });
 
   it('should custom compare function works', () => {
@@ -46,30 +46,19 @@ describe('usePrevious', () => {
 
       return Object.entries(prev).every(([key, value]) => next[key] === value);
     };
-    const { result, rerender } = renderHook(({ state }) => usePrevious(state, { compare: compareObject }), {
+    const { result, rerender } = renderHook(({ state }) => usePrevious(state, compareObject), {
       initialProps: { state: { hello: 'world' }, otherState: 1 },
     });
 
-    expect(result.current).toBeUndefined();
+    expect(result.current).toStrictEqual({ hello: 'world' });
 
-    rerender({ state: { hello: 'world' }, otherState: 2 });
-    expect(result.current).toBeUndefined();
+    rerender({ state: { hello: 'world!' }, otherState: 1 });
+    expect(result.current).toStrictEqual({ hello: 'world' });
 
     rerender({ state: { hello: 'world!' }, otherState: 2 });
     expect(result.current).toStrictEqual({ hello: 'world' });
 
-    rerender({ state: { hello: 'world!' }, otherState: 3 });
-    expect(result.current).toStrictEqual({ hello: 'world' });
-  });
-
-  it('should always update previous state if withoutCompare is true', () => {
-    const { result, rerender } = renderHook(({ state }) => usePrevious(state, { withoutCompare: true }), {
-      initialProps: { state: 1, otherState: 1 },
-    });
-
-    expect(result.current).toBeUndefined();
-
-    rerender({ state: 1, otherState: 2 });
-    expect(result.current).toBe(1);
+    rerender({ state: { hello: 'world!!' }, otherState: 2 });
+    expect(result.current).toStrictEqual({ hello: 'world!' });
   });
 });
