@@ -5,23 +5,13 @@
 ## 인터페이스
 
 ```typescript
-function usePrevious<T>(
-  state: T,
-  options: PreviousOptions<T> = {
-    compare: (prev: T | undefined, next: T) => boolean,
-    withoutCompare: false,
-    withInitialValue: false,
-  }
-): T | undefined;
+function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
 ```
 
 ### 파라미터
 
 - `state` (`T`): 이전 값을 구할 대상 상태에요.
-- `options` (`PreviousOptions<T>`, optional): 옵션 객체예요.
-  - `compare` (`(prev: T | undefined, next: T) => boolean`, optional): 값이 변했는 지 감지하기 위한 비교 함수예요. 기본적으로는 `prev === next`를 통해 값을 비교해요.
-  - `withoutCompare` (`boolean`, optional): 만약 값 비교 없이 항상 previous 값을 업데이트 하고 싶다면 `withoutCompare` 값을 `true`로 설정해주세요. 기본 값은 `false`예요.
-  - `withInitialValue` (`boolean`, optional): 만약 state의 초기값을 이전 값의 초기값으로 지정하고 싶다면 `withInitialValue`를 `true`로 설정해주세요. 기본 값은 `false`예요.
+- `compare` (`(prev: T | undefined, next: T) => boolean`, optional): 값이 변했는 지 감지하기 위한 비교 함수예요. 기본적으로는 `prev === next`를 통해 값을 비교해요.
 
 ### 반환 값
 
