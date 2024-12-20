@@ -47,15 +47,15 @@ const compareObject = (prev: Record<string, unknown> | undefined, next: Record<s
   return Object.entries(prev).every(([key, value]) => next[key] === value);
 };
 
-const [count, setCount] = useState({ hello: 'world' });
+const [data, setData] = useState({ hello: 'world' });
 const [unrelated, setUnrelated] = useState(0);
 
-// initial value of previousCount is `{ hello: 'world' }`
-const previousCount = usePrevious(count, customCompare);
+// initial value of previousData is `{ hello: 'world' }`
+const previousData = usePrevious(data, customCompare);
 
 // ...
 
 setUnrelated(prev => prev + 1); // previous: { hello: 'world' }
 
-setCount({ hello: 'world!' }); // count: { hello: 'world!' }, previous: { hello: 'world' }
+setData({ hello: 'world!' }); // data: { hello: 'world!' }, previous: { hello: 'world' }
 ```
