@@ -17,7 +17,7 @@ import { RefCallback, RefObject } from 'react';
  *   return <div ref={mergeRefs(myRef, parentRef)} />;
  * })
  */
-export function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T>>): RefCallback<T> {
+export function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T> | null | undefined>): RefCallback<T> {
   return value => {
     for (const ref of refs) {
       if (typeof ref === 'function') {
