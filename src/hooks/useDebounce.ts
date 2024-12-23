@@ -8,12 +8,41 @@ interface DebounceOptions {
   trailing?: boolean;
 }
 
+/**
+ * `useDebounce` is a hook that returns a debounced version of the provided callback function
+ *
+ * @param callback Function to debounce
+ * @param wait Time in milliseconds to delay
+ * @param options Configuration options for debounce behavior
+ * @returns Debounced function that will delay invoking the callback
+ *
+ * @example
+ * function SearchInput() {
+ *   const [query, setQuery] = useState('');
+ *
+ *   const debouncedSearch = useDebounce((value: string) => {
+ *     // Actual API call
+ *     searchAPI(value);
+ *   }, 300);
+ *
+ *   return (
+ *     <input
+ *       value={query}
+ *       onChange={e => {
+ *         setQuery(e.target.value);
+ *         debouncedSearch(e.target.value);
+ *       }}
+ *       placeholder="Enter search term"
+ *     />
+ *   );
+ * }
+ */
 export function useDebounce<F extends (...args: unknown[]) => unknown>(
   callback: F,
   wait: number,
   options: DebounceOptions = {}
 ) {
-  // TODO: const preservedCallback = usePreservedCallback(callback);
+  // TODO: Replace with usePreservedCallback for proper callback memoization
   const preservedCallback = callback;
 
   const { leading, trailing = true } = options;
