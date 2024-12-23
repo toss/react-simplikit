@@ -19,16 +19,16 @@ export function useDebounce<F extends (...args: unknown[]) => unknown>(
   const { leading, trailing = true } = options;
 
   const edges = useMemo(() => {
-    const edges: Array<'leading' | 'trailing'> = [];
+    const _edges: Array<'leading' | 'trailing'> = [];
     if (leading) {
-      edges.push('leading');
+      _edges.push('leading');
     }
 
     if (trailing) {
-      edges.push('trailing');
+      _edges.push('trailing');
     }
 
-    return edges;
+    return _edges;
   }, [leading, trailing]);
 
   const debounced = useMemo(() => {
