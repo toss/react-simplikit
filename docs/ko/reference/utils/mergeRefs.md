@@ -18,6 +18,8 @@ function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T>>): RefCallbac
 
 ## 예시
 
+### 기본 예제
+
 ```tsx
 import { forwardRef, useRef } from 'react';
 import { mergeRefs } from 'reactie';
@@ -27,4 +29,26 @@ const Component = forwardRef((props, parentRef) => {
 
   return <div ref={mergeRefs(localRef, parentRef)}>내용</div>;
 });
+```
+
+### Callback Refs와 함께 사용
+
+```tsx
+import { useCallback, useRef } from 'react';
+import { mergeRefs } from 'reactie';
+
+const Component = () => {
+  const ref = useRef(null);
+  const [height, setHeight] = useState(0);
+
+  const measuredRef = useCallback(node => {
+    if (node == null) {
+      return;
+    }
+
+    setHeight(node.offsetHeight);
+  }, []);
+
+  return <div ref={mergeRefs(measuredRef, ref)} />;
+};
 ```
