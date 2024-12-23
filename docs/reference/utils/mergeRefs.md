@@ -31,7 +31,7 @@ const Component = forwardRef((props, parentRef) => {
 });
 ```
 
-### Usage with `useCallback`
+### Usage with Callback Refs
 
 ```tsx
 import { useCallback, useRef } from 'react';
@@ -42,7 +42,11 @@ const Component = () => {
   const [height, setHeight] = useState(0);
 
   const measuredRef = useCallback(node => {
-    setHeight(node?.offsetHeight ?? 0);
+    if (node == null) {
+      return;
+    }
+
+    setHeight(node.offsetHeight);
   }, []);
 
   return <div ref={mergeRefs(measuredRef, ref)} />;
