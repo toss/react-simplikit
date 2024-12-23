@@ -18,7 +18,24 @@ const strictEquals = <T>(prev: T | undefined, next: T) => prev === next;
 export default function usePrevious<T>(state: T, compare: (prev: T, next: T) => boolean = strictEquals): T {
   const prevRef = useRef<T>(state);
   const currentRef = useRef<T>(state);
-  const isFirstMount = useFirstMountState();
+export default function usePrevious<T>(state: T, compare: (prev: T, next: T) => boolean = strictEquals): T {
+  const prevRef = useRef<T>(state);
+  const currentRef = useRef<T>(state);
+  const isFirstRender = useRef<boolean>(true);
+
+  useEffect(() => {
+    isFirstRender.current = false;
+  }, []);
+
+  if (isFirstRender.current || compare(currentRef.current, state)) {
+    return prevRef.current;
+  }
+
+  prevRef.current = currentRef.current;
+  currentRef.current = state;
+
+  return prevRef.current;
+}
 
   if (isFirstMount || compare(currentRef.current, state)) {
     return prevRef.current;
