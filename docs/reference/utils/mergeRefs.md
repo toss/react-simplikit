@@ -18,6 +18,8 @@ Returns a `RefCallback<T>` that updates all provided refs when called.
 
 ## Example
 
+### Basic Usage
+
 ```tsx
 import { forwardRef, useRef } from 'react';
 import { mergeRefs } from 'reactie';
@@ -27,4 +29,22 @@ const Component = forwardRef((props, parentRef) => {
 
   return <div ref={mergeRefs(localRef, parentRef)}>Content</div>;
 });
+```
+
+### Usage with `useCallback`
+
+```tsx
+import { useCallback, useRef } from 'react';
+import { mergeRefs } from 'reactie';
+
+const Component = () => {
+  const ref = useRef(null);
+  const [height, setHeight] = useState(0);
+
+  const measuredRef = useCallback(node => {
+    setHeight(node?.offsetHeight ?? 0);
+  }, []);
+
+  return <div ref={mergeRefs(measuredRef, ref)} />;
+};
 ```
