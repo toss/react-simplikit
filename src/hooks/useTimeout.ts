@@ -5,21 +5,21 @@ import { useCallback, useEffect, useRef } from 'react';
  *
  *
  * @description
- * window.setTimeout 를 편리하게 이용할 수 있는 hook 입니다.
+ * A convenient hook for using window.setTimeout.
  *
- * `useTimeout` 은 `전달받은 callback을 delay 만큼 지연 후 실행하는 훅입니다.
- * `useTimeout`을 사용하는 정확한 방법은 아래 Example을 참고해주시기 바랍니다.
+ * `useTimeout` executes a callback function after a specified delay.
+ * Please refer to the example below for the correct usage of `useTimeout`.
  *
  * @example
  * function Example() {
  *   const [title, setTitle] = useState('');
  *
  *   useTimeout(() => {
- *     setTitle(`상품을 찾고있어요`);
+ *     setTitle('Searching for products...');
  *   }, 2000);
  *
  *   useTimeout(() => {
- *     setTitle(`거의 다 끝났어요`);
+ *     setTitle('Almost done...');
  *   }, 4000);
  *
  *   return <div>{title}</div>;
