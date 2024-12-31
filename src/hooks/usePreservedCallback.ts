@@ -45,9 +45,10 @@ import { useCallback, useEffect, useRef } from 'react';
  *   return <button onClick={onIncrement}>Increment</button>;
  * }
  */
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function usePreservedCallback<Argument = any, ReturnValue = unknown>(
-  callback: (...args: Argument[]) => ReturnValue
+export function usePreservedCallback<Arguments extends any[] = any[], ReturnValue = unknown>(
+  callback: (...args: Arguments) => ReturnValue
 ) {
   const callbackRef = useRef(callback);
 
@@ -55,7 +56,7 @@ export function usePreservedCallback<Argument = any, ReturnValue = unknown>(
     callbackRef.current = callback;
   }, [callback]);
 
-  return useCallback((...args: Argument[]) => {
+  return useCallback((...args: Arguments) => {
     return callbackRef.current(...args);
   }, []);
 }
