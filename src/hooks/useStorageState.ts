@@ -1,6 +1,6 @@
 import { SetStateAction, useCallback, useRef, useSyncExternalStore } from 'react';
 
-import { MemoStorage, Storage } from '../_internal/storage.ts';
+import { safeLocalStorage, Storage } from '../_internal/storage.ts';
 
 type ToPrimitive<T> = T extends string ? string : T extends number ? number : T extends boolean ? boolean : never;
 type ToObject<T> = T extends unknown[] | Record<string, unknown> ? T : never;
@@ -22,8 +22,6 @@ const emitListeners = () => {
   listeners.forEach(listener => listener());
 };
 
-const memoStorage = new MemoStorage();
-
 /**
  * a hook that works like useState but stores the state value in the storage and retains the value.
  * @param key key for storage
@@ -41,7 +39,7 @@ export function useStorageState<T>(
 ): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void];
 export function useStorageState<T>(
   key: string,
-  { storage = memoStorage, defaultValue }: StorageStateOptions<T> = {}
+  { storage = safeLocalStorage, defaultValue }: StorageStateOptions<T> = {}
 ): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void] {
   const cache = useRef<{
     data: string | null;
