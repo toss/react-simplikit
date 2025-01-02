@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback, useSyncExternalStore } from 'react';
+import { SetStateAction, useCallback, useRef, useSyncExternalStore } from 'react';
 
 import { MemoStorage, Storage } from '../_internal/storage.ts';
 
@@ -22,6 +22,8 @@ const emitListeners = () => {
   listeners.forEach(listener => listener());
 };
 
+const memoStorage = new MemoStorage();
+
 /**
  * a hook that works like useState but stores the state value in the storage and retains the value.
  * @param key key for storage
@@ -39,26 +41,30 @@ export function useStorageState<T>(
 ): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void];
 export function useStorageState<T>(
   key: string,
-  { storage = new MemoStorage(), defaultValue }: StorageStateOptions<T> = {}
+  { storage = memoStorage, defaultValue }: StorageStateOptions<T> = {}
 ): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void] {
-  const getValue = useCallback(<T>() => {
+  const cache = useRef<{
+    data: string | null;
+    parsed: Serializable<T> | undefined;
+  }>({
+    data: null,
+    parsed: defaultValue,
+  });
+
+  const getSnapshot = useCallback(() => {
     const data = storage.get(key);
 
-    if (data == null) {
-      return defaultValue;
-    }
-
-    try {
-      const result = JSON.parse(data);
-
-      if (result == null) {
-        return defaultValue;
+    // 데이터가 변경된 경우에만 파싱
+    if (data !== cache.current.data) {
+      try {
+        cache.current.parsed = data ? JSON.parse(data) : defaultValue;
+      } catch {
+        cache.current.parsed = defaultValue;
       }
-
-      return result as T;
-    } catch {
-      return defaultValue;
+      cache.current.data = data;
     }
+
+    return cache.current.parsed;
   }, [defaultValue, key, storage]);
 
   const storageState = useSyncExternalStore<Serializable<T> | undefined>(
@@ -78,12 +84,12 @@ export function useStorageState<T>(
         window.removeEventListener('storage', handler);
       };
     },
-    () => getValue()
+    () => getSnapshot()
   );
 
   const setStorageState = useCallback(
     (value: SetStateAction<Serializable<T> | undefined>) => {
-      const nextValue = typeof value === 'function' ? value(getValue()) : value;
+      const nextValue = typeof value === 'function' ? value(getSnapshot()) : value;
 
       if (nextValue == null) {
         storage.remove(key);
@@ -92,7 +98,7 @@ export function useStorageState<T>(
       }
       emitListeners();
     },
-    [getValue, key, storage]
+    [getSnapshot, key, storage]
   );
 
   return [storageState, setStorageState] as const;
