@@ -1,6 +1,6 @@
 # useAsyncEffect
 
-`useAsyncEffect`는 비동기 함수를 useEffect 패턴으로 쉽게 관리할 수 있도록 도와주는 React 훅이에요.
+`useAsyncEffect`는 React 컴포넌트에서 비동기 작업을 처리하기 위한 커스텀 훅이에요. `useEffect`와 동일한 정리(cleanup) 패턴을 따르면서, 비동기 작업을 안전하게 수행할 수 있도록 도와줘요.
 
 ## 인터페이스
 

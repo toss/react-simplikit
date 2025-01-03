@@ -1,6 +1,6 @@
 # useAsyncEffect
 
-`useAsyncEffect` is a hook for handling async effects in React components.
+`useAsyncEffect` is a hook for handling async effects in React components. It follows the same cleanup pattern as `useEffect` while safely handling async operations.
 
 ## Interface
 
