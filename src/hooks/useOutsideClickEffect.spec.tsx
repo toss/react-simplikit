@@ -85,4 +85,47 @@ describe('useOutsideClickEffect', () => {
     fireEvent.click(document.body);
     expect(onOutsideClick).toHaveBeenCalledTimes(1);
   });
+
+  it('should handle null containers', () => {
+    const onOutsideClick = vi.fn();
+    const NullContainer = () => {
+      useOutsideClickEffect(null, onOutsideClick);
+      return <div data-testid="target">Test</div>;
+    };
+
+    render(<NullContainer />);
+
+    fireEvent.click(screen.getByTestId('target'));
+    expect(onOutsideClick).not.toHaveBeenCalled();
+  });
+
+  it('should handle empty containers', () => {
+    const onOutsideClick = vi.fn();
+
+    const EmptyContainers = () => {
+      useOutsideClickEffect([], onOutsideClick);
+      return <div data-testid="target">Test</div>;
+    };
+
+    render(<EmptyContainers />);
+
+    fireEvent.click(screen.getByTestId('target'));
+    expect(onOutsideClick).not.toHaveBeenCalled();
+  });
+
+  it('should handle null target event', () => {
+    const onOutsideClick = vi.fn();
+    render(<TestComponent onOutsideClick={onOutsideClick} />);
+
+    const nullTargetEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+    });
+
+    Object.defineProperty(nullTargetEvent, 'target', { value: null });
+
+    document.dispatchEvent(nullTargetEvent);
+
+    expect(onOutsideClick).not.toHaveBeenCalled();
+  });
 });
