@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+
+import { usePreservedCallback } from './usePreservedCallback.ts';
 
 type IntervalOptions =
   | number
@@ -34,17 +36,4 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
     const id = window.setInterval(savedCallback, delay);
     return () => window.clearInterval(id);
   }, [delay, savedCallback, enabled]);
-}
-
-// temporary implementation
-function usePreservedCallback<Callback extends (...args: any[]) => any>(callback: Callback) {
-  const callbackRef = useRef<Callback>(callback);
-
-  useEffect(() => {
-    callbackRef.current = callback;
-  }, [callback]);
-
-  return useCallback((...args: any[]) => {
-    return callbackRef.current(...args);
-  }, []) as Callback;
 }
