@@ -17,7 +17,7 @@ function useBooleanState(defaultValue?: boolean): readonly [
 
 - `defaultValue` (`boolean`): It's the initial value of the state. The default value is false.
 
-### 반환 값
+### Returns
 
 Returns a `readonly [boolean, () => void, () => void, () => void]` tuple:
 
