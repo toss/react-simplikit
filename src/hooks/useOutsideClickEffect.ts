@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+
+import { usePreservedCallback } from './usePreservedCallback.ts';
 
 type OneOrMore<T> = T | T[];
 
@@ -32,16 +34,4 @@ export function useOutsideClickEffect(container: OneOrMore<HTMLElement | null>, 
       document.removeEventListener('click', handleDocumentClick);
     };
   }, [handleDocumentClick]);
-}
-
-function usePreservedCallback<Callback extends (...args: any[]) => any>(callback: Callback) {
-  const callbackRef = useRef<Callback>(callback);
-
-  useEffect(() => {
-    callbackRef.current = callback;
-  }, [callback]);
-
-  return useCallback((...args: any[]) => {
-    return callbackRef.current(...args);
-  }, []) as Callback;
 }
