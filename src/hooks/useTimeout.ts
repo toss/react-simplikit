@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+
+import { usePreservedCallback } from './usePreservedCallback.ts';
 
 /**
  *
@@ -28,24 +30,11 @@ import { useCallback, useEffect, useRef } from 'react';
  */
 
 export function useTimeout(callback: () => void, delay = 0) {
-  const savedCallback = usePreservedCallback(callback);
+  const preservedCallback = usePreservedCallback(callback);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(savedCallback, delay);
+    const timeoutId = window.setTimeout(preservedCallback, delay);
 
     return () => window.clearTimeout(timeoutId);
-  }, [delay, savedCallback]);
-}
-
-// temporary implementation
-function usePreservedCallback<Callback extends (...args: any[]) => any>(callback: Callback) {
-  const callbackRef = useRef<Callback>(callback);
-
-  useEffect(() => {
-    callbackRef.current = callback;
-  }, [callback]);
-
-  return useCallback((...args: any[]) => {
-    return callbackRef.current(...args);
-  }, []) as Callback;
+  }, [delay, preservedCallback]);
 }
