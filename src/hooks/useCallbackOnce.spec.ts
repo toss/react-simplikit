@@ -6,7 +6,6 @@ import { useCallbackOnce } from './useCallbackOnce.ts';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useCaller(callback: (...args: any) => any, deps: DependencyList) {
   useEffect(() => {
-    console.log(deps);
     callback();
   }, deps);
 }
