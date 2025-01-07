@@ -8,9 +8,9 @@
 type IntervalOptions =
   | number
   | {
-      delay: number | null;
+      delay: number;
       enabled?: boolean;
-      trailing?: boolean;
+      immediate?: boolean;
     };
 
 function useInterval(callback: () => void, options: IntervalOptions): void;
@@ -21,8 +21,14 @@ function useInterval(callback: () => void, options: IntervalOptions): void;
 - `callback` (`() => void`): The function to be executed periodically.
 - `options` (`IntervalOptions`): Configure the interval timing and behavior.
   - `delay` (`number | null`): The interval duration in milliseconds. When null, the interval won't be executed.
-  - `trailing` (`boolean`): When true, waits for the first delay before execution. When false, executes immediately.
+  - `immediate` (`boolean`): When true, executes immediately. When false, waits for the first delay before execution.
   - `enabled` (`boolean`): When false, the interval won't be executed.
+
+### Notes
+
+- The timer is automatically cleaned up when the component unmounts.
+- If the `delay` value changes, the timer will restart.
+- You can control the execution by setting `enabled` to `false`.
 
 ### Returns
 
@@ -52,7 +58,7 @@ function Timer() {
 
 ### Stopwatch
 
-You can control the execution by setting `delay` to `null` or `enabled` to `false`.
+You can control the execution by setting `enabled` to `false`.
 
 ```tsx
 import { useInterval } from 'reactie';
@@ -65,7 +71,10 @@ function StopWatch() {
     () => {
       setTime(prev => prev + 1);
     },
-    isRunning ? 1000 : null
+    {
+      delay: 1000,
+      enabled: isRunning,
+    }
   );
 
   return (
