@@ -5,35 +5,30 @@ import { usePreservedCallback } from './usePreservedCallback.ts';
 type IntervalOptions =
   | number
   | {
-      delay: number | null;
-      trailing?: boolean;
+      delay: number;
+      immediate?: boolean;
       enabled?: boolean;
     };
 
-const getEnabled = (options: IntervalOptions) => {
-  if (typeof options === 'number' || options.enabled === undefined) return true;
-  return options.enabled;
-};
-
 export function useInterval(callback: () => void, options: IntervalOptions) {
   const delay = typeof options === 'number' ? options : options.delay;
-  const trailing = typeof options === 'number' ? undefined : options.trailing;
-  const enabled = getEnabled(options);
+  const immediate = typeof options === 'number' ? false : options.immediate;
+  const enabled = typeof options === 'number' ? true : (options.enabled ?? true);
 
-  const savedCallback = usePreservedCallback(callback);
+  const preservedCallback = usePreservedCallback(callback);
 
   useEffect(() => {
-    if (trailing === false && enabled) {
-      savedCallback();
+    if (immediate === true && enabled) {
+      preservedCallback();
     }
-  }, [trailing, savedCallback, enabled]);
+  }, [immediate, preservedCallback, enabled]);
 
   useEffect(() => {
-    if (delay === null || !enabled) {
+    if (!enabled) {
       return;
     }
 
-    const id = window.setInterval(savedCallback, delay);
+    const id = window.setInterval(preservedCallback, delay);
     return () => window.clearInterval(id);
-  }, [delay, savedCallback, enabled]);
+  }, [delay, preservedCallback, enabled]);
 }

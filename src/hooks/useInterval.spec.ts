@@ -25,33 +25,12 @@ describe('useInterval', () => {
     expect(callback).toHaveBeenCalledTimes(2);
   });
 
-  it('should not set interval when delay is null', () => {
-    const callback = vi.fn();
-    renderHook(() => useInterval(callback, { delay: null }));
-
-    vi.advanceTimersByTime(1000);
-    expect(callback).not.toHaveBeenCalled();
-  });
-
   it('should not set interval when enabled is false', () => {
     const callback = vi.fn();
     renderHook(() =>
       useInterval(callback, {
         delay: 1000,
         enabled: false,
-      })
-    );
-
-    vi.advanceTimersByTime(1000);
-    expect(callback).not.toHaveBeenCalled();
-  });
-
-  it('should not set interval when delay is null', () => {
-    const callback = vi.fn();
-    renderHook(() =>
-      useInterval(callback, {
-        delay: null,
-        enabled: true,
       })
     );
 
@@ -109,7 +88,7 @@ describe('useInterval', () => {
       renderHook(() =>
         useInterval(callback, {
           delay: 1000,
-          trailing: false,
+          immediate: true,
         })
       );
 
@@ -124,7 +103,7 @@ describe('useInterval', () => {
       renderHook(() =>
         useInterval(callback, {
           delay: 1000,
-          trailing: true,
+          immediate: false,
         })
       );
 
