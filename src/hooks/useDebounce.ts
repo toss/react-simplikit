@@ -3,6 +3,8 @@ import { useMemo } from 'react';
 
 import { debounce } from '../_internal/debounce.ts';
 
+import { usePreservedCallback } from './usePreservedCallback.ts';
+
 interface DebounceOptions {
   leading?: boolean;
   trailing?: boolean;
