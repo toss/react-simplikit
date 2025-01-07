@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
+import { useMemo } from 'react';
 import { useAsyncEffect } from './useAsyncEffect.ts';
 
 describe('useAsyncEffect', () => {
@@ -55,6 +55,27 @@ describe('useAsyncEffect', () => {
 
     await flushPromises();
     rerender({ dep: 2 });
+
+    expect(effect).toHaveBeenCalledTimes(2);
+    expect(cleanup).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not handle un-related state changes', async () => {
+    const cleanup = vi.fn();
+    const effect = vi.fn().mockResolvedValue(cleanup);
+
+    const { rerender } = renderHook(({ dep }) => useAsyncEffect(effect, [dep]), {
+      initialProps: { dep: 1, unrelated: 1 },
+    });
+
+    await flushPromises();
+    rerender({ dep: 2 });
+
+    expect(effect).toHaveBeenCalledTimes(2);
+    expect(cleanup).toHaveBeenCalledTimes(1);
+
+    await flushPromises();
+    rerender({ unrelated: 2 });
 
     expect(effect).toHaveBeenCalledTimes(2);
     expect(cleanup).toHaveBeenCalledTimes(1);
