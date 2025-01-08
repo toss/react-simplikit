@@ -40,6 +40,7 @@ export default [
     },
     rules: {
       ...hooksPlugin.configs.recommended.rules,
+      '@typescript-eslint/no-explicit-any': 'warn',
       'react/react-in-jsx-scope': 'off',
       'import/extensions': [
         'error',
