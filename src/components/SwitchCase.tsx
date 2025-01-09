@@ -1,19 +1,18 @@
-interface Props<Case extends string | number | boolean> {
-  caseBy: {
-    [K in Case extends boolean ? 'true' | 'false' : Case extends number ? `${Case}` : Case]: React.ReactNode | null;
-  };
+import { ReactNode } from 'react';
+
+type CaseValue = string | number | boolean;
+type StringifiedValue<T> = T extends boolean ? 'true' | 'false' : T extends number ? `${T}` : T;
+
+interface Props<Case extends CaseValue> {
   value: Case;
-  defaultComponent?: React.ReactNode;
+  caseBy: {
+    [Key in StringifiedValue<Case>]: () => ReactNode;
+  };
+  defaultComponent?: () => ReactNode;
 }
 
-export function SwitchCase<Case extends string | number | boolean>({
-  value,
-  caseBy,
-  defaultComponent: defaultComponent = null,
-}: Props<Case>) {
-  if (value == null) {
-    return defaultComponent;
-  }
+export function SwitchCase<Case extends CaseValue>({ value, caseBy, defaultComponent = () => null }: Props<Case>) {
+  const key = value as keyof typeof caseBy;
 
-  return caseBy[value as keyof typeof caseBy] ?? defaultComponent;
+  return caseBy[key] ?? defaultComponent();
 }

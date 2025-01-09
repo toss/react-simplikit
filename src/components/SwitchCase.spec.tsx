@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
@@ -10,8 +10,8 @@ describe('SwitchCase', () => {
       <SwitchCase<'a' | 'b'>
         value="a"
         caseBy={{
-          a: <div>A Component</div>,
-          b: <div>B Component</div>,
+          a: () => <div>A Component</div>,
+          b: () => <div>B Component</div>,
         }}
       />
     );
@@ -26,8 +26,8 @@ describe('SwitchCase', () => {
       <SwitchCase<1 | 2>
         value={value}
         caseBy={{
-          1: <div>One</div>,
-          2: <div>Two</div>,
+          1: () => <div>One</div>,
+          2: () => <div>Two</div>,
         }}
       />
     );
@@ -40,10 +40,10 @@ describe('SwitchCase', () => {
       <SwitchCase<'a' | 'b'>
         value={'c' as 'a'}
         caseBy={{
-          a: <div>A Component</div>,
-          b: <div>B Component</div>,
+          a: () => <div>A Component</div>,
+          b: () => <div>B Component</div>,
         }}
-        defaultComponent={<div>Default</div>}
+        defaultComponent={() => <div>Default</div>}
       />
     );
 
@@ -55,9 +55,9 @@ describe('SwitchCase', () => {
       <SwitchCase
         value={null as unknown as 'a'}
         caseBy={{
-          a: <div>A Component</div>,
+          a: () => <div>A Component</div>,
         }}
-        defaultComponent={<div>Default</div>}
+        defaultComponent={() => <div>Default</div>}
       />
     );
 
@@ -71,8 +71,9 @@ describe('SwitchCase', () => {
       <SwitchCase
         value={value}
         caseBy={{
-          true: <div>True Case</div>,
-          false: <div>False Case</div>,
+          true: () => <div>True Case</div>,
+          false: () => <div>False Case</div>,
+          a: () => <div>A Case</div>,
         }}
       />
     );
@@ -85,7 +86,7 @@ describe('SwitchCase', () => {
       <SwitchCase
         value={'non-existent' as 'a'}
         caseBy={{
-          a: <div>A Component</div>,
+          a: () => <div>A Component</div>,
         }}
       />
     );
@@ -97,8 +98,8 @@ describe('SwitchCase', () => {
     render(
       <SwitchCase
         value="any"
-        caseBy={{} as unknown as { any: React.ReactNode }}
-        defaultComponent={<div>Default</div>}
+        caseBy={{} as unknown as { any: () => ReactNode }}
+        defaultComponent={() => <div>Default</div>}
       />
     );
 
@@ -119,8 +120,8 @@ describe('SwitchCase', () => {
     render(
       <SwitchCase<'a' | 'b'>
         value="a"
-        caseBy={{ a: <div>A Component</div>, b: <NotRender /> }}
-        defaultComponent={<div>Default</div>}
+        caseBy={{ a: () => <div>A Component</div>, b: () => <NotRender /> }}
+        defaultComponent={() => <div>Default</div>}
       />
     );
 
