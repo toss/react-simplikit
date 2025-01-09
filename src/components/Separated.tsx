@@ -1,7 +1,8 @@
-import { Children, Fragment, isValidElement, PropsWithChildren, ReactNode } from 'react';
+import { Children, Fragment, isValidElement, ReactNode } from 'react';
 
-interface Props extends PropsWithChildren {
+interface Props {
   with: ReactNode;
+  children: ReactNode;
 }
 
 export function Separated({ children, with: separator }: Props) {

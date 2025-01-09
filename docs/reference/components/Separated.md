@@ -5,7 +5,7 @@
 ## Props
 
 - `with`: The component to insert between each element.
-- `children`: The child elements to render. Valid elements are filtered using the validElement function.
+- `children`: The child elements to render.Each child will be filtered using `React.isValidElement` function.
 
 ## Example
 
