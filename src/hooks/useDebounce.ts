@@ -1,3 +1,4 @@
+import { usePreservedCallback } from 'reactie';
 import { useEffect } from 'react';
 import { useMemo } from 'react';
 
@@ -44,8 +45,7 @@ export function useDebounce<F extends (...args: unknown[]) => unknown>(
   wait: number,
   options: DebounceOptions = {}
 ) {
-  // TODO: Replace with usePreservedCallback for proper callback memoization
-  const preservedCallback = callback;
+  const preservedCallback = usePreservedCallback(callback);
 
   const { leading, trailing = true } = options;
 
