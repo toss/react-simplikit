@@ -7,14 +7,13 @@ interface Props {
 
 export function Separated({ children, with: separator }: Props) {
   const childrenArray = Children.toArray(children).filter(isValidElement);
-  const childrenLength = childrenArray.length;
 
   return (
     <>
-      {childrenArray.map((child, i) => (
+      {childrenArray.map((child, i, { length }) => (
         <Fragment key={i}>
           {child}
-          {i + 1 !== childrenLength ? separator : null}
+          {i + 1 !== length ? separator : null}
         </Fragment>
       ))}
     </>
