@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DependencyList, useCallback, useEffect, useRef } from 'react';
+import { DependencyList, useEffect, useRef } from 'react';
+
+import { usePreservedCallback } from './usePreservedCallback.ts';
 
 /**
  * A React hook that ensures a callback function is executed only once, regardless of
@@ -38,18 +40,17 @@ import { DependencyList, useCallback, useEffect, useRef } from 'react';
  */
 export function useCallbackOnce<F extends (...args: any[]) => void>(callback: F, deps: DependencyList) {
   const hasFired = useRef(false);
-  const memoizedCallback = useCallback((...args: Parameters<F>) => {
+
+  useEffect(() => {
+    hasFired.current = false;
+  }, deps);
+
+  return usePreservedCallback((...args: Parameters<F>) => {
     if (hasFired.current) {
       return;
     }
 
     callback(...args);
     hasFired.current = true;
-  }, deps);
-
-  useEffect(() => {
-    hasFired.current = false;
-  }, deps);
-
-  return memoizedCallback;
+  });
 }
