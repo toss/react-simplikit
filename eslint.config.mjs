@@ -12,17 +12,17 @@ import tseslint from 'typescript-eslint';
 export default [
   {
     ignores: [
-      '.yarn/**',
-      'coverage/**',
-      '**/dist/**',
-      '**/cache/**',
-      '.pnp.*',
       '**/*.d.ts',
       '**/*.tgz',
-      'node_modules/**',
-      'vitest.*',
+      '**/dist/**',
+      '**/cache/**',
+      '.yarn/**',
+      '.pnp.*',
+      'coverage',
       'docs',
+      'node_modules',
       'eslint.*',
+      'vitest.*',
     ],
   },
   {
