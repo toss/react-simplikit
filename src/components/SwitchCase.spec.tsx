@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { useEffect } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
@@ -6,9 +6,15 @@ import { SwitchCase } from './SwitchCase.tsx';
 
 describe('SwitchCase', () => {
   it('should render correct component for string value', () => {
+    const getStringValue = () => {
+      const value = 'a';
+      return value as 'a' | 'b';
+    };
+
+    const value = getStringValue();
     render(
-      <SwitchCase<'a' | 'b'>
-        value="a"
+      <SwitchCase
+        value={value}
         caseBy={{
           a: () => <div>A Component</div>,
           b: () => <div>B Component</div>,
@@ -20,10 +26,16 @@ describe('SwitchCase', () => {
   });
 
   it('should render correct component for number value', () => {
-    const value = 1;
+    const getNumberValue = () => {
+      const value = 1;
+
+      return value as 1 | 2;
+    };
+
+    const value = getNumberValue();
 
     render(
-      <SwitchCase<1 | 2>
+      <SwitchCase
         value={value}
         caseBy={{
           1: () => <div>One</div>,
@@ -36,9 +48,15 @@ describe('SwitchCase', () => {
   });
 
   it('should render default component when case not found', () => {
+    const getStringValue = () => {
+      const value = 'c';
+      return value as 'a' | 'b' | 'c';
+    };
+
+    const value = getStringValue();
     render(
-      <SwitchCase<'a' | 'b'>
-        value={'c' as 'a'}
+      <SwitchCase
+        value={value}
         caseBy={{
           a: () => <div>A Component</div>,
           b: () => <div>B Component</div>,
@@ -53,7 +71,7 @@ describe('SwitchCase', () => {
   it('should render default component when value is null', () => {
     render(
       <SwitchCase
-        value={null as unknown as 'a'}
+        value={null}
         caseBy={{
           a: () => <div>A Component</div>,
         }}
@@ -73,7 +91,6 @@ describe('SwitchCase', () => {
         caseBy={{
           true: () => <div>True Case</div>,
           false: () => <div>False Case</div>,
-          a: () => <div>A Case</div>,
         }}
       />
     );
@@ -82,28 +99,24 @@ describe('SwitchCase', () => {
   });
 
   it('should render nothing when no matching case and default is null', () => {
+    const getValue = () => {
+      const value = undefined;
+      return value as 'a' | 'b' | undefined;
+    };
+
+    const value = getValue();
     const { container } = render(
       <SwitchCase
-        value={'non-existent' as 'a'}
+        value={value}
         caseBy={{
           a: () => <div>A Component</div>,
+          b: () => <div>B Component</div>,
         }}
+        defaultComponent={() => null}
       />
     );
 
     expect(container.firstChild).toBeNull();
-  });
-
-  it('should render default component with empty caseBy', () => {
-    render(
-      <SwitchCase
-        value="any"
-        caseBy={{} as unknown as { any: () => ReactNode }}
-        defaultComponent={() => <div>Default</div>}
-      />
-    );
-
-    expect(screen.getByText('Default')).toBeInTheDocument();
   });
 
   it('should render only target component', () => {

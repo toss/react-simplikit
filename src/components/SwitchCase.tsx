@@ -1,18 +1,20 @@
 import { ReactNode } from 'react';
 
-type CaseValue = string | number | boolean;
-type StringifiedValue<T> = T extends boolean ? 'true' | 'false' : T extends number ? `${T}` : T;
+type StringifiedValue<T> = T extends boolean
+  ? 'true' | 'false'
+  : T extends number
+    ? `${T}`
+    : T extends string
+      ? T
+      : never;
 
-interface Props<Case extends CaseValue> {
+interface Props<Case> {
   value: Case;
-  caseBy: {
-    [Key in StringifiedValue<Case>]: () => ReactNode;
-  };
+  caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactNode }>;
   defaultComponent?: () => ReactNode;
 }
 
-export function SwitchCase<Case extends CaseValue>({ value, caseBy, defaultComponent = () => null }: Props<Case>) {
-  const key = value as keyof typeof caseBy;
-
-  return caseBy[key] ?? defaultComponent();
+export function SwitchCase<Case>({ value, caseBy, defaultComponent = () => null }: Props<Case>) {
+  const stringifiedValue = String(value) as StringifiedValue<Case>;
+  return (caseBy[stringifiedValue] ?? defaultComponent)();
 }
