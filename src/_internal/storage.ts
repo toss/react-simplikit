@@ -32,12 +32,12 @@ class LocalStorage implements Storage {
   public static canUse(): boolean {
     const TEST_KEY = generateTestKey();
 
-    // 사용자가 쿠키 차단을 하는 경우 LocalStorage '접근' 시에 예외가 발생합니다.
+    // when user blocks cookies, LocalStorage throws an error.
     try {
       localStorage.setItem(TEST_KEY, 'test');
       localStorage.removeItem(TEST_KEY);
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }
@@ -63,12 +63,12 @@ class SessionStorage implements Storage {
   public static canUse(): boolean {
     const TEST_KEY = generateTestKey();
 
-    // sessionStorage를 사용할 수 없는 경우에 대응합니다.
+    // when sessionStorage is not available, it throws an error.
     try {
       sessionStorage.setItem(TEST_KEY, 'test');
       sessionStorage.removeItem(TEST_KEY);
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }
