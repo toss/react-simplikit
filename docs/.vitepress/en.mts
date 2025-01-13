@@ -45,6 +45,10 @@ function sidebar(): DefaultTheme.Sidebar {
           items: [...getSidebarItems(docsRoot, 'reference', 'hooks')],
         },
         {
+          text: 'Utils',
+          items: [...getSidebarItems(docsRoot, 'reference', 'utils')],
+        },
+        {
           text: 'Components',
           items: [...getSidebarItems(docsRoot, 'reference', 'components')],
         },
