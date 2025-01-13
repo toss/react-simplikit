@@ -12,20 +12,26 @@ import tseslint from 'typescript-eslint';
 export default [
   {
     ignores: [
-      '.yarn/**',
-      'coverage/**',
-      '**/dist/**',
-      '**/cache/**',
-      '.pnp.*',
       '**/*.d.ts',
       '**/*.tgz',
-      'node_modules/**',
-      'vitest.*',
+      '**/dist/**',
+      '**/cache/**',
+      '.yarn/**',
+      '.pnp.*',
+      'coverage',
       'docs',
+      'node_modules',
+      'eslint.*',
+      'vitest.*',
     ],
   },
   {
-    languageOptions: { globals: globals.browser },
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
@@ -40,6 +46,8 @@ export default [
     },
     rules: {
       ...hooksPlugin.configs.recommended.rules,
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/strict-boolean-expressions': 'error',
       'react/react-in-jsx-scope': 'off',
       'import/extensions': [
         'error',
