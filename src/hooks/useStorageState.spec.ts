@@ -111,7 +111,6 @@ describe('useStorageState', () => {
       safeLocalStorage.clear();
     });
 
-    // 공통 테스트 실행
     runCommonTests(safeLocalStorage);
 
     it('should persist value after rerender', () => {

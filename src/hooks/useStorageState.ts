@@ -52,7 +52,6 @@ export function useStorageState<T>(
   const getSnapshot = useCallback(() => {
     const data = storage.get(key);
 
-    // 데이터가 변경된 경우에만 파싱
     if (data !== cache.current.data) {
       try {
         cache.current.parsed = data ? JSON.parse(data) : defaultValue;
