@@ -39,6 +39,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.7",
     "@vitest/coverage-v8": "^2.1.8",
+    "corepack": "^0.30.0",
     "esbuild": "^0.24.0",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
