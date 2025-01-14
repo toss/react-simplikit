@@ -2445,16 +2445,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docs@workspace:docs":
-  version: 0.0.0-use.local
-  resolution: "docs@workspace:docs"
-  dependencies:
-    fast-glob: "npm:^3.3.2"
-    vitepress: "npm:^1.5.0"
-    vue: "npm:^3.5.13"
-  languageName: unknown
-  linkType: soft
-
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Fdoctrine%2F-%2Fdoctrine-2.1.0.tgz"

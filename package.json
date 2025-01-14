@@ -6,10 +6,10 @@
     "dist/**/*",
     "esm/**/*"
   ],
-  "workspaces": [
-    "docs"
-  ],
   "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier:fix": "prettier --write .",

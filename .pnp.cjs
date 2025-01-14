@@ -13,16 +13,11 @@ const RAW_RUNTIME_STATE =
     {\
       "name": "reactie",\
       "reference": "workspace:."\
-    },\
-    {\
-      "name": "docs",\
-      "reference": "workspace:docs"\
     }\
   ],\
   "enableTopLevelFallback": true,\
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "fallbackExclusionList": [\
-    ["docs", ["workspace:docs"]],\
     ["reactie", ["workspace:."]]\
   ],\
   "fallbackPool": [\
@@ -3133,18 +3128,6 @@ const RAW_RUNTIME_STATE =
           ["dequal", "npm:2.0.3::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Fdequal%2F-%2Fdequal-2.0.3.tgz"]\
         ],\
         "linkType": "HARD"\
-      }]\
-    ]],\
-    ["docs", [\
-      ["workspace:docs", {\
-        "packageLocation": "./docs/",\
-        "packageDependencies": [\
-          ["docs", "workspace:docs"],\
-          ["fast-glob", "npm:3.3.2::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Ffast-glob%2F-%2Ffast-glob-3.3.2.tgz"],\
-          ["vitepress", "virtual:d7c60c0aac1086f1c123a253d3228303bdfbf3ea3327a619d039bee109d0af930379609406c97fd33c9a37787564888834bf14ee401c66250339d762994c63b1#npm:1.5.0::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Fvitepress%2F-%2Fvitepress-1.5.0.tgz"],\
-          ["vue", "virtual:8d5d35f18eee161f78db7d87b1e04d10f5938868122a7083481ee650d6cfbdea8a4c19fe8aa4dae4daf7976bb2b45a0779e65235e20eae8d27d8b237f0322b8c#npm:3.5.13::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Fvue%2F-%2Fvue-3.5.13.tgz"]\
-        ],\
-        "linkType": "SOFT"\
       }]\
     ]],\
     ["doctrine", [\

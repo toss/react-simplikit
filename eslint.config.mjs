@@ -23,6 +23,7 @@ export default [
       'node_modules',
       'eslint.*',
       'vitest.*',
+      '.vitepress',
     ],
   },
   {
