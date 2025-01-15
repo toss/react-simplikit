@@ -2,10 +2,10 @@
 layout: home
 
 hero:
-  name: 'reactie'
+  name: 'reactive-kit'
   actions:
     - theme: brand
-      text: About reactie
+      text: About reactive-kit
       link: /intro
     - theme: alt
       text: Reference

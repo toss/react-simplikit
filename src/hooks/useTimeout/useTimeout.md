@@ -22,7 +22,7 @@ This hook doesn't return any value.
 ### Basic Usage
 
 ```tsx
-import { useTimeout } from 'reactie';
+import { useTimeout } from 'reactive-kit';
 
 function Notification() {
   const [visible, setVisible] = useState(true);

@@ -1,9 +1,9 @@
-# About reactie
+# About reactive-kit
 
-reactie is React utility library.
+reactive-kit is React utility library.
 
 ## Links
 
 Please refer to the following links for more information about this project.
 
-- [GitHub](https://github.com/toss/reactie)
+- [GitHub](https://github.com/toss/reactive-kit)

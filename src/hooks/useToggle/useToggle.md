@@ -25,7 +25,7 @@ Returns a `readonly [boolean, () => void]` tuple:
 ## Examples
 
 ```tsx
-import { useToggle } from 'reactie';
+import { useToggle } from 'reactive-kit';
 
 function Component() {
   const [open, toggle] = useToggle(false);

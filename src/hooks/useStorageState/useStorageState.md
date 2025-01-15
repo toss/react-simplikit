@@ -42,7 +42,7 @@ Returns a tuple of the form [state, setState]:
 ### Counter
 
 ```tsx
-import { useStorageState } from 'reactie';
+import { useStorageState } from 'reactive-kit';
 
 function Counter() {
   const [count, setCount] = useStorageState<number>('counter', {
@@ -56,7 +56,7 @@ function Counter() {
 ### Search History
 
 ```tsx
-import { useStorageState } from 'reactie';
+import { useStorageState } from 'reactive-kit';
 
 function SearchHistory() {
   const [recentSearches, setRecentSearches] = useStorageState<string[]>('recent-searches', {

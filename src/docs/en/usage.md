@@ -1,27 +1,27 @@
 ---
-description: How to use reactie
+description: How to use reactive-kit
 ---
 
 # Installation & Usage
 
-reactie is available via [npm](https://npmjs.com/package/reactie) for Node.js and Bun.
+reactive-kit is available via [npm](https://npmjs.com/package/reactive-kit) for Node.js and Bun.
 
 ## Node.js
 
-reactie supports Node.js 18 or later. Install reactie with the following command:
+reactive-kit supports Node.js 18 or later. Install reactive-kit with the following command:
 
 ::: code-group
 
 ```sh [npm]
-npm install reactie
+npm install reactive-kit
 ```
 
 ```sh [pnpm]
-pnpm add reactie
+pnpm add reactive-kit
 ```
 
 ```sh [yarn]
-yarn add reactie
+yarn add reactive-kit
 ```
 
 :::

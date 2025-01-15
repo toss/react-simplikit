@@ -22,7 +22,7 @@ This hook doesn't return any value.
 ### Basic Usage
 
 ```tsx
-import { useOutsideClickEffect } from 'reactie';
+import { useOutsideClickEffect } from 'reactive-kit';
 
 function Example() {
   const [wrapperEl, setWrapperEl] = useState<HTMLDivElement | null>(null);
@@ -58,7 +58,7 @@ function Example() {
 ### Handling Modal component
 
 ```tsx
-import { useOutsideClickEffect } from 'reactie';
+import { useOutsideClickEffect } from 'reactive-kit';
 
 function Modal({ isOpen, onClose, children }: { isOpen: boolean; onClose: () => void; children: React.ReactNode }) {
   const modalRef = useState<HTMLDivElement | null>(null);

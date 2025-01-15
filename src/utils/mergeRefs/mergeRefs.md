@@ -22,7 +22,7 @@ Returns a `RefCallback<T>` that updates all provided refs when called.
 
 ```tsx
 import { forwardRef, useRef } from 'react';
-import { mergeRefs } from 'reactie';
+import { mergeRefs } from 'reactive-kit';
 
 const Component = forwardRef((props, parentRef) => {
   const localRef = useRef(null);
@@ -35,7 +35,7 @@ const Component = forwardRef((props, parentRef) => {
 
 ```tsx
 import { useCallback, useRef } from 'react';
-import { mergeRefs } from 'reactie';
+import { mergeRefs } from 'reactive-kit';
 
 const Component = () => {
   const ref = useRef(null);

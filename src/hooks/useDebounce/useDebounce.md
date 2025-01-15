@@ -32,7 +32,7 @@ Returns the debounced function that maintains the original function's type signa
 ## Examples
 
 ```tsx
-import { useDebounce } from 'reactie';
+import { useDebounce } from 'reactive-kit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');

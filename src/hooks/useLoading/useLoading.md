@@ -27,7 +27,7 @@ The function returns a tuple of the form `[boolean, <T>(promise: Promise<T>) => 
 ## Examples
 
 ```tsx
-import { useLoading } from 'reactie';
+import { useLoading } from 'reactive-kit';
 
 function ConfirmButton() {
   const [loading, startLoading] = useLoading();

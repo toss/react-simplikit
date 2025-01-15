@@ -27,7 +27,7 @@ function usePreservedCallback<Argument = any, ReturnValue = unknown>(
 Here is an example where the button click increments a counter while logging the current count.
 
 ```tsx
-import { usePreservedCallback } from 'reactie';
+import { usePreservedCallback } from 'reactive-kit';
 import { useState } from 'react';
 
 function Counter() {
@@ -48,7 +48,7 @@ function Counter() {
 This example demonstrates how a parent component can pass a callback to a child component while preserving its reference.
 
 ```tsx
-import { usePreservedCallback } from 'reactie';
+import { usePreservedCallback } from 'reactive-kit';
 import { useState } from 'react';
 
 function Parent() {

@@ -20,7 +20,7 @@ This hook does not return anything.
 ## Example
 
 ```tsx
-import { useAsyncEffect } from 'reactie';
+import { useAsyncEffect } from 'reactive-kit';
 
 function Component() {
   const [data, setData] = useState<Data | null>(null);

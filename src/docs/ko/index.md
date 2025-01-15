@@ -2,10 +2,10 @@
 layout: home
 
 hero:
-  name: 'reactie'
+  name: 'reactive-kit'
   actions:
     - theme: brand
-      text: reactie 알아보기
+      text: reactive-kit 알아보기
       link: /ko/intro
     - theme: alt
       text: 레퍼런스

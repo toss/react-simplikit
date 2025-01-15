@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef } from 'react';
  * function maintains a stable reference while accessing the latest state or props.
  *
  * @example
- * import { usePreservedCallback } from 'reactie';
+ * import { usePreservedCallback } from 'reactive-kit';
  * import { useState } from 'react';
  *
  * function Counter() {
@@ -28,7 +28,7 @@ import { useCallback, useEffect, useRef } from 'react';
  *
  * @example
  * // Passing a stable callback reference to a child component
- * import { usePreservedCallback } from 'reactie';
+ * import { usePreservedCallback } from 'reactive-kit';
  * import { useState } from 'react';
  *
  * function Parent() {

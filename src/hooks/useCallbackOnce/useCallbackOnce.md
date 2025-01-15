@@ -31,7 +31,7 @@ function useCallbackOnce<F extends (...args: any[]) => void>(
 Here's an example of tracking a user's first interaction:
 
 ```tsx
-import { useCallbackOnce } from 'reactie';
+import { useCallbackOnce } from 'reactive-kit';
 
 function UserInteraction() {
   const trackFirstInteraction = useCallbackOnce(() => {
@@ -47,7 +47,7 @@ function UserInteraction() {
 This example shows how to track user visits, resetting when the user ID changes:
 
 ```tsx
-import { useCallbackOnce } from 'reactie';
+import { useCallbackOnce } from 'reactive-kit';
 import { useEffect } from 'react';
 
 function UserTracker({ userId }: { userId: string }) {

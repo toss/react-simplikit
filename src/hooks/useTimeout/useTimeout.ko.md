@@ -22,7 +22,7 @@ function useTimeout(callback: () => void, delay?: number): void;
 ### 기본 사용법
 
 ```tsx
-import { useTimeout } from 'reactie';
+import { useTimeout } from 'reactive-kit';
 
 function Notification() {
   const [visible, setVisible] = useState(true);

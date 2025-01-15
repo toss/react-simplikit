@@ -28,7 +28,7 @@ function useLoading(): [
 ## 예시
 
 ```tsx
-import { useLoading } from 'reactie';
+import { useLoading } from 'reactive-kit';
 
 function ConfirmButton() {
   const [loading, startLoading] = useLoading();

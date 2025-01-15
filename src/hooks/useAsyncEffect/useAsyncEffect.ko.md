@@ -20,7 +20,7 @@ function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps?: Depen
 ## 예시
 
 ```tsx
-import { useAsyncEffect } from 'reactie';
+import { useAsyncEffect } from 'reactive-kit';
 
 function Component() {
   const [data, setData] = useState<Data | null>(null);

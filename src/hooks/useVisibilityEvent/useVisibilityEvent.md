@@ -28,7 +28,7 @@ This hook does not return any value.
 ## Examples
 
 ```tsx
-import { useVisibilityEvent } from 'reactie';
+import { useVisibilityEvent } from 'reactive-kit';
 
 function Component() {
   useVisibilityEvent(visibilityState => {

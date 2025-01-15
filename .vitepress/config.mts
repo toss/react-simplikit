@@ -3,7 +3,7 @@ import { en } from './en.mts';
 import { ko } from './ko.mts';
 
 export default defineConfig({
-  title: 'reactie',
+  title: 'reactive-kit',
   locales: {
     root: { label: 'English', ...en },
     ko: { label: '한국어', ...ko },

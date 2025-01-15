@@ -8,7 +8,7 @@ export const en = defineConfig({
     nav: nav(),
     sidebar: sidebar(),
     editLink: {
-      pattern: 'https://github.com/toss/reactie/edit/main/docs/:path',
+      pattern: 'https://github.com/toss/reactive-kit/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
     footer: {

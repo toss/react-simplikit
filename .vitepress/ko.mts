@@ -8,7 +8,7 @@ export const ko = defineConfig({
     nav: nav(),
     sidebar: sidebar(),
     editLink: {
-      pattern: 'https://github.com/toss/reactie/edit/main/docs/:path',
+      pattern: 'https://github.com/toss/reactive-kit/edit/main/docs/:path',
       text: 'GitHub에서 수정하기',
     },
     footer: {

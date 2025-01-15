@@ -31,7 +31,7 @@ function useCallbackOnce<F extends (...args: any[]) => void>(
 사용자의 첫 상호작용을 추적하는 예제예요:
 
 ```tsx
-import { useCallbackOnce } from 'reactie';
+import { useCallbackOnce } from 'reactive-kit';
 
 function UserInteraction() {
   const trackFirstInteraction = useCallbackOnce(() => {
@@ -47,7 +47,7 @@ function UserInteraction() {
 사용자 ID가 변경될 때 방문을 추적하는 예제예요:
 
 ```tsx
-import { useCallbackOnce } from 'reactie';
+import { useCallbackOnce } from 'reactive-kit';
 import { useEffect } from 'react';
 
 function UserTracker({ userId }: { userId: string }) {

@@ -29,7 +29,7 @@ Returns a `readonly [boolean, () => void, () => void, () => void]` tuple:
 ## Examples
 
 ```tsx
-import { useBooleanState } from 'reactie';
+import { useBooleanState } from 'reactive-kit';
 
 function Component() {
   const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);

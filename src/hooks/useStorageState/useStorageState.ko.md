@@ -42,7 +42,7 @@ function useStorageState<T>(
 ### 카운터 예시
 
 ```tsx
-import { useStorageState } from 'reactie';
+import { useStorageState } from 'reactive-kit';
 
 function Counter() {
   const [count, setCount] = useStorageState<number>('counter', {
@@ -56,7 +56,7 @@ function Counter() {
 ### 최근 검색어 예시
 
 ```tsx
-import { useStorageState } from 'reactie';
+import { useStorageState } from 'reactive-kit';
 
 function SearchHistory() {
   const [recentSearches, setRecentSearches] = useStorageState<string[]>('recent-searches', {

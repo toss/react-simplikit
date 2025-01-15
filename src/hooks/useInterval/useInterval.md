@@ -39,7 +39,7 @@ This hook doesn't return any value.
 ### Basic Usage
 
 ```tsx
-import { useInterval } from 'reactie';
+import { useInterval } from 'reactive-kit';
 
 function Timer() {
   const [time, setTime] = useState(0);
@@ -61,7 +61,7 @@ function Timer() {
 You can control the execution by setting `enabled` to `false`.
 
 ```tsx
-import { useInterval } from 'reactie';
+import { useInterval } from 'reactive-kit';
 
 function StopWatch() {
   const [time, setTime] = useState(0);
@@ -91,7 +91,7 @@ function StopWatch() {
 Set `trailing` to `false` to execute the callback immediately and then periodically.
 
 ```tsx
-import { useInterval } from 'reactie';
+import { useInterval } from 'reactive-kit';
 
 function PollingExample() {
   const [data, setData] = useState<string>(null);
