@@ -19,3 +19,7 @@ node_modules
 
 # output of 'vitest run --coverage'
 coverage
+
+# vitepress
+.vitepress/cache
+.vitepress/dist
