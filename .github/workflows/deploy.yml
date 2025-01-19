@@ -1,0 +1,83 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      implementation: ${{ steps.changes.outputs.implementation }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Check for changes in .ts and .tsx files
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            implementation:
+              - 'src/**/*.ts'
+              - 'src/**/*.tsx'
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.implementation == 'true' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Bump version
+        run: yarn version patch
+
+      - name: Publish package
+        run: |
+          echo "npmAuthToken: \${NPM_TOKEN}" >> .yarnrc.yml
+          yarn npm publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Set git username with email
+        run: |
+          git config user.name "pumpkiinbell" 
+          git config user.email "pumpkiinbell@gmail.com"
+
+      - name: Tag version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          git tag -a "v$VERSION" -m "$COMMIT_MESSAGE"
+
+      - name: Commit version bump
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          git add package.json
+          git commit -m "bump version to $VERSION"
+
+      - name: Push changes and tags
+        run: |
+          git push -u origin HEAD --follow-tags --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
