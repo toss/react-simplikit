@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import { useRefEffect } from './useRefEffect.legacy.ts';
+import { useRefEffect } from './useRefEffect.ts';
 
 describe('useRefEffect', () => {
   it('should call the callback when a new element is set', () => {
