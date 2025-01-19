@@ -1,6 +1,9 @@
 name: CI
 
 on:
+  pull_request:
+    branches:
+      - develop
   push:
     branches:
       - create-ci-workflow
@@ -9,7 +12,8 @@ jobs:
   check-changes:
     runs-on: ubuntu-latest
     outputs:
-      implementation: ${{ steps.changes.outputs.implementation }}
+      changed: ${{ steps.filter.outputs.changed }}
+      changed_files: ${{ steps.filter.outputs.changed_files }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,26 +24,31 @@ jobs:
           node-version: '20.x'
 
       - name: Check for changes in .ts and .tsx files
-        id: changes
+        id: filter
         uses: dorny/paths-filter@v3
         with:
+          list-files: csv
           filters: |
-            ts:
+            changed:
               - 'src/**/*.ts'
               - 'src/**/*.tsx'
 
   verify-documentation:
     runs-on: ubuntu-latest
     needs: check-changes
-    if: ${{ needs.check-changes.outputs.implementation != '' }}
+    if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Verify documentation exists
         run: |
-          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
-            doc_file="${file%.*}.md"
+          echo ${{ needs.check-changes.outputs.changed_files }}
+
+          for file in $(echo "${{ needs.check-changes.outputs.changed_files }}" | tr ',' '\n'); do
+            dir_name=$(dirname "$file")
+            base_name=$(basename "${file%.*}")
+            doc_file="$dir_name/$base_name.md"
             if [ ! -f "$doc_file" ]; then
               echo "Documentation missing for $file"
               exit 1
@@ -49,17 +58,19 @@ jobs:
   verify-tests:
     runs-on: ubuntu-latest
     needs: check-changes
-    if: ${{ needs.check-changes.outputs.implementation != '' }}
+    if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Verify test files exist
         run: |
-          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
-            test_file="${file%.*}.spec.ts"
+          for file in $(echo "${{ needs.check-changes.outputs.changed_files }}" | tr ',' '\n'); do
+            dir_name=$(dirname "$file")
+            base_name=$(basename "${file%.*}")
+            test_file="$dir_name/$base_name.spec.ts"
             if [ ! -f "$test_file" ]; then
-              test_file="${file%.*}.spec.tsx"
+              test_file="$dir_name/$base_name.spec.tsx"
               if [ ! -f "$test_file" ]; then
                 echo "Test file missing for $file"
                 exit 1
@@ -69,13 +80,13 @@ jobs:
 
       - name: Run tests with coverage for changed files
         run: |
-          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
+          for file in $(echo "${{ needs.check-changes.outputs.changed_files }}" | tr ',' '\n'); do
             yarn vitest run --coverage $file
           done
 
       - name: Check test coverage
         run: |
-          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
+          for file in $(echo "${{ needs.check-changes.outputs.changed_files }}" | tr ',' '\n'); do
             coverage_file="coverage/lcov-report/${file}.html"
             if [ ! -f "$coverage_file" ] || ! grep -q "100%" "$coverage_file"; then
               echo "Not all lines are covered by tests in $file"
@@ -86,14 +97,14 @@ jobs:
   verify-jsdoc:
     runs-on: ubuntu-latest
     needs: check-changes
-    if: ${{ needs.check-changes.outputs.implementation != '' }}
+    if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Check for JSDoc comments
         run: |
-          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
+          for file in $(echo "${{ needs.check-changes.outputs.changed_files }}" | tr ',' '\n'); do
             if ! grep -q "/**" "$file"; then
               echo "JSDoc comments missing in $file"
               exit 1
