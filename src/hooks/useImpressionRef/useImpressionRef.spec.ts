@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import { useImpressionRef, UseImpressionRefOptions } from './useImpressionRef.legacy.ts';
+import { useImpressionRef, UseImpressionRefOptions } from './useImpressionRef.ts';
 
 const mockInstances: any[] = [];
 
