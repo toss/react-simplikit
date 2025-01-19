@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { Mock, MockInstance, vi } from 'vitest';
 
-import { useIntersectionObserver } from './useIntersectionObserver.legacy.ts';
+import { useIntersectionObserver } from './useIntersectionObserver.ts';
 
 class MockIntersectionObserver {
   observe = vi.fn();
