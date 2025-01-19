@@ -32,6 +32,7 @@ const RAW_RUNTIME_STATE =
           ["@testing-library/jest-dom", "npm:6.6.3"],\
           ["@testing-library/react", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:16.1.0"],\
           ["@trivago/prettier-plugin-sort-imports", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:5.2.1"],\
+          ["@types/lodash.debounce", "npm:4.0.9::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash.debounce%2F-%2Flodash.debounce-4.0.9.tgz"],\
           ["@types/node", "npm:22.10.6"],\
           ["@types/react", "npm:19.0.7"],\
           ["@vitest/coverage-v8", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:2.1.8"],\
@@ -48,6 +49,7 @@ const RAW_RUNTIME_STATE =
           ["fast-glob", "npm:3.3.3"],\
           ["globals", "npm:15.14.0"],\
           ["jsdom", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:25.0.1"],\
+          ["lodash.debounce", "npm:4.0.8::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Flodash.debounce%2F-%2Flodash.debounce-4.0.8.tgz"],\
           ["prettier", "npm:3.4.2"],\
           ["prettier-plugin-sort-re-exports", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:0.1.0"],\
           ["react", "npm:19.0.0"],\
@@ -1813,6 +1815,25 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-linkify-it-npm-5.0.0-576a16b976-7bbbf45b9d.zip/node_modules/@types/linkify-it/",\
         "packageDependencies": [\
           ["@types/linkify-it", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/lodash", [\
+      ["npm:4.17.14::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash%2F-%2Flodash-4.17.14.tgz", {\
+        "packageLocation": "./.yarn/cache/@types-lodash-npm-4.17.14-4a7bf9ce0f-343c6f722e.zip/node_modules/@types/lodash/",\
+        "packageDependencies": [\
+          ["@types/lodash", "npm:4.17.14::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash%2F-%2Flodash-4.17.14.tgz"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/lodash.debounce", [\
+      ["npm:4.0.9::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash.debounce%2F-%2Flodash.debounce-4.0.9.tgz", {\
+        "packageLocation": "./.yarn/cache/@types-lodash.debounce-npm-4.0.9-960857bc70-9fbb24e5e5.zip/node_modules/@types/lodash.debounce/",\
+        "packageDependencies": [\
+          ["@types/lodash.debounce", "npm:4.0.9::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash.debounce%2F-%2Flodash.debounce-4.0.9.tgz"],\
+          ["@types/lodash", "npm:4.17.14::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash%2F-%2Flodash-4.17.14.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -5305,6 +5326,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["lodash.debounce", [\
+      ["npm:4.0.8::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Flodash.debounce%2F-%2Flodash.debounce-4.0.8.tgz", {\
+        "packageLocation": "./.yarn/cache/lodash.debounce-npm-4.0.8-33dbda8a2e-762998a63e.zip/node_modules/lodash.debounce/",\
+        "packageDependencies": [\
+          ["lodash.debounce", "npm:4.0.8::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Flodash.debounce%2F-%2Flodash.debounce-4.0.8.tgz"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["lodash.merge", [\
       ["npm:4.6.2", {\
         "packageLocation": "./.yarn/cache/lodash.merge-npm-4.6.2-77cb4416bf-402fa16a1e.zip/node_modules/lodash.merge/",\
@@ -6307,6 +6337,7 @@ const RAW_RUNTIME_STATE =
           ["@testing-library/jest-dom", "npm:6.6.3"],\
           ["@testing-library/react", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:16.1.0"],\
           ["@trivago/prettier-plugin-sort-imports", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:5.2.1"],\
+          ["@types/lodash.debounce", "npm:4.0.9::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash.debounce%2F-%2Flodash.debounce-4.0.9.tgz"],\
           ["@types/node", "npm:22.10.6"],\
           ["@types/react", "npm:19.0.7"],\
           ["@vitest/coverage-v8", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:2.1.8"],\
@@ -6323,6 +6354,7 @@ const RAW_RUNTIME_STATE =
           ["fast-glob", "npm:3.3.3"],\
           ["globals", "npm:15.14.0"],\
           ["jsdom", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:25.0.1"],\
+          ["lodash.debounce", "npm:4.0.8::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Flodash.debounce%2F-%2Flodash.debounce-4.0.8.tgz"],\
           ["prettier", "npm:3.4.2"],\
           ["prettier-plugin-sort-re-exports", "virtual:434acee5c30e31739fbf83c96014c2e442b6ca35a57fd951859facc1eaf8815ea2742084e53124b5c742dd65a3de2e1f9bbfeac2ef1467a3d949512f01e7bfb0#npm:0.1.0"],\
           ["react", "npm:19.0.0"],\
