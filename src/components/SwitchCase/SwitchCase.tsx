@@ -12,6 +12,7 @@ interface Props<Case> {
   value: Case;
   caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactNode }>;
   defaultComponent?: () => ReactNode;
+  a?: boolean;
 }
 
 export function SwitchCase<Case>({ value, caseBy, defaultComponent = () => null }: Props<Case>) {
