@@ -9,7 +9,7 @@ jobs:
   check-changes:
     runs-on: ubuntu-latest
     outputs:
-      implementation: ${{ steps.changes.outputs.implementation }}
+      changed: ${{ steps.filter.outputs.changed }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,18 +20,18 @@ jobs:
           node-version: '20.x'
 
       - name: Check for changes in .ts and .tsx files
-        id: changes
+        id: filter
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            implementation:
+            changed:
               - 'src/**/*.ts'
               - 'src/**/*.tsx'
 
   deploy:
     runs-on: ubuntu-latest
     needs: check-changes
-    if: ${{ needs.check-changes.outputs.implementation == 'true' }}
+    if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
