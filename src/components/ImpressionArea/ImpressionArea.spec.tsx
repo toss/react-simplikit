@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import { ImpressionArea } from './ImpressionArea.legacy.tsx';
+import { ImpressionArea } from './ImpressionArea.tsx';
 
 const mockInstances: any[] = [];
 
