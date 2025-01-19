@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      implementation: ${{ steps.changes.outputs.implementation }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Check for changes in .ts and .tsx files
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            ts:
+              - 'src/**/*.ts'
+              - 'src/**/*.tsx'
+
+  verify-documentation:
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.implementation != '' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify documentation exists
+        run: |
+          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
+            doc_file="${file%.*}.md"
+            if [ ! -f "$doc_file" ]; then
+              echo "Documentation missing for $file"
+              exit 1
+            fi
+          done
+
+  verify-tests:
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.implementation != '' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify test files exist
+        run: |
+          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
+            test_file="${file%.*}.spec.ts"
+            if [ ! -f "$test_file" ]; then
+              test_file="${file%.*}.spec.tsx"
+              if [ ! -f "$test_file" ]; then
+                echo "Test file missing for $file"
+                exit 1
+              fi
+            fi
+          done
+
+      - name: Run tests with coverage for changed files
+        run: |
+          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
+            yarn vitest run --coverage $file
+          done
+
+      - name: Check test coverage
+        run: |
+          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
+            coverage_file="coverage/lcov-report/${file}.html"
+            if [ ! -f "$coverage_file" ] || ! grep -q "100%" "$coverage_file"; then
+              echo "Not all lines are covered by tests in $file"
+              exit 1
+            fi
+          done
+
+  verify-jsdoc:
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.implementation != '' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for JSDoc comments
+        run: |
+          for file in $(echo "${{ needs.check-changes.outputs.implementation }}" | tr ',' '\n'); do
+            if ! grep -q "/**" "$file"; then
+              echo "JSDoc comments missing in $file"
+              exit 1
+            fi
+          done
