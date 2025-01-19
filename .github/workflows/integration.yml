@@ -1,0 +1,120 @@
+name: Integration
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.filter.outputs.changed }}
+      changed_files: ${{ steps.filter.outputs.changed_files }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Check for changes in .ts and .tsx files
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          list-files: csv
+          filters: |
+            changed:
+              - 'src/**/*.ts'
+              - 'src/**/*.tsx'
+
+  verify-documentation:
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.changed == 'true' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify documentation exists
+        run: |
+          for file in $(echo "${{ needs.check-changes.outputs.changed_files }}" | tr ',' '\n'); do
+            if [[ "$file" != *.ts && "$file" != *.tsx ]]; then
+              continue
+            fi
+            dir_name=$(basename $(dirname "$file"))
+            base_name=$(basename "${file%.*}")
+            if [ "$dir_name" != "$base_name" ]; then
+              continue
+            fi
+            doc_file="$(dirname "$file")/$base_name.md"
+            if [ ! -f "$doc_file" ]; then
+              echo "Documentation missing for $file"
+              exit 1
+            fi
+          done
+
+  verify-test:
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.changed == 'true' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Verify and run tests with coverage
+        run: |
+          corepack enable
+          yarn install
+
+          for file in $(echo "${{ needs.check-changes.outputs.changed_files }}" | tr ',' '\n'); do
+            if [[ "$file" != *.ts && "$file" != *.tsx ]]; then
+              continue
+            fi
+            dir_name=$(basename $(dirname "$file"))
+            base_name=$(basename "${file%.*}")
+            if [ "$dir_name" != "$base_name" ]; then
+              continue
+            fi
+            test_file="$(dirname "$file")/$base_name.spec.ts"
+            if [ ! -f "$test_file" ]; then
+              test_file="$(dirname "$file")/$base_name.spec.tsx"
+              if [ ! -f "$test_file" ]; then
+                echo "Test file missing for $file"
+                exit 1
+              fi
+            fi
+            yarn run test:coverage $test_file
+          done
+
+  verify-jsdoc:
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.changed == 'true' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for JSDoc comments
+        run: |
+          for file in $(echo "${{ needs.check-changes.outputs.changed_files }}" | tr ',' '\n'); do
+            if [[ "$file" != *.ts && "$file" != *.tsx ]]; then
+              continue
+            fi
+            dir_name=$(basename $(dirname "$file"))
+            base_name=$(basename "${file%.*}")
+            if [ "$dir_name" != "$base_name" ]; then
+              continue
+            fi
+            if ! grep -q "/**" "$file"; then
+              echo "JSDoc comments missing in $file"
+              exit 1
+            fi
+          done
