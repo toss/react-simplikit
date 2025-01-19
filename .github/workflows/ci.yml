@@ -1,9 +1,9 @@
 name: CI
 
 on:
-  pull_request:
+  push:
     branches:
-      - develop
+      - create-ci-workflow
 
 jobs:
   check-changes:
