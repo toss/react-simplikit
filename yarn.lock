@@ -1417,22 +1417,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.debounce@npm:^4":
-  version: 4.0.9
-  resolution: "@types/lodash.debounce@npm:4.0.9::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash.debounce%2F-%2Flodash.debounce-4.0.9.tgz"
-  dependencies:
-    "@types/lodash": "npm:*"
-  checksum: 10c0/9fbb24e5e52616faf60ba5c82d8c6517f4b86fc6e9ab353b4c56c0760f63d9bf53af3f2d8f6c37efa48090359fb96dba1087d497758511f6c40677002191d042
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*":
-  version: 4.17.14
-  resolution: "@types/lodash@npm:4.17.14::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2F%40types%2Flodash%2F-%2Flodash-4.17.14.tgz"
-  checksum: 10c0/343c6f722e0b39969036a885ad5aad6578479ead83987128c9b994e6b7f2fb9808244d802d4d332396bb09096f720a6c7060de16a492f5460e06a44560360322
-  languageName: node
-  linkType: hard
-
 "@types/markdown-it@npm:^14.1.2":
   version: 14.1.2
   resolution: "@types/markdown-it@npm:14.1.2"
@@ -4367,13 +4351,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.debounce@npm:^4.0.8":
-  version: 4.0.8
-  resolution: "lodash.debounce@npm:4.0.8::__archiveUrl=http%3A%2F%2Fnexus.toss.bz%2Frepository%2Fnpm-group%2Flodash.debounce%2F-%2Flodash.debounce-4.0.8.tgz"
-  checksum: 10c0/762998a63e095412b6099b8290903e0a8ddcb353ac6e2e0f2d7e7d03abd4275fe3c689d88960eb90b0dde4f177554d51a690f22a343932ecbc50a5d111849987
-  languageName: node
-  linkType: hard
-
 "lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
@@ -5233,7 +5210,6 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.6.3"
     "@testing-library/react": "npm:^16.1.0"
     "@trivago/prettier-plugin-sort-imports": "npm:^5.2.0"
-    "@types/lodash.debounce": "npm:^4"
     "@types/node": "npm:^22.10.2"
     "@types/react": "npm:^19.0.7"
     "@vitest/coverage-v8": "npm:^2.1.8"
@@ -5250,7 +5226,6 @@ __metadata:
     fast-glob: "npm:^3.3.3"
     globals: "npm:^15.13.0"
     jsdom: "npm:^25.0.1"
-    lodash.debounce: "npm:^4.0.8"
     prettier: "npm:^3.4.2"
     prettier-plugin-sort-re-exports: "npm:^0.1.0"
     react: "npm:^19.0.0"
