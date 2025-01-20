@@ -37,7 +37,6 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
-    "@types/lodash.debounce": "^4",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.7",
     "@vitest/coverage-v8": "^2.1.8",
@@ -69,8 +68,5 @@
     "react": "*",
     "react-dom": "*"
   },
-  "packageManager": "yarn@4.5.3",
-  "dependencies": {
-    "lodash.debounce": "^4.0.8"
-  }
+  "packageManager": "yarn@4.5.3"
 }
