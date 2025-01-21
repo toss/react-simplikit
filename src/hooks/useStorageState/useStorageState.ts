@@ -23,8 +23,26 @@ const emitListeners = () => {
 };
 
 /**
+ * @description
  * a hook that works like useState but stores the state value in the storage and retains the value.
- * @param key key for storage
+ *
+ * @param key - key for storage
+ * @param options - options for storage
+ * - `options.storage`: Storage to use (default: `safeLocalStorage`)
+ * - `options.defaultValue`: Initial value
+ * 
+ * @returns a tuple of the form [state, setState]:
+ * - `state`: Current state value
+ * - `setState`: Function to update the state
+ * 
+ * @example
+ * function Counter() {
+ *   const [count, setCount] = useStorageState<number>('counter', {
+ *     defaultValue: 0,
+ *   });
+ * 
+ *   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
+ * }
  */
 export function useStorageState<T>(
   key: string

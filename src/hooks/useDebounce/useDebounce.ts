@@ -11,11 +11,13 @@ interface DebounceOptions {
 }
 
 /**
+ * @description
  * `useDebounce` is a hook that returns a debounced version of the provided callback function
  *
  * @param callback Function to debounce
  * @param wait Time in milliseconds to delay
  * @param options Configuration options for debounce behavior
+ * 
  * @returns Debounced function that will delay invoking the callback
  *
  * @example

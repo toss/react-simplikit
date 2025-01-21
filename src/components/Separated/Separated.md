@@ -12,7 +12,7 @@
 ```tsx
 <Separated with={<Border type="padding24" />}>
   {LIST.map(item => (
-    <div>item.title</div>
+    <div>{item.title}</div>
   ))}
 </Separated>
 ```
