@@ -3,11 +3,16 @@ import { useCallback, useState } from 'react';
 /**
  *
  * @description
- * boolean 타입으로 useState를 쉽게 사용할 수 있는 hook 입니다.
+ * useBooleanState is a React hook that helps manage a boolean state easily. It provides functionalities to set the state to true, set it to false, and toggle the state.
  *
- * ```ts
- * function useBooleanState(defaultValue = false): readonly [bool, setTrue, setFalse, toggle];
- * ```
+ * @param defaultValue - It's the initial value of the state. The default value is false.
+ *
+ * @returns Returns a `readonly [boolean, () => void, () => void, () => void]` tuple:
+ *
+ * 1. boolean: The current state value
+ * 2. () => void: A function to set the state to true
+ * 3. () => void: A function to set the state to false  
+ * 4. () => void: A function to toggle the state
  *
  * @example
  * const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
