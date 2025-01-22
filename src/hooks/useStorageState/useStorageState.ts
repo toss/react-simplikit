@@ -7,12 +7,12 @@ type ToObject<T> = T extends unknown[] | Record<string, unknown> ? T : never;
 
 export type Serializable<T> = T extends string | number | boolean ? ToPrimitive<T> : ToObject<T>;
 
-interface StorageStateOptions<T> {
+type StorageStateOptions<T> = {
   storage?: Storage;
   defaultValue?: Serializable<T>;
 }
 
-interface StorageStateOptionsWithDefaultValue<T> extends StorageStateOptions<T> {
+type StorageStateOptionsWithDefaultValue<T> = StorageStateOptions<T> & {
   defaultValue: Serializable<T>;
 }
 

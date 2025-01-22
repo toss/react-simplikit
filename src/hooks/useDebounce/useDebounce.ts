@@ -5,7 +5,7 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 import { debounce } from './debounce.ts';
 
-interface DebounceOptions {
+type DebounceOptions = {
   leading?: boolean;
   trailing?: boolean;
 }
