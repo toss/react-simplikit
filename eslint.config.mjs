@@ -49,6 +49,7 @@ export default [
       ...hooksPlugin.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/strict-boolean-expressions': 'error',
+      '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
       'react/react-in-jsx-scope': 'off',
       'import/extensions': [
         'error',

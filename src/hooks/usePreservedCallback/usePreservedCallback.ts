@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 /**
+ * @description
  * A React hook that preserves the reference of a callback function while ensuring it always
  * uses the latest state or props. This helps prevent unnecessary re-renders and simplifies
  * dependency management when stable callback references are needed.
