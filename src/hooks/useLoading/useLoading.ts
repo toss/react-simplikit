@@ -5,38 +5,36 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
  *
  *
  * @description
- * Promise의 로딩 상태를 쉽게 관리할 수 있게 해주는 훅입니다.
+ * `useLoading` is a React hook that helps manage the loading state of a `Promise` easily. It provides a state to check whether an asynchronous operation is in progress, along with functions to handle the loading state.
  *
- * `useLoading` 은 `[isLoading: boolean, startLoading: (promise: Promise) => Promise]`의 Tuple을 반환합니다.
+ * @returns The function returns a tuple of the form `[boolean, <T>(promise: Promise<T>) => Promise<T>]`:
  *
- * - 첫 번째 값인 `isLoading` 은 처음에 `false` 로 시작합니다.
- * - 두 번째 값인 `startLoading`은 `promise`를 반환하는 함수입니다.
- *    - `startLoading`이 실행되고 인자로 주어진 Promise가 resolve 될 때까지 `isLoading`은 `true`가 됩니다.
- *    - 이후 그 Promise가 resolve되면 `isLoading` 은 다시 `false`가 됩니다.
+ * 1. `boolean`: Represents the current loading state.
  *
- * `useLoading`을 사용하는 정확한 방법은 아래 Example을 참고해주시기 바랍니다.
+ * - The initial value is `false`.
+ * - It is set to `true` when an asynchronous task is in progress.
  *
- * ```typescript
- * const [isLoading, startLoading] = useLoading();
- * ```
+ * 2. `<T>(promise: Promise<T>) => Promise<T>`: This is a function that executes asynchronous tasks while managing the loading state.
+ *
+ * - This function takes a `Promise` as an argument and sets the `isLoading` state to `false` when the `Promise` is completed.
+ *
  * @example
- * function postConfirmation(data: Data): Promise<Result> {
- *   return post.e2e<Result>('/api/sample/confirm', data);
- * }
+ * function ConfirmButton() {
+ *   const [loading, startLoading] = useLoading();
  *
- * function ConfirmButton({ data }: { data: Data }) {
- *   const [loading, startTransition] = useLoading();
+ *   const handleSubmit = useCallback(async () => {
+ *     try {
+ *       const result = await startLoading(postConfirmation());
+ *       router.push(`/success?id=${result.id}`);
+ *     } catch (error) {
+ *       console.error('Error:', error);
+ *     }
+ *   }, [startLoading, data]);
  *
- *   const handleSubmit = useCallback(() => {
- *     const result = await startTransition(postConfirmation(data));
- *     router.push(`/success?id=${result.id}`);
- *   }, [call])
- *
- *   return (
- *     <Button loading={loading} onClick={handleSubmit}>
- *       GoGo
- *     </Button>
- *   )
+ *     <button disabled={loading} onClick={handleSubmit}>
+ *       {loading ? 'loading...' : 'Confirm'}
+ *     </button>
+ *   );
  * }
  */
 export function useLoading(): [boolean, <T>(promise: Promise<T>) => Promise<T>] {

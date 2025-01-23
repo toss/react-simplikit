@@ -5,17 +5,19 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 import { debounce } from './debounce.ts';
 
-interface DebounceOptions {
+type DebounceOptions = {
   leading?: boolean;
   trailing?: boolean;
-}
+};
 
 /**
+ * @description
  * `useDebounce` is a hook that returns a debounced version of the provided callback function
  *
  * @param callback Function to debounce
  * @param wait Time in milliseconds to delay
  * @param options Configuration options for debounce behavior
+ *
  * @returns Debounced function that will delay invoking the callback
  *
  * @example
@@ -46,7 +48,7 @@ export function useDebounce<F extends (...args: unknown[]) => unknown>(
 ) {
   const preservedCallback = usePreservedCallback(callback);
 
-  const { leading = true, trailing = true } = options;
+  const { leading = false, trailing = true } = options;
 
   const edges = useMemo(() => {
     const _edges: Array<'leading' | 'trailing'> = [];
