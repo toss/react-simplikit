@@ -4,11 +4,12 @@ import { sortByText } from './libs/sortByText.mts';
 import { sourceRoot } from './shared.mts';
 
 export const ko = defineConfig({
+  lang: 'ko',
   themeConfig: {
     nav: nav(),
     sidebar: sidebar(),
     editLink: {
-      pattern: 'https://github.com/toss/reactive-kit/edit/main/docs/:path',
+      pattern: 'https://github.com/toss/reactive-kit/edit/develop/src/:path',
       text: 'GitHub에서 수정하기',
     },
     footer: {
@@ -22,6 +23,7 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     { text: '홈', link: '/ko' },
     { text: '소개', link: '/ko/intro.html' },
+    { text: '레퍼런스', link: '/ko/hooks/useBooleanState.html' },
   ];
 }
 
@@ -31,7 +33,8 @@ function sidebar(): DefaultTheme.Sidebar {
       text: '가이드',
       items: [
         { text: '소개', link: '/ko/intro' },
-        { text: '설치 및 사용 방법', link: '/ko/usage' },
+        { text: '설계 원칙', link: '/ko/design-principles' },
+        { text: '설치하기', link: '/ko/installation' },
       ],
     },
     {
@@ -53,3 +56,29 @@ function sidebar(): DefaultTheme.Sidebar {
     },
   ];
 }
+
+export const search: DefaultTheme.LocalSearchOptions['locales'] = {
+  ko: {
+    translations: {
+      button: {
+        buttonText: '검색',
+        buttonAriaLabel: '검색',
+      },
+      modal: {
+        backButtonTitle: '뒤로가기',
+        displayDetails: '더보기',
+        footer: {
+          closeKeyAriaLabel: '닫기',
+          closeText: '닫기',
+          navigateDownKeyAriaLabel: '아래로',
+          navigateText: '이동',
+          navigateUpKeyAriaLabel: '위로',
+          selectKeyAriaLabel: '선택',
+          selectText: '선택',
+        },
+        noResultsText: '검색 결과를 찾지 못했어요.',
+        resetButtonTitle: '모두 지우기',
+      },
+    },
+  },
+};
