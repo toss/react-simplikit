@@ -7,6 +7,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'v8',
+      reporter: ['text', 'json'],
       extension: ['.ts', '.tsx'],
       include: ['src/**/*.ts?(x)'],
       exclude: ['src/**/index.ts', 'src/**/*.spec.ts?(x)'],

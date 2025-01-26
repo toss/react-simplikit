@@ -89,15 +89,27 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Verify and run tests with coverage
+      - name: Install dependencies
         run: |
           corepack enable
           yarn install
 
-          for file in ${{ needs.check-changes.outputs.changed_files }}; do
+      - name: Run tests and generate coverage
+        run: yarn run test:coverage
+
+      - name: Verify test coverage
+        run: |
+          changed_files="${{ needs.check-changes.outputs.changed_files }}"
+          coverage_file="coverage/coverage-final.json"
+
+          if [ ! -f "$coverage_file" ]; then
+            echo "Coverage file not found!"
+            exit 1
+          fi          
+
+          for file in $changed_files; do
             dir_name=$(basename $(dirname "$file"))
             base_name=$(basename $dir_name)
-
             test_file="$(dirname "$file")/$base_name.spec.ts"
 
             if [ ! -f "$test_file" ]; then
@@ -107,6 +119,46 @@ jobs:
                 echo "Test file missing for $base_name"
                 exit 1
               fi
+            fi
+
+            # Debugging: Print the file path
+            echo "Checking coverage for: $file"
+
+            # Extract coverage data for the file using base_name
+            coverage_data=$(jq -r --arg file "$file_to_check" '. | to_entries[] | select(.key | contains($file)) | .value' "$coverage_file")
+
+            if [ -z "$coverage_data" ]; then
+              echo "No coverage data found for $file_to_check"
+              exit 1
+            fi
+
+            total_lines=0
+            covered_lines=0
+
+            # 각 커버리지 데이터 항목을 순회
+            for entry in $(echo "$coverage_data" | jq -c '.s | to_entries[]'); do
+              line_coverage=$(echo "$entry" | jq -r '.value')
+
+              # 총 라인 수와 커버된 라인 수 계산
+              total_lines=$((total_lines + 1))
+              if [ "$line_coverage" -gt 0 ]; then
+                covered_lines=$((covered_lines + 1))
+              fi
+            done
+
+            # Calculate overall coverage percentage
+            coverage=$(echo "scale=2; ($covered_lines / $total_lines) * 100" | bc)
+
+            # Debugging: Print accumulated total and covered lines
+            echo "Total lines: $total_lines, Covered lines: $covered_lines"
+            echo "Coverage: $coverage%"
+
+            # Check if coverage is 100%
+            if (( $(echo "$coverage < 100" | bc -l) )); then
+              echo "Overall test coverage is not 100%: $coverage%"
+              exit 1
+            else
+              echo "Test coverage is 100%."
             fi
           done
 
