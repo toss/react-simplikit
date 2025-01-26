@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - fix/deployment-workflow
 
 jobs:
   check-changes:
@@ -61,8 +62,7 @@ jobs:
 
       - name: Set git username with email
         run: |
-          git config user.name "pumpkiinbell" 
-          git config user.email "pumpkiinbell@gmail.com"
+          git config user.name "Deploy Bot"
 
       - name: Tag version
         run: |
