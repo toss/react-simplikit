@@ -61,8 +61,8 @@ jobs:
 
       - name: Set git username with email
         run: |
-          git config user.name "Deploy Bot"
-          git config user.name "pumpkiinbell@gmail.com"
+          git config user.name "pumpkiinbell"
+          git config user.email "pumpkiinbell@gmail.com"
 
       - name: Tag version
         run: |
