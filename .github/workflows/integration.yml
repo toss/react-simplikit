@@ -138,4 +138,14 @@ jobs:
               echo "JSDoc comments missing in $implementation"
               exit 1
             fi
+
+            if ! grep -q "@description" "$implementation"; then
+              echo "@description tag missing in $implementation"
+              exit 1
+            fi
+
+            if ! grep -q "@example" "$implementation"; then
+              echo "@example tag missing in $implementation"
+              exit 1
+            fi
           done
