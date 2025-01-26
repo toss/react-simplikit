@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - fix/deployment-workflow
 
 jobs:
   check-changes:
