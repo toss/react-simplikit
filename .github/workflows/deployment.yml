@@ -78,4 +78,4 @@ jobs:
         run: |
           git push -u origin HEAD --follow-tags --force
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOSS_REACTIVE_KIT_GITHUB_ACCESS_TOKEN }}
