@@ -4,9 +4,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildContext } from './buildContext.tsx';
 
 describe('buildContext', () => {
-  interface TestContextType {
+  type TestContextType = {
     title: string;
-  }
+  };
 
   const defaultValues: TestContextType = {
     title: 'default title',
