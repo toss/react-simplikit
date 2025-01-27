@@ -158,7 +158,7 @@ jobs:
               echo "Overall test coverage is not 100%: $coverage%"
               exit 1
             else
-              echo "Test coverage is 100%."
+              echo "$file test coverage is 100%."
             fi
           done
 
