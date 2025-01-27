@@ -125,21 +125,21 @@ jobs:
             echo "Checking coverage for: $file"
 
             # Extract coverage data for the file using base_name
-            coverage_data=$(jq -r --arg file "$file_to_check" '. | to_entries[] | select(.key | contains($file)) | .value' "$coverage_file")
+            coverage_data=$(jq -r --arg file "$file" '. | to_entries[] | select(.key | contains($file)) | .value' "$coverage_file")
 
             if [ -z "$coverage_data" ]; then
-              echo "No coverage data found for $file_to_check"
+              echo "No coverage data found for $file"
               exit 1
             fi
 
             total_lines=0
             covered_lines=0
 
-            # 각 커버리지 데이터 항목을 순회
-            for entry in $(echo "$coverage_data" | jq -c '.s | to_entries[]'); do
-              line_coverage=$(echo "$entry" | jq -r '.value')
+            # Iterate over each statement in the coverage data
+            for key in $(echo "$coverage_data" | jq -r '.s | keys[]'); do
+              line_coverage=$(echo "$coverage_data" | jq -r --arg key "$key" '.s[$key]')
 
-              # 총 라인 수와 커버된 라인 수 계산
+              # Accumulate total and covered lines
               total_lines=$((total_lines + 1))
               if [ "$line_coverage" -gt 0 ]; then
                 covered_lines=$((covered_lines + 1))
