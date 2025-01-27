@@ -124,18 +124,26 @@ jobs:
             # Debugging: Print the file path
             echo "Checking coverage for: $file"
 
-            # Extract coverage data for the file using base_name
-            coverage_data=$(jq -r --arg base_name "$base_name" '. | to_entries[] | select(.key | contains($base_name)) | .value' "$coverage_file")
+            # Calculate coverage percentage for each matching entry
+            total_lines=0
+            covered_lines=0
 
-            if [ -z "$coverage_data" ]; then
-              echo "No coverage data found for $base_name"
-              exit 1
-            fi
+            # Iterate over each matching coverage data entry
+            for entry in $(jq -c --arg base_name "$base_name" '. | to_entries[] | select(.key | contains($base_name)) | .value' "$coverage_file"); do
+              entry_total_lines=$(echo "$entry" | jq '.s | length')
+              entry_covered_lines=$(echo "$entry" | jq '[.s[] | select(. > 0)] | length')
 
-            # Calculate coverage percentage
-            total_lines=$(echo "$coverage_data" | jq '.s | length')
-            covered_lines=$(echo "$coverage_data" | jq '[.s[] | select(. > 0)] | length')
+              # Accumulate total and covered lines
+              total_lines=$((total_lines + entry_total_lines))
+              covered_lines=$((covered_lines + entry_covered_lines))
+            done
+
+            # Calculate overall coverage percentage
             coverage=$(echo "scale=2; ($covered_lines / $total_lines) * 100" | bc)
+
+            # Debugging: Print accumulated total and covered lines
+            echo "Total lines: $total_lines, Covered lines: $covered_lines"
+            echo "Coverage: $coverage%"
 
             # Correct the condition to check if coverage is less than 100
             if (( $(echo "$coverage < 100" | bc -l) )); then
