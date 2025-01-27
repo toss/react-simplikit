@@ -6,7 +6,7 @@ on:
       - develop
   push:
     branches:
-      - fix/integration
+      - useInputState-check
 
 jobs:
   lint:
