@@ -8,7 +8,7 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  *
  * @description
  * `useTimeout` is a React hook that executes a callback function after a specified delay. It manages `window.setTimeout` in accordance with the React lifecycle.
- * 
+ *
  * @param callback - The function to be executed after the delay.
  * @param delay - The time in milliseconds to wait before executing the callback. Defaults to 0.
  *

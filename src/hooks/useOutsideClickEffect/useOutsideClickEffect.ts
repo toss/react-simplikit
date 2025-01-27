@@ -10,7 +10,7 @@ type OneOrMore<T> = T | T[];
  *
  * @param container - A single HTML element, array of HTML elements, or null
  * @param callback - Function to be called when clicking outside the container(s)
- * 
+ *
  * @example
  * import { useOutsideClickEffect } from 'reactive-kit';
  *

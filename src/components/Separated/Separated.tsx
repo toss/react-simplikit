@@ -1,9 +1,9 @@
 import { Children, Fragment, isValidElement, ReactNode } from 'react';
 
-interface Props {
+type Props = {
   with: ReactNode;
   children: ReactNode;
-}
+};
 
 /**
  * @description
