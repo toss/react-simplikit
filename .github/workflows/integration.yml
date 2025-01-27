@@ -105,7 +105,7 @@ jobs:
           if [ ! -f "$coverage_file" ]; then
             echo "Coverage file not found!"
             exit 1
-          fi          
+          fi
 
           for file in $changed_files; do
             dir_name=$(basename $(dirname "$file"))
@@ -125,40 +125,22 @@ jobs:
             echo "Checking coverage for: $file"
 
             # Extract coverage data for the file using base_name
-            coverage_data=$(jq -r --arg file "$file" '. | to_entries[] | select(.key | contains($file)) | .value' "$coverage_file")
+            coverage_data=$(jq -r --arg base_name "$base_name" '. | to_entries[] | select(.key | contains($base_name)) | .value' "$coverage_file")
 
             if [ -z "$coverage_data" ]; then
-              echo "No coverage data found for $file"
+              echo "No coverage data found for $base_name"
               exit 1
             fi
 
-            total_lines=0
-            covered_lines=0
-
-            # Iterate over each statement in the coverage data
-            for key in $(echo "$coverage_data" | jq -r '.s | keys[]'); do
-              line_coverage=$(echo "$coverage_data" | jq -r --arg key "$key" '.s[$key]')
-
-              # Accumulate total and covered lines
-              total_lines=$((total_lines + 1))
-              if [ "$line_coverage" -gt 0 ]; then
-                covered_lines=$((covered_lines + 1))
-              fi
-            done
-
-            # Calculate overall coverage percentage
+            # Calculate coverage percentage
+            total_lines=$(echo "$coverage_data" | jq '.s | length')
+            covered_lines=$(echo "$coverage_data" | jq '[.s[] | select(. > 0)] | length')
             coverage=$(echo "scale=2; ($covered_lines / $total_lines) * 100" | bc)
 
-            # Debugging: Print accumulated total and covered lines
-            echo "Total lines: $total_lines, Covered lines: $covered_lines"
-            echo "Coverage: $coverage%"
-
-            # Check if coverage is 100%
+            # Correct the condition to check if coverage is less than 100
             if (( $(echo "$coverage < 100" | bc -l) )); then
-              echo "Overall test coverage is not 100%: $coverage%"
+              echo "Test coverage for $base_name is not 100%: $coverage%"
               exit 1
-            else
-              echo "$file test coverage is 100%."
             fi
           done
 
