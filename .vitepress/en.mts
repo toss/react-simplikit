@@ -33,8 +33,9 @@ function sidebar(): DefaultTheme.Sidebar {
       text: 'Guide',
       items: [
         { text: 'Introduction', link: '/intro' },
-        { text: 'Design Principles', link: '/design-principles' },
         { text: 'Installation', link: '/installation' },
+        { text: 'Design Principles', link: '/design-principles' },
+        { text: 'Contributing', link: '/contributing' },
       ],
     },
     {

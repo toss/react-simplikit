@@ -33,8 +33,9 @@ function sidebar(): DefaultTheme.Sidebar {
       text: '가이드',
       items: [
         { text: '소개', link: '/ko/intro' },
-        { text: '설계 원칙', link: '/ko/design-principles' },
         { text: '설치하기', link: '/ko/installation' },
+        { text: '설계 원칙', link: '/ko/design-principles' },
+        { text: '기여하기', link: '/ko/contributing' },
       ],
     },
     {

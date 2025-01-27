@@ -31,7 +31,7 @@ function Component() {
 
 Contributions are welcome from everyone in the community. Please check the contribution guide linked below.
 
-[CONTRIBUTING](./.github/CONTRIBUTING.md)
+[CONTRIBUTING](./src/docs/en/contributing.md)
 
 ## License
 

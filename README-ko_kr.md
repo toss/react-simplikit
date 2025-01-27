@@ -33,7 +33,7 @@ function Component() {
 
 커뮤니티에 있는 모든 분들에게 기여를 환영해요. 아래에 작성되어 있는 기여 가이드를 확인하세요.
 
-[CONTRIBUTING](./.github/CONTRIBUTING.md)
+[CONTRIBUTING](./src/docs/ko/contributing.md)
 
 ## 라이선스
 
