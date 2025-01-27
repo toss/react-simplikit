@@ -11,7 +11,7 @@ import { useCallback, useState } from 'react';
  *
  * 1. boolean: The current state value
  * 2. () => void: A function to set the state to true
- * 3. () => void: A function to set the state to false  
+ * 3. () => void: A function to set the state to false
  * 4. () => void: A function to toggle the state
  *
  * @example

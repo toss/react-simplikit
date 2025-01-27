@@ -8,11 +8,11 @@ type StringifiedValue<T> = T extends boolean
       ? T
       : never;
 
-interface Props<Case> {
+type Props<Case> = {
   value: Case;
   caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactNode }>;
   defaultComponent?: () => ReactNode;
-}
+};
 
 /**
  * @description

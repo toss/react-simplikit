@@ -12,9 +12,9 @@ const strictEquals = <T>(prev: T | undefined, next: T) => prev === next;
  * @template T - The type of state.
  * @param {T} state - The state to get previous value.
  * @param {(prev: T, next: T) => boolean} compare - The comparison function to detect that state has been changed
- * 
+ *
  * @returns previous value of the state
- * 
+ *
  * @example
  * const [count, setCount] = useState(0);
  *

@@ -6,7 +6,7 @@ export type Storage = {
   remove(key: string): void;
 
   clear(): void;
-}
+};
 
 export class MemoStorage implements Storage {
   private storage = new Map<string, string>();
