@@ -140,4 +140,17 @@ describe('SwitchCase', () => {
 
     expect(check).not.toHaveBeenCalled();
   });
+
+  it('should use default null component when defaultComponent is not provided', () => {
+    const { container } = render(
+      <SwitchCase
+        value="nonexistent"
+        caseBy={{
+          a: () => <div>A Component</div>,
+        }}
+      />
+    );
+
+    expect(container.firstChild).toBeNull();
+  });
 });
