@@ -4,6 +4,26 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 type OneOrMore<T> = T | T[];
 
+/**
+ * @description
+ * `useOutsideClickEffect` is  a hook that invokes a callback when a click event occurs on an element outside the entered container.
+ *
+ * @param container - A single HTML element, array of HTML elements, or null
+ * @param callback - Function to be called when clicking outside the container(s)
+ *
+ * @example
+ * import { useOutsideClickEffect } from 'reactive-kit';
+ *
+ * function Example() {
+ *   const [wrapperEl, setWrapperEl] = useState<HTMLDivElement | null>(null);
+ *
+ *   useOutsideClickEffect(wrapperEl, () => {
+ *     console.log('outside clicked!');
+ *   });
+ *
+ *   return <div ref={setWrapperEl}>Content</div>;
+ * }
+ */
 export function useOutsideClickEffect(container: OneOrMore<HTMLElement | null>, callback: () => void) {
   const containers = useRef<HTMLElement[]>([]);
 

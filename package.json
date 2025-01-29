@@ -1,6 +1,6 @@
 {
   "name": "reactive-kit",
-  "version": "0.2.2",
+  "version": "0.2.17",
   "main": "./src/index.ts",
   "files": [
     "dist/**/*",
@@ -10,8 +10,8 @@
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "prettier:fix": "prettier --write .",
     "test": "vitest run",
     "test:coverage": "yarn vitest run --coverage",

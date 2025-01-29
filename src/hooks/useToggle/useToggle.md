@@ -5,7 +5,7 @@ useToggle is a React hook that helps manage a boolean state easily. It provides 
 ## Interface
 
 ```ts
-function useToggle(defaultValue?: boolean): readonly [
+function useToggle(initialValue: boolean = false): readonly [
   boolean, // Current state value
   () => void, // Function to toggle the state
 ];
@@ -13,7 +13,7 @@ function useToggle(defaultValue?: boolean): readonly [
 
 ### Parameters
 
-- `defaultValue` (`boolean`): It's the initial value of the state. The default value is false.
+- `initialValue` (`boolean`): It's the initial value of the state. The default value is false.
 
 ### Returns
 

@@ -1,4 +1,4 @@
-export interface Storage {
+export type Storage = {
   get(key: string): string | null;
 
   set(key: string, value: string): void;
@@ -6,7 +6,7 @@ export interface Storage {
   remove(key: string): void;
 
   clear(): void;
-}
+};
 
 export class MemoStorage implements Storage {
   private storage = new Map<string, string>();
