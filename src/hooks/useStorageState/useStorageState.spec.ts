@@ -1,8 +1,145 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { MemoStorage, safeLocalStorage, safeSessionStorage, Storage } from './storage.ts';
+import {
+  generateSessionStorage,
+  generateStorage,
+  LocalStorage,
+  MemoStorage,
+  safeLocalStorage,
+  safeSessionStorage,
+  SessionStorage,
+  Storage,
+} from './storage.ts';
 import { useStorageState } from './useStorageState.ts';
+
+describe('Storage', () => {
+  describe('MemoStorage', () => {
+    let storage: MemoStorage;
+
+    beforeEach(() => {
+      storage = new MemoStorage();
+    });
+
+    it('should set and get value', () => {
+      storage.set('key', 'value');
+      expect(storage.get('key')).toBe('value');
+    });
+
+    it('should return null for non-existent key', () => {
+      expect(storage.get('non-existent')).toBeNull();
+    });
+
+    it('should remove value', () => {
+      storage.set('key', 'value');
+      storage.remove('key');
+      expect(storage.get('key')).toBeNull();
+    });
+
+    it('should clear all values', () => {
+      storage.set('key1', 'value1');
+      storage.set('key2', 'value2');
+      storage.clear();
+      expect(storage.get('key1')).toBeNull();
+      expect(storage.get('key2')).toBeNull();
+    });
+  });
+
+  describe('LocalStorage', () => {
+    let storage: LocalStorage;
+
+    beforeEach(() => {
+      localStorage.clear();
+      storage = new LocalStorage();
+    });
+
+    it('should check if localStorage is available', () => {
+      const originLocalStorage = window.localStorage;
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      delete window.localStorage;
+
+      const disabledLocalStorage = generateStorage();
+
+      expect(disabledLocalStorage).toBeInstanceOf(MemoStorage);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      window.localStorage = originLocalStorage;
+    });
+
+    it('should set and get value', () => {
+      storage.set('key', 'value');
+      expect(storage.get('key')).toBe('value');
+    });
+
+    it('should return null for non-existent key', () => {
+      expect(storage.get('non-existent')).toBeNull();
+    });
+
+    it('should remove value', () => {
+      storage.set('key', 'value');
+      storage.remove('key');
+      expect(storage.get('key')).toBeNull();
+    });
+
+    it('should clear all values', () => {
+      storage.set('key1', 'value1');
+      storage.set('key2', 'value2');
+      storage.clear();
+      expect(storage.get('key1')).toBeNull();
+      expect(storage.get('key2')).toBeNull();
+    });
+  });
+
+  describe('SessionStorage', () => {
+    let storage: SessionStorage;
+
+    beforeEach(() => {
+      sessionStorage.clear();
+      storage = new SessionStorage();
+    });
+
+    it('should check if sessionStorage is available', () => {
+      const originSessionStorage = window.sessionStorage;
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      delete window.sessionStorage;
+
+      const disabledSessionStorage = generateSessionStorage();
+
+      expect(disabledSessionStorage).toBeInstanceOf(MemoStorage);
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      window.sessionStorage = originSessionStorage;
+    });
+
+    it('should set and get value', () => {
+      storage.set('key', 'value');
+      expect(storage.get('key')).toBe('value');
+    });
+
+    it('should return null for non-existent key', () => {
+      expect(storage.get('non-existent')).toBeNull();
+    });
+
+    it('should remove value', () => {
+      storage.set('key', 'value');
+      storage.remove('key');
+      expect(storage.get('key')).toBeNull();
+    });
+
+    it('should clear all values', () => {
+      storage.set('key1', 'value1');
+      storage.set('key2', 'value2');
+      storage.clear();
+      expect(storage.get('key1')).toBeNull();
+      expect(storage.get('key2')).toBeNull();
+    });
+  });
+});
 
 describe('useStorageState', () => {
   // 공통 테스트 함수
@@ -137,6 +274,40 @@ describe('useStorageState', () => {
       });
 
       expect(result.current[0]).toBe('value from other tab');
+    });
+
+    it('should return defaultValue when an error occured while parsing data', () => {
+      const { result } = renderHook(() =>
+        useStorageState<string>('test-key', { storage: safeLocalStorage, defaultValue: 'default' })
+      );
+
+      act(() => {
+        localStorage.setItem('test-key', '{ "test": "hi" ');
+        window.dispatchEvent(
+          new StorageEvent('storage', {
+            key: 'test-key',
+            newValue: '{ "test": "hi" ',
+          })
+        );
+      });
+
+      expect(result.current[0]).toBe('default');
+    });
+
+    it('should remove value when set value to undefined', () => {
+      const { result } = renderHook(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
+
+      act(() => {
+        result.current[1]('value');
+      });
+
+      expect(result.current[0]).toBe('value');
+
+      act(() => {
+        result.current[1](undefined);
+      });
+
+      expect(result.current[0]).toBeUndefined();
     });
   });
 });

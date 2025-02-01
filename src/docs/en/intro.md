@@ -1,9 +1,11 @@
-# About reactive-kit
+# Introduction to reactive-kit
 
-reactive-kit is React utility library.
+`reactive-kit` is a lightweight yet powerful library that offers a variety of utilities designed to be highly useful in React environments.
+
+Compared to other libraries, `reactive-kit` stands out for its zero dependencies, making it incredibly lightweight. It also ensures reliability with 100% test coverage. Additionally, it provides comprehensive documentation, JSDoc support, and rich examples, enabling any developer to use it with ease.
 
 ## Links
 
-Please refer to the following links for more information about this project.
+For more information about reactive-kit, please check out the following link:
 
 - [GitHub](https://github.com/toss/reactive-kit)

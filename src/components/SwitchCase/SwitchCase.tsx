@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactElement } from 'react';
 
 type StringifiedValue<T> = T extends boolean
   ? 'true' | 'false'
@@ -10,8 +10,8 @@ type StringifiedValue<T> = T extends boolean
 
 type Props<Case> = {
   value: Case;
-  caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactNode }>;
-  defaultComponent?: () => ReactNode;
+  caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>;
+  defaultComponent?: () => ReactElement | null;
 };
 
 /**
@@ -29,16 +29,16 @@ type Props<Case> = {
  *     value={status}
  *     // component is rendered based on the status value
  *     caseBy={{
- *       a: <TypeA />,
- *       b: <TypeB />,
- *       c: <TypeC />,
+ *       a: () => <TypeA />,
+ *       b: () => <TypeB />,
+ *       c: () => <TypeC />,
  *     }}
  *     // component is rendered when the status value is not matched
- *     defaultComponent={<Default />}
+ *     defaultComponent={() => <Default />}
  *   />;
  * }
  */
-export function SwitchCase<Case>({ value, caseBy, defaultComponent = () => null }: Props<Case>) {
+export function SwitchCase<Case>({ value, caseBy, defaultComponent = () => null }: Props<Case>): ReactElement | null {
   const stringifiedValue = String(value) as StringifiedValue<Case>;
   return (caseBy[stringifiedValue] ?? defaultComponent)();
 }

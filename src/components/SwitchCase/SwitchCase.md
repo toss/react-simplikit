@@ -15,11 +15,11 @@
   value={status}
   // component is rendered based on the status value
   caseBy={{
-    a: <TypeA />,
-    b: <TypeB />,
-    c: <TypeC />,
+    a: () => <TypeA />,
+    b: () => <TypeB />,
+    c: () => <TypeC />,
   }}
   // component is rendered when the status value is not matched
-  defaultComponent={<Default />}
+  defaultComponent={() => <Default />}
 />
 ```
