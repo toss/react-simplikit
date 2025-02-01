@@ -35,12 +35,13 @@ describe('mergeRefs', () => {
   it('should merge multiple refs', () => {
     const ref1 = { current: null };
     const ref2 = { current: null };
-    let ref3Value: string | null = null;
-    const ref3 = (value: string | null) => {
-      ref3Value = value;
+    const ref3 = null;
+    let ref4Value: string | null = null;
+    const ref4 = (value: string | null) => {
+      ref4Value = value;
     };
 
-    const mergedRef = mergeRefs<string | null>(ref1, ref2, ref3);
+    const mergedRef = mergeRefs<string | null>(ref1, ref2, ref3, ref4);
     const value = 'test-value';
 
     act(() => {
@@ -49,7 +50,7 @@ describe('mergeRefs', () => {
 
     expect(ref1.current).toBe(value);
     expect(ref2.current).toBe(value);
-    expect(ref3Value).toBe(value);
+    expect(ref4Value).toBe(value);
   });
 
   it('should work with actual React hooks', () => {

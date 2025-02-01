@@ -28,7 +28,7 @@ export class MemoStorage implements Storage {
   }
 }
 
-class LocalStorage implements Storage {
+export class LocalStorage implements Storage {
   public static canUse(): boolean {
     const TEST_KEY = generateTestKey();
 
@@ -59,7 +59,7 @@ class LocalStorage implements Storage {
   }
 }
 
-class SessionStorage implements Storage {
+export class SessionStorage implements Storage {
   public static canUse(): boolean {
     const TEST_KEY = generateTestKey();
 
