@@ -12,11 +12,11 @@ export default defineConfig({
   rewrites: {
     'docs/ko/:document.md': 'ko/:document.md',
     'docs/en/:document.md': ':document.md',
-    'components/:implementation/:implementation.ko.md': 'ko/components/:implementation.md',
+    'components/:implementation/ko/:implementation.md': 'ko/components/:implementation.md',
     'components/:implementation/:implementation.md': 'components/:implementation.md',
-    'hooks/:implementation/:implementation.ko.md': 'ko/hooks/:implementation.md',
+    'hooks/:implementation/ko/:implementation.md': 'ko/hooks/:implementation.md',
     'hooks/:implementation/:implementation.md': 'hooks/:implementation.md',
-    'utils/:implementation/:implementation.ko.md': 'ko/utils/:implementation.md',
+    'utils/:implementation/ko/:implementation.md': 'ko/utils/:implementation.md',
     'utils/:implementation/:implementation.md': 'utils/:implementation.md',
   },
 });

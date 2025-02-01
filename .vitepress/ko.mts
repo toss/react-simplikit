@@ -39,15 +39,15 @@ function sidebar(): DefaultTheme.Sidebar {
       items: sortByText([
         {
           text: 'Components',
-          items: [...getSidebarItems(sourceRoot, 'components', '*', '*.ko.md')],
+          items: getSidebarItems(sourceRoot, 'components', '*', 'ko'),
         },
         {
           text: 'Hooks',
-          items: [...getSidebarItems(sourceRoot, 'hooks', '*', '*.ko.md')],
+          items: getSidebarItems(sourceRoot, 'hooks', '*', 'ko'),
         },
         {
           text: 'Utils',
-          items: [...getSidebarItems(sourceRoot, 'utils', '*', '*.ko.md')],
+          items: getSidebarItems(sourceRoot, 'utils', '*', 'ko'),
         },
       ]),
     },
