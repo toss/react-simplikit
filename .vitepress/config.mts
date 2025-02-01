@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { en } from './en.mts';
-import { ko } from './ko.mts';
+import { ko, search as koSearch } from './ko.mts';
 
 export default defineConfig({
   title: 'reactive-kit',
@@ -18,5 +18,23 @@ export default defineConfig({
     'hooks/:implementation/:implementation.md': 'hooks/:implementation.md',
     'utils/:implementation/ko/:implementation.md': 'ko/utils/:implementation.md',
     'utils/:implementation/:implementation.md': 'utils/:implementation.md',
+  },
+  themeConfig: {
+    search: {
+      provider: 'local',
+      options: {
+        locales: {
+          ...koSearch,
+        },
+      },
+    },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/toss/reactive-kit' },
+      {
+        icon: 'npm',
+        link: 'https://www.npmjs.com/package/reactive-kit',
+        ariaLabel: 'npm',
+      },
+    ],
   },
 });

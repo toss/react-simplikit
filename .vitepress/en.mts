@@ -4,11 +4,12 @@ import { sortByText } from './libs/sortByText.mts';
 import { sourceRoot } from './shared.mts';
 
 export const en = defineConfig({
+  lang: 'en',
   themeConfig: {
     nav: nav(),
     sidebar: sidebar(),
     editLink: {
-      pattern: 'https://github.com/toss/reactive-kit/edit/main/docs/:path',
+      pattern: 'https://github.com/toss/reactive-kit/edit/develop/src/:path',
       text: 'Edit this page on GitHub',
     },
     footer: {
@@ -22,6 +23,7 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     { text: 'Home', link: '/' },
     { text: 'Introduction', link: '/intro.html' },
+    { text: 'Reference', link: '/hooks/useBooleanState.html' },
   ];
 }
 
@@ -31,7 +33,9 @@ function sidebar(): DefaultTheme.Sidebar {
       text: 'Guide',
       items: [
         { text: 'Introduction', link: '/intro' },
-        { text: 'Installation & Usage', link: '/usage' },
+        { text: 'Installation', link: '/installation' },
+        { text: 'Design Principles', link: '/design-principles' },
+        { text: 'Contributing', link: '/contributing' },
       ],
     },
     {
