@@ -1,4 +1,4 @@
-![reactive-kit](/src/public/images/og.png)
+![reactive-kit](./src/public/images/og.png)
 
 # reactive-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE)
 
