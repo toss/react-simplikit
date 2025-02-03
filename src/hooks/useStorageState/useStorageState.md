@@ -24,7 +24,7 @@ function useStorageState<T>(
 
 ## Returns
 
-Returns a tuple of the form [state, setState]:
+Returns a tuple of the form `[state, setState]`:
 
 - `state`: Current state value
 - `setState`: Function to update the state

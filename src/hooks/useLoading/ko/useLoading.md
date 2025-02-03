@@ -13,17 +13,11 @@ function useLoading(): [
 
 ### 반환 값
 
-`[boolean, <T>(promise: Promise<T>) => Promise<T>]` 형태의 튜플을 반환해요:
+`[boolean, <T>(promise: Promise<T>) => Promise<T>]` 형태의 튜플을 반환해요.
 
-1. `boolean`: 현재 로딩 상태를 나타내요.
+- `boolean`: 현재 로딩 상태를 나타내고 비동기 작업이 진행 중이면 `true`로 설정돼요.
 
-- 초기값은 `false`예요.
-- 비동기 작업이 진행 중이면 `true`로 설정돼요.
-
-2. `<T>(promise: Promise<T>) => Promise<T>`:
-   로딩 상태를 관리하면서 비동기 작업을 실행하는 함수예요.
-
-- 이 함수는 `Promise`를 인자로 받고, `Promise`가 완료되면 `isLoading` 상태를 `false`로 바꿔요.
+- `<T>(promise: Promise<T>) => Promise<T>`: 로딩 상태를 관리하면서 비동기 작업을 실행하는 함수예요.
 
 ## 예시
 

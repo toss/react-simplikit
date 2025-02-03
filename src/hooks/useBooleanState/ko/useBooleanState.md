@@ -21,10 +21,10 @@ function useBooleanState(defaultValue?: boolean): readonly [
 
 `readonly [boolean, () => void, () => void, () => void]` 형태의 튜플을 반환해요:
 
-1. boolean: 현재 상태 값이에요.
-2. () => void: 상태를 true로 설정하는 함수예요.
-3. () => void: 상태를 false로 설정하는 함수예요.
-4. () => void: 상태를 토글하는 함수예요.
+- `boolean`: 현재 상태 값이에요.
+- `() => void`: 상태를 true로 설정하는 함수예요.
+- `() => void`: 상태를 false로 설정하는 함수예요.
+- `() => void`: 상태를 토글하는 함수예요.
 
 ## 예시
 

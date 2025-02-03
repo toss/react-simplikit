@@ -1,6 +1,6 @@
 # usePrevious
 
-Returns the previous value of the input state. The previous value is recalculated on each re-render, and it updates only when the state value changes. The default comparison for determining state value changes is performed using the `prev === next` check.
+`usePrevious` returns the previous value of the input state. The previous value is recalculated on each re-render, and it updates only when the state value changes. The default comparison for determining state value changes is performed using the `prev === next` check.
 
 ## Signature
 
@@ -15,7 +15,7 @@ function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
 
 ### Returns
 
-Previous value of the state.
+Returns the previous value of the state.
 
 ## Examples
 

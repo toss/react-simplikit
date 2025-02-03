@@ -17,21 +17,20 @@ function useInputState(initialValue: string, transformValue: (value: string) => 
 
 Returns a `readonly [string, (value: string) => void]` tuple:
 
-1. string: The current state value.
-2. (value: string) => void: A function to set the state to true.
+- `string`: The current state value.
+- `(value: string) => void`: A function to set the state.
 
 ## Examples
 
 ### Basic
+
 ```tsx
 import { useInputState } from 'reactive-kit';
 
 function Example() {
   const [value, setValue] = useInputState('');
 
-  return (
-      <input type="text" value={value} onChange={setValue} />
-  );
+  return <input type="text" value={value} onChange={setValue} />;
 }
 ```
 

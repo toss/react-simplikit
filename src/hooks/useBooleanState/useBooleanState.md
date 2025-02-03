@@ -1,6 +1,6 @@
 # useBooleanState
 
-useBooleanState is a React hook that helps manage a boolean state easily. It provides functionalities to set the state to true, set it to false, and toggle the state.
+`useBooleanState` is a React hook that helps manage a boolean state easily. It provides functionalities to set the state to true, set it to false, and toggle the state.
 
 ## Interface
 
@@ -21,10 +21,10 @@ function useBooleanState(defaultValue?: boolean): readonly [
 
 Returns a `readonly [boolean, () => void, () => void, () => void]` tuple:
 
-1. boolean: The current state value.
-2. () => void: A function to set the state to true.
-3. () => void: A function to set the state to false.
-4. () => void: A function to toggle the state.
+- `boolean`: The current state value.
+- `() => void`: A function to set the state to true.
+- `() => void`: A function to set the state to false.
+- `() => void`: A function to toggle the state.
 
 ## Examples
 

@@ -13,16 +13,11 @@ function useLoading(): [
 
 ### Returns
 
-The function returns a tuple of the form `[boolean, <T>(promise: Promise<T>) => Promise<T>]`:
+Returns a tuple of the form `[boolean, <T>(promise: Promise<T>) => Promise<T>]`:
 
-1. `boolean`: Represents the current loading state.
+- `boolean`: Represents the current loading state. It is set to `true` when an asynchronous task is in progress.
 
-- The initial value is `false`.
-  0 It is set to `true` when an asynchronous task is in progress.
-
-2. `<T>(promise: Promise<T>) => Promise<T>`: This is a function that executes asynchronous tasks while managing the loading state.
-
-- This function takes a `Promise` as an argument and sets the `isLoading` state to `false` when the `Promise` is completed.
+- `<T>(promise: Promise<T>) => Promise<T>`: This is a function that executes asynchronous tasks while managing the loading state.
 
 ## Examples
 

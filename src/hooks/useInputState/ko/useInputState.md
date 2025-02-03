@@ -15,10 +15,10 @@ function useInputState(initialValue: string, transformValue: (value: string) => 
 
 ### Returns
 
- `readonly [string, (value: string) => void]` 형태의 튜플을 반환해요:
+`readonly [string, (value: string) => void]` 형태의 튜플을 반환해요:
 
-1. string: 현재 상태 값이에요.
-2. (value: string) => void: 상태를 설정하는 함수예요.
+- `string`: 현재 상태 값이에요.
+- `(value: string) => void`: 상태를 설정하는 함수예요.
 
 ## Examples
 
@@ -30,9 +30,7 @@ import { useInputState } from 'reactive-kit';
 function Example() {
   const [value, setValue] = useInputState('');
 
-  return (
-      <input type="text" value={value} onChange={setValue} />
-  );
+  return <input type="text" value={value} onChange={setValue} />;
 }
 ```
 

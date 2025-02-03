@@ -12,13 +12,11 @@ function usePreservedCallback<Argument = any, ReturnValue = unknown>(
 
 ### Parameters
 
-- **`callback`**  
-  A callback function that will always reference the latest state. Its reference remains the same even when the component re-renders.
+- `callback`: A callback function that will always reference the latest state. Its reference remains the same even when the component re-renders.
 
 ### Returns
 
-- **A function with the same shape as the callback**  
-  The returned function ensures it always uses the latest state while maintaining the same reference, which helps prevent unnecessary re-renders.
+Returns a function with the same shape as the callback. The returned function ensures it always uses the latest state while maintaining the same reference, which helps prevent unnecessary re-renders.
 
 ## Usage Examples
 

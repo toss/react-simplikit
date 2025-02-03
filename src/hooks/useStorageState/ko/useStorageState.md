@@ -24,7 +24,7 @@ function useStorageState<T>(
 
 ## Returns
 
-[state, setState] 형태의 튜플을 반환합니다:
+`[state, setState]` 형태의 튜플을 반환합니다:
 
 - `state`: 현재 상태 값
 - `setState`: 상태를 업데이트하는 함수
