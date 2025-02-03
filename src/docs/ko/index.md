@@ -4,6 +4,9 @@ layout: home
 hero:
   name: 'reactive-kit'
   text: '가볍고 강력한 React 유틸리티 라이브러리'
+  image:
+    src: /images/symbol.svg
+    alt: reactive-kit symbol
   actions:
     - theme: brand
       text: reactive-kit 알아보기
