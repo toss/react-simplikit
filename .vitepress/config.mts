@@ -33,10 +33,10 @@ export default defineConfig({
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'reactive-kit' }],
     ['meta', { property: 'og:description', content: 'Lightweight and powerful React utility library' }],
-    ['meta', { property: 'og:image', content: '/images/og.png' }],
     ['meta', { property: 'og:site_name', content: 'reactive-kit' }],
-    ['meta', { name: 'twitter:image', content: '/images/og.png' }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { property: 'og:image', content: 'https://reactive-kit.slash.page/images/og.png' }],
+    ['meta', { name: 'twitter:image', content: 'https://reactive-kit.slash.page/images/og.png' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
   transformHead: ({ pageData }) => {
     const head: HeadConfig[] = [];
