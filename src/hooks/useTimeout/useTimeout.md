@@ -1,6 +1,7 @@
 # useTimeout
 
-`useTimeout` is a React hook that executes a callback function after a specified delay. It manages `window.setTimeout` in accordance with the React lifecycle.
+`useTimeout` is a React hook that executes a callback function after a specified delay.  
+It manages `window.setTimeout` in accordance with the React lifecycle, ensuring cleanup when dependencies change or the component unmounts.
 
 ## Interface
 
@@ -11,7 +12,7 @@ function useTimeout(callback: () => void, delay?: number): void;
 ### Parameters
 
 - `callback` (`() => void`): The function to be executed after the delay.
-- `delay` (`number`, optional): The time in milliseconds to wait before executing the callback. Defaults to 0.
+- `delay` (`number`, optional): The time in milliseconds to wait before executing the callback. Defaults to `0`.  
 
 ### Returns
 

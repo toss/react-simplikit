@@ -1,6 +1,8 @@
 # useLoading
 
-`useLoading` is a React hook that helps manage the loading state of a `Promise` easily. It provides a state to check whether an asynchronous operation is in progress, along with functions to handle the loading state.
+`useLoading` is a React hook that simplifies managing the loading state of a `Promise`.  
+It provides a state to track whether an asynchronous operation is in progress and a function to handle the loading state automatically.
+
 
 ## Interface
 
@@ -17,7 +19,7 @@ Returns a tuple of the form `[boolean, <T>(promise: Promise<T>) => Promise<T>]`:
 
 - `boolean`: Represents the current loading state. It is set to `true` when an asynchronous task is in progress.
 
-- `<T>(promise: Promise<T>) => Promise<T>`: This is a function that executes asynchronous tasks while managing the loading state.
+- `<T>(promise: Promise<T>) => Promise<T>`: A function that executes asynchronous tasks while managing the loading state automatically.
 
 ## Examples
 

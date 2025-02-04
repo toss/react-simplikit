@@ -1,6 +1,7 @@
 # Separated
 
-`Separated` is a component that can be used when you want to insert a component that repeats between each element.
+`Separated` is a component that allows you to insert a repeating component between each child element.  
+It is useful when you need to add dividers, spacers, or any other separator between list items.
 
 ## Props
 

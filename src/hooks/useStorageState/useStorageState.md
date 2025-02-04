@@ -1,6 +1,7 @@
 # useStorageState
 
-`useStorageState` is a Hook that makes it convenient for React to handle persistent state in the browser's storage.
+`useStorageState` is a React hook that simplifies managing persistent state using browser storage.  
+It allows you to store and retrieve values from `localStorage` or `sessionStorage` as if they were React state.
 
 ## Interface
 
@@ -17,25 +18,26 @@ function useStorageState<T>(
 
 ## Parameters
 
-- `key`: Key for storage
-- `options`:
-  - `storage`: Storage to use (default: `safeLocalStorage`)
-  - `defaultValue`: Initial value
+- `key` (`string`): The key used to store the value in the browser storage.
+- `options` (`StorageStateOptions<T>`, optional):  
+  - `storage` (`Storage`): The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
+  - `defaultValue` (`T`): The initial value if no existing value is found.
 
 ## Returns
 
 Returns a tuple of the form `[state, setState]`:
 
-- `state`: Current state value
-- `setState`: Function to update the state
+- `state` (`Serializable<T> | undefined`): The current value stored in the storage.
+- `setState` (`(value: SetStateAction<Serializable<T> | undefined>) => void`): A function to update the stored value.
+
 
 ## Notes
 
-- Values must be JSON serializable
-- Automatically syncs between tabs when using LocalStorage
-- Returns default value when invalid JSON data is encountered
-- Uses caching to minimize parsing operations
-- Handles storage events for cross-tab communication
+- Stored values must be JSON serializable.
+- When using `localStorage`, updates are automatically synchronized across browser tabs.
+- If the stored data is invalid JSON, the default value is returned.
+- Uses caching to minimize unnecessary JSON parsing.
+- Listens for storage events to sync state between tabs.
 
 ## Examples
 

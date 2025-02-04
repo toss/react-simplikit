@@ -2,11 +2,13 @@ import { DependencyList, useEffect } from 'react';
 
 /**
  * @description
- * useAsyncEffect is a hook for handling async effects in React components.
- * Follows the same cleanup pattern as useEffect.
+ * `useAsyncEffect` is a custom hook for handling asynchronous side effects in React components.
+ * It follows the same cleanup pattern as `useEffect` while ensuring async operations are handled safely.
  *
- * @param effect - An async function to be executed in useEffect pattern.
- * @param deps - A dependency array.
+ * @param {() => Promise<void | (() => void)>} effect - An asynchronous function executed in the `useEffect` pattern.
+ *   This function can optionally return a cleanup function.
+ * @param {DependencyList} [deps] - A dependency array. 
+ *   The effect will re-run whenever any value in this array changes. If omitted, it runs only once when the component mounts.
  *
  * @example
  * useAsyncEffect(async () => {
@@ -14,7 +16,7 @@ import { DependencyList, useEffect } from 'react';
  *   setData(data);
  *
  *   return () => {
- *     // cleanup logic
+ *     console.log('Cleanup on unmount or dependency change');
  *   };
  * }, [dependency]);
  */

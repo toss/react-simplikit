@@ -1,6 +1,7 @@
 # useDebounce
 
-`useDebounce` is a React hook that delays function calls and groups multiple sequential calls into a single one.
+`useDebounce` is a React hook that delays function calls and groups multiple sequential calls into a single one.  
+It is useful for optimizing event handling, such as search input, button click prevention, and other high-frequency events.
 
 ## Interface
 
