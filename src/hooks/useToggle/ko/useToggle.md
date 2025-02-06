@@ -1,6 +1,6 @@
 # useToggle
 
-`useToggle`은 `boolean` 상태를 쉽게 관리할 수 있도록 도와주는 React 훅이에요. 상태를 토글하는 기능을 제공해요.
+`useToggle`은 `boolean` 상태를 쉽게 관리할 수 있도록 도와주는 React 훅이에요. `true`와 `false`로 상태를 간단히 토글할 수 있는 기능을 제공해요.
 
 ## 인터페이스
 
@@ -19,8 +19,8 @@ function useToggle(defaultValue?: boolean): readonly [
 
 `readonly [boolean, () => void]` 형태의 튜플을 반환해요:
 
-1. boolean: 현재 상태 값이에요.
-2. () => void: 상태를 토글하는 함수예요.
+- `boolean`: 현재 상태 값이에요.
+- `() => void`: 상태를 토글하는 함수예요.
 
 ## 예시
 

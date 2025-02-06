@@ -8,25 +8,24 @@ type Options = {
  * @description
  * A React hook that listens to changes in the document's visibility state and triggers a callback.
  *
- * @param callback - A function to be called when the visibility state changes.
- * It receives the current visibility state ('visible' or 'hidden') as an argument.
- * @param options - Optional configuration for the hook.
- * @param options.immediate - If true, the callback is invoked immediately upon mounting
+ * @param {(visibilityState: 'visible' | 'hidden') => void} callback - A function to be called
+ * when the visibility state changes. It receives the current visibility state ('visible' or 'hidden') as an argument.
+ * @param {object} [options] - Optional configuration for the hook.
+ * @param {boolean} [options.immediate=false] - If true, the callback is invoked immediately upon mounting
  * with the current visibility state.
  *
  * @example
+ * import { useVisibilityEvent } from 'reactive-kit';
+ *
  * function Component() {
  *   useVisibilityEvent(visibilityState => {
  *     console.log(`Document is now ${visibilityState}`);
  *   });
  *
- *   return (
- *     <div>
- *       <p>Check the console for visibility changes.</p>
- *     </div>
- *   );
+ *   return <p>Check the console for visibility changes.</p>;
  * }
  */
+
 export function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') => void, options: Options = {}) {
   const handleVisibilityChange = useCallback(() => {
     callback(document.visibilityState);

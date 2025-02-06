@@ -2,10 +2,15 @@ import { ChangeEventHandler, useCallback, useState } from 'react';
 
 /**
  * @description
- * `useInputState` is a React hook that manages an input state.
+ * `useInputState` is a React hook that manages an input state with optional value transformation.
  *
- * @param initialValue - The initial value of the input. Default value is empty string.
- * @param transformValue - The function to transform the input value. Default value is identity function.
+ * @param {string} initialValue - The initial value of the input. Defaults to an empty string (`""`).
+ * @param {(value: string) => string} [transformValue] - A function to transform the input value.
+ *   Defaults to an identity function that returns the input unchanged.
+ *
+ * @returns {readonly [string, (value: string) => void]} A tuple containing:
+ * - `string` - The current state value.
+ * - `(value: string) => void` - A function to update the state.
  *
  * @example
  * import { useInputState } from 'reactive-kit';

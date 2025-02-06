@@ -1,6 +1,8 @@
-# `useCallbackOnce`
+# useCallbackOnce
 
-`useCallbackOnce` is a React hook that ensures a callback function is executed only once, regardless of how many times it's called. This is particularly useful for one-time operations like analytics tracking, initialization code, or any other side effects that should not be repeated.
+`useCallbackOnce` is a React hook that ensures a callback function is executed only once,
+regardless of how many times it's called. This is useful for one-time operations like
+analytics tracking, initialization code.
 
 ## Interface
 
@@ -13,16 +15,13 @@ function useCallbackOnce<F extends (...args: any[]) => void>(
 
 ### Parameters
 
-- **`callback`**  
-  The function to be executed once. After its first execution, subsequent calls will be ignored.
+- `callback`: The function to be executed once. After its first execution, subsequent calls will be ignored.
 
-- **`deps`**  
-  A dependency array that, when changed, will reset the execution state and allow the callback to fire once again.
+- `deps`: A dependency array that, when changed, will reset the execution state and allow the callback to fire once again.
 
 ### Returns
 
-- **A memoized function**  
-  Returns a function that wraps the original callback and ensures it only executes once until the dependencies change.
+Returns a function that wraps the original callback and ensures it only executes once until the dependencies change.
 
 ## Usage Examples
 

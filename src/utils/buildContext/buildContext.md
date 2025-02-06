@@ -8,12 +8,12 @@
 function buildContext<T>(contextName: string, defaultContextValues: T): [React.Provider<T>, () => T];
 ```
 
-## Parameters
+### Parameters
 
 - `contextName`: The name of the context.
 - `defaultContextValues`: The default values to be passed to the context.
 
-## Return value
+### Return value
 
 - `Provider`: The component that provides the context.
 - `useContext`: The hook that uses the context.

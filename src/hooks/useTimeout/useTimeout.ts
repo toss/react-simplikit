@@ -3,16 +3,18 @@ import { useEffect } from 'react';
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 /**
- *
- *
- *
  * @description
- * `useTimeout` is a React hook that executes a callback function after a specified delay. It manages `window.setTimeout` in accordance with the React lifecycle.
+ * `useTimeout` is a React hook that executes a callback function after a specified delay.
+ * It manages `window.setTimeout` in accordance with the React lifecycle, ensuring cleanup on unmount or when dependencies change.
  *
- * @param callback - The function to be executed after the delay.
- * @param delay - The time in milliseconds to wait before executing the callback. Defaults to 0.
+ * @param {() => void} callback - The function to be executed after the delay.
+ * @param {number} [delay=0] - The time in milliseconds to wait before executing the callback.
  *
  * @example
+ * // Updating a title after a delay
+ * import { useTimeout } from 'reactive-kit';
+ * import { useState } from 'react';
+ *
  * function Example() {
  *   const [title, setTitle] = useState('');
  *
@@ -26,8 +28,8 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  *
  *   return <div>{title}</div>;
  * }
- *
  */
+
 export function useTimeout(callback: () => void, delay = 0) {
   const preservedCallback = usePreservedCallback(callback);
 
