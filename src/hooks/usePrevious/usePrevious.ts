@@ -4,9 +4,9 @@ const strictEquals = <T>(prev: T | undefined, next: T) => prev === next;
 
 /**
  * @description
- * Returns the previous value of the input state.  
- * If a re-render occurs but the state value does not change, the previous value remains unchanged.  
- * If the state is an object or requires custom change detection, a `compare` function can be provided.  
+ * Returns the previous value of the input state.
+ * If a re-render occurs but the state value does not change, the previous value remains unchanged.
+ * If the state is an object or requires custom change detection, a `compare` function can be provided.
  * By default, state changes are detected using `prev === next`.
  *
  * @template T - The type of the state.

@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 
 /**
  * @description
- * `useBooleanState` is a React hook that simplifies managing a boolean state. 
+ * `useBooleanState` is a React hook that simplifies managing a boolean state.
  * It provides functions to set the state to `true`, set it to `false`, and toggle its value.
  *
  * @param {boolean} [defaultValue=false] - The initial value of the state. Defaults to `false`.
