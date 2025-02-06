@@ -1,4 +1,4 @@
-# `useCallbackOnce`
+# useCallbackOnce
 
 `useCallbackOnce`는 콜백 함수가 여러 번 호출되더라도 단 한 번만 실행되도록 보장하는 React 훅이에요.
 분석 추적, 초기화 코드, 또는 반복되면 안 되는 일회성 작업에 유용해요.

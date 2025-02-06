@@ -1,4 +1,4 @@
-# `usePreservedCallback`
+# usePreservedCallback
 
 `usePreservedCallback`은 React에서 콜백 함수의 참조를 유지하면서 최신 상태를 안전하게 사용할 수 있도록 도와주는 React 훅이에요.
 컴포넌트가 재렌더링되더라도 콜백 참조는 변하지 않으면서 최신 상태를 사용할 수 있어요.

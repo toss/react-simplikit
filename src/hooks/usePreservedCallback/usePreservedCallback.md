@@ -1,4 +1,4 @@
-# `usePreservedCallback`
+# usePreservedCallback
 
 `usePreservedCallback` is a React hook that helps you preserve the reference of a callback function while ensuring it always uses the latest state.
 
