@@ -2,15 +2,18 @@ import { useCallback, useState } from 'react';
 
 /**
  * @description
- * `useToggle` is a React hook that helps manage a boolean state easily. It provides functionalities to toggle the state.
+ * `useToggle` is a React hook that simplifies managing a boolean state.
+ * It provides a function to toggle the state between `true` and `false`.
  *
- * @param initialValue - The initial value of the state. Defaults to `false`.
+ * @param {boolean} [initialValue=false] - The initial state value. Defaults to `false`.
  *
- * @returns a tuple of the form [state, toggle]:
- * - `state`: Current state value
- * - `toggle`: Function to toggle the state
+ * @returns {[boolean, () => void]} A tuple:
+ * - `state`: The current state value.
+ * - `toggle`: A function to toggle the state.
  *
  * @example
+ * import { useToggle } from 'reactive-kit';
+ *
  * function Component() {
  *   const [open, toggle] = useToggle(false);
  *

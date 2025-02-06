@@ -13,13 +13,9 @@ function useVisibilityEvent(
 
 ### 파라미터
 
-- `callback ((visibilityState: 'visible' | 'hidden') => void`
-  - 가시성 상태가 변경될 때 호출되는 콜백 함수예요.
-  - `'visible' | 'hidden'` 값을 매개변수로 전달받아요.
+- `callback ((visibilityState: 'visible' | 'hidden') => void`: 가시성 상태가 변경될 때 호출되는 콜백 함수예요. `'visible' | 'hidden'` 값을 매개변수로 전달받아요.
 - `options ({ immediate?: boolean })`
-  - immediate (boolean)
-    - true일 경우, 훅이 처음 마운트될 때 즉시 콜백을 실행해요.
-    - 기본값은 false예요.
+  - `immediate` (boolean): true일 경우, 훅이 처음 마운트될 때 즉시 콜백을 실행해요. 기본값은 false예요.
 
 ### 반환 값
 
