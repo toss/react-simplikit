@@ -1,7 +1,7 @@
 # SwitchCase
 
-`SwitchCase`는 `switch-case` 구문을 선언적으로 사용할 수 있는 컴포넌트예요.  
-값(`value`)에 따라 적절한 컴포넌트를 선택적으로 렌더링할 때 유용해요.
+`SwitchCase`는 `switch-case` 구문을 선언적으로 사용할 수 있는 컴포넌트예요.
+값(`value`)에 따라 적절한 컴포넌트를 조건부 렌더링을 할 때 유용해요.
 
 ## Props
 

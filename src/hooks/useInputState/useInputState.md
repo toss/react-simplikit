@@ -1,12 +1,15 @@
 # useInputState
 
-`useInputState` is a React hook that simplifies managing an input state.  
+`useInputState` is a React hook that simplifies managing an input state.
 It allows you to control the state of an input field and optionally transform the input value.
 
 ## Interface
 
 ```ts
-function useInputState(initialValue: string, transformValue: (value: string) => string = echo): readonly [string, (value: string) => void];
+function useInputState(
+  initialValue: string,
+  transformValue: (value: string) => string = echo
+): readonly [string, (value: string) => void];
 ```
 
 ### Parameters

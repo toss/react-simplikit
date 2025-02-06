@@ -1,8 +1,7 @@
 # useLoading
 
-`useLoading` is a React hook that simplifies managing the loading state of a `Promise`.  
+`useLoading` is a React hook that simplifies managing the loading state.
 It provides a state to track whether an asynchronous operation is in progress and a function to handle the loading state automatically.
-
 
 ## Interface
 

@@ -1,6 +1,6 @@
 # useStorageState
 
-`useStorageState`는 React에서 브라우저 스토리지의 데이터를 편리하게 관리할 수 있도록 도와주는 훅이에요.  
+`useStorageState`는 React에서 브라우저 스토리지의 데이터를 편리하게 관리할 수 있도록 도와주는 React 훅이에요.
 이 훅을 사용하면 `localStorage` 또는 `sessionStorage`를 쉽게 상태처럼 사용할 수 있어요.
 
 ## Interface
@@ -19,7 +19,7 @@ function useStorageState<T>(
 ## Parameters
 
 - `key` (`string`): 브라우저 스토리지에서 사용할 키 값이에요.
-- `options` (`StorageStateOptions<T>`, 선택 사항):  
+- `options` (`StorageStateOptions<T>`, 선택 사항):
   - `storage` (`Storage`): 사용할 스토리지 (`localStorage` 또는 `sessionStorage`). 기본값은 `localStorage`예요.
   - `defaultValue` (`T`): 초기 값이에요. 스토리지에 값이 없을 경우 사용돼요.
 

@@ -1,6 +1,6 @@
 # SwitchCase
 
-`SwitchCase` is a component that allows you to declaratively render components based on a given value, similar to a `switch-case` statement.  
+`SwitchCase` is a component that allows you to declaratively render components based on a given value, similar to a `switch-case` statement.
 It is useful when you need to conditionally render different components based on a specific state.
 
 ## Props

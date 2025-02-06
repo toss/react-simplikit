@@ -1,6 +1,6 @@
 # useInterval
 
-`useInterval`은 일정한 간격으로 함수를 실행할 수 있도록 도와주는 React 훅이에요.  
+`useInterval`은 일정한 간격으로 함수를 실행할 수 있도록 도와주는 React 훅이에요.
 타이머 기반 작업, 자동 갱신, 폴링 등 다양한 상황에서 활용할 수 있어요.
 
 ## 인터페이스
@@ -24,7 +24,6 @@ function useInterval(callback: () => void, options: IntervalOptions): void;
   - `delay` (`number`): 실행 간격(밀리초)을 설정해요.
   - `immediate` (`boolean`): `true`이면 즉시 실행하고, `false`이면 `delay`만큼 기다린 후 실행해요.
   - `enabled` (`boolean`): `false`이면 실행되지 않아요.
-
 
 ### 반환 값
 

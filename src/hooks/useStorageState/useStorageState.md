@@ -1,6 +1,6 @@
 # useStorageState
 
-`useStorageState` is a React hook that simplifies managing persistent state using browser storage.  
+`useStorageState` is a React hook that simplifies managing persistent state using browser storage.
 It allows you to store and retrieve values from `localStorage` or `sessionStorage` as if they were React state.
 
 ## Interface
@@ -19,7 +19,7 @@ function useStorageState<T>(
 ## Parameters
 
 - `key` (`string`): The key used to store the value in the browser storage.
-- `options` (`StorageStateOptions<T>`, optional):  
+- `options` (`StorageStateOptions<T>`, optional):
   - `storage` (`Storage`): The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
   - `defaultValue` (`T`): The initial value if no existing value is found.
 
@@ -29,7 +29,6 @@ Returns a tuple of the form `[state, setState]`:
 
 - `state` (`Serializable<T> | undefined`): The current value stored in the storage.
 - `setState` (`(value: SetStateAction<Serializable<T> | undefined>) => void`): A function to update the stored value.
-
 
 ## Notes
 

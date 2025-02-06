@@ -1,7 +1,7 @@
 # useAsyncEffect
 
-`useAsyncEffect` is a custom hook for handling asynchronous side effects in React components.  
-It follows the same cleanup pattern as `useEffect` while ensuring that async operations are handled safely.  
+`useAsyncEffect` is a custom hook for handling asynchronous side effects in React components.
+It follows the same cleanup pattern as `useEffect` while ensuring that async operations are handled safely.
 This hook allows you to write cleaner and more reliable async code inside React components.
 
 ## Interface
