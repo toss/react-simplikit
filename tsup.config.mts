@@ -4,7 +4,7 @@ const defaultConfig = {
   entry: ['**/index.ts'],
   splitting: false,
   clean: true,
-  dts: true,
+  dts: false,
 };
 
 export default defineConfig([

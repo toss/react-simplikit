@@ -15,7 +15,7 @@
     "prettier:fix": "prettier --write .",
     "test": "vitest run",
     "test:coverage": "yarn vitest run --coverage",
-    "prepack": "tsup"
+    "prepack": "rm -rf dist esm && tsup && tsc"
   },
   "publishConfig": {
     "access": "public",
