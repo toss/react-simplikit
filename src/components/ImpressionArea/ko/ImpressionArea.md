@@ -1,19 +1,38 @@
 # ImpressionArea
 
 `ImpressionArea`는 특정 DOM 요소가 화면에 보이는 시간을 측정하고, 요소가 화면에 들어오거나 나갈 때 콜백을 실행하는 컴포넌트예요. 이 컴포넌트는 [useImpressionRef](../hooks/useImpressionRef) 훅을 사용하여 요소의 가시성을 추적해요.
-œ
 
-## Props
+## 인터페이스
 
-- `onImpressionStart`: 요소가 화면에 들어올 때 실행할 콜백 함수
-- `onImpressionEnd`: 요소가 화면에서 나갈 때 실행할 콜백 함수
-- `timeThreshold`: 요소가 화면에 보여야 하는 최소 시간 (밀리초)
-- `areaThreshold`: 요소가 화면에 보여야 하는 최소 비율 (0 ~ 1)
-- `rootMargin`: 감지 범위를 조정하는 여백 값
-- `as`: 렌더링할 HTML 태그 (기본값: `div`)
-- `children`: 자식 요소
+```tsx
+function ImpressionArea<T extends ElementType = 'div'>({
+  as,
+  rootMargin,
+  areaThreshold,
+  timeThreshold,
+  onImpressionStart,
+  onImpressionEnd,
+  ref,
+  ...props
+}: Props<T>): JSX.Element;
+```
 
-## 예제
+### 파라미터
+
+- `as` (`ElementType`): 렌더링 할 HTML 태그 (기본값: `div`).
+- `rootMargin` (`string`): 감지 범위를 조정하는 여백 값.
+- `areaThreshold` (`number`): 요소가 화면에 보여야 하는 최소 비율 (0 ~ 1).
+- `timeThreshold` (`number`): 요소가 화면에 보여야 하는 최소 시간 (밀리초).
+- `onImpressionStart` (`() => void`): 요소가 화면에 들어올 때 실행할 콜백 함수.
+- `onImpressionEnd` (`() => void`): 요소가 화면에서 나갈 때 실행할 콜백 함수.
+- `ref` (`Ref<HTMLElement>`): 요소에 대한 참조.
+- `props` (`Props<T>`): `as` 에서 넘긴 태그의 props.
+
+### 반환 값
+
+이 컴포넌트는 JSX 요소를 반환해요.
+
+## 예시
 
 ```tsx
 import { ImpressionArea } from 'reactive-kit';
@@ -31,5 +50,3 @@ function App() {
   );
 }
 ```
-
-이 예제에서는 `ImpressionArea`를 사용하여 `div` 요소가 화면에 들어오거나 나갈 때 콘솔에 메시지를 출력합니다.
