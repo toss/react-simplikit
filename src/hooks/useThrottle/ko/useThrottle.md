@@ -8,7 +8,7 @@
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
-  options?: ThrottleOptions
+  options?: { edges?: Array<'leading' | 'trailing'> }
 ): F & { cancel: () => void };
 ```
 
@@ -16,9 +16,8 @@ function useThrottle<F extends (...args: any[]) => any>(
 
 - `callback` (`F`): 지정한 시간 간격 내에서 실행할 함수예요.
 - `wait` (`number`): 함수 실행 간격을 밀리초(단위: ms)로 설정해요.
-- `options` (`ThrottleOptions`, 선택 사항):
-  - `leading` (`boolean`): true이면 첫 실행 시점에 callback을 즉시 실행해요. 기본값은 false예요.
-  - `trailing` (`boolean`): true이면 지연이 끝난 후 마지막 callback을 실행해요. 기본값은 true예요.
+- `options` (`{ edges?: Array<'leading' | 'trailing'> }`, 선택 사항):
+  - `edges` (`Array<'leading' | 'trailing'>`): 함수가 선행, 후행, 또는 둘 다에서 호출되어야 하는지를 지정해요. 기본값은 `['leading', 'trailing']`이에요.
 
 ### 반환값
 

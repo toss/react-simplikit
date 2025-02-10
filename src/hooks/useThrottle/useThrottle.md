@@ -8,7 +8,7 @@
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
-  options?: ThrottleOptions
+  options?: { edges?: Array<'leading' | 'trailing'> }
 ): F & { cancel: () => void };
 ```
 
@@ -16,9 +16,8 @@ function useThrottle<F extends (...args: any[]) => any>(
 
 - `callback` (`F`): The function to be executed at the specified interval.
 - `wait` (`number`): The interval in milliseconds at which the function should be executed.
-- `options` (`ThrottleOptions`, optional):
-  - `leading` (`boolean`): If true, the function is invoked on the leading edge of the timeout. Defaults to false.
-  - `trailing` (`boolean`): If true, the function is invoked on the trailing edge of the timeout. Defaults to true.
+- `options` (`{ edges?: Array<'leading' | 'trailing'> }`, optional):
+  - `edges` (`Array<'leading' | 'trailing'>`): Specifies whether the function should be invoked on the leading edge, trailing edge, or both. Defaults to `['leading', 'trailing']`.
 
 ### Returns
 
