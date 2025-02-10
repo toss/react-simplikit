@@ -19,9 +19,9 @@ function useIntersectionObserver<Element extends HTMLElement>(
 - `options` (`IntersectionObserverInit`):
   - [`IntersectionObserver`의 옵션](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver#options)을 설정할 수 있어요.
   - 예를 들어, 다음과 같은 값을 지정할 수 있어요.
-    - `root`: 관찰할 뷰포트 또는 특정 요소 (`null`이면 기본 뷰포트 사용)
-    - `rootMargin`: 감지 범위를 조정하는 여백 값 (예: `"0px 0px -50px 0px"`)
-    - `threshold`: 요소가 화면에 얼마나 보여야 콜백이 실행될지 설정 (예: `0.5`는 50% 이상 보일 때 실행)
+    - `root`: 관찰할 뷰포트 또는 특정 요소예요. (`null`이면 기본 뷰포트 사용)
+    - `rootMargin`: 감지 범위를 조정하는 여백 값이에요. (예: `"0px 0px -50px 0px"`)
+    - `threshold`: 요소가 화면에 얼마나 보여야 콜백이 실행될지 설정해요. (예: `0.5`는 50% 이상 보일 때 실행)
 
 ### 반환 값
 

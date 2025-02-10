@@ -19,14 +19,14 @@ function ImpressionArea<T extends ElementType = 'div'>({
 
 ### 파라미터
 
-- `as` (`ElementType`): 렌더링 할 HTML 태그 (기본값: `div`).
-- `rootMargin` (`string`): 감지 범위를 조정하는 여백 값.
-- `areaThreshold` (`number`): 요소가 화면에 보여야 하는 최소 비율 (0 ~ 1).
-- `timeThreshold` (`number`): 요소가 화면에 보여야 하는 최소 시간 (밀리초).
-- `onImpressionStart` (`() => void`): 요소가 화면에 들어올 때 실행할 콜백 함수.
-- `onImpressionEnd` (`() => void`): 요소가 화면에서 나갈 때 실행할 콜백 함수.
-- `ref` (`Ref<HTMLElement>`): 요소에 대한 참조.
-- `props` (`Props<T>`): `as` 에서 넘긴 태그의 props.
+- `as` (`ElementType`): 렌더링 할 HTML 태그예요. (기본값: `div`)
+- `rootMargin` (`string`): 감지 범위를 조정하는 여백 값이에요.
+- `areaThreshold` (`number`): 요소가 화면에 보여야 하는 최소 비율이에요. (0 ~ 1)
+- `timeThreshold` (`number`): 요소가 화면에 보여야 하는 최소 시간이에요. (밀리초)
+- `onImpressionStart` (`() => void`): 요소가 화면에 들어올 때 실행할 콜백 함수예요.
+- `onImpressionEnd` (`() => void`): 요소가 화면에서 나갈 때 실행할 콜백 함수예요.
+- `ref` (`Ref<HTMLElement>`): 요소에 대한 참조예요.
+- `props` (`Props<T>`): `as` 에서 넘긴 태그의 props 예요.
 
 ### 반환 값
 

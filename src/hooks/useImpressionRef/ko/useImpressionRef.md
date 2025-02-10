@@ -12,12 +12,12 @@ function useImpressionRef<Element extends HTMLElement = HTMLElement>(
 
 ### 파라미터
 
-- `options` (`UseImpressionRefOptions`): 요소의 가시성을 추적하기 위한 설정 객체예요.
-  - `onImpressionStart`: 요소가 화면에 들어올 때 실행할 콜백 함수
-  - `onImpressionEnd`: 요소가 화면에서 나갈 때 실행할 콜백 함수
-  - `timeThreshold`: 요소가 화면에 보여야 하는 최소 시간 (밀리초)
-  - `areaThreshold`: 요소가 화면에 보여야 하는 최소 비율 (0 ~ 1)
-  - `rootMargin`: 감지 범위를 조정하는 여백 값
+- `options` (`UseImpressionRefOptions`): 요소의 가시성을 추적하기 위한 설정 객체이에요.
+  - `onImpressionStart`: 요소가 화면에 들어올 때 실행할 콜백이에요.
+  - `onImpressionEnd`: 요소가 화면에서 나갈 때 실행할 콜백이에요.
+  - `timeThreshold`: 요소가 화면에 보여야 하는 최소 시간이에요. (밀리초)
+  - `areaThreshold`: 요소가 화면에 보여야 하는 최소 비율이예요. (0 ~ 1)
+  - `rootMargin`: 감지 범위를 조정하는 여백 값이에요.
 
 ### 반환 값
 
