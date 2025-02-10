@@ -1,6 +1,6 @@
 {
   "name": "reactive-kit",
-  "version": "0.2.21",
+  "version": "0.2.22",
   "main": "./src/index.ts",
   "files": [
     "dist/**/*",
