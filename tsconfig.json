@@ -3,14 +3,19 @@
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ESNext",
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
-    "types": ["vitest/globals", "@testing-library/jest-dom"]
-  }
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "noEmit": false,
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx"]
 }
