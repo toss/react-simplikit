@@ -7,6 +7,7 @@
     "esm/**/*"
   ],
   "scripts": {
+    "docs:gen": "tsx .scripts/docs/jsdoc-to-md.ts",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
@@ -40,6 +41,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.7",
     "@vitest/coverage-v8": "^2.1.8",
+    "comment-parser": "^1.4.1",
     "corepack": "^0.30.0",
     "esbuild": "^0.24.0",
     "eslint": "^9.16.0",
@@ -58,6 +60,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0",
     "vitepress": "^1.5.0",
