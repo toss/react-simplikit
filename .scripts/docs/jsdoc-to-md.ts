@@ -174,6 +174,7 @@ function getParamLi(param: Spec) {
     }<span class="post-parameters--type">${param.type}</span>${param.default == null ? '' : ` · <span class="post-parameters--default">${param.default}</span>`}
     <br />
     <p class="post-parameters--description">${param.description
+      .replace(/^\s*-\s*/, '')
       .replace(/`([^`]*)`/g, '<code>$1</code>')
       .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
       .replace(/\*([^*]*)\*/g, '<em>$1</em>')

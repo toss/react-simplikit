@@ -19,7 +19,7 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
     ><span class="post-parameters--required">required</span> ·
     <span class="post-parameters--type">F</span>
     <br />
-    <p class="post-parameters--description">- The function to debounce.</p>
+    <p class="post-parameters--description">The function to debounce.</p>
   </li>
 </ul>
 <ul class="post-parameters-ul">
@@ -29,7 +29,7 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
     <span class="post-parameters--type">number</span>
     <br />
     <p class="post-parameters--description">
-      - The number of milliseconds to delay the function execution.
+      The number of milliseconds to delay the function execution.
     </p>
   </li>
 </ul>
@@ -39,7 +39,7 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
     ><span class="post-parameters--type">DebounceOptions</span>
     <br />
     <p class="post-parameters--description">
-      - Configuration options for debounce behavior.
+      Configuration options for debounce behavior.
     </p>
     <ul class="post-parameters-ul">
       <li class="post-parameters-li">
@@ -48,7 +48,7 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
         <span class="post-parameters--default">false</span>
         <br />
         <p class="post-parameters--description">
-          - If <code>true</code>, the function is called at the start of the
+          If <code>true</code>, the function is called at the start of the
           sequence.
         </p>
       </li>
@@ -58,7 +58,7 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
         <span class="post-parameters--default">true</span>
         <br />
         <p class="post-parameters--description">
-          - If <code>true</code>, the function is called at the end of the
+          If <code>true</code>, the function is called at the end of the
           sequence.
         </p>
       </li>
