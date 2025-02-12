@@ -68,7 +68,7 @@ export function useDebounce<F extends (...args: unknown[]) => unknown>(
   }, [leading, trailing]);
 
   const debounced = useMemo(() => {
-    return debounce(preservedCallback, wait, edges);
+    return debounce(preservedCallback, wait, { edges });
   }, [preservedCallback, wait, edges]);
 
   useEffect(() => {
