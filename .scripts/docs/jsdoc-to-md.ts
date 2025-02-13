@@ -68,8 +68,8 @@ function parseJSDoc(source: string) {
     template,
     example,
     params,
-    returns: { ...returns[0], name: '', optional: true },
-    nestedValueOfReturns: getNestedValuesFromReturn(returns[0]),
+    returns: returns.length === 0 ? undefined : { ...returns[0], name: '', optional: true },
+    nestedValueOfReturns: returns.length === 0 ? undefined : getNestedValuesFromReturn(returns[0]),
   };
 }
 
@@ -118,19 +118,24 @@ ${description}
 
 ## Interface
 \`\`\`ts
-${await prettier.format(`function ${name}${getTemplateCode()}(${getParamsCode()}): ${returns.type};`, { parser: 'typescript' })}
+${await prettier.format(`function ${name}${getTemplateCode()}(${getParamsCode()}): ${returns == null ? 'void' : returns.type};`, { parser: 'typescript' })}
 \`\`\`
 
-## Parameters
+### Parameters
+
 ${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { parser: 'html' })}
-
-## Returns
-
+### Return Value
+${
+  returns == null
+    ? '\nThis hook does not return anything.'
+    : `
 ${returns.description.split('-')[0].trim()}
 
-${await prettier.format(getParamUl(returns, nestedValueOfReturns), { parser: 'html' })}
+${await prettier.format(getParamUl(returns, nestedValueOfReturns), { parser: 'html' })}`
+}
 
 ## Example
+
 \`\`\`tsx
 ${example}
 \`\`\`
@@ -171,7 +176,7 @@ function getParamLi(param: Spec) {
   return `
     <span class="post-parameters--name">${param.name}</span>${
       param.optional ? '' : '<span class="post-parameters--required">required</span> · '
-    }<span class="post-parameters--type">${param.type}</span>${param.default == null ? '' : ` · <span class="post-parameters--default">${param.default}</span>`}
+    }<span class="post-parameters--type">${escapeHTMLEntities(param.type)}</span>${param.default == null ? '' : ` · <span class="post-parameters--default">${escapeHTMLEntities(param.default)}</span>`}
     <br />
     <p class="post-parameters--description">${param.description
       .replace(/^\s*-\s*/, '')
@@ -180,4 +185,13 @@ function getParamLi(param: Spec) {
       .replace(/\*([^*]*)\*/g, '<em>$1</em>')
       .replace(/_([^*]*)_/g, '<em>$1</em>')}</p>\
   `;
+}
+
+function escapeHTMLEntities(text: string) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
