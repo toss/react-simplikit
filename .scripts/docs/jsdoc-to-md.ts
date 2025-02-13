@@ -53,6 +53,8 @@ function parseJSDoc(source: string) {
       .find(comment => comment.tags.find(tag => tag.tag === 'returns') != null)
       ?.tags.filter(tag => tag.tag === 'returns') ?? [];
 
+  const nestedValueOfReturns = returns.length === 0 ? undefined : getNestedValuesFromReturn(returns[0]);
+
   const exampleSource = targetComment.tags.find(tag => tag.tag === 'example')?.source;
 
   const example =
@@ -68,8 +70,17 @@ function parseJSDoc(source: string) {
     template,
     example,
     params,
-    returns: returns.length === 0 ? undefined : { ...returns[0], name: '', optional: true },
-    nestedValueOfReturns: returns.length === 0 ? undefined : getNestedValuesFromReturn(returns[0]),
+    returns:
+      returns.length === 0
+        ? undefined
+        : {
+            ...returns[0],
+            name: '',
+            description:
+              nestedValueOfReturns == null ? returns[0].description : returns[0].description.split('-')[0].trim(),
+            optional: true,
+          },
+    nestedValueOfReturns,
   };
 }
 
@@ -80,10 +91,13 @@ function getNestedValuesFromReturn(returnTag: Spec): Spec[] | undefined {
 
   const nestedDerscriptions = returnTag.description.split('-').splice(1, 999).join('-').split('.');
 
-  return nestedDerscriptions.map(origin => {
-    const [, type, name, description] = /([^-\s]*)\s*`([^`]+)`\s+-\s+(.*)/.exec(origin) ?? [];
-    return { type, name, description, optional: true };
-  });
+  return nestedDerscriptions
+    .filter(origin => origin.trim().length > 0)
+    .map(origin => {
+      console.log(origin);
+      const [, name, type, description] = /([^-\s]*)\s*`([^`]+)`\s+-\s+(.*)/.exec(origin) ?? [];
+      return { name, type, description, optional: true };
+    });
 }
 
 async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
@@ -129,8 +143,6 @@ ${
   returns == null
     ? '\nThis hook does not return anything.'
     : `
-${returns.description.split('-')[0].trim()}
-
 ${await prettier.format(getParamUl(returns, nestedValueOfReturns), { parser: 'html' })}`
 }
 
@@ -173,6 +185,7 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
 }
 
 function getParamLi(param: Spec) {
+  console.log(param);
   return `
     <span class="post-parameters--name">${param.name}</span>${
       param.optional ? '' : '<span class="post-parameters--required">required</span> · '
