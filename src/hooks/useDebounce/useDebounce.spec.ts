@@ -73,7 +73,9 @@ describe('useDebounce', () => {
       console.log('test::', value);
     };
 
-    expectTypeOf(useDebounce(callback, 100)).toEqualTypeOf<DebouncedFunction<typeof callback>>();
+    const { result } = renderHook(() => useDebounce(callback, 100));
+
+    expectTypeOf(result.current).toEqualTypeOf<DebouncedFunction<typeof callback>>();
   });
 
   it('should cleanup on unmount', () => {
