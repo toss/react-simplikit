@@ -79,7 +79,3 @@ export function useDebounce<F extends (...args: any[]) => unknown>(
 
   return debounced;
 }
-
-const boo = useDebounce((value: string) => {
-  console.log('test::', value);
-}, 300);
