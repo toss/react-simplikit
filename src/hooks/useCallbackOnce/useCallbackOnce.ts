@@ -15,8 +15,6 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  * @returns {(...args: any[]) => void} A memoized function that will only execute once until dependencies change.
  *
  * @example
- * import { useCallbackOnce } from 'reactive-kit';
- *
  * function Component() {
  *   const handleOneTimeEvent = useCallbackOnce(() => {
  *     console.log('This will only run once');
@@ -25,16 +23,13 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  *   return <button onClick={handleOneTimeEvent}>Click me</button>;
  * }
  *
- * @example
  * // With dependencies
  * function TrackingComponent({ userId }: { userId: string }) {
  *   const trackUserVisit = useCallbackOnce(() => {
  *     analytics.trackVisit(userId);
  *   }, [userId]);
  *
- *   useEffect(() => {
- *     trackUserVisit();
- *   }, [trackUserVisit]);
+ *   trackUserVisit();
  *
  *   return <div>User page</div>;
  * }

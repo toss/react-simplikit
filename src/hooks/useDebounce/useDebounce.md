@@ -12,7 +12,8 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
 
 ```
 
-## Parameters
+### Parameters
+
 <ul class="post-parameters-ul">
   <li class="post-parameters-li post-parameters-li-root">
     <span class="post-parameters--name">callback</span
@@ -66,15 +67,14 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
   </li>
 </ul>
 
-
-## Returns
-
-debounced function that delays invoking the callback. It also includes a `cancel` method to cancel any pending debounced execution.
+### Return Value
 
 <ul class="post-parameters-ul">
   <li class="post-parameters-li post-parameters-li-root">
     <span class="post-parameters--name"></span
-    ><span class="post-parameters--type">F & { cancel: () => void }</span>
+    ><span class="post-parameters--type"
+      >F &amp; { cancel: () =&gt; void }</span
+    >
     <br />
     <p class="post-parameters--description">
       debounced function that delays invoking the callback. It also includes a
@@ -85,6 +85,7 @@ debounced function that delays invoking the callback. It also includes a `cancel
 
 
 ## Example
+
 ```tsx
 function SearchInput() {
   const [query, setQuery] = useState('');

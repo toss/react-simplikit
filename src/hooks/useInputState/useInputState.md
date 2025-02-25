@@ -1,52 +1,79 @@
 # useInputState
 
-`useInputState` is a React hook that simplifies managing an input state.
-It allows you to control the state of an input field and optionally transform the input value.
+`useInputState` is a React hook that manages an input state with optional value transformation.
 
 ## Interface
-
 ```ts
 function useInputState(
-  initialValue: string,
-  transformValue: (value: string) => string = echo
-): readonly [string, (value: string) => void];
+  initialValue: string = "",
+  transformValue: (value: string) => string = (v: string) => v,
+): readonly [value: string, onChange: (value: string) => void];
+
 ```
 
 ### Parameters
 
-- `initialValue` (`string`): The initial value of the input. Defaults to an empty string (`""`).
-- `transformValue` (`(value: string) => string`): A function to transform the input value before updating the state.  
-  By default, it returns the value unchanged.
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">initialValue</span
+    ><span class="post-parameters--type">string</span> ·
+    <span class="post-parameters--default">&quot;&quot;</span>
+    <br />
+    <p class="post-parameters--description">
+      The initial value of the input. Defaults to an empty string
+      (<code>""</code>).
+    </p>
+  </li>
+</ul>
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">transformValue</span
+    ><span class="post-parameters--type">(value: string) =&gt; string</span> ·
+    <span class="post-parameters--default">(v: string) =&gt; v</span>
+    <br />
+    <p class="post-parameters--description">
+      A function to transform the input value. Defaults to an identity function
+      that returns the input unchanged.
+    </p>
+  </li>
+</ul>
 
-### Returns
+### Return Value
 
-Returns a `readonly [string, (value: string) => void]` tuple:
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name"></span
+    ><span class="post-parameters--type"
+      >readonly [value: string, onChange: (value: string) =&gt; void]</span
+    >
+    <br />
+    <p class="post-parameters--description">tuple containing:</p>
+    <ul class="post-parameters-ul">
+      <li class="post-parameters-li">
+        <span class="post-parameters--name">value</span
+        ><span class="post-parameters--type">string</span>
+        <br />
+        <p class="post-parameters--description">The current state value</p>
+      </li>
+      <li class="post-parameters-li">
+        <span class="post-parameters--name">onChange</span
+        ><span class="post-parameters--type">(value: string) =&gt; void</span>
+        <br />
+        <p class="post-parameters--description">
+          A function to update the state
+        </p>
+      </li>
+    </ul>
+  </li>
+</ul>
 
-- `string`: The current state value.
-- `(value: string) => void`: A function to set the state.
 
-## Examples
-
-### Basic
+## Example
 
 ```tsx
-import { useInputState } from 'reactive-kit';
-
 function Example() {
   const [value, setValue] = useInputState('');
-
   return <input type="text" value={value} onChange={setValue} />;
 }
 ```
-
-### Make uppercase value
-
-```tsx
-import { useInputState } from 'reactive-kit';
-
-function Example() {
-  const [value, setValue] = useInputState('', v => v.toUpperCase());
-
-  return <input type="text" value={value} onChange={setValue} />;
-}
-```
+  

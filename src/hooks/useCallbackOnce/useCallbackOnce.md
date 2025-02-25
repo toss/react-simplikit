@@ -1,63 +1,76 @@
 # useCallbackOnce
 
-`useCallbackOnce` is a React hook that ensures a callback function is executed only once,
-regardless of how many times it's called. This is useful for one-time operations like
-analytics tracking, initialization code.
+A React hook that ensures a callback function is executed only once, regardless of how many times it's called. This is useful for one-time operations that should not be repeated, even if the component re-renders.
 
 ## Interface
+```ts
+function useCallbackOnce(
+  callback: () => void,
+  deps: DependencyList,
+): (...args: any[]) => void;
 
-```typescript
-function useCallbackOnce<F extends (...args: any[]) => void>(
-  callback: F,
-  deps: DependencyList
-): (...args: Parameters<F>) => void;
 ```
 
 ### Parameters
 
-- `callback`: The function to be executed once. After its first execution, subsequent calls will be ignored.
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">callback</span
+    ><span class="post-parameters--required">required</span> ·
+    <span class="post-parameters--type">() =&gt; void</span>
+    <br />
+    <p class="post-parameters--description">
+      The callback function to be executed once.
+    </p>
+  </li>
+</ul>
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">deps</span
+    ><span class="post-parameters--required">required</span> ·
+    <span class="post-parameters--type">DependencyList</span>
+    <br />
+    <p class="post-parameters--description">
+      Dependencies array that will trigger a new one-time execution when
+      changed.
+    </p>
+  </li>
+</ul>
 
-- `deps`: A dependency array that, when changed, will reset the execution state and allow the callback to fire once again.
+### Return Value
 
-### Returns
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name"></span
+    ><span class="post-parameters--type">(...args: any[]) =&gt; void</span>
+    <br />
+    <p class="post-parameters--description">
+      memoized function that will only execute once until dependencies change.
+    </p>
+  </li>
+</ul>
 
-Returns a function that wraps the original callback and ensures it only executes once until the dependencies change.
 
-## Usage Examples
-
-### Basic Example
-
-Here's an example of tracking a user's first interaction:
+## Example
 
 ```tsx
-import { useCallbackOnce } from 'reactive-kit';
-
-function UserInteraction() {
-  const trackFirstInteraction = useCallbackOnce(() => {
-    analytics.track('first_interaction');
+function Component() {
+  const handleOneTimeEvent = useCallbackOnce(() => {
+    console.log('This will only run once');
   }, []);
 
-  return <button onClick={trackFirstInteraction}>Interact</button>;
+  return <button onClick={handleOneTimeEvent}>Click me</button>;
 }
-```
 
-### With Dependencies
-
-This example shows how to track user visits, resetting when the user ID changes:
-
-```tsx
-import { useCallbackOnce } from 'reactive-kit';
-import { useEffect } from 'react';
-
-function UserTracker({ userId }: { userId: string }) {
+// With dependencies
+function TrackingComponent({ userId }: { userId: string }) {
   const trackUserVisit = useCallbackOnce(() => {
     analytics.trackVisit(userId);
-  }, [userId]); // Will reset and fire again if userId changes
+  }, [userId]);
 
-  useEffect(() => {
-    trackUserVisit();
-  }, [trackUserVisit]);
+  trackUserVisit();
 
-  return <div>Tracking user: {userId}</div>;
+  return <div>User page</div>;
 }
 ```
+  

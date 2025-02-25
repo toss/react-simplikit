@@ -94,7 +94,6 @@ function getNestedValuesFromReturn(returnTag: Spec): Spec[] | undefined {
   return nestedDerscriptions
     .filter(origin => origin.trim().length > 0)
     .map(origin => {
-      console.log(origin);
       const [, name, type, description] = /([^-\s]*)\s*`([^`]+)`\s+-\s+(.*)/.exec(origin) ?? [];
       return { name, type, description, optional: true };
     });
@@ -185,7 +184,6 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
 }
 
 function getParamLi(param: Spec) {
-  console.log(param);
   return `
     <span class="post-parameters--name">${param.name}</span>${
       param.optional ? '' : '<span class="post-parameters--required">required</span> · '

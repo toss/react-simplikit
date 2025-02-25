@@ -1,47 +1,77 @@
 # useBooleanState
 
-`useBooleanState` is a React hook that simplifies managing a boolean state.
-This hook makes handling boolean states more intuitive and concise.
+`useBooleanState` is a React hook that simplifies managing a boolean state. It provides functions to set the state to `true`, set it to `false`, and toggle its value.
 
 ## Interface
 
 ```ts
-function useBooleanState(defaultValue?: boolean): readonly [
-  boolean, // Current state value
-  () => void, // Function to set the state to true
-  () => void, // Function to set the state to false
-  () => void, // Function to toggle the state
-];
+function useBooleanState(
+  defaultValue: boolean = false
+): readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void];
 ```
 
 ### Parameters
 
-- `defaultValue` (`boolean`): It's the initial value of the state. The default value is `false`.
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">defaultValue</span
+    ><span class="post-parameters--type">boolean</span> ·
+    <span class="post-parameters--default">false</span>
+    <br />
+    <p class="post-parameters--description">
+      The initial value of the state. Defaults to <code>false</code>.
+    </p>
+  </li>
+</ul>
 
-### Returns
+### Return Value
 
-Returns a `readonly [boolean, () => void, () => void, () => void]` tuple:
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name"></span
+    ><span class="post-parameters--type"
+      >readonly [state: boolean, setTrue: () =&gt; void, setFalse: () =&gt;
+      void, toggle: () =&gt; void]</span
+    >
+    <br />
+    <p class="post-parameters--description">tuple containing:</p>
+    <ul class="post-parameters-ul">
+      <li class="post-parameters-li">
+        <span class="post-parameters--name">state</span
+        ><span class="post-parameters--type">boolean</span>
+        <br />
+        <p class="post-parameters--description">The current state value</p>
+      </li>
+      <li class="post-parameters-li">
+        <span class="post-parameters--name">setTrue</span
+        ><span class="post-parameters--type">() =&gt; void</span>
+        <br />
+        <p class="post-parameters--description">
+          A function to set the state to <code>true</code>
+        </p>
+      </li>
+      <li class="post-parameters-li">
+        <span class="post-parameters--name">setFalse</span
+        ><span class="post-parameters--type">() =&gt; void</span>
+        <br />
+        <p class="post-parameters--description">
+          A function to set the state to <code>false</code>
+        </p>
+      </li>
+      <li class="post-parameters-li">
+        <span class="post-parameters--name">toggle</span
+        ><span class="post-parameters--type">() =&gt; void</span>
+        <br />
+        <p class="post-parameters--description">
+          A function to toggle the state
+        </p>
+      </li>
+    </ul>
+  </li>
+</ul>
 
-- `boolean`: The current state value.
-- `() => void`: A function to set the state to `true`.
-- `() => void`: A function to set the state to `false`.
-- `() => void`: A function to toggle the state.
-
-## Examples
+## Example
 
 ```tsx
-import { useBooleanState } from 'reactive-kit';
-
-function Component() {
-  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
-
-  return (
-    <div>
-      <p>Bottom Sheet state: {open ? 'opened' : 'closed'}</p>
-      <button onClick={openBottomSheet}>Open</button>
-      <button onClick={closeBottomSheet}>Close</button>
-      <button onClick={toggleBottomSheet}>Toggle</button>
-    </div>
-  );
-}
+const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
 ```

@@ -22,9 +22,6 @@ type IntervalOptions =
  * @param {boolean} [options.enabled=true] - If `false`, the interval will not run.
  *
  * @example
- * import { useInterval } from 'reactive-kit';
- * import { useState } from 'react';
- *
  * function Timer() {
  *   const [time, setTime] = useState(0);
  *
