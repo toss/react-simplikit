@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Simplified version of https://github.com/toss/es-toolkit/blob/main/src/function/debounce.ts
 
-type DebouncedFunction<F extends (...args: any[]) => void> = {
+export type DebouncedFunction<F extends (...args: any[]) => void> = {
   (...args: Parameters<F>): void;
   cancel: () => void;
 };

@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 
+import { DebouncedFunction } from './debounce.ts';
 import { useDebounce } from './useDebounce.ts';
 
 describe('useDebounce', () => {
@@ -65,6 +66,16 @@ describe('useDebounce', () => {
     result.current();
     vi.advanceTimersByTime(150);
     expect(callback).toBeCalledTimes(2);
+  });
+
+  it('should inference the callback type', () => {
+    const callback = (value: string) => {
+      console.log('test::', value);
+    };
+
+    const { result } = renderHook(() => useDebounce(callback, 100));
+
+    expectTypeOf(result.current).toEqualTypeOf<DebouncedFunction<typeof callback>>();
   });
 
   it('should cleanup on unmount', () => {
