@@ -13,5 +13,8 @@
     "jsx": "react-jsx",
     "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src", ".scripts/**/*"]
+  "include": ["src", ".scripts/**/*"],
+  "vueCompilerOptions": {
+    "vitePressExtensions": [".md"]
+  }
 }

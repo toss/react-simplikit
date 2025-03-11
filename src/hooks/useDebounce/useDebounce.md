@@ -14,74 +14,49 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
 
 ### Parameters
 
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">callback</span
-    ><span class="post-parameters--required">required</span> ·
-    <span class="post-parameters--type">F</span>
-    <br />
-    <p class="post-parameters--description">The function to debounce.</p>
-  </li>
-</ul>
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">wait</span
-    ><span class="post-parameters--required">required</span> ·
-    <span class="post-parameters--type">number</span>
-    <br />
-    <p class="post-parameters--description">
-      The number of milliseconds to delay the function execution.
-    </p>
-  </li>
-</ul>
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">options</span
-    ><span class="post-parameters--type">DebounceOptions</span>
-    <br />
-    <p class="post-parameters--description">
-      Configuration options for debounce behavior.
-    </p>
-    <ul class="post-parameters-ul">
-      <li class="post-parameters-li">
-        <span class="post-parameters--name">options.leading</span
-        ><span class="post-parameters--type">boolean</span> ·
-        <span class="post-parameters--default">false</span>
-        <br />
-        <p class="post-parameters--description">
-          If <code>true</code>, the function is called at the start of the
-          sequence.
-        </p>
-      </li>
-      <li class="post-parameters-li">
-        <span class="post-parameters--name">options.trailing</span
-        ><span class="post-parameters--type">boolean</span> ·
-        <span class="post-parameters--default">true</span>
-        <br />
-        <p class="post-parameters--description">
-          If <code>true</code>, the function is called at the end of the
-          sequence.
-        </p>
-      </li>
-    </ul>
-  </li>
-</ul>
+<Interface
+  required
+  name="callback"
+  type="F"
+  description="The function to debounce."
+/>
+
+<Interface
+  required
+  name="wait"
+  type="number"
+  description="The number of milliseconds to delay the function execution."
+/>
+
+<Interface
+  name="options"
+  type="DebounceOptions"
+  description="Configuration options for debounce behavior."
+  :nested="[
+    {
+      name: 'options.leading',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        'If <code>true</code>, the function is called at the start of the sequence.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      defaultValue: 'true',
+      description:
+        'If <code>true</code>, the function is called at the end of the sequence.',
+    },
+  ]"
+/>
 
 ### Return Value
 
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name"></span
-    ><span class="post-parameters--type"
-      >F &amp; { cancel: () =&gt; void }</span
-    >
-    <br />
-    <p class="post-parameters--description">
-      debounced function that delays invoking the callback. It also includes a
-      <code>cancel</code> method to cancel any pending debounced execution.
-    </p>
-  </li>
-</ul>
+<Interface
+  name=""
+  type="F & { cancel: () => void }"
+  description="debounced function that delays invoking the callback. It also includes a <code>cancel</code> method to cancel any pending debounced execution."
+/>
 
 
 ## Example

@@ -136,13 +136,13 @@ ${await prettier.format(`function ${name}${getTemplateCode()}(${getParamsCode()}
 
 ### Parameters
 
-${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { parser: 'html' })}
+${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { parser: 'vue' })}
 ### Return Value
 ${
   returns == null
     ? '\nThis hook does not return anything.'
     : `
-${await prettier.format(getParamUl(returns, nestedValueOfReturns), { parser: 'html' })}`
+${await prettier.format(getParamUl(returns, nestedValueOfReturns), { parser: 'vue' })}`
 }
 
 ## Example
@@ -154,55 +154,95 @@ ${example}
 }
 
 function getParamUl(param: Spec, nestedParams?: Spec[]) {
-  return `<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    ${getParamLi(param)}
-    ${
-      nestedParams == null
-        ? ''
-        : `\
-    ${
-      nestedParams.length > 0
-        ? `<ul class="post-parameters-ul">
-    ${nestedParams
-      .map(
-        nestedParam => `\
-      <li class="post-parameters-li">
-        ${getParamLi(nestedParam)}
-      </li>\
-        `
-      )
-      .join('\n')}
-    </ul>`
-        : ''
-    }  \
-    `
-    }
-  </li>
-</ul>
-  `;
-}
-
-function getParamLi(param: Spec) {
   return `
-    <span class="post-parameters--name">${param.name}</span>${
-      param.optional ? '' : '<span class="post-parameters--required">required</span> · '
-    }<span class="post-parameters--type">${escapeHTMLEntities(param.type)}</span>${param.default == null ? '' : ` · <span class="post-parameters--default">${escapeHTMLEntities(param.default)}</span>`}
-    <br />
-    <p class="post-parameters--description">${param.description
-      .replace(/^\s*-\s*/, '')
-      .replace(/`([^`]*)`/g, '<code>$1</code>')
-      .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*([^*]*)\*/g, '<em>$1</em>')
-      .replace(/_([^*]*)_/g, '<em>$1</em>')}</p>\
+  <Interface
+    ${Object.entries({
+      required: !param.optional,
+      name: param.name,
+      type: param.type,
+      description: param.description,
+      nested: nestedParams,
+    })
+      .filter(([key, value]) => {
+        if (key === 'required') {
+          return value as boolean;
+        }
+
+        if (key === 'nested') {
+          return (value as Spec[])?.length > 0;
+        }
+
+        return value != null;
+      })
+      .map(([key, value]) => {
+        if (key === 'required') {
+          return `required`;
+        }
+
+        if (key === 'description') {
+          return `description="${replaceDescription(value as string)}"`;
+        }
+
+        if (key === 'nested') {
+          return `:nested="[
+            ${nestedParams
+              ?.map(
+                nestedParam => `{
+                     ${Object.entries({
+                       name: nestedParam.name,
+                       type: nestedParam.type,
+                       defaultValue: nestedParam.default,
+                       description: nestedParam.description,
+                     })
+                       // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                       .filter(([_, value]) => value != null)
+                       .map(
+                         ([key, value]) =>
+                           `${key}: '${key === 'description' ? replaceDescription(value as string) : value!.replace(/'/g, "\\'")}'`
+                       )
+                       .join(',\n')}
+            }`
+              )
+              .join(',\n')}
+          ]"`;
+        }
+
+        return `${key}="${(value as string).replace(/"/g, '\\"')}"`;
+      })
+      .join('\n')}
+  />
   `;
 }
 
-function escapeHTMLEntities(text: string) {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+function replaceDescription(value: string) {
+  return value
+    .replace(/^\s*-\s*/, '')
+    .replace(/`([^`]*)`/g, '<code>$1</code>')
+    .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]*)\*/g, '<em>$1</em>')
+    .replace(/_([^*]*)_/g, '<em>$1</em>');
 }
+
+// function getParamLi(param: Spec) {
+//   return `
+//     <span class="post-parameters--name">${param.name}</span>${
+//       param.optional ? '' : '<span class="post-parameters--required">required</span> · '
+//     }<span class="post-parameters--type">${escapeHTMLEntities(param.type)}</span>${param.default == null ? '' : ` · <span class="post-parameters--default">${escapeHTMLEntities(param.default)}</span>`}
+//     <br />
+//     <p class="post-parameters--description">${param.description
+//       .replace(/^\s*-\s*/, '')
+//       .replace(/`([^`]*)`/g, '<code>$1</code>')
+//       .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
+//       .replace(/\*([^*]*)\*/g, '<em>$1</em>')
+//       .replace(/_([^*]*)_/g, '<em>$1</em>')}</p>\
+//   `;
+// }
+
+// function escapeHTMLEntities(text: string) {
+//   return text
+//     .replace(/&/g, '&amp;')
+//     .replace(/</g, '&lt;')
+//     .replace(/>/g, '&gt;')
+//     .replace(/"/g, '&quot;')
+//     .replace(/'/g, '&#39;');
+// }
