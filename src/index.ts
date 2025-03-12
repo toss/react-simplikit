@@ -6,6 +6,7 @@ export { useBooleanState } from './hooks/useBooleanState/index.ts';
 export { useCallbackOnce } from './hooks/useCallbackOnce/index.ts';
 export { useDebounce } from './hooks/useDebounce/index.ts';
 export { useImpressionRef } from './hooks/useImpressionRef/index.ts';
+export { useInputState } from './hooks/useInputState/index.ts';
 export { useIntersectionObserver } from './hooks/useIntersectionObserver/index.ts';
 export { useInterval } from './hooks/useInterval/index.ts';
 export { useLoading } from './hooks/useLoading/index.ts';
