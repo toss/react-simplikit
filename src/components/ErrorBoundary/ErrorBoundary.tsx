@@ -94,6 +94,7 @@ class BaseErrorBoundary extends Component<PropsWithRef<PropsWithChildren<Props>>
 }
 
 /**
+ * @description
  * ErrorBoundary is a component that catches JavaScript errors anywhere in its child component tree
  * and displays a fallback UI instead of crashing the entire application.
  *
@@ -139,6 +140,7 @@ export const ErrorBoundary = forwardRef<{ reset(): void }, ComponentPropsWithout
 ErrorBoundary.displayName = 'ErrorBoundary';
 
 /**
+ * @description
  * A hook that returns a function which, when called with an error,
  * will throw that error to be caught by the nearest ErrorBoundary.
  *
@@ -173,6 +175,7 @@ export const useErrorBoundary = <ErrorType extends Error>() => {
 };
 
 /**
+ * @description
  * Higher-order component that wraps a component with an ErrorBoundary.
  *
  * @template Props - The props type of the wrapped component
