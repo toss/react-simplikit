@@ -1,10 +1,11 @@
-import { defineConfig } from 'tsup';
+import { defineConfig, Options } from 'tsup';
 
-const defaultConfig = {
+const defaultConfig: Options = {
   entry: ['**/index.ts'],
   splitting: false,
   clean: true,
   dts: true,
+  minify: true,
 };
 
 export default defineConfig([
