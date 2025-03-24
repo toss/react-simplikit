@@ -6,6 +6,7 @@
     "dist/**/*",
     "esm/**/*"
   ],
+  "packageManager": "yarn@4.2.2",
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
@@ -17,6 +18,9 @@
     "test:coverage": "yarn vitest run --coverage",
     "prepack": "tsup"
   },
+  "workspaces": [
+    "benchmarks"
+  ],
   "publishConfig": {
     "access": "public",
     "main": "./dist/index.js",
@@ -67,6 +71,5 @@
   "peerDependencies": {
     "react": "*",
     "react-dom": "*"
-  },
-  "packageManager": "yarn@4.5.3"
+  }
 }

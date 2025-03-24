@@ -20,6 +20,7 @@ export default [
       '.pnp.*',
       'coverage',
       'docs',
+      'benchmarks',
       'node_modules',
       'eslint.*',
       'vitest.*',
