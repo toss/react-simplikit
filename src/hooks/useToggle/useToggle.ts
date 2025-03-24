@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useReducer } from 'react';
 
 /**
  * @description
@@ -26,11 +26,7 @@ import { useCallback, useState } from 'react';
  * }
  */
 export function useToggle(initialValue: boolean = false) {
-  const [value, setValue] = useState(initialValue);
-
-  const toggle = useCallback(() => {
-    setValue(b => !b);
-  }, []);
-
-  return [value, toggle] as const;
+  return useReducer(toggle, initialValue);
 }
+
+const toggle = (state: boolean) => !state;

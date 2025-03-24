@@ -46,12 +46,12 @@ type DebounceOptions = {
  *   );
  * }
  */
-export function useDebounce<F extends (...args: unknown[]) => unknown>(
+export function useDebounce<F extends (...args: any[]) => unknown>(
   callback: F,
   wait: number,
   options: DebounceOptions = {}
 ) {
-  const preservedCallback = usePreservedCallback(callback);
+  const preservedCallback = usePreservedCallback(callback) as F;
 
   const { leading = false, trailing = true } = options;
 
@@ -69,7 +69,7 @@ export function useDebounce<F extends (...args: unknown[]) => unknown>(
   }, [leading, trailing]);
 
   const debounced = useMemo(() => {
-    return debounce(preservedCallback, wait, edges);
+    return debounce<F>(preservedCallback, wait, { edges });
   }, [preservedCallback, wait, edges]);
 
   useEffect(() => {
