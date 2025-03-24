@@ -2,6 +2,7 @@
   "name": "reactive-kit",
   "version": "0.2.21",
   "main": "./src/index.ts",
+  "sideEffects": false,
   "files": [
     "dist/**/*",
     "esm/**/*"
