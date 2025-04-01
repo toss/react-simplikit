@@ -1,12 +1,12 @@
 # reactive-kit, 선택의 이유
 
-왜 많은 리액트 기반 라이브러리 중 reactive-kit을 선택해야 할까요? 우리가 중요하게 생각하는 가치에 대해 알아보면서, 왜 reactive-kit을 선택하면 리액트를 리액트 답게 작성할 수 있는 건지 알아볼게요.
+왜 많은 리액트 기반 라이브러리 중 reactive-kit을 선택해야 할까요? 우리가 중요하게 생각하는 가치에 대해 알아보면서, 왜 reactive-kit을 사용하는 것이 리액트를 리액트 답게 작성하는 것과 같은 지 알아볼게요.
 
 ## 선언적 인터페이스
 
 리액트 컴포넌트는 클래스형 컴포넌트에서 함수형 컴포넌트로 그 형태가 발전되어 왔어요.
 
-함수형 컴포넌트가 등장하면서, 기존의 클래스형 컴포넌트에서 복잡하게 작성하던 [상태와 생명주기 관련 로직들을 추상화](https://ko.legacy.reactjs.org/docs/hooks-intro.html#ts-hard-to-reuse-stateful-logic-between-components) 할 수 있게 되었어요.
+함수형 컴포넌트와 선언적인 API의 훅들이 등장하면서, 기존의 클래스형 컴포넌트에서 복잡하게 작성하던 [상태와 생명주기 관련 로직들을 추상화](https://ko.legacy.reactjs.org/docs/hooks-intro.html#ts-hard-to-reuse-stateful-logic-between-components) 할 수 있게 되었어요.
 
 그러나 여전히 리액트 컴포넌트는 복잡해요. 리액트는 [최소한의 인터페이스를 제공](https://ko.legacy.reactjs.org/docs/design-principles.html#common-abstraction)하고 있기 때문에, 조금만 복잡한 기능이 포함된 컴포넌트를 작성하기 위해서는 수십개의 상태, 핸들러, 상태 변화에 따른 사이드 이펙트 정의가 포함될 수 있어요.
 
@@ -196,7 +196,7 @@ function AutoCompleteInput() {
 
 ## 작은 번들 사이즈
 
-서비스 입장에서 빠른 응답속도는 매우 중요한 가치예요. 클라이언트 서비스를 구성하기 위한 라이브러리인 reactive-kit에게 작은 번들 사이즈는 매우 중요한 가치예요. reactive-kit은 지금도, 앞으로도 최대한 작은 번들 사이즈를 제공하기 위해 노력할 거예요.
+웹 서비스 입장에서 빠른 응답속도는 매우 중요해요. 그렇기에 웹 서비스를 구성하기 위한 라이브러리인 reactive-kit에게 작은 번들 사이즈는 매우 중요해요. reactive-kit은 지금도, 앞으로도 최대한 작은 번들 사이즈를 제공하기 위해 노력하고자 해요.
 
 reactive-kit은 react-use에 대비하여, 아래와 같이 최대 약 89% 작은 크기를 가져요.
 
