@@ -33,6 +33,7 @@ function sidebar(): DefaultTheme.Sidebar {
       text: '가이드',
       items: [
         { text: '소개', link: '/ko/intro' },
+        { text: 'reactive-kit, 선택의 이유', link: '/ko/why-reactive-kit-matters' },
         { text: '설치하기', link: '/ko/installation' },
         { text: '설계 원칙', link: '/ko/design-principles' },
         { text: '기여하기', link: '/ko/contributing' },
