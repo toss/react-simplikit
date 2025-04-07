@@ -58,6 +58,7 @@ jobs:
           yarn npm publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Set git username with email
         run: |
