@@ -103,7 +103,8 @@ export function useStorageState<T>(
         window.removeEventListener('storage', handler);
       };
     },
-    () => getSnapshot()
+    () => getSnapshot(),
+    () => defaultValue
   );
 
   const setStorageState = useCallback(
