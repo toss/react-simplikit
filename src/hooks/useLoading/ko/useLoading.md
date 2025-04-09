@@ -24,7 +24,7 @@ function useLoading(): [
 ## 예시
 
 ```tsx
-import { useLoading } from 'reactive-kit';
+import { useLoading } from 'react-simplikit';
 
 function ConfirmButton() {
   const [loading, startLoading] = useLoading();

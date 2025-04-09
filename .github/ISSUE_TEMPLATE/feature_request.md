@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest an idea for reactive-kit
+about: Suggest an idea for react-simplikit
 title: '[FEATURE] '
 labels: 'enhancement'
 assignees: 'seungrodotlee, pumpkiinbell, choi2021'

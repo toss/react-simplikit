@@ -3,7 +3,7 @@ import { en } from './en.mts';
 import { ko, search as koSearch } from './ko.mts';
 
 export default defineConfig({
-  title: 'reactive-kit',
+  title: 'react-simplikit',
   locales: {
     root: { label: 'English', ...en },
     ko: { label: '한국어', ...ko },
@@ -28,19 +28,19 @@ export default defineConfig({
     ['link', { rel: 'apple-touch-icon', href: '/favicon/apple-touch-icon.png' }],
     ['link', { rel: 'manifest', href: '/favicon/site.webmanifest' }],
     ['meta', { name: 'author', content: 'Viva Republica, Inc.' }],
-    ['meta', { name: 'keywords', content: 'react, hooks, utility, library, reactive-kit' }],
+    ['meta', { name: 'keywords', content: 'react, hooks, utility, library, react-simplikit' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'reactive-kit' }],
+    ['meta', { property: 'og:title', content: 'react-simplikit' }],
     ['meta', { property: 'og:description', content: 'Lightweight and powerful React utility library' }],
-    ['meta', { property: 'og:site_name', content: 'reactive-kit' }],
-    ['meta', { property: 'og:image', content: 'https://reactive-kit.slash.page/images/og.png' }],
-    ['meta', { name: 'twitter:image', content: 'https://reactive-kit.slash.page/images/og.png' }],
+    ['meta', { property: 'og:site_name', content: 'react-simplikit' }],
+    ['meta', { property: 'og:image', content: 'https://react-simplikit.slash.page/images/og.png' }],
+    ['meta', { name: 'twitter:image', content: 'https://react-simplikit.slash.page/images/og.png' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
   transformHead: ({ pageData }) => {
     const head: HeadConfig[] = [];
-    const title = pageData.frontmatter.title || pageData.title || 'reactive-kit';
+    const title = pageData.frontmatter.title || pageData.title || 'react-simplikit';
     const description =
       pageData.frontmatter.description || pageData.description || 'Lightweight and powerful React utility library';
 
@@ -60,10 +60,10 @@ export default defineConfig({
       },
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/toss/reactive-kit' },
+      { icon: 'github', link: 'https://github.com/toss/react-simplikit' },
       {
         icon: 'npm',
-        link: 'https://www.npmjs.com/package/reactive-kit',
+        link: 'https://www.npmjs.com/package/react-simplikit',
         ariaLabel: 'npm',
       },
     ],

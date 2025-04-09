@@ -30,7 +30,7 @@ Returns a function that wraps the original callback and ensures it only executes
 Here's an example of tracking a user's first interaction:
 
 ```tsx
-import { useCallbackOnce } from 'reactive-kit';
+import { useCallbackOnce } from 'react-simplikit';
 
 function UserInteraction() {
   const trackFirstInteraction = useCallbackOnce(() => {
@@ -46,7 +46,7 @@ function UserInteraction() {
 This example shows how to track user visits, resetting when the user ID changes:
 
 ```tsx
-import { useCallbackOnce } from 'reactive-kit';
+import { useCallbackOnce } from 'react-simplikit';
 import { useEffect } from 'react';
 
 function UserTracker({ userId }: { userId: string }) {

@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Help us improve reactive-kit by reporting a bug
+about: Help us improve react-simplikit by reporting a bug
 title: '[BUG] '
 labels: 'bug'
 assignees: 'seungrodotlee, pumpkiinbell, choi2021'
@@ -45,14 +45,14 @@ If applicable, add screenshots to help explain your problem.
 - OS: [e.g. iOS, Windows]
 - Browser: [e.g. chrome, safari]
 - Version: [e.g. 22]
-- reactive-kit version: [e.g. 0.2.26]
+- react-simplikit version: [e.g. 0.2.26]
 
 <!-- **환경 정보:**
 
 - OS: [예: iOS, Windows]
 - 브라우저: [예: chrome, safari]
 - 버전: [예: 22]
-- reactive-kit 버전: [예: 0.2.26] -->
+- react-simplikit 버전: [예: 0.2.26] -->
 
 **Additional context**
 Add any other context about the problem here.

@@ -29,14 +29,14 @@ If possible, share a code example that reproduces the problem.
 - OS: [e.g. iOS, Windows]
 - Browser: [e.g. chrome, safari]
 - Version: [e.g. 22]
-- reactive-kit version: [e.g. 0.2.26]
+- react-simplikit version: [e.g. 0.2.26]
 
 <!-- **환경 정보:**
 
 - OS: [예: iOS, Windows]
 - 브라우저: [예: chrome, safari]
 - 버전: [예: 22]
-- reactive-kit 버전: [예: 0.2.26] -->
+- react-simplikit 버전: [예: 0.2.26] -->
 
 ## Additional Information
 

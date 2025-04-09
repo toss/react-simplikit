@@ -24,7 +24,7 @@ value가 이전 값과 같다면 동일한 참조를 반환하고, 다르다면 
 아래는 객체에 대한 참조를 유지하기 위해 훅을 사용하는 예제예요.
 
 ```tsx
-import { usePreservedReference } from 'reactive-kit';
+import { usePreservedReference } from 'react-simplikit';
 import { useState } from 'react';
 
 function ExampleComponent() {
@@ -41,7 +41,7 @@ function ExampleComponent() {
 사용자 정의 비교 함수를 사용하는 방법을 보여주는 예제예요.
 
 ```tsx
-import { usePreservedReference } from 'reactive-kit';
+import { usePreservedReference } from 'react-simplikit';
 import { useState } from 'react';
 
 function ExampleComponent() {

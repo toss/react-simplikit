@@ -15,7 +15,7 @@ export type CleanupCallback = () => void;
  * @returns A function to set the element. Pass this function to the `ref` attribute, and the `callback` will be called whenever the element changes.
  *
  * @example
- * import { useRefEffect } from 'reactive-kit';
+ * import { useRefEffect } from 'react-simplikit';
  *
  * function Component() {
  *   const ref = useRefEffect<HTMLDivElement>(element => {

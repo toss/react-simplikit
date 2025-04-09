@@ -38,7 +38,7 @@ const emitListeners = () => {
  *
  * @example
  * // Counter with persistent state
- * import { useStorageState } from 'reactive-kit';
+ * import { useStorageState } from 'react-simplikit';
  *
  * function Counter() {
  *   const [count, setCount] = useStorageState<number>('counter', {

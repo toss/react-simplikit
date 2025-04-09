@@ -1,6 +1,6 @@
 ---
 name: Documentation
-about: Help us improve reactive-kit's documentation
+about: Help us improve react-simplikit's documentation
 title: '[DOCS] '
 labels: 'documentation'
 assignees: 'seungrodotlee, pumpkiinbell, choi2021'
