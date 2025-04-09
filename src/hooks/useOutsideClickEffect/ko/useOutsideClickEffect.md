@@ -24,7 +24,7 @@ function useOutsideClickEffect(container: HTMLElement | HTMLElement[] | null, ca
 ### 기본 사용법
 
 ```tsx
-import { useOutsideClickEffect } from 'reactive-kit';
+import { useOutsideClickEffect } from 'react-simplikit';
 
 function Example() {
   const [wrapperEl, setWrapperEl] = useState<HTMLDivElement | null>(null);
@@ -40,7 +40,7 @@ function Example() {
 ### 여러 컨테이너 처리
 
 ```tsx
-import { useOutsideClickEffect } from 'reactive-kit';
+import { useOutsideClickEffect } from 'react-simplikit';
 function Example() {
   const [wrapperEl1, setWrapperEl1] = useState<HTMLDivElement | null>(null);
   const [wrapperEl2, setWrapperEl2] = useState<HTMLDivElement | null>(null);
@@ -61,7 +61,7 @@ function Example() {
 ### 모달 컴포넌트 처리
 
 ```tsx
-import { useOutsideClickEffect } from 'reactive-kit';
+import { useOutsideClickEffect } from 'react-simplikit';
 
 function Modal({ isOpen, onClose, children }: { isOpen: boolean; onClose: () => void; children: React.ReactNode }) {
   const modalRef = useState<HTMLDivElement | null>(null);

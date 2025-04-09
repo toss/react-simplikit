@@ -35,7 +35,7 @@ This component returns a JSX element.
 ## Example
 
 ```tsx
-import { ImpressionArea } from 'reactive-kit';
+import { ImpressionArea } from 'react-simplikit';
 
 function App() {
   return (

@@ -31,7 +31,7 @@ function useIntersectionObserver<Element extends HTMLElement>(
 ## 예제
 
 ```tsx
-import { useIntersectionObserver } from 'reactive-kit';
+import { useIntersectionObserver } from 'react-simplikit';
 
 function Component() {
   const ref = useIntersectionObserver<HTMLDivElement>(

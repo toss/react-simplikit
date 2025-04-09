@@ -15,7 +15,7 @@ type Options = {
  * with the current visibility state.
  *
  * @example
- * import { useVisibilityEvent } from 'reactive-kit';
+ * import { useVisibilityEvent } from 'react-simplikit';
  *
  * function Component() {
  *   useVisibilityEvent(visibilityState => {

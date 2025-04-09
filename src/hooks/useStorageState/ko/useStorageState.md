@@ -43,7 +43,7 @@ function useStorageState<T>(
 ### 카운터 예시
 
 ```tsx
-import { useStorageState } from 'reactive-kit';
+import { useStorageState } from 'react-simplikit';
 
 function Counter() {
   const [count, setCount] = useStorageState<number>('counter', {
@@ -59,7 +59,7 @@ function Counter() {
 최근 검색어를 `localStorage`에 저장하고, 최대 5개까지만 유지하는 예제예요.
 
 ```tsx
-import { useStorageState } from 'reactive-kit';
+import { useStorageState } from 'react-simplikit';
 
 function SearchHistory() {
   const [recentSearches, setRecentSearches] = useStorageState<string[]>('recent-searches', {

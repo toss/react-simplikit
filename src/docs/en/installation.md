@@ -1,35 +1,35 @@
 ---
-description: How to install reactive-kit
+description: How to install react-simplikit
 ---
 
 # Installation
 
-`reactive-kit` is available via [npm](https://npmjs.com/package/reactive-kit) for Node.js and Bun.
+`react-simplikit` is available via [npm](https://npmjs.com/package/react-simplikit) for Node.js and Bun.
 
 ## Node.js
 
-Install reactive-kit with the following command:
+Install react-simplikit with the following command:
 
 ::: code-group
 
 ```sh [npm]
-npm install reactive-kit
+npm install react-simplikit
 ```
 
 ```sh [pnpm]
-pnpm add reactive-kit
+pnpm add react-simplikit
 ```
 
 ```sh [yarn]
-yarn add reactive-kit
+yarn add react-simplikit
 ```
 
 :::
 
 ## Bun
 
-reactive-kit is also available on Bun. You can install it via the following command:
+react-simplikit is also available on Bun. You can install it via the following command:
 
 ```sh
-bun add reactive-kit
+bun add react-simplikit
 ```

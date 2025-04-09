@@ -1,6 +1,6 @@
-# Contributing to reactive-kit
+# Contributing to react-simplikit
 
-`reactive-kit` is designed to encourage contributions from anyone. If you'd like to contribute, please follow the guide below.
+`react-simplikit` is designed to encourage contributions from anyone. If you'd like to contribute, please follow the guide below.
 
 ## Feature Contribution
 
@@ -13,7 +13,7 @@ When contributing features, add them to the appropriate directory based on their
 
 ### Writing Features
 
-Follow the [Design Principles](./design-principles) of `reactive-kit`. Do not create features that depend on specific libraries or are tightly coupled with React's lifecycle. Ensure your feature aligns with these principles.
+Follow the [Design Principles](./design-principles) of `react-simplikit`. Do not create features that depend on specific libraries or are tightly coupled with React's lifecycle. Ensure your feature aligns with these principles.
 
 ### Writing Guide Documentation
 
@@ -36,7 +36,7 @@ Every feature must include JSDoc comments. You can use any JSDoc Block Tags, but
 
 ### Deployment
 
-When changes are merged into the main branch, deployment happens automatically. You can view the deployment results in [GitHub Actions](https://github.com/toss/reactive-kit/actions).
+When changes are merged into the main branch, deployment happens automatically. You can view the deployment results in [GitHub Actions](https://github.com/toss/react-simplikit/actions).
 
 ## Documentation Contribution
 

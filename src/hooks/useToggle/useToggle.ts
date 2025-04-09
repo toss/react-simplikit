@@ -12,7 +12,7 @@ import { useReducer } from 'react';
  * - `toggle`: A function to toggle the state.
  *
  * @example
- * import { useToggle } from 'reactive-kit';
+ * import { useToggle } from 'react-simplikit';
  *
  * function Component() {
  *   const [open, toggle] = useToggle(false);

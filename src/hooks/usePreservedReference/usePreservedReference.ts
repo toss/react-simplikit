@@ -18,7 +18,7 @@ type NotNullishValue = {};
  *   otherwise returns a new reference.
  *
  * @example
- * import { usePreservedReference } from 'reactive-kit';
+ * import { usePreservedReference } from 'react-simplikit';
  * import { useState } from 'react';
  *
  * function ExampleComponent() {
@@ -30,7 +30,7 @@ type NotNullishValue = {};
  * }
  *
  * @example
- * import { usePreservedReference } from 'reactive-kit';
+ * import { usePreservedReference } from 'react-simplikit';
  * import { useState } from 'react';
  *
  * function ExampleComponent() {

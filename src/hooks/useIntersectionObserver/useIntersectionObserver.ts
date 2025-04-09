@@ -16,7 +16,7 @@ import { useRefEffect } from '../useRefEffect/index.ts';
  * @returns A function to set the element. Attach this function to the `ref` attribute, and the `callback` will be executed whenever the element's visibility changes.
  *
  * @example
- * import { useIntersectionObserver } from 'reactive-kit';
+ * import { useIntersectionObserver } from 'react-simplikit';
  *
  * function Component() {
  *   const ref = useIntersectionObserver<HTMLDivElement>(

@@ -28,7 +28,7 @@ function usePreservedCallback<Argument = any, ReturnValue = unknown>(
 아래는 버튼을 클릭할 때마다 `count`를 증가시키는 간단한 예제예요.
 
 ```tsx
-import { usePreservedCallback } from 'reactive-kit';
+import { usePreservedCallback } from 'react-simplikit';
 import { useState } from 'react';
 
 function Counter() {
@@ -49,7 +49,7 @@ function Counter() {
 부모 컴포넌트에서 자식 컴포넌트로 콜백을 전달할 때도 동일한 참조를 유지할 수 있어요.
 
 ```tsx
-import { usePreservedCallback } from 'reactive-kit';
+import { usePreservedCallback } from 'react-simplikit';
 import { useState } from 'react';
 
 function Parent() {

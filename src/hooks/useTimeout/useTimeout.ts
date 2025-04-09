@@ -12,7 +12,7 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  *
  * @example
  * // Updating a title after a delay
- * import { useTimeout } from 'reactive-kit';
+ * import { useTimeout } from 'react-simplikit';
  * import { useState } from 'react';
  *
  * function Example() {
