@@ -1,13 +1,13 @@
-# useCallbackOnce
+# useCallbackOncePerRender
 
-`useCallbackOnce` is a React hook that ensures a callback function is executed only once,
+`useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once,
 regardless of how many times it's called. This is useful for one-time operations like
 analytics tracking, initialization code.
 
 ## Interface
 
 ```typescript
-function useCallbackOnce<F extends (...args: any[]) => void>(
+function useCallbackOncePerRender<F extends (...args: any[]) => void>(
   callback: F,
   deps: DependencyList
 ): (...args: Parameters<F>) => void;
@@ -30,10 +30,10 @@ Returns a function that wraps the original callback and ensures it only executes
 Here's an example of tracking a user's first interaction:
 
 ```tsx
-import { useCallbackOnce } from 'react-simplikit';
+import { useCallbackOncePerRender } from 'react-simplikit';
 
 function UserInteraction() {
-  const trackFirstInteraction = useCallbackOnce(() => {
+  const trackFirstInteraction = useCallbackOncePerRender(() => {
     analytics.track('first_interaction');
   }, []);
 
@@ -46,11 +46,11 @@ function UserInteraction() {
 This example shows how to track user visits, resetting when the user ID changes:
 
 ```tsx
-import { useCallbackOnce } from 'react-simplikit';
+import { useCallbackOncePerRender } from 'react-simplikit';
 import { useEffect } from 'react';
 
 function UserTracker({ userId }: { userId: string }) {
-  const trackUserVisit = useCallbackOnce(() => {
+  const trackUserVisit = useCallbackOncePerRender(() => {
     analytics.trackVisit(userId);
   }, [userId]); // Will reset and fire again if userId changes
 
