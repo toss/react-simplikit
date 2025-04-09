@@ -41,7 +41,7 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  *       timeThreshold={1000}
  *       areaThreshold={0.5}
  *     >
- *       <div>Track me!</div>
+ *       <div>Track my visibility!</div>
  *     </ImpressionArea>
  *   );
  * }
