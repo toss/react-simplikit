@@ -109,6 +109,8 @@ jobs:
           MATCHED_NAMES=$(echo "$FILES" | grep -E '^src/.+/[^/]+\.tsx?$' | sed -E 's#^src/([^/]+)/\1\.tsx?$#\1#' | sort -u | tr '\n' ',' | sed 's/,$//')
 
           echo "names=$MATCHED_NAMES" >> $GITHUB_OUTPUT
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Generate docs
         run: |
