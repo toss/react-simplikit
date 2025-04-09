@@ -1,1 +1,1 @@
-export { useStorageState } from './useStorageState.ts';
+export { Serializable, useStorageState } from './useStorageState.ts';
