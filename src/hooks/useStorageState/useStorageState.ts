@@ -24,18 +24,22 @@ const emitListeners = () => {
 
 /**
  * @description
- * a hook that works like useState but stores the state value in the storage and retains the value.
+ * A React hook that functions like `useState` but persists the state value in browser storage.
+ * The value is retained across page reloads and can be shared between tabs when using `localStorage`.
  *
- * @param key - key for storage
- * @param options - options for storage
- * - `options.storage`: Storage to use (default: `safeLocalStorage`)
- * - `options.defaultValue`: Initial value
+ * @param {string} key - The key used to store the value in storage.
+ * @param {object} [options] - Configuration options for storage behavior.
+ * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
+ * @param {T} [options.defaultValue] - The initial value if no existing value is found.
  *
- * @returns a tuple of the form [state, setState]:
- * - `state`: Current state value
- * - `setState`: Function to update the state
+ * @returns {[Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void]} A tuple:
+ * - `state`: The current state value retrieved from storage.
+ * - `setState`: A function to update and persist the state.
  *
  * @example
+ * // Counter with persistent state
+ * import { useStorageState } from 'reactive-kit';
+ *
  * function Counter() {
  *   const [count, setCount] = useStorageState<number>('counter', {
  *     defaultValue: 0,
@@ -99,7 +103,8 @@ export function useStorageState<T>(
         window.removeEventListener('storage', handler);
       };
     },
-    () => getSnapshot()
+    () => getSnapshot(),
+    () => defaultValue
   );
 
   const setStorageState = useCallback(

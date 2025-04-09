@@ -1,6 +1,7 @@
 # useLoading
 
-`useLoading`은 `Promise`의 로딩 상태를 간단하게 관리할 수 있도록 도와주는 React 훅이에요. 비동기 작업이 진행 중인지 확인할 수 있는 상태와 함께, 로딩 상태를 처리하는 함수도 제공해요.
+`useLoading`은 로딩 상태를 간편하게 관리할 수 있도록 도와주는 React 훅이에요.
+비동기 작업이 진행 중인지 확인할 수 있는 상태를 제공하며, 로딩 상태를 자동으로 처리하는 함수도 함께 제공해요.
 
 ## 인터페이스
 
@@ -13,17 +14,12 @@ function useLoading(): [
 
 ### 반환 값
 
-`[boolean, <T>(promise: Promise<T>) => Promise<T>]` 형태의 튜플을 반환해요:
+`[boolean, <T>(promise: Promise<T>) => Promise<T>]` 형태의 튜플을 반환해요.
 
-1. `boolean`: 현재 로딩 상태를 나타내요.
+- `boolean`: 현재 로딩 상태를 나타내고 비동기 작업이 진행 중이면 `true`로 설정돼요.
 
-- 초기값은 `false`예요.
-- 비동기 작업이 진행 중이면 `true`로 설정돼요.
-
-2. `<T>(promise: Promise<T>) => Promise<T>`:
-   로딩 상태를 관리하면서 비동기 작업을 실행하는 함수예요.
-
-- 이 함수는 `Promise`를 인자로 받고, `Promise`가 완료되면 `isLoading` 상태를 `false`로 바꿔요.
+- `<T>(promise: Promise<T>) => Promise<T>`: 로딩 상태를 자동으로 관리하면서 비동기 작업을 실행하는 함수예요.  
+  이 함수를 사용하면 로딩 상태를 따로 설정하지 않아도 돼요.
 
 ## 예시
 

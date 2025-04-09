@@ -1,6 +1,7 @@
 # useTimeout
 
-`useTimeout`은 지정된 시간이 지난 후에 콜백 함수를 실행하는 React 훅이에요. `window.setTimeout`을 React 생명주기에 맞게 관리해줘요.
+`useTimeout`은 지정된 시간이 지난 후 콜백 함수를 실행하는 React 훅이에요.
+`window.setTimeout`을 React 생명주기에 맞게 관리하며, 의존성 변경 시 자동으로 갱신돼요.
 
 ## 인터페이스
 
@@ -11,7 +12,7 @@ function useTimeout(callback: () => void, delay?: number): void;
 ### 매개변수
 
 - `callback` (`() => void`): 지정된 시간이 지난 후 실행할 함수예요.
-- `delay` (`number`, 선택적): 콜백 함수를 실행하기까지 기다릴 시간(밀리초)이에요. 기본값은 0이에요.
+- `delay` (`number`, optional): 콜백 함수를 실행하기까지 기다릴 시간(밀리초)이에요. 기본값은 0이에요.
 
 ### 반환 값
 

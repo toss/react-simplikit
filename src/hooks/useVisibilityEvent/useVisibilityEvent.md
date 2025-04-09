@@ -13,13 +13,13 @@ function useVisibilityEvent(
 
 ### Parameters
 
-- callback ((visibilityState: 'visible' | 'hidden') => void)
+- `callback ((visibilityState: 'visible' | 'hidden') => void)`:
+  A callback function invoked when the visibility state changes.  
+  Receives the current visibility state (`'visible'` | `'hidden'`) as its argument.
 
-  - A callback function invoked when the visibility state changes. Receives the current visibility state ('visible' | 'hidden') as its argument.
-
-- options ({ immediate?: boolean })
-  - immediate (boolean):
-    - If true, the hook executes the callback immediately upon mounting with the current visibility state. Defaults to false.
+- `options ({ immediate?: boolean })` (optional):  
+  - `immediate` (`boolean`):  
+    - If `true`, the hook executes the callback immediately upon mounting with the current visibility state. Defaults to `false`.
 
 ### Returns
 

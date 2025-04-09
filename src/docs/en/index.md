@@ -4,6 +4,9 @@ layout: home
 hero:
   name: 'reactive-kit'
   text: 'Lightweight and powerful React utility library'
+  image:
+    src: /images/symbol.svg
+    alt: reactive-kit symbol
   actions:
     - theme: brand
       text: About reactive-kit

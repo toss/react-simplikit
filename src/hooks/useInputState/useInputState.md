@@ -1,37 +1,41 @@
 # useInputState
 
-`useInputState` is a React hook that manages an input state.
+`useInputState` is a React hook that simplifies managing an input state.
+It allows you to control the state of an input field and optionally transform the input value.
 
 ## Interface
 
 ```ts
-function useInputState(initialValue: string, transformValue: (value: string) => string = echo): void;
+function useInputState(
+  initialValue: string,
+  transformValue: (value: string) => string = echo
+): readonly [string, (value: string) => void];
 ```
 
 ### Parameters
 
-- `initialValue` (`string`): The initial value of the input, default value is empty string.
-- `transformValue` (`(value: string) => string`): The function to transform the input value.
+- `initialValue` (`string`): The initial value of the input. Defaults to an empty string (`""`).
+- `transformValue` (`(value: string) => string`): A function to transform the input value before updating the state.  
+  By default, it returns the value unchanged.
 
 ### Returns
 
 Returns a `readonly [string, (value: string) => void]` tuple:
 
-1. string: The current state value.
-2. (value: string) => void: A function to set the state to true.
+- `string`: The current state value.
+- `(value: string) => void`: A function to set the state.
 
 ## Examples
 
 ### Basic
+
 ```tsx
 import { useInputState } from 'reactive-kit';
 
 function Example() {
   const [value, setValue] = useInputState('');
 
-  return (
-      <input type="text" value={value} onChange={setValue} />
-  );
+  return <input type="text" value={value} onChange={setValue} />;
 }
 ```
 
