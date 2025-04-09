@@ -3,12 +3,12 @@
 `useInterval` is a React hook that executes a function at a specified interval. It is useful for timers, polling data, and other recurring tasks.
 
 ## Interface
+
 ```ts
 function useInterval(
   callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean },
+  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
 ): void;
-
 ```
 
 ### Parameters
@@ -76,6 +76,8 @@ This hook does not return anything.
 ## Example
 
 ```tsx
+import { useInterval } from 'react-simplikit';
+
 function Timer() {
   const [time, setTime] = useState(0);
 
@@ -90,4 +92,58 @@ function Timer() {
   );
 }
 ```
-  
+
+### Stopwatch
+
+You can control the execution by setting `enabled` to `false`.
+
+```tsx
+import { useInterval } from 'react-simplikit';
+
+function StopWatch() {
+  const [time, setTime] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useInterval(
+    () => {
+      setTime(prev => prev + 1);
+    },
+    {
+      delay: 1000,
+      enabled: isRunning,
+    }
+  );
+
+  return (
+    <div>
+      <p>{time} seconds</p>
+      <button onClick={() => setIsRunning(prev => !prev)}>{isRunning ? 'Stop' : 'Start'}</button>
+    </div>
+  );
+}
+```
+
+### Polling Data Updates
+
+Set `trailing` to `false` to execute the callback immediately and then periodically.
+
+```tsx
+import { useInterval } from 'react-simplikit';
+
+function PollingExample() {
+  const [data, setData] = useState<string>(null);
+
+  useInterval(
+    async () => {
+      const data = await getData();
+      setData(data);
+    },
+    {
+      delay: 3000,
+      trailing: false, // Execute immediately and then every 3 seconds
+    }
+  );
+
+  return <div>{data}</div>;
+}
+```

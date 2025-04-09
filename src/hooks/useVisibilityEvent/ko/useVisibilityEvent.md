@@ -24,7 +24,7 @@ function useVisibilityEvent(
 ## 예시
 
 ```tsx
-import { useVisibilityEvent } from 'reactive-kit';
+import { useVisibilityEvent } from 'react-simplikit';
 
 function Component() {
   useVisibilityEvent(visibilityState => {

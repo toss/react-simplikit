@@ -22,7 +22,7 @@ function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T>>): RefCallbac
 
 ```tsx
 import { forwardRef, useRef } from 'react';
-import { mergeRefs } from 'reactive-kit';
+import { mergeRefs } from 'react-simplikit';
 
 const Component = forwardRef((props, parentRef) => {
   const localRef = useRef(null);
@@ -35,7 +35,7 @@ const Component = forwardRef((props, parentRef) => {
 
 ```tsx
 import { useCallback, useRef } from 'react';
-import { mergeRefs } from 'reactive-kit';
+import { mergeRefs } from 'react-simplikit';
 
 const Component = () => {
   const ref = useRef(null);

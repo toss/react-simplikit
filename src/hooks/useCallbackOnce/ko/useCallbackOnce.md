@@ -49,16 +49,26 @@ function useCallbackOnce(callback: () => void, deps: DependencyList): (...args: 
 ## 예시
 
 ```tsx
-function Component() {
-  const handleOneTimeEvent = useCallbackOnce(() => {
-    console.log('This will only run once');
+import { useCallbackOnce } from 'react-simplikit';
+
+function UserInteraction() {
+  const trackFirstInteraction = useCallbackOnce(() => {
+    analytics.track('first_interaction');
   }, []);
 
   return <button onClick={handleOneTimeEvent}>Click me</button>;
 }
+```
 
-// With dependencies
-function TrackingComponent({ userId }: { userId: string }) {
+### 의존성 사용
+
+사용자 ID가 변경될 때 방문을 추적하는 예제예요:
+
+```tsx
+import { useCallbackOnce } from 'react-simplikit';
+import { useEffect } from 'react';
+
+function UserTracker({ userId }: { userId: string }) {
   const trackUserVisit = useCallbackOnce(() => {
     analytics.trackVisit(userId);
   }, [userId]);

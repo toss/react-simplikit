@@ -25,7 +25,7 @@ function useRefEffect<Element extends HTMLElement = HTMLElement>(
 ## 예제
 
 ```tsx
-import { useRefEffect } from 'reactive-kit';
+import { useRefEffect } from 'react-simplikit';
 
 function Component() {
   const ref = useRefEffect<HTMLDivElement>(element => {

@@ -13,6 +13,8 @@ import { ChangeEventHandler, useCallback, useState } from 'react';
  * - onChange `(value: string) => void` - A function to update the state.
  *
  * @example
+ * import { useInputState } from 'react-simplikit';
+ *
  * function Example() {
  *   const [value, setValue] = useInputState('');
  *   return <input type="text" value={value} onChange={setValue} />;

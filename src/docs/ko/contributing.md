@@ -1,6 +1,6 @@
 # 기여하기
 
-`reactive-kit`에는 누구나 쉽게 기여할 수 있어요. 기여하고 싶다면 아래 가이드를 참고해 주세요.
+`react-simplikit`에는 누구나 쉽게 기여할 수 있어요. 기여하고 싶다면 아래 가이드를 참고해 주세요.
 
 ## 구현체 기여
 
@@ -13,7 +13,7 @@
 
 ### 구현체 작성
 
-`reactive-kit`의 [설계 원칙](./design-principles)을 따라야 해요. 특정 라이브러리에 의존하거나 React 생명 주기와 밀접하게 관련된 구현체는 제공하지 않아요. 설계 원칙을 준수해 구현체를 작성해 주세요.
+`react-simplikit`의 [설계 원칙](./design-principles)을 따라야 해요. 특정 라이브러리에 의존하거나 React 생명 주기와 밀접하게 관련된 구현체는 제공하지 않아요. 설계 원칙을 준수해 구현체를 작성해 주세요.
 
 ### 가이드 문서 작성
 
@@ -36,7 +36,7 @@ yarn test:coverage
 
 ### 배포
 
-`main` 브랜치에 병합되면 자동으로 배포가 진행돼요. 배포 결과는 [GitHub Actions](https://github.com/toss/reactive-kit/actions)에서 확인할 수 있어요.
+`main` 브랜치에 병합되면 자동으로 배포가 진행돼요. 배포 결과는 [GitHub Actions](https://github.com/toss/react-simplikit/actions)에서 확인할 수 있어요.
 
 ## 문서 기여
 

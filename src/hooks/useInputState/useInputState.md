@@ -3,12 +3,12 @@
 `useInputState` is a React hook that manages an input state with optional value transformation.
 
 ## Interface
+
 ```ts
 function useInputState(
-  initialValue: string = "",
-  transformValue: (value: string) => string = (v: string) => v,
+  initialValue: string = '',
+  transformValue: (value: string) => string = (v: string) => v
 ): readonly [value: string, onChange: (value: string) => void];
-
 ```
 
 ### Parameters
@@ -67,13 +67,26 @@ function useInputState(
   </li>
 </ul>
 
-
 ## Example
 
 ```tsx
+import { useInputState } from 'react-simplikit';
+
 function Example() {
   const [value, setValue] = useInputState('');
+
   return <input type="text" value={value} onChange={setValue} />;
 }
 ```
-  
+
+### Make uppercase value
+
+```tsx
+import { useInputState } from 'react-simplikit';
+
+function Example() {
+  const [value, setValue] = useInputState('', v => v.toUpperCase());
+
+  return <input type="text" value={value} onChange={setValue} />;
+}
+```

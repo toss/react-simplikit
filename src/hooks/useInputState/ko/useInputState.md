@@ -67,8 +67,23 @@ function useInputState(
 ## 예시
 
 ```tsx
+import { useInputState } from 'react-simplikit';
+
 function Example() {
   const [value, setValue] = useInputState('');
+
+  return <input type="text" value={value} onChange={setValue} />;
+}
+```
+
+### Make uppercase value
+
+```tsx
+import { useInputState } from 'react-simplikit';
+
+function Example() {
+  const [value, setValue] = useInputState('', v => v.toUpperCase());
+
   return <input type="text" value={value} onChange={setValue} />;
 }
 ```

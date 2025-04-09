@@ -1,6 +1,6 @@
 {
-  "name": "reactive-kit",
-  "version": "0.2.29",
+  "name": "react-simplikit",
+  "version": "0.0.3",
   "main": "./src/index.ts",
   "sideEffects": false,
   "files": [

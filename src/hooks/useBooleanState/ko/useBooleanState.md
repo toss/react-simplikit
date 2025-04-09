@@ -73,5 +73,19 @@ function useBooleanState(
 ## 예시
 
 ```tsx
-const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
+import { useBooleanState } from 'react-simplikit';
+
+function Component() {
+  // useBooleanState 훅을 사용해 상태를 관리해요.
+  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
+
+  return (
+    <div>
+      <p>Bottom Sheet 상태: {open ? '열림' : '닫힘'}</p>
+      <button onClick={openBottomSheet}>열기</button>
+      <button onClick={closeBottomSheet}>닫기</button>
+      <button onClick={toggleBottomSheet}>토글</button>
+    </div>
+  );
+}
 ```

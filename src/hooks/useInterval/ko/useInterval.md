@@ -74,6 +74,8 @@ function useInterval(
 ## 예시
 
 ```tsx
+import { useInterval } from 'react-simplikit';
+
 function Timer() {
   const [time, setTime] = useState(0);
 
@@ -86,5 +88,60 @@ function Timer() {
       <p>{time} seconds</p>
     </div>
   );
+}
+```
+
+### 스탑 워치
+
+조건에 따라 실행을 제어하려면 `enabled`를 `false`로 설정할 수 있어요.
+
+```tsx
+import { useInterval } from 'react-simplikit';
+
+function StopWatch() {
+  const [time, setTime] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useInterval(
+    () => {
+      setTime(prev => prev + 1);
+    },
+    {
+      delay: 1000,
+      enabled: isRunning,
+    }
+  );
+
+  return (
+    <div>
+      <p>{time}초</p>
+      <button onClick={() => setIsRunning(prev => !prev)}>{isRunning ? '정지' : '시작'}</button>
+    </div>
+  );
+}
+```
+
+### 폴링으로 데이터 업데이트하기
+
+`immediate: true`를 사용하면 컴포넌트가 마운트되자마자 데이터를 가져오고, 이후 지정된 간격으로 데이터를 업데이트해요.
+
+```tsx
+import { useInterval } from 'react-simplikit';
+
+function PollingExample() {
+  const [data, setData] = useState<string>(null);
+
+  useInterval(
+    async () => {
+      const data = await getData();
+      setData(data);
+    },
+    {
+      delay: 3000,
+      immediate: true, // 즉시 콜백을 실행하고 3초마다 콜백을 실행해요.
+    }
+  );
+
+  return <div>{data}</div>;
 }
 ```

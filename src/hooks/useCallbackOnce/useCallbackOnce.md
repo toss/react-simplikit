@@ -3,12 +3,9 @@
 A React hook that ensures a callback function is executed only once, regardless of how many times it's called. This is useful for one-time operations that should not be repeated, even if the component re-renders.
 
 ## Interface
-```ts
-function useCallbackOnce(
-  callback: () => void,
-  deps: DependencyList,
-): (...args: any[]) => void;
 
+```ts
+function useCallbackOnce(callback: () => void, deps: DependencyList): (...args: any[]) => void;
 ```
 
 ### Parameters
@@ -50,20 +47,29 @@ function useCallbackOnce(
   </li>
 </ul>
 
-
 ## Example
 
 ```tsx
-function Component() {
-  const handleOneTimeEvent = useCallbackOnce(() => {
-    console.log('This will only run once');
+import { useCallbackOnce } from 'react-simplikit';
+
+function UserInteraction() {
+  const trackFirstInteraction = useCallbackOnce(() => {
+    analytics.track('first_interaction');
   }, []);
 
   return <button onClick={handleOneTimeEvent}>Click me</button>;
 }
+```
 
-// With dependencies
-function TrackingComponent({ userId }: { userId: string }) {
+### With Dependencies
+
+This example shows how to track user visits, resetting when the user ID changes:
+
+```tsx
+import { useCallbackOnce } from 'react-simplikit';
+import { useEffect } from 'react';
+
+function UserTracker({ userId }: { userId: string }) {
   const trackUserVisit = useCallbackOnce(() => {
     analytics.trackVisit(userId);
   }, [userId]);
@@ -73,4 +79,3 @@ function TrackingComponent({ userId }: { userId: string }) {
   return <div>User page</div>;
 }
 ```
-  

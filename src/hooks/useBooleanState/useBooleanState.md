@@ -73,5 +73,18 @@ function useBooleanState(
 ## Example
 
 ```tsx
-const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
+import { useBooleanState } from 'react-simplikit';
+
+function Component() {
+  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
+
+  return (
+    <div>
+      <p>Bottom Sheet state: {open ? 'opened' : 'closed'}</p>
+      <button onClick={openBottomSheet}>Open</button>
+      <button onClick={closeBottomSheet}>Close</button>
+      <button onClick={toggleBottomSheet}>Toggle</button>
+    </div>
+  );
+}
 ```
