@@ -116,7 +116,7 @@ jobs:
         run: |
           yarn generate-docs ${{ steps.files.outputs.names }}
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit generated docs
         run: |
