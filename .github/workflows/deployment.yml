@@ -95,15 +95,9 @@ jobs:
       - name: Get changed files from merged PR
         id: files
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-
-          FILES=$(gh pr view $PR_NUMBER --json files -q '.files[].path')
-
           MATCHED_NAMES=$(echo "$FILES" | grep -E '^src/.+/[^/]+\.tsx?$' | sed -E 's#^src/([^/]+)/\1\.tsx?$#\1#' | sort -u | tr '\n' ',' | sed 's/,$//')
 
           echo "names=$MATCHED_NAMES" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout branch
         run: |
