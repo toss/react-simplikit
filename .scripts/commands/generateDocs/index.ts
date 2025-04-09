@@ -1,40 +1,79 @@
 import { parse, Spec as OriginSpec } from 'comment-parser';
+import glob from 'fast-glob';
 import * as fs from 'fs/promises';
-import * as path from 'path';
+import { Listr } from 'listr2';
+import path from 'path';
 import * as prettier from 'prettier';
+
+import { getRootPath } from '../../utils/getRootPath.ts';
+
+import { translate } from './translate.ts';
 
 type Spec = Pick<OriginSpec, 'type' | 'name' | 'description' | 'optional' | 'default'>;
 
-(async () => {
-  const arg = process.argv[2];
+export async function generateDocs(names: string[]) {
+  const tasks = new Listr([], { concurrent: 10 });
 
-  const filePath = arg.includes('/') ? arg : await searchFile(arg);
+  names
+    .map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]])
+    .forEach(([name, sourceFilePath]) => {
+      tasks.add([
+        {
+          title: `Generate documents: ${sourceFilePath}`,
+          task: async (_, task) =>
+            task.newListr<{ docSource?: string; translatedDoc?: string }>(
+              [
+                {
+                  title: `Convert JSDoc to markdown`,
+                  task: async ctx => {
+                    const docSource = await jsdocToMd(name, parseJSDoc(await fs.readFile(sourceFilePath, 'utf-8')));
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-  const name = /\/([^/.]+)\.ts/.exec(filePath)?.[1]!;
+                    ctx.docSource = docSource;
+                  },
+                },
+                {
+                  title: `Translate markdown to Korean`,
+                  task: async ctx => {
+                    const { docSource } = ctx;
 
-  const docSource = await jsdocToMd(name, parseJSDoc(await fs.readFile(filePath, 'utf-8')));
+                    if (docSource == null) {
+                      throw new Error('docSource is not found');
+                    }
 
-  await fs.writeFile(filePath.replace(/\..+/, '.md'), docSource);
-})();
+                    const translatedDoc = await translate(docSource);
 
-async function searchFile(filename: string, dir: string = './src'): Promise<string> {
-  const files = await fs.readdir(dir, { withFileTypes: true });
+                    ctx.translatedDoc = translatedDoc;
+                  },
+                },
+                {
+                  title: `Write document files`,
+                  task: async ctx => {
+                    const { docSource, translatedDoc } = ctx;
 
-  for (const file of files) {
-    const fullPath = path.join(dir, file.name);
+                    if (docSource == null || translatedDoc == null) {
+                      throw new Error('docSource or translatedDoc is not found');
+                    }
 
-    if (file.isDirectory()) {
-      const found = await searchFile(filename, fullPath);
-      if (found !== 'x') {
-        return found;
-      }
-    } else if (file.name.startsWith(`${filename}.ts`)) {
-      return fullPath;
-    }
-  }
+                    const dirname = path.dirname(sourceFilePath);
+                    await fs.writeFile(`${dirname}/${name}.md`, docSource);
+                    await fs.mkdir(`${dirname}/ko`).catch(e => {
+                      if (e.code === 'EEXIST') {
+                        return;
+                      }
 
-  return 'x';
+                      throw e;
+                    });
+                    await fs.writeFile(`${dirname}/ko/${name}.md`, translatedDoc);
+                  },
+                },
+              ],
+              { concurrent: false }
+            ),
+        },
+      ]);
+    });
+
+  tasks.run();
 }
 
 function parseJSDoc(source: string) {
@@ -222,27 +261,3 @@ function replaceDescription(value: string) {
     .replace(/\*([^*]*)\*/g, '<em>$1</em>')
     .replace(/_([^*]*)_/g, '<em>$1</em>');
 }
-
-// function getParamLi(param: Spec) {
-//   return `
-//     <span class="post-parameters--name">${param.name}</span>${
-//       param.optional ? '' : '<span class="post-parameters--required">required</span> · '
-//     }<span class="post-parameters--type">${escapeHTMLEntities(param.type)}</span>${param.default == null ? '' : ` · <span class="post-parameters--default">${escapeHTMLEntities(param.default)}</span>`}
-//     <br />
-//     <p class="post-parameters--description">${param.description
-//       .replace(/^\s*-\s*/, '')
-//       .replace(/`([^`]*)`/g, '<code>$1</code>')
-//       .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
-//       .replace(/\*([^*]*)\*/g, '<em>$1</em>')
-//       .replace(/_([^*]*)_/g, '<em>$1</em>')}</p>\
-//   `;
-// }
-
-// function escapeHTMLEntities(text: string) {
-//   return text
-//     .replace(/&/g, '&amp;')
-//     .replace(/</g, '&lt;')
-//     .replace(/>/g, '&gt;')
-//     .replace(/"/g, '&quot;')
-//     .replace(/'/g, '&#39;');
-// }
