@@ -1,48 +1,99 @@
-# useAsyncEffect
+# ImpressionArea
 
-`useAsyncEffect` is a custom hook for handling asynchronous side effects in React components.
-It follows the same cleanup pattern as `useEffect` while ensuring that async operations are handled safely.
-This hook allows you to write cleaner and more reliable async code inside React components.
+`ImpressionArea` is a component that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. This component uses the `useImpressionRef` hook to track the element's visibility.
 
 ## Interface
-
 ```ts
-function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps?: DependencyList): void;
+function ImpressionArea(props: Object): JSX.Element;
+
 ```
 
 ### Parameters
 
-- `effect` (`() => Promise<void | (() => void)>`): An asynchronous function executed within the `useEffect` pattern.  
-  This function can return a cleanup function, just like in `useEffect`.
-- `deps` (`DependencyList`): A dependency array.  
-  The effect is re-executed whenever any value in this array changes.  
-  If omitted, the effect runs only once when the component mounts.
+<Interface
+  required
+  name="props"
+  type="Object"
+  description="The props for the component."
+  :nested="[
+    {
+      name: 'props.as',
+      type: 'ElementType',
+      defaultValue: '\'div\'',
+      description: 'The HTML tag to render. Defaults to <code>div</code>.',
+    },
+    {
+      name: 'props.rootMargin',
+      type: 'string',
+      description: 'Margin to adjust the detection area.',
+    },
+    {
+      name: 'props.areaThreshold',
+      type: 'number',
+      description:
+        'Minimum ratio of the element that must be visible (0 to 1).',
+    },
+    {
+      name: 'props.timeThreshold',
+      type: 'number',
+      description:
+        'Minimum time the element must be visible (in milliseconds).',
+    },
+    {
+      name: 'props.onImpressionStart',
+      type: '() => void',
+      description:
+        'Callback function executed when the element enters the view.',
+    },
+    {
+      name: 'props.onImpressionEnd',
+      type: '() => void',
+      description:
+        'Callback function executed when the element exits the view.',
+    },
+    {
+      name: 'props.ref',
+      type: 'Ref<HTMLElement>',
+      description: 'Reference to the element.',
+    },
+    {
+      name: 'props.children',
+      type: 'React.ReactNode',
+      description: 'Child elements to be rendered inside the component.',
+    },
+    {
+      name: 'props.className',
+      type: 'string',
+      description: 'Additional class names for styling.',
+    },
+  ]"
+/>
 
-### Return value
+### Return Value
 
-This hook does not return anything.
+<Interface
+  name=""
+  type="JSX.Element"
+  description="React component that tracks the visibility of its child elements."
+/>
+
 
 ## Example
 
 ```tsx
-import { useAsyncEffect } from 'react-simplikit';
+import { ImpressionArea } from 'react-simplikit';
 
-function Component() {
-  const [data, setData] = useState<Data | null>(null);
-
-  useAsyncEffect(async () => {
-    const data = await fetchData();
-    setData(data);
-
-    return () => {
-      // cleanup logic
-    };
-  }, [dependency]);
-
+function App() {
   return (
-    <div>
-      <p>Data: {data}</p>
-    </div>
+    <ImpressionArea
+      onImpressionStart={() => console.log('Element entered view')}
+      onImpressionEnd={() => console.log('Element exited view')}
+      timeThreshold={1000}
+      areaThreshold={0.5}
+    >
+      <div>Track my visibility!</div>
+    </ImpressionArea>
   );
 }
 ```
+  

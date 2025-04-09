@@ -12,5 +12,9 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "types": ["vitest/globals", "@testing-library/jest-dom"]
+  },
+  "include": ["src", ".scripts/**/*"],
+  "vueCompilerOptions": {
+    "vitePressExtensions": [".md"]
   }
 }

@@ -128,3 +128,88 @@
 .DocSearch {
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
+
+/**
+ * Component: Parameter Block
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-border: #b0b8c1;
+  --vp-color-primary: rgb(78, 89, 104);
+  --vp-red: #f44336;
+  --vp-green: rgb(0, 166, 97);
+  --vp-color-secondary: rgb(78, 89, 104);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vp-border: #5c6064;
+    --vp-color-primary: #f0f0f0;
+    --vp-red: #f5645a;
+    --vp-green: #38cc8e;
+    --vp-color-secondary: #f0f0f0;
+  }
+}
+
+.vp-doc ul.post-parameters-ul {
+  margin-top: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li {
+  position: relative;
+  padding-left: 16px;
+  margin-left: 12px;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li::before {
+  position: absolute;
+  left: 0;
+  display: block;
+  content: '';
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-left: 2px solid var(--vp-border);
+  border-bottom: 2px solid var(--vp-border);
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li-root {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li-root::before {
+  content: none;
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li .post-parameters--name {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--vp-color-primary);
+  margin-right: 6px;
+  font-family: Menlo, Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li .post-parameters--required {
+  font-size: 14px;
+  color: var(--vp-red);
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li .post-parameters--type {
+  font-size: 14px;
+  color: var(--vp-green);
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li .post-parameters--default {
+  font-size: 14px;
+}
+
+.vp-doc ul.post-parameters-ul .post-parameters-li .post-parameters--description {
+  margin: 0;
+  font-size: 14px;
+  color: var(--vp-color-secondary);
+}
