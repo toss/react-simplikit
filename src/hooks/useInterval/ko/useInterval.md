@@ -40,7 +40,7 @@ function useInterval(callback: () => void, options: IntervalOptions): void;
 ### 기본 사용법
 
 ```tsx
-import { useInterval } from 'reactive-kit';
+import { useInterval } from 'react-simplikit';
 
 function Timer() {
   const [time, setTime] = useState(0);
@@ -62,7 +62,7 @@ function Timer() {
 조건에 따라 실행을 제어하려면 `enabled`를 `false`로 설정할 수 있어요.
 
 ```tsx
-import { useInterval } from 'reactive-kit';
+import { useInterval } from 'react-simplikit';
 
 function StopWatch() {
   const [time, setTime] = useState(0);
@@ -92,7 +92,7 @@ function StopWatch() {
 `immediate: true`를 사용하면 컴포넌트가 마운트되자마자 데이터를 가져오고, 이후 지정된 간격으로 데이터를 업데이트해요.
 
 ```tsx
-import { useInterval } from 'reactive-kit';
+import { useInterval } from 'react-simplikit';
 
 function PollingExample() {
   const [data, setData] = useState<string>(null);

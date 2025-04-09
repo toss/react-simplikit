@@ -15,7 +15,7 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  * @returns {(...args: any[]) => void} A memoized function that will only execute once until dependencies change.
  *
  * @example
- * import { useCallbackOnce } from 'reactive-kit';
+ * import { useCallbackOnce } from 'react-simplikit';
  *
  * function Component() {
  *   const handleOneTimeEvent = useCallbackOnce(() => {

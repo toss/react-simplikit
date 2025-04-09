@@ -24,7 +24,7 @@ function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps?: Depen
 ## 예시
 
 ```tsx
-import { useAsyncEffect } from 'reactive-kit';
+import { useAsyncEffect } from 'react-simplikit';
 
 function Component() {
   const [data, setData] = useState<Data | null>(null);

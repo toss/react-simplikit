@@ -13,7 +13,7 @@ import { ChangeEventHandler, useCallback, useState } from 'react';
  * - `(value: string) => void` - A function to update the state.
  *
  * @example
- * import { useInputState } from 'reactive-kit';
+ * import { useInputState } from 'react-simplikit';
  *
  * function Example() {
  *   const [value, setValue] = useInputState('');

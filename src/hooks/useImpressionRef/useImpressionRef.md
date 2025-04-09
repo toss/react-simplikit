@@ -26,7 +26,7 @@ function useImpressionRef<Element extends HTMLElement = HTMLElement>(
 ## Example
 
 ```tsx
-import { useImpressionRef } from 'reactive-kit';
+import { useImpressionRef } from 'react-simplikit';
 
 function Component() {
   const ref = useImpressionRef<HTMLDivElement>({

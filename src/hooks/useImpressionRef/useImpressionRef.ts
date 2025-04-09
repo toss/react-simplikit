@@ -29,7 +29,7 @@ export type UseImpressionRefOptions = Partial<{
  * @returns A function to set the element. Attach this function to the `ref` attribute, and the callbacks will be executed whenever the element's visibility changes.
  *
  * @example
- * import { useImpressionRef } from 'reactive-kit';
+ * import { useImpressionRef } from 'react-simplikit';
  *
  * function Component() {
  *   const ref = useImpressionRef<HTMLDivElement>({

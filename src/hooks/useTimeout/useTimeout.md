@@ -23,7 +23,7 @@ This hook doesn't return any value.
 ### Basic Usage
 
 ```tsx
-import { useTimeout } from 'reactive-kit';
+import { useTimeout } from 'react-simplikit';
 
 function Notification() {
   const [visible, setVisible] = useState(true);

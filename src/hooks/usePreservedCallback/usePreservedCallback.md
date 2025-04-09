@@ -25,7 +25,7 @@ Returns a function with the same shape as the callback. The returned function en
 Here is an example where the button click increments a counter while logging the current count.
 
 ```tsx
-import { usePreservedCallback } from 'reactive-kit';
+import { usePreservedCallback } from 'react-simplikit';
 import { useState } from 'react';
 
 function Counter() {
@@ -46,7 +46,7 @@ function Counter() {
 This example demonstrates how a parent component can pass a callback to a child component while preserving its reference.
 
 ```tsx
-import { usePreservedCallback } from 'reactive-kit';
+import { usePreservedCallback } from 'react-simplikit';
 import { useState } from 'react';
 
 function Parent() {

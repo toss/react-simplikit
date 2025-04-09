@@ -30,7 +30,7 @@ Returns a `readonly [string, (value: string) => void]` tuple:
 ### Basic
 
 ```tsx
-import { useInputState } from 'reactive-kit';
+import { useInputState } from 'react-simplikit';
 
 function Example() {
   const [value, setValue] = useInputState('');
@@ -42,7 +42,7 @@ function Example() {
 ### Make uppercase value
 
 ```tsx
-import { useInputState } from 'reactive-kit';
+import { useInputState } from 'react-simplikit';
 
 function Example() {
   const [value, setValue] = useInputState('', v => v.toUpperCase());

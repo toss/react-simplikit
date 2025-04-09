@@ -33,7 +33,7 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
 ## 예시
 
 ```tsx
-import { useDebounce } from 'reactive-kit';
+import { useDebounce } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
