@@ -92,13 +92,6 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Checkout branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          BRANCH=new-docgen-branch-${{ github.run_id }}
-          git checkout -b $BRANCH
-
       - name: Get changed files from merged PR
         id: files
         run: |
@@ -111,6 +104,13 @@ jobs:
           echo "names=$MATCHED_NAMES" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH=new-docgen-branch-${{ github.run_id }}
+          git checkout -b $BRANCH
 
       - name: Generate docs
         run: |
