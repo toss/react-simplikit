@@ -4,6 +4,7 @@ import './style.css';
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import { h } from 'vue';
+import Interface from '../components/Interface.vue';
 
 export default {
   extends: DefaultTheme,
@@ -11,5 +12,8 @@ export default {
     return h(DefaultTheme.Layout, null, {
       // https://vitepress.dev/guide/extending-default-theme#layout-slots
     });
+  },
+  enhanceApp({ app }) {
+    app.component('Interface', Interface);
   },
 } satisfies Theme;

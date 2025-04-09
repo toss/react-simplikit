@@ -25,16 +25,13 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  *   return <button onClick={handleOneTimeEvent}>Click me</button>;
  * }
  *
- * @example
  * // With dependencies
  * function TrackingComponent({ userId }: { userId: string }) {
  *   const trackUserVisit = useCallbackOncePerRender(() => {
  *     analytics.trackVisit(userId);
  *   }, [userId]);
  *
- *   useEffect(() => {
- *     trackUserVisit();
- *   }, [trackUserVisit]);
+ *   trackUserVisit();
  *
  *   return <div>User page</div>;
  * }

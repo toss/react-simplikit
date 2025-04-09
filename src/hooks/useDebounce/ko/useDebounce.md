@@ -1,7 +1,6 @@
 # useDebounce
 
-`useDebounce`는 함수 호출을 지연시키고 여러 번의 연속된 호출을 하나로 묶어주는 React 훅이에요.
-입력 검색, 버튼 클릭 방지 등 연속적인 이벤트 핸들링을 최적화할 때 유용해요.
+`useDebounce`는 제공된 콜백 함수의 디바운스된 버전을 반환하는 React 훅이에요. 함수 실행을 지연시키고 여러 호출을 하나로 그룹화하여 이벤트 처리를 최적화하는 데 도움을 줘요.
 
 ## 인터페이스
 
@@ -9,26 +8,77 @@
 function useDebounce<F extends (...args: unknown[]) => unknown>(
   callback: F,
   wait: number,
-  options?: {
-    leading?: boolean;
-    trailing?: boolean;
-  }
+  options: DebounceOptions
 ): F & { cancel: () => void };
 ```
 
 ### 파라미터
 
-- `callback` (`F`): 디바운스할 함수예요.
-- `wait` (`number`): 디바운스 대기 시간(밀리초)이에요.
-- `options` (`object`): 디바운스 동작을 설정하는 옵션이에요.
-  - `leading` (`boolean`): `true`면 시퀀스의 시작에서 함수를 실행해요. 기본값은 `false`예요.
-  - `trailing` (`boolean`): `true`면 시퀀스의 끝에서 함수를 실행해요. 기본값은 `true`예요.
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">callback</span
+    ><span class="post-parameters--required">required</span> ·
+    <span class="post-parameters--type">F</span>
+    <br />
+    <p class="post-parameters--description">디바운스할 함수예요.</p>
+  </li>
+</ul>
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">wait</span
+    ><span class="post-parameters--required">required</span> ·
+    <span class="post-parameters--type">number</span>
+    <br />
+    <p class="post-parameters--description">
+      함수 실행을 지연시킬 시간(밀리초)이에요.
+    </p>
+  </li>
+</ul>
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">options</span
+    ><span class="post-parameters--type">DebounceOptions</span>
+    <br />
+    <p class="post-parameters--description">
+      디바운스 동작을 위한 설정 옵션이에요.
+    </p>
+    <ul class="post-parameters-ul">
+      <li class="post-parameters-li">
+        <span class="post-parameters--name">options.leading</span
+        ><span class="post-parameters--type">boolean</span> ·
+        <span class="post-parameters--default">false</span>
+        <br />
+        <p class="post-parameters--description">
+          <code>true</code>이면 시퀀스의 시작에서 함수가 호출돼요.
+        </p>
+      </li>
+      <li class="post-parameters-li">
+        <span class="post-parameters--name">options.trailing</span
+        ><span class="post-parameters--type">boolean</span> ·
+        <span class="post-parameters--default">true</span>
+        <br />
+        <p class="post-parameters--description">
+          <code>true</code>이면 시퀀스의 끝에서 함수가 호출돼요.
+        </p>
+      </li>
+    </ul>
+  </li>
+</ul>
 
 ### 반환 값
 
-디바운스된 함수를 반환해요. 이 함수는 원본 함수의 타입을 유지하면서 `cancel` 메서드를 추가로 가져요:
-
-- `cancel` (`() => void`): 대기 중인 디바운스 실행을 취소하는 함수예요.
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name"></span
+    ><span class="post-parameters--type"
+      >F &amp; { cancel: () =&gt; void }</span
+    >
+    <br />
+    <p class="post-parameters--description">
+      콜백 호출을 지연시키는 디바운스된 함수예요. 대기 중인 디바운스 실행을 취소하는 <code>cancel</code> 메서드도 포함되어 있어요.
+    </p>
+  </li>
+</ul>
 
 ## 예시
 
@@ -39,7 +89,7 @@ function SearchInput() {
   const [query, setQuery] = useState('');
 
   const debouncedSearch = useDebounce((value: string) => {
-    // 실제 검색 API 호출
+    // Actual API call
     searchAPI(value);
   }, 300);
 
@@ -50,7 +100,7 @@ function SearchInput() {
         setQuery(e.target.value);
         debouncedSearch(e.target.value);
       }}
-      placeholder="검색어를 입력하세요"
+      placeholder="Enter search term"
     />
   );
 }

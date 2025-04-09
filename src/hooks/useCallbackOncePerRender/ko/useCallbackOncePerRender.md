@@ -12,21 +12,45 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
 ): (...args: Parameters<F>) => void;
 ```
 
-### 매개변수
+### 파라미터
 
-- `callback`: 한 번만 실행될 함수예요. 첫 실행 이후의 호출은 무시돼요.
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">callback</span
+    ><span class="post-parameters--required">required</span> ·
+    <span class="post-parameters--type">() =&gt; void</span>
+    <br />
+    <p class="post-parameters--description">
+      한 번만 실행될 콜백 함수예요.
+    </p>
+  </li>
+</ul>
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name">deps</span
+    ><span class="post-parameters--required">required</span> ·
+    <span class="post-parameters--type">DependencyList</span>
+    <br />
+    <p class="post-parameters--description">
+      변경되면 새로운 일회성 실행을 트리거하는 의존성 배열이에요.
+    </p>
+  </li>
+</ul>
 
-- `deps`: 의존성 배열이에요. 이 값이 변경되면 실행 상태가 초기화되어 콜백이 다시 한 번 실행될 수 있어요.
+### 반환 값
 
-### 반환값
+<ul class="post-parameters-ul">
+  <li class="post-parameters-li post-parameters-li-root">
+    <span class="post-parameters--name"></span
+    ><span class="post-parameters--type">(...args: any[]) =&gt; void</span>
+    <br />
+    <p class="post-parameters--description">
+      의존성이 변경될 때까지 한 번만 실행되는 메모이제이션된 함수예요.
+    </p>
+  </li>
+</ul>
 
-원래 콜백을 감싸고 의존성이 변경될 때까지 한 번만 실행되도록 보장하는 함수를 반환해요.
-
-## 사용 예시
-
-### 기본 사용
-
-사용자의 첫 상호작용을 추적하는 예제예요:
+## 예시
 
 ```tsx
 import { useCallbackOncePerRender } from 'react-simplikit';
@@ -36,7 +60,7 @@ function UserInteraction() {
     analytics.track('first_interaction');
   }, []);
 
-  return <button onClick={trackFirstInteraction}>상호작용</button>;
+  return <button onClick={handleOneTimeEvent}>Click me</button>;
 }
 ```
 
@@ -51,12 +75,10 @@ import { useEffect } from 'react';
 function UserTracker({ userId }: { userId: string }) {
   const trackUserVisit = useCallbackOncePerRender(() => {
     analytics.trackVisit(userId);
-  }, [userId]); // userId가 변경되면 초기화되고 다시 실행돼요
+  }, [userId]);
 
-  useEffect(() => {
-    trackUserVisit();
-  }, [trackUserVisit]);
+  trackUserVisit();
 
-  return <div>추적 중인 사용자: {userId}</div>;
+  return <div>User page</div>;
 }
 ```

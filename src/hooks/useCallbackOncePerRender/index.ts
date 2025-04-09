@@ -1,1 +1,1 @@
-export { useCallbackOncePerRender } from './useCallbackOncePerRenderPerRender';
+export { useCallbackOncePerRender } from './useCallbackOncePerRender.ts';
