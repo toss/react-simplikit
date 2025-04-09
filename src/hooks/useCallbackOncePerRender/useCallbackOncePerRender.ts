@@ -15,8 +15,10 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  * @returns {(...args: any[]) => void} A memoized function that will only execute once until dependencies change.
  *
  * @example
+ * import { useCallbackOncePerRender } from 'react-simplikit';
+ *
  * function Component() {
- *   const handleOneTimeEvent = useCallbackOnce(() => {
+ *   const handleOneTimeEvent = useCallbackOncePerRender(() => {
  *     console.log('This will only run once');
  *   }, []);
  *
@@ -25,7 +27,7 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  *
  * // With dependencies
  * function TrackingComponent({ userId }: { userId: string }) {
- *   const trackUserVisit = useCallbackOnce(() => {
+ *   const trackUserVisit = useCallbackOncePerRender(() => {
  *     analytics.trackVisit(userId);
  *   }, [userId]);
  *
@@ -34,7 +36,7 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  *   return <div>User page</div>;
  * }
  */
-export function useCallbackOnce<F extends (...args: any[]) => void>(callback: F, deps: DependencyList) {
+export function useCallbackOncePerRender<F extends (...args: any[]) => void>(callback: F, deps: DependencyList) {
   const hasFired = useRef(false);
 
   useEffect(() => {
