@@ -1,12 +1,12 @@
-# useCallbackOnce
+# useCallbackOncePerRender
 
-`useCallbackOnce`는 콜백 함수가 여러 번 호출되더라도 단 한 번만 실행되도록 보장하는 React 훅이에요.
+`useCallbackOncePerRender`는 콜백 함수가 여러 번 호출되더라도 단 한 번만 실행되도록 보장하는 React 훅이에요.
 분석 추적, 초기화 코드, 또는 반복되면 안 되는 일회성 작업에 유용해요.
 
 ## 인터페이스
 
 ```typescript
-function useCallbackOnce<F extends (...args: any[]) => void>(
+function useCallbackOncePerRender<F extends (...args: any[]) => void>(
   callback: F,
   deps: DependencyList
 ): (...args: Parameters<F>) => void;
@@ -29,10 +29,10 @@ function useCallbackOnce<F extends (...args: any[]) => void>(
 사용자의 첫 상호작용을 추적하는 예제예요:
 
 ```tsx
-import { useCallbackOnce } from 'react-simplikit';
+import { useCallbackOncePerRender } from 'react-simplikit';
 
 function UserInteraction() {
-  const trackFirstInteraction = useCallbackOnce(() => {
+  const trackFirstInteraction = useCallbackOncePerRender(() => {
     analytics.track('first_interaction');
   }, []);
 
@@ -45,11 +45,11 @@ function UserInteraction() {
 사용자 ID가 변경될 때 방문을 추적하는 예제예요:
 
 ```tsx
-import { useCallbackOnce } from 'react-simplikit';
+import { useCallbackOncePerRender } from 'react-simplikit';
 import { useEffect } from 'react';
 
 function UserTracker({ userId }: { userId: string }) {
-  const trackUserVisit = useCallbackOnce(() => {
+  const trackUserVisit = useCallbackOncePerRender(() => {
     analytics.trackVisit(userId);
   }, [userId]); // userId가 변경되면 초기화되고 다시 실행돼요
 
