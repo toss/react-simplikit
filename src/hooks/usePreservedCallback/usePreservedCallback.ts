@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef } from 'react';
  *   The returned function maintains a stable reference while accessing the latest state or props.
  *
  * @example
- * import { usePreservedCallback } from 'reactive-kit';
+ * import { usePreservedCallback } from 'react-simplikit';
  * import { useState } from 'react';
  *
  * function Counter() {

@@ -25,7 +25,7 @@ This hook does not return anything.
 ## Example
 
 ```tsx
-import { useAsyncEffect } from 'reactive-kit';
+import { useAsyncEffect } from 'react-simplikit';
 
 function Component() {
   const [data, setData] = useState<Data | null>(null);

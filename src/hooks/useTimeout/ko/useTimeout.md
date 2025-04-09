@@ -23,7 +23,7 @@ function useTimeout(callback: () => void, delay?: number): void;
 ### 기본 사용법
 
 ```tsx
-import { useTimeout } from 'reactive-kit';
+import { useTimeout } from 'react-simplikit';
 
 function Notification() {
   const [visible, setVisible] = useState(true);

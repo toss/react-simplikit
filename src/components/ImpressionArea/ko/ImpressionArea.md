@@ -35,7 +35,7 @@ function ImpressionArea<T extends ElementType = 'div'>({
 ## 예시
 
 ```tsx
-import { ImpressionArea } from 'reactive-kit';
+import { ImpressionArea } from 'react-simplikit';
 
 function App() {
   return (

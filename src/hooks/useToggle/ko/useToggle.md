@@ -25,7 +25,7 @@ function useToggle(defaultValue?: boolean): readonly [
 ## 예시
 
 ```tsx
-import { useToggle } from 'reactive-kit';
+import { useToggle } from 'react-simplikit';
 
 function Component() {
   // useToggle 훅을 사용해 상태를 관리해요.

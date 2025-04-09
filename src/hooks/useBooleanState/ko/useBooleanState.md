@@ -30,7 +30,7 @@ function useBooleanState(defaultValue?: boolean): readonly [
 ## 예시
 
 ```tsx
-import { useBooleanState } from 'reactive-kit';
+import { useBooleanState } from 'react-simplikit';
 
 function Component() {
   // useBooleanState 훅을 사용해 상태를 관리해요.

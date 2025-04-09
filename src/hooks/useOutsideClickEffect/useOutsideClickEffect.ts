@@ -14,7 +14,7 @@ type OneOrMore<T> = T | T[];
  * @param {() => void} callback - A function that is executed when clicking outside the specified container(s).
  *
  * @example
- * import { useOutsideClickEffect } from 'reactive-kit';
+ * import { useOutsideClickEffect } from 'react-simplikit';
  * import { useState } from 'react';
  *
  * function Example() {

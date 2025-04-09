@@ -43,7 +43,7 @@ Returns a tuple of the form `[state, setState]`:
 ### Counter
 
 ```tsx
-import { useStorageState } from 'reactive-kit';
+import { useStorageState } from 'react-simplikit';
 
 function Counter() {
   const [count, setCount] = useStorageState<number>('counter', {
@@ -57,7 +57,7 @@ function Counter() {
 ### Search History
 
 ```tsx
-import { useStorageState } from 'reactive-kit';
+import { useStorageState } from 'react-simplikit';
 
 function SearchHistory() {
   const [recentSearches, setRecentSearches] = useStorageState<string[]>('recent-searches', {

@@ -17,8 +17,8 @@ function useVisibilityEvent(
   A callback function invoked when the visibility state changes.  
   Receives the current visibility state (`'visible'` | `'hidden'`) as its argument.
 
-- `options ({ immediate?: boolean })` (optional):  
-  - `immediate` (`boolean`):  
+- `options ({ immediate?: boolean })` (optional):
+  - `immediate` (`boolean`):
     - If `true`, the hook executes the callback immediately upon mounting with the current visibility state. Defaults to `false`.
 
 ### Returns
@@ -28,7 +28,7 @@ This hook does not return any value.
 ## Examples
 
 ```tsx
-import { useVisibilityEvent } from 'reactive-kit';
+import { useVisibilityEvent } from 'react-simplikit';
 
 function Component() {
   useVisibilityEvent(visibilityState => {

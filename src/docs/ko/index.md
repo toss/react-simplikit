@@ -2,14 +2,14 @@
 layout: home
 
 hero:
-  name: 'reactive-kit'
+  name: 'react-simplikit'
   text: '가볍고 강력한 React 유틸리티 라이브러리'
   image:
     src: /images/symbol.svg
-    alt: reactive-kit symbol
+    alt: react-simplikit symbol
   actions:
     - theme: brand
-      text: reactive-kit 알아보기
+      text: react-simplikit 알아보기
       link: /ko/intro.html
     - theme: alt
       text: 레퍼런스

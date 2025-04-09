@@ -9,7 +9,7 @@ export const ko = defineConfig({
     nav: nav(),
     sidebar: sidebar(),
     editLink: {
-      pattern: 'https://github.com/toss/reactive-kit/edit/develop/src/:path',
+      pattern: 'https://github.com/toss/react-simplikit/edit/develop/src/:path',
       text: 'GitHub에서 수정하기',
     },
     footer: {
@@ -33,7 +33,7 @@ function sidebar(): DefaultTheme.Sidebar {
       text: '가이드',
       items: [
         { text: '소개', link: '/ko/intro' },
-        { text: 'reactive-kit, 선택의 이유', link: '/ko/why-reactive-kit-matters' },
+        { text: 'react-simplikit, 선택의 이유', link: '/ko/why-react-simplikit-matters' },
         { text: '설치하기', link: '/ko/installation' },
         { text: '설계 원칙', link: '/ko/design-principles' },
         { text: '기여하기', link: '/ko/contributing' },

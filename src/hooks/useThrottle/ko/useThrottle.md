@@ -27,7 +27,7 @@ function useThrottle<F extends (...args: any[]) => any>(
 ## 예시
 
 ```tsx
-import { useThrottle } from 'reactive-kit';
+import { useThrottle } from 'react-simplikit';
 import { useEffect } from 'react';
 
 function ThrottledComponent() {

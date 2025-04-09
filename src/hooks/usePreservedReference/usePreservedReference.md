@@ -24,7 +24,7 @@ Returns the same reference if the value is considered equal to the previous one,
 Below is an example of using the hook to maintain a reference to an object.
 
 ```tsx
-import { usePreservedReference } from 'reactive-kit';
+import { usePreservedReference } from 'react-simplikit';
 import { useState } from 'react';
 
 function ExampleComponent() {
@@ -41,7 +41,7 @@ function ExampleComponent() {
 This example shows how to use a custom equality function.
 
 ```tsx
-import { usePreservedReference } from 'reactive-kit';
+import { usePreservedReference } from 'react-simplikit';
 import { useState } from 'react';
 
 function ExampleComponent() {
