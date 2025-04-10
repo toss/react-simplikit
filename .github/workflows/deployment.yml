@@ -103,8 +103,6 @@ jobs:
   generate-docs:
     runs-on: ubuntu-latest
     needs: get-diffs
-    env:
-      BRANCH: new-docgen-branch-${{ github.run_id }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -120,32 +118,19 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Checkout branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b $BRANCH
-
       - name: Generate docs
         run: |
           yarn docs:gen ${{ needs.get-diffs.outputs.result }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
-      - name: Commit generated docs
-        run: |
-          git add .
-          git commit -m "Generate docs for ${{ needs.get-diffs.outputs.result }}"
-          git push origin $BRANCH
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: develop
+          branch: new-docgen-branch-${{ github.run_id }}
           title: 'docs(${{ needs.get-diffs.outputs.result }}): auto-generated docs'
           body: 'This PR includes documentation updates for: ${{ needs.get-diffs.outputs.result }}'
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           reviewers: seungrodotlee,pumpkiinbell,choi2021
+          commit-message: 'Generate docs for ${{ needs.get-diffs.outputs.result }}'
