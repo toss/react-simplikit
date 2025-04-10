@@ -9,18 +9,208 @@ export async function translate(origin: string) {
 ### WHAT TO DO
 Translate given markdown in Korean.
 
-### TRANSLATION  RULES
-- ALWAYS finish every korean sentenses with "요".
-- Do not translate or delete title.
-- Do not change structure of document
-- ALWAYS translate this subtitles to
-  - Interface : 인터페이스
-  - Parameters : 파라미터
-  - Return Value : 반환 값
-  - Example : 예시
-- Do not translate contents in backticks and triple backticks, but translate "string values" in codes inside triple backticks
-- Do not translate body and other props of Interface component, but only "description infos" in it. "description infos" mean value of description props, value of each item's description prop in nested array.
-- If there are any unnatural or awkward sentences, please rewrite them in a more natural and fluent way.
+### ALWAYS finish every korean sentenses with "요".
+
+[example]
+<input>
+That is apple
+</input>
+
+<correct-output>
+그것은 사과예요
+</correct-output>
+
+<wrong-output>
+그것은 사과입니다
+</wrong-output>
+
+### Do not translate or delete title.
+
+[example]
+<input>
+# Title
+
+Welcome to the world of React
+</input>
+
+<correct-output>
+# Title
+
+리액트 세상에 오신 것을 환영해요
+</correct-output>
+
+<wrong-output>
+# 제목
+
+리액트 세상에 오신 것을 환영해요
+</wrong-output>
+
+### Do not change structure of document
+
+[example]
+<input>
+# Title
+
+## Subtitle 1
+
+content 1
+
+## Subtitle 2
+
+content 2
+</input>
+
+<correct-output>
+# Title
+
+## 서브타이틀 1
+
+내용 1
+
+## 서브타이틀 2
+
+내용 2
+</correct-output>
+
+<wrong-output>
+# Title
+
+## 서브타이틀 2
+
+내용 2
+</wrong-output>
+
+### ALWAYS translate subtitles with below rules
+  - Translate \`Interface\` to \`인터페이스\`
+  - Translate \`Parameters\` to \`파라미터\`
+  - Translate \`Return Value\` to \`반환 값\`
+  - Translate \`Example\` to \`예시\`
+
+### Do not translate contents in backticks and triple backticks, but translate "string values" in codes inside triple backticks
+
+[example]
+<input>
+Value of \`result\` is \`true\`
+
+\`\`\`ts
+const result = (1 + 3 === 4);
+\`\`\`
+</input>
+
+<correct-output>
+\`result\`의 값은 \`true\`이예요
+
+\`\`\`ts
+const result = (1 + 3 === 4);
+\`\`\`
+</correct-output>
+
+<wrong-output>
+\`결과\`의 값은 \`참\`이예요
+
+\`\`\`ts
+const 결과 = (1 + 3 === 4);
+\`\`\`
+</wrong-output>
+
+### Do not translate body and other props of Interface component, but only "description infos" in it. 
+- "description infos" mean value of description prop, values of each item's description prop in nested array.
+
+<input>
+<Interface
+  name="options"
+  type="DebounceOptions"
+  description="Configuration options for debounce behavior."
+  :nested="[
+    {
+      name: 'options.leading',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        'If <code>true</code>, the function is called at the start of the sequence.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      defaultValue: 'true',
+      description:
+        'If <code>true</code>, the function is called at the end of the sequence.',
+    },
+  ]"
+/>
+</input>
+
+<correct-output>
+<Interface
+  name="options"
+  type="DebounceOptions"
+  description="디바운스 동작을 설정하는 옵션이에요."
+  :nested="[
+    {
+      name: 'options.leading',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        '만약 <code>true</code>이면, 함수는 시퀀스의 시작에 호출돼요.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      defaultValue: 'true',
+      description:
+        '만약 <code>true</code>이면, 함수는 시퀀스의 끝에 호출돼요.',
+    },
+  ]"
+/>
+</correct-output>
+
+<wrong-output>
+<인터페이스
+  name="옵션"
+  type="디바운스옵션"
+  description="디바운스 동작을 설정하는 옵션이에요."
+  :nested="[
+    {
+      name: '옵션.leading',
+      type: '불리언',
+      defaultValue: 'false',
+      description:
+        '만약 <code>true</code>이면, 함수는 시퀀스의 시작에 호출돼요.',
+    },
+    {
+      name: '옵션.trailing',
+      type: '불리언',
+      defaultValue: 'true',
+      description:
+        '만약 <code>true</code>이면, 함수는 시퀀스의 끝에 호출돼요.',
+    },
+  ]"
+/>
+</wrong-output>
+
+<correct-output-2>
+<Interface
+  name="options"
+  type="DebounceOptions"
+  description="디바운스 동작을 설정하는 옵션이에요."
+  :nested="[
+    {
+      name: 'options.leading',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        '만약 <코드>참</코드>이면, 함수는 시퀀스의 시작에 호출돼요.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      defaultValue: 'true',
+      description:
+        '만약 <코드>참</코드>이면, 함수는 시퀀스의 끝에 호출돼요.',
+    },
+  ]"
+/>
+</correct-output-2>
 
 ### RETURN FORMAT
 \`\`\`json
