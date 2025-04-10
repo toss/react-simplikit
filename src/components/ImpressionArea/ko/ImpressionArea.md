@@ -3,9 +3,10 @@
 `ImpressionArea`는 특정 DOM 요소가 화면에 보이는 시간을 측정하고 요소가 뷰포트에 들어오거나 나갈 때 콜백을 실행하는 컴포넌트예요. 이 컴포넌트는 요소의 가시성을 추적하기 위해 `useImpressionRef` 훅을 사용해요.
 
 ## 인터페이스
+
 ```ts
 function ImpressionArea(
-  as: ElementType = "div",
+  as: ElementType = 'div',
   rootMargin: string,
   areaThreshold: number,
   timeThreshold: number,
@@ -13,9 +14,8 @@ function ImpressionArea(
   onImpressionEnd: () => void,
   ref: Ref<HTMLElement>,
   children: React.ReactNode,
-  className: string,
+  className: string
 ): JSX.Element;
-
 ```
 
 ### 파라미터
@@ -82,14 +82,13 @@ function ImpressionArea(
   description="자식 요소들의 가시성을 추적하는 React 컴포넌트예요."
 />
 
-
 ## 예시
 
 ```tsx
 function App() {
   return (
     <ImpressionArea
-      onImpressionStart={() => console.log('요소가 보이기 시작했어요')}
+      onImpressionStart={() => console.log('요소가 보여요')}
       onImpressionEnd={() => console.log('요소가 사라졌어요')}
       timeThreshold={1000}
       areaThreshold={0.5}
