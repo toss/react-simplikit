@@ -1,28 +1,34 @@
 # usePreservedCallback
 
-`usePreservedCallback` is a React hook that helps you preserve the reference of a callback function while ensuring it always uses the latest state.
+`usePreservedCallback` is a React hook that maintains a stable reference to a callback function while ensuring it always has access to the latest state or props. This prevents unnecessary re-renders and simplifies dependency management when passing callbacks to child components or handling event listeners.
 
 ## Interface
+```ts
+function usePreservedCallback(
+  callback: (...args: any[]) => any,
+): (...args: any[]) => any;
 
-```typescript
-function usePreservedCallback<Argument = any, ReturnValue = unknown>(
-  callback: (...args: Argument[]) => ReturnValue
-): (...args: Argument[]) => ReturnValue;
 ```
 
 ### Parameters
 
-- `callback`: A callback function that will always reference the latest state. Its reference remains the same even when the component re-renders.
+<Interface
+  required
+  name="callback"
+  type="(...args: any[]) => any"
+  description="The function to preserve. It always references the latest state or props, even when the component re-renders."
+/>
 
-### Returns
+### Return Value
 
-Returns a function with the same shape as the callback. The returned function ensures it always uses the latest state while maintaining the same reference, which helps prevent unnecessary re-renders.
+<Interface
+  name=""
+  type="(...args: any[]) => any"
+  description="function with the same signature as the input callback. The returned function maintains a stable reference while accessing the latest state or props."
+/>
 
-## Usage Examples
 
-### Basic Example
-
-Here is an example where the button click increments a counter while logging the current count.
+## Example
 
 ```tsx
 import { usePreservedCallback } from 'react-simplikit';
@@ -31,36 +37,12 @@ import { useState } from 'react';
 function Counter() {
   const [count, setCount] = useState(0);
 
-  // Create a callback that safely references the latest `count` value
   const handleClick = usePreservedCallback(() => {
     console.log(`Current count: ${count}`);
-    setCount(count + 1);
+    setCount(prev => prev + 1);
   });
 
   return <button onClick={handleClick}>Click me</button>;
 }
 ```
-
-### Passing Callbacks Between Components
-
-This example demonstrates how a parent component can pass a callback to a child component while preserving its reference.
-
-```tsx
-import { usePreservedCallback } from 'react-simplikit';
-import { useState } from 'react';
-
-function Parent() {
-  const [count, setCount] = useState(0);
-
-  // Create a callback that safely updates the count
-  const increment = usePreservedCallback(() => {
-    setCount(prev => prev + 1);
-  });
-
-  return <Child onIncrement={increment} />;
-}
-
-function Child({ onIncrement }: { onIncrement: () => void }) {
-  return <button onClick={onIncrement}>Increment</button>;
-}
-```
+  

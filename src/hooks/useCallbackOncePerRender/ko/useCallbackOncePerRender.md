@@ -1,84 +1,53 @@
 # useCallbackOncePerRender
 
-`useCallbackOncePerRender`는 콜백 함수가 여러 번 호출되더라도 단 한 번만 실행되도록 보장하는 React 훅이에요.
-분석 추적, 초기화 코드, 또는 반복되면 안 되는 일회성 작업에 유용해요.
+리액트 훅으로, 콜백 함수가 한 번만 실행되도록 보장해요. 몇 번 호출되든 간에 단 한 번만 실행돼요. 이는 컴포넌트가 다시 렌더링되더라도 반복되지 말아야 하는 일회성 작업에 유용해요.
 
 ## 인터페이스
+```ts
+function useCallbackOncePerRender(
+  callback: () => void,
+  deps: DependencyList,
+): (...args: any[]) => void;
 
-```typescript
-function useCallbackOncePerRender<F extends (...args: any[]) => void>(
-  callback: F,
-  deps: DependencyList
-): (...args: Parameters<F>) => void;
 ```
 
 ### 파라미터
 
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">callback</span
-    ><span class="post-parameters--required">required</span> ·
-    <span class="post-parameters--type">() =&gt; void</span>
-    <br />
-    <p class="post-parameters--description">
-      한 번만 실행될 콜백 함수예요.
-    </p>
-  </li>
-</ul>
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">deps</span
-    ><span class="post-parameters--required">required</span> ·
-    <span class="post-parameters--type">DependencyList</span>
-    <br />
-    <p class="post-parameters--description">
-      변경되면 새로운 일회성 실행을 트리거하는 의존성 배열이에요.
-    </p>
-  </li>
-</ul>
+<Interface
+  required
+  name="callback"
+  type="() => void"
+  description="한 번 실행될 콜백 함수예요."
+/>
+
+<Interface
+  required
+  name="deps"
+  type="DependencyList"
+  description="변경될 때 새로운 일회성 실행을 트리거하는 의존성 배열이에요."
+/>
 
 ### 반환 값
 
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name"></span
-    ><span class="post-parameters--type">(...args: any[]) =&gt; void</span>
-    <br />
-    <p class="post-parameters--description">
-      의존성이 변경될 때까지 한 번만 실행되는 메모이제이션된 함수예요.
-    </p>
-  </li>
-</ul>
+<Interface
+  name=""
+  type="(...args: any[]) => void"
+  description="의존성이 변경될 때까지 한 번만 실행될 메모이제이션된 함수예요."
+/>
+
 
 ## 예시
 
 ```tsx
 import { useCallbackOncePerRender } from 'react-simplikit';
 
-function UserInteraction() {
-  const trackFirstInteraction = useCallbackOncePerRender(() => {
-    analytics.track('first_interaction');
+function Component() {
+  const handleOneTimeEvent = useCallbackOncePerRender(() => {
+    console.log('이것은 한 번만 실행될 거예요');
   }, []);
 
-  return <button onClick={handleOneTimeEvent}>Click me</button>;
+  return <button onClick={handleOneTimeEvent}>누르세요</button>;
 }
 ```
 
-### 의존성 사용
 
-사용자 ID가 변경될 때 방문을 추적하는 예제예요:
-
-```tsx
-import { useCallbackOncePerRender } from 'react-simplikit';
-import { useEffect } from 'react';
-
-function UserTracker({ userId }: { userId: string }) {
-  const trackUserVisit = useCallbackOncePerRender(() => {
-    analytics.trackVisit(userId);
-  }, [userId]);
-
-  trackUserVisit();
-
-  return <div>User page</div>;
-}
-```

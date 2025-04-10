@@ -1,30 +1,45 @@
 # useLoading
 
-`useLoading` is a React hook that simplifies managing the loading state.
-It provides a state to track whether an asynchronous operation is in progress and a function to handle the loading state automatically.
+`useLoading` is a React hook that simplifies managing the loading state of a `Promise`. It provides a state to track whether an asynchronous operation is in progress and a function to handle the loading state automatically.
 
 ## Interface
-
 ```ts
 function useLoading(): [
-  boolean, // Loading state value
-  <T>(promise: Promise<T>) => Promise<T>, // Function that manages the loading state and executes asynchronous tasks
+  loading: boolean,
+  startLoading: <T>(promise: Promise<T>) => Promise<T>,
 ];
+
 ```
 
-### Returns
+### Parameters
 
-Returns a tuple of the form `[boolean, <T>(promise: Promise<T>) => Promise<T>]`:
 
-- `boolean`: Represents the current loading state. It is set to `true` when an asynchronous task is in progress.
+### Return Value
 
-- `<T>(promise: Promise<T>) => Promise<T>`: A function that executes asynchronous tasks while managing the loading state automatically.
+<Interface
+  name=""
+  type="[loading: boolean, startLoading: <T>(promise: Promise<T>) => Promise<T>]"
+  description="tuple containing:"
+  :nested="[
+    {
+      name: 'loading',
+      type: 'boolean',
+      description:
+        'Represents the current loading state. <br />  : The initial value is <code>false</code>. <br />  : It is set to <code>true</code> when an asynchronous task is in progress.',
+    },
+    {
+      name: 'startLoading',
+      type: '<T>(promise: Promise<T>) => Promise<T>',
+      description:
+        'A function that executes asynchronous tasks while managing the loading state. <br />  : This function takes a <code>Promise</code> as an argument and automatically resets the <code>isLoading</code> state to <code>false</code> when the <code>Promise</code> completes.',
+    },
+  ]"
+/>
 
-## Examples
+
+## Example
 
 ```tsx
-import { useLoading } from 'react-simplikit';
-
 function ConfirmButton() {
   const [loading, startLoading] = useLoading();
 
@@ -35,12 +50,13 @@ function ConfirmButton() {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [startLoading, data]);
+  }, [startLoading]);
 
   return (
     <button disabled={loading} onClick={handleSubmit}>
-      {loading ? 'loading...' : 'Confirm'}
+      {loading ? 'Loading...' : 'Confirm'}
     </button>
   );
 }
 ```
+  

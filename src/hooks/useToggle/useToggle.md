@@ -1,29 +1,45 @@
 # useToggle
 
-`useToggle` is a React hook that simplifies managing a boolean state.
-It provides a function to toggle the state between `true` and `false`.
+`useToggle` is a React hook that simplifies managing a boolean state. It provides a function to toggle the state between `true` and `false`.
 
 ## Interface
-
 ```ts
-function useToggle(initialValue: boolean = false): readonly [
-  boolean, // Current state value
-  () => void, // Function to toggle the state
-];
+function useToggle(
+  initialValue: boolean = false,
+): [state: boolean, toggle: () => void];
+
 ```
 
 ### Parameters
 
-- `initialValue` (`boolean`): It's the initial value of the state. The default value is false.
+<Interface
+  name="initialValue"
+  type="boolean"
+  description="The initial state value. Defaults to <code>false</code>."
+/>
 
-### Returns
+### Return Value
 
-Returns a `readonly [boolean, () => void]` tuple:
+<Interface
+  name=""
+  type="[state: boolean, toggle: () => void]"
+  description="tuple:"
+  :nested="[
+    {
+      name: 'state',
+      type: 'boolean',
+      description: 'The current state value.',
+    },
+    {
+      name: 'toggle',
+      type: '() => void',
+      description: 'A function to toggle the state.',
+    },
+  ]"
+/>
 
-- `boolean`: The current state value.
-- `() => void`: A function to toggle the state.
 
-## Examples
+## Example
 
 ```tsx
 import { useToggle } from 'react-simplikit';
@@ -39,3 +55,4 @@ function Component() {
   );
 }
 ```
+  

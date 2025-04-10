@@ -1,26 +1,43 @@
 # useToggle
 
-`useToggle`은 `boolean` 상태를 쉽게 관리할 수 있도록 도와주는 React 훅이에요. `true`와 `false`로 상태를 간단히 토글할 수 있는 기능을 제공해요.
+`useToggle`은 불리언 상태 관리를 간소화하는 리액트 훅이에요. 상태를 `true`와 `false` 사이에서 전환하는 함수를 제공해요.
 
 ## 인터페이스
-
 ```ts
-function useToggle(defaultValue?: boolean): readonly [
-  boolean, // 현재 상태 값
-  () => void, // 상태를 토글하는 함수
-];
+function useToggle(
+  initialValue: boolean = false,
+): [state: boolean, toggle: () => void];
+
 ```
 
 ### 파라미터
 
-- `defaultValue` (`boolean`): 상태의 초기 값이에요. 기본값은 `false`예요.
+<Interface
+  name="initialValue"
+  type="boolean"
+  description="초기 상태 값이에요. 기본값은 <code>false</code>예요."
+/>
 
 ### 반환 값
 
-`readonly [boolean, () => void]` 형태의 튜플을 반환해요:
+<Interface
+  name=""
+  type="[state: boolean, toggle: () => void]"
+  description="튜플:"
+  :nested="[
+    {
+      name: 'state',
+      type: 'boolean',
+      description: '현재 상태 값이에요.',
+    },
+    {
+      name: 'toggle',
+      type: '() => void',
+      description: '상태를 전환하는 함수예요.',
+    },
+  ]"
+/>
 
-- `boolean`: 현재 상태 값이에요.
-- `() => void`: 상태를 토글하는 함수예요.
 
 ## 예시
 
@@ -28,12 +45,11 @@ function useToggle(defaultValue?: boolean): readonly [
 import { useToggle } from 'react-simplikit';
 
 function Component() {
-  // useToggle 훅을 사용해 상태를 관리해요.
   const [open, toggle] = useToggle(false);
 
   return (
     <div>
-      <p>Bottom Sheet 상태: {open ? '열림' : '닫힘'}</p>
+      <p>하단 시트 상태: {open ? '열림' : '닫힘'}</p>
       <button onClick={toggle}>토글</button>
     </div>
   );

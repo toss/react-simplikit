@@ -1,27 +1,60 @@
 # useImpressionRef
 
-`useImpressionRef` is a custom hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. This hook uses [useIntersectionObserver](./useIntersectionObserver) and the [useVisibilityEvent](./useVisibilityEvent) to track the element's visibility.
+`useImpressionRef` is a custom hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. This hook uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
 
 ## Interface
-
-```typescript
-function useImpressionRef<Element extends HTMLElement = HTMLElement>(
-  options: UseImpressionRefOptions
+```ts
+function useImpressionRef(
+  options: UseImpressionRefOptions,
 ): (element: Element | null) => void;
+
 ```
 
 ### Parameters
 
-- `options` (`UseImpressionRefOptions`): An options object for tracking the element's visibility.
-  - `onImpressionStart`: Callback function executed when the element enters the view
-  - `onImpressionEnd`: Callback function executed when the element exits the view
-  - `timeThreshold`: Minimum time the element must be visible (in milliseconds)
-  - `areaThreshold`: Minimum ratio of the element that must be visible (0 to 1)
-  - `rootMargin`: Margin to adjust the detection area
+<Interface
+  required
+  name="options"
+  type="UseImpressionRefOptions"
+  description="Options for tracking the element's visibility."
+  :nested="[
+    {
+      name: 'options.onImpressionStart',
+      type: '() => void',
+      description:
+        'Callback function executed when the element enters the view',
+    },
+    {
+      name: 'options.onImpressionEnd',
+      type: '() => void',
+      description: 'Callback function executed when the element exits the view',
+    },
+    {
+      name: 'options.timeThreshold',
+      type: 'number',
+      description: 'Minimum time the element must be visible (in milliseconds)',
+    },
+    {
+      name: 'options.areaThreshold',
+      type: 'number',
+      description: 'Minimum ratio of the element that must be visible (0 to 1)',
+    },
+    {
+      name: 'options.rootMargin',
+      type: 'string',
+      description: 'Margin to adjust the detection area',
+    },
+  ]"
+/>
 
 ### Return Value
 
-- `(element: Element | null) => void`: A function to set the element. Attach this function to the `ref` attribute, and the callbacks will be executed whenever the element's visibility changes.
+<Interface
+  name=""
+  type="(element: Element | null) => void"
+  description="function to set the element. Attach this function to the <code>ref</code> attribute, and the callbacks will be executed whenever the element's visibility changes."
+/>
+
 
 ## Example
 
@@ -39,5 +72,4 @@ function Component() {
   return <div ref={ref}>Track my visibility!</div>;
 }
 ```
-
-In this example, `useImpressionRef` is used to log a message to the console whenever the `div` element enters or exits the viewport.
+  

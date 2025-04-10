@@ -1,49 +1,61 @@
 # useThrottle
 
-`useThrottle`은 React에서 특정 시간 간격마다 함수 호출을 제한하는 훅이에요. 성능 최적화가 필요한 경우, 특히 **사용자가 빠르게 입력하거나 스크롤할 때** 불필요한 함수 호출을 방지하는 데 유용해요.
+리액트 훅으로, 콜백 함수를 제한된 버전으로 만드는 데 사용해요. 이는 스크롤이나 리사이즈 이벤트를 처리할 때와 같이 함수 호출 빈도를 제한하는 데 유용해요.
 
-## 인터페이스
-
+## Interface
 ```ts
-function useThrottle<F extends (...args: any[]) => any>(
+function useThrottle<F>(
   callback: F,
   wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  options: { edges?: Array<"leading" | "trailing"> },
 ): F & { cancel: () => void };
+
 ```
 
-### 매개변수
+### 파라미터
 
-- `callback` (`F`): 지정한 시간 간격 내에서 실행할 함수예요.
-- `wait` (`number`): 함수 실행 간격을 밀리초(단위: ms)로 설정해요.
-- `options` (`{ edges?: Array<'leading' | 'trailing'> }`, 선택 사항):
-  - `edges` (`Array<'leading' | 'trailing'>`): 함수가 선행, 후행, 또는 둘 다에서 호출되어야 하는지를 지정해요. 기본값은 `['leading', 'trailing']`이에요.
+<Interface
+  required
+  name="callback"
+  type="F"
+  description="스로틀링할 함수예요."
+/>
 
-### 반환값
+<Interface
+  required
+  name="wait"
+  type="number"
+  description="스로틀링 호출을 밀리초로 제한할 수예요."
+/>
 
-- 제한된 호출을 적용한 함수와 cancel 메서드를 포함한 객체를 반환해요.
-- cancel() 메서드를 호출하면, 대기 중인 실행을 취소할 수 있어요.
+<Interface
+  name="options"
+  type="{ edges?: Array<'leading' | 'trailing'> }"
+  description="스로틀의 동작을 제어하기 위한 옵션이에요."
+/>
+
+### 반환 값
+
+<Interface
+  name=""
+  type="F & { cancel: () => void }"
+  description="<code>cancel</code> 메서드를 가진 제한된 함수를 반환해요. 대기 중인 실행을 취소할 수 있어요."
+/>
+
 
 ## 예시
 
 ```tsx
-import { useThrottle } from 'react-simplikit';
-import { useEffect } from 'react';
+const throttledScroll = useThrottle(() => {
+  console.log('스크롤 이벤트');
+}, 200, { edges: ['leading', 'trailing'] });
 
-function ThrottledComponent() {
-  const handleScroll = useThrottle(() => {
-    console.log('스크롤 이벤트 발생');
-  }, 200);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      handleScroll.cancel();
-    };
-  }, [handleScroll]);
-
-  return <div>스크롤을 해보세요!</div>;
-}
+useEffect(() => {
+  window.addEventListener('scroll', throttledScroll);
+  return () => {
+    window.removeEventListener('scroll', throttledScroll);
+    throttledScroll.cancel();
+  };
+}, [throttledScroll]);
 ```
+  

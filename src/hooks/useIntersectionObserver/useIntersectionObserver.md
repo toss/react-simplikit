@@ -3,32 +3,38 @@
 `useIntersectionObserver` is a custom hook that detects whether a specific DOM element is visible on the screen. This hook uses the `IntersectionObserver` API to execute a callback when the element enters or exits the viewport.
 
 ## Interface
-
-```typescript
-function useIntersectionObserver<Element extends HTMLElement>(
+```ts
+function useIntersectionObserver(
   callback: (entry: IntersectionObserverEntry) => void,
-  options: IntersectionObserverInit
+  options: IntersectionObserverInit,
 ): (element: Element | null) => void;
+
 ```
 
 ### Parameters
 
-- `callback` (`(entry: IntersectionObserverEntry) => void`)
+<Interface
+  required
+  name="callback"
+  type="(entry: IntersectionObserverEntry) => void"
+  description="A callback function that is executed when the visibility of the element changes. You can check <code>entry.isIntersecting</code> to determine if the element is in view."
+/>
 
-  - A callback function that is executed when the visibility of the element changes.
-  - You can check `entry.isIntersecting` to determine if the element is in view.
-
-- `options` (`IntersectionObserverInit`):
-  - Options for the [`IntersectionObserver`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver#options).
-  - You can specify values such as:
-    - `root`: The viewport or a specific element to observe (`null` for the default viewport)
-    - `rootMargin`: Margin around the root to adjust the detection area (e.g., `"0px 0px -50px 0px"`)
-    - `threshold`: The percentage of the element's visibility required to trigger the callback (e.g., `0.5` for 50% visibility)
+<Interface
+  required
+  name="options"
+  type="IntersectionObserverInit"
+  description="Options for the <code>IntersectionObserver</code>. You can specify values such as <code>root</code>, <code>rootMargin</code>, and <code>threshold</code>."
+/>
 
 ### Return Value
 
-- `(element: Element | null) => void`
-  - A function to set the element. Attach this function to the `ref` attribute, and the `callback` will be executed whenever the element's visibility changes.
+<Interface
+  name=""
+  type="(element: Element | null) => void"
+  description="function to set the element. Attach this function to the <code>ref</code> attribute, and the <code>callback</code> will be executed whenever the element's visibility changes."
+/>
+
 
 ## Example
 
@@ -50,5 +56,4 @@ function Component() {
   return <div ref={ref}>Observe me!</div>;
 }
 ```
-
-In this example, `useIntersectionObserver` is used to log a message to the console whenever the `div` element enters or exits the viewport.
+  
