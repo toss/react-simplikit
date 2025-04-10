@@ -16,7 +16,7 @@ import { DependencyList, useEffect } from 'react';
  *   setData(data);
  *
  *   return () => {
- *     console.log('Cleanup on unmount or deps change');
+ *     console.log('Cleanup on unmount or dependencies change');
  *   };
  * }, [dependencies]);
  */
