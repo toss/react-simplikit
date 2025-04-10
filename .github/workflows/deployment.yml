@@ -135,18 +135,17 @@ jobs:
       - name: Commit generated docs
         run: |
           git add .
-          git commit -m "Generate docs for ${{ steps.files.outputs.names }}"
+          git commit -m "Generate docs for ${{ needs.get-diffs.outputs.result }}"
           git push origin $BRANCH
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Pull Request
-        if: steps.files.outputs.names != ''
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: docs/update-${{ github.run_id }}
-          title: 'docs(${{ steps.files.outputs.names }}): auto-generated docs'
-          body: 'This PR includes documentation updates for: ${{ steps.files.outputs.names }}'
+          title: 'docs(${{ needs.get-diffs.outputs.result }}): auto-generated docs'
+          body: 'This PR includes documentation updates for: ${{ needs.get-diffs.outputs.result }}'
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           reviewers: seungrodotlee,pumpkiinbell,choi2021
