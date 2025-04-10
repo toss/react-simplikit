@@ -8,10 +8,10 @@ import { useCallback, useState } from 'react';
  * @param {boolean} [defaultValue=false] - The initial value of the state. Defaults to `false`.
  *
  * @returns {readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]} A tuple containing:
- * - state `boolean` - The current state value.
- * - setTrue `() => void` - A function to set the state to `true`.
- * - setFalse `() => void` - A function to set the state to `false`.
- * - toggle `() => void` - A function to toggle the state.
+ * - state `boolean` - The current state value;
+ * - setTrue `() => void` - A function to set the state to `true`;
+ * - setFalse `() => void` - A function to set the state to `false`;
+ * - toggle `() => void` - A function to toggle the state;
  *
  * @example
  * const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);

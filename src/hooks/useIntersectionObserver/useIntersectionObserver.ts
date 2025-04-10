@@ -8,12 +8,12 @@ import { useRefEffect } from '../useRefEffect/index.ts';
  * `useIntersectionObserver` is a custom hook that detects whether a specific DOM element is visible on the screen.
  * This hook uses the `IntersectionObserver` API to execute a callback when the element enters or exits the viewport.
  *
- * @param callback - A callback function that is executed when the visibility of the element changes.
- *                   You can check `entry.isIntersecting` to determine if the element is in view.
- * @param options - Options for the `IntersectionObserver`.
- *                  You can specify values such as `root`, `rootMargin`, and `threshold`.
+ * @param {(entry: IntersectionObserverEntry) => void} callback - A callback function that is executed when the visibility of the element changes.
+ *   You can check `entry.isIntersecting` to determine if the element is in view.
+ * @param {IntersectionObserverInit} options - Options for the `IntersectionObserver`.
+ *   You can specify values such as `root`, `rootMargin`, and `threshold`.
  *
- * @returns A function to set the element. Attach this function to the `ref` attribute, and the `callback` will be executed whenever the element's visibility changes.
+ * @returns {(element: Element | null) => void} A function to set the element. Attach this function to the `ref` attribute, and the `callback` will be executed whenever the element's visibility changes.
  *
  * @example
  * import { useIntersectionObserver } from 'react-simplikit';

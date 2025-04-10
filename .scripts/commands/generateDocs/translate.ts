@@ -86,14 +86,24 @@ content 2
   - Translate \`Return Value\` to \`반환 값\`
   - Translate \`Example\` to \`예시\`
 
-### Do not translate contents in backticks and triple backticks, but translate "string values" in codes inside triple backticks
+### Do not translate contents in backticks and triple backticks, but translate "string values" in codes inside triple backticks.
+- example of "string values"
+  - values in \`console.log\`
+  - text nodes in HTML tags
+  - comments in code blocks
 
 [example]
 <input>
 Value of \`result\` is \`true\`
 
 \`\`\`ts
-const result = (1 + 3 === 4);
+function sum(a, b) {
+  console.log(\`sum of \${a} and \${b} is \${a + b}\`);
+  return a + b;
+}
+
+const result = sum(1, 3) === 4;
+console.log(\`result is \${result}\`);
 \`\`\`
 </input>
 
@@ -101,7 +111,13 @@ const result = (1 + 3 === 4);
 \`result\`의 값은 \`true\`이예요
 
 \`\`\`ts
-const result = (1 + 3 === 4);
+function sum(a, b) {
+  console.log(\`\${a}와 \${b}의 합은 \${a + b}이예요\`);
+  return a + b;
+}
+
+const result = sum(1, 3) === 4;
+console.log(\`result는 \${result}이예요\`);
 \`\`\`
 </correct-output>
 
@@ -109,11 +125,31 @@ const result = (1 + 3 === 4);
 \`결과\`의 값은 \`참\`이예요
 
 \`\`\`ts
-const 결과 = (1 + 3 === 4);
+function 더하기(a, b) {
+  console.log(\`\${a}와 \${b}의 합은 \${a + b}이예요\`);
+  return a + b;
+}
+
+const 결과 = 더하기(1, 3) === 4;
+console.log(\`결과는 \${결과}이예요\`);
 \`\`\`
 </wrong-output>
 
-### Do not translate body and other props of Interface component, but only "description infos" in it. 
+<wrong-output-2>
+\`result\`의 값은 \`true\`이예요
+
+\`\`\`ts
+function sum(a, b) {
+  console.log(\`sum of \${a} and \${b} is \${a + b}\`);
+  return a + b;
+}
+
+const result = sum(1, 3) === 4;
+console.log(\`result is \${result}\`);
+\`\`\`
+</wrong-output-2>
+
+### Do not translate body and other props of \`Interface\` component in Interface section, but only "description infos" in it. 
 - "description infos" mean value of description prop, values of each item's description prop in nested array.
 
 <input>
@@ -211,6 +247,26 @@ const 결과 = (1 + 3 === 4);
   ]"
 />
 </correct-output-2>
+
+### If possible, use easy-to-understand words.
+- If there is no pure-korean word to translate, use naturalized words.
+- If you translated jargon to easy-to-understand words, comment the translated jargon in the end of the sentences with brackets.
+
+[example]
+<input>
+'pending' means waiting for something to be done.
+'debounce' means delaying the execution of a function until a certain amount of time has passed.
+</input>
+
+<correct-output>
+'보류'는 무언가가 완료될 때까지 기다리는 것을 의미해요.
+'디바운스'는 함수의 실행을 지연시키는 것을 의미해요.
+</correct-output>
+
+<wrong-output>
+'펜딩'은 무언가가 완료될 때까지 기다리는 것을 의미해요.
+'디바운스'는 함수의 실행을 지연시키는 것을 의미해요.
+</wrong-output>
 
 ### RETURN FORMAT
 \`\`\`json
