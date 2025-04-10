@@ -18,7 +18,7 @@ import { DependencyList, useEffect } from 'react';
  *   return () => {
  *     console.log('Cleanup on unmount or deps change');
  *   };
- * }, [deps]);
+ * }, [dependencies]);
  */
 
 export function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps?: DependencyList) {
