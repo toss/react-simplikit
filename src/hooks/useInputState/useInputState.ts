@@ -9,7 +9,7 @@ import { ChangeEventHandler, useCallback, useState } from 'react';
  *   Defaults to an identity function that returns the input unchanged.
  *
  * @returns {[value: string, onChange: (value: string) => void]} A tuple containing:
- * - value - The current state value;
+ * - value `string` - The current state value;
  * - onChange `(value: string) => void` - A function to update the state;
  *
  * @example
