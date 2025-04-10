@@ -144,7 +144,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: new-docgen-branch-${{ github.run_id }}
+          branch: develop
           title: 'docs(${{ needs.get-diffs.outputs.result }}): auto-generated docs'
           body: 'This PR includes documentation updates for: ${{ needs.get-diffs.outputs.result }}'
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
