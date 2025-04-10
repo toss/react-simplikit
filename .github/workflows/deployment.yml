@@ -84,7 +84,7 @@ jobs:
   get-diffs:
     runs-on: ubuntu-latest
     outputs:
-      result: ${{ steps.step1.outputs.test }}
+      result: ${{ steps.diffs.outputs.result }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -92,6 +92,7 @@ jobs:
           fetch-depth: 0
 
       - name: Get changed files from merged PR
+        id: diffs
         run: |
           MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
 
