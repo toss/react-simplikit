@@ -81,8 +81,22 @@ jobs:
         run: |
           git push -u origin HEAD --follow-tags --force
 
+  get-diffs:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.step1.outputs.test }}
+    steps:
+      - name: Get changed files from merged PR
+        run: |
+          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
+
+          echo $MATCHED_NAMES
+
+          echo "result=$MATCHED_NAMES" >> "$GITHUB_OUTPUT"
+
   generate-docs:
     runs-on: ubuntu-latest
+    needs: get-diffs
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -95,15 +109,6 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Get changed files from merged PR
-        id: files
-        run: |
-          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
-
-          echo $MATCHED_NAMES
-
-          echo "names=$MATCHED_NAMES" >> $GITHUB_OUTPUT
-
       - name: Checkout branch
         run: |
           git config user.name "github-actions[bot]"
@@ -113,7 +118,7 @@ jobs:
 
       - name: Generate docs
         run: |
-          yarn docs:gen ${{ steps.files.outputs.names }}
+          yarn docs:gen ${{ needs.get-diffs.outputs.result }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
