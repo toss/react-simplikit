@@ -6,7 +6,7 @@
 ```ts
 function useBooleanState(
   defaultValue: boolean = false,
-): readonly [
+): [
   state: boolean,
   setTrue: () => void,
   setFalse: () => void,
@@ -27,7 +27,7 @@ function useBooleanState(
 
 <Interface
   name=""
-  type="readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
+  type="[state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
   description="tuple containing:"
   :nested="[
     {
