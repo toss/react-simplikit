@@ -1,6 +1,6 @@
 # buildContext
 
-`buildContext`는 React Context를 정의할 때 반복적인 코드를 줄여주는 도우미 함수예요.
+`buildContext`는 리액트 컨텍스트를 정의할 때 반복적인 코드를 줄여주는 헬퍼 함수예요.
 
 ## 인터페이스
 ```ts
@@ -26,7 +26,7 @@ function buildContext(
 <Interface
   name="defaultContextValues"
   type="ContextValuesType"
-  description="컨텍스트에 전달할 기본 값이에요."
+  description="컨텍스트에 전달될 기본 값들이에요."
 />
 
 ### 반환 값
@@ -34,7 +34,7 @@ function buildContext(
 <Interface
   name=""
   type="[Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element, useContext: () => ContextValuesType]"
-  description="다음과 같은 형태의 튜플이에요:"
+  description="다음 형식의 튜플이에요:"
   :nested="[
     {
       name: 'Provider',

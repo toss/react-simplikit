@@ -1,6 +1,6 @@
 # Separated
 
-`Separated`는 각 자식 요소 사이에 지정된 컴포넌트를 삽입하는 컴포넌트예요. 리스트에서 구분자, 간격 또는 다른 반복 요소를 추가하는 데 유용해요.
+`Separated`는 각 자식 요소 사이에 지정된 컴포넌트를 삽입하는 컴포넌트예요. 목록에서 구분자, 간격 또는 다른 반복 요소를 추가하는 데 유용해요.
 
 ## 인터페이스
 ```ts
@@ -14,7 +14,7 @@ function Separated(children: React.ReactNode, by: React.ReactNode): JSX.Element;
   required
   name="children"
   type="React.ReactNode"
-  description="렌더링할 자식 요소들이에요. 올바른 리액트 요소(<code>React.isValidElement</code>)만 렌더링돼요."
+  description="렌더링할 자식 요소들이에요. 오직 유효한 React 요소(<code>React.isValidElement</code>)만 렌더링돼요."
 />
 
 <Interface
@@ -29,7 +29,7 @@ function Separated(children: React.ReactNode, by: React.ReactNode): JSX.Element;
 <Interface
   name=""
   type="JSX.Element"
-  description="지정한 구분자로 자식을 구분하는 리액트 컴포넌트예요."
+  description="지정된 구분자로 자식을 구분하는 React 컴포넌트예요."
 />
 
 
@@ -52,4 +52,3 @@ function App() {
   // <div>world</div>
 }
 ```
-  

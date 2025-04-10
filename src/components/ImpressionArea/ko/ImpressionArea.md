@@ -1,8 +1,8 @@
 # ImpressionArea
 
-`ImpressionArea`는 특정 DOM 요소가 화면에 보이는 시간을 측정하고 요소가 뷰포트에 들어오거나 나갈 때 콜백을 실행하는 컴포넌트예요. 이 컴포넌트는 요소의 가시성을 추적하기 위해 `useImpressionRef` 훅을 사용해요.
+`ImpressionArea`는 특정 DOM 요소가 화면에 보이는 시간을 측정하고 그 요소가 뷰포트에 들어오거나 나갈 때 콜백을 실행하는 컴포넌트예요. 이 컴포넌트는 `useImpressionRef` 훅을 사용하여 요소의 가시성을 추적해요.
 
-## 인터페이스
+## Interface
 ```ts
 function ImpressionArea(
   as: ElementType = "div",
@@ -23,7 +23,7 @@ function ImpressionArea(
 <Interface
   name="as"
   type="ElementType"
-  description="렌더링할 HTML 태그예요. 기본값은 <code>div</code>이에요."
+  description="렌더링할 HTML 태그예요. 기본값은 <code>div</code>예요."
 />
 
 <Interface
@@ -35,19 +35,19 @@ function ImpressionArea(
 <Interface
   name="areaThreshold"
   type="number"
-  description="요소가 보여야 하는 최소 비율이에요 (0에서 1)."
+  description="요소가 보여져야 할 최소 비율이에요 (0에서 1 사이)."
 />
 
 <Interface
   name="timeThreshold"
   type="number"
-  description="요소가 보여야 하는 최소 시간(밀리초)이에요."
+  description="요소가 보여져야 할 최소 시간이에요 (밀리초 단위)."
 />
 
 <Interface
   name="onImpressionStart"
   type="() => void"
-  description="요소가 뷰에 들어갈 때 실행되는 콜백 함수예요."
+  description="요소가 뷰에 들어올 때 실행되는 콜백 함수예요."
 />
 
 <Interface
@@ -65,7 +65,7 @@ function ImpressionArea(
 <Interface
   name="children"
   type="React.ReactNode"
-  description="컴포넌트 내부에 렌더링될 자식 요소들이에요."
+  description="컴포넌트 안에서 렌더링될 자식 요소들이에요."
 />
 
 <Interface
@@ -89,13 +89,14 @@ function ImpressionArea(
 function App() {
   return (
     <ImpressionArea
-      onImpressionStart={() => console.log('요소가 보이기 시작했어요')}
-      onImpressionEnd={() => console.log('요소가 사라졌어요')}
+      onImpressionStart={() => console.log('Element entered view')}
+      onImpressionEnd={() => console.log('Element exited view')}
       timeThreshold={1000}
       areaThreshold={0.5}
     >
-      <div>저를 추적해 보세요!</div>
+      <div>날 추적해보세요!</div>
     </ImpressionArea>
   );
 }
 ```
+  
