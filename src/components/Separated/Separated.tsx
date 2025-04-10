@@ -1,7 +1,7 @@
 import { Children, Fragment, isValidElement, ReactNode } from 'react';
 
 type Props = {
-  with: ReactNode;
+  by: ReactNode;
   children: ReactNode;
 };
 
@@ -12,14 +12,14 @@ type Props = {
  *
  * @param {React.ReactNode} children - The child elements to render.
  *   Only valid React elements (`React.isValidElement`) will be rendered.
- * @param {React.ReactNode} with - The component to insert between child elements.
+ * @param {React.ReactNode} by - The component to insert between child elements.
  *
  * @returns {JSX.Element} A React component that separates children with a specified separator.
  *
  * @example
  * function App() {
  *   return (
- *     <Separated with={<Border type="padding24" />}>
+ *     <Separated by={<Border type="padding24" />}>
  *       {['hello', 'react', 'world'].map(item => (
  *         <div key={item}>{item}</div>
  *       ))}
@@ -33,7 +33,7 @@ type Props = {
  *   // <div>world</div>
  * }
  */
-export function Separated({ children, with: separator }: Props) {
+export function Separated({ children, by: separator }: Props) {
   const childrenArray = Children.toArray(children).filter(isValidElement);
 
   return (

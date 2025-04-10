@@ -1,62 +1,45 @@
 # usePrevious
 
-`usePrevious` is a React hook that stores and returns the previous value of a given state.
-The previous value updates only when the state value changes, and it is recalculated on each re-render.
+Returns the previous value of the input state. If a re-render occurs but the state value does not change, the previous value remains unchanged. If the state is an object or requires custom change detection, a `compare` function can be provided. By default, state changes are detected using `prev === next`.
 
-## Signature
+## Interface
+```ts
+function usePrevious<T>(
+  state: T,
+  compare: (prev: T | undefined, next: T) => boolean,
+): T | undefined;
 
-```typescript
-function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
 ```
 
 ### Parameters
 
-- `state` (`T`): The state to get previous value.
-- `compare` (`(prev: T, next: T) => boolean`, optional): The comparison function to detect that state has been changed. If not given, detect change by `prev === next` check.
+<Interface
+  required
+  name="state"
+  type="T"
+  description="The state whose previous value is to be tracked."
+/>
 
-### Returns
+<Interface
+  name="compare"
+  type="(prev: T | undefined, next: T) => boolean"
+  description="An optional comparison function to determine if the state has changed."
+/>
 
-Returns the previous value of the state.
+### Return Value
 
-## Examples
+<Interface
+  name=""
+  type="T | undefined"
+  description="previous value of the state."
+/>
 
-### Basic Usage
 
-```typescript
+## Example
+
+```tsx
 const [count, setCount] = useState(0);
-
 // initial value of previousCount is `0`
 const previousCount = usePrevious(count);
-
-// ...
-
-setCount(prev => prev + 1); // count: 1, previous: 0
-
-setUnrelated(prev => prev + 1); // previous: 0
-
-setCount(prev => prev + 1); // count: 2, previous: 1
 ```
-
-### Use custom compare function
-
-```typescript
-const compareObject = (prev: Record<string, unknown> | undefined, next: Record<string, unknown>) => {
-  if (prev === undefined) {
-    return false;
-  }
-
-  return Object.entries(prev).every(([key, value]) => next[key] === value);
-};
-
-const [data, setData] = useState({ hello: 'world' });
-const [unrelated, setUnrelated] = useState(0);
-
-// initial value of previousData is `{ hello: 'world' }`
-const previousData = usePrevious(data, customCompare);
-
-// ...
-
-setUnrelated(prev => prev + 1); // previous: { hello: 'world' }
-
-setData({ hello: 'world!' }); // data: { hello: 'world!' }, previous: { hello: 'world' }
-```
+  

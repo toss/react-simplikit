@@ -9,8 +9,8 @@ import { ChangeEventHandler, useCallback, useState } from 'react';
  *   Defaults to an identity function that returns the input unchanged.
  *
  * @returns {readonly [value: string, onChange: (value: string) => void]} A tuple containing:
- * - value `string` - The current state value.
- * - onChange `(value: string) => void` - A function to update the state.
+ * - value `string` - The current state value;
+ * - onChange `(value: string) => void` - A function to update the state;
  *
  * @example
  * import { useInputState } from 'react-simplikit';

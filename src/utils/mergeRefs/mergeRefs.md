@@ -1,54 +1,40 @@
 # mergeRefs
 
-`mergeRefs` is a utility function that combines multiple React refs into a single ref. This is particularly useful when you need to attach multiple refs to a single element.
+This function takes multiple refs (RefObject or RefCallback) and returns a single ref that updates all provided refs. It's useful when you need to pass multiple refs to a single element.
 
 ## Interface
-
 ```ts
-function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T>>): RefCallback<T>;
+function mergeRefs(
+  refs: Array<RefObject<T> | RefCallback<T> | null | undefined>,
+): RefCallback<T>;
+
 ```
 
 ### Parameters
 
-- `refs` (`Array<RefObject<T> | RefCallback<T>>`): An array of refs to be merged. Each ref can be either a `RefObject` or a `RefCallback`.
+<Interface
+  required
+  name="refs"
+  type="Array<RefObject<T> | RefCallback<T> | null | undefined>"
+  description="An array of refs to be merged. Each ref can be either a RefObject or RefCallback."
+/>
 
-### Returns
+### Return Value
 
-Returns a `RefCallback<T>` that updates all provided refs when called.
+<Interface
+  name=""
+  type="RefCallback<T>"
+  description="single ref callback that updates all provided refs."
+/>
+
 
 ## Example
 
-### Basic Usage
-
 ```tsx
-import { forwardRef, useRef } from 'react';
-import { mergeRefs } from 'react-simplikit';
+forwardRef(function Component(props, parentRef) {
+  const myRef = useRef(null);
 
-const Component = forwardRef((props, parentRef) => {
-  const localRef = useRef(null);
-
-  return <div ref={mergeRefs(localRef, parentRef)}>Content</div>;
-});
+  return <div ref={mergeRefs(myRef, parentRef)} />;
+})
 ```
-
-### Usage with Callback Refs
-
-```tsx
-import { useCallback, useRef } from 'react';
-import { mergeRefs } from 'react-simplikit';
-
-const Component = () => {
-  const ref = useRef(null);
-  const [height, setHeight] = useState(0);
-
-  const measuredRef = useCallback(node => {
-    if (node == null) {
-      return;
-    }
-
-    setHeight(node.offsetHeight);
-  }, []);
-
-  return <div ref={mergeRefs(measuredRef, ref)} />;
-};
-```
+  

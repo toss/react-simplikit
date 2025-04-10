@@ -3,71 +3,50 @@
 `useInterval` is a React hook that executes a function at a specified interval. It is useful for timers, polling data, and other recurring tasks.
 
 ## Interface
-
 ```ts
 function useInterval(
   callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
+  options: number | { delay: number; enabled?: boolean; immediate?: boolean },
 ): void;
+
 ```
 
 ### Parameters
 
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">callback</span
-    ><span class="post-parameters--required">required</span> ·
-    <span class="post-parameters--type">() =&gt; void</span>
-    <br />
-    <p class="post-parameters--description">
-      The function to be executed periodically.
-    </p>
-  </li>
-</ul>
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">options</span
-    ><span class="post-parameters--required">required</span> ·
-    <span class="post-parameters--type"
-      >number | { delay: number; enabled?: boolean; immediate?: boolean }</span
-    >
-    <br />
-    <p class="post-parameters--description">
-      Configures the interval behavior.
-    </p>
-    <ul class="post-parameters-ul">
-      <li class="post-parameters-li">
-        <span class="post-parameters--name">options.delay</span
-        ><span class="post-parameters--required">required</span> ·
-        <span class="post-parameters--type">number</span>
-        <br />
-        <p class="post-parameters--description">
-          The interval duration in milliseconds. If <code>null</code>, the
-          interval will not run.
-        </p>
-      </li>
-      <li class="post-parameters-li">
-        <span class="post-parameters--name">options.immediate</span
-        ><span class="post-parameters--type">boolean</span> ·
-        <span class="post-parameters--default">false</span>
-        <br />
-        <p class="post-parameters--description">
-          If <code>true</code>, executes immediately before starting the
-          interval.
-        </p>
-      </li>
-      <li class="post-parameters-li">
-        <span class="post-parameters--name">options.enabled</span
-        ><span class="post-parameters--type">boolean</span> ·
-        <span class="post-parameters--default">true</span>
-        <br />
-        <p class="post-parameters--description">
-          If <code>false</code>, the interval will not run.
-        </p>
-      </li>
-    </ul>
-  </li>
-</ul>
+<Interface
+  required
+  name="callback"
+  type="() => void"
+  description="The function to be executed periodically."
+/>
+
+<Interface
+  required
+  name="options"
+  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
+  description="Configures the interval behavior."
+  :nested="[
+    {
+      name: 'options.delay',
+      type: 'number',
+      description:
+        'The interval duration in milliseconds. If <code>null</code>, the interval will not run.',
+    },
+    {
+      name: 'options.immediate',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        'If <code>true</code>, executes immediately before starting the interval.',
+    },
+    {
+      name: 'options.enabled',
+      type: 'boolean',
+      defaultValue: 'true',
+      description: 'If <code>false</code>, the interval will not run.',
+    },
+  ]"
+/>
 
 ### Return Value
 
@@ -77,6 +56,7 @@ This hook does not return anything.
 
 ```tsx
 import { useInterval } from 'react-simplikit';
+import { useState } from 'react';
 
 function Timer() {
   const [time, setTime] = useState(0);
@@ -92,58 +72,4 @@ function Timer() {
   );
 }
 ```
-
-### Stopwatch
-
-You can control the execution by setting `enabled` to `false`.
-
-```tsx
-import { useInterval } from 'react-simplikit';
-
-function StopWatch() {
-  const [time, setTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-
-  useInterval(
-    () => {
-      setTime(prev => prev + 1);
-    },
-    {
-      delay: 1000,
-      enabled: isRunning,
-    }
-  );
-
-  return (
-    <div>
-      <p>{time} seconds</p>
-      <button onClick={() => setIsRunning(prev => !prev)}>{isRunning ? 'Stop' : 'Start'}</button>
-    </div>
-  );
-}
-```
-
-### Polling Data Updates
-
-Set `trailing` to `false` to execute the callback immediately and then periodically.
-
-```tsx
-import { useInterval } from 'react-simplikit';
-
-function PollingExample() {
-  const [data, setData] = useState<string>(null);
-
-  useInterval(
-    async () => {
-      const data = await getData();
-      setData(data);
-    },
-    {
-      delay: 3000,
-      trailing: false, // Execute immediately and then every 3 seconds
-    }
-  );
-
-  return <div>{data}</div>;
-}
-```
+  
