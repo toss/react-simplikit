@@ -98,7 +98,9 @@ jobs:
       - name: Get changed files from merged PR
         id: files
         run: |
-          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | tr "\n" "," | sed 's/,$//')
+          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
+
+          echo $MATCHED_NAMES
 
           echo "names=$MATCHED_NAMES" >> $GITHUB_OUTPUT
 
@@ -111,7 +113,7 @@ jobs:
 
       - name: Generate docs
         run: |
-          yarn generate-docs ${{ steps.files.outputs.names }}
+          yarn docs:gen ${{ steps.files.outputs.names }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
