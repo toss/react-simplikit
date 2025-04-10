@@ -1,39 +1,71 @@
 # buildContext
 
-`buildContext`는 React Context를 정의할 때 반복되는 코드를 줄여주는 헬퍼 함수에요.
+`buildContext`는 React Context를 정의할 때 반복적인 코드를 줄여주는 도우미 함수예요.
 
 ## 인터페이스
-
 ```ts
-function buildContext<T>(contextName: string, defaultContextValues: T): [React.Provider<T>, () => T];
+function buildContext(
+  contextName: string,
+  defaultContextValues: ContextValuesType,
+): [
+  Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element,
+  useContext: () => ContextValuesType,
+];
+
 ```
 
-## 파라미터
+### 파라미터
 
-- `contextName`: context의 이름을 지정해요.
-- `defaultContextValues`: context로 전달하는 기본값을 지정해요
+<Interface
+  required
+  name="contextName"
+  type="string"
+  description="컨텍스트의 이름이에요."
+/>
 
-## 반환값
+<Interface
+  name="defaultContextValues"
+  type="ContextValuesType"
+  description="컨텍스트에 전달할 기본 값이에요."
+/>
 
-- `Provider`: context를 제공하는 컴포넌트에요.
-- `useContext`: context로 전달된 값을 사용하는 훅에요.
+### 반환 값
 
-## 예제
+<Interface
+  name=""
+  type="[Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element, useContext: () => ContextValuesType]"
+  description="다음과 같은 형태의 튜플이에요:"
+  :nested="[
+    {
+      name: 'Provider',
+      type: '(props: ProviderProps<ContextValuesType>) => JSX.Element',
+      description: '컨텍스트를 제공하는 컴포넌트예요.',
+    },
+    {
+      name: 'useContext',
+      type: '() => ContextValuesType',
+      description: '컨텍스트를 사용하는 훅이에요.',
+    },
+  ]"
+/>
+
+
+## 예시
 
 ```tsx
 const [Provider, useContext] = buildContext<{ title: string }>('TestContext', null);
 
 function Inner() {
-  const context = useContext();
-
-  return <h1>{context.title}</h1>;
+  const { title } = useContext();
+  return <div>{title}</div>;
 }
 
 function Page() {
   return (
-    <Provider title="타이틀">
+    <Provider title="Hello">
       <Inner />
     </Provider>
   );
 }
 ```
+  

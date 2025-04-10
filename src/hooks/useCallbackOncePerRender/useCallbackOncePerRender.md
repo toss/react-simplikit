@@ -3,90 +3,50 @@
 A React hook that ensures a callback function is executed only once, regardless of how many times it's called. This is useful for one-time operations that should not be repeated, even if the component re-renders.
 
 ## Interface
+```ts
+function useCallbackOncePerRender(
+  callback: () => void,
+  deps: DependencyList,
+): (...args: any[]) => void;
 
-````ts
-function useCallbackOnce(callback: () => void, deps: DependencyList): (...args: any[]) => void;
-`useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once,
-regardless of how many times it's called. This is useful for one-time operations like
-analytics tracking, initialization code.
-
-## Interface
-
-```typescript
-function useCallbackOncePerRender<F extends (...args: any[]) => void>(
-  callback: F,
-  deps: DependencyList
-): (...args: Parameters<F>) => void;
-````
+```
 
 ### Parameters
 
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">callback</span
-    ><span class="post-parameters--required">required</span> ·
-    <span class="post-parameters--type">() =&gt; void</span>
-    <br />
-    <p class="post-parameters--description">
-      The callback function to be executed once.
-    </p>
-  </li>
-</ul>
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name">deps</span
-    ><span class="post-parameters--required">required</span> ·
-    <span class="post-parameters--type">DependencyList</span>
-    <br />
-    <p class="post-parameters--description">
-      Dependencies array that will trigger a new one-time execution when
-      changed.
-    </p>
-  </li>
-</ul>
+<Interface
+  required
+  name="callback"
+  type="() => void"
+  description="The callback function to be executed once."
+/>
+
+<Interface
+  required
+  name="deps"
+  type="DependencyList"
+  description="Dependencies array that will trigger a new one-time execution when changed."
+/>
 
 ### Return Value
 
-<ul class="post-parameters-ul">
-  <li class="post-parameters-li post-parameters-li-root">
-    <span class="post-parameters--name"></span
-    ><span class="post-parameters--type">(...args: any[]) =&gt; void</span>
-    <br />
-    <p class="post-parameters--description">
-      memoized function that will only execute once until dependencies change.
-    </p>
-  </li>
-</ul>
+<Interface
+  name=""
+  type="(...args: any[]) => void"
+  description="memoized function that will only execute once until dependencies change."
+/>
+
 
 ## Example
 
 ```tsx
 import { useCallbackOncePerRender } from 'react-simplikit';
 
-function UserInteraction() {
-  const trackFirstInteraction = useCallbackOncePerRender(() => {
-    analytics.track('first_interaction');
+function Component() {
+  const handleOneTimeEvent = useCallbackOncePerRender(() => {
+    console.log('This will only run once');
   }, []);
 
   return <button onClick={handleOneTimeEvent}>Click me</button>;
 }
 ```
-
-### With Dependencies
-
-This example shows how to track user visits, resetting when the user ID changes:
-
-```tsx
-import { useCallbackOncePerRender } from 'react-simplikit';
-import { useEffect } from 'react';
-
-function UserTracker({ userId }: { userId: string }) {
-  const trackUserVisit = useCallbackOncePerRender(() => {
-    analytics.trackVisit(userId);
-  }, [userId]);
-
-  trackUserVisit();
-
-  return <div>User page</div>;
-}
-```
+  

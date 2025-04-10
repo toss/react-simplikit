@@ -17,6 +17,7 @@ export async function generateDocs(names: string[]) {
   names
     .map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]])
     .forEach(([name, sourceFilePath]) => {
+      const subCtx: { docSource?: string; translatedDoc?: string } = {};
       tasks.add([
         {
           title: `Generate documents: ${sourceFilePath}`,
@@ -67,7 +68,7 @@ export async function generateDocs(names: string[]) {
                   },
                 },
               ],
-              { concurrent: false }
+              { concurrent: false, ctx: subCtx }
             ),
         },
       ]);
@@ -128,13 +129,19 @@ function getNestedValuesFromReturn(returnTag: Spec): Spec[] | undefined {
     return;
   }
 
-  const nestedDerscriptions = returnTag.description.split('-').splice(1, 999).join('-').split('.');
+  const nestedDerscriptions = returnTag.description
+    .split('-')
+    .splice(1, 999)
+    .join('-')
+    .split(';')
+    .filter(description => description.trim().length > 0)
+    .map(description => `${description}.`);
 
   return nestedDerscriptions
     .filter(origin => origin.trim().length > 0)
     .map(origin => {
       const [, name, type, description] = /([^-\s]*)\s*`([^`]+)`\s+-\s+(.*)/.exec(origin) ?? [];
-      return { name, type, description, optional: true };
+      return { name, type, description: description?.replaceAll(':', '\n  :'), optional: true };
     });
 }
 
@@ -158,7 +165,7 @@ async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
   );
 
   const getTemplateCode = () =>
-    template == null ? '' : `<${template.name}${template.type.length === 0 ? '' : ` extends ${template.type}>`}`;
+    template == null ? '' : `<${template.name}${template.type.length === 0 ? '>' : ` extends ${template.type}>`}`;
   const getParamsCode = () =>
     params
       .filter(param => !param.name.includes('.'))
@@ -259,5 +266,7 @@ function replaceDescription(value: string) {
     .replace(/`([^`]*)`/g, '<code>$1</code>')
     .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]*)\*/g, '<em>$1</em>')
-    .replace(/_([^*]*)_/g, '<em>$1</em>');
+    .replace(/_([^*]*)_/g, '<em>$1</em>')
+    .replace(/\n/g, '<br />')
+    .replace(/"/g, '&quot;');
 }

@@ -1,48 +1,73 @@
 # useStorageState
 
-`useStorageState` is a React hook that simplifies managing persistent state using browser storage.
-It allows you to store and retrieve values from `localStorage` or `sessionStorage` as if they were React state.
+A React hook that functions like `useState` but persists the state value in browser storage. The value is retained across page reloads and can be shared between tabs when using `localStorage`.
 
 ## Interface
-
 ```ts
-function useStorageState<T>(
-  key: string
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void];
-
-function useStorageState<T>(
+function useStorageState(
   key: string,
-  options: StorageStateOptions<T>
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void];
+  options: object,
+): [
+  state: Serializable<T> | undefined,
+  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
+];
+
 ```
 
-## Parameters
+### Parameters
 
-- `key` (`string`): The key used to store the value in the browser storage.
-- `options` (`StorageStateOptions<T>`, optional):
-  - `storage` (`Storage`): The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
-  - `defaultValue` (`T`): The initial value if no existing value is found.
+<Interface
+  required
+  name="key"
+  type="string"
+  description="The key used to store the value in storage."
+/>
 
-## Returns
+<Interface
+  name="options"
+  type="object"
+  description="Configuration options for storage behavior."
+  :nested="[
+    {
+      name: 'options.storage',
+      type: 'Storage',
+      defaultValue: 'localStorage',
+      description:
+        'The storage type (<code>localStorage</code> or <code>sessionStorage</code>). Defaults to <code>localStorage</code>.',
+    },
+    {
+      name: 'options.defaultValue',
+      type: 'T',
+      description: 'The initial value if no existing value is found.',
+    },
+  ]"
+/>
 
-Returns a tuple of the form `[state, setState]`:
+### Return Value
 
-- `state` (`Serializable<T> | undefined`): The current value stored in the storage.
-- `setState` (`(value: SetStateAction<Serializable<T> | undefined>) => void`): A function to update the stored value.
+<Interface
+  name=""
+  type="[state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void]"
+  description="tuple:"
+  :nested="[
+    {
+      name: 'state',
+      type: 'Serializable<T> | undefined',
+      description: 'The current state value retrieved from storage.',
+    },
+    {
+      name: 'setState',
+      type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
+      description: 'A function to update and persist the state.',
+    },
+  ]"
+/>
 
-## Notes
 
-- Stored values must be JSON serializable.
-- When using `localStorage`, updates are automatically synchronized across browser tabs.
-- If the stored data is invalid JSON, the default value is returned.
-- Uses caching to minimize unnecessary JSON parsing.
-- Listens for storage events to sync state between tabs.
-
-## Examples
-
-### Counter
+## Example
 
 ```tsx
+// Counter with persistent state
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
@@ -53,15 +78,4 @@ function Counter() {
   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
 }
 ```
-
-### Search History
-
-```tsx
-import { useStorageState } from 'react-simplikit';
-
-function SearchHistory() {
-  const [recentSearches, setRecentSearches] = useStorageState<string[]>('recent-searches', {
-    defaultValue: [],
-  });
-}
-```
+  

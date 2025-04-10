@@ -1,62 +1,45 @@
 # usePrevious
 
-`usePrevious`는 주어진 상태(state)의 이전 값을 저장하고 반환하는 React 훅이에요.
-이전 값은 리렌더링이 발생할 때마다 갱신되며, 기본적으로 상태 값이 변경될 때만 업데이트돼요.
+입력 상태의 이전 값을 반환해요. 만약 다시 렌더링이 발생하지만 상태 값이 변경되지 않으면 이전 값은 변경되지 않아요. 상태가 객체이거나 사용자 정의 변경 감지가 필요한 경우, `compare` 함수를 제공할 수 있어요. 기본적으로 상태 변경은 `prev === next`을 사용하여 감지해요.
 
-## 인터페이스
+## Interface
+```ts
+function usePrevious<T>(
+  state: T,
+  compare: (prev: T | undefined, next: T) => boolean,
+): T | undefined;
 
-```typescript
-function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
 ```
 
 ### 파라미터
 
-- `state` (`T`): 이전 값을 구할 대상 상태에요.
-- `compare` (`(prev: T | undefined, next: T) => boolean`, optional): 값이 변했는 지 감지하기 위한 비교 함수예요. 기본적으로는 `prev === next`를 통해 값을 비교해요.
+<Interface
+  required
+  name="state"
+  type="T"
+  description="이전 값을 추적할 상태예요."
+/>
+
+<Interface
+  name="compare"
+  type="(prev: T | undefined, next: T) => boolean"
+  description="상태가 변경되었는지를 판단하기 위한 선택적 비교 함수예요."
+/>
 
 ### 반환 값
 
-상태의 이전 값이에요.
+<Interface
+  name=""
+  type="T | undefined"
+  description="상태의 이전 값이에요."
+/>
+
 
 ## 예시
 
-### 기본 예제
-
-```typescript
+```tsx
 const [count, setCount] = useState(0);
-
-// 초기 값은 `0`예요.
+// previousCount의 초기 값은 `0`이예요
 const previousCount = usePrevious(count);
-
-// ...
-
-setCount(prev => prev + 1); // count: 1, previous: 0
-
-setUnrelated(prev => prev + 1); // previous: 0
-
-setCount(prev => prev + 1); // count: 2, previous: 1
 ```
-
-### 커스텀 compare 함수 사용
-
-```typescript
-const compareObject = (prev: Record<string, unknown> | undefined, next: Record<string, unknown>) => {
-  if (prev === undefined) {
-    return false;
-  }
-
-  return Object.entries(prev).every(([key, value]) => next[key] === value);
-};
-
-const [data, setData] = useState({ hello: 'world' });
-const [unrelated, setUnrelated] = useState(0);
-
-// initial value of previousData is `{ hello: 'world' }`
-const previousData = usePrevious(data, customCompare);
-
-// ...
-
-setUnrelated(prev => prev + 1); // previous: { hello: 'world' }
-
-setData({ hello: 'world!' }); // data: { hello: 'world!' }, previous: { hello: 'world' }
-```
+  
