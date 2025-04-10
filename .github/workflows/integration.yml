@@ -216,7 +216,7 @@ jobs:
                 
                 while read -r var_type; do
                   if ! grep -qe "- $var_type - .*;" "$file"; then
-                    echo "Missing or invalid description for tuple member with type $var_type in $file"
+                    echo "Missing or invalid description for tuple member with [$var_type] in $file"
                     exit 1
                   fi
                 done <<< "$tuple_vars"
