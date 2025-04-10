@@ -115,9 +115,6 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Checkout branch
         run: |
           git config user.name "github-actions[bot]"
