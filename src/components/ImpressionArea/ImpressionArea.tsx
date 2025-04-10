@@ -31,8 +31,6 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  * @returns {JSX.Element} A React component that tracks the visibility of its child elements.
  *
  * @example
- * import { ImpressionArea } from 'react-simplikit';
- *
  * function App() {
  *   return (
  *     <ImpressionArea
