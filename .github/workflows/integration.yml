@@ -188,12 +188,12 @@ jobs:
       - name: Check JSDoc structure
         run: |
           for file in ${{ needs.check-changes.outputs.changed_files }}; do
-            if ! grep -q "@description" "$file"; then
+            if ! grep -e "@description" "$file"; then
               echo "@description tag missing in $file"
               exit 1
             fi
 
-            if ! grep -q "@example" "$file"; then
+            if ! grep -e "@example" "$file"; then
               echo "@example tag missing in $file"
               exit 1
             fi
@@ -215,7 +215,7 @@ jobs:
                 tuple_vars=$(grep "@returns {\\[.*\\]}" "$file" | sed -E 's/.*\[(.*)\].*/\1/' | tr ',' '\n' | sed 's/^ //' | sed -E 's/([^:]): (.+)$/\1 \`\2\`/')
                 
                 while read -r var_type; do
-                  if ! grep -q "- $var_type - .*;" "$file"; then
+                  if ! grep -qe "- $var_type - .*;" "$file"; then
                     echo "Missing or invalid description for tuple member with type $var_type in $file"
                     exit 1
                   fi
