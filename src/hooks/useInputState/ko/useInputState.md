@@ -1,13 +1,13 @@
 # useInputState
 
-`useInputState`는 선택적인 값 변환을 통해 입력 상태를 관리하는 리액트 훅이에요.
+`useInputState`는 입력 상태를 관리하는 리액트 훅이에요. 선택적으로 값 변환 함수를 지정할 수도 있어요.
 
-## Interface
+## 인터페이스
 ```ts
 function useInputState(
   initialValue: string = "",
   transformValue: (value: string) => string = (v: string) => v,
-): readonly [value: string, onChange: (value: string) => void];
+): [value: string, onChange: (value: string) => void];
 
 ```
 
@@ -16,21 +16,21 @@ function useInputState(
 <Interface
   name="initialValue"
   type="string"
-  description='입력의 초기 값이에요. 기본값은 빈 문자열 (<code>""</code>)이에요.'
+  description='입력의 초기 값이에요. 기본값은 빈 문자열(<code>""</code>)이에요.'
 />
 
 <Interface
   name="transformValue"
   type="(value: string) => string"
-  description="입력 값을 변환하는 함수예요. 기본값은 입력을 변하지 않은 채로 반환하는 동일 함수예요."
+  description="입력 값을 변환하는 함수예요. 기본값은 아무 변화 없이 입력을 반환하는 함수예요."
 />
 
 ### 반환 값
 
 <Interface
   name=""
-  type="readonly [value: string, onChange: (value: string) => void]"
-  description="다음을 포함하는 튜플이에요:"
+  type="[value: string, onChange: (value: string) => void]"
+  description="튜플을 포함해요:"
   :nested="[
     {
       name: 'value',
@@ -49,8 +49,6 @@ function useInputState(
 ## 예시
 
 ```tsx
-import { useInputState } from 'react-simplikit';
-
 function Example() {
   const [value, setValue] = useInputState('');
   return <input type="text" value={value} onChange={setValue} />;

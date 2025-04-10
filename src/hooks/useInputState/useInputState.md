@@ -7,7 +7,7 @@
 function useInputState(
   initialValue: string = "",
   transformValue: (value: string) => string = (v: string) => v,
-): readonly [value: string, onChange: (value: string) => void];
+): [value: string, onChange: (value: string) => void];
 
 ```
 
@@ -29,7 +29,7 @@ function useInputState(
 
 <Interface
   name=""
-  type="readonly [value: string, onChange: (value: string) => void]"
+  type="[value: string, onChange: (value: string) => void]"
   description="tuple containing:"
   :nested="[
     {
@@ -49,8 +49,6 @@ function useInputState(
 ## Example
 
 ```tsx
-import { useInputState } from 'react-simplikit';
-
 function Example() {
   const [value, setValue] = useInputState('');
   return <input type="text" value={value} onChange={setValue} />;
