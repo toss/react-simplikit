@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { Separated } from './Separated.tsx';
 
 describe('Separated', () => {
-  it('should render children with separator', () => {
+  it('should render children by separator', () => {
     const CHILDREN_COUNT = 3;
     const separator = <span data-testid="separator">|</span>;
     const children = Array.from({ length: CHILDREN_COUNT }, (_, i) => (
@@ -12,7 +12,7 @@ describe('Separated', () => {
       </div>
     ));
 
-    render(<Separated with={separator}>{children}</Separated>);
+    render(<Separated by={separator}>{children}</Separated>);
 
     for (let i = 0; i < CHILDREN_COUNT; i++) {
       expect(screen.getByTestId(`child-${i}`)).toBeInTheDocument();
@@ -21,21 +21,21 @@ describe('Separated', () => {
     expect(screen.getAllByTestId('separator')).toHaveLength(CHILDREN_COUNT - 1);
   });
 
-  it('should not render separator with single child', () => {
+  it('should not render separator by single child', () => {
     const separator = <span data-testid="separator">|</span>;
     const child = <div data-testid="single-child">Single Item</div>;
 
-    render(<Separated with={separator}>{child}</Separated>);
+    render(<Separated by={separator}>{child}</Separated>);
 
     expect(screen.getByTestId('single-child')).toBeInTheDocument();
     expect(screen.queryByTestId('separator')).not.toBeInTheDocument();
   });
 
-  it('should not render separator with empty children', () => {
+  it('should not render separator by empty children', () => {
     const separator = <span data-testid="separator">|</span>;
 
     render(
-      <Separated with={separator}>
+      <Separated by={separator}>
         <></>
       </Separated>
     );
@@ -55,7 +55,7 @@ describe('Separated', () => {
       'text',
     ];
 
-    render(<Separated with={separator}>{children}</Separated>);
+    render(<Separated by={separator}>{children}</Separated>);
 
     expect(screen.getByTestId('valid')).toBeInTheDocument();
     expect(screen.queryByTestId('separator')).not.toBeInTheDocument();
