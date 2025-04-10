@@ -22,7 +22,7 @@ function useInputState(
 <Interface
   name="transformValue"
   type="(value: string) => string"
-  description="입력 값을 변환하는 함수이에요. 기본값은 아무 변화 없이 입력을 반환하는 함수예요."
+  description="입력 값을 변환하는 함수예요. 기본값은 아무 변화 없이 입력을 반환하는 함수예요."
 />
 
 ### 반환 값
