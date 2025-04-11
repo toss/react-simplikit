@@ -1,9 +1,12 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+
+import { renderSSR } from '../../_internal/test-utils/renderSSR.tsx';
 
 import { Separated } from './Separated.tsx';
 
 describe('Separated', () => {
-  it('should render children by separator', () => {
+  it('is safe on server side rendering', () => {
     const CHILDREN_COUNT = 3;
     const separator = <span data-testid="separator">|</span>;
     const children = Array.from({ length: CHILDREN_COUNT }, (_, i) => (
@@ -12,7 +15,27 @@ describe('Separated', () => {
       </div>
     ));
 
-    render(<Separated by={separator}>{children}</Separated>);
+    const server = renderSSR.serverOnly(<Separated by={separator}>{children}</Separated>);
+
+    server(() => {
+      for (let i = 0; i < CHILDREN_COUNT; i++) {
+        expect(screen.getByTestId(`child-${i}`)).toBeInTheDocument();
+      }
+
+      expect(screen.getAllByTestId('separator')).toHaveLength(CHILDREN_COUNT - 1);
+    });
+  });
+
+  it('should render children by separator', async () => {
+    const CHILDREN_COUNT = 3;
+    const separator = <span data-testid="separator">|</span>;
+    const children = Array.from({ length: CHILDREN_COUNT }, (_, i) => (
+      <div key={i} data-testid={`child-${i}`}>
+        Item {i}
+      </div>
+    ));
+
+    await renderSSR(<Separated by={separator}>{children}</Separated>);
 
     for (let i = 0; i < CHILDREN_COUNT; i++) {
       expect(screen.getByTestId(`child-${i}`)).toBeInTheDocument();
@@ -21,20 +44,20 @@ describe('Separated', () => {
     expect(screen.getAllByTestId('separator')).toHaveLength(CHILDREN_COUNT - 1);
   });
 
-  it('should not render separator by single child', () => {
+  it('should not render separator by single child', async () => {
     const separator = <span data-testid="separator">|</span>;
     const child = <div data-testid="single-child">Single Item</div>;
 
-    render(<Separated by={separator}>{child}</Separated>);
+    await renderSSR(<Separated by={separator}>{child}</Separated>);
 
     expect(screen.getByTestId('single-child')).toBeInTheDocument();
     expect(screen.queryByTestId('separator')).not.toBeInTheDocument();
   });
 
-  it('should not render separator by empty children', () => {
+  it('should not render separator by empty children', async () => {
     const separator = <span data-testid="separator">|</span>;
 
-    render(
+    await renderSSR(
       <Separated by={separator}>
         <></>
       </Separated>
@@ -43,7 +66,7 @@ describe('Separated', () => {
     expect(screen.queryByTestId('separator')).not.toBeInTheDocument();
   });
 
-  it('should filter out non-valid elements', () => {
+  it('should filter out non-valid elements', async () => {
     const separator = <span data-testid="separator">|</span>;
     const children = [
       <div key="valid" data-testid="valid">
@@ -55,7 +78,7 @@ describe('Separated', () => {
       'text',
     ];
 
-    render(<Separated by={separator}>{children}</Separated>);
+    await renderSSR(<Separated by={separator}>{children}</Separated>);
 
     expect(screen.getByTestId('valid')).toBeInTheDocument();
     expect(screen.queryByTestId('separator')).not.toBeInTheDocument();

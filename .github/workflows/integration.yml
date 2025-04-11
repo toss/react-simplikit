@@ -204,7 +204,7 @@ jobs:
                 exit 1
               fi
 
-              if ! grep -q "@param {.*} .*[^ ] -" "$file"; then
+              if ! grep -q "@param {.*} [^ -]* - .*" "$file"; then
                 echo "Parameter description missing in @param tag in $file"
                 exit 1
               fi

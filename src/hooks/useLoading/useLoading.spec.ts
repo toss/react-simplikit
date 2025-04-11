@@ -1,18 +1,30 @@
-import { act, renderHook } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useLoading } from './useLoading.ts';
 
 describe('useLoading', () => {
-  it('should start with loading as false', () => {
-    const { result } = renderHook(() => useLoading());
+  it('is safe on server side rendering', () => {
+    const server = renderHookSSR.serverOnly(() => useLoading());
+
+    server(result => {
+      const [bool] = result.current ?? [];
+      expect(result.error).toBeUndefined();
+      expect(bool).toBe(false);
+    });
+  });
+
+  it('should start with loading as false', async () => {
+    const { result } = await renderHookSSR(() => useLoading());
     const [isLoading] = result.current;
 
     expect(isLoading).toBe(false);
   });
 
   it('should set loading to true when startLoading is called with a pending promise', async () => {
-    const { result } = renderHook(() => useLoading());
+    const { result } = await renderHookSSR(() => useLoading());
     const [, startLoading] = result.current;
 
     let resolvePromise: () => void;
@@ -40,7 +52,7 @@ describe('useLoading', () => {
   });
 
   it('should return the resolved value from the promise', async () => {
-    const { result } = renderHook(() => useLoading());
+    const { result } = await renderHookSSR(() => useLoading());
     const [, startLoading] = result.current;
 
     const mockPromise = Promise.resolve('test-value');
@@ -54,7 +66,7 @@ describe('useLoading', () => {
   });
 
   it('should handle unmounted components gracefully', async () => {
-    const { result, unmount } = renderHook(() => useLoading());
+    const { result, unmount } = await renderHookSSR(() => useLoading());
     const [, startLoading] = result.current;
 
     const mockPromise = new Promise(resolve => setTimeout(() => resolve('test-value'), 100));

@@ -1,12 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { renderHook } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { usePreservedReference } from './usePreservedReference.ts';
 
 describe('usePreservedReference', () => {
-  it('initializes and updates with primitive values', () => {
+  it('is safe on server side rendering', () => {
+    const server = renderHookSSR.serverOnly(() => usePreservedReference(10));
+
+    server(result => {
+      expect(result.error).toBeUndefined();
+      expect(result.current).toBe(10);
+    });
+  });
+
+  it('initializes and updates with primitive values', async () => {
     const initialValue = 10;
-    const { result, rerender } = renderHook(({ value }) => usePreservedReference(value), {
+    const { result, rerender } = await renderHookSSR(({ value }) => usePreservedReference(value), {
       initialProps: {
         value: initialValue,
       },
@@ -20,9 +30,9 @@ describe('usePreservedReference', () => {
     expect(result.current).toEqual(newValue);
   });
 
-  it('initializes and updates with objects', () => {
+  it('initializes and updates with objects', async () => {
     const initialValue = { key: 'value' };
-    const { result, rerender } = renderHook(({ value }) => usePreservedReference(value), {
+    const { result, rerender } = await renderHookSSR(({ value }) => usePreservedReference(value), {
       initialProps: {
         value: initialValue,
       },
@@ -35,7 +45,7 @@ describe('usePreservedReference', () => {
     expect(result.current).toEqual(newValue);
   });
 
-  it('initializes with objects and updates function arguments', () => {
+  it('initializes with objects and updates function arguments', async () => {
     const initialFunction = () => console.log('hello');
     const initialValue = { key: 'value', action: initialFunction };
     const initialProps: {
@@ -43,7 +53,7 @@ describe('usePreservedReference', () => {
       areValuesEqual?: (a: any, b: any) => boolean;
     } = { value: initialValue, areValuesEqual: areDeeplyEqual };
 
-    const { result, rerender } = renderHook(
+    const { result, rerender } = await renderHookSSR(
       ({ value, areValuesEqual }) => usePreservedReference(value, areValuesEqual),
       {
         initialProps,
@@ -66,9 +76,9 @@ describe('usePreservedReference', () => {
     expect(result.current.action).toBe(newFunction);
   });
 
-  it('does not update when deep equal objects are passed', () => {
+  it('does not update when deep equal objects are passed', async () => {
     const initialValue = { key: 'value' };
-    const { result, rerender } = renderHook(({ value }) => usePreservedReference(value), {
+    const { result, rerender } = await renderHookSSR(({ value }) => usePreservedReference(value), {
       initialProps: {
         value: initialValue,
       },
@@ -81,9 +91,9 @@ describe('usePreservedReference', () => {
     expect(result.current).not.toBe(newValue);
   });
 
-  it('updates when non-deep equal objects are passed', () => {
+  it('updates when non-deep equal objects are passed', async () => {
     const initialValue = { key: 'value' };
-    const { result, rerender } = renderHook(({ value }) => usePreservedReference(value), {
+    const { result, rerender } = await renderHookSSR(({ value }) => usePreservedReference(value), {
       initialProps: {
         value: initialValue,
       },
@@ -96,9 +106,9 @@ describe('usePreservedReference', () => {
     expect(result.current).not.toEqual(initialValue);
   });
 
-  it('updates when object properties are added', () => {
+  it('updates when object properties are added', async () => {
     const initialValue = { key: 'value' };
-    const { result, rerender } = renderHook(({ value }) => usePreservedReference(value), {
+    const { result, rerender } = await renderHookSSR(({ value }) => usePreservedReference(value), {
       initialProps: {
         value: initialValue,
       },

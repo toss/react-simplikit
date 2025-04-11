@@ -1,5 +1,7 @@
-import { act, renderHook } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { act } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import {
   generateSessionStorage,
@@ -21,22 +23,22 @@ describe('Storage', () => {
       storage = new MemoStorage();
     });
 
-    it('should set and get value', () => {
+    it('should set and get value', async () => {
       storage.set('key', 'value');
       expect(storage.get('key')).toBe('value');
     });
 
-    it('should return null for non-existent key', () => {
+    it('should return null for non-existent key', async () => {
       expect(storage.get('non-existent')).toBeNull();
     });
 
-    it('should remove value', () => {
+    it('should remove value', async () => {
       storage.set('key', 'value');
       storage.remove('key');
       expect(storage.get('key')).toBeNull();
     });
 
-    it('should clear all values', () => {
+    it('should clear all values', async () => {
       storage.set('key1', 'value1');
       storage.set('key2', 'value2');
       storage.clear();
@@ -53,7 +55,7 @@ describe('Storage', () => {
       storage = new LocalStorage();
     });
 
-    it('should check if localStorage is available', () => {
+    it('should check if localStorage is available', async () => {
       const originLocalStorage = window.localStorage;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -68,22 +70,22 @@ describe('Storage', () => {
       window.localStorage = originLocalStorage;
     });
 
-    it('should set and get value', () => {
+    it('should set and get value', async () => {
       storage.set('key', 'value');
       expect(storage.get('key')).toBe('value');
     });
 
-    it('should return null for non-existent key', () => {
+    it('should return null for non-existent key', async () => {
       expect(storage.get('non-existent')).toBeNull();
     });
 
-    it('should remove value', () => {
+    it('should remove value', async () => {
       storage.set('key', 'value');
       storage.remove('key');
       expect(storage.get('key')).toBeNull();
     });
 
-    it('should clear all values', () => {
+    it('should clear all values', async () => {
       storage.set('key1', 'value1');
       storage.set('key2', 'value2');
       storage.clear();
@@ -100,7 +102,7 @@ describe('Storage', () => {
       storage = new SessionStorage();
     });
 
-    it('should check if sessionStorage is available', () => {
+    it('should check if sessionStorage is available', async () => {
       const originSessionStorage = window.sessionStorage;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -116,22 +118,22 @@ describe('Storage', () => {
       window.sessionStorage = originSessionStorage;
     });
 
-    it('should set and get value', () => {
+    it('should set and get value', async () => {
       storage.set('key', 'value');
       expect(storage.get('key')).toBe('value');
     });
 
-    it('should return null for non-existent key', () => {
+    it('should return null for non-existent key', async () => {
       expect(storage.get('non-existent')).toBeNull();
     });
 
-    it('should remove value', () => {
+    it('should remove value', async () => {
       storage.set('key', 'value');
       storage.remove('key');
       expect(storage.get('key')).toBeNull();
     });
 
-    it('should clear all values', () => {
+    it('should clear all values', async () => {
       storage.set('key1', 'value1');
       storage.set('key2', 'value2');
       storage.clear();
@@ -144,36 +146,46 @@ describe('Storage', () => {
 describe('useStorageState', () => {
   // 공통 테스트 함수
   const runCommonTests = (storage: Storage) => {
-    it('should initialize without default value', () => {
-      const { result } = renderHook(() => useStorageState('test-key', { storage }));
+    it('is safe on server side rendering', () => {
+      const server = renderHookSSR.serverOnly(() => useStorageState('test-key', { defaultValue: 'default', storage }));
+
+      server(result => {
+        expect(result.error).toBeUndefined();
+        const [value] = result.current ?? [];
+        expect(value).toBe('default');
+      });
+    });
+
+    it('should initialize without default value', async () => {
+      const { result } = await renderHookSSR(() => useStorageState('test-key', { storage }));
       expect(result.current[0]).toBeUndefined();
     });
 
-    it('should initialize with default value', () => {
+    it('should initialize with default value', async () => {
       const defaultValue = 'default';
-      const { result } = renderHook(() => useStorageState('test-key', { defaultValue, storage }));
+      const { result } = await renderHookSSR(() => useStorageState('test-key', { defaultValue, storage }));
       expect(result.current[0]).toBe(defaultValue);
     });
 
-    it('should set and get value', () => {
-      const { result } = renderHook(() => useStorageState<string>('test-key', { storage }));
+    it('should set and get value', async () => {
+      const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
       act(() => {
         result.current[1]('new value');
       });
       expect(result.current[0]).toBe('new value');
     });
 
-    it('should update value using function', () => {
-      const { result } = renderHook(() => useStorageState<number>('test-key', { defaultValue: 0, storage }));
+    it('should update value using function', async () => {
+      const { result } = await renderHookSSR(() => useStorageState<number>('test-key', { defaultValue: 0, storage }));
       act(() => {
         result.current[1](prev => prev + 1);
       });
       expect(result.current[0]).toBe(1);
     });
 
-    it('should sync between multiple hooks with same key', () => {
-      const { result: result1 } = renderHook(() => useStorageState<string>('test-key', { storage }));
-      const { result: result2 } = renderHook(() => useStorageState<string>('test-key', { storage }));
+    it('should sync between multiple hooks with same key', async () => {
+      const { result: result1 } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
+      const { result: result2 } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
 
       act(() => {
         result1.current[1]('updated value');
@@ -193,8 +205,8 @@ describe('useStorageState', () => {
     // 공통 테스트 실행
     runCommonTests(storage);
 
-    it('should persist value after rerender', () => {
-      const { result, rerender } = renderHook(() => useStorageState<string>('test-key', { storage }));
+    it('should persist value after rerender', async () => {
+      const { result, rerender } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
 
       act(() => {
         result.current[1]('memo value');
@@ -213,8 +225,8 @@ describe('useStorageState', () => {
     // 공통 테스트 실행
     runCommonTests(safeSessionStorage);
 
-    it('should persist value after rerender', () => {
-      const { result, rerender } = renderHook(() =>
+    it('should persist value after rerender', async () => {
+      const { result, rerender } = await renderHookSSR(() =>
         useStorageState<string>('test-key', { storage: safeSessionStorage })
       );
 
@@ -226,8 +238,10 @@ describe('useStorageState', () => {
       expect(result.current[0]).toBe('session value');
     });
 
-    it('should not sync between different tabs', () => {
-      const { result } = renderHook(() => useStorageState<string>('test-key', { storage: safeSessionStorage }));
+    it('should not sync between different tabs', async () => {
+      const { result } = await renderHookSSR(() =>
+        useStorageState<string>('test-key', { storage: safeSessionStorage })
+      );
 
       act(() => {
         window.dispatchEvent(
@@ -249,8 +263,10 @@ describe('useStorageState', () => {
 
     runCommonTests(safeLocalStorage);
 
-    it('should persist value after rerender', () => {
-      const { result, rerender } = renderHook(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
+    it('should persist value after rerender', async () => {
+      const { result, rerender } = await renderHookSSR(() =>
+        useStorageState<string>('test-key', { storage: safeLocalStorage })
+      );
 
       act(() => {
         result.current[1]('local value');
@@ -260,8 +276,8 @@ describe('useStorageState', () => {
       expect(result.current[0]).toBe('local value');
     });
 
-    it('should sync between different tabs', () => {
-      const { result } = renderHook(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
+    it('should sync between different tabs', async () => {
+      const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
 
       act(() => {
         localStorage.setItem('test-key', JSON.stringify('value from other tab'));
@@ -276,8 +292,8 @@ describe('useStorageState', () => {
       expect(result.current[0]).toBe('value from other tab');
     });
 
-    it('should return defaultValue when an error occured while parsing data', () => {
-      const { result } = renderHook(() =>
+    it('should return defaultValue when an error occured while parsing data', async () => {
+      const { result } = await renderHookSSR(() =>
         useStorageState<string>('test-key', { storage: safeLocalStorage, defaultValue: 'default' })
       );
 
@@ -294,8 +310,8 @@ describe('useStorageState', () => {
       expect(result.current[0]).toBe('default');
     });
 
-    it('should remove value when set value to undefined', () => {
-      const { result } = renderHook(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
+    it('should remove value when set value to undefined', async () => {
+      const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
 
       act(() => {
         result.current[1]('value');

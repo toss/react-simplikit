@@ -1,5 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { renderSSR } from '../../_internal/test-utils/renderSSR.tsx';
 
 import { ImpressionArea } from './ImpressionArea.tsx';
 
@@ -33,8 +35,20 @@ describe('ImpressionArea', () => {
     vi.useRealTimers();
   });
 
-  it('renders children correctly', () => {
-    render(
+  it('is safe on server side rendering', () => {
+    const server = renderSSR.serverOnly(
+      <ImpressionArea onImpressionStart={mockOnImpressionStart} onImpressionEnd={mockOnImpressionEnd}>
+        <span>Test Content</span>
+      </ImpressionArea>
+    );
+
+    server(() => {
+      expect(screen.getByText('Test Content')).toBeInTheDocument();
+    });
+  });
+
+  it('renders children correctly', async () => {
+    await renderSSR(
       <ImpressionArea onImpressionStart={mockOnImpressionStart} onImpressionEnd={mockOnImpressionEnd}>
         <span>Test Content</span>
       </ImpressionArea>
@@ -43,8 +57,8 @@ describe('ImpressionArea', () => {
     expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('calls onImpressionStart when the element becomes visible', () => {
-    render(
+  it('calls onImpressionStart when the element becomes visible', async () => {
+    await renderSSR(
       <ImpressionArea onImpressionStart={mockOnImpressionStart} onImpressionEnd={mockOnImpressionEnd}>
         <div>Visible Content</div>
       </ImpressionArea>
@@ -57,8 +71,8 @@ describe('ImpressionArea', () => {
     expect(mockOnImpressionStart).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onImpressionEnd when the element goes out of view', () => {
-    render(
+  it('calls onImpressionEnd when the element goes out of view', async () => {
+    await renderSSR(
       <ImpressionArea onImpressionStart={mockOnImpressionStart} onImpressionEnd={mockOnImpressionEnd}>
         <div>Visible Content</div>
       </ImpressionArea>
@@ -66,10 +80,10 @@ describe('ImpressionArea', () => {
 
     const observerCallback = mockInstances[0].callback;
     observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
-    vi.runAllTimers();
+    // vi.runAllTimers();
 
     observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
-    vi.runAllTimers();
+    // vi.runAllTimers();
 
     expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
   });

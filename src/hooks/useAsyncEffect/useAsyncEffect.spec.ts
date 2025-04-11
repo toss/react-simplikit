@@ -1,5 +1,7 @@
-import { act, renderHook } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useAsyncEffect } from './useAsyncEffect.ts';
 
@@ -10,10 +12,20 @@ describe('useAsyncEffect', () => {
 
   const flushPromises = () => act(async () => await Promise.resolve());
 
+  it('should not execute async effect in server', async () => {
+    const effect = vi.fn().mockResolvedValue(undefined);
+
+    const server = renderHookSSR.serverOnly(() => useAsyncEffect(effect, []));
+
+    server(() => {
+      expect(effect).not.toHaveBeenCalled();
+    });
+  });
+
   it('should execute async effect', async () => {
     const effect = vi.fn().mockResolvedValue(undefined);
 
-    renderHook(() => useAsyncEffect(effect, []));
+    await renderHookSSR(() => useAsyncEffect(effect, []));
     expect(effect).toHaveBeenCalled();
   });
 
@@ -21,7 +33,7 @@ describe('useAsyncEffect', () => {
     const result = { data: 'test' };
     let capturedData: typeof result | null = null;
 
-    renderHook(() =>
+    await renderHookSSR(() =>
       useAsyncEffect(async () => {
         const data = await Promise.resolve(result);
         capturedData = data;
@@ -35,7 +47,7 @@ describe('useAsyncEffect', () => {
 
   it('should execute cleanup function when provided', async () => {
     const cleanup = vi.fn();
-    const { unmount } = renderHook(() =>
+    const { unmount } = await renderHookSSR(() =>
       useAsyncEffect(async () => {
         return cleanup;
       }, [])
@@ -51,7 +63,9 @@ describe('useAsyncEffect', () => {
     const cleanup = vi.fn();
     const effect = vi.fn().mockResolvedValue(cleanup);
 
-    const { rerender } = renderHook(({ dep }) => useAsyncEffect(effect, [dep]), { initialProps: { dep: 1 } });
+    const { rerender } = await renderHookSSR(({ dep }) => useAsyncEffect(effect, [dep]), {
+      initialProps: { dep: 1 },
+    });
 
     await flushPromises();
     rerender({ dep: 2 });
@@ -62,7 +76,7 @@ describe('useAsyncEffect', () => {
 
   it('should handle delayed async operations', async () => {
     const cleanup = vi.fn();
-    const { unmount } = renderHook(() =>
+    const { unmount } = await renderHookSSR(() =>
       useAsyncEffect(async () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         return cleanup;
@@ -80,7 +94,7 @@ describe('useAsyncEffect', () => {
   it('should call effect every rerender when deps are undefined', async () => {
     const effect = vi.fn().mockResolvedValue(undefined);
 
-    const { rerender } = renderHook(() => useAsyncEffect(effect));
+    const { rerender } = await renderHookSSR(() => useAsyncEffect(effect));
 
     await flushPromises();
 

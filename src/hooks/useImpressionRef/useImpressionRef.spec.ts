@@ -1,5 +1,7 @@
-import { act, renderHook } from '@testing-library/react';
-import { vi } from 'vitest';
+import { act } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useImpressionRef, UseImpressionRefOptions } from './useImpressionRef.ts';
 
@@ -46,13 +48,21 @@ describe('useImpressionRef', () => {
   });
 
   const setup = (options = defaultOptions) => {
-    const { result } = renderHook(() => useImpressionRef(options));
+    const { result } = renderHookSSR(() => useImpressionRef(options));
     const mockElement = document.createElement('div');
     act(() => result.current(mockElement));
     return { result, observerCallback: mockInstances[0].callback };
   };
 
-  it('should call onImpressionStart when element becomes visible', () => {
+  it('is safe on server side rendering', () => {
+    const server = renderHookSSR.serverOnly(() => useImpressionRef({}));
+
+    server(result => {
+      expect(result.error).toBeUndefined();
+    });
+  });
+
+  it('should call onImpressionStart when element becomes visible', async () => {
     const { observerCallback } = setup();
     act(() => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
@@ -63,7 +73,7 @@ describe('useImpressionRef', () => {
     expect(mockOnImpressionEnd).not.toHaveBeenCalled();
   });
 
-  it('should call onImpressionEnd when element goes out of view', () => {
+  it('should call onImpressionEnd when element goes out of view', async () => {
     const { observerCallback } = setup();
     act(() => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
@@ -76,7 +86,7 @@ describe('useImpressionRef', () => {
     expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
   });
 
-  it('should handle default options without errors', () => {
+  it('should handle default options without errors', async () => {
     const { observerCallback } = setup({});
     act(() => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
@@ -87,7 +97,7 @@ describe('useImpressionRef', () => {
     expect(mockOnImpressionEnd).not.toHaveBeenCalled();
   });
 
-  it('should not call handlers when document is hidden', () => {
+  it('should not call handlers when document is hidden', async () => {
     const { observerCallback } = setup();
     Object.defineProperty(document, 'visibilityState', { value: 'hidden', writable: true });
 
@@ -100,7 +110,7 @@ describe('useImpressionRef', () => {
     expect(mockOnImpressionEnd).not.toHaveBeenCalled();
   });
 
-  it('should handle visibility change to hidden', () => {
+  it('should handle visibility change to hidden', async () => {
     const { observerCallback } = setup();
 
     act(() => {
@@ -119,7 +129,7 @@ describe('useImpressionRef', () => {
     expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
   });
 
-  it('should not call handlers if element is not intersecting on visibility change', () => {
+  it('should not call handlers if element is not intersecting on visibility change', async () => {
     const { observerCallback } = setup();
     act(() => {
       observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);

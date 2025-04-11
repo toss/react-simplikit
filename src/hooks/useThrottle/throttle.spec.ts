@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { throttle } from './throttle.ts';
 
 describe('throttle', () => {
-  it('should throttle function calls', () => {
+  it('should throttle function calls', async () => {
     const func = vi.fn();
     const throttledFunc = throttle(func, 100);
 
@@ -65,7 +65,7 @@ describe('throttle', () => {
     expect(func).toHaveBeenCalledTimes(3);
   });
 
-  it('should call the function with correct arguments', () => {
+  it('should call the function with correct arguments', async () => {
     const func = vi.fn();
     const throttleMs = 50;
     const throttledFunc = throttle(func, throttleMs);
