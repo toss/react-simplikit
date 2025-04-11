@@ -12,16 +12,16 @@ React의 선언적인 API를 사용할 때와 최대한 유사한 개발 경험�
 
 ```tsx
 function Page() {
-  const [open, setOpen] = useState(false); // [!code --]
+  const [isOpen, setOpen] = useState(false); // [!code --]
   // [!code --]
   const toggle = useCallback(() => { // [!code --]
-    setValue(b => !b); // [!code --]
+    setOpen(isOpen => !isOpen); // [!code --]
   }, []); // [!code --]
-  const [open, toggle] = useToggle(false); // [!code ++]
+  const [isOpen, toggle] = useToggle(false); // [!code ++]
 
   return <>
     <div>
-      <p>Bottom Sheet state: {open ? 'opened' : 'closed'}</p>
+      <p>Bottom Sheet state: {isOpen ? 'opened' : 'closed'}</p>
       <button onClick={toggle}>Toggle</button>
    </div>
   <>;
@@ -50,40 +50,11 @@ function Page() {
 }
 ```
 
-## React 19, RSC, React Native 등 다양한 환경에서의 완벽한 동작을 보장해요
-
-React가 동작하는 환경이 다양해지면서, 특정 환경에서 동작하지 않는 기능들이 생겼어요.
-`react-simplikit`은 이러한 환경에서 사용 가능한 대안을 제시하고, 최대한 일관된 경험을 제공하고자 해요.
-
-### RSC 환경에서 Context API 사용하기
-
-기존의 Context API는 RSC 환경에서 사용하기에 제약이 있었어요.
-react-simplikit은 같은 인터페이스를 통해 RSC 환경에서도 대응되는 Context API 기능을 사용할 수 있어요
-
-```tsx [with-react-simplikit.tsx]
-const SomeContext = createRSCSafeContext({
-  hello: 'world',
-});
-
-function Page() {
-  return (
-    <SomeServerComponent>
-      <SomeContext.Provider value={{ hello: 'world' }}>
-        <SomeNestedServerComponent>
-          <ComponentA />
-        </SomeNestedServerComponent>
-        <ComponentB />
-      </SomeContext.Provider>
-    </SomeServerComponent>
-  );
-}
-```
-
 ## 간결한 구현으로, 의도하지 않은 동작이나 버그를 최소화해요
 
-react-simplikit의 모든 구현체는 숨은 로직을 포함하지 않아요. 만약 기능의 조합이나 확장이 필요하다면 외부에서 주입될 수 있도록 인터페이스를 제공해요. 또한 현대적인 구현을 통해 간결한 코드를 유지해요.
+`react-simplikit`의 모든 구현체는 숨은 로직을 포함하지 않아요. 만약 기능의 조합이나 확장이 필요하다면 외부에서 주입될 수 있도록 인터페이스를 제공해요. 또한 현대적인 구현을 통해 간결한 코드를 유지해요.
 
-그렇기 때문에 react-simplikit을 사용하면 코드의 안정성과 신뢰성을 높일 수 있어요.
+그렇기 때문에 `react-simplikit`을 사용하면 코드의 안정성과 신뢰성을 높일 수 있어요.
 
 ```tsx
 function Page() {
@@ -104,9 +75,17 @@ function Page() {
 }
 ```
 
+## 높은 신뢰성
+
+`react-simplikit`은 높은 신뢰성을 보장하기 위해 모든 구현체의 테스트를 100% 커버리지 수준으로 지원하여 이를 보장해요.
+
+## SSR 환경에서 안전한 동작을 보장해요
+
+SSR 환경이 적극적으로 도입되면서, 컴포넌트나 훅을 자칫 잘못 작성하면 SSR 환경에서 오류가 발생하거나, hydration 불일치 오류가 발생할 수 있어요. `react-simplikit`은 이러한 문제를 최소화하기 위해 설계되었고, 역시 SSR 환경에서의 테스트를 100% 커버리지 수준으로 지원하여 이를 보장해요.
+
 ## React 외의 의존성을 두지 않아요
 
-react-use가 React와 React-DOM 제외 [14개의 의존성](https://www.npmjs.com/package/react-use?activeTab=dependencies)을 가지고 있는 것에 비해, react-simplikit은 React 및 React-DOM에 대한 peer-dependency를 제외하고, 그 어떤 라이브러리에도 의존하지 않아요.
+react-use가 React와 React-DOM 제외 [14개의 의존성](https://www.npmjs.com/package/react-use?activeTab=dependencies)을 가지고 있는 것에 비해, `react-simplikit`은 React 및 React-DOM에 대한 peer-dependency를 제외하고, 그 어떤 라이브러리에도 의존하지 않아요.
 
 ## 링크
 

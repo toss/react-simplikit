@@ -4,9 +4,9 @@ description: 설치하기
 
 # 설치하기
 
-Node.js나 Bun을 사용한다면 [npm](https://npmjs.com/package/react-simplikit)에서 react-simplikit을 설치할 수 있어요.
+Node.js나 Bun을 사용한다면 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요.
 
-react-simplikit을 설치하려면 각각 다음 명령어를 사용하세요.
+`react-simplikit`을 설치하려면 각각 다음 명령어를 사용하세요.
 
 ## Node.js
 
