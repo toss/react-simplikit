@@ -9,7 +9,7 @@ export const ko = defineConfig({
     nav: nav(),
     sidebar: sidebar(),
     editLink: {
-      pattern: 'https://github.com/toss/react-simplikit/edit/develop/src/:path',
+      pattern: 'https://github.com/toss/react-simplikit/edit/main/src/:path',
       text: 'GitHub에서 수정하기',
     },
     footer: {

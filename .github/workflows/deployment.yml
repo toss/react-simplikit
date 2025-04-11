@@ -3,7 +3,7 @@ name: Deployment
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   check-changes:
