@@ -1,40 +1,67 @@
 # useDebounce
 
-`useDebounce` is a React hook that delays function calls and groups multiple sequential calls into a single one.
-It is useful for optimizing event handling, such as search input, button click prevention, and other high-frequency events.
+`useDebounce` is a React hook that returns a debounced version of the provided callback function. It helps optimize event handling by delaying function execution and grouping multiple calls into one.
 
 ## Interface
-
 ```ts
 function useDebounce<F extends (...args: unknown[]) => unknown>(
   callback: F,
   wait: number,
-  options?: {
-    leading?: boolean;
-    trailing?: boolean;
-  }
+  options: DebounceOptions,
 ): F & { cancel: () => void };
+
 ```
 
 ### Parameters
 
-- `callback` (`F`): The function to debounce.
-- `wait` (`number`): The number of milliseconds to delay.
-- `options` (`object`): Options that control the debounce behavior.
-  - `leading` (`boolean`): If `true`, the function is called at the start of the sequence. Defaults to `false`.
-  - `trailing` (`boolean`): If `true`, the function is called at the end of the sequence. Defaults to `true`.
+<Interface
+  required
+  name="callback"
+  type="F"
+  description="The function to debounce."
+/>
 
-### Returns
+<Interface
+  required
+  name="wait"
+  type="number"
+  description="The number of milliseconds to delay the function execution."
+/>
 
-Returns the debounced function that maintains the original function's type signature and includes an additional `cancel` method:
+<Interface
+  name="options"
+  type="DebounceOptions"
+  description="Configuration options for debounce behavior."
+  :nested="[
+    {
+      name: 'options.leading',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        'If <code>true</code>, the function is called at the start of the sequence.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      defaultValue: 'true',
+      description:
+        'If <code>true</code>, the function is called at the end of the sequence.',
+    },
+  ]"
+/>
 
-- `cancel` (`() => void`): A function that cancels any pending debounced execution.
+### Return Value
 
-## Examples
+<Interface
+  name=""
+  type="F & { cancel: () => void }"
+  description="debounced function that delays invoking the callback. It also includes a <code>cancel</code> method to cancel any pending debounced execution."
+/>
+
+
+## Example
 
 ```tsx
-import { useDebounce } from 'reactive-kit';
-
 function SearchInput() {
   const [query, setQuery] = useState('');
 
@@ -55,3 +82,4 @@ function SearchInput() {
   );
 }
 ```
+  

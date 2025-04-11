@@ -1,18 +1,27 @@
 # useTimeout
 
-`useTimeout`은 지정된 시간이 지난 후 콜백 함수를 실행하는 React 훅이에요.
-`window.setTimeout`을 React 생명주기에 맞게 관리하며, 의존성 변경 시 자동으로 갱신돼요.
+`useTimeout`은 지정된 지연 시간 후에 콜백 함수를 실행하는 리액트 훅이에요. 리액트 생명 주기에 따라 `window.setTimeout`을 관리하며, 언마운트 시 또는 종속성이 변경될 때 정리가 보장돼요.
 
 ## 인터페이스
+```ts
+function useTimeout(callback: () => void, delay: number = 0): void;
 
-```typescript
-function useTimeout(callback: () => void, delay?: number): void;
 ```
 
-### 매개변수
+### 파라미터
 
-- `callback` (`() => void`): 지정된 시간이 지난 후 실행할 함수예요.
-- `delay` (`number`, optional): 콜백 함수를 실행하기까지 기다릴 시간(밀리초)이에요. 기본값은 0이에요.
+<Interface
+  required
+  name="callback"
+  type="() => void"
+  description="지연 후 실행될 함수예요."
+/>
+
+<Interface
+  name="delay"
+  type="number"
+  description="콜백을 실행하기 전에 대기할 시간(밀리초)예요."
+/>
 
 ### 반환 값
 
@@ -20,34 +29,23 @@ function useTimeout(callback: () => void, delay?: number): void;
 
 ## 예시
 
-### 기본 사용법
-
 ```tsx
-import { useTimeout } from 'reactive-kit';
+// 지연 후 제목 업데이트
+import { useTimeout } from 'react-simplikit';
+import { useState } from 'react';
 
-function Notification() {
-  const [visible, setVisible] = useState(true);
+function Example() {
+  const [title, setTitle] = useState('');
 
   useTimeout(() => {
-    setVisible(false);
-  }, 3000); // 3초 후에 알림을 숨김
+    setTitle('제품을 검색 중이에요...');
+  }, 2000);
 
-  if (!visible) return null;
-  return <div>3초 후에 이 알림이 사라져요</div>;
+  useTimeout(() => {
+    setTitle('거의 완료됐어요...');
+  }, 4000);
+
+  return <div>{title}</div>;
 }
 ```
-
-### 조건부로 타이머 설정하기
-
-```tsx
-function ConditionalTimer({ shouldStart }: { shouldStart: boolean }) {
-  useTimeout(
-    () => {
-      console.log('타이머 완료!');
-    },
-    shouldStart ? 2000 : undefined
-  );
-
-  return <div>타이머 {shouldStart ? '시작됨' : '중지됨'}</div>;
-}
-```
+  

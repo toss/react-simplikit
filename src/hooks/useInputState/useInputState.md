@@ -1,52 +1,57 @@
 # useInputState
 
-`useInputState` is a React hook that simplifies managing an input state.
-It allows you to control the state of an input field and optionally transform the input value.
+`useInputState` is a React hook that manages an input state with optional value transformation.
 
 ## Interface
-
 ```ts
 function useInputState(
-  initialValue: string,
-  transformValue: (value: string) => string = echo
-): readonly [string, (value: string) => void];
+  initialValue: string = "",
+  transformValue: (value: string) => string = (v: string) => v,
+): [value: string, onChange: (value: string) => void];
+
 ```
 
 ### Parameters
 
-- `initialValue` (`string`): The initial value of the input. Defaults to an empty string (`""`).
-- `transformValue` (`(value: string) => string`): A function to transform the input value before updating the state.  
-  By default, it returns the value unchanged.
+<Interface
+  name="initialValue"
+  type="string"
+  description='The initial value of the input. Defaults to an empty string (<code>""</code>).'
+/>
 
-### Returns
+<Interface
+  name="transformValue"
+  type="(value: string) => string"
+  description="A function to transform the input value. Defaults to an identity function that returns the input unchanged."
+/>
 
-Returns a `readonly [string, (value: string) => void]` tuple:
+### Return Value
 
-- `string`: The current state value.
-- `(value: string) => void`: A function to set the state.
+<Interface
+  name=""
+  type="[value: string, onChange: (value: string) => void]"
+  description="tuple containing:"
+  :nested="[
+    {
+      name: 'value',
+      type: 'string',
+      description: 'The current state value.',
+    },
+    {
+      name: 'onChange',
+      type: '(value: string) => void',
+      description: 'A function to update the state.',
+    },
+  ]"
+/>
 
-## Examples
 
-### Basic
+## Example
 
 ```tsx
-import { useInputState } from 'reactive-kit';
-
 function Example() {
   const [value, setValue] = useInputState('');
-
   return <input type="text" value={value} onChange={setValue} />;
 }
 ```
-
-### Make uppercase value
-
-```tsx
-import { useInputState } from 'reactive-kit';
-
-function Example() {
-  const [value, setValue] = useInputState('', v => v.toUpperCase());
-
-  return <input type="text" value={value} onChange={setValue} />;
-}
-```
+  

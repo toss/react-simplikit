@@ -1,44 +1,55 @@
 # useVisibilityEvent
 
-`useVisibilityEvent` is a React hook that helps detect and handle changes in the document's visibility state.
+A React hook that listens to changes in the document's visibility state and triggers a callback.
 
 ## Interface
-
 ```ts
 function useVisibilityEvent(
-  callback: (visibilityState: 'visible' | 'hidden') => void,
-  options: { immediate?: boolean }
+  callback: (visibilityState: "visible" | "hidden") => void,
+  options: object,
 ): void;
+
 ```
 
 ### Parameters
 
-- `callback ((visibilityState: 'visible' | 'hidden') => void)`:
-  A callback function invoked when the visibility state changes.  
-  Receives the current visibility state (`'visible'` | `'hidden'`) as its argument.
+<Interface
+  required
+  name="callback"
+  type="(visibilityState: 'visible' | 'hidden') => void"
+  description="A function to be called when the visibility state changes. It receives the current visibility state ('visible' or 'hidden') as an argument."
+/>
 
-- `options ({ immediate?: boolean })` (optional):  
-  - `immediate` (`boolean`):  
-    - If `true`, the hook executes the callback immediately upon mounting with the current visibility state. Defaults to `false`.
+<Interface
+  name="options"
+  type="object"
+  description="Optional configuration for the hook."
+  :nested="[
+    {
+      name: 'options.immediate',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        'If true, the callback is invoked immediately upon mounting with the current visibility state.',
+    },
+  ]"
+/>
 
-### Returns
+### Return Value
 
-This hook does not return any value.
+This hook does not return anything.
 
-## Examples
+## Example
 
 ```tsx
-import { useVisibilityEvent } from 'reactive-kit';
+import { useVisibilityEvent } from 'react-simplikit';
 
 function Component() {
   useVisibilityEvent(visibilityState => {
     console.log(`Document is now ${visibilityState}`);
   });
 
-  return (
-    <div>
-      <p>Check the console for visibility changes.</p>
-    </div>
-  );
+  return <p>Check the console for visibility changes.</p>;
 }
 ```
+  

@@ -1,47 +1,62 @@
 # useBooleanState
 
-`useBooleanState` is a React hook that simplifies managing a boolean state.
-This hook makes handling boolean states more intuitive and concise.
+`useBooleanState` is a React hook that simplifies managing a boolean state. It provides functions to set the state to `true`, set it to `false`, and toggle its value.
 
 ## Interface
-
 ```ts
-function useBooleanState(defaultValue?: boolean): readonly [
-  boolean, // Current state value
-  () => void, // Function to set the state to true
-  () => void, // Function to set the state to false
-  () => void, // Function to toggle the state
+function useBooleanState(
+  defaultValue: boolean = false,
+): [
+  state: boolean,
+  setTrue: () => void,
+  setFalse: () => void,
+  toggle: () => void,
 ];
+
 ```
 
 ### Parameters
 
-- `defaultValue` (`boolean`): It's the initial value of the state. The default value is `false`.
+<Interface
+  name="defaultValue"
+  type="boolean"
+  description="The initial value of the state. Defaults to <code>false</code>."
+/>
 
-### Returns
+### Return Value
 
-Returns a `readonly [boolean, () => void, () => void, () => void]` tuple:
+<Interface
+  name=""
+  type="[state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
+  description="tuple containing:"
+  :nested="[
+    {
+      name: 'state',
+      type: 'boolean',
+      description: 'The current state value.',
+    },
+    {
+      name: 'setTrue',
+      type: '() => void',
+      description: 'A function to set the state to <code>true</code>.',
+    },
+    {
+      name: 'setFalse',
+      type: '() => void',
+      description: 'A function to set the state to <code>false</code>.',
+    },
+    {
+      name: 'toggle',
+      type: '() => void',
+      description: 'A function to toggle the state.',
+    },
+  ]"
+/>
 
-- `boolean`: The current state value.
-- `() => void`: A function to set the state to `true`.
-- `() => void`: A function to set the state to `false`.
-- `() => void`: A function to toggle the state.
 
-## Examples
+## Example
 
 ```tsx
-import { useBooleanState } from 'reactive-kit';
-
-function Component() {
-  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
-
-  return (
-    <div>
-      <p>Bottom Sheet state: {open ? 'opened' : 'closed'}</p>
-      <button onClick={openBottomSheet}>Open</button>
-      <button onClick={closeBottomSheet}>Close</button>
-      <button onClick={toggleBottomSheet}>Toggle</button>
-    </div>
-  );
-}
+const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
 ```
+  

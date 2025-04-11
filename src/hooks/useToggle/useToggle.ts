@@ -7,12 +7,12 @@ import { useReducer } from 'react';
  *
  * @param {boolean} [initialValue=false] - The initial state value. Defaults to `false`.
  *
- * @returns {[boolean, () => void]} A tuple:
- * - `state`: The current state value.
- * - `toggle`: A function to toggle the state.
+ * @returns {[state: boolean, toggle: () => void]} A tuple:
+ * - state `boolean` - The current state value;
+ * - toggle `() => void` - A function to toggle the state;
  *
  * @example
- * import { useToggle } from 'reactive-kit';
+ * import { useToggle } from 'react-simplikit';
  *
  * function Component() {
  *   const [open, toggle] = useToggle(false);

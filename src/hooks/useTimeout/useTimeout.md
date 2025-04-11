@@ -1,53 +1,51 @@
 # useTimeout
 
-`useTimeout` is a React hook that executes a callback function after a specified delay.
-It manages `window.setTimeout` in accordance with the React lifecycle, ensuring cleanup when dependencies change or the component unmounts.
+`useTimeout` is a React hook that executes a callback function after a specified delay. It manages `window.setTimeout` in accordance with the React lifecycle, ensuring cleanup on unmount or when dependencies change.
 
 ## Interface
+```ts
+function useTimeout(callback: () => void, delay: number = 0): void;
 
-```typescript
-function useTimeout(callback: () => void, delay?: number): void;
 ```
 
 ### Parameters
 
-- `callback` (`() => void`): The function to be executed after the delay.
-- `delay` (`number`, optional): The time in milliseconds to wait before executing the callback. Defaults to `0`.
+<Interface
+  required
+  name="callback"
+  type="() => void"
+  description="The function to be executed after the delay."
+/>
 
-### Returns
+<Interface
+  name="delay"
+  type="number"
+  description="The time in milliseconds to wait before executing the callback."
+/>
 
-This hook doesn't return any value.
+### Return Value
 
-## Examples
+This hook does not return anything.
 
-### Basic Usage
+## Example
 
 ```tsx
-import { useTimeout } from 'reactive-kit';
+// Updating a title after a delay
+import { useTimeout } from 'react-simplikit';
+import { useState } from 'react';
 
-function Notification() {
-  const [visible, setVisible] = useState(true);
+function Example() {
+  const [title, setTitle] = useState('');
 
   useTimeout(() => {
-    setVisible(false);
-  }, 3000); // Hide notification after 3 seconds
+    setTitle('Searching for products...');
+  }, 2000);
 
-  if (!visible) return null;
-  return <div>This notification will disappear in 3 seconds</div>;
+  useTimeout(() => {
+    setTitle('Almost done...');
+  }, 4000);
+
+  return <div>{title}</div>;
 }
 ```
-
-### Conditional Timer
-
-```tsx
-function ConditionalTimer({ shouldStart }: { shouldStart: boolean }) {
-  useTimeout(
-    () => {
-      console.log('Timer completed!');
-    },
-    shouldStart ? 2000 : undefined
-  );
-
-  return <div>Timer {shouldStart ? 'started' : 'stopped'}</div>;
-}
-```
+  

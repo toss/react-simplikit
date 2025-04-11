@@ -1,19 +1,19 @@
-![reactive-kit](./src/public/images/og.png)
+![react-simplikit](./src/public/images/og.png)
 
-# reactive-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE)
+# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE)
 
 English | [Korean](./README-ko_kr.md)
 
-`reactive-kit` is a lightweight yet powerful library that provides various utilities for use in React environments.
+`react-simplikit` is a lightweight yet powerful library that provides various utilities for use in React environments.
 
-- `reactive-kit` is dependency-free, making it extremely lightweight.
-- `reactive-kit` guarantees reliability with 100% test coverage.
-- `reactive-kit` offers JSDoc comments, detailed documentation, and examples to ensure any developer can easily use it.
+- `react-simplikit` is dependency-free, making it extremely lightweight.
+- `react-simplikit` guarantees reliability with 100% test coverage.
+- `react-simplikit` offers JSDoc comments, detailed documentation, and examples to ensure any developer can easily use it.
 
 ## Example
 
 ```tsx
-import { useBooleanState } from 'reactive-kit';
+import { useBooleanState } from 'react-simplikit';
 
 function Component() {
   const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);

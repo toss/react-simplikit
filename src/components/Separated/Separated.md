@@ -1,19 +1,55 @@
 # Separated
 
-`Separated` is a component that allows you to insert a repeating component between each child element.
-It is useful when you need to add dividers, spacers, or any other separator between list items.
+`Separated` is a component that inserts a specified component between each child element. It is useful for adding separators, spacing, or other repeating elements in lists.
 
-## Props
+## Interface
+```ts
+function Separated(children: React.ReactNode, by: React.ReactNode): JSX.Element;
 
-- `with`: The component to insert between each element.
-- `children`: The child elements to render.Each child will be filtered using `React.isValidElement` function.
+```
+
+### Parameters
+
+<Interface
+  required
+  name="children"
+  type="React.ReactNode"
+  description="The child elements to render. Only valid React elements (<code>React.isValidElement</code>) will be rendered."
+/>
+
+<Interface
+  required
+  name="by"
+  type="React.ReactNode"
+  description="The component to insert between child elements."
+/>
+
+### Return Value
+
+<Interface
+  name=""
+  type="JSX.Element"
+  description="React component that separates children with a specified separator."
+/>
+
 
 ## Example
 
 ```tsx
-<Separated with={<Border type="padding24" />}>
-  {LIST.map(item => (
-    <div>{item.title}</div>
-  ))}
-</Separated>
+function App() {
+  return (
+    <Separated by={<Border type="padding24" />}>
+      {['hello', 'react', 'world'].map(item => (
+        <div key={item}>{item}</div>
+      ))}
+    </Separated>
+  );
+  // Expected output:
+  // <div>hello</div>
+  // <Border type="padding24" />
+  // <div>react</div>
+  // <Border type="padding24" />
+  // <div>world</div>
+}
 ```
+  

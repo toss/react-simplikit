@@ -1,49 +1,61 @@
 # useThrottle
 
-`useThrottle` is a React hook that limits the rate at which a function can be called. It is particularly useful for performance optimization in scenarios where frequent function calls are expected, such as when a user is rapidly typing or scrolling.
+A React hook that creates a throttled version of a callback function. This is useful for limiting the rate at which a function can be called, such as when handling scroll or resize events.
 
 ## Interface
-
 ```ts
-function useThrottle<F extends (...args: any[]) => any>(
+function useThrottle<F>(
   callback: F,
   wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  options: { edges?: Array<"leading" | "trailing"> },
 ): F & { cancel: () => void };
+
 ```
 
 ### Parameters
 
-- `callback` (`F`): The function to be executed at the specified interval.
-- `wait` (`number`): The interval in milliseconds at which the function should be executed.
-- `options` (`{ edges?: Array<'leading' | 'trailing'> }`, optional):
-  - `edges` (`Array<'leading' | 'trailing'>`): Specifies whether the function should be invoked on the leading edge, trailing edge, or both. Defaults to `['leading', 'trailing']`.
+<Interface
+  required
+  name="callback"
+  type="F"
+  description="The function to be throttled."
+/>
 
-### Returns
+<Interface
+  required
+  name="wait"
+  type="number"
+  description="The number of milliseconds to throttle invocations to."
+/>
 
-- Returns an object containing the throttled function and a `cancel` method.
-- The `cancel()` method can be called to cancel any pending executions.
+<Interface
+  name="options"
+  type="{ edges?: Array<'leading' | 'trailing'> }"
+  description="Options to control the behavior of the throttle."
+/>
+
+### Return Value
+
+<Interface
+  name=""
+  type="F & { cancel: () => void }"
+  description="Returns the throttled function with a <code>cancel</code> method to cancel pending executions."
+/>
+
 
 ## Example
 
 ```tsx
-import { useThrottle } from 'reactive-kit';
-import { useEffect } from 'react';
+const throttledScroll = useThrottle(() => {
+  console.log('Scroll event');
+}, 200, { edges: ['leading', 'trailing'] });
 
-function ThrottledComponent() {
-  const handleScroll = useThrottle(() => {
-    console.log('Scroll event');
-  }, 200);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      handleScroll.cancel();
-    };
-  }, [handleScroll]);
-
-  return <div>Scroll the page!</div>;
-}
+useEffect(() => {
+  window.addEventListener('scroll', throttledScroll);
+  return () => {
+    window.removeEventListener('scroll', throttledScroll);
+    throttledScroll.cancel();
+  };
+}, [throttledScroll]);
 ```
+  

@@ -1,30 +1,44 @@
 # usePreservedReference
 
-`usePreservedReference`는 React에서 값이 변경되지 않았다면 기존 참조를 유지하고, 최신 상태를 안전하게 사용할 수 있도록 도와주는 React 훅이에요. 불필요한 렌더링을 방지하면서도 항상 최신 데이터를 사용할 수 있도록 해줘요.
+`usePreservedReference`는 값이 변경되지 않았을 때 참조를 유지하면서, 최신 상태를 안전하게 사용할 수 있도록 돕는 리액트 훅이에요. 불필요한 재렌더링을 방지하면서 항상 최신 데이터에 접근할 수 있도록 해줘요.
 
 ## 인터페이스
+```ts
+function usePreservedReference(
+  value: T,
+  areValuesEqual: (a: T, b: T) => boolean,
+): T;
 
-```typescript
-function usePreservedReference<T>(value: T, areValuesEqual?: (a: T, b: T) => boolean): T;
 ```
 
-### 매개변수
+### 파라미터
 
-- `value`: 참조를 유지할 값이에요. 상태 값이 변경될 때마다 비교 후 필요하면 새로운 참조를 반환해요.
-- `areValuesEqual`: 두 값이 같은지 판단하는 선택적 함수예요. 기본적으로 `JSON.stringify`를 사용해 비교해요.
+<Interface
+  required
+  name="value"
+  type="T"
+  description="참조를 유지할 값이에요. 상태 값이 비교 후 변경되면 새로운 참조를 반환해요."
+/>
 
-### 반환값
+<Interface
+  name="areValuesEqual"
+  type="(a: T, b: T) => boolean"
+  description="두 값이 같은지 여부를 결정하는 선택적 함수에요. 기본적으로 <code>JSON.stringify</code>를 사용하여 비교해요."
+/>
 
-value가 이전 값과 같다면 동일한 참조를 반환하고, 다르다면 새로운 참조를 반환해요.
+### 반환 값
 
-## 사용 예시
+<Interface
+  name=""
+  type="T"
+  description="값이 이전 것과 같다고 간주되면 동일한 참조를, 그렇지 않으면 새로운 참조를 반환해요."
+/>
 
-### 기본 사용
 
-아래는 객체에 대한 참조를 유지하기 위해 훅을 사용하는 예제예요.
+## 예시
 
 ```tsx
-import { usePreservedReference } from 'reactive-kit';
+import { usePreservedReference } from 'react-simplikit';
 import { useState } from 'react';
 
 function ExampleComponent() {
@@ -35,20 +49,4 @@ function ExampleComponent() {
   return <div>{preservedState.key}</div>;
 }
 ```
-
-### 사용자 정의 비교 함수
-
-사용자 정의 비교 함수를 사용하는 방법을 보여주는 예제예요.
-
-```tsx
-import { usePreservedReference } from 'reactive-kit';
-import { useState } from 'react';
-
-function ExampleComponent() {
-  const [state, setState] = useState({ key: 'value' });
-
-  const preservedState = usePreservedReference(state, (a, b) => a.key === b.key);
-
-  return <div>{preservedState.key}</div>;
-}
-```
+  

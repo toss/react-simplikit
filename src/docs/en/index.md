@@ -2,14 +2,14 @@
 layout: home
 
 hero:
-  name: 'reactive-kit'
+  name: 'react-simplikit'
   text: 'Lightweight and powerful React utility library'
   image:
     src: /images/symbol.svg
-    alt: reactive-kit symbol
+    alt: react-simplikit symbol
   actions:
     - theme: brand
-      text: About reactive-kit
+      text: About react-simplikit
       link: /intro.html
     - theme: alt
       text: Reference

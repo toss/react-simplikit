@@ -1,46 +1,62 @@
 # useInterval
 
-`useInterval` is a React hook that executes a function at a specified interval.
-It is useful for timers, polling data, and other recurring tasks.
+`useInterval` is a React hook that executes a function at a specified interval. It is useful for timers, polling data, and other recurring tasks.
 
 ## Interface
-
 ```ts
-type IntervalOptions =
-  | number
-  | {
-      delay: number;
-      enabled?: boolean;
-      immediate?: boolean;
-    };
+function useInterval(
+  callback: () => void,
+  options: number | { delay: number; enabled?: boolean; immediate?: boolean },
+): void;
 
-function useInterval(callback: () => void, options: IntervalOptions): void;
 ```
 
 ### Parameters
 
-- `callback` (`() => void`): The function to be executed periodically.
-- `options` (`IntervalOptions`): Configures the interval behavior.
-  - `delay` (`number`): The interval duration in milliseconds.
-  - `immediate` (`boolean`): If `true`, executes immediately before starting the interval. Defaults to `false`.
-  - `enabled` (`boolean`): If `false`, the interval will not run. Defaults to `true`.
+<Interface
+  required
+  name="callback"
+  type="() => void"
+  description="The function to be executed periodically."
+/>
 
-### Notes
+<Interface
+  required
+  name="options"
+  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
+  description="Configures the interval behavior."
+  :nested="[
+    {
+      name: 'options.delay',
+      type: 'number',
+      description:
+        'The interval duration in milliseconds. If <code>null</code>, the interval will not run.',
+    },
+    {
+      name: 'options.immediate',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        'If <code>true</code>, executes immediately before starting the interval.',
+    },
+    {
+      name: 'options.enabled',
+      type: 'boolean',
+      defaultValue: 'true',
+      description: 'If <code>false</code>, the interval will not run.',
+    },
+  ]"
+/>
 
-- The timer is automatically cleaned up when the component unmounts.
-- If the `delay` value changes, the timer will restart.
-- You can control the execution by setting `enabled` to `false`.
+### Return Value
 
-### Returns
+This hook does not return anything.
 
-This hook doesn't return any value.
-
-## Examples
-
-### Basic Usage
+## Example
 
 ```tsx
-import { useInterval } from 'reactive-kit';
+import { useInterval } from 'react-simplikit';
+import { useState } from 'react';
 
 function Timer() {
   const [time, setTime] = useState(0);
@@ -56,58 +72,4 @@ function Timer() {
   );
 }
 ```
-
-### Stopwatch
-
-You can control the execution by setting `enabled` to `false`.
-
-```tsx
-import { useInterval } from 'reactive-kit';
-
-function StopWatch() {
-  const [time, setTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-
-  useInterval(
-    () => {
-      setTime(prev => prev + 1);
-    },
-    {
-      delay: 1000,
-      enabled: isRunning,
-    }
-  );
-
-  return (
-    <div>
-      <p>{time} seconds</p>
-      <button onClick={() => setIsRunning(prev => !prev)}>{isRunning ? 'Stop' : 'Start'}</button>
-    </div>
-  );
-}
-```
-
-### Polling Data Updates
-
-Set `trailing` to `false` to execute the callback immediately and then periodically.
-
-```tsx
-import { useInterval } from 'reactive-kit';
-
-function PollingExample() {
-  const [data, setData] = useState<string>(null);
-
-  useInterval(
-    async () => {
-      const data = await getData();
-      setData(data);
-    },
-    {
-      delay: 3000,
-      trailing: false, // Execute immediately and then every 3 seconds
-    }
-  );
-
-  return <div>{data}</div>;
-}
-```
+  

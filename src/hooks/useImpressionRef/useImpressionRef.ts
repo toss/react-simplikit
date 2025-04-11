@@ -19,17 +19,17 @@ export type UseImpressionRefOptions = Partial<{
  * `useImpressionRef` is a custom hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport.
  * This hook uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
  *
- * @param options - An options object for tracking the element's visibility.
- *                  - `onImpressionStart`: Callback function executed when the element enters the view
- *                  - `onImpressionEnd`: Callback function executed when the element exits the view
- *                  - `timeThreshold`: Minimum time the element must be visible (in milliseconds)
- *                  - `areaThreshold`: Minimum ratio of the element that must be visible (0 to 1)
- *                  - `rootMargin`: Margin to adjust the detection area
+ * @param {UseImpressionRefOptions} options - Options for tracking the element's visibility.
+ * @param {() => void} options.onImpressionStart - Callback function executed when the element enters the view
+ * @param {() => void} options.onImpressionEnd - Callback function executed when the element exits the view
+ * @param {number} options.timeThreshold - Minimum time the element must be visible (in milliseconds)
+ * @param {number} options.areaThreshold - Minimum ratio of the element that must be visible (0 to 1)
+ * @param {string} options.rootMargin - Margin to adjust the detection area
  *
- * @returns A function to set the element. Attach this function to the `ref` attribute, and the callbacks will be executed whenever the element's visibility changes.
+ * @returns {(element: Element | null) => void} A function to set the element. Attach this function to the `ref` attribute, and the callbacks will be executed whenever the element's visibility changes.
  *
  * @example
- * import { useImpressionRef } from 'reactive-kit';
+ * import { useImpressionRef } from 'react-simplikit';
  *
  * function Component() {
  *   const ref = useImpressionRef<HTMLDivElement>({

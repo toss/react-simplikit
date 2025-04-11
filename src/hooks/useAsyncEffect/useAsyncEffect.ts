@@ -16,9 +16,9 @@ import { DependencyList, useEffect } from 'react';
  *   setData(data);
  *
  *   return () => {
- *     console.log('Cleanup on unmount or dependency change');
+ *     console.log('Cleanup on unmount or dependencies change');
  *   };
- * }, [dependency]);
+ * }, [dependencies]);
  */
 
 export function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps?: DependencyList) {

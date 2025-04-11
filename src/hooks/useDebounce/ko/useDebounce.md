@@ -1,45 +1,72 @@
 # useDebounce
 
-`useDebounce`는 함수 호출을 지연시키고 여러 번의 연속된 호출을 하나로 묶어주는 React 훅이에요.
-입력 검색, 버튼 클릭 방지 등 연속적인 이벤트 핸들링을 최적화할 때 유용해요.
+`useDebounce`는 제공된 콜백 함수의 디바운스 버전을 반환하는 리액트 훅이에요. 함수 실행을 지연시키고 여러 호출을 하나로 묶어줌으로써 이벤트 처리를 최적화하는 데 도움을 줘요.
 
 ## 인터페이스
-
 ```ts
 function useDebounce<F extends (...args: unknown[]) => unknown>(
   callback: F,
   wait: number,
-  options?: {
-    leading?: boolean;
-    trailing?: boolean;
-  }
+  options: DebounceOptions,
 ): F & { cancel: () => void };
+
 ```
 
 ### 파라미터
 
-- `callback` (`F`): 디바운스할 함수예요.
-- `wait` (`number`): 디바운스 대기 시간(밀리초)이에요.
-- `options` (`object`): 디바운스 동작을 설정하는 옵션이에요.
-  - `leading` (`boolean`): `true`면 시퀀스의 시작에서 함수를 실행해요. 기본값은 `false`예요.
-  - `trailing` (`boolean`): `true`면 시퀀스의 끝에서 함수를 실행해요. 기본값은 `true`예요.
+<Interface
+  required
+  name="callback"
+  type="F"
+  description="디바운스할 함수예요."
+/>
+
+<Interface
+  required
+  name="wait"
+  type="number"
+  description="함수 실행을 지연시킬 밀리초 단위의 시간이예요."
+/>
+
+<Interface
+  name="options"
+  type="DebounceOptions"
+  description="디바운스 동작을 설정하는 옵션이에요."
+  :nested="[
+    {
+      name: 'options.leading',
+      type: 'boolean',
+      defaultValue: 'false',
+      description:
+        '만약 <code>true</code>이면, 함수는 시퀀스의 시작에 호출돼요.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      defaultValue: 'true',
+      description:
+        '만약 <code>true</code>이면, 함수는 시퀀스의 끝에 호출돼요.',
+    },
+  ]"
+/>
 
 ### 반환 값
 
-디바운스된 함수를 반환해요. 이 함수는 원본 함수의 타입을 유지하면서 `cancel` 메서드를 추가로 가져요:
+<Interface
+  name=""
+  type="F & { cancel: () => void }"
+  description="콜백 호출을 지연시키는 디바운스된 함수예요. 또한, 대기 중인 디바운스 실행을 취소할 수 있는 <code>cancel</code> 메서드를 포함해요."
+/>
 
-- `cancel` (`() => void`): 대기 중인 디바운스 실행을 취소하는 함수예요.
 
 ## 예시
 
 ```tsx
-import { useDebounce } from 'reactive-kit';
-
 function SearchInput() {
   const [query, setQuery] = useState('');
 
   const debouncedSearch = useDebounce((value: string) => {
-    // 실제 검색 API 호출
+    // 실제 API 호출
     searchAPI(value);
   }, 300);
 
@@ -55,3 +82,4 @@ function SearchInput() {
   );
 }
 ```
+  

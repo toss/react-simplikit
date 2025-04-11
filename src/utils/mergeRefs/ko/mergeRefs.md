@@ -1,54 +1,39 @@
 # mergeRefs
 
-`mergeRefs`는 여러 개의 React ref를 하나로 합치는 유틸리티 함수예요. 하나의 엘리먼트에 여러 ref를 연결해야 할 때 유용하게 사용할 수 있어요.
+이 함수는 여러 개의 ref (RefObject 또는 RefCallback)를 받아서 제공된 모든 ref를 업데이트하는 단일 ref를 반환해요. 단일 요소에 여러 개의 ref를 전달해야 할 때 유용해요.
 
 ## 인터페이스
-
 ```ts
-function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T>>): RefCallback<T>;
+function mergeRefs(
+  refs: Array<RefObject<T> | RefCallback<T> | null | undefined>,
+): RefCallback<T>;
+
 ```
 
 ### 파라미터
 
-- `...refs` (`Array<RefObject<T> | RefCallback<T>>`): 합칠 ref들의 배열이에요. 각 ref는 `RefObject`나 `RefCallback` 타입이 될 수 있어요.
+<Interface
+  required
+  name="refs"
+  type="Array<RefObject<T> | RefCallback<T> | null | undefined>"
+  description="병합할 ref의 배열이에요. 각 ref는 RefObject 또는 RefCallback일 수 있어요."
+/>
 
 ### 반환 값
 
-모든 ref들을 업데이트하는 `RefCallback<T>`을 반환해요.
+<Interface
+  name=""
+  type="RefCallback<T>"
+  description="제공된 모든 ref를 업데이트하는 단일 ref 콜백이에요."
+/>
+
 
 ## 예시
 
-### 기본 예제
-
 ```tsx
-import { forwardRef, useRef } from 'react';
-import { mergeRefs } from 'reactive-kit';
+forwardRef(function Component(props, parentRef) {
+  const myRef = useRef(null);
 
-const Component = forwardRef((props, parentRef) => {
-  const localRef = useRef(null);
-
-  return <div ref={mergeRefs(localRef, parentRef)}>내용</div>;
-});
-```
-
-### Callback Refs와 함께 사용
-
-```tsx
-import { useCallback, useRef } from 'react';
-import { mergeRefs } from 'reactive-kit';
-
-const Component = () => {
-  const ref = useRef(null);
-  const [height, setHeight] = useState(0);
-
-  const measuredRef = useCallback(node => {
-    if (node == null) {
-      return;
-    }
-
-    setHeight(node.offsetHeight);
-  }, []);
-
-  return <div ref={mergeRefs(measuredRef, ref)} />;
-};
+  return <div ref={mergeRefs(myRef, parentRef)} />;
+})
 ```
