@@ -62,6 +62,7 @@
     "jsdom": "^25.0.1",
     "listr2": "^8.2.5",
     "nanoid": "^5.1.5",
+    "openai": "^4.93.0",
     "ora": "^8.2.0",
     "prettier": "^3.4.2",
     "prettier-plugin-sort-re-exports": "^0.1.0",
@@ -79,8 +80,5 @@
     "react": "*",
     "react-dom": "*"
   },
-  "packageManager": "yarn@4.5.3",
-  "dependencies": {
-    "openai": "^4.93.0"
-  }
+  "packageManager": "yarn@4.5.3"
 }
