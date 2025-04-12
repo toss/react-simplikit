@@ -1,12 +1,12 @@
 # useStorageState
 
-브라우저 저장소에 상태 값을 유지하는 `useState`처럼 작동하는 리액트 훅이에요. 페이지가 새로고침되어도 값이 유지되고, `localStorage`를 사용할 때 탭 간에 공유될 수 있어요.
+리액트 훅으로, `useState`처럼 동작하지만 브라우저 저장소에 상태 값을 저장해요. 이 값은 페이지가 다시 로드되어도 유지되고, `localStorage`를 사용할 때 탭 간에 공유될 수 있어요.
 
 ## 인터페이스
 ```ts
 function useStorageState(
   key: string,
-  options: object,
+  options: Object,
 ): [
   state: Serializable<T> | undefined,
   setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
@@ -20,25 +20,27 @@ function useStorageState(
   required
   name="key"
   type="string"
-  description="값을 저장소에 저장하는데 사용되는 키예요."
+  description="값을 저장소에 저장하는 데 사용되는 키예요."
 />
 
 <Interface
   name="options"
-  type="object"
-  description="저장소 동작을 설정하는 옵션이에요."
+  type="Object"
+  description="저장소 동작에 대한 설정 옵션이에요."
   :nested="[
     {
       name: 'options.storage',
       type: 'Storage',
+      required: 'false',
       defaultValue: 'localStorage',
       description:
-        '저장소 유형 (<code>localStorage</code> 또는 <code>sessionStorage</code>)이에요. 기본값은 <code>localStorage</code>예요.',
+        '저장소 타입 (<code>localStorage</code> 또는 <code>sessionStorage</code>). 기본값은 <code>localStorage</code>예요.',
     },
     {
       name: 'options.defaultValue',
       type: 'T',
-      description: '기존 값이 없을 경우의 초기값이에요.',
+      required: 'false',
+      description: '기존 값을 찾을 수 없는 경우의 초기 값이에요.',
     },
   ]"
 />
@@ -48,17 +50,19 @@ function useStorageState(
 <Interface
   name=""
   type="[state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void]"
-  description="튜플:"
+  description="튜플(tuple)로 구성돼요:"
   :nested="[
     {
       name: 'state',
       type: 'Serializable<T> | undefined',
+      required: 'false',
       description: '저장소에서 가져온 현재 상태 값이에요.',
     },
     {
       name: 'setState',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
-      description: '상태를 업데이트하고 유지하기 위한 함수예요.',
+      required: 'false',
+      description: '상태를 업데이트하고 저장하는 함수예요.',
     },
   ]"
 />
@@ -67,7 +71,7 @@ function useStorageState(
 ## 예시
 
 ```tsx
-// 지속적인 상태를 가진 카운터
+// 지속 가능한 상태를 가진 카운터
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
