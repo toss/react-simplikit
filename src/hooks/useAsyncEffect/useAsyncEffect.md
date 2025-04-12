@@ -14,7 +14,6 @@ function useAsyncEffect(
 ### Parameters
 
 <Interface
-  required
   name="effect"
   type="() => Promise<void | (() => void)>"
   description="An asynchronous function executed in the <code>useEffect</code> pattern. This function can optionally return a cleanup function."

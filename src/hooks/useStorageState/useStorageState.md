@@ -6,7 +6,7 @@ A React hook that functions like `useState` but persists the state value in brow
 ```ts
 function useStorageState(
   key: string,
-  options: object,
+  options: Object,
 ): [
   state: Serializable<T> | undefined,
   setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
@@ -25,12 +25,13 @@ function useStorageState(
 
 <Interface
   name="options"
-  type="object"
+  type="Object"
   description="Configuration options for storage behavior."
   :nested="[
     {
       name: 'options.storage',
       type: 'Storage',
+      required: 'false',
       defaultValue: 'localStorage',
       description:
         'The storage type (<code>localStorage</code> or <code>sessionStorage</code>). Defaults to <code>localStorage</code>.',
@@ -38,6 +39,7 @@ function useStorageState(
     {
       name: 'options.defaultValue',
       type: 'T',
+      required: 'false',
       description: 'The initial value if no existing value is found.',
     },
   ]"
@@ -53,11 +55,13 @@ function useStorageState(
     {
       name: 'state',
       type: 'Serializable<T> | undefined',
+      required: 'false',
       description: 'The current state value retrieved from storage.',
     },
     {
       name: 'setState',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
+      required: 'false',
       description: 'A function to update and persist the state.',
     },
   ]"
