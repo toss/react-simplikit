@@ -194,9 +194,9 @@ function AutoCompleteInput() {
 
 `react-simplikit`은 `react-use`에 대비하여, 아래와 같이 최대 약 89% 작은 크기를 가져요.
 
-|                                            | react-simplikit                                                   | react-use                                                    | 차이   |
-| ------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------ | ------ |
-| Unpacked Size                              | [131 kB](https://www.npmjs.com/package/react-simplikit)           | [454 kB](https://www.npmjs.com/package/react-use)            | -71.1% |
-| Minified Size                              | [8.5 kB](https://bundlephobia.com/package/react-simplikit@0.2.27) | [78.2 kB](https://bundlephobia.com/package/react-use@17.6.0) | -89.1% |
-| Gzipped Size                               | [2.8 kB](https://bundlephobia.com/package/react-simplikit@0.2.27) | [22 kB](https://bundlephobia.com/package/react-use@17.6.0)   | -87.2% |
-| 평균 함수 당 크기<br/>(Minified Size 기준) | 350 byte                                                          | 680 byte                                                     | -48.5% |
+|                                            | react-simplikit                                                  | react-use                                                    | 차이   |
+| ------------------------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------ | ------ |
+| Unpacked Size                              | [219 kB](https://www.npmjs.com/package/react-simplikit)          | [454 kB](https://www.npmjs.com/package/react-use)            | -51.7% |
+| Minified Size                              | [8.7 kB](https://bundlephobia.com/package/react-simplikit@0.0.7) | [78.2 kB](https://bundlephobia.com/package/react-use@17.6.0) | -88.8% |
+| Gzipped Size                               | [2.9 kB](https://bundlephobia.com/package/react-simplikit@0.0.7) | [22 kB](https://bundlephobia.com/package/react-use@17.6.0)   | -86.8% |
+| 평균 함수 당 크기<br/>(Minified Size 기준) | 348 byte                                                         | 680 byte                                                     | -48.8% |

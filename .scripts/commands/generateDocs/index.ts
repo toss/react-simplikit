@@ -36,6 +36,21 @@ export async function generateDocs(names: string[]) {
                   title: `Translate markdown to Korean`,
                   task: async ctx => {
                     const { docSource } = ctx;
+                    const dirname = path.dirname(sourceFilePath);
+
+                    let isFileExists = false;
+                    try {
+                      await fs.access(`${dirname}/${name}.md`);
+                      await fs.access(`${dirname}/ko/${name}.md`);
+                      isFileExists = true;
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    } catch (_) {
+                      isFileExists = false;
+                    }
+
+                    if (isFileExists && (await fs.readFile(`${dirname}/${name}.md`)).toString() === docSource) {
+                      return;
+                    }
 
                     if (docSource == null) {
                       throw new Error('docSource is not found');

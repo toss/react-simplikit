@@ -13,9 +13,14 @@ type DebounceOptions = {
  * `useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function.
  * It helps optimize event handling by delaying function execution and grouping multiple calls into one.
  *
+ * Note that if both 'leading' and 'trailing' are included, the function will be called at both the start and end of the delay period. However, it must be called at least twice within debounceMs milliseconds for this to happen, as one debounced function call cannot trigger the function twice.
+ *
  * @param {Object} options - The options object.
  * @param {Function} options.onChange - The callback function to debounce.
  * @param {number} options.timeThreshold - The number of milliseconds to delay the function execution.
+ * @param {boolean} [options.leading=false] - If `true`, the function is called at the start of the sequence.
+ * @param {boolean} [options.trailing=true] - If `true`, the function is called at the end of the sequence.
+ *
  * @returns {Function} A debounced function that delays invoking the callback.
  *
  * @example

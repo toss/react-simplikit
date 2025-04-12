@@ -15,6 +15,7 @@ import { throttle } from './throttle.ts';
  * @param {F} callback - The function to be throttled.
  * @param {number} wait - The number of milliseconds to throttle invocations to.
  * @param {{ edges?: Array<'leading' | 'trailing'> }} [options] - Options to control the behavior of the throttle.
+ * @param {Array<'leading' | 'trailing'>} [options.edges=['leading', 'trailing']] - An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.
  * @returns {F & { cancel: () => void }} - Returns the throttled function with a `cancel` method to cancel pending executions.
  *
  * @example

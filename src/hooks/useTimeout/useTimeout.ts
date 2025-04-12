@@ -35,7 +35,6 @@ export function useTimeout(callback: () => void, delay = 0) {
 
   useEffect(() => {
     const timeoutId = window.setTimeout(preservedCallback, delay);
-
     return () => window.clearTimeout(timeoutId);
   }, [delay, preservedCallback]);
 }

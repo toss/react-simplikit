@@ -11,7 +11,9 @@ import { useRefEffect } from '../useRefEffect/index.ts';
  * @param {(entry: IntersectionObserverEntry) => void} callback - A callback function that is executed when the visibility of the element changes.
  *   You can check `entry.isIntersecting` to determine if the element is in view.
  * @param {IntersectionObserverInit} options - Options for the `IntersectionObserver`.
- *   You can specify values such as `root`, `rootMargin`, and `threshold`.
+ * @param {boolean} [options.root] - The element that is used as the viewport for checking visibility of the target.
+ * @param {string} [options.rootMargin] - Margin around the root.
+ * @param {number | number[]} [options.threshold] - Either a single number or an array of numbers which indicate at what percentage of the target's visibility the observer's callback should be executed.
  *
  * @returns {(element: Element | null) => void} A function to set the element. Attach this function to the `ref` attribute, and the `callback` will be executed whenever the element's visibility changes.
  *
