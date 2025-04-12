@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef } from 'react';
 /**
  * @description
@@ -26,7 +27,6 @@ import { useCallback, useEffect, useRef } from 'react';
  *   return <button onClick={handleClick}>Click me</button>;
  * }
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function usePreservedCallback<Arguments extends any[] = any[], ReturnValue = unknown>(
   callback: (...args: Arguments) => ReturnValue
 ) {

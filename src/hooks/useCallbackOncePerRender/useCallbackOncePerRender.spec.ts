@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DependencyList, useEffect } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -5,7 +6,6 @@ import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useCallbackOncePerRender } from './useCallbackOncePerRender.ts';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useCaller(callback: (...args: any) => any, deps: DependencyList) {
   useEffect(() => {
     callback();

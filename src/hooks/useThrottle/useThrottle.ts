@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
