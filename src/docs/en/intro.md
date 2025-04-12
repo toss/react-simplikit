@@ -19,12 +19,12 @@ function Page() {
   }, []); // [!code --]
   const [isOpen, toggle] = useToggle(false); // [!code ++]
 
-  return <>
+  return (
     <div>
       <p>Bottom Sheet state: {isOpen ? 'opened' : 'closed'}</p>
       <button onClick={toggle}>Toggle</button>
-   </div>
-  <>;
+    </div>
+  );
 }
 ```
 
