@@ -116,17 +116,11 @@ function AutoCompleteInput() {
   const [isOpen, openSearchBox, closeSearchBox] = useBooleanState(false);
 
   const searchBoxState = useMemo(() => {
-    if (!isOpen) {
-      return 'CLOSE';
-    }
+    if (!isOpen) return 'CLOSE';
 
-    if (isLoading) {
-      return 'LOADING';
-    }
+    if (isLoading) return 'LOADING';
 
-    if (results.length > 0) {
-      return 'RESULT_EXISTS';
-    }
+    if (results.length > 0) return 'RESULT_EXISTS';
 
     return 'EMPTY';
   }, [isOpen, isLoading, results]);

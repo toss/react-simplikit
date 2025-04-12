@@ -1,28 +1,28 @@
 # Design Principles
 
-`react-simplikit` is designed to be lightweight, reliable, and easy to use. The following principles serve as the foundation for its design.
+`react-simplikit` is designed to be lightweight, reliable, and easy to use. The following principles serve as the core values supporting this design.
 
 ## Respect React's Lifecycle Without Interference
 
-`react-simplikit` avoids interfering with React's lifecycle.  
-For example, it does not provide hooks like `useMount` or `useLifecycles` that directly manipulate React's lifecycle. Instead, it respects React's default behaviors and encourages leveraging them effectively.
+`react-simplikit` does not include implementations that directly interfere with React's lifecycle.  
+For example, it doesn't provide hooks like `useMount` or `useLifecycles`, instead favoring approaches that respect and utilize React's default behaviors.
 
-## Lightweight and Fast With Zero Dependencies
+## Lightweight and Fast Through Zero Dependencies
 
-`react-simplikit` is entirely free of external dependencies.  
-By not relying on additional libraries, it minimizes bundle size when integrated into a project and avoids any performance overhead caused by dependencies.
+`react-simplikit` has absolutely no dependencies. By not relying on additional libraries, it minimizes bundle size when integrated into projects and eliminates concerns about performance degradation.
 
-## Ensures Reliability With 100% Test Coverage
+## Ensures Reliability Through 100% Test Coverage
 
-`react-simplikit` emphasizes reliability by thoroughly testing all functions and code paths.  
-Each implementation is rigorously tested to prevent unexpected behaviors and ensure stability. If you're looking for a trustworthy library, `react-simplikit` is a great choice.
+`react-simplikit` thoroughly tests every function and branch.
+We write comprehensive tests that include not only basic functionality but also SSR environment considerations for each implementation, preventing issues caused by unexpected behavior.
+If you're looking for a reliable library, `react-simplikit` will be an excellent choice.
 
-## Comprehensive Documentation for Ease of Use
+## Comprehensive Documentation for Easy Understanding and Use
 
-`react-simplikit` provides detailed documentation to help users quickly understand and utilize its features. The documentation includes:
+`react-simplikit` provides detailed documentation to help users quickly understand and utilize each feature. The documentation includes:
 
-- **JSDoc Comments**: Detailed descriptions of each function, including their behavior, parameters, and return values.
-- **Comprehensive Guides**: Clear and beginner-friendly instructions to help users get started immediately.
-- **Practical Examples**: Real-world examples that demonstrate how to use the library effectively in practical scenarios.
+- **JSDoc Comments**: Detailed explanations of each function's behavior, parameters, and return values.
+- **Usage Guides**: Clear and easy-to-follow instructions to get started immediately.
+- **Practical Examples**: Examples demonstrating how to utilize implementations in real-world scenarios.
 
-While the primary documentation is written in English, Korean translations are also available, making it accessible to Korean-speaking users.
+While the primary documentation is in English, Korean documentation is also supported, making it accessible to Korean users.

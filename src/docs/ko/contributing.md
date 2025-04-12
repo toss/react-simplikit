@@ -13,7 +13,7 @@
 ::: tip
 **문서는 쓰지 않아도 되나요?**
 
-문서는 기여를 위해 올려주신 PR이 병합되면 JSDoc을 기반으로 자동으로 영문, 한글 문서를 생성하여, 문서를 추가하는 PR이 자동 생성돼요.
+맞아요. 문서는 따로 쓰지 않아도 돼요. 대신, JSDoc을 꼼꼼하게 작성해주세요. 문서는 기여를 위해 올려주신 PR이 병합되면 JSDoc을 기반으로 자동으로 영문, 한글 문서를 생성하여, 문서를 추가하는 PR이 자동 생성돼요.
 :::
 
 ### 구현체 작성
@@ -256,16 +256,13 @@ yarn test:coverage
     // renderHookSSR.serverOnly는 클라이언트 단에서 발생하는 동적인 로직들은 수행하지 않기 때문에
     // 최초 렌더링 결과에 의도한 값들을 반환하는 지, 불필요한 호출이 발생하지는 않는 지 확인해요.
     const result = renderHookSSR.serverOnly(() => useToggle(true));
-
     const [bool] = result.current;
-
     expect(bool).toBe(true);
   });
 
   it('should initialize with the default value true', async () => {
     const { result } = await renderHookSSR(() => useToggle(true));
     const [bool] = result.current;
-
     expect(bool).toBe(true);
   });
   ```
@@ -279,3 +276,82 @@ yarn test:coverage
 ## 문서 기여
 
 문서에 기여할 때 특별한 조건은 없어요. 잘못된 내용이 있거나 오역 혹은 아쉬운 번역이 있거나, 추가할 내용이 있다면 자유롭게 수정해 주세요. 문서는 독자 입장에서 쉽게 이해할 수 있도록 명확하고 간결하게 작성해 주세요.
+
+## 스캐폴딩
+
+기여를 하기 위한 최소한의 골격을 만들어 주는 명령어가 있어요. 아래 명령어를 사용하면 기본적인 구조가 잡힌 구현체 폴더를 생성할 수 있어요.
+
+```bash
+yarn scripts scaffold <name> --type <type>
+```
+
+- `type`: 구현체의 유형으로, `component`, `hook`, `util` 중 하나를 선택해야 해요.
+- `name`: 구현체의 이름이에요.
+
+### 예시
+
+```bash
+yarn scripts scaffold Button --type component
+```
+
+이 명령어는 `src/components/Button` 폴더에 세 개의 파일들을 생성해요.
+
+::: code-group
+
+```tsx [Button.tsx]
+/**
+ * @description
+ * <description-here>
+ *
+ * @param {<param-type>} <param-name> - <param-description>
+ * @param {<param-type>} [<param-name>] - <optional-param-description>
+ *
+ * @returns {<return-type>} <return-description>
+ * - <member-description> `<member-name>` - <member-description>
+ *
+ * @example
+ * <example-code>
+ */
+export function Button() {
+  // TODO: Implement Button
+}
+```
+
+```tsx [Button.spec.ts]
+import { describe, expect, it } from 'vitest';
+
+import { renderSSR } from '../../_internal/test-utils/renderSSR.tsx';
+
+import { Button } from './Button.tsx';
+
+describe('Button', () => {
+  it('is safe on server side rendering', async () => {
+    const result = renderSSR.serverOnly(() => <Button />);
+
+    expect(true).toBe(true);
+  });
+
+  it('should work', async () => {
+    const result = renderSSR.serverOnly(() => <Button />);
+
+    expect(true).toBe(true);
+  });
+});
+```
+
+```ts [index.ts]
+export { Button } from './Button.tsx';
+```
+
+:::
+
+::: tip
+이렇게도 쓸 수 있어요.
+
+```bash
+yarn scripts scaffold Button --t c // 컴포넌트 생성
+yarn scripts scaffold useButton --t h // 훅 생성
+yarn scripts scaffold getButton --t u // 유틸 생성
+```
+
+:::

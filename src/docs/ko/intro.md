@@ -30,25 +30,53 @@ function Page() {
 
 ### 특정 요소로 구분하여 배열 렌더링 하기
 
+<SplitView>
+  <template #left>
+
 ```tsx [without-react-simplikit.tsx]
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
   return <>
-    {texts.map((text, idx) => ( // [!code --]
-      <Fragment key={text}> // [!code --]
-        <div>{text}</div> // [!code --]
-        {idx === texts.length - 1 ? <Border type="padding24" /> : null} // [!code --]
-      </Fragment> // [!code --]
-    ))} // [!code --]
-    <Seperated with={<Border type="padding24" />}> // [!code ++]
-      {texts.map(text => ( // [!code ++]
-        <div>{text}</div> // [!code ++]
-      ))} // [!code ++]
-    </Seperated> // [!code ++]
-  <>;
+    {texts.map((text, idx) =>
+      <Fragment key={text}>
+        <div>{text}</div>
+        {idx === texts.length - 1
+          ? <Border type="padding24" />
+          : null
+        }
+      </Fragment>
+    )}
+<>;
 }
+
 ```
+
+  </template>
+
+<template #right>
+
+```tsx [without-react-simplikit.tsx]
+const texts = ['hello', 'react', 'world'];
+
+function Page() {
+  return <>
+    {texts.map((text, idx) => (
+      <Seperated by={
+        <Border type="padding24" />
+      }>
+        {texts.map(text => (
+          <div>{text}</div>
+        ))}
+      </Seperated>
+    }
+  </>;
+}
+
+```
+
+  </template>
+</SplitView>
 
 ## 간결한 구현으로, 의도하지 않은 동작이나 버그를 최소화해요
 

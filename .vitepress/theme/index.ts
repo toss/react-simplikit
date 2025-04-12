@@ -5,6 +5,7 @@ import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import { h } from 'vue';
 import Interface from '../components/Interface.vue';
+import SplitView from '../components/SplitView.vue';
 
 export default {
   extends: DefaultTheme,
@@ -15,5 +16,6 @@ export default {
   },
   enhanceApp({ app }) {
     app.component('Interface', Interface);
+    app.component('SplitView', SplitView);
   },
 } satisfies Theme;
