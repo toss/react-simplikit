@@ -4,18 +4,17 @@
 
 ## Interface
 ```ts
-function ImpressionArea(
-  as: ElementType = "div",
-  rootMargin: string,
-  areaThreshold: number,
-  timeThreshold: number,
-  onImpressionStart: () => void,
-  onImpressionEnd: () => void,
-  ref: Ref<HTMLElement>,
-  children: React.ReactNode,
-  className: string,
-): JSX.Element;
-
+function ImpressionArea({
+  as?: ElementType = "div",
+  rootMargin?: string,
+  areaThreshold?: number,
+  timeThreshold?: number,
+  onImpressionStart?: () => void,
+  onImpressionEnd?: () => void,
+  ref?: Ref<HTMLElement>,
+  children?: React.ReactNode,
+  className?: string,
+}): JSX.Element;
 ```
 
 ### Parameters
