@@ -66,20 +66,22 @@ export async function generateDocs(names: string[]) {
                   task: async ctx => {
                     const { docSource, translatedDoc } = ctx;
 
-                    if (docSource == null || translatedDoc == null) {
-                      throw new Error('docSource or translatedDoc is not found');
+                    const dirname = path.dirname(sourceFilePath);
+
+                    if (docSource != null) {
+                      await fs.writeFile(`${dirname}/${name}.md`, docSource);
                     }
 
-                    const dirname = path.dirname(sourceFilePath);
-                    await fs.writeFile(`${dirname}/${name}.md`, docSource);
-                    await fs.mkdir(`${dirname}/ko`).catch(e => {
-                      if (e.code === 'EEXIST') {
-                        return;
-                      }
+                    if (translatedDoc != null) {
+                      await fs.mkdir(`${dirname}/ko`).catch(e => {
+                        if (e.code === 'EEXIST') {
+                          return;
+                        }
 
-                      throw e;
-                    });
-                    await fs.writeFile(`${dirname}/ko/${name}.md`, translatedDoc);
+                        throw e;
+                      });
+                      await fs.writeFile(`${dirname}/ko/${name}.md`, translatedDoc);
+                    }
                   },
                 },
               ],
