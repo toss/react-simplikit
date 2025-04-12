@@ -35,7 +35,7 @@ function useImpressionRef(
       name: 'options.timeThreshold',
       type: 'number',
       required: 'true',
-      description: '요소가 최소한으로 보여야 하는 시간 (밀리초 단위)예요',
+      description: '요소가 최소한으로 보여야 하는 시간이에요 (밀리초 단위)',
     },
     {
       name: 'options.areaThreshold',
