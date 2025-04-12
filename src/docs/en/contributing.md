@@ -18,7 +18,7 @@ No, you don't need to write documentation separately. Instead, please write deta
 
 ### Writing Implementations
 
-You must follow `react-simplikit`'s [Design Principles](./design-principles). We don't provide implementations that depend on specific libraries or are tightly coupled with React's lifecycle. Please write implementations that adhere to these design principles.
+You must follow `react-simplikit`'s [Design Principles](./design-principles.md). We don't provide implementations that depend on specific libraries or are tightly coupled with React's lifecycle. Please write implementations that adhere to these design principles.
 
 ### Writing JSDoc
 
