@@ -52,7 +52,6 @@ function Page() {
 
 ```
 
-<<<<<<< Updated upstream
   </template>
 
 <template #right>
@@ -79,8 +78,6 @@ function Page() {
   </template>
 </SplitView>
 
-=======
->>>>>>> Stashed changes
 ## 간결한 구현으로, 의도하지 않은 동작이나 버그를 최소화해요
 
 `react-simplikit`의 모든 구현체는 숨은 로직을 포함하지 않아요. 만약 기능의 조합이나 확장이 필요하다면 외부에서 주입될 수 있도록 인터페이스를 제공해요. 또한 현대적인 구현을 통해 간결한 코드를 유지해요.
