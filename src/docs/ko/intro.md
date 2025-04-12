@@ -37,17 +37,19 @@ function Page() {
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
-  return <>
-    {texts.map((text, idx) =>
-      <Fragment key={text}>
-        <div>{text}</div>
-        {idx === texts.length - 1
-          ? <Border type="padding24" />
-          : null
-        }
-      </Fragment>
-    )}
-<>;
+  return (
+    <>
+      {texts.map((text, idx) =>
+        <Fragment key={text}>
+          <div>{text}</div>
+          {idx === texts.length - 1
+            ? <Border type="padding24" />
+            : null
+          }
+        </Fragment>
+      )}
+    </>
+  );
 }
 
 ```
