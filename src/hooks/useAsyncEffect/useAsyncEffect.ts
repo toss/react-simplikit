@@ -5,7 +5,7 @@ import { DependencyList, useEffect } from 'react';
  * `useAsyncEffect` is a custom hook for handling asynchronous side effects in React components.
  * It follows the same cleanup pattern as `useEffect` while ensuring async operations are handled safely.
  *
- * @param {() => Promise<void | (() => void)>} effect - An asynchronous function executed in the `useEffect` pattern.
+ * @param {() => Promise<void | (() => void)>} [effect] - An asynchronous function executed in the `useEffect` pattern.
  *   This function can optionally return a cleanup function.
  * @param {DependencyList} [deps] - A dependency array.
  *   The effect will re-run whenever any value in this array changes. If omitted, it runs only once when the component mounts.
