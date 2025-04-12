@@ -4,7 +4,7 @@
 
 ## Interface
 ```ts
-function Separated(children: React.ReactNode, by: React.ReactNode): JSX.Element;
+function Separated({ children: React.ReactNode, by: React.ReactNode }): JSX.Element;
 
 ```
 
