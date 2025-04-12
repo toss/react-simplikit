@@ -62,17 +62,13 @@ function Page() {
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
-  return <>
-    {texts.map((text, idx) => (
-      <Seperated by={
-        <Border type="padding24" />
-      }>
-        {texts.map(text => (
-          <div>{text}</div>
-        ))}
-      </Seperated>
-    }
-  </>;
+  return (
+    <Separated by={<Border type="padding24" />}>
+      {texts.map(text => (
+        <div key={text}>{text}</div>
+      ))}
+    </Separated>
+  );
 }
 
 ```
