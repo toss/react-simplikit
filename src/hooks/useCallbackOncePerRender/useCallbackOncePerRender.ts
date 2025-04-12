@@ -44,6 +44,7 @@ export function useCallbackOncePerRender<F extends (...args: any[]) => void>(cal
 
   useEffect(() => {
     hasFired.current = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return usePreservedCallback((...args: Parameters<F>) => {
