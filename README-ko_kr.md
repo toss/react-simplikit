@@ -1,6 +1,6 @@
 ![react-simplikit](src/public/images/og.png)
 
-# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE)
+# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/branch/main/graph/badge.svg?token=5PopssACmx)](https://codecov.io/gh/toss/react-simplikit)
 
 [English](./README.md) | 한국어
 
