@@ -44,12 +44,12 @@ jobs:
           list-files: shell
           filters: |
             changed:
-              - 'src/components/**/*.ts'
-              - 'src/components/**/*.tsx'
-              - 'src/hooks/**/*.ts'
-              - 'src/hooks/**/*.tsx'
-              - 'src/utils/**/*.ts'
-              - 'src/utils/**/*.tsx'
+              - 'src/components/**/!(index|*.spec).ts'
+              - 'src/components/**/!(*.spec).tsx'
+              - 'src/hooks/**/!(index|*.spec).ts'
+              - 'src/hooks/**/!(*.spec).tsx'
+              - 'src/utils/**/!(index|*.spec).ts'
+              - 'src/utils/**/!(*.spec).tsx'
 
   verify-test:
     runs-on: ubuntu-latest
