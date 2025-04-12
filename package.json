@@ -8,6 +8,7 @@
     "esm/**/*"
   ],
   "scripts": {
+    "scaffold": "tsx .scripts/index.ts scaffold",
     "docs:gen": "tsx .scripts/index.ts generate-docs",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
