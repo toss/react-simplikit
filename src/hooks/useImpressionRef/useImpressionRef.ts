@@ -1,10 +1,9 @@
 import { useRef } from 'react';
 
+import { useDebouncedCallback } from '../useDebouncedCallback/useDebouncedCallback.ts';
 import { useIntersectionObserver } from '../useIntersectionObserver/index.ts';
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 import { useVisibilityEvent } from '../useVisibilityEvent/index.ts';
-
-import { useDebouncedCallback } from './useDebouncedCallback.ts';
 
 export type UseImpressionRefOptions = Partial<{
   onImpressionStart: () => void;
@@ -58,6 +57,7 @@ export function useImpressionRef<Element extends HTMLElement>({
     onChange: impressed => {
       (impressed ? impressionStartHandler : impressionEndHandler)();
     },
+    leading: true,
   });
 
   useVisibilityEvent(documentVisible => {

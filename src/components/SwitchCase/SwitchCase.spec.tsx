@@ -1,10 +1,23 @@
 import { useEffect } from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+import { renderSSR } from '../../_internal/test-utils/renderSSR.tsx';
 
 import { SwitchCase } from './SwitchCase.tsx';
 
 describe('SwitchCase', () => {
+  it('is safe on server side rendering', () => {
+    const caseBy = { a: () => <div>A Component</div>, b: () => <div>B Component</div> };
+    renderSSR.serverOnly(() => <SwitchCase value="a" caseBy={caseBy} />);
+
+    expect(screen.getByText('A Component')).toBeInTheDocument();
+
+    renderSSR.serverOnly(() => <SwitchCase value="b" caseBy={caseBy} />);
+
+    expect(screen.getByText('B Component')).toBeInTheDocument();
+  });
+
   it('should render correct component for string value', () => {
     const getStringValue = () => {
       const value = 'a';

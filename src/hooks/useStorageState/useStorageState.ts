@@ -28,7 +28,7 @@ const emitListeners = () => {
  * The value is retained across page reloads and can be shared between tabs when using `localStorage`.
  *
  * @param {string} key - The key used to store the value in storage.
- * @param {object} [options] - Configuration options for storage behavior.
+ * @param {Object} [options] - Configuration options for storage behavior.
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
  * @param {T} [options.defaultValue] - The initial value if no existing value is found.
  *

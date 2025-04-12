@@ -1,4 +1,4 @@
-import OpenAI from '@openai/openai';
+import OpenAI from 'openai';
 
 export async function translate(origin: string) {
   const client = new OpenAI({

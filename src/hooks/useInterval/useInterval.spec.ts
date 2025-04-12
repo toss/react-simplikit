@@ -1,5 +1,6 @@
-import { renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useInterval } from './useInterval.ts';
 
@@ -12,9 +13,9 @@ describe('useInterval', () => {
     vi.restoreAllMocks();
   });
 
-  it('should execute callback at specified intervals', () => {
+  it('should execute callback at specified intervals', async () => {
     const callback = vi.fn();
-    renderHook(() => useInterval(callback, 1000));
+    await renderHookSSR(() => useInterval(callback, 1000));
 
     expect(callback).not.toHaveBeenCalled();
 
@@ -25,9 +26,16 @@ describe('useInterval', () => {
     expect(callback).toHaveBeenCalledTimes(2);
   });
 
-  it('should not set interval when enabled is false', () => {
+  it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    renderHook(() =>
+    renderHookSSR.serverOnly(() => useInterval(callback, 1000));
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should not set interval when enabled is false', async () => {
+    const callback = vi.fn();
+    await renderHookSSR(() =>
       useInterval(callback, {
         delay: 1000,
         enabled: false,
@@ -38,18 +46,20 @@ describe('useInterval', () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it('should clean up interval on unmount', () => {
+  it('should clean up interval on unmount', async () => {
     const callback = vi.fn();
-    const { unmount } = renderHook(() => useInterval(callback, 1000));
+    const { unmount } = await renderHookSSR(() => useInterval(callback, 1000));
 
     unmount();
     vi.advanceTimersByTime(1000);
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it('should reset interval when delay changes', () => {
+  it('should reset interval when delay changes', async () => {
     const callback = vi.fn();
-    const { rerender } = renderHook(({ delay }) => useInterval(callback, delay), { initialProps: { delay: 1000 } });
+    const { rerender } = await renderHookSSR(({ delay }) => useInterval(callback, delay), {
+      initialProps: { delay: 1000 },
+    });
 
     vi.advanceTimersByTime(500);
     rerender({ delay: 2000 });
@@ -61,17 +71,17 @@ describe('useInterval', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should support numeric delay parameter', () => {
+  it('should support numeric delay parameter', async () => {
     const callback = vi.fn();
-    renderHook(() => useInterval(callback, 1000));
+    await renderHookSSR(() => useInterval(callback, 1000));
 
     vi.advanceTimersByTime(1000);
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should support options object parameter', () => {
+  it('should support options object parameter', async () => {
     const callback = vi.fn();
-    renderHook(() =>
+    await renderHookSSR(() =>
       useInterval(callback, {
         delay: 1000,
         enabled: true,
@@ -83,9 +93,9 @@ describe('useInterval', () => {
   });
 
   describe('trailing option', () => {
-    it('should execute callback immediately when trailing is false', () => {
+    it('should execute callback immediately when trailing is false', async () => {
       const callback = vi.fn();
-      renderHook(() =>
+      await renderHookSSR(() =>
         useInterval(callback, {
           delay: 1000,
           immediate: true,
@@ -98,9 +108,9 @@ describe('useInterval', () => {
       expect(callback).toHaveBeenCalledTimes(2);
     });
 
-    it('should wait for first delay when trailing is true', () => {
+    it('should wait for first delay when trailing is true', async () => {
       const callback = vi.fn();
-      renderHook(() =>
+      await renderHookSSR(() =>
         useInterval(callback, {
           delay: 1000,
           immediate: false,
@@ -114,9 +124,9 @@ describe('useInterval', () => {
     });
   });
 
-  it('should handle enabled flag changes appropriately', () => {
+  it('should handle enabled flag changes appropriately', async () => {
     const callback = vi.fn();
-    const { rerender } = renderHook(
+    const { rerender } = await renderHookSSR(
       ({ enabled }) =>
         useInterval(callback, {
           delay: 1000,

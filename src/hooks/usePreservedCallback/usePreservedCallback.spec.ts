@@ -1,11 +1,21 @@
-import { act, renderHook } from '@testing-library/react';
+import { act } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { usePreservedCallback } from './usePreservedCallback.ts';
 
 describe('usePreservedCallback', () => {
-  test('should return the same callback instance initially', () => {
+  it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const { result } = renderHook(() => usePreservedCallback(callback));
+    renderHookSSR.serverOnly(() => usePreservedCallback(callback));
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should return the same callback instance initially', async () => {
+    const callback = vi.fn();
+    const { result } = await renderHookSSR(() => usePreservedCallback(callback));
 
     const preservedCallback = result.current;
 
@@ -13,12 +23,11 @@ describe('usePreservedCallback', () => {
     preservedCallback();
     expect(callback).toHaveBeenCalled();
   });
-
-  test('should always call the latest version of the callback', () => {
+  it('should always call the latest version of the callback', async () => {
     const initialCallback = vi.fn();
     const updatedCallback = vi.fn();
 
-    const { result, rerender } = renderHook(({ callback }) => usePreservedCallback(callback), {
+    const { result, rerender } = await renderHookSSR(({ callback }) => usePreservedCallback(callback), {
       initialProps: { callback: initialCallback },
     });
 
@@ -39,9 +48,9 @@ describe('usePreservedCallback', () => {
     expect(initialCallback).toHaveBeenCalledTimes(1); // Ensure the old callback is not called again
   });
 
-  test('should correctly pass arguments to the callback', () => {
+  it('should correctly pass arguments to the callback', async () => {
     const callback = vi.fn((a: number, b: number) => a + b);
-    const { result } = renderHook(() => usePreservedCallback(callback));
+    const { result } = await renderHookSSR(() => usePreservedCallback(callback));
 
     act(() => {
       result.current(2, 3);
@@ -50,10 +59,9 @@ describe('usePreservedCallback', () => {
     expect(callback).toHaveBeenCalledWith(2, 3);
     expect(callback).toHaveReturnedWith(5);
   });
-
-  test('should not create a new function instance unnecessarily', () => {
+  it('should not create a new function instance unnecessarily', async () => {
     const callback = vi.fn();
-    const { result, rerender } = renderHook(({ callback }) => usePreservedCallback(callback), {
+    const { result, rerender } = await renderHookSSR(({ callback }) => usePreservedCallback(callback), {
       initialProps: { callback },
     });
 

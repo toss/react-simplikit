@@ -1,14 +1,22 @@
-import { renderHook } from '@testing-library/react';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useThrottle } from './useThrottle.ts';
 
 describe('useThrottle', () => {
-  it('should call throttle cancel when unmount', () => {
+  it('is safe on server side rendering', () => {
+    const callback = vi.fn();
+    renderHookSSR.serverOnly(() => useThrottle(callback, 50));
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should call throttle cancel when unmount', async () => {
     vi.useFakeTimers();
 
     const callback = vi.fn();
-    const { result, unmount } = renderHook(() => useThrottle(callback, 50));
+    const { result, unmount } = await renderHookSSR(() => useThrottle(callback, 50));
 
     const cancel = vi.spyOn(result.current, 'cancel');
 

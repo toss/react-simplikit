@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { Command } from 'commander';
 
 import { generateDocs } from './commands/generateDocs/index.ts';
+import { scaffold } from './commands/scaffold/index.ts';
 
 export function cli(args: string[]) {
   const program = new Command();
@@ -18,6 +19,23 @@ export function cli(args: string[]) {
       generateDocs(names.split(','));
     });
 
+  program
+    .command('scaffold <name>')
+    .description('Scaffold a new hook, component or util')
+    .option('-t, --type <type>', 'The type of implementation')
+    .action((name: string, options: { type: string }) => {
+      const formatShortcut = (value: string) => ({ c: 'component', h: 'hook', u: 'util' })[value];
+
+      const type = formatShortcut(options.type);
+
+      if (type == null || !isValidType(type)) {
+        console.error(`Invalid type (${options.type}). type should be one of the following: hook, component, util`);
+        return;
+      }
+
+      scaffold(name, type);
+    });
+
   program.parse(args);
 
   // Show help if no command is provided
@@ -25,5 +43,8 @@ export function cli(args: string[]) {
     program.outputHelp();
   }
 }
+
+const isValidType = (value: string): value is 'hook' | 'component' | 'util' =>
+  ['hook', 'component', 'util'].includes(value);
 
 cli(process.argv);

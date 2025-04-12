@@ -8,6 +8,7 @@
     "esm/**/*"
   ],
   "scripts": {
+    "scaffold": "tsx .scripts/index.ts scaffold",
     "docs:gen": "tsx .scripts/index.ts generate-docs",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
@@ -35,13 +36,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
-    "@openai/openai": "npm:@jsr/openai__openai@^4.93.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
     "@types/node": "^22.10.2",
-    "@types/react": "^19.0.7",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitest/coverage-v8": "^2.1.8",
     "commander": "^13.1.0",
     "comment-parser": "^1.4.1",
@@ -60,6 +61,7 @@
     "globals": "^15.13.0",
     "jsdom": "^25.0.1",
     "listr2": "^8.2.5",
+    "nanoid": "^5.1.5",
     "ora": "^8.2.0",
     "prettier": "^3.4.2",
     "prettier-plugin-sort-re-exports": "^0.1.0",
@@ -77,5 +79,8 @@
     "react": "*",
     "react-dom": "*"
   },
-  "packageManager": "yarn@4.5.3"
+  "packageManager": "yarn@4.5.3",
+  "dependencies": {
+    "openai": "^4.93.0"
+  }
 }

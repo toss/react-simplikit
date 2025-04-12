@@ -1,5 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { renderSSR } from '../../_internal/test-utils/renderSSR.tsx';
 
 import { buildContext } from './buildContext.tsx';
 
@@ -30,11 +32,11 @@ describe('buildContext', () => {
       return <h1>{context.title}</h1>;
     }
 
-    render(
+    await renderSSR(() => (
       <Provider title="test title">
         <TestComponent />
       </Provider>
-    );
+    ));
 
     expect(await screen.findByText('test title')).toBeInTheDocument();
   });
@@ -47,11 +49,11 @@ describe('buildContext', () => {
       return <h1>{context.title}</h1>;
     }
 
-    render(
+    await renderSSR(() => (
       <Provider>
         <TestComponent />
       </Provider>
-    );
+    ));
 
     expect(await screen.findByText('default title')).toBeInTheDocument();
   });
@@ -64,7 +66,7 @@ describe('buildContext', () => {
       return <h1 data-testid={testId}>{context.title}</h1>;
     }
 
-    render(
+    await renderSSR(() => (
       <Provider title="outer title">
         <div data-testid="outer-scope">
           <TestComponent testId="outer-component" />
@@ -75,7 +77,7 @@ describe('buildContext', () => {
           </Provider>
         </div>
       </Provider>
-    );
+    ));
 
     const outerComponent = screen.getByTestId('outer-component');
     const innerComponent = screen.getByTestId('inner-component');
@@ -91,7 +93,7 @@ describe('buildContext', () => {
     expect(outerScope).toContainElement(outerComponent);
   });
 
-  it('should throw error when used outside provider', () => {
+  it('should throw error when used outside provider', async () => {
     const [, useContext] = buildContext<TestContextType>('Test');
 
     function TestComponent() {
@@ -99,10 +101,12 @@ describe('buildContext', () => {
       return <h1>{context.title}</h1>;
     }
 
-    expect(() => render(<TestComponent />)).toThrow('`TestContext` must be used within `TestProvider`');
+    await expect(async () => await renderSSR(() => <TestComponent />)).rejects.toThrow(
+      '`TestContext` must be used within `TestProvider`'
+    );
   });
 
-  it('should throw error when no values available', () => {
+  it('should throw error when no values available', async () => {
     const [Provider, useContext] = buildContext<TestContextType>('Test');
 
     function TestComponent() {
@@ -110,12 +114,13 @@ describe('buildContext', () => {
       return <h1>{context.title}</h1>;
     }
 
-    expect(() =>
-      render(
-        <Provider>
-          <TestComponent />
-        </Provider>
-      )
-    ).toThrow();
+    await expect(
+      async () =>
+        await renderSSR(() => (
+          <Provider>
+            <TestComponent />
+          </Provider>
+        ))
+    ).rejects.toThrow();
   });
 });

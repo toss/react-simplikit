@@ -44,12 +44,13 @@ jobs:
           list-files: shell
           filters: |
             changed:
-              - 'src/components/**/*.ts'
-              - 'src/components/**/*.tsx'
-              - 'src/hooks/**/*.ts'
-              - 'src/hooks/**/*.tsx'
-              - 'src/utils/**/*.ts'
-              - 'src/utils/**/*.tsx'
+              - added|modified:
+                - 'src/components/**/!(index|*.spec).ts'
+                - 'src/components/**/!(*.spec).tsx'
+                - 'src/hooks/**/!(index|*.spec).ts'
+                - 'src/hooks/**/!(*.spec).tsx'
+                - 'src/utils/**/!(index|*.spec).ts'
+                - 'src/utils/**/!(*.spec).tsx'
 
   verify-test:
     runs-on: ubuntu-latest
@@ -188,6 +189,13 @@ jobs:
       - name: Check JSDoc structure
         run: |
           for file in ${{ needs.check-changes.outputs.changed_files }}; do
+            directory=$(basename "$(dirname "$file")")
+            filename=$(basename $file)
+            filename="${filename%%.*}"
+            if [ "$directory" != "$filename" ]; then
+              continue
+            fi
+
             if ! grep -e "@description" "$file"; then
               echo "@description tag missing in $file"
               exit 1
@@ -204,7 +212,7 @@ jobs:
                 exit 1
               fi
 
-              if ! grep -q "@param {.*} .*[^ ] -" "$file"; then
+              if ! grep -q "@param {.*} [^ -]* - .*" "$file"; then
                 echo "Parameter description missing in @param tag in $file"
                 exit 1
               fi

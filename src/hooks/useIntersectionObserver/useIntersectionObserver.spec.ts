@@ -1,5 +1,7 @@
-import { act, renderHook } from '@testing-library/react';
-import { Mock, MockInstance, vi } from 'vitest';
+import { act } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, Mock, MockInstance, vi } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useIntersectionObserver } from './useIntersectionObserver.ts';
 
@@ -36,14 +38,21 @@ describe('useIntersectionObserver', () => {
     }
   });
 
-  const setup = (callback = vi.fn()) => {
-    const { result } = renderHook(() => useIntersectionObserver(callback, { root: null, threshold: 0.5 }));
+  const setup = async (callback = vi.fn()) => {
+    const { result } = await renderHookSSR(() => useIntersectionObserver(callback, { root: null, threshold: 0.5 }));
     const mockElement = document.createElement('div');
     return { result, mockElement };
   };
 
-  it('should observe the element when it is set', () => {
-    const { result, mockElement } = setup();
+  it('is safe on server side rendering', () => {
+    const callback = vi.fn();
+    renderHookSSR.serverOnly(() => useIntersectionObserver(callback, { root: null, threshold: 0.5 }));
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should observe the element when it is set', async () => {
+    const { result, mockElement } = await setup();
     act(() => {
       result.current(mockElement);
     });
@@ -51,8 +60,8 @@ describe('useIntersectionObserver', () => {
     expect(mockObserve).toHaveBeenCalledWith(mockElement);
   });
 
-  it('should unobserve the element when it is removed', () => {
-    const { result, mockElement } = setup();
+  it('should unobserve the element when it is removed', async () => {
+    const { result, mockElement } = await setup();
     act(() => {
       result.current(mockElement);
       result.current(null);
@@ -61,9 +70,9 @@ describe('useIntersectionObserver', () => {
     expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
   });
 
-  it('should call the callback when an entry is observed', () => {
+  it('should call the callback when an entry is observed', async () => {
     const mockCallback = vi.fn();
-    const { result, mockElement } = setup(mockCallback);
+    const { result, mockElement } = await setup(mockCallback);
     act(() => {
       result.current(mockElement);
     });
@@ -77,12 +86,12 @@ describe('useIntersectionObserver', () => {
     expect(mockCallback).toHaveBeenCalledWith(mockEntry);
   });
 
-  it('should not create an observer if IntersectionObserver is undefined', () => {
+  it('should not create an observer if IntersectionObserver is undefined', async () => {
     originalIntersectionObserver = global.IntersectionObserver;
     delete (global as any).IntersectionObserver;
 
     const mockCallback = vi.fn();
-    const { result, mockElement } = setup(mockCallback);
+    const { result, mockElement } = await setup(mockCallback);
     act(() => {
       result.current(mockElement);
     });

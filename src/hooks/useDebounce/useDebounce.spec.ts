@@ -1,5 +1,6 @@
-import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { DebouncedFunction } from './debounce.ts';
 import { useDebounce } from './useDebounce.ts';
@@ -9,9 +10,16 @@ describe('useDebounce', () => {
     vi.useFakeTimers();
   });
 
-  it('should debounce the callback with default options', () => {
+  it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const { result } = renderHook(() => useDebounce(callback, 100));
+    renderHookSSR.serverOnly(() => useDebounce(callback, 100));
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should debounce the callback with default options', async () => {
+    const callback = vi.fn();
+    const { result } = await renderHookSSR(() => useDebounce(callback, 100));
 
     result.current();
     expect(callback).not.toBeCalled();
@@ -23,9 +31,9 @@ describe('useDebounce', () => {
     expect(callback).toBeCalledTimes(1);
   });
 
-  it('should handle leading edge', () => {
+  it('should handle leading edge', async () => {
     const callback = vi.fn();
-    const { result } = renderHook(() => useDebounce(callback, 100, { leading: true }));
+    const { result } = await renderHookSSR(() => useDebounce(callback, 100, { leading: true }));
 
     result.current();
     expect(callback).toBeCalledTimes(1);
@@ -41,9 +49,9 @@ describe('useDebounce', () => {
     expect(callback).toBeCalledTimes(2);
   });
 
-  it('should handle trailing edge', () => {
+  it('should handle trailing edge', async () => {
     const callback = vi.fn();
-    const { result } = renderHook(() => useDebounce(callback, 100, { trailing: true }));
+    const { result } = await renderHookSSR(() => useDebounce(callback, 100, { trailing: true }));
 
     result.current();
     expect(callback).not.toBeCalled();
@@ -56,9 +64,9 @@ describe('useDebounce', () => {
     expect(callback).toBeCalledTimes(1);
   });
 
-  it('should handle both leading and trailing edges', () => {
+  it('should handle both leading and trailing edges', async () => {
     const callback = vi.fn();
-    const { result } = renderHook(() => useDebounce(callback, 100, { leading: true, trailing: true }));
+    const { result } = await renderHookSSR(() => useDebounce(callback, 100, { leading: true, trailing: true }));
 
     result.current();
     expect(callback).toBeCalledTimes(1);
@@ -68,19 +76,19 @@ describe('useDebounce', () => {
     expect(callback).toBeCalledTimes(2);
   });
 
-  it('should inference the callback type', () => {
+  it('should inference the callback type', async () => {
     const callback = (value: string) => {
       console.log('test::', value);
     };
 
-    const { result } = renderHook(() => useDebounce(callback, 100));
+    const { result } = renderHookSSR(() => useDebounce(callback, 100));
 
     expectTypeOf(result.current).toEqualTypeOf<DebouncedFunction<typeof callback>>();
   });
 
-  it('should cleanup on unmount', () => {
+  it('should cleanup on unmount', async () => {
     const callback = vi.fn();
-    const { result, unmount } = renderHook(() => useDebounce(callback, 100));
+    const { result, unmount } = await renderHookSSR(() => useDebounce(callback, 100));
 
     result.current();
     unmount();
