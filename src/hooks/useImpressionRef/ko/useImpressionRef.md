@@ -57,7 +57,7 @@ function useImpressionRef(
 <Interface
   name=""
   type="(element: Element | null) => void"
-  description="요소를 설정하기 위한 함수예요. 이 함수를 <code>ref</code> 속성에 첨부하면 요소의 가시성이 변경될 때마다 콜백이 실행돼요."
+  description="요소를 설정하기 위한 ref 함수예요. 이 함수를 <code>ref</code> 속성에 전달하면 해당 요소의 가시성이 변경될 때마다 콜백이 실행돼요."
 />
 
 
