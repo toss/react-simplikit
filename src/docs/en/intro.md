@@ -37,17 +37,19 @@ function Page() {
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
-  return <>
-    {texts.map((text, idx) =>
-      <Fragment key={text}>
-        <div>{text}</div>
-        {idx === texts.length - 1
-          ? <Border type="padding24" />
-          : null
-        }
-      </Fragment>
-    )}
-<>;
+  return (
+    <>
+      {texts.map((text, idx) =>
+        <Fragment key={text}>
+          <div>{text}</div>
+          {idx === texts.length - 1
+            ? <Border type="padding24" />
+            : null
+          }
+        </Fragment>
+      )}
+    </>
+  );
 }
 
 ```
@@ -116,11 +118,3 @@ Compared to react-use, which has [14 dependencies](https://www.npmjs.com/package
 For more information about react-simplikit, please check out the following link:
 
 - [GitHub](https://github.com/toss/react-simplikit)
-
-```
-
-```
-
-```
-
-```
