@@ -4,11 +4,11 @@
 
 ## Interface
 ```ts
-function SwitchCase(
+function SwitchCase({
   value: string | number,
   caseBy: Record<string | number, () => JSX.Element>,
-  defaultComponent: () => JSX.Element,
-): JSX.Element;
+  defaultComponent?: () => JSX.Element,
+}): JSX.Element;
 
 ```
 
