@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createRef, RefObject } from 'react';
 import { renderToString } from 'react-dom/server';
 import { render, renderHook, RenderHookOptions } from '@testing-library/react';
