@@ -15,12 +15,9 @@ describe('useTimeout', () => {
 
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const server = renderHookSSR.serverOnly(() => useTimeout(callback, 1000));
+    renderHookSSR.serverOnly(() => useTimeout(callback, 1000));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(callback).not.toHaveBeenCalled();
-    });
+    expect(callback).not.toHaveBeenCalled();
   });
 
   it('should call callback after specified delay', async () => {

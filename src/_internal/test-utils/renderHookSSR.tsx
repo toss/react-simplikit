@@ -16,23 +16,17 @@ export function renderHookSSR<P extends Record<string, any>, Hook extends (props
   return result;
 }
 
-renderHookSSR.serverOnly =
-  <Hook extends () => any>(useHook: Hook) =>
-  (fn: (result: RefObject<ReturnType<Hook> | null> & { error?: Error }) => Promise<void> | void) => {
-    try {
-      const result = createRef<ReturnType<Hook>>();
+renderHookSSR.serverOnly = <Hook extends () => any>(useHook: Hook) => {
+  const result = createRef<ReturnType<Hook>>();
 
-      const Component = () => {
-        const hookResult = useHook();
-        result.current = hookResult;
-        return <div></div>;
-      };
-
-      const stringified = serverEnvironments(() => renderToString(<Component />));
-      render(<div dangerouslySetInnerHTML={{ __html: stringified }} />);
-
-      fn(result);
-    } catch (error) {
-      fn({ current: null, error: error as Error });
-    }
+  const Component = () => {
+    const hookResult = useHook();
+    result.current = hookResult;
+    return <div></div>;
   };
+
+  const stringified = serverEnvironments(() => renderToString(<Component />));
+  render(<div dangerouslySetInnerHTML={{ __html: stringified }} />);
+
+  return result as RefObject<ReturnType<Hook>>;
+};

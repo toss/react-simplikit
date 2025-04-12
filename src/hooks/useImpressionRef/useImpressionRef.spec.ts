@@ -55,11 +55,7 @@ describe('useImpressionRef', () => {
   };
 
   it('is safe on server side rendering', () => {
-    const server = renderHookSSR.serverOnly(() => useImpressionRef({}));
-
-    server(result => {
-      expect(result.error).toBeUndefined();
-    });
+    renderHookSSR.serverOnly(() => useImpressionRef({}));
   });
 
   it('should call onImpressionStart when element becomes visible', async () => {

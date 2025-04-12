@@ -147,13 +147,10 @@ describe('useStorageState', () => {
   // 공통 테스트 함수
   const runCommonTests = (storage: Storage) => {
     it('is safe on server side rendering', () => {
-      const server = renderHookSSR.serverOnly(() => useStorageState('test-key', { defaultValue: 'default', storage }));
+      const result = renderHookSSR.serverOnly(() => useStorageState('test-key', { defaultValue: 'default', storage }));
 
-      server(result => {
-        expect(result.error).toBeUndefined();
-        const [value] = result.current ?? [];
-        expect(value).toBe('default');
-      });
+      const [value] = result.current;
+      expect(value).toBe('default');
     });
 
     it('should initialize without default value', async () => {

@@ -12,14 +12,12 @@ describe('useAsyncEffect', () => {
 
   const flushPromises = () => act(async () => await Promise.resolve());
 
-  it('should not execute async effect in server', async () => {
+  it('is safe on server side rendering', async () => {
     const effect = vi.fn().mockResolvedValue(undefined);
 
-    const server = renderHookSSR.serverOnly(() => useAsyncEffect(effect, []));
+    renderHookSSR.serverOnly(() => useAsyncEffect(effect, []));
 
-    server(() => {
-      expect(effect).not.toHaveBeenCalled();
-    });
+    expect(effect).not.toHaveBeenCalled();
   });
 
   it('should execute async effect', async () => {

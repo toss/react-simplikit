@@ -237,6 +237,7 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
                      ${Object.entries({
                        name: nestedParam.name,
                        type: nestedParam.type,
+                       required: String(!nestedParam.optional),
                        defaultValue: nestedParam.default,
                        description: nestedParam.description,
                      })

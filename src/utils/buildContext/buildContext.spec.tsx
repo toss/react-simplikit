@@ -32,11 +32,11 @@ describe('buildContext', () => {
       return <h1>{context.title}</h1>;
     }
 
-    await renderSSR(
+    await renderSSR(() => (
       <Provider title="test title">
         <TestComponent />
       </Provider>
-    );
+    ));
 
     expect(await screen.findByText('test title')).toBeInTheDocument();
   });
@@ -49,11 +49,11 @@ describe('buildContext', () => {
       return <h1>{context.title}</h1>;
     }
 
-    await renderSSR(
+    await renderSSR(() => (
       <Provider>
         <TestComponent />
       </Provider>
-    );
+    ));
 
     expect(await screen.findByText('default title')).toBeInTheDocument();
   });
@@ -66,7 +66,7 @@ describe('buildContext', () => {
       return <h1 data-testid={testId}>{context.title}</h1>;
     }
 
-    await renderSSR(
+    await renderSSR(() => (
       <Provider title="outer title">
         <div data-testid="outer-scope">
           <TestComponent testId="outer-component" />
@@ -77,7 +77,7 @@ describe('buildContext', () => {
           </Provider>
         </div>
       </Provider>
-    );
+    ));
 
     const outerComponent = screen.getByTestId('outer-component');
     const innerComponent = screen.getByTestId('inner-component');
@@ -101,7 +101,7 @@ describe('buildContext', () => {
       return <h1>{context.title}</h1>;
     }
 
-    expect(async () => await renderSSR(<TestComponent />)).rejects.toThrow(
+    await expect(async () => await renderSSR(() => <TestComponent />)).rejects.toThrow(
       '`TestContext` must be used within `TestProvider`'
     );
   });
@@ -114,13 +114,13 @@ describe('buildContext', () => {
       return <h1>{context.title}</h1>;
     }
 
-    expect(
+    await expect(
       async () =>
-        await renderSSR(
+        await renderSSR(() => (
           <Provider>
             <TestComponent />
           </Provider>
-        )
+        ))
     ).rejects.toThrow();
   });
 });

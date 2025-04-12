@@ -22,12 +22,9 @@ describe('useVisibilityEvent', () => {
 
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const server = renderHookSSR.serverOnly(() => useVisibilityEvent(callback));
+    renderHookSSR.serverOnly(() => useVisibilityEvent(callback));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(callback).not.toHaveBeenCalled();
-    });
+    expect(callback).not.toHaveBeenCalled();
   });
 
   it('should not call the callback on initial render if immediate is false', async () => {

@@ -7,12 +7,9 @@ import { useRefEffect } from './useRefEffect.ts';
 describe('useRefEffect', () => {
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const server = renderHookSSR.serverOnly(() => useRefEffect(callback, []));
+    renderHookSSR.serverOnly(() => useRefEffect(callback, []));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(callback).not.toHaveBeenCalled();
-    });
+    expect(callback).not.toHaveBeenCalled();
   });
 
   it('should call the callback when a new element is set', async () => {

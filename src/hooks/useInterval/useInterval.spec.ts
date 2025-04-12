@@ -1,5 +1,6 @@
-import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useInterval } from './useInterval.ts';
 
@@ -27,12 +28,9 @@ describe('useInterval', () => {
 
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const server = renderHookSSR.serverOnly(() => useInterval(callback, 1000));
+    renderHookSSR.serverOnly(() => useInterval(callback, 1000));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(callback).not.toHaveBeenCalled();
-    });
+    expect(callback).not.toHaveBeenCalled();
   });
 
   it('should not set interval when enabled is false', async () => {

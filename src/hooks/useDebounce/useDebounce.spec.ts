@@ -12,11 +12,9 @@ describe('useDebounce', () => {
 
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const server = renderHookSSR.serverOnly(() => useDebounce(callback, 100));
+    renderHookSSR.serverOnly(() => useDebounce(callback, 100));
 
-    server(() => {
-      expect(callback).not.toHaveBeenCalled();
-    });
+    expect(callback).not.toHaveBeenCalled();
   });
 
   it('should debounce the callback with default options', async () => {

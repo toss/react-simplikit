@@ -46,12 +46,9 @@ describe('useIntersectionObserver', () => {
 
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const server = renderHookSSR.serverOnly(() => useIntersectionObserver(callback, { root: null, threshold: 0.5 }));
+    renderHookSSR.serverOnly(() => useIntersectionObserver(callback, { root: null, threshold: 0.5 }));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(callback).not.toHaveBeenCalled();
-    });
+    expect(callback).not.toHaveBeenCalled();
   });
 
   it('should observe the element when it is set', async () => {

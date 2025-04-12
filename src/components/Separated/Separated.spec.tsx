@@ -15,15 +15,13 @@ describe('Separated', () => {
       </div>
     ));
 
-    const server = renderSSR.serverOnly(<Separated by={separator}>{children}</Separated>);
+    renderSSR.serverOnly(() => <Separated by={separator}>{children}</Separated>);
 
-    server(() => {
-      for (let i = 0; i < CHILDREN_COUNT; i++) {
-        expect(screen.getByTestId(`child-${i}`)).toBeInTheDocument();
-      }
+    for (let i = 0; i < CHILDREN_COUNT; i++) {
+      expect(screen.getByTestId(`child-${i}`)).toBeInTheDocument();
+    }
 
-      expect(screen.getAllByTestId('separator')).toHaveLength(CHILDREN_COUNT - 1);
-    });
+    expect(screen.getAllByTestId('separator')).toHaveLength(CHILDREN_COUNT - 1);
   });
 
   it('should render children by separator', async () => {
@@ -35,7 +33,7 @@ describe('Separated', () => {
       </div>
     ));
 
-    await renderSSR(<Separated by={separator}>{children}</Separated>);
+    await renderSSR(() => <Separated by={separator}>{children}</Separated>);
 
     for (let i = 0; i < CHILDREN_COUNT; i++) {
       expect(screen.getByTestId(`child-${i}`)).toBeInTheDocument();
@@ -48,7 +46,7 @@ describe('Separated', () => {
     const separator = <span data-testid="separator">|</span>;
     const child = <div data-testid="single-child">Single Item</div>;
 
-    await renderSSR(<Separated by={separator}>{child}</Separated>);
+    await renderSSR(() => <Separated by={separator}>{child}</Separated>);
 
     expect(screen.getByTestId('single-child')).toBeInTheDocument();
     expect(screen.queryByTestId('separator')).not.toBeInTheDocument();
@@ -57,11 +55,11 @@ describe('Separated', () => {
   it('should not render separator by empty children', async () => {
     const separator = <span data-testid="separator">|</span>;
 
-    await renderSSR(
+    await renderSSR(() => (
       <Separated by={separator}>
         <></>
       </Separated>
-    );
+    ));
 
     expect(screen.queryByTestId('separator')).not.toBeInTheDocument();
   });
@@ -78,7 +76,7 @@ describe('Separated', () => {
       'text',
     ];
 
-    await renderSSR(<Separated by={separator}>{children}</Separated>);
+    await renderSSR(() => <Separated by={separator}>{children}</Separated>);
 
     expect(screen.getByTestId('valid')).toBeInTheDocument();
     expect(screen.queryByTestId('separator')).not.toBeInTheDocument();

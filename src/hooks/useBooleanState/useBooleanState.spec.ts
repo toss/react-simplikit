@@ -6,15 +6,12 @@ import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 import { useBooleanState } from './useBooleanState.ts';
 
 describe('useBooleanState', () => {
-  it('should initialize default value even if in server', async () => {
-    const server = renderHookSSR.serverOnly(() => useBooleanState(true));
+  it('is safe on server side rendering', async () => {
+    const result = renderHookSSR.serverOnly(() => useBooleanState(true));
 
-    server(result => {
-      const [bool] = result.current ?? [];
+    const [bool] = result.current;
 
-      expect(result.error).toBeUndefined();
-      expect(bool).toBe(true);
-    });
+    expect(bool).toBe(true);
   });
 
   it('should initialize with the default value', async () => {

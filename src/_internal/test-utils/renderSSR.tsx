@@ -1,17 +1,20 @@
 import { type ReactNode } from 'react';
 import { renderToString } from 'react-dom/server';
-import { render, RenderOptions, RenderResult } from '@testing-library/react';
+import { render, RenderOptions } from '@testing-library/react';
 import { expect } from 'vitest';
 import { vi } from 'vitest';
 
 import { serverEnvironments } from './serverEnvironments.ts';
 
-export async function renderSSR(ui: ReactNode, options: RenderOptions = {}) {
+export async function renderSSR(renderer: () => ReactNode, options: RenderOptions = {}) {
   const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+  const ui = renderer();
+  const serverUi = renderer();
 
   const container = document.createElement('div');
 
-  container.innerHTML = renderToString(ui);
+  container.innerHTML = renderToString(serverUi);
 
   document.body.appendChild(container);
 
@@ -20,8 +23,14 @@ export async function renderSSR(ui: ReactNode, options: RenderOptions = {}) {
     container,
     hydrate: true,
     onRecoverableError: err => {
+      if (!(err instanceof Error)) {
+        console.warn(err);
+        return;
+      }
+
+      console.warn(err.message);
+
       if (err instanceof Error && err.message.includes('Hydration failed')) {
-        // console.log(err);
         console.error('Hydration failed');
       }
     },
@@ -37,10 +46,11 @@ export async function renderSSR(ui: ReactNode, options: RenderOptions = {}) {
   return result;
 }
 
-renderSSR.serverOnly = (ui: ReactNode) => (fn: (renderResult: RenderResult) => void) => {
+renderSSR.serverOnly = (renderer: () => ReactNode) => {
+  const ui = renderer();
   const stringified = serverEnvironments(() => renderToString(ui));
 
   const renderResult = render(<div dangerouslySetInnerHTML={{ __html: stringified }} />);
 
-  fn(renderResult);
+  return renderResult;
 };

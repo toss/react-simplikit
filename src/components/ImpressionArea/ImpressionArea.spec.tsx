@@ -36,33 +36,31 @@ describe('ImpressionArea', () => {
   });
 
   it('is safe on server side rendering', () => {
-    const server = renderSSR.serverOnly(
+    renderSSR.serverOnly(() => (
       <ImpressionArea onImpressionStart={mockOnImpressionStart} onImpressionEnd={mockOnImpressionEnd}>
         <span>Test Content</span>
       </ImpressionArea>
-    );
+    ));
 
-    server(() => {
-      expect(screen.getByText('Test Content')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
   it('renders children correctly', async () => {
-    await renderSSR(
+    await renderSSR(() => (
       <ImpressionArea onImpressionStart={mockOnImpressionStart} onImpressionEnd={mockOnImpressionEnd}>
         <span>Test Content</span>
       </ImpressionArea>
-    );
+    ));
 
     expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
   it('calls onImpressionStart when the element becomes visible', async () => {
-    await renderSSR(
+    await renderSSR(() => (
       <ImpressionArea onImpressionStart={mockOnImpressionStart} onImpressionEnd={mockOnImpressionEnd}>
         <div>Visible Content</div>
       </ImpressionArea>
-    );
+    ));
 
     const observerCallback = mockInstances[0].callback;
     observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
@@ -72,11 +70,11 @@ describe('ImpressionArea', () => {
   });
 
   it('calls onImpressionEnd when the element goes out of view', async () => {
-    await renderSSR(
+    await renderSSR(() => (
       <ImpressionArea onImpressionStart={mockOnImpressionStart} onImpressionEnd={mockOnImpressionEnd}>
         <div>Visible Content</div>
       </ImpressionArea>
-    );
+    ));
 
     const observerCallback = mockInstances[0].callback;
     observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);

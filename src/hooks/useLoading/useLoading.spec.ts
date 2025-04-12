@@ -7,13 +7,11 @@ import { useLoading } from './useLoading.ts';
 
 describe('useLoading', () => {
   it('is safe on server side rendering', () => {
-    const server = renderHookSSR.serverOnly(() => useLoading());
+    const result = renderHookSSR.serverOnly(() => useLoading());
 
-    server(result => {
-      const [bool] = result.current ?? [];
-      expect(result.error).toBeUndefined();
-      expect(bool).toBe(false);
-    });
+    const [bool] = result.current;
+
+    expect(bool).toBe(false);
   });
 
   it('should start with loading as false', async () => {

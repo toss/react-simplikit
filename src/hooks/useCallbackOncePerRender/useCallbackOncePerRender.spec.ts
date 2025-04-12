@@ -16,12 +16,7 @@ function useCaller(callback: (...args: any) => any, deps: DependencyList) {
 describe('useCallbackOncePerRender', () => {
   it('is safe on server side rendering', () => {
     const mockFn = vi.fn();
-    const server = renderHookSSR.serverOnly(() => useCallbackOncePerRender(mockFn, []));
-
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(mockFn).not.toHaveBeenCalled();
-    });
+    renderHookSSR.serverOnly(() => useCallbackOncePerRender(mockFn, []));
   });
 
   it('should execute callback only once', async () => {

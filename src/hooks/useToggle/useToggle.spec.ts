@@ -7,13 +7,10 @@ import { useToggle } from './useToggle.ts';
 
 describe('useToggle', () => {
   it('is safe on server side rendering', () => {
-    const server = renderHookSSR.serverOnly(() => useToggle(false));
+    const result = renderHookSSR.serverOnly(() => useToggle(false));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      const [bool] = result.current ?? [];
-      expect(bool).toBe(false);
-    });
+    const [bool] = result.current;
+    expect(bool).toBe(false);
   });
 
   it('should initialize with the default value false', async () => {

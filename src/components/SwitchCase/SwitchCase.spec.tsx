@@ -9,17 +9,13 @@ import { SwitchCase } from './SwitchCase.tsx';
 describe('SwitchCase', () => {
   it('is safe on server side rendering', () => {
     const caseBy = { a: () => <div>A Component</div>, b: () => <div>B Component</div> };
-    const serverA = renderSSR.serverOnly(<SwitchCase value="a" caseBy={caseBy} />);
+    renderSSR.serverOnly(() => <SwitchCase value="a" caseBy={caseBy} />);
 
-    serverA(() => {
-      expect(screen.getByText('A Component')).toBeInTheDocument();
-    });
+    expect(screen.getByText('A Component')).toBeInTheDocument();
 
-    const serverB = renderSSR.serverOnly(<SwitchCase value="b" caseBy={caseBy} />);
+    renderSSR.serverOnly(() => <SwitchCase value="b" caseBy={caseBy} />);
 
-    serverB(() => {
-      expect(screen.getByText('B Component')).toBeInTheDocument();
-    });
+    expect(screen.getByText('B Component')).toBeInTheDocument();
   });
 
   it('should render correct component for string value', () => {

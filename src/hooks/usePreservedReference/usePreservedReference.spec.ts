@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it } from 'vitest';
+
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { usePreservedReference } from './usePreservedReference.ts';
 
 describe('usePreservedReference', () => {
   it('is safe on server side rendering', () => {
-    const server = renderHookSSR.serverOnly(() => usePreservedReference(10));
+    const result = renderHookSSR.serverOnly(() => usePreservedReference(10));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(result.current).toBe(10);
-    });
+    expect(result.current).toBe(10);
   });
 
   it('initializes and updates with primitive values', async () => {

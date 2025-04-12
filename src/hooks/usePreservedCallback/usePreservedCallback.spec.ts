@@ -8,12 +8,9 @@ import { usePreservedCallback } from './usePreservedCallback.ts';
 describe('usePreservedCallback', () => {
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    const server = renderHookSSR.serverOnly(() => usePreservedCallback(callback));
+    renderHookSSR.serverOnly(() => usePreservedCallback(callback));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(callback).not.toHaveBeenCalled();
-    });
+    expect(callback).not.toHaveBeenCalled();
   });
 
   it('should return the same callback instance initially', async () => {

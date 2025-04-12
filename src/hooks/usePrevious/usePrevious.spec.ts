@@ -1,16 +1,14 @@
-import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 import { describe, expect, it } from 'vitest';
+
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { usePrevious } from './usePrevious.ts';
 
 describe('usePrevious', () => {
   it('is safe on server side rendering', () => {
-    const server = renderHookSSR.serverOnly(() => usePrevious(1));
+    const result = renderHookSSR.serverOnly(() => usePrevious(1));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(result.current).toBe(1);
-    });
+    expect(result.current).toBe(1);
   });
 
   it('should return initial value of state on first mount', async () => {

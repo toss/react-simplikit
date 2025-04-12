@@ -11,12 +11,9 @@ describe('useDebouncedCallback', () => {
 
   it('is safe on server side rendering', () => {
     const onChange = vi.fn();
-    const server = renderHookSSR.serverOnly(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+    renderHookSSR.serverOnly(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
 
-    server(result => {
-      expect(result.error).toBeUndefined();
-      expect(onChange).not.toHaveBeenCalled();
-    });
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it('should debounce the callback with the specified time threshold', () => {
