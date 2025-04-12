@@ -188,6 +188,13 @@ jobs:
       - name: Check JSDoc structure
         run: |
           for file in ${{ needs.check-changes.outputs.changed_files }}; do
+            directory=$(basename "$(dirname "$file")")
+            filename=$(basename $file)
+            filename="${filename%%.*}"
+            if [ "$dir_name" != "$file_name" ]; then
+              continue
+            fi
+
             if ! grep -e "@description" "$file"; then
               echo "@description tag missing in $file"
               exit 1
