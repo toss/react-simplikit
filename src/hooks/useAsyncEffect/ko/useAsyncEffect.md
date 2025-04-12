@@ -16,7 +16,7 @@ function useAsyncEffect(
 <Interface
   name="effect"
   type="() => Promise<void | (() => void)>"
-  description="<code>useEffect</code> 패턴에서 실행되는 비동기 함수예요. 이 함수는 선택적으로 정리(cleanup) 함수를 반환할 수 있어요."
+  description="<code>useEffect</code> 패턴으로 실행되는 비동기 함수예요. 이 함수는 선택적으로 정리(cleanup) 함수를 반환할 수 있어요."
 />
 
 <Interface
