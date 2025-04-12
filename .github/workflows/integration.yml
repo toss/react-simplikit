@@ -43,7 +43,7 @@ jobs:
         with:
           list-files: shell
           filters: |
-            changed:
+            added|modified:
               - 'src/components/**/!(index|*.spec).ts'
               - 'src/components/**/!(*.spec).tsx'
               - 'src/hooks/**/!(index|*.spec).ts'
@@ -191,7 +191,7 @@ jobs:
             directory=$(basename "$(dirname "$file")")
             filename=$(basename $file)
             filename="${filename%%.*}"
-            if [ "$dir_name" != "$file_name" ]; then
+            if [ "$directory" != "$filename" ]; then
               continue
             fi
 
