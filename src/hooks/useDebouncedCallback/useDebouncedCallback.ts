@@ -9,7 +9,7 @@ type DebounceOptions = {
 };
 
 /**
- * @deescription
+ * @description
  * `useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function.
  * It helps optimize event handling by delaying function execution and grouping multiple calls into one.
  *
