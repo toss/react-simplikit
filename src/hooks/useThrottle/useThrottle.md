@@ -32,6 +32,16 @@ function useThrottle<F>(
   name="options"
   type="{ edges?: Array<'leading' | 'trailing'> }"
   description="Options to control the behavior of the throttle."
+  :nested="[
+    {
+      name: 'options.edges',
+      type: 'Array<\'leading\' | \'trailing\'>',
+      required: 'false',
+      defaultValue: '[\'leading\', \'trailing\']',
+      description:
+        'An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.',
+    },
+  ]"
 />
 
 ### Return Value

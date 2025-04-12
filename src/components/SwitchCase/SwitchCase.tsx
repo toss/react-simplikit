@@ -25,7 +25,7 @@ type Props<Case> = {
  * @param {Record<string | number, () => JSX.Element>} caseBy - An object that maps values to
  *   components to render. The keys represent possible values, and the values are functions returning
  *   the corresponding components.
- * @param {() => JSX.Element} defaultComponent - The component to render if `value` does not match
+ * @param {() => JSX.Element} [defaultComponent] - The component to render if `value` does not match
  *   any key in `caseBy`.
  *
  * @returns {JSX.Element} A React component that conditionally renders based on cases.
