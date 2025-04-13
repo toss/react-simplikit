@@ -3,16 +3,11 @@
 `useBooleanState` is a React hook that simplifies managing a boolean state. It provides functions to set the state to `true`, set it to `false`, and toggle its value.
 
 ## Interface
+
 ```ts
 function useBooleanState(
-  defaultValue: boolean = false,
-): [
-  state: boolean,
-  setTrue: () => void,
-  setFalse: () => void,
-  toggle: () => void,
-];
-
+  defaultValue: boolean = false
+): [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void];
 ```
 
 ### Parameters
@@ -53,10 +48,8 @@ function useBooleanState(
   ]"
 />
 
-
 ## Example
 
 ```tsx
 const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
 ```
-  

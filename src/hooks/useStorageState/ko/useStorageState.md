@@ -3,15 +3,12 @@
 리액트 훅으로, `useState`처럼 동작하지만 브라우저 저장소에 상태 값을 저장해요. 이 값은 페이지가 다시 로드되어도 유지되고, `localStorage`를 사용할 때 탭 간에 공유될 수 있어요.
 
 ## 인터페이스
+
 ```ts
 function useStorageState(
   key: string,
-  options: Object,
-): [
-  state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-];
-
+  options: Object
+): [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void];
 ```
 
 ### 파라미터
@@ -67,7 +64,6 @@ function useStorageState(
   ]"
 />
 
-
 ## 예시
 
 ```tsx
@@ -82,4 +78,3 @@ function Counter() {
   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
 }
 ```
-  

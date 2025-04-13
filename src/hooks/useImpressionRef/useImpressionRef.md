@@ -3,11 +3,9 @@
 `useImpressionRef` is a custom hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. This hook uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
 
 ## Interface
-```ts
-function useImpressionRef(
-  options: UseImpressionRefOptions,
-): (element: Element | null) => void;
 
+```ts
+function useImpressionRef(options: UseImpressionRefOptions): (element: Element | null) => void;
 ```
 
 ### Parameters
@@ -60,7 +58,6 @@ function useImpressionRef(
   description="function to set the element. Attach this function to the <code>ref</code> attribute, and the callbacks will be executed whenever the element's visibility changes."
 />
 
-
 ## Example
 
 ```tsx
@@ -77,4 +74,3 @@ function Component() {
   return <div ref={ref}>Track my visibility!</div>;
 }
 ```
-  

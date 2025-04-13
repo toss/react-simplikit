@@ -3,13 +3,13 @@
 리액트 훅이 콜백 함수의 쓰로틀 버전을 생성해요. 이는 스크롤 또는 리사이즈 이벤트를 처리할 때와 같이 함수가 호출되는 빈도를 제한하는 데 유용해요.
 
 ## 인터페이스
+
 ```ts
 function useThrottle<F>(
   callback: F,
   wait: number,
-  options: { edges?: Array<"leading" | "trailing"> },
+  options: { edges?: Array<'leading' | 'trailing'> }
 ): F & { cancel: () => void };
-
 ```
 
 ### 파라미터
@@ -52,13 +52,16 @@ function useThrottle<F>(
   description="보류 중인 실행을 취소하는 <code>cancel</code> 메서드를 가진 쓰로틀된 함수를 반환해요."
 />
 
-
 ## 예시
 
 ```tsx
-const throttledScroll = useThrottle(() => {
-  console.log('스크롤 이벤트');
-}, 200, { edges: ['leading', 'trailing'] });
+const throttledScroll = useThrottle(
+  () => {
+    console.log('스크롤 이벤트');
+  },
+  200,
+  { edges: ['leading', 'trailing'] }
+);
 
 useEffect(() => {
   window.addEventListener('scroll', throttledScroll);
@@ -68,4 +71,3 @@ useEffect(() => {
   };
 }, [throttledScroll]);
 ```
-  
