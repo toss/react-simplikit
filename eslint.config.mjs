@@ -15,6 +15,7 @@ export default [
       '**/*.d.ts',
       '**/*.tgz',
       '**/dist/**',
+      '**/esm/**',
       '**/cache/**',
       '.yarn/**',
       '.pnp.*',
@@ -22,6 +23,7 @@ export default [
       'docs',
       'node_modules',
       'eslint.*',
+      'tsup.*',
       'vitest.*',
       '.vitepress',
     ],
@@ -36,17 +38,15 @@ export default [
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  pluginPrettierRecommended,
   pluginReact.configs.flat.recommended,
+  hooksPlugin.configs['recommended-latest'],
   {
     plugins: {
-      'react-hooks': hooksPlugin,
       'simple-import-sort': simpleImportSort,
       'unused-imports': unusedImports,
       import: pluginImport,
     },
     rules: {
-      ...hooksPlugin.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/strict-boolean-expressions': 'error',
       '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
@@ -95,4 +95,5 @@ export default [
       },
     },
   },
+  pluginPrettierRecommended,
 ];
