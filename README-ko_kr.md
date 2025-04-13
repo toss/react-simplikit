@@ -1,6 +1,6 @@
 ![react-simplikit](src/public/images/og.png)
 
-# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/branch/main/graph/badge.svg?token=5PopssACmx)](https://codecov.io/gh/toss/react-simplikit)
+# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit)
 
 [English](./README.md) | 한국어
 
@@ -8,7 +8,7 @@
 
 - `react-simplikit`은 의존성이 없어서 매우 가벼워요.
 - 100% 테스트 커버리지를 통해 신뢰성을 보장해요.
-- JSDoc 과 풍부한 문서, 예제를 제공해서 어떤 개발자도 쉽게 사용할 수 있어요.
+- JSDoc과 풍부한 문서, 예제를 제공해서 어떤 개발자도 쉽게 사용할 수 있어요.
 
 ## 예시
 
