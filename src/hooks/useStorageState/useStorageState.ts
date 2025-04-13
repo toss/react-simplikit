@@ -34,8 +34,8 @@ const emitListeners = () => {
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
  * @param {T} [options.defaultValue] - The initial value if no existing value is found.
  *
- * @returns {readonly [Serializable<T> | undefined, StorageStateSetter<T>] 
- * | readonly [Serializable<T>, RequiredStorageStateSetter<T>]} A tuple:
+ * @returns {readonly [Serializable<T>, RequiredStorageStateSetter<T>] | readonly [Serializable<T> | undefined, StorageStateSetter<T>]} A tuple with state and setState function, depending on whether defaultValue is provided.
+ *
  * - state: the current state value retrieved from storage;
  * - setState: function to update and persist the state;
  *
