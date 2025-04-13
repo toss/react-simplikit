@@ -1,8 +1,8 @@
-import pluginJs from '@eslint/js';
-import pluginImport from 'eslint-plugin-import';
-import pluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import pluginReact from 'eslint-plugin-react';
-import hooksPlugin from 'eslint-plugin-react-hooks';
+import js from '@eslint/js';
+import importPlugin from 'eslint-plugin-import';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
@@ -36,15 +36,15 @@ export default [
       },
     },
   },
-  pluginJs.configs.recommended,
+  js.configs.recommended,
   ...tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
-  hooksPlugin.configs['recommended-latest'],
+  react.configs.flat.recommended,
+  reactHooks.configs['recommended-latest'],
   {
     plugins: {
       'simple-import-sort': simpleImportSort,
       'unused-imports': unusedImports,
-      import: pluginImport,
+      import: importPlugin,
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -95,5 +95,5 @@ export default [
       },
     },
   },
-  pluginPrettierRecommended,
+  prettierRecommended,
 ];
