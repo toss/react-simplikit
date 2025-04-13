@@ -1,4 +1,4 @@
-import React, { ElementType, Ref } from 'react';
+import { ElementType, ReactNode, Ref } from 'react';
 
 import { useImpressionRef, UseImpressionRefOptions } from '../../hooks/useImpressionRef/index.ts';
 import { mergeRefs } from '../../utils/mergeRefs/mergeRefs.ts';
@@ -7,7 +7,7 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
   UseImpressionRefOptions & {
     as?: Tag;
     ref?: Ref<HTMLElement>;
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
   };
 
