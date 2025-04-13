@@ -20,7 +20,7 @@ function usePreservedReference(value: T, areValuesEqual: (a: T, b: T) => boolean
 <Interface
   name="areValuesEqual"
   type="(a: T, b: T) => boolean"
-  description="두 값이 같은지 여부를 결정하는 선택적 함수에요. 기본적으로 <code>JSON.stringify</code>를 사용하여 비교해요."
+  description="두 값이 같은지 여부를 결정하는 선택적 함수예요. 기본적으로 <code>JSON.stringify</code>를 사용하여 비교해요."
 />
 
 ### 반환 값
