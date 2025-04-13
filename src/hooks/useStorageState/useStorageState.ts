@@ -43,7 +43,7 @@ const emitListeners = () => {
  * ]} A tuple:
  * - state `Serializable<T> | undefined` - The current state value retrieved from storage;
  * - setState `StorageStateSetter<T>` - A function to update and persist the state when `defaultValue` is not provided or state can be `undefined`.
- * 
+ *
  * When `defaultValue` is provided:
  * - state `Serializable<T>` - The current state value retrieved from storage (must exist);
  * - setState `RequiredStorageStateSetter<T>` - A function to update and persist the state when `defaultValue` is provided (state cannot be `undefined`).
@@ -60,9 +60,7 @@ const emitListeners = () => {
  *   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
  * }
  */
-export function useStorageState<T>(
-  key: string
-): readonly [Serializable<T> | undefined, StorageStateSetter<T>];
+export function useStorageState<T>(key: string): readonly [Serializable<T> | undefined, StorageStateSetter<T>];
 export function useStorageState<T>(
   key: string,
   { storage, defaultValue }: StorageStateOptionsWithDefaultValue<T>
