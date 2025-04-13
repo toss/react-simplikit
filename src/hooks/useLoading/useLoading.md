@@ -3,16 +3,12 @@
 `useLoading` is a React hook that simplifies managing the loading state of a `Promise`. It provides a state to track whether an asynchronous operation is in progress and a function to handle the loading state automatically.
 
 ## Interface
-```ts
-function useLoading(): [
-  loading: boolean,
-  startLoading: <T>(promise: Promise<T>) => Promise<T>,
-];
 
+```ts
+function useLoading(): [loading: boolean, startLoading: <T>(promise: Promise<T>) => Promise<T>];
 ```
 
 ### Parameters
-
 
 ### Return Value
 
@@ -36,7 +32,6 @@ function useLoading(): [
   ]"
 />
 
-
 ## Example
 
 ```tsx
@@ -59,4 +54,3 @@ function ConfirmButton() {
   );
 }
 ```
-  

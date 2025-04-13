@@ -3,13 +3,13 @@
 A React hook that creates a throttled version of a callback function. This is useful for limiting the rate at which a function can be called, such as when handling scroll or resize events.
 
 ## Interface
+
 ```ts
 function useThrottle<F>(
   callback: F,
   wait: number,
-  options: { edges?: Array<"leading" | "trailing"> },
+  options: { edges?: Array<'leading' | 'trailing'> }
 ): F & { cancel: () => void };
-
 ```
 
 ### Parameters
@@ -52,13 +52,16 @@ function useThrottle<F>(
   description="Returns the throttled function with a <code>cancel</code> method to cancel pending executions."
 />
 
-
 ## Example
 
 ```tsx
-const throttledScroll = useThrottle(() => {
-  console.log('Scroll event');
-}, 200, { edges: ['leading', 'trailing'] });
+const throttledScroll = useThrottle(
+  () => {
+    console.log('Scroll event');
+  },
+  200,
+  { edges: ['leading', 'trailing'] }
+);
 
 useEffect(() => {
   window.addEventListener('scroll', throttledScroll);
@@ -68,4 +71,3 @@ useEffect(() => {
   };
 }, [throttledScroll]);
 ```
-  

@@ -3,15 +3,12 @@
 `buildContext`는 React Context를 정의할 때 반복적인 코드를 줄여주는 도우미 함수예요.
 
 ## 인터페이스
+
 ```ts
 function buildContext(
   contextName: string,
-  defaultContextValues: ContextValuesType,
-): [
-  Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element,
-  useContext: () => ContextValuesType,
-];
-
+  defaultContextValues: ContextValuesType
+): [Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element, useContext: () => ContextValuesType];
 ```
 
 ### 파라미터
@@ -49,7 +46,6 @@ function buildContext(
   ]"
 />
 
-
 ## 예시
 
 ```tsx
@@ -68,4 +64,3 @@ function Page() {
   );
 }
 ```
-  
