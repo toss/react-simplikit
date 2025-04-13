@@ -15,6 +15,7 @@ export default [
       '**/*.d.ts',
       '**/*.tgz',
       '**/dist/**',
+      '**/esm/**',
       '**/cache/**',
       '.yarn/**',
       '.pnp.*',
