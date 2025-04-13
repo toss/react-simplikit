@@ -3,12 +3,12 @@
 `useInputState` is a React hook that manages an input state with optional value transformation.
 
 ## Interface
+
 ```ts
 function useInputState(
-  initialValue: string = "",
-  transformValue: (value: string) => string = (v: string) => v,
+  initialValue: string = '',
+  transformValue: (value: string) => string = (v: string) => v
 ): [value: string, onChange: (value: string) => void];
-
 ```
 
 ### Parameters
@@ -45,7 +45,6 @@ function useInputState(
   ]"
 />
 
-
 ## Example
 
 ```tsx
@@ -54,4 +53,3 @@ function Example() {
   return <input type="text" value={value} onChange={setValue} />;
 }
 ```
-  

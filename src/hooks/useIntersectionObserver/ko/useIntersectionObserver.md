@@ -3,12 +3,12 @@
 `useIntersectionObserver`는 특정 DOM 요소가 화면에 보이는지를 감지하는 커스텀 훅이에요. 이 훅은 `IntersectionObserver` API를 사용하여 요소가 뷰포트에 들어오거나 나갈 때 콜백을 실행해요.
 
 ## 인터페이스
+
 ```ts
 function useIntersectionObserver(
   callback: (entry: IntersectionObserverEntry) => void,
-  options: IntersectionObserverInit,
+  options: IntersectionObserverInit
 ): (element: Element | null) => void;
-
 ```
 
 ### 파라미터
@@ -35,7 +35,6 @@ function useIntersectionObserver(
   description="요소를 설정하는 함수예요. 이 함수를 <code>ref</code> 속성에 첨부하면, 요소의 가시성이 변경될 때마다 <code>callback</code>이 실행돼요."
 />
 
-
 ## 예시
 
 ```tsx
@@ -56,4 +55,3 @@ function Component() {
   return <div ref={ref}>나를 관찰해요!</div>;
 }
 ```
-  

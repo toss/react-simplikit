@@ -3,9 +3,9 @@
 `useTimeout`은 지정된 지연 시간 후에 콜백 함수를 실행하는 리액트 훅이에요. 리액트 생명 주기에 따라 `window.setTimeout`을 관리하며, 언마운트 시 또는 종속성이 변경될 때 정리가 보장돼요.
 
 ## 인터페이스
+
 ```ts
 function useTimeout(callback: () => void, delay: number = 0): void;
-
 ```
 
 ### 파라미터
@@ -48,4 +48,3 @@ function Example() {
   return <div>{title}</div>;
 }
 ```
-  

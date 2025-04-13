@@ -3,12 +3,12 @@
 `useInterval`는 정해진 간격으로 함수를 실행하는 리액트 훅이에요. 타이머, 데이터 폴링 및 기타 반복 작업에 유용해요.
 
 ## 인터페이스
+
 ```ts
 function useInterval(
   callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean },
+  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
 ): void;
-
 ```
 
 ### 파라미터
@@ -72,4 +72,3 @@ function Timer() {
   );
 }
 ```
-

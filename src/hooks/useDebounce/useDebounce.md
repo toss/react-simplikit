@@ -3,13 +3,13 @@
 `useDebounce` is a React hook that returns a debounced version of the provided callback function. It helps optimize event handling by delaying function execution and grouping multiple calls into one.
 
 ## Interface
+
 ```ts
 function useDebounce<F extends (...args: unknown[]) => unknown>(
   callback: F,
   wait: number,
-  options: DebounceOptions,
+  options: DebounceOptions
 ): F & { cancel: () => void };
-
 ```
 
 ### Parameters
@@ -58,7 +58,6 @@ function useDebounce<F extends (...args: unknown[]) => unknown>(
   description="debounced function that delays invoking the callback. It also includes a <code>cancel</code> method to cancel any pending debounced execution."
 />
 
-
 ## Example
 
 ```tsx
@@ -82,4 +81,3 @@ function SearchInput() {
   );
 }
 ```
-  

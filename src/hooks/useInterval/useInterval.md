@@ -3,12 +3,12 @@
 `useInterval` is a React hook that executes a function at a specified interval. It is useful for timers, polling data, and other recurring tasks.
 
 ## Interface
+
 ```ts
 function useInterval(
   callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean },
+  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
 ): void;
-
 ```
 
 ### Parameters
@@ -72,4 +72,3 @@ function Timer() {
   );
 }
 ```
-  
