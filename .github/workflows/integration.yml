@@ -15,16 +15,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
 
       - name: Run linter
-        run: |
-          corepack enable
-          yarn install
-          yarn run lint
+        run: yarn run lint
 
   check-changes:
     runs-on: ubuntu-latest
@@ -35,10 +39,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
 
       - name: Check for changes in .ts and .tsx files
         id: filter
@@ -63,15 +71,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
 
       - name: Install dependencies
-        run: |
-          corepack enable
-          yarn install
+        run: yarn install
 
       - name: Run tests and generate coverage
         run: yarn run test:coverage
@@ -184,15 +194,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
 
       - name: Install dependencies
-        run: |
-          corepack enable
-          yarn install
+        run: yarn install
 
       - name: Check JSDoc structure
         run: |

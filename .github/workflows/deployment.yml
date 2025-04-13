@@ -13,11 +13,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
 
       - name: Check for changes in .ts and .tsx files
         id: filter
@@ -38,13 +42,14 @@ jobs:
         with:
           token: ${{ secrets.TOSS_REACTIVE_KIT_GITHUB_ACCESS_TOKEN }}
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install
@@ -110,13 +115,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install
