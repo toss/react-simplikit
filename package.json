@@ -3,6 +3,16 @@
   "version": "0.0.11",
   "main": "./src/index.ts",
   "sideEffects": false,
+  "keywords": [
+    "react"
+  ],
+  "homepage": "https://react-simplikit.slash.page",
+  "bugs": "https://github.com/toss/react-simplikit/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toss/react-simplikit.git"
+  },
+  "license": "MIT",
   "files": [
     "dist/**/*",
     "esm/**/*"
