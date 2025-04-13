@@ -34,9 +34,19 @@ const emitListeners = () => {
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
  * @param {T} [options.defaultValue] - The initial value if no existing value is found.
  *
- * @returns {[state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void]} A tuple:
+ * @returns {[
+ *   state: Serializable<T> | undefined, 
+ *   setState: StorageStateSetter<T> 
+ * ] | [
+ *   state: Serializable<T>, 
+ *   setState: RequiredStorageStateSetter<T>
+ * ]} A tuple:
  * - state `Serializable<T> | undefined` - The current state value retrieved from storage;
- * - setState `(value: SetStateAction<Serializable<T> | undefined>) => void` - A function to update and persist the state;
+ * - setState `StorageStateSetter<T>` - A function to update and persist the state when `defaultValue` is not provided or state can be `undefined`.
+ * 
+ * When `defaultValue` is provided:
+ * - state `Serializable<T>` - The current state value retrieved from storage (must exist);
+ * - setState `RequiredStorageStateSetter<T>` - A function to update and persist the state when `defaultValue` is provided (state cannot be `undefined`).
  *
  * @example
  * // Counter with persistent state
@@ -50,7 +60,6 @@ const emitListeners = () => {
  *   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
  * }
  */
-
 export function useStorageState<T>(
   key: string
 ): readonly [Serializable<T> | undefined, StorageStateSetter<T>];
