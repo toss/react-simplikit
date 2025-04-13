@@ -3,12 +3,9 @@
 `useAsyncEffect`는 리액트 컴포넌트에서 비동기 사이드이펙트를 처리하기 위한 커스텀 훅이에요. `useEffect`와 동일한 정리(clean-up) 패턴을 따르면서 비동기 작업이 안전하게 처리되도록 해요.
 
 ## 인터페이스
-```ts
-function useAsyncEffect(
-  effect: () => Promise<void | (() => void)>,
-  deps: DependencyList,
-): void;
 
+```ts
+function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps: DependencyList): void;
 ```
 
 ### 파라미터
@@ -41,4 +38,3 @@ useAsyncEffect(async () => {
   };
 }, [dependencies]);
 ```
-  

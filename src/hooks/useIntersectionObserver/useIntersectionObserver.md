@@ -3,12 +3,12 @@
 `useIntersectionObserver` is a custom hook that detects whether a specific DOM element is visible on the screen. This hook uses the `IntersectionObserver` API to execute a callback when the element enters or exits the viewport.
 
 ## Interface
+
 ```ts
 function useIntersectionObserver(
   callback: (entry: IntersectionObserverEntry) => void,
-  options: IntersectionObserverInit,
+  options: IntersectionObserverInit
 ): (element: Element | null) => void;
-
 ```
 
 ### Parameters
@@ -35,7 +35,6 @@ function useIntersectionObserver(
   description="function to set the element. Attach this function to the <code>ref</code> attribute, and the <code>callback</code> will be executed whenever the element's visibility changes."
 />
 
-
 ## Example
 
 ```tsx
@@ -56,4 +55,3 @@ function Component() {
   return <div ref={ref}>Observe me!</div>;
 }
 ```
-  

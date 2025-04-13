@@ -3,11 +3,9 @@
 `useImpressionRef`는 특정 DOM 요소가 화면에 보이는 시간을 측정하고 요소가 뷰포트에 들어오거나 나갈 때 콜백을 실행하는 커스텀 훅이에요. 이 훅은 `IntersectionObserver`와 `Visibility API`를 사용하여 요소의 가시성을 추적해요.
 
 ## 인터페이스
-```ts
-function useImpressionRef(
-  options: UseImpressionRefOptions,
-): (element: Element | null) => void;
 
+```ts
+function useImpressionRef(options: UseImpressionRefOptions): (element: Element | null) => void;
 ```
 
 ### 파라미터
@@ -60,7 +58,6 @@ function useImpressionRef(
   description="요소를 설정하기 위한 ref 함수예요. 이 함수를 <code>ref</code> 속성에 전달하면 해당 요소의 가시성이 변경될 때마다 콜백이 실행돼요."
 />
 
-
 ## 예시
 
 ```tsx
@@ -77,4 +74,3 @@ function Component() {
   return <div ref={ref}>내 가시성을 추적해 보세요!</div>;
 }
 ```
-  
