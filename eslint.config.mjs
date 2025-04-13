@@ -36,7 +36,6 @@ export default [
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  pluginPrettierRecommended,
   pluginReact.configs.flat.recommended,
   {
     plugins: {
@@ -95,4 +94,5 @@ export default [
       },
     },
   },
+  pluginPrettierRecommended,
 ];
