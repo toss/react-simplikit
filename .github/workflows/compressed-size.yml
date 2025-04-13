@@ -1,0 +1,24 @@
+name: Compressed Size
+
+on: [pull_request]
+
+jobs:
+  compressed-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - uses: preactjs/compressed-size-action@v2
+        with:
+          build-script: 'prepack'
+          pattern: './{dist,esm}/**/*.{js,cjs}'
