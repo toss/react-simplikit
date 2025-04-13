@@ -1,6 +1,9 @@
 name: Integration
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
@@ -226,7 +229,7 @@ jobs:
             if grep -q "@returns" "$file"; then
               if grep -q "@returns {\\[.*:.*\\]}" "$file"; then
                 tuple_vars=$(grep "@returns {\\[.*\\]}" "$file" | sed -E 's/.*\[(.*)\].*/\1/' | tr ',' '\n' | sed 's/^ //' | sed -E 's/([^:]): (.+)$/\1 \`\2\`/')
-                
+
                 while read -r var_type; do
                   if ! grep -qe "- $var_type - .*;" "$file"; then
                     echo "Missing or invalid description for tuple member with [$var_type] in $file"
