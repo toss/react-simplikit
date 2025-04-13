@@ -3,13 +3,13 @@
 `SwitchCase`는 주어진 값에 기반하여 선언적으로 컴포넌트를 렌더링할 수 있는 컴포넌트예요, 마치 `switch-case` 문장과 비슷해요. 이는 특정 상태에 따라 다른 컴포넌트를 조건부로 렌더링해야 할 때 유용해요.
 
 ## 인터페이스
+
 ```ts
 function SwitchCase(
   value: string | number,
   caseBy: Record<string | number, () => JSX.Element>,
-  defaultComponent: () => JSX.Element,
+  defaultComponent: () => JSX.Element
 ): JSX.Element;
-
 ```
 
 ### 파라미터
@@ -43,7 +43,6 @@ function SwitchCase(
   description="케이스에 따라 조건부로 렌더링하는 리액트 컴포넌트예요."
 />
 
-
 ## 예시
 
 ```tsx
@@ -53,9 +52,9 @@ function App() {
       value={status}
       // 상태 값에 따라 TypeA, TypeB 또는 TypeC를 렌더링해요.
       caseBy={{
-        a: () => <TypeA />, 
-        b: () => <TypeB />, 
-        c: () => <TypeC />, 
+        a: () => <TypeA />,
+        b: () => <TypeB />,
+        c: () => <TypeC />,
       }}
       // 상태 값이 어떤 케이스와도 일치하지 않으면 Default를 렌더링해요.
       defaultComponent={() => <Default />}
@@ -63,4 +62,3 @@ function App() {
   );
 }
 ```
-  

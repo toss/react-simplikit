@@ -14,7 +14,8 @@ We provide a development experience as similar as possible to using React's decl
 function Page() {
   const [isOpen, setOpen] = useState(false); // [!code --]
   // [!code --]
-  const toggle = useCallback(() => { // [!code --]
+  const toggle = useCallback(() => {
+    // [!code --]
     setOpen(isOpen => !isOpen); // [!code --]
   }, []); // [!code --]
   const [isOpen, toggle] = useToggle(false); // [!code ++]
@@ -39,19 +40,17 @@ const texts = ['hello', 'react', 'world'];
 function Page() {
   return (
     <>
-      {texts.map((text, idx) =>
+      {texts.map((text, idx) => (
         <Fragment key={text}>
           <div>{text}</div>
-          {idx < texts.length - 1
-            ? <Border type="padding24" />
-            : null
-          }
+          {idx < texts.length - 1 ? (
+            <Border type="padding24" />
+          ) : null}
         </Fragment>
-      )}
+      ))}
     </>
   );
 }
-
 ```
 
   </template>
@@ -70,7 +69,6 @@ function Page() {
     </Separated>
   );
 }
-
 ```
 
   </template>
