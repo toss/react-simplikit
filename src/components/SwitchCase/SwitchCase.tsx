@@ -1,12 +1,13 @@
 import { ReactElement } from 'react';
 
-type StringifiedValue<T> = T extends boolean
-  ? 'true' | 'false'
-  : T extends number
-    ? `${T}`
-    : T extends string
-      ? T
-      : never;
+type IsBoolean<T> = T extends boolean ? 'true' | 'false' : never;
+type IsNumber<T> = T extends number ? `${T}` : never;
+type IsString<T> = T extends string ? T : never;
+
+type StringifiedValue<T> =
+  | IsBoolean<T>
+  | IsNumber<T>
+  | IsString<T>;
 
 type Props<Case> = {
   value: Case;
