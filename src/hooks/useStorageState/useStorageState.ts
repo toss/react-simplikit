@@ -35,10 +35,10 @@ const emitListeners = () => {
  * @param {T} [options.defaultValue] - The initial value if no existing value is found.
  *
  * @returns {[
- *   state: Serializable<T> | undefined, 
- *   setState: StorageStateSetter<T> 
+ *   state: Serializable<T> | undefined,
+ *   setState: StorageStateSetter<T>
  * ] | [
- *   state: Serializable<T>, 
+ *   state: Serializable<T>,
  *   setState: RequiredStorageStateSetter<T>
  * ]} A tuple:
  * - state `Serializable<T> | undefined` - The current state value retrieved from storage;
