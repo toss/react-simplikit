@@ -3,9 +3,9 @@
 `useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function. It helps optimize event handling by delaying function execution and grouping multiple calls into one.
 
 ## Interface
+
 ```ts
 function useDebouncedCallback(options: Object): Function;
-
 ```
 
 ### Parameters
@@ -40,14 +40,12 @@ function useDebouncedCallback(options: Object): Function;
   description="debounced function that delays invoking the callback."
 />
 
-
 ## Example
 
 ```tsx
 function SearchInput() {
   const [query, setQuery] = useState('');
   const debouncedSetQuery = useDebouncedCallback({ onChange: setQuery, timeThreshold: 100 });
-  return <input type="text" onChange={(e) => debouncedSetQuery(e.target.value)} />;
+  return <input type="text" onChange={e => debouncedSetQuery(e.target.value)} />;
 }
 ```
-  

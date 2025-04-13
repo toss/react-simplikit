@@ -3,11 +3,9 @@
 `useToggle`은 불리언 상태 관리를 간소화하는 리액트 훅이에요. 상태를 `true`와 `false` 사이에서 전환하는 함수를 제공해요.
 
 ## 인터페이스
-```ts
-function useToggle(
-  initialValue: boolean = false,
-): [state: boolean, toggle: () => void];
 
+```ts
+function useToggle(initialValue: boolean = false): [state: boolean, toggle: () => void];
 ```
 
 ### 파라미터
@@ -37,7 +35,6 @@ function useToggle(
     },
   ]"
 />
-
 
 ## 예시
 

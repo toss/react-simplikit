@@ -3,9 +3,9 @@
 `useTimeout` is a React hook that executes a callback function after a specified delay. It manages `window.setTimeout` in accordance with the React lifecycle, ensuring cleanup on unmount or when dependencies change.
 
 ## Interface
+
 ```ts
 function useTimeout(callback: () => void, delay: number = 0): void;
-
 ```
 
 ### Parameters
@@ -48,4 +48,3 @@ function Example() {
   return <div>{title}</div>;
 }
 ```
-  

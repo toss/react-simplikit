@@ -3,12 +3,12 @@
 `useRefEffect` is a custom hook that helps you set a reference to a specific DOM element and execute a callback whenever the element changes. This hook calls a cleanup function whenever the element changes to prevent memory leaks.
 
 ## Interface
+
 ```ts
 function useRefEffect(
   callback: (element: Element) => CleanupCallback | void,
-  deps: DependencyList,
+  deps: DependencyList
 ): (element: Element | null) => void;
-
 ```
 
 ### Parameters
@@ -35,7 +35,6 @@ function useRefEffect(
   description="function to set the element. Pass this function to the <code>ref</code> attribute, and the <code>callback</code> will be called whenever the element changes."
 />
 
-
 ## Example
 
 ```tsx
@@ -53,4 +52,3 @@ function Component() {
   return <div ref={ref}>Basic Example</div>;
 }
 ```
-  

@@ -41,7 +41,7 @@ export function Separated({ children, by: separator }: Props) {
       {childrenArray.map((child, i, { length }) => (
         <Fragment key={i}>
           {child}
-          {i + 1 !== length ? separator : null}
+          {i + 1 !== length && separator}
         </Fragment>
       ))}
     </>

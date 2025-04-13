@@ -3,9 +3,9 @@
 `Separated` is a component that inserts a specified component between each child element. It is useful for adding separators, spacing, or other repeating elements in lists.
 
 ## Interface
+
 ```ts
 function Separated(children: React.ReactNode, by: React.ReactNode): JSX.Element;
-
 ```
 
 ### Parameters
@@ -32,7 +32,6 @@ function Separated(children: React.ReactNode, by: React.ReactNode): JSX.Element;
   description="React component that separates children with a specified separator."
 />
 
-
 ## Example
 
 ```tsx
@@ -52,4 +51,3 @@ function App() {
   // <div>world</div>
 }
 ```
-  

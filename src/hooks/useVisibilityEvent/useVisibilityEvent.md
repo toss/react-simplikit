@@ -3,12 +3,9 @@
 A React hook that listens to changes in the document's visibility state and triggers a callback.
 
 ## Interface
-```ts
-function useVisibilityEvent(
-  callback: (visibilityState: "visible" | "hidden") => void,
-  options: object,
-): void;
 
+```ts
+function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') => void, options: object): void;
 ```
 
 ### Parameters
@@ -52,4 +49,3 @@ function Component() {
   return <p>Check the console for visibility changes.</p>;
 }
 ```
-  

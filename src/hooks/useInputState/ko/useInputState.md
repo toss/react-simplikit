@@ -3,12 +3,12 @@
 `useInputState`는 입력 상태를 관리하는 리액트 훅이에요. 선택적으로 값 변환 함수를 지정할 수도 있어요.
 
 ## 인터페이스
+
 ```ts
 function useInputState(
-  initialValue: string = "",
-  transformValue: (value: string) => string = (v: string) => v,
+  initialValue: string = '',
+  transformValue: (value: string) => string = (v: string) => v
 ): [value: string, onChange: (value: string) => void];
-
 ```
 
 ### 파라미터
@@ -45,7 +45,6 @@ function useInputState(
   ]"
 />
 
-
 ## 예시
 
 ```tsx
@@ -54,4 +53,3 @@ function Example() {
   return <input type="text" value={value} onChange={setValue} />;
 }
 ```
-  

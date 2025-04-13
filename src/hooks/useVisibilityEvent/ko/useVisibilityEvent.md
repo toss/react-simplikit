@@ -3,12 +3,9 @@
 문서의 가시성 상태 변화를 감지하고 콜백을 트리거하는 React 훅이에요
 
 ## Interface
-```ts
-function useVisibilityEvent(
-  callback: (visibilityState: "visible" | "hidden") => void,
-  options: object,
-): void;
 
+```ts
+function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') => void, options: object): void;
 ```
 
 ### 파라미터
@@ -52,4 +49,3 @@ function Component() {
   return <p>가시성 변화를 콘솔에서 확인해요.</p>;
 }
 ```
-

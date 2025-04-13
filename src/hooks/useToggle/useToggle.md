@@ -3,11 +3,9 @@
 `useToggle` is a React hook that simplifies managing a boolean state. It provides a function to toggle the state between `true` and `false`.
 
 ## Interface
-```ts
-function useToggle(
-  initialValue: boolean = false,
-): [state: boolean, toggle: () => void];
 
+```ts
+function useToggle(initialValue: boolean = false): [state: boolean, toggle: () => void];
 ```
 
 ### Parameters
@@ -38,7 +36,6 @@ function useToggle(
   ]"
 />
 
-
 ## Example
 
 ```tsx
@@ -55,4 +52,3 @@ function Component() {
   );
 }
 ```
-  
