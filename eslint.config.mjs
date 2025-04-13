@@ -22,6 +22,7 @@ export default [
       'docs',
       'node_modules',
       'eslint.*',
+      'tsup.*',
       'vitest.*',
       '.vitepress',
     ],
