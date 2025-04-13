@@ -42,7 +42,7 @@ function Page() {
       {texts.map((text, idx) =>
         <Fragment key={text}>
           <div>{text}</div>
-          {idx === texts.length - 1
+          {idx !== texts.length - 1
             ? <Border type="padding24" />
             : null
           }
