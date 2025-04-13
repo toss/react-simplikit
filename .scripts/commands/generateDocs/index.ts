@@ -43,7 +43,7 @@ export async function generateDocs(names: string[]) {
                       await fs.access(`${dirname}/${name}.md`);
                       await fs.access(`${dirname}/ko/${name}.md`);
                       isFileExists = true;
-                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
                     } catch (_) {
                       isFileExists = false;
                     }
