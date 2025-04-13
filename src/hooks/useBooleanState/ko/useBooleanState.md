@@ -33,17 +33,17 @@ function useBooleanState(
     {
       name: 'setTrue',
       type: '() => void',
-      description: '상태를 <code>true</code>로 설정하는 함수에요.',
+      description: '상태를 <code>true</code>로 설정하는 함수예요.',
     },
     {
       name: 'setFalse',
       type: '() => void',
-      description: '상태를 <code>false</code>로 설정하는 함수에요.',
+      description: '상태를 <code>false</code>로 설정하는 함수예요.',
     },
     {
       name: 'toggle',
       type: '() => void',
-      description: '상태를 토글하는 함수에요.',
+      description: '상태를 토글하는 함수예요.',
     },
   ]"
 />
