@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
 
       - name: Run linter
         run: |
@@ -39,6 +40,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
 
       - name: Check for changes in .ts and .tsx files
         id: filter
@@ -67,6 +69,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: |
@@ -188,6 +191,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: |
