@@ -1,6 +1,6 @@
 # useVisibilityEvent
 
-문서의 가시성 상태 변화를 감지하고 콜백을 트리거하는 React 훅이에요
+문서의 가시성 상태 변화를 감지하고 콜백을 트리거하는 React 훅이에요.
 
 ## Interface
 ```ts
@@ -37,7 +37,7 @@ function useVisibilityEvent(
 
 ### 반환 값
 
-이 훅은 아무것도 반환하지 않아요
+이 훅은 아무것도 반환하지 않아요.
 
 ## 예시
 
