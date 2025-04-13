@@ -3,13 +3,13 @@
 `SwitchCase` is a component that allows you to declaratively render components based on a given value, similar to a `switch-case` statement. It is useful when you need to conditionally render different components depending on a specific state.
 
 ## Interface
+
 ```ts
 function SwitchCase(
   value: string | number,
   caseBy: Record<string | number, () => JSX.Element>,
-  defaultComponent: () => JSX.Element,
+  defaultComponent: () => JSX.Element
 ): JSX.Element;
-
 ```
 
 ### Parameters
@@ -43,7 +43,6 @@ function SwitchCase(
   description="React component that conditionally renders based on cases."
 />
 
-
 ## Example
 
 ```tsx
@@ -63,4 +62,3 @@ function App() {
   );
 }
 ```
-  

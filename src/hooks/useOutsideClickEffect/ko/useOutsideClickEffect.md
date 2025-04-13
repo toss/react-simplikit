@@ -3,12 +3,9 @@
 `useOutsideClickEffect`는 지정된 컨테이너 외부에서 클릭 이벤트가 발생할 때 콜백을 트리거하는 React 훅이에요. 모달, 드롭다운, 툴팁 및 다른 UI 컴포넌트를 외부 클릭 시 닫는 데 유용해요.
 
 ## 인터페이스
-```ts
-function useOutsideClickEffect(
-  container: HTMLElement | HTMLElement[] | null,
-  callback: () => void,
-): void;
 
+```ts
+function useOutsideClickEffect(container: HTMLElement | HTMLElement[] | null, callback: () => void): void;
 ```
 
 ### 파라미터
@@ -47,4 +44,3 @@ function Example() {
   return <div ref={setWrapperEl}>내용</div>;
 }
 ```
-  

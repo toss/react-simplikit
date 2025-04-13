@@ -3,9 +3,10 @@
 `ImpressionArea` is a component that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. This component uses the `useImpressionRef` hook to track the element's visibility.
 
 ## Interface
+
 ```ts
 function ImpressionArea(
-  as: ElementType = "div",
+  as: ElementType = 'div',
   rootMargin: string,
   areaThreshold: number,
   timeThreshold: number,
@@ -13,9 +14,8 @@ function ImpressionArea(
   onImpressionEnd: () => void,
   ref: Ref<HTMLElement>,
   children: React.ReactNode,
-  className: string,
+  className: string
 ): JSX.Element;
-
 ```
 
 ### Parameters
@@ -82,7 +82,6 @@ function ImpressionArea(
   description="React component that tracks the visibility of its child elements."
 />
 
-
 ## Example
 
 ```tsx
@@ -99,4 +98,3 @@ function App() {
   );
 }
 ```
-  
