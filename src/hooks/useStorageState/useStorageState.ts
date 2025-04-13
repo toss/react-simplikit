@@ -11,10 +11,12 @@ type StorageStateOptions<T> = {
   storage?: Storage;
   defaultValue?: Serializable<T>;
 };
-
 type StorageStateOptionsWithDefaultValue<T> = StorageStateOptions<T> & {
   defaultValue: Serializable<T>;
 };
+
+type StorageStateSetter<T> = (value: SetStateAction<Serializable<T> | undefined>) => void;
+type RequiredStorageStateSetter<T> = (value: SetStateAction<Serializable<T>>) => void;
 
 const listeners = new Set<() => void>();
 
@@ -48,21 +50,22 @@ const emitListeners = () => {
  *   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
  * }
  */
+
 export function useStorageState<T>(
   key: string
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void];
+): readonly [Serializable<T> | undefined, StorageStateSetter<T>];
 export function useStorageState<T>(
   key: string,
   { storage, defaultValue }: StorageStateOptionsWithDefaultValue<T>
-): readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void];
+): readonly [Serializable<T>, RequiredStorageStateSetter<T>];
 export function useStorageState<T>(
   key: string,
   { storage, defaultValue }: StorageStateOptions<T>
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void];
+): readonly [Serializable<T> | undefined, StorageStateSetter<T>];
 export function useStorageState<T>(
   key: string,
   { storage = safeLocalStorage, defaultValue }: StorageStateOptions<T> = {}
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void] {
+): readonly [Serializable<T> | undefined, StorageStateSetter<T>] {
   const cache = useRef<{
     data: string | null;
     parsed: Serializable<T> | undefined;
