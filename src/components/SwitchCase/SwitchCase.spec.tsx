@@ -6,6 +6,10 @@ import { renderSSR } from '../../_internal/test-utils/renderSSR.tsx';
 
 import { SwitchCase } from './SwitchCase.tsx';
 
+type Ok<T> = { tag: "Ok"; value: T };
+type Err = { tag: "Err"; error: string };
+type Result<T> = Ok<T> | Err;
+
 describe('SwitchCase', () => {
   it('is safe on server side rendering', () => {
     const caseBy = { a: () => <div>A Component</div>, b: () => <div>B Component</div> };
@@ -165,5 +169,47 @@ describe('SwitchCase', () => {
     );
 
     expect(container.firstChild).toBeNull();
+  });
+
+  it('should render correct component using string selector with discriminated union', () => {
+    const getValue = (): Result<number> => {
+      const value = { tag: 'Ok', value: 42 };
+      return value as Result<number>;
+    }
+    
+    const value = getValue();
+    render(
+      <SwitchCase
+        value={value}
+        selector="tag"
+        caseBy={{
+          Ok: () => <div>The answer is {(value as Ok<number>).value}</div>,
+          Err: () => <div>Error</div>,
+        }}
+      />
+    );
+
+    expect(screen.getByText('The answer is 42')).toBeInTheDocument();
+  });
+
+  it('should render correct component using function selector', () => {
+    const getValue = (): Result<number> => {
+      const value = { tag: 'Ok', value: 42 };
+      return value as Result<number>;
+    }
+
+    const value = getValue();
+    render(
+      <SwitchCase
+        value={value}
+        selector={result => result.tag === 'Ok' && result.value === 42}
+        caseBy={{
+          true: () => <div>The answer is correct</div>,
+          false: () => <div>Error</div>,
+        }}
+      />
+    );
+
+    expect(screen.getByText('The answer is correct')).toBeInTheDocument();
   });
 });

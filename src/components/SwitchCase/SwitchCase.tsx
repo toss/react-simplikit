@@ -1,13 +1,17 @@
 import { ReactElement } from 'react';
 
+// Selector type for discriminated unions
+type Selector<T, K extends keyof T, V = T[K]> = K | ((value: T) => V);
+
 type StringifiedValue<T> =
   | (T extends boolean ? 'true' | 'false' : never)
   | (T extends number ? `${T}` : never)
   | (T extends string ? T : never);
 
-type Props<Case> = {
-  value: Case;
-  caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>;
+type Props<Value, Key extends keyof Value = never, Selected = never extends Key  ? Value : Value[Key]> = {
+  value: Value;
+  selector?: Selector<Value, Key, Selected>;
+  caseBy: Partial<{ [P in StringifiedValue<Selected>]: () => ReactElement | null }>;
   defaultComponent?: () => ReactElement | null;
 };
 
@@ -17,8 +21,13 @@ type Props<Case> = {
  * similar to a `switch-case` statement. It is useful when you need to conditionally render different
  * components depending on a specific state.
  *
- * @param {string | number} value - The value to compare against.
- *   The component associated with the matching key in `caseBy` will be rendered.
+ * It supports both primitive values and objects with discriminated unions.
+ *
+ * @param {any} value - The value to compare against or an object with a discriminator property.
+ * @param {string | function} [selector] - Optional property name or function to extract the value to match against.
+ *   If a string is provided, it will use that property of the value object.
+ *   If a function is provided, it will call the function with the value and use the result.
+ *   If not provided, it will use the value directly.
  * @param {Record<string | number, () => JSX.Element>} caseBy - An object that maps values to
  *   components to render. The keys represent possible values, and the values are functions returning
  *   the corresponding components.
@@ -43,8 +52,66 @@ type Props<Case> = {
  *     />
  *   );
  * }
+ *
+ * @example
+ * type Ok<T> = { tag: "Ok"; value: T };
+ * type Err = { tag: "Err"; error: string };
+ * type Result<T> = Ok<T> | Err;
+ *
+ * function App() {
+ *   return (
+ *     <SwitchCase
+ *       value={result}
+ *       selector="tag"
+ *       caseBy={{
+ *         Ok: () => <ResultComponent data={result.value} />,
+ *         Err: () => <ErrorComponent />,
+ *       }}
+ *     />
+ *   );
+ * }
+ * 
+ * @example
+ * type Ok<T> = { tag: "Ok"; value: T };
+ * type Err = { tag: "Err"; error: string };
+ * type Result<T> = Ok<T> | Err;
+ *
+ * function App() {
+ *   return (
+ *     <SwitchCase
+ *       value={result}
+ *       selector={result => result.tag === 'Ok' && result.value === 42}
+ *       caseBy={{
+ *         true: () => <div>The answer is correct</div>,
+ *         false: () => <div>Error</div>,
+ *       }}
+ *     />
+ *   );
+ * }
  */
-export function SwitchCase<Case>({ value, caseBy, defaultComponent = () => null }: Props<Case>): ReactElement | null {
-  const stringifiedValue = String(value) as StringifiedValue<Case>;
+export function SwitchCase<Value, Key extends keyof Value = never, Selected = [Key] extends [never] ? Value : Value[Key]>({
+  value,
+  selector,
+  caseBy,
+  defaultComponent = () => null
+}: Props<Value, Key, Selected>): ReactElement | null {
+  // Extract the selected value based on the selector
+  let selectedValue: Selected;
+  
+  if (selector === undefined) {
+    // If no selector is provided, use the value directly (backward compatibility)
+    selectedValue = value as unknown as Selected;
+  } else if (typeof selector === 'function') {
+    // If selector is a function, call it with the value
+    selectedValue = (selector as (value: Value) => Selected)(value);
+  } else {
+    // If selector is a property key, access that property
+    selectedValue = value[selector as keyof Value] as unknown as Selected;
+  }
+  
+  // Convert to string for case matching
+  const stringifiedValue = String(selectedValue) as StringifiedValue<Selected>;
+  
+  // Return the matching case or default component
   return (caseBy[stringifiedValue] ?? defaultComponent)();
 }
