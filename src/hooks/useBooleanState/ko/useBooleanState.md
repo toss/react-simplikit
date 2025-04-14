@@ -2,7 +2,7 @@
 
 `useBooleanState`는 불리언 상태 관리를 단순화하는 리액트 훅이에요. 상태를 `true`로 설정하고, `false`로 설정하고, 그 값을 토글할 수 있는 함수를 제공해요.
 
-## Interface
+## 인터페이스
 
 ```ts
 function useBooleanState(
