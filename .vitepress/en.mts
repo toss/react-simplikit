@@ -23,7 +23,7 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     { text: 'Home', link: '/' },
     { text: 'Introduction', link: '/intro.html' },
-    { text: 'Reference', link: '/hooks/useBooleanState.html' },
+    { text: 'Reference', link: '/components/ImpressionArea.html' },
   ];
 }
 
