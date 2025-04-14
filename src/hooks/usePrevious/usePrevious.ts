@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 const strictEquals = <T>(prev: T | undefined, next: T) => prev === next;
 
@@ -25,16 +25,15 @@ export function usePrevious<T>(state: T, compare: (prev: T, next: T) => boolean 
   const currentRef = useRef<T>(state);
   const isFirstRender = useRef<boolean>(true);
 
-  useEffect(() => {
+  if (isFirstRender.current) {
     isFirstRender.current = false;
-  }, []);
-
-  if (isFirstRender.current || compare(currentRef.current, state)) {
     return prevRef.current;
   }
 
-  prevRef.current = currentRef.current;
-  currentRef.current = state;
+  if (!compare(currentRef.current, state)) {
+    prevRef.current = currentRef.current;
+    currentRef.current = state;
+  }
 
   return prevRef.current;
 }
