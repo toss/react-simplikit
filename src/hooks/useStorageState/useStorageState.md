@@ -3,12 +3,15 @@
 A React hook that functions like `useState` but persists the state value in browser storage. The value is retained across page reloads and can be shared between tabs when using `localStorage`.
 
 ## Interface
-
 ```ts
 function useStorageState(
   key: string,
-  options: Object
-): [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void];
+  options: Object,
+): readonly [
+  state: Serializable<T> | undefined,
+  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
+];
+
 ```
 
 ### Parameters
@@ -46,7 +49,7 @@ function useStorageState(
 
 <Interface
   name=""
-  type="[state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void]"
+  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void]"
   description="tuple:"
   :nested="[
     {
@@ -64,6 +67,7 @@ function useStorageState(
   ]"
 />
 
+
 ## Example
 
 ```tsx
@@ -78,3 +82,4 @@ function Counter() {
   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
 }
 ```
+  
