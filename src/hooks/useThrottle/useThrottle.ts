@@ -40,9 +40,10 @@ export function useThrottle<F extends (...args: any[]) => any>(
   const preservedCallback = usePreservedCallback(callback);
   const preservedOptions = usePreservedReference(options ?? {});
 
-  const throttledCallback = useMemo(() => {
-    return throttle(preservedCallback, wait, preservedOptions);
-  }, [preservedOptions, preservedCallback, wait]);
+  const throttledCallback = useMemo(
+    () => throttle(preservedCallback, wait, preservedOptions),
+    [preservedOptions, preservedCallback, wait]
+  );
 
   useEffect(() => {
     return () => {
