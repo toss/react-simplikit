@@ -13,13 +13,13 @@ function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps: Depend
 <Interface
   name="effect"
   type="() => Promise<void | (() => void)>"
-  description="<code>useEffect</code> 패턴으로 실행되는 비동기 함수예요. 이 함수는 선택적으로 정리(cleanup) 함수를 반환할 수 있어요."
+  description="<code>useEffect</code> 패턴으로 실행되는 비동기 함수예요. 이 함수는 선택적으로 정리(clean-up) 함수를 반환할 수 있어요."
 />
 
 <Interface
   name="deps"
   type="DependencyList"
-  description="의존성 배열이에요. 이 배열의 값이 변경될 때마다 효과가 다시 실행돼요. 만약 생략하면, 컴포넌트가 마운트될 때만 한 번 실행돼요."
+  description="의존성 배열이에요. 이 배열의 값이 변경될 때마다 효과가 다시 실행돼요. 만약 생략하면, 컴포넌트가 리렌더링 될 때마다 실행돼요."
 />
 
 ### 반환 값
