@@ -1,15 +1,15 @@
 # useDebounce
 
-`useDebounce`는 제공된 콜백 함수의 디바운스 버전을 반환하는 리액트 훅이에요. 함수 실행을 지연시키고 여러 호출을 하나로 묶어줌으로써 이벤트 처리를 최적화하는 데 도움을 줘요.
+`useDebounce`는 제공된 콜백 함수를 디바운스한 버전으로 반환하는 리액트 훅이에요. 이것은 함수 실행을 지연시키고 여러 번의 호출을 하나로 묶어 줌으로써 이벤트 처리를 최적화하는 데 도움을 줘요.
 
 ## 인터페이스
-
 ```ts
 function useDebounce<F extends (...args: any[]) => unknown>(
   callback: F,
   wait: number,
-  options: DebounceOptions
+  options: DebounceOptions,
 ): F & { cancel: () => void };
+
 ```
 
 ### 파라미터
@@ -25,7 +25,7 @@ function useDebounce<F extends (...args: any[]) => unknown>(
   required
   name="wait"
   type="number"
-  description="함수 실행을 지연시킬 밀리초 단위의 시간이에요."
+  description="함수 실행을 지연시킬 밀리세컨드예요."
 />
 
 <Interface
@@ -36,6 +36,7 @@ function useDebounce<F extends (...args: any[]) => unknown>(
     {
       name: 'options.leading',
       type: 'boolean',
+      required: 'false',
       defaultValue: 'false',
       description:
         '만약 <code>true</code>이면, 함수는 시퀀스의 시작에 호출돼요.',
@@ -43,6 +44,7 @@ function useDebounce<F extends (...args: any[]) => unknown>(
     {
       name: 'options.trailing',
       type: 'boolean',
+      required: 'false',
       defaultValue: 'true',
       description:
         '만약 <code>true</code>이면, 함수는 시퀀스의 끝에 호출돼요.',
@@ -55,8 +57,9 @@ function useDebounce<F extends (...args: any[]) => unknown>(
 <Interface
   name=""
   type="F & { cancel: () => void }"
-  description="콜백 호출을 지연시키는 디바운스된 함수예요. 또한, 대기 중인 디바운스 실행을 취소할 수 있는 <code>cancel</code> 메서드를 포함해요."
+  description="콜백 호출을 지연시키는 디바운스된 함수예요. 이 함수에는 대기 중인 디바운스 실행을 취소할 수 있는 <code>cancel</code> 메소드도 포함돼요."
 />
+
 
 ## 예시
 
@@ -76,8 +79,9 @@ function SearchInput() {
         setQuery(e.target.value);
         debouncedSearch(e.target.value);
       }}
-      placeholder="검색어를 입력하세요"
+      placeholder="검색어 입력하세요"
     />
   );
 }
 ```
+  
