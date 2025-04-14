@@ -108,13 +108,13 @@ export function useStorageState<T>(
   );
 
   const setStorageState = useCallback(
-    (value: SetStateAction<Serializable<T> | undefined>) => {
-      const nextValue = typeof value === 'function' ? value(getSnapshot()) : value;
+    (nextValue: SetStateAction<Serializable<T> | undefined>) => {
+      const value = typeof nextValue === 'function' ? nextValue(getSnapshot()) : nextValue;
 
-      if (nextValue == null) {
+      if (value == null) {
         storage.remove(key);
       } else {
-        storage.set(key, JSON.stringify(nextValue));
+        storage.set(key, JSON.stringify(value));
       }
       emitListeners();
     },
