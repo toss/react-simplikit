@@ -40,18 +40,18 @@ function sidebar(): DefaultTheme.Sidebar {
       ],
     },
     {
-      text: 'Reference',
+      text: '레퍼런스',
       items: sortByText([
         {
-          text: 'Components',
+          text: '컴포넌트',
           items: getSidebarItems(sourceRoot, 'components', '*', 'ko'),
         },
         {
-          text: 'Hooks',
+          text: '훅',
           items: getSidebarItems(sourceRoot, 'hooks', '*', 'ko'),
         },
         {
-          text: 'Utils',
+          text: '유틸리티',
           items: getSidebarItems(sourceRoot, 'utils', '*', 'ko'),
         },
       ]),
