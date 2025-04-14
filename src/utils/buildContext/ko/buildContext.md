@@ -1,6 +1,6 @@
 # buildContext
 
-`buildContext`는 React Context를 정의할 때 반복적인 코드를 줄여주는 도우미 함수예요.
+`buildContext`는 리액트 컨텍스트를 정의할 때 반복적인 코드를 줄여주는 도우미 함수예요.
 
 ## 인터페이스
 
