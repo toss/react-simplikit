@@ -25,7 +25,7 @@ function useDebounce<F extends (...args: any[]) => unknown>(
   required
   name="wait"
   type="number"
-  description="함수 실행을 지연시킬 밀리세컨드예요."
+  description="함수 실행을 지연시킬 밀리초 단위의 시간이에요."
 />
 
 <Interface
