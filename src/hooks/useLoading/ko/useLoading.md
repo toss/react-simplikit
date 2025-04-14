@@ -2,7 +2,7 @@
 
 `useLoading`은 `Promise`의 로딩 상태 관리를 간소화하는 리액트 훅이에요. 비동기 작업이 진행 중인지 추적하는 상태와 로딩 상태를 자동으로 처리하는 함수를 제공해요.
 
-## Interface
+## 인터페이스
 
 ```ts
 function useLoading(): [loading: boolean, startLoading: <T>(promise: Promise<T>) => Promise<T>];
