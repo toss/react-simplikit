@@ -7,17 +7,16 @@
 `react-simplikit`은 React 환경에서 유용하게 사용할 수 있는 다양한 유틸리티를 제공하는 가볍고 강력한 라이브러리예요.
 
 - `react-simplikit`은 의존성이 없어서 매우 가벼워요.
-- 100% 테스트 커버리지를 통해 신뢰성을 보장해요.
-- JSDoc과 풍부한 문서, 예제를 제공해서 어떤 개발자도 쉽게 사용할 수 있어요.
+- `react-simplikit`은 100% 테스트 커버리지를 통해 신뢰성을 보장해요.
+- `react-simplikit`은 JSDoc과 풍부한 문서, 예제를 제공해서 어떤 개발자도 쉽게 사용할 수 있어요.
 
 ## 예시
 
 ```tsx
-// import from '@es-toolkit/es-toolkit' in jsr.
 import { useBooleanState } from 'react-simplikit';
 
 function Component() {
-  // useBooleanState 훅을 사용해 상태를 관리해요.
+  // `useBooleanState` 훅을 사용해 상태를 관리해요.
   const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
 
   return (
