@@ -28,7 +28,7 @@ export const useBooleanState = (defaultValue = false): readonly [boolean, () => 
   }, []);
 
   const toggle = useCallback(() => {
-    setBool(b => !b);
+    setBool(prevBool => !prevBool);
   }, []);
 
   return [bool, setTrue, setFalse, toggle] as const;
