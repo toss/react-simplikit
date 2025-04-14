@@ -28,7 +28,7 @@ jobs:
         run: yarn install
 
       - name: Run linter
-        run: yarn run lint
+        run: yarn run test:lint
 
   check-changes:
     runs-on: ubuntu-latest
