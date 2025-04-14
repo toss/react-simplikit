@@ -19,7 +19,7 @@ function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps: Depend
 <Interface
   name="deps"
   type="DependencyList"
-  description="의존성 배열이에요. 이 배열의 값이 변경될 때마다 효과가 다시 실행돼요. 만약 생략하면, 컴포넌트가 마운트될 때만 한 번 실행돼요."
+  description="의존성 배열이에요. 이 배열의 값이 변경될 때마다 효과가 다시 실행돼요. 만약 생략하면, 컴포넌트가 리렌더링 될 때마다 실행돼요."
 />
 
 ### 반환 값
