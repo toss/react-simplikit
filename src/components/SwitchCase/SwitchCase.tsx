@@ -8,7 +8,7 @@ type StringifiedValue<T> =
   | (T extends number ? `${T}` : never)
   | (T extends string ? T : never);
 
-type Props<Value, Key extends keyof Value = never, Selected = never extends Key  ? Value : Value[Key]> = {
+type Props<Value, Key extends keyof Value = never, Selected = [Key] extends [never] ? Value : Value[Key]> = {
   value: Value;
   selector?: Selector<Value, Key, Selected>;
   caseBy: Partial<{ [P in StringifiedValue<Selected>]: () => ReactElement | null }>;
@@ -70,7 +70,7 @@ type Props<Value, Key extends keyof Value = never, Selected = never extends Key 
  *     />
  *   );
  * }
- * 
+ *
  * @example
  * type Ok<T> = { tag: "Ok"; value: T };
  * type Err = { tag: "Err"; error: string };
@@ -89,29 +89,28 @@ type Props<Value, Key extends keyof Value = never, Selected = never extends Key 
  *   );
  * }
  */
-export function SwitchCase<Value, Key extends keyof Value = never, Selected = [Key] extends [never] ? Value : Value[Key]>({
-  value,
-  selector,
-  caseBy,
-  defaultComponent = () => null
-}: Props<Value, Key, Selected>): ReactElement | null {
+export function SwitchCase<
+  Value,
+  Key extends keyof Value = never,
+  Selected = [Key] extends [never] ? Value : Value[Key],
+>({ value, selector, caseBy, defaultComponent = () => null }: Props<Value, Key, Selected>): ReactElement | null {
   // Extract the selected value based on the selector
   let selectedValue: Selected;
-  
-  if (selector === undefined) {
-    // If no selector is provided, use the value directly (backward compatibility)
-    selectedValue = value as unknown as Selected;
-  } else if (typeof selector === 'function') {
+
+  if (typeof selector === 'function') {
     // If selector is a function, call it with the value
     selectedValue = (selector as (value: Value) => Selected)(value);
-  } else {
+  } else if (typeof selector === 'string' && typeof value === 'object' && !!value && selector in value) {
     // If selector is a property key, access that property
-    selectedValue = value[selector as keyof Value] as unknown as Selected;
+    selectedValue = value[selector as keyof Value] as Selected;
+  } else {
+    // If no selector is provided, use the value directly (backward compatibility)
+    selectedValue = value as unknown as Selected;
   }
-  
+
   // Convert to string for case matching
   const stringifiedValue = String(selectedValue) as StringifiedValue<Selected>;
-  
+
   // Return the matching case or default component
   return (caseBy[stringifiedValue] ?? defaultComponent)();
 }

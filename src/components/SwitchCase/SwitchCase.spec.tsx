@@ -6,8 +6,8 @@ import { renderSSR } from '../../_internal/test-utils/renderSSR.tsx';
 
 import { SwitchCase } from './SwitchCase.tsx';
 
-type Ok<T> = { tag: "Ok"; value: T };
-type Err = { tag: "Err"; error: string };
+type Ok<T> = { tag: 'Ok'; value: T };
+type Err = { tag: 'Err'; error: string };
 type Result<T> = Ok<T> | Err;
 
 describe('SwitchCase', () => {
@@ -175,8 +175,8 @@ describe('SwitchCase', () => {
     const getValue = (): Result<number> => {
       const value = { tag: 'Ok', value: 42 };
       return value as Result<number>;
-    }
-    
+    };
+
     const value = getValue();
     render(
       <SwitchCase
@@ -196,7 +196,7 @@ describe('SwitchCase', () => {
     const getValue = (): Result<number> => {
       const value = { tag: 'Ok', value: 42 };
       return value as Result<number>;
-    }
+    };
 
     const value = getValue();
     render(
