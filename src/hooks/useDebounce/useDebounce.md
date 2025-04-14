@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useDebounce<F extends (...args: unknown[]) => unknown>(
+function useDebounce<F extends (...args: any[]) => unknown>(
   callback: F,
   wait: number,
   options: DebounceOptions

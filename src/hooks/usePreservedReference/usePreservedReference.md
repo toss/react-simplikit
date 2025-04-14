@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function usePreservedReference(value: T, areValuesEqual: (a: T, b: T) => boolean): T;
+function usePreservedReference<T extends NotNullishValue>(value: T, areValuesEqual: (a: T, b: T) => boolean): T;
 ```
 
 ### Parameters
