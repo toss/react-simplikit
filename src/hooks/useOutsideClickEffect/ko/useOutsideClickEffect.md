@@ -1,6 +1,6 @@
 # useOutsideClickEffect
 
-`useOutsideClickEffect`는 지정된 컨테이너 외부에서 클릭 이벤트가 발생할 때 콜백을 트리거하는 React 훅이에요. 모달, 드롭다운, 툴팁 및 다른 UI 컴포넌트를 외부 클릭 시 닫는 데 유용해요.
+`useOutsideClickEffect`는 지정된 컨테이너 외부에서 클릭 이벤트가 발생할 때 콜백을 트리거하는 리액트 훅이에요. 모달, 드롭다운, 툴팁 및 다른 UI 컴포넌트를 외부 클릭 시 닫는 데 유용해요.
 
 ## 인터페이스
 
