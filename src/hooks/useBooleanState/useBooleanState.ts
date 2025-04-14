@@ -16,7 +16,7 @@ import { useCallback, useState } from 'react';
  * @example
  * const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
  */
-export const useBooleanState = (defaultValue = false): readonly [boolean, () => void, () => void, () => void] => {
+export function useBooleanState(defaultValue = false): readonly [boolean, () => void, () => void, () => void] {
   const [bool, setBool] = useState(defaultValue);
 
   const setTrue = useCallback(() => {
@@ -28,8 +28,8 @@ export const useBooleanState = (defaultValue = false): readonly [boolean, () => 
   }, []);
 
   const toggle = useCallback(() => {
-    setBool(b => !b);
+    setBool(prevBool => !prevBool);
   }, []);
 
   return [bool, setTrue, setFalse, toggle] as const;
-};
+}
