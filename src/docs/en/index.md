@@ -13,7 +13,7 @@ hero:
       link: /intro.html
     - theme: alt
       text: Reference
-      link: /hooks/useBooleanState.html
+      link: /components/ImpressionArea.html
     - theme: alt
       text: Installation
       link: /installation.html
