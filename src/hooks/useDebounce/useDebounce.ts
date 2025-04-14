@@ -16,7 +16,7 @@ type DebounceOptions = {
  * `useDebounce` is a React hook that returns a debounced version of the provided callback function.
  * It helps optimize event handling by delaying function execution and grouping multiple calls into one.
  *
- * @template {(...args: unknown[]) => unknown} F - The type of the callback function.
+ * @template {(...args: any[]) => unknown} F - The type of the callback function.
  * @param {F} callback - The function to debounce.
  * @param {number} wait - The number of milliseconds to delay the function execution.
  * @param {DebounceOptions} [options] - Configuration options for debounce behavior.
