@@ -9,6 +9,8 @@ type NotNullishValue = {};
  * when it hasn't changed, while ensuring you can safely use the latest state.
  * It prevents unnecessary re-renders while always allowing access to the latest data.
  *
+ * @template {NotNullishValue} T - The type of target to be referenced.
+ *
  * @param {T} value - The value to maintain the reference for. It returns a new reference
  *   if the state value changes after comparison.
  * @param {(a: T, b: T) => boolean} [areValuesEqual] - An optional function to determine

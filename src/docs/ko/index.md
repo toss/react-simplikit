@@ -13,7 +13,7 @@ hero:
       link: /ko/intro.html
     - theme: alt
       text: 레퍼런스
-      link: /ko/hooks/useBooleanState.html
+      link: /ko/components/ImpressionArea.html
     - theme: alt
       text: 설치하기
       link: /ko/installation.html
