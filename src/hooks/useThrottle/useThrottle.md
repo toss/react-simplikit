@@ -5,7 +5,7 @@ A React hook that creates a throttled version of a callback function. This is us
 ## Interface
 
 ```ts
-function useThrottle<F>(
+function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
   options: { edges?: Array<'leading' | 'trailing'> }
