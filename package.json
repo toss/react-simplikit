@@ -19,6 +19,7 @@
     "esm/**/*"
   ],
   "scripts": {
+    "clean": "rimraf ./dist ./esm ./coverage ./node_modules",
     "scaffold": "tsx .scripts/index.ts scaffold",
     "docs:gen": "tsx .scripts/index.ts generate-docs",
     "docs:dev": "vitepress dev",
