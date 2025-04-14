@@ -7,7 +7,7 @@ import { useCallback, useState } from 'react';
  *
  * @param {boolean} [defaultValue=false] - The initial value of the state. Defaults to `false`.
  *
- * @returns {[state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]} A tuple containing:
+ * @returns {readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]} A tuple containing:
  * - state `boolean` - The current state value;
  * - setTrue `() => void` - A function to set the state to `true`;
  * - setFalse `() => void` - A function to set the state to `false`;
