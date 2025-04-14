@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function mergeRefs(refs: Array<RefObject<T> | RefCallback<T> | null | undefined>): RefCallback<T>;
+function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T> | null | undefined>): RefCallback<T>;
 ```
 
 ### 파라미터
