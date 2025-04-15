@@ -108,35 +108,35 @@ console.log(\`result is \${result}\`);
 </input>
 
 <correct-output>
-\`result\`의 값은 \`true\`이예요
+\`result\`의 값은 \`true\`예요
 
 \`\`\`ts
 function sum(a, b) {
-  console.log(\`\${a}와 \${b}의 합은 \${a + b}이예요\`);
+  console.log(\`\${a}와 \${b}의 합은 \${a + b}예요\`);
   return a + b;
 }
 
 const result = sum(1, 3) === 4;
-console.log(\`result는 \${result}이예요\`);
+console.log(\`result는 \${result}예요\`);
 \`\`\`
 </correct-output>
 
 <wrong-output>
-\`결과\`의 값은 \`참\`이예요
+\`결과\`의 값은 \`참\`이에요
 
 \`\`\`ts
 function 더하기(a, b) {
-  console.log(\`\${a}와 \${b}의 합은 \${a + b}이예요\`);
+  console.log(\`\${a}와 \${b}의 합은 \${a + b}예요\`);
   return a + b;
 }
 
 const 결과 = 더하기(1, 3) === 4;
-console.log(\`결과는 \${결과}이예요\`);
+console.log(\`결과는 \${결과}예요\`);
 \`\`\`
 </wrong-output>
 
 <wrong-output-2>
-\`result\`의 값은 \`true\`이예요
+\`result\`의 값은 \`true\`예요
 
 \`\`\`ts
 function sum(a, b) {

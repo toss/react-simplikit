@@ -261,15 +261,16 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
                      ${Object.entries({
                        name: nestedParam.name,
                        type: nestedParam.type,
-                       required: String(!nestedParam.optional),
+                       required: !nestedParam.optional,
                        defaultValue: nestedParam.default,
                        description: nestedParam.description,
                      })
                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                        .filter(([_, value]) => value != null)
-                       .map(
-                         ([key, value]) =>
-                           `${key}: '${key === 'description' ? replaceDescription(value as string) : value!.replace(/'/g, "\\'")}'`
+                       .map(([key, value]) =>
+                         typeof value === 'string'
+                           ? `${key}: '${key === 'description' ? replaceDescription(value as string) : value!.replace(/'/g, "\\'")}'`
+                           : `${key}: ${value}`
                        )
                        .join(',\n')}
             }`

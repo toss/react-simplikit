@@ -1,6 +1,6 @@
 # useDebouncedCallback
 
-`useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function. It helps optimize event handling by delaying function execution and grouping multiple calls into one.
+`useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function. It helps optimize event handling by delaying function execution and grouping multiple calls into one. Note that if both 'leading' and 'trailing' are included, the function will be called at both the start and end of the delay period. However, it must be called at least twice within debounceMs milliseconds for this to happen, as one debounced function call cannot trigger the function twice.
 
 ## Interface
 
@@ -19,15 +19,31 @@ function useDebouncedCallback(options: Object): Function;
     {
       name: 'options.onChange',
       type: 'Function',
-      required: 'true',
+      required: true,
       description: 'The callback function to debounce.',
     },
     {
       name: 'options.timeThreshold',
       type: 'number',
-      required: 'true',
+      required: true,
       description:
         'The number of milliseconds to delay the function execution.',
+    },
+    {
+      name: 'options.leading',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'false',
+      description:
+        'If <code>true</code>, the function is called at the start of the sequence.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        'If <code>true</code>, the function is called at the end of the sequence.',
     },
   ]"
 />
@@ -46,6 +62,6 @@ function useDebouncedCallback(options: Object): Function;
 function SearchInput() {
   const [query, setQuery] = useState('');
   const debouncedSetQuery = useDebouncedCallback({ onChange: setQuery, timeThreshold: 100 });
-  return <input type="text" onChange={e => debouncedSetQuery(e.target.value)} />;
+  return <input type="text" onChange={(e) => debouncedSetQuery(e.target.value)} />;
 }
 ```
