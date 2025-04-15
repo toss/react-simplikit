@@ -31,9 +31,7 @@ function Page() {
 
 ### Rendering Arrays with Specific Separators
 
-<SplitView>
-  <template #left>
-
+::: code-group
 ```tsx [without-react-simplikit.tsx]
 const texts = ['hello', 'react', 'world'];
 
@@ -53,10 +51,6 @@ function Page() {
 }
 ```
 
-  </template>
-
-<template #right>
-
 ```tsx [without-react-simplikit.tsx]
 const texts = ['hello', 'react', 'world'];
 
@@ -70,9 +64,7 @@ function Page() {
   );
 }
 ```
-
-  </template>
-</SplitView>
+:::
 
 ## Minimizing Unintended Behavior and Bugs with Concise Implementation
 

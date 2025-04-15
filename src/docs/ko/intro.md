@@ -31,9 +31,7 @@ function Page() {
 
 ### 특정 요소로 구분하여 배열 렌더링하기
 
-<SplitView>
-  <template #left>
-
+::: code-group
 ```tsx [without-react-simplikit.tsx]
 const texts = ['hello', 'react', 'world'];
 
@@ -53,10 +51,6 @@ function Page() {
 }
 ```
 
-  </template>
-
-<template #right>
-
 ```tsx [without-react-simplikit.tsx]
 const texts = ['hello', 'react', 'world'];
 
@@ -70,9 +64,7 @@ function Page() {
   );
 }
 ```
-
-  </template>
-</SplitView>
+:::
 
 ## 간결한 구현으로, 의도하지 않은 동작이나 버그를 최소화해요
 
