@@ -1,6 +1,6 @@
 # useControlledState
 
-`useControlledState`는 통제된 상태와 비통제 상태를 모두 제어할 수 있게 해주는 훅이에요. `value`에 상태를 전달하면 통제된 상태가 되고, `defaultValue`에 상태를 전달하면 비통제 상태가 돼요. `value`와 `defaultValue`가 둘 다 전달되면, `value`가 우선시돼요.
+`useControlledState`는 제어된 상태와 비제어된 상태를 모두 제어할 수 있게 해주는 훅이에요. 상태를 `value`에 전달하면 제어된 상태가 되고, 상태를 `defaultValue`에 전달하면 비제어된 상태가 돼요. `value`와 `defaultValue`가 모두 전달되면, `value`가 우선권을 가져요.
 
 ## 인터페이스
 
