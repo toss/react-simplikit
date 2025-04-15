@@ -1,6 +1,6 @@
 # useIsomorphicLayoutEffect
 
-SSR 중에는 동기적으로 측정하거나 변경할 DOM이 없어서 React는 useLayoutEffect 사용에 대해 경고해요. 이 훅은 브라우저에서 SSR 경고를 트리거하지 않고 useLayoutEffect의 동작을 제공해요. DOM 업데이트 후 페인트 전에 동기적으로 실행되며, 다음에 이상적이에요: 
+SSR 환경에서는 DOM에 대한 접근이 불가하기 때문에 useLayoutEffect 훅 사용 시 경고가 발생해요. 이 훅은 브라우저에서 SSR 경고를 트리거하지 않고 useLayoutEffect의 동작을 제공해요. DOM 업데이트 후 페인트 전에 동기적으로 실행되며, 다음과 같은 상황에서 효과적으로 사용할 수 있어요: 
 
 - 렌더링 후 DOM 요소 측정
 - 페인트 전 DOM 변경 적용
@@ -22,7 +22,7 @@ function useIsomorphicLayoutEffect(
   required
   name="effect"
   type="React.EffectCallback"
-  description="효과 함수예요."
+  description="발생시킬 사이드이펙트 함수예요."
 />
 
 <Interface
