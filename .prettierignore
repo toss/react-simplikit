@@ -11,5 +11,3 @@ esm
 out
 *.d.ts
 *.tgz
-
-src/docs/en
