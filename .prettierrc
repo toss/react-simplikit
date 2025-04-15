@@ -10,6 +10,12 @@
       "options": {
         "printWidth": 80
       }
+    },
+    {
+      "files": "**/intro.md",
+      "options": {
+        "printWidth": 70
+      }
     }
   ]
 }

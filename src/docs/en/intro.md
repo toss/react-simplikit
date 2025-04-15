@@ -37,7 +37,7 @@ right-title="with-react-simplikit.tsx">
 
 <template #left>
 
-```tsx 
+```tsx
 // without react simplikit
 const texts = ['hello', 'react', 'world'];
 
@@ -46,9 +46,9 @@ function Page() {
     <>
       {texts.map((text, idx) => (
         <Fragment key={text}>
-          <div>{text}</div>
-          {idx < texts.length - 1 
-          : null}
+          {idx < texts.length - 1 ? (
+            <Border type="padding24" />
+          ) : null}
         </Fragment>
       ))}
     </>
@@ -60,7 +60,7 @@ function Page() {
 
 <template #right>
 
-```tsx 
+```tsx
 // without react simplikit
 const texts = ['hello', 'react', 'world'];
 
