@@ -5,7 +5,10 @@ A React hook that listens to changes in the document's visibility state and trig
 ## Interface
 
 ```ts
-function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') => void, options: object): void;
+function useVisibilityEvent(
+  callback: (visibilityState: 'visible' | 'hidden') => void,
+  options: object
+): void;
 ```
 
 ### Parameters
@@ -25,6 +28,7 @@ function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') =>
     {
       name: 'options.immediate',
       type: 'boolean',
+      required: false,
       defaultValue: 'false',
       description:
         'If true, the callback is invoked immediately upon mounting with the current visibility state.',
@@ -35,7 +39,6 @@ function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') =>
 ### Return Value
 
 This hook does not return anything.
-
 ## Example
 
 ```tsx
