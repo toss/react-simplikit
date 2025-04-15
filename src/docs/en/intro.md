@@ -37,7 +37,8 @@ right-title="with-react-simplikit.tsx">
 
 <template #left>
 
-```tsx [without-react-simplikit.tsx]
+```tsx 
+// without react simplikit
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
@@ -59,7 +60,8 @@ function Page() {
 
 <template #right>
 
-```tsx [without-react-simplikit.tsx]
+```tsx 
+// without react simplikit
 const texts = ['hello', 'react', 'world'];
 
 function Page() {

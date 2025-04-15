@@ -75,6 +75,7 @@ function scrollTo(target) {
 }
 
 .view-handle {
+  display: none;
   position: sticky;
   left: 0;
   right: 0;
@@ -102,6 +103,10 @@ function scrollTo(target) {
   }
 
   .scroller-element {
+    display: block;
+  }
+
+  .view-handle {
     display: block;
   }
 }
