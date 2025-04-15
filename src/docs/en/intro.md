@@ -31,10 +31,14 @@ function Page() {
 
 ### Rendering Arrays with Specific Separators
 
-<SplitView>
-  <template #left>
+<SplitView 
+left-title="without-react-simplikit.tsx"
+right-title="with-react-simplikit.tsx">
 
-```tsx [without-react-simplikit.tsx]
+<template #left>
+
+```tsx 
+// without react simplikit
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
@@ -43,9 +47,8 @@ function Page() {
       {texts.map((text, idx) => (
         <Fragment key={text}>
           <div>{text}</div>
-          {idx < texts.length - 1 ? (
-            <Border type="padding24" />
-          ) : null}
+          {idx < texts.length - 1 
+          : null}
         </Fragment>
       ))}
     </>
@@ -57,7 +60,8 @@ function Page() {
 
 <template #right>
 
-```tsx [without-react-simplikit.tsx]
+```tsx 
+// without react simplikit
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
