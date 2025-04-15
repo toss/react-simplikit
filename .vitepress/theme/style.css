@@ -141,14 +141,12 @@
   --vp-color-secondary: rgb(78, 89, 104);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --vp-border: #5c6064;
-    --vp-color-primary: #f0f0f0;
-    --vp-red: #f5645a;
-    --vp-green: #38cc8e;
-    --vp-color-secondary: #f0f0f0;
-  }
+.dark {
+  --vp-border: #5c6064;
+  --vp-color-primary: #f0f0f0;
+  --vp-red: #f5645a;
+  --vp-green: #38cc8e;
+  --vp-color-secondary: #f0f0f0;
 }
 
 .vp-doc ul.post-parameters-ul {

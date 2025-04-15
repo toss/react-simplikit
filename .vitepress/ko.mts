@@ -23,7 +23,7 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     { text: '홈', link: '/ko' },
     { text: '소개', link: '/ko/intro.html' },
-    { text: '레퍼런스', link: '/ko/hooks/useBooleanState.html' },
+    { text: '레퍼런스', link: '/ko/components/ImpressionArea.html' },
   ];
 }
 
