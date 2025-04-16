@@ -129,7 +129,8 @@ jobs:
 
       - name: Generate docs
         run: |
-          yarn docs:gen ${{ needs.get-diffs.outputs.result }}
+          yarn run docs:gen ${{ needs.get-diffs.outputs.result }}
+          yarn run fix:format
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 

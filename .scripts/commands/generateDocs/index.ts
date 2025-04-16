@@ -11,6 +11,14 @@ import { translate } from './translate.ts';
 
 type Spec = Pick<OriginSpec, 'type' | 'name' | 'description' | 'optional' | 'default'>;
 
+const prettierConfig: prettier.Options = {
+  printWidth: 80,
+  singleQuote: true,
+  trailingComma: 'es5',
+  tabWidth: 2,
+  arrowParens: 'avoid',
+};
+
 export async function generateDocs(names: string[]) {
   const tasks = new Listr([], { concurrent: 10 });
 
@@ -193,27 +201,26 @@ async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
 ${description}
 
 ## Interface
+
 \`\`\`ts
-${await prettier.format(`function ${name}${getTemplateCode()}(${getParamsCode()}): ${returns == null ? 'void' : returns.type};`, { parser: 'typescript' })}
-\`\`\`
+${await prettier.format(`function ${name}${getTemplateCode()}(${getParamsCode()}): ${returns == null ? 'void' : returns.type};`, { ...prettierConfig, parser: 'typescript' })}\`\`\`
 
 ### Parameters
 
-${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { parser: 'vue' })}
+${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { ...prettierConfig, parser: 'vue' })}
 ### Return Value
 ${
   returns == null
     ? '\nThis hook does not return anything.'
     : `
-${await prettier.format(getParamUl(returns, nestedValueOfReturns), { parser: 'vue' })}`
+${await prettier.format(getParamUl(returns, nestedValueOfReturns), { ...prettierConfig, parser: 'vue' })}`
 }
-
 ## Example
 
 \`\`\`tsx
 ${example}
 \`\`\`
-  `;
+`;
 }
 
 function getParamUl(param: Spec, nestedParams?: Spec[]) {
@@ -254,15 +261,16 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
                      ${Object.entries({
                        name: nestedParam.name,
                        type: nestedParam.type,
-                       required: String(!nestedParam.optional),
+                       required: !nestedParam.optional,
                        defaultValue: nestedParam.default,
                        description: nestedParam.description,
                      })
                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                        .filter(([_, value]) => value != null)
-                       .map(
-                         ([key, value]) =>
-                           `${key}: '${key === 'description' ? replaceDescription(value as string) : value!.replace(/'/g, "\\'")}'`
+                       .map(([key, value]) =>
+                         typeof value === 'string'
+                           ? `${key}: '${key === 'description' ? replaceDescription(value as string) : value!.replace(/'/g, "\\'")}'`
+                           : `${key}: ${value}`
                        )
                        .join(',\n')}
             }`

@@ -5,7 +5,9 @@
 ## Interface
 
 ```ts
-function useImpressionRef(options: UseImpressionRefOptions): (element: Element | null) => void;
+function useImpressionRef(
+  options: UseImpressionRefOptions
+): (element: Element | null) => void;
 ```
 
 ### Parameters
@@ -19,32 +21,34 @@ function useImpressionRef(options: UseImpressionRefOptions): (element: Element |
     {
       name: 'options.onImpressionStart',
       type: '() => void',
-      required: 'true',
+      required: false,
       description:
         'Callback function executed when the element enters the view',
     },
     {
       name: 'options.onImpressionEnd',
       type: '() => void',
-      required: 'true',
+      required: false,
       description: 'Callback function executed when the element exits the view',
     },
     {
       name: 'options.timeThreshold',
       type: 'number',
-      required: 'true',
+      required: false,
+      defaultValue: '0',
       description: 'Minimum time the element must be visible (in milliseconds)',
     },
     {
       name: 'options.areaThreshold',
       type: 'number',
-      required: 'true',
+      required: false,
+      defaultValue: '0',
       description: 'Minimum ratio of the element that must be visible (0 to 1)',
     },
     {
       name: 'options.rootMargin',
       type: 'string',
-      required: 'true',
+      required: true,
       description: 'Margin to adjust the detection area',
     },
   ]"
