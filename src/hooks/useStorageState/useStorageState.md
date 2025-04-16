@@ -78,6 +78,8 @@ function Counter() {
     defaultValue: 0,
   });
 
-  return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
+  return (
+    <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>
+  );
 }
 ```
