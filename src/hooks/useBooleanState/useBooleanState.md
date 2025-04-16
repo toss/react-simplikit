@@ -60,5 +60,6 @@ function useBooleanState(
 ## Example
 
 ```tsx
-const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
+const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
+  useBooleanState(false);
 ```

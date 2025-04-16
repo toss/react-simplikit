@@ -78,4 +78,3 @@ function Component() {
   return <div ref={ref}>내 가시성을 추적해줘요!</div>;
 }
 ```
-

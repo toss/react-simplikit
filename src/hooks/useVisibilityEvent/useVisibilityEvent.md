@@ -39,6 +39,7 @@ function useVisibilityEvent(
 ### Return Value
 
 This hook does not return anything.
+
 ## Example
 
 ```tsx

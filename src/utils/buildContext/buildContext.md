@@ -8,7 +8,10 @@
 function buildContext(
   contextName: string,
   defaultContextValues: ContextValuesType
-): [Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element, useContext: () => ContextValuesType];
+): [
+  Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element,
+  useContext: () => ContextValuesType,
+];
 ```
 
 ### Parameters
@@ -49,7 +52,10 @@ function buildContext(
 ## Example
 
 ```tsx
-const [Provider, useContext] = buildContext<{ title: string }>('TestContext', null);
+const [Provider, useContext] = buildContext<{ title: string }>(
+  'TestContext',
+  null
+);
 
 function Inner() {
   const { title } = useContext();
