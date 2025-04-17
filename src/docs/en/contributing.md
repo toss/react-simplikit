@@ -282,7 +282,7 @@ There are no specific conditions for contributing to documentation. If you find 
 There's a command that creates the minimum skeleton for contributions. Use the following command to create an implementation folder with a basic structure:
 
 ```bash
-yarn scripts scaffold <name> --type <type>
+yarn run scaffold <name> --type <type>
 ```
 
 - `type`: Implementation type, must be one of `component`, `hook`, or `util`.
@@ -291,7 +291,7 @@ yarn scripts scaffold <name> --type <type>
 ### Example
 
 ```bash
-yarn scripts scaffold Button --type component
+yarn run scaffold Button --type component
 ```
 
 This command creates three files in the `src/components/Button` folder:
@@ -347,9 +347,9 @@ export { Button } from './Button.tsx';
 You can also use these shortcuts:
 
 ```bash
-yarn scripts scaffold Button --t c // Create component
-yarn scripts scaffold useButton --t h // Create hook
-yarn scripts scaffold getButton --t u // Create util
+yarn run scaffold Button --t c // Create component
+yarn run scaffold useButton --t h // Create hook
+yarn run scaffold getButton --t u // Create util
 ```
 
 :::

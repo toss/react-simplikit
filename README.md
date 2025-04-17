@@ -17,7 +17,8 @@ import { useBooleanState } from 'react-simplikit';
 
 function Component() {
   // using the `useBooleanState` hook to manage state.
-  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
+  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
+    useBooleanState(false);
 
   return (
     <div>

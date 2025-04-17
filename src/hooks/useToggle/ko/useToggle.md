@@ -5,7 +5,9 @@
 ## 인터페이스
 
 ```ts
-function useToggle(initialValue: boolean = false): [state: boolean, toggle: () => void];
+function useToggle(
+  initialValue: boolean = false
+): [state: boolean, toggle: () => void];
 ```
 
 ### 파라미터
