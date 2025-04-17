@@ -5,7 +5,7 @@ import prettier from 'prettier';
 
 import { getRootPath } from '../../utils/getRootPath.ts';
 
-const PRETTIER_CONFIG: Partial<prettier.RequiredOptions> = {
+const prettierConfig: prettier.Options = {
   printWidth: 120,
   singleQuote: true,
   trailingComma: 'es5',
@@ -51,7 +51,7 @@ export async function scaffold(name: string, type: 'hook' | 'component' | 'util'
                   // TODO: Implement ${name}
                 }
               `,
-              PRETTIER_CONFIG
+              prettierConfig
             )
           );
         },
@@ -100,7 +100,7 @@ export async function scaffold(name: string, type: 'hook' | 'component' | 'util'
                   });
                 });
               `,
-              PRETTIER_CONFIG
+              prettierConfig
             )
           );
         },
@@ -111,7 +111,7 @@ export async function scaffold(name: string, type: 'hook' | 'component' | 'util'
           const indexFile = `${directory}/index.ts`;
           await fs.writeFile(
             indexFile,
-            await prettier.format(`export { ${name} } from './${name}.${ext}';`, PRETTIER_CONFIG)
+            await prettier.format(`export { ${name} } from './${name}.${ext}';`, prettierConfig)
           );
         },
       },
