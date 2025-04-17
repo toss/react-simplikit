@@ -282,7 +282,7 @@ yarn test:coverage
 기여를 하기 위한 최소한의 골격을 만들어 주는 명령어가 있어요. 아래 명령어를 사용하면 기본적인 구조가 잡힌 구현체 폴더를 생성할 수 있어요.
 
 ```bash
-yarn scripts scaffold <name> --type <type>
+yarn run scaffold <name> --type <type>
 ```
 
 - `type`: 구현체의 유형으로, `component`, `hook`, `util` 중 하나를 선택해야 해요.
@@ -291,7 +291,7 @@ yarn scripts scaffold <name> --type <type>
 ### 예시
 
 ```bash
-yarn scripts scaffold Button --type component
+yarn run scaffold Button --type component
 ```
 
 이 명령어는 `src/components/Button` 폴더에 세 개의 파일을 생성해요.
@@ -349,9 +349,9 @@ export { Button } from './Button.tsx';
 이렇게도 쓸 수 있어요.
 
 ```bash
-yarn scripts scaffold Button --t c // 컴포넌트 생성
-yarn scripts scaffold useButton --t h // 훅 생성
-yarn scripts scaffold getButton --t u // 유틸 생성
+yarn run scaffold Button --t c // 컴포넌트 생성
+yarn run scaffold useButton --t h // 훅 생성
+yarn run scaffold getButton --t u // 유틸 생성
 ```
 
 :::
