@@ -61,7 +61,7 @@ function Page() {
 <template #right>
 
 ```tsx
-// without react simplikit
+// with react simplikit
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
