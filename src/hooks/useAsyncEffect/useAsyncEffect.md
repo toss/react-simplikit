@@ -5,7 +5,10 @@
 ## Interface
 
 ```ts
-function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps: DependencyList): void;
+function useAsyncEffect(
+  effect: () => Promise<void | (() => void)>,
+  deps: DependencyList
+): void;
 ```
 
 ### Parameters
