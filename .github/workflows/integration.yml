@@ -9,8 +9,12 @@ on:
       - main
 
 jobs:
-  lint:
+  quality:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        command: ['format', 'lint', 'type']
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,8 +31,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run linter
-        run: yarn run test:lint
+      - name: Run test:${{ matrix.command }}
+        run: yarn run test:${{matrix.command }}
 
   check-changes:
     runs-on: ubuntu-latest
