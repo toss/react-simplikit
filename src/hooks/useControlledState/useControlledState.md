@@ -60,19 +60,17 @@ type ToggleProps = {
   value?: boolean;
   defaultValue?: boolean;
   onChange?: (value: boolean) => void;
-}
+};
 
 function Toggle({ value, defaultValue, onChange }: ToggleProps) {
- const [on, setOn] = useControlledState({
-   value,
-   defaultValue: defaultValue ?? false,
-   onChange,
- });
+  const [on, setOn] = useControlledState({
+    value,
+    defaultValue: defaultValue ?? false,
+    onChange,
+  });
 
- return (
-   <button onClick={() => setOn((prev) => !prev)}>
-     {on ? 'ON' : 'OFF'}
-   </button>
- )
+  return (
+    <button onClick={() => setOn(prev => !prev)}>{on ? 'ON' : 'OFF'}</button>
+  );
 }
 ```
