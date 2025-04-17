@@ -5,7 +5,10 @@
 ## Interface
 
 ```ts
-function useOutsideClickEffect(container: HTMLElement | HTMLElement[] | null, callback: () => void): void;
+function useOutsideClickEffect(
+  container: HTMLElement | HTMLElement[] | null,
+  callback: () => void
+): void;
 ```
 
 ### Parameters

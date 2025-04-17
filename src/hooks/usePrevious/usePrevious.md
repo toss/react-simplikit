@@ -5,7 +5,10 @@ Returns the previous value of the input state. If a re-render occurs but the sta
 ## Interface
 
 ```ts
-function usePrevious<T>(state: T, compare: (prev: T | undefined, next: T) => boolean): T | undefined;
+function usePrevious<T>(
+  state: T,
+  compare: (prev: T | undefined, next: T) => boolean
+): T | undefined;
 ```
 
 ### Parameters

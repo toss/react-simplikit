@@ -3,12 +3,12 @@
 `usePreservedReference` is a React hook that helps maintain the reference of a value when it hasn't changed, while ensuring you can safely use the latest state. It prevents unnecessary re-renders while always allowing access to the latest data.
 
 ## Interface
+
 ```ts
 function usePreservedReference<T extends NotNullishValue>(
   value: T,
-  areValuesEqual: (a: T, b: T) => boolean,
+  areValuesEqual: (a: T, b: T) => boolean
 ): T;
-
 ```
 
 ### Parameters
@@ -34,7 +34,6 @@ function usePreservedReference<T extends NotNullishValue>(
   description="the same reference if the value is considered equal to the previous one, otherwise returns a new reference."
 />
 
-
 ## Example
 
 ```tsx
@@ -49,4 +48,3 @@ function ExampleComponent() {
   return <div>{preservedState.key}</div>;
 }
 ```
-  
