@@ -5,7 +5,10 @@
 ## 인터페이스
 
 ```ts
-function useCallbackOncePerRender(callback: () => void, deps: DependencyList): (...args: any[]) => void;
+function useCallbackOncePerRender(
+  callback: () => void,
+  deps: DependencyList
+): (...args: any[]) => void;
 ```
 
 ### 파라미터

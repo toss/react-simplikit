@@ -17,7 +17,8 @@ import { useBooleanState } from 'react-simplikit';
 
 function Component() {
   // `useBooleanState` 훅을 사용해 상태를 관리해요.
-  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] = useBooleanState(false);
+  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
+    useBooleanState(false);
 
   return (
     <div>

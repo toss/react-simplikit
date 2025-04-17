@@ -5,7 +5,10 @@ A React hook that ensures a callback function is executed only once, regardless 
 ## Interface
 
 ```ts
-function useCallbackOncePerRender(callback: () => void, deps: DependencyList): (...args: any[]) => void;
+function useCallbackOncePerRender(
+  callback: () => void,
+  deps: DependencyList
+): (...args: any[]) => void;
 ```
 
 ### Parameters

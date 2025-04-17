@@ -55,9 +55,13 @@ function useThrottle<F extends (...args: any[]) => any>(
 ## 예시
 
 ```tsx
-const throttledScroll = useThrottle(() => {
-  console.log('Scroll event');
-}, 200, { edges: ['leading', 'trailing'] });
+const throttledScroll = useThrottle(
+  () => {
+    console.log('Scroll event');
+  },
+  200,
+  { edges: ['leading', 'trailing'] }
+);
 
 useEffect(() => {
   window.addEventListener('scroll', throttledScroll);
@@ -67,4 +71,3 @@ useEffect(() => {
   };
 }, [throttledScroll]);
 ```
-

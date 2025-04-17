@@ -12,7 +12,7 @@ import { throttle } from './throttle.ts';
  * This is useful for limiting the rate at which a function can be called,
  * such as when handling scroll or resize events.
  *
-  @template {(...args: any[]) => any} F - The type of the callback function.
+ * @template {(...args: any[]) => any} F - The type of the callback function.
  * @param {F} callback - The function to be throttled.
  * @param {number} wait - The number of milliseconds to throttle invocations to.
  * @param {{ edges?: Array<'leading' | 'trailing'> }} [options] - Options to control the behavior of the throttle.
