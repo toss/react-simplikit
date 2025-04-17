@@ -5,7 +5,10 @@
 ## Interface
 
 ```ts
-function useLoading(): [loading: boolean, startLoading: <T>(promise: Promise<T>) => Promise<T>];
+function useLoading(): [
+  loading: boolean,
+  startLoading: <T>(promise: Promise<T>) => Promise<T>,
+];
 ```
 
 ### Parameters

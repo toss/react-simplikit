@@ -61,7 +61,12 @@ function useDebouncedCallback(options: Object): Function;
 ```tsx
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const debouncedSetQuery = useDebouncedCallback({ onChange: setQuery, timeThreshold: 100 });
-  return <input type="text" onChange={(e) => debouncedSetQuery(e.target.value)} />;
+  const debouncedSetQuery = useDebouncedCallback({
+    onChange: setQuery,
+    timeThreshold: 100,
+  });
+  return (
+    <input type="text" onChange={e => debouncedSetQuery(e.target.value)} />
+  );
 }
 ```

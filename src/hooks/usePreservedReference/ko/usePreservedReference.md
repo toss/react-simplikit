@@ -3,12 +3,12 @@
 `usePreservedReference`는 값이 변경되지 않았을 때 그 참조를 유지하면서 최신 상태를 안전하게 사용할 수 있도록 도와주는 리액트 훅이에요. 이 훅은 불필요한 리렌더링을 방지하면서 항상 최신 데이터를 접근할 수 있도록 해줘요.
 
 ## 인터페이스
+
 ```ts
 function usePreservedReference<T extends NotNullishValue>(
   value: T,
-  areValuesEqual: (a: T, b: T) => boolean,
+  areValuesEqual: (a: T, b: T) => boolean
 ): T;
-
 ```
 
 ### 파라미터
@@ -34,7 +34,6 @@ function usePreservedReference<T extends NotNullishValue>(
   description="값이 이전과 동일하게 간주되면 동일한 참조를 반환하고, 그렇지 않으면 새로운 참조를 반환해요."
 />
 
-
 ## 예시
 
 ```tsx
@@ -49,4 +48,3 @@ function ExampleComponent() {
   return <div>{preservedState.key}</div>;
 }
 ```
-  

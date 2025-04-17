@@ -5,7 +5,9 @@
 ## Interface
 
 ```ts
-function usePreservedCallback(callback: (...args: any[]) => any): (...args: any[]) => any;
+function usePreservedCallback(
+  callback: (...args: any[]) => any
+): (...args: any[]) => any;
 ```
 
 ### Parameters
