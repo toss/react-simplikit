@@ -32,7 +32,7 @@ jobs:
         run: yarn install
 
       - name: Run test:${{ matrix.command }}
-        run: yarn run test:${{matrix.command }}
+        run: yarn run test:${{ matrix.command }}
 
   check-changes:
     runs-on: ubuntu-latest
