@@ -190,6 +190,31 @@ describe('useStorageState', () => {
 
       expect(result2.current[0]).toBe('updated value');
     });
+
+    it('should refresh storage state', async () => {
+      const { result } = await renderHookSSR(() => useStorageState('test-key', { storage }));
+
+      storage.set('test-key', JSON.stringify({ hello: 'world' }));
+
+      act(() => {
+        result.current[2]();
+      });
+
+      expect(result.current[0]).toEqual({ hello: 'world' });
+    });
+
+    it('should work with custom serializer and deserializer', async () => {
+      const serializer = (value: any) =>
+        ['string', 'number', 'boolean'].includes(typeof value) ? value : JSON.stringify(value);
+      const deserializer = (value: any) =>
+        /^(\d+)|(true|false)|([^[].*)|([^{].*)$/.test(value) ? value : JSON.parse(value);
+
+      storage.set('test-key', serializer('hello'));
+
+      const { result } = await renderHookSSR(() => useStorageState('test-key', { storage, serializer, deserializer }));
+
+      expect(result.current[0]).toEqual('hello');
+    });
   };
 
   describe('MemoStorage', () => {

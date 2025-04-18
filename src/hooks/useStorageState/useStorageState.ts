@@ -1,11 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { SetStateAction, useCallback, useRef, useSyncExternalStore } from 'react';
 
 import { safeLocalStorage, Storage } from './storage.ts';
 
-type ToPrimitive<T> = T extends string ? string : T extends number ? number : T extends boolean ? boolean : never;
 type ToObject<T> = T extends unknown[] | Record<string, unknown> ? T : never;
 
-export type Serializable<T> = T extends string | number | boolean ? ToPrimitive<T> : ToObject<T>;
+export type Serializable<T> = T extends string | number | boolean ? T : ToObject<T>;
 
 type StorageStateOptions<T> = {
   storage?: Storage;
@@ -14,6 +14,11 @@ type StorageStateOptions<T> = {
 
 type StorageStateOptionsWithDefaultValue<T> = StorageStateOptions<T> & {
   defaultValue: Serializable<T>;
+};
+
+type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
+  serializer: (value: Serializable<T>) => string;
+  deserializer: (value: string) => Serializable<T>;
 };
 
 const listeners = new Set<() => void>();
@@ -31,11 +36,13 @@ const emitListeners = () => {
  * @param {Object} [options] - Configuration options for storage behavior.
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
  * @param {T} [options.defaultValue] - The initial value if no existing value is found.
+ * @param {Function} [options.serializer] - A function to serialize the state value to a string.
+ * @param {Function} [options.deserializer] - A function to deserialize the state value from a string.
  *
- * @returns {readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void]} A tuple:
+ * @returns {readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]} A tuple:
  * - state `Serializable<T> | undefined` - The current state value retrieved from storage;
  * - setState `(value: SetStateAction<Serializable<T> | undefined>) => void` - A function to update and persist the state;
- *
+ * - refreshState `() => void` - A function to refresh the state from storage;
  * @example
  * // Counter with persistent state
  * import { useStorageState } from 'react-simplikit';
@@ -50,19 +57,27 @@ const emitListeners = () => {
  */
 export function useStorageState<T>(
   key: string
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void];
+): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
 export function useStorageState<T>(
   key: string,
-  { storage, defaultValue }: StorageStateOptionsWithDefaultValue<T>
-): readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void];
+  options: StorageStateOptionsWithDefaultValue<T>
+): readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void, () => void];
 export function useStorageState<T>(
   key: string,
-  { storage, defaultValue }: StorageStateOptions<T>
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void];
+  options: StorageStateOptions<T>
+): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
 export function useStorageState<T>(
   key: string,
-  { storage = safeLocalStorage, defaultValue }: StorageStateOptions<T> = {}
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void] {
+  options: StorageStateOptionsWithSerializer<T>
+): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
+export function useStorageState<T>(
+  key: string,
+  {
+    storage = safeLocalStorage,
+    defaultValue,
+    ...options
+  }: StorageStateOptions<T> | StorageStateOptionsWithSerializer<T> = {}
+): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void] {
   const cache = useRef<{
     data: string | null;
     parsed: Serializable<T> | undefined;
@@ -72,11 +87,12 @@ export function useStorageState<T>(
   });
 
   const getSnapshot = useCallback(() => {
+    const deserializer = 'deserializer' in options ? options.deserializer : JSON.parse;
     const data = storage.get(key);
 
     if (data !== cache.current.data) {
       try {
-        cache.current.parsed = data != null ? JSON.parse(data) : defaultValue;
+        cache.current.parsed = data != null ? deserializer(data) : defaultValue;
       } catch {
         cache.current.parsed = defaultValue;
       }
@@ -109,17 +125,24 @@ export function useStorageState<T>(
 
   const setStorageState = useCallback(
     (value: SetStateAction<Serializable<T> | undefined>) => {
+      const serializer = 'serializer' in options ? options.serializer : JSON.stringify;
+
       const nextValue = typeof value === 'function' ? value(getSnapshot()) : value;
 
       if (nextValue == null) {
         storage.remove(key);
       } else {
-        storage.set(key, JSON.stringify(nextValue));
+        storage.set(key, serializer(nextValue));
       }
       emitListeners();
     },
     [getSnapshot, key, storage]
   );
 
-  return [storageState, setStorageState] as const;
+  const refreshSotrageState = useCallback(() => {
+    console.log(getSnapshot(), storage.get(key));
+    setStorageState(getSnapshot() ?? defaultValue);
+  }, [storage, defaultValue, getSnapshot, setStorageState]);
+
+  return [storageState, setStorageState, refreshSotrageState] as const;
 }
