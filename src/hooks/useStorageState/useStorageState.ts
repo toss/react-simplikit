@@ -140,8 +140,7 @@ export function useStorageState<T>(
   );
 
   const refreshSotrageState = useCallback(() => {
-    console.log(getSnapshot(), storage.get(key));
-    setStorageState(getSnapshot() ?? defaultValue);
+    setStorageState(getSnapshot());
   }, [storage, defaultValue, getSnapshot, setStorageState]);
 
   return [storageState, setStorageState, refreshSotrageState] as const;

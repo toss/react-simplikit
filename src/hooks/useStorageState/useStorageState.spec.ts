@@ -209,9 +209,11 @@ describe('useStorageState', () => {
       const deserializer = (value: any) =>
         /^(\d+)|(true|false)|([^[].*)|([^{].*)$/.test(value) ? value : JSON.parse(value);
 
-      storage.set('test-key', serializer('hello'));
-
       const { result } = await renderHookSSR(() => useStorageState('test-key', { storage, serializer, deserializer }));
+
+      act(() => {
+        result.current[1]('hello');
+      });
 
       expect(result.current[0]).toEqual('hello');
     });
