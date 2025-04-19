@@ -1,14 +1,10 @@
 ---
-description: 설치하기
+description: react-simplikit을 설치하는 방법
 ---
 
 # 설치하기
 
-Node.js나 Bun을 사용한다면 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요.
-
-`react-simplikit`을 설치하려면 각각 다음 명령어를 사용하세요.
-
-## Node.js
+선호하는 패키지 매니저를 사용하여 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요.
 
 ::: code-group
 
@@ -24,10 +20,8 @@ pnpm add react-simplikit
 yarn add react-simplikit
 ```
 
-:::
-
-## Bun
-
-```sh
+```sh [bun]
 bun add react-simplikit
 ```
+
+:::
