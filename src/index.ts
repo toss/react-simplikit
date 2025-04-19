@@ -9,6 +9,7 @@ export { useImpressionRef } from './hooks/useImpressionRef/index.ts';
 export { useInputState } from './hooks/useInputState/index.ts';
 export { useIntersectionObserver } from './hooks/useIntersectionObserver/index.ts';
 export { useInterval } from './hooks/useInterval/index.ts';
+export { useIsBrowser } from './hooks/useIsBrowser/index.ts';
 export { useLoading } from './hooks/useLoading/index.ts';
 export { useOutsideClickEffect } from './hooks/useOutsideClickEffect/index.ts';
 export { usePreservedCallback } from './hooks/usePreservedCallback/index.ts';
