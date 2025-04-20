@@ -139,7 +139,7 @@ export function useStorageState<T>(
     [getSnapshot, key, storage]
   );
 
-  const refreshSotrageState = useCallback(() => {
+  const refreshStorageState = useCallback(() => {
     setStorageState(getSnapshot());
   }, [storage, defaultValue, getSnapshot, setStorageState]);
 
