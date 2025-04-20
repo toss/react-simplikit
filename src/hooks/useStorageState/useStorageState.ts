@@ -190,5 +190,5 @@ export function useStorageState<T>(
     setStorageState(getSnapshot());
   }, [storage, getSnapshot, setStorageState]);
 
-  return ensureSerializable([storageState, setStorageState, refreshSotrageState] as const);
+  return ensureSerializable([storageState, setStorageState, refreshStorageState] as const);
 }
