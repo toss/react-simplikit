@@ -9,11 +9,11 @@ export type Serializable<T> = T extends string | number | boolean ? T : ToObject
 
 type StorageStateOptions<T> = {
   storage?: Storage;
-  defaultValue?: Serializable<T>;
+  defaultValue?: T;
 };
 
 type StorageStateOptionsWithDefaultValue<T> = StorageStateOptions<T> & {
-  defaultValue: Serializable<T>;
+  defaultValue: T;
 };
 
 type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
@@ -21,10 +21,48 @@ type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
   deserializer: (value: string) => Serializable<T>;
 };
 
+type SerializableGuard<T extends readonly any[]> = T[0] extends any
+  ? T
+  : T[0] extends never
+    ? 'Received a non-serializable value'
+    : T;
+
 const listeners = new Set<() => void>();
 
 const emitListeners = () => {
   listeners.forEach(listener => listener());
+};
+
+function isPlainObject(value: unknown): value is Record<PropertyKey, any> {
+  if (typeof value !== 'object') {
+    return false;
+  }
+
+  const proto = Object.getPrototypeOf(value) as typeof Object.prototype | null;
+
+  const hasObjectPrototype =
+    proto === null ||
+    proto === Object.prototype ||
+    // Required to support node:vm.runInNewContext({})
+    Object.getPrototypeOf(proto) === null;
+
+  if (!hasObjectPrototype) {
+    return false;
+  }
+
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGuard<T> => {
+  if (
+    value[0] != null &&
+    !['string', 'number', 'boolean'].includes(typeof value[0]) &&
+    !(isPlainObject(value[0]) || Array.isArray(value[0]))
+  ) {
+    throw new Error('Received a non-serializable value');
+  }
+
+  return value as SerializableGuard<T>;
 };
 
 /**
@@ -57,19 +95,25 @@ const emitListeners = () => {
  */
 export function useStorageState<T>(
   key: string
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
+): SerializableGuard<
+  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
+>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptionsWithDefaultValue<T>
-): readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void, () => void];
+): SerializableGuard<readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void, () => void]>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptions<T>
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
+): SerializableGuard<
+  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
+>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptionsWithSerializer<T>
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
+): SerializableGuard<
+  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
+>;
 export function useStorageState<T>(
   key: string,
   {
@@ -77,13 +121,16 @@ export function useStorageState<T>(
     defaultValue,
     ...options
   }: StorageStateOptions<T> | StorageStateOptionsWithSerializer<T> = {}
-): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void] {
+): SerializableGuard<
+  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
+> {
+  const serializedDefaultValue = defaultValue as Serializable<T>;
   const cache = useRef<{
     data: string | null;
     parsed: Serializable<T> | undefined;
   }>({
     data: null,
-    parsed: defaultValue,
+    parsed: serializedDefaultValue,
   });
 
   const getSnapshot = useCallback(() => {
@@ -94,7 +141,7 @@ export function useStorageState<T>(
       try {
         cache.current.parsed = data != null ? deserializer(data) : defaultValue;
       } catch {
-        cache.current.parsed = defaultValue;
+        cache.current.parsed = serializedDefaultValue;
       }
       cache.current.data = data;
     }
@@ -120,7 +167,7 @@ export function useStorageState<T>(
       };
     },
     () => getSnapshot(),
-    () => defaultValue
+    () => serializedDefaultValue
   );
 
   const setStorageState = useCallback(
@@ -141,7 +188,7 @@ export function useStorageState<T>(
 
   const refreshStorageState = useCallback(() => {
     setStorageState(getSnapshot());
-  }, [storage, defaultValue, getSnapshot, setStorageState]);
+  }, [storage, getSnapshot, setStorageState]);
 
-  return [storageState, setStorageState, refreshSotrageState] as const;
+  return ensureSerializable([storageState, setStorageState, refreshSotrageState] as const);
 }
