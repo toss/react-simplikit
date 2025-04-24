@@ -113,7 +113,7 @@ With the active adoption of SSR environments, poorly written components or hooks
 
 ## No Dependencies Beyond React
 
-Compared to react-use, which has [14 dependencies](https://www.npmjs.com/package/react-use?activeTab=dependencies) excluding React and React-DOM, `react-simplikit` has no dependencies other than peer dependencies on React and React-DOM.
+Compared to react-use, which has [14 dependencies](https://www.npmjs.com/package/react-use?activeTab=dependencies) excluding React and React-DOM, `react-simplikit` has no dependencies other than peer dependencies on React.
 
 ## Links
 
