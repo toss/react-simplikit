@@ -12,11 +12,11 @@ React의 선언적인 API를 사용할 때와 최대한 유사한 개발 경험�
 
 ```tsx
 function Page() {
-  const [isOpen, setIsOpen] = useState(false); // [!code --]
+  const [isOpen, setOpen] = useState(false); // [!code --]
   // [!code --]
   const toggle = useCallback(() => {
     // [!code --]
-    setIsOpen(isOpen => !isOpen); // [!code --]
+    setOpen(isOpen => !isOpen); // [!code --]
   }, []); // [!code --]
   const [isOpen, toggle] = useToggle(false); // [!code ++]
 
