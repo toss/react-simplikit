@@ -197,9 +197,9 @@ function AutoCompleteInput() {
 
 `react-simplikit`은 `react-use`에 대비하여, 아래와 같이 최대 약 89% 작은 크기를 가져요.
 
-|                                            | react-simplikit                                                  | react-use                                                    | 차이   |
-| ------------------------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------ | ------ |
-| Unpacked Size                              | [237 kB](https://www.npmjs.com/package/react-simplikit)          | [454 kB](https://www.npmjs.com/package/react-use)            | -47.8% |
+|                                            | react-simplikit                                                   | react-use                                                    | 차이   |
+| ------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------ | ------ |
+| Unpacked Size                              | [237 kB](https://www.npmjs.com/package/react-simplikit)           | [454 kB](https://www.npmjs.com/package/react-use)            | -47.8% |
 | Minified Size                              | [8.7 kB](https://bundlephobia.com/package/react-simplikit@0.0.29) | [78.2 kB](https://bundlephobia.com/package/react-use@17.6.0) | -88.9% |
 | Gzipped Size                               | [2.9 kB](https://bundlephobia.com/package/react-simplikit@0.0.29) | [22 kB](https://bundlephobia.com/package/react-use@17.6.0)   | -86.9% |
-| 평균 함수 당 크기<br/>(Minified Size 기준) | 318.2 byte                                                         | 696.3 byte                                                     | -54.3% |
+| 평균 함수 당 크기<br/>(Minified Size 기준) | 318.2 byte                                                        | 696.3 byte                                                   | -54.3% |
