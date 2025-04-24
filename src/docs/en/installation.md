@@ -4,11 +4,7 @@ description: How to install react-simplikit
 
 # Installation
 
-`react-simplikit` is available via [npm](https://npmjs.com/package/react-simplikit) for Node.js and Bun.
-
-## Node.js
-
-Install react-simplikit with the following command:
+You can install `react-simplikit` from [npm](https://npmjs.com/package/react-simplikit) using your favorite package manager.
 
 ::: code-group
 
@@ -24,12 +20,8 @@ pnpm add react-simplikit
 yarn add react-simplikit
 ```
 
-:::
-
-## Bun
-
-react-simplikit is also available on Bun. You can install it via the following command:
-
-```sh
+```sh [bun]
 bun add react-simplikit
 ```
+
+:::
