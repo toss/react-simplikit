@@ -1,6 +1,6 @@
 # Introduction to react-simplikit
 
-How can we build React-based applications more safely and reliably? We defined the answer as 'writing React codes in a React-like way' and the answer really began to take shape through react-simplikit.
+How can we build React-based applications more safely and reliably? We defined the answer as 'writing React codes in a React-like way' and the answer really began to take shape through `react-simplikit`.
 
 `react-simplikit` is a lightweight yet powerful library that provides various useful tools in React environments. It is designed to respect React's design principles while improving the React development experience.
 
@@ -38,7 +38,7 @@ right-title="with-react-simplikit.tsx">
 <template #left>
 
 ```tsx
-// without react simplikit
+// without `react-simplikit`
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
@@ -61,7 +61,7 @@ function Page() {
 <template #right>
 
 ```tsx
-// with react simplikit
+// with `react-simplikit`
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
