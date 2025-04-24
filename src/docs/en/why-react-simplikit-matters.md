@@ -53,7 +53,7 @@ function AutoCompleteInput() {
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
     searchTimeoutRef.current = setTimeout(async () => {
       try {
         const response = await fetch(`/api/search?q=${query}`);
@@ -62,7 +62,7 @@ function AutoCompleteInput() {
       } catch (error) {
         console.error('Failed to fetch results:', error);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     }, 300);
 
