@@ -53,6 +53,39 @@ function useCounter(options: UseCounterOptions): UseCounterReturn;
   name=""
   type="UseCounterReturn"
   description="object with count value and control functions."
+  :nested="[
+    {
+      name: 'count',
+      type: 'number',
+      required: false,
+      description: 'The current count value.',
+    },
+    {
+      name: 'increment',
+      type: '() => void',
+      required: false,
+      description: 'A function to increment the count.',
+    },
+    {
+      name: 'decrement',
+      type: '() => void',
+      required: false,
+      description: 'A function to decrement the count.',
+    },
+    {
+      name: 'reset',
+      type: '() => void',
+      required: false,
+      description: 'A function to reset the count to the initial value.',
+    },
+    {
+      name: 'setCount',
+      type: '(value: number | ((prev: number) => number)) => void',
+      required: false,
+      description:
+        'A function to set the count to a specific value or a function that returns a new value.',
+    },
+  ]"
 />
 
 ## Example
@@ -70,15 +103,9 @@ function ShoppingCart() {
   return (
     <div>
       <span>Quantity: {count}</span>
-      <button type="button" onClick={decrement}>
-        -
-      </button>
-      <button type="button" onClick={increment}>
-        +
-      </button>
-      <button type="button" onClick={reset}>
-        Reset
-      </button>
+      <button type="button" onClick={decrement}>-</button>
+      <button type="button" onClick={increment}>+</button>
+      <button type="button" onClick={reset}>Reset</button>
     </div>
   );
 }

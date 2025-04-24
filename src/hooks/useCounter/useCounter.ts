@@ -27,6 +27,11 @@ type UseCounterReturn = {
  * @param {number} [options.step=1] - Value to increment or decrement by. Defaults to 1.
  *
  * @returns {UseCounterReturn} An object with count value and control functions.
+ * - count `number` - The current count value;
+ * - increment `() => void` - A function to increment the count;
+ * - decrement `() => void` - A function to decrement the count;
+ * - reset `() => void` - A function to reset the count to the initial value;
+ * - setCount `(value: number | ((prev: number) => number)) => void` - A function to set the count to a specific value or a function that returns a new value;
  *
  * @example
  * import { useCounter } from 'react-simplikit';

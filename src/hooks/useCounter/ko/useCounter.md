@@ -1,6 +1,6 @@
 # useCounter
 
-`useCounter`는 숫자 카운터 상태를 증가, 감소, 초기화 기능과 함께 관리하는 리액트 훅이에요. 선택적으로 최소값과 최대값을 제공하여 카운터의 범위를 제한할 수 있어요.
+`useCounter`는 숫자 카운터 상태를 증가, 감소, 초기화 기능과 함께 관리하는 리액트 훅이에요. 선택적으로, 카운터의 범위를 제한하기 위해 최소 및 최대값을 제공할 수 있어요.
 
 ## Interface
 
@@ -14,7 +14,7 @@ function useCounter(options: UseCounterOptions): UseCounterReturn;
   required
   name="options"
   type="UseCounterOptions"
-  description="카운터를 위한 옵션이에요."
+  description="카운터의 옵션이에요."
   :nested="[
     {
       name: 'options.initialValue',
@@ -42,7 +42,7 @@ function useCounter(options: UseCounterOptions): UseCounterReturn;
       type: 'number',
       required: false,
       defaultValue: '1',
-      description: '증가 또는 감소할 값이에요. 기본값은 1이에요.',
+      description: '증가 또는 감소의 단위 값이에요. 기본값은 1이에요.',
     },
   ]"
 />
@@ -52,7 +52,40 @@ function useCounter(options: UseCounterOptions): UseCounterReturn;
 <Interface
   name=""
   type="UseCounterReturn"
-  description="카운트 값과 제어 함수들이 있는 객체에요."
+  description="카운트 값과 제어 함수들이 포함된 객체에요."
+  :nested="[
+    {
+      name: 'count',
+      type: 'number',
+      required: false,
+      description: '현재 카운트 값이에요.',
+    },
+    {
+      name: 'increment',
+      type: '() => void',
+      required: false,
+      description: '카운트를 증가시키는 함수에요.',
+    },
+    {
+      name: 'decrement',
+      type: '() => void',
+      required: false,
+      description: '카운트를 감소시키는 함수에요.',
+    },
+    {
+      name: 'reset',
+      type: '() => void',
+      required: false,
+      description: '카운트를 초기 값으로 리셋하는 함수에요.',
+    },
+    {
+      name: 'setCount',
+      type: '(value: number | ((prev: number) => number)) => void',
+      required: false,
+      description:
+        '카운트를 특정 값으로 설정하거나 새로운 값을 반환하는 함수에요.',
+    },
+  ]"
 />
 
 ## 예시
@@ -69,7 +102,7 @@ function ShoppingCart() {
 
   return (
     <div>
-      <span>수량: {count}</span>
+      <span>Quantity: {count}</span>
       <button type="button" onClick={decrement}>
         -
       </button>
@@ -77,7 +110,7 @@ function ShoppingCart() {
         +
       </button>
       <button type="button" onClick={reset}>
-        초기화
+        Reset
       </button>
     </div>
   );
