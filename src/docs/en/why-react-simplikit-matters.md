@@ -199,7 +199,7 @@ Compared to `react-use`, `react-simplikit` has up to about 89% smaller size:
 
 |                                               | react-simplikit                                                   | react-use                                                    | Difference |
 | --------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------ | ---------- |
-| Unpacked Size                                 | [131 kB](https://www.npmjs.com/package/react-simplikit)           | [454 kB](https://www.npmjs.com/package/react-use)            | -71.1%     |
-| Minified Size                                 | [8.5 kB](https://bundlephobia.com/package/react-simplikit@0.2.27) | [78.2 kB](https://bundlephobia.com/package/react-use@17.6.0) | -89.1%     |
-| Gzipped Size                                  | [2.8 kB](https://bundlephobia.com/package/react-simplikit@0.2.27) | [22 kB](https://bundlephobia.com/package/react-use@17.6.0)   | -87.2%     |
-| Average Size per Function<br/>(Minified Size) | 350 byte                                                          | 680 byte                                                     | -48.5%     |
+| Unpacked Size                                 | [237 kB](https://www.npmjs.com/package/react-simplikit)           | [454 kB](https://www.npmjs.com/package/react-use)            | -47.8%     |
+| Minified Size                                 | [8.7 kB](https://bundlephobia.com/package/react-simplikit@0.0.29) | [78.2 kB](https://bundlephobia.com/package/react-use@17.6.0) | -88.9%     |
+| Gzipped Size                                  | [2.9 kB](https://bundlephobia.com/package/react-simplikit@0.0.29) | [22 kB](https://bundlephobia.com/package/react-use@17.6.0)   | -86.9%     |
+| Average Size per Function<br/>(Minified Size) | 318.2 byte                                                        | 696.3 byte                                                   | -54.3%     |

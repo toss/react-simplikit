@@ -113,7 +113,7 @@ SSR 환경이 적극적으로 도입되면서, 컴포넌트나 훅을 자칫 잘
 
 ## React 외의 의존성을 두지 않아요
 
-react-use가 React와 React-DOM 제외 [14개의 의존성](https://www.npmjs.com/package/react-use?activeTab=dependencies)을 가지고 있는 것에 비해, `react-simplikit`은 React 및 React-DOM에 대한 peer-dependency를 제외하고, 그 어떤 라이브러리에도 의존하지 않아요.
+react-use가 React와 React-DOM 제외 [14개의 의존성](https://www.npmjs.com/package/react-use?activeTab=dependencies)을 가지고 있는 것에 비해, `react-simplikit`은 React에 대한 peer-dependency를 제외하고, 그 어떤 라이브러리에도 의존하지 않아요.
 
 ## 링크
 
