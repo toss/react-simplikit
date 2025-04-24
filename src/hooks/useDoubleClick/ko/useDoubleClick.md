@@ -1,6 +1,6 @@
 # useDoubleClick
 
-`useDoubleClick`는 리액트 훅으로, 단일 클릭과 더블 클릭 이벤트를 구분해요. 지정된 시간 동안 단일 클릭 콜백 실행을 지연시키고, 그 시간 내에 두 번째 클릭(즉, 더블 클릭)이 발생하면 이를 취소해요.
+`useDoubleClick`는 단일 클릭과 더블 클릭 이벤트를 구분하는 리액트 훅이에요. 지정된 시간 동안 단일 클릭 콜백 실행을 지연시키고, 그 시간 안에 두 번째 클릭(즉, 더블 클릭)이 발생하면 이를 취소해요.
 
 ## 인터페이스
 
@@ -24,7 +24,7 @@ function useDoubleClick<E extends HTMLElement>(
       required: false,
       defaultValue: '250',
       description:
-        '단일 클릭 콜백을 실행하기 전에 기다리는 밀리초로, 기본값은 250ms예요.',
+        '단일 클릭 콜백을 실행하기 전에 기다리는 밀리초 단위 수로, 기본값은 250ms예요.',
     },
     {
       name: 'props.click',
