@@ -24,8 +24,8 @@
 function AutoCompleteInput() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isOpen, setOpen] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +35,7 @@ function AutoCompleteInput() {
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
-        setIsOpen(false);
+        setOpen(false);
       }
     };
 
@@ -53,7 +53,7 @@ function AutoCompleteInput() {
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
     searchTimeoutRef.current = setTimeout(async () => {
       try {
         const response = await fetch(`/api/search?q=${query}`);
@@ -62,7 +62,7 @@ function AutoCompleteInput() {
       } catch (error) {
         console.error('Failed to fetch results:', error);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     }, 300);
 
@@ -80,9 +80,9 @@ function AutoCompleteInput() {
         value={query}
         onChange={e => {
           setQuery(e.target.value);
-          setIsOpen(true);
+          setOpen(true);
         }}
-        onFocus={() => setIsOpen(true)}
+        onFocus={() => setOpen(true)}
         placeholder="검색어를 입력하세요"
       />
       {isOpen && (isLoading || results.length > 0) && (
@@ -95,7 +95,7 @@ function AutoCompleteInput() {
                 <div
                   onClick={() => {
                     setQuery(result.title);
-                    setIsOpen(false);
+                    setOpen(false);
                   }}
                 >
                   {result.title}
@@ -197,9 +197,9 @@ function AutoCompleteInput() {
 
 `react-simplikit`은 `react-use`에 대비하여, 아래와 같이 최대 약 89% 작은 크기를 가져요.
 
-|                                            | react-simplikit                                                  | react-use                                                    | 차이   |
-| ------------------------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------ | ------ |
-| Unpacked Size                              | [219 kB](https://www.npmjs.com/package/react-simplikit)          | [454 kB](https://www.npmjs.com/package/react-use)            | -51.7% |
-| Minified Size                              | [8.7 kB](https://bundlephobia.com/package/react-simplikit@0.0.7) | [78.2 kB](https://bundlephobia.com/package/react-use@17.6.0) | -88.8% |
-| Gzipped Size                               | [2.9 kB](https://bundlephobia.com/package/react-simplikit@0.0.7) | [22 kB](https://bundlephobia.com/package/react-use@17.6.0)   | -86.8% |
-| 평균 함수 당 크기<br/>(Minified Size 기준) | 348 byte                                                         | 680 byte                                                     | -48.8% |
+|                                            | react-simplikit                                                   | react-use                                                    | 차이   |
+| ------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------ | ------ |
+| Unpacked Size                              | [237 kB](https://www.npmjs.com/package/react-simplikit)           | [454 kB](https://www.npmjs.com/package/react-use)            | -47.8% |
+| Minified Size                              | [8.7 kB](https://bundlephobia.com/package/react-simplikit@0.0.29) | [78.2 kB](https://bundlephobia.com/package/react-use@17.6.0) | -88.9% |
+| Gzipped Size                               | [2.9 kB](https://bundlephobia.com/package/react-simplikit@0.0.29) | [22 kB](https://bundlephobia.com/package/react-use@17.6.0)   | -86.9% |
+| 평균 함수 당 크기<br/>(Minified Size 기준) | 318.2 byte                                                        | 696.3 byte                                                   | -54.3% |

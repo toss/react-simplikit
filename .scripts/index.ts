@@ -22,11 +22,11 @@ export function cli(args: string[]) {
   program
     .command('scaffold <name>')
     .description('Scaffold a new hook, component or util')
-    .option('-t, --type <type>', 'The type of implementation')
+    .option('--t, --type <type>', 'The type of implementation')
     .action((name: string, options: { type: string }) => {
-      const formatShortcut = (value: string) => ({ c: 'component', h: 'hook', u: 'util' })[value];
-
-      const type = formatShortcut(options.type);
+      const type = { c: 'component', h: 'hook', u: 'util', component: 'component', hook: 'hook', util: 'util' }[
+        options.type
+      ];
 
       if (type == null || !isValidType(type)) {
         console.error(`Invalid type (${options.type}). type should be one of the following: hook, component, util`);
