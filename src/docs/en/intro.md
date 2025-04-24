@@ -12,11 +12,11 @@ We provide a development experience as similar as possible to using React's decl
 
 ```tsx
 function Page() {
-  const [isOpen, setIsOpen] = useState(false); // [!code --]
+  const [isOpen, setOpen] = useState(false); // [!code --]
   // [!code --]
   const toggle = useCallback(() => {
     // [!code --]
-    setIsOpen(isOpen => !isOpen); // [!code --]
+    setOpen(isOpen => !isOpen); // [!code --]
   }, []); // [!code --]
   const [isOpen, toggle] = useToggle(false); // [!code ++]
 
