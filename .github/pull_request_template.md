@@ -5,5 +5,6 @@
 ## Checklist
 
 - [ ] Did you write the test code?
+- [ ] Have you run `yarn run fix` to format and lint the code and docs?
 - [ ] Have you run `yarn run test:coverage` to make sure there is no uncovered line?
 - [ ] Did you write the JSDoc?
