@@ -6,7 +6,7 @@
 
 ```ts
 function useDoubleClick<E extends HTMLElement>(
-  params: Object
+  props: Object
 ): (event: MouseEvent<E>) => void;
 ```
 
@@ -14,12 +14,12 @@ function useDoubleClick<E extends HTMLElement>(
 
 <Interface
   required
-  name="params"
+  name="props"
   type="Object"
   description="Configuration options for click handling."
   :nested="[
     {
-      name: 'params.delay',
+      name: 'props.delay',
       type: 'number',
       required: false,
       defaultValue: '250',
@@ -27,13 +27,13 @@ function useDoubleClick<E extends HTMLElement>(
         'The number of milliseconds to wait before triggering the single click callback. Defaults to 250ms.',
     },
     {
-      name: 'params.click',
+      name: 'props.click',
       type: '(event: MouseEvent<E>) => void',
       required: false,
       description: 'The callback function to be executed on a single click.',
     },
     {
-      name: 'params.doubleClick',
+      name: 'props.doubleClick',
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
