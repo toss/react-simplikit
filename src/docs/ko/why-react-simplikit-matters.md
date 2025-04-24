@@ -24,8 +24,8 @@
 function AutoCompleteInput() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isOpen, setOpen] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +35,7 @@ function AutoCompleteInput() {
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
-        setIsOpen(false);
+        setOpen(false);
       }
     };
 
@@ -53,7 +53,7 @@ function AutoCompleteInput() {
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
     searchTimeoutRef.current = setTimeout(async () => {
       try {
         const response = await fetch(`/api/search?q=${query}`);
@@ -62,7 +62,7 @@ function AutoCompleteInput() {
       } catch (error) {
         console.error('Failed to fetch results:', error);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     }, 300);
 
@@ -80,9 +80,9 @@ function AutoCompleteInput() {
         value={query}
         onChange={e => {
           setQuery(e.target.value);
-          setIsOpen(true);
+          setOpen(true);
         }}
-        onFocus={() => setIsOpen(true)}
+        onFocus={() => setOpen(true)}
         placeholder="검색어를 입력하세요"
       />
       {isOpen && (isLoading || results.length > 0) && (
@@ -95,7 +95,7 @@ function AutoCompleteInput() {
                 <div
                   onClick={() => {
                     setQuery(result.title);
-                    setIsOpen(false);
+                    setOpen(false);
                   }}
                 >
                   {result.title}

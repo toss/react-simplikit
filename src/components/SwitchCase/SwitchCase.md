@@ -6,8 +6,8 @@
 
 ```ts
 function SwitchCase(
-  value: string | number,
-  caseBy: Record<string | number, () => JSX.Element>,
+  value: string | number | boolean,
+  caseBy: Record<string | number | boolean, () => JSX.Element>,
   defaultComponent: () => JSX.Element
 ): JSX.Element;
 ```
@@ -17,14 +17,14 @@ function SwitchCase(
 <Interface
   required
   name="value"
-  type="string | number"
+  type="string | number | boolean"
   description="The value to compare against. The component associated with the matching key in <code>caseBy</code> will be rendered."
 />
 
 <Interface
   required
   name="caseBy"
-  type="Record<string | number, () => JSX.Element>"
+  type="Record<string | number | boolean, () => JSX.Element>"
   description="An object that maps values to components to render. The keys represent possible values, and the values are functions returning the corresponding components."
 />
 

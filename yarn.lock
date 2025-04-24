@@ -5866,7 +5866,6 @@ __metadata:
     vue: "npm:^3.5.13"
   peerDependencies:
     react: "*"
-    react-dom: "*"
   languageName: unknown
   linkType: soft
 

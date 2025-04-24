@@ -211,3 +211,13 @@
   font-size: 14px;
   color: var(--vp-color-secondary);
 }
+
+div.codeblock {
+  padding: 20px 24px;
+  border-radius: 8px;
+  background-color: white;
+}
+
+html.dark div.codeblock {
+  background-color: var(--vp-c-bg-alt);
+}
