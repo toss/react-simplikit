@@ -66,7 +66,7 @@ JSDoc comments must include `@description` and `@example`, and if there are para
 
     This JSDoc will be converted into the following documentation.
 
-    <div style="background: white; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         required
         name="name"
@@ -140,7 +140,7 @@ JSDoc comments must include `@description` and `@example`, and if there are para
 
     This JSDoc will be converted into the following documentation.
 
-    <div style="background: white; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         name=""
         type="[value: string, onChange: () => void]"
@@ -176,7 +176,7 @@ JSDoc comments must include `@description` and `@example`, and if there are para
 
     This JSDoc will be converted into the following documentation.
 
-    <div style="background: white; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         name=""
         type="Object"
@@ -271,7 +271,7 @@ All `react-simplikit` implementations use special rendering functions to verify 
 
 ### Deployment
 
-When changes are merged into the main branch, deployment happens automatically. You can view the deployment results in [GitHub Actions](https://github.com/toss/react-simplikit/actions).
+When changes are merged into the `main` branch, deployment happens automatically. You can view the deployment results in [GitHub Actions](https://github.com/toss/react-simplikit/actions).
 
 ## Documentation Contribution
 
