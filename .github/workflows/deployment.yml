@@ -80,7 +80,7 @@ jobs:
         run: |
           VERSION=$(jq -r '.version' package.json)
           git add package.json
-          git commit -m "bump version to $VERSION"
+          git commit -m "chore: bump version to $VERSION"
 
       - name: Push changes and tags
         run: |
