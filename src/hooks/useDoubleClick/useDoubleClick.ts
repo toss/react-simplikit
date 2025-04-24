@@ -14,10 +14,10 @@ type UseDoubleClickProps<E extends HTMLElement> = {
  * It delays the single click callback execution for a specified time, and cancels it if a second click (i.e. a double click) occurs within that time.
  *
  * @template {HTMLElement} E - The specific type of HTMLElement to be used with this hook (e.g., HTMLButtonElement, HTMLDivElement).
- * @param {Object} params - Configuration options for click handling.
- * @param {number} [params.delay=250] - The number of milliseconds to wait before triggering the single click callback. Defaults to 250ms.
- * @param {(event: MouseEvent<E>) => void} [params.click] - The callback function to be executed on a single click.
- * @param {(event: MouseEvent<E>) => void} params.doubleClick - The callback function to be executed on a double click. Required.
+ * @param {Object} props - Configuration options for click handling.
+ * @param {number} [props.delay=250] - The number of milliseconds to wait before triggering the single click callback. Defaults to 250ms.
+ * @param {(event: MouseEvent<E>) => void} [props.click] - The callback function to be executed on a single click.
+ * @param {(event: MouseEvent<E>) => void} props.doubleClick - The callback function to be executed on a double click. Required.
  *
  * @returns {(event: MouseEvent<E>) => void} A click handler function to attach to an element's `onClick` event.
  *
