@@ -6,10 +6,10 @@
 
 ```ts
 function SwitchCase(
-  value: string | number | boolean,
-  caseBy: Record<string | number | boolean, () => JSX.Element>,
-  defaultComponent: () => JSX.Element
-): JSX.Element;
+  value: Case,
+  caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>,
+  defaultComponent: () => ReactElement | null
+): ReactElement | null;
 ```
 
 ### Parameters
@@ -17,21 +17,20 @@ function SwitchCase(
 <Interface
   required
   name="value"
-  type="string | number | boolean"
+  type="Case"
   description="The value to compare against. The component associated with the matching key in <code>caseBy</code> will be rendered."
 />
 
 <Interface
   required
   name="caseBy"
-  type="Record<string | number | boolean, () => JSX.Element>"
+  type="Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>"
   description="An object that maps values to components to render. The keys represent possible values, and the values are functions returning the corresponding components."
 />
 
 <Interface
-  required
   name="defaultComponent"
-  type="() => JSX.Element"
+  type="() => ReactElement | null"
   description="The component to render if <code>value</code> does not match any key in <code>caseBy</code>."
 />
 
@@ -39,7 +38,7 @@ function SwitchCase(
 
 <Interface
   name=""
-  type="JSX.Element"
+  type="ReactElement | null"
   description="React component that conditionally renders based on cases."
 />
 
