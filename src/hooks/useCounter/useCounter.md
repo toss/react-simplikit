@@ -103,9 +103,15 @@ function ShoppingCart() {
   return (
     <div>
       <span>Quantity: {count}</span>
-      <button type="button" onClick={decrement}>-</button>
-      <button type="button" onClick={increment}>+</button>
-      <button type="button" onClick={reset}>Reset</button>
+      <button type="button" onClick={decrement}>
+        -
+      </button>
+      <button type="button" onClick={increment}>
+        +
+      </button>
+      <button type="button" onClick={reset}>
+        Reset
+      </button>
     </div>
   );
 }
