@@ -31,15 +31,14 @@ export function throttle<F extends (...args: any[]) => void>(
   const throttled = function (...args: Parameters<F>) {
     if (pendingAt == null) {
       pendingAt = Date.now();
+      debounced(...args);
     } else {
       if (Date.now() - pendingAt >= throttleMs) {
         pendingAt = Date.now();
         debounced.cancel();
-        debounced(...args);
       }
+      debounced(...args);
     }
-
-    debounced(...args);
   };
 
   throttled.cancel = debounced.cancel;
