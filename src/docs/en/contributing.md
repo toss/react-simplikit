@@ -66,7 +66,7 @@ JSDoc comments must include `@description` and `@example`, and if there are para
 
     This JSDoc will be converted into the following documentation.
 
-    <div style="background: #161618; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         required
         name="name"
@@ -140,7 +140,7 @@ JSDoc comments must include `@description` and `@example`, and if there are para
 
     This JSDoc will be converted into the following documentation.
 
-    <div style="background: #161618; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         name=""
         type="[value: string, onChange: () => void]"
@@ -176,7 +176,7 @@ JSDoc comments must include `@description` and `@example`, and if there are para
 
     This JSDoc will be converted into the following documentation.
 
-    <div style="background: #161618; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         name=""
         type="Object"

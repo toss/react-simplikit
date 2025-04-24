@@ -66,7 +66,7 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
 
     이 파라미터 JSDoc은 다음과 같은 문서로 변환돼요.
 
-    <div style="background: #161618; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         required
         name="name"
@@ -140,7 +140,7 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
 
     이 반환 값 JSDoc은 다음과 같은 문서로 변환돼요.
 
-    <div style="background: #161618; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         name=""
         type="[value: string, onChange: () => void]"
@@ -176,7 +176,7 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
 
     이 반환 값 JSDoc은 다음과 같은 문서로 변환돼요.
 
-    <div style="background: #161618; padding: 20px 24px; border-radius: 8px;">
+    <div class='codeblock'>
       <Interface
         name=""
         type="Object"
