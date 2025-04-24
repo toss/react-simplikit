@@ -24,8 +24,8 @@ Based on this, it guides developers to write more declarative React components.
 function AutoCompleteInput() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isOpen, setOpen] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +35,7 @@ function AutoCompleteInput() {
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
-        setIsOpen(false);
+        setOpen(false);
       }
     };
 
@@ -80,9 +80,9 @@ function AutoCompleteInput() {
         value={query}
         onChange={e => {
           setQuery(e.target.value);
-          setIsOpen(true);
+          setOpen(true);
         }}
-        onFocus={() => setIsOpen(true)}
+        onFocus={() => setOpen(true)}
         placeholder="Enter search term"
       />
       {isOpen && (isLoading || results.length > 0) && (
@@ -95,7 +95,7 @@ function AutoCompleteInput() {
                 <div
                   onClick={() => {
                     setQuery(result.title);
-                    setIsOpen(false);
+                    setOpen(false);
                   }}
                 >
                   {result.title}
