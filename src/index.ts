@@ -4,6 +4,7 @@ export { SwitchCase } from './components/SwitchCase/index.ts';
 export { useAsyncEffect } from './hooks/useAsyncEffect/index.ts';
 export { useBooleanState } from './hooks/useBooleanState/index.ts';
 export { useCallbackOncePerRender } from './hooks/useCallbackOncePerRender/index.ts';
+export { useCounter } from './hooks/useCounter/index.ts';
 export { useDebounce } from './hooks/useDebounce/index.ts';
 export { useImpressionRef } from './hooks/useImpressionRef/index.ts';
 export { useInputState } from './hooks/useInputState/index.ts';
