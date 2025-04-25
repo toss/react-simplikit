@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
  * @returns {boolean} Returns `true` in a client-side environment, and `false` otherwise.
  *
  * @example
- * function MyComponent() {
+ * function ClientSideContent() {
  *   const isClient = useIsClient();
  *
  *   if (!isClient) {
@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
  * }
  *
  * @example
- * function MapComponent() {
+ * function ClientOnlyMap() {
  *   const isClient = useIsClient();
  *
  *   if (!isClient) return null;
@@ -29,7 +29,7 @@ import { useEffect, useState } from 'react';
  * }
  *
  * @example
- * function UserTheme() {
+ * function ClientTheme() {
  *   const isClient = useIsClient();
  *
  *   const theme = isClient ? localStorage.getItem('theme') : 'light';
