@@ -15,8 +15,8 @@ export type UseImpressionRefOptions = Partial<{
 
 /**
  * @description
- * `useImpressionRef` is a custom hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport.
- * This hook uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
+ * `useImpressionRef` is a React hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport.
+ * It uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
  *
  * @param {UseImpressionRefOptions} options - Options for tracking the element's visibility.
  * @param {() => void} [options.onImpressionStart] - Callback function executed when the element enters the view
