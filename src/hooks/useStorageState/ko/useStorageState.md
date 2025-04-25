@@ -11,6 +11,7 @@ function useStorageState(
 ): readonly [
   state: Serializable<T> | undefined,
   setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
+  refreshState: () => void,
 ];
 ```
 
@@ -20,13 +21,13 @@ function useStorageState(
   required
   name="key"
   type="string"
-  description="저장소에 값을 저장하는 데 사용되는 키예요."
+  description="값을 저장소에 저장하기 위해 사용하는 키예요."
 />
 
 <Interface
   name="options"
   type="Object"
-  description="저장 동작을 설정하는 옵션이에요."
+  description="저장소 동작을 설정하는 옵션이에요."
   :nested="[
     {
       name: 'options.storage',
@@ -34,13 +35,25 @@ function useStorageState(
       required: false,
       defaultValue: 'localStorage',
       description:
-        '저장소의 유형 (<code>localStorage</code> 또는 <code>sessionStorage</code>)이에요. 기본값은 <code>localStorage</code>예요.',
+        '스토리지 타입 (<code>localStorage</code> 또는 <code>sessionStorage</code>). 기본값은 <code>localStorage</code>예요.',
     },
     {
       name: 'options.defaultValue',
       type: 'T',
       required: false,
-      description: '기존 값이 발견되지 않을 경우의 초기 값이에요.',
+      description: '기존의 값을 찾을 수 없을 때의 초기 값이에요.',
+    },
+    {
+      name: 'options.serializer',
+      type: 'Function',
+      required: false,
+      description: '상태 값을 문자열로 직렬화하는 함수예요.',
+    },
+    {
+      name: 'options.deserializer',
+      type: 'Function',
+      required: false,
+      description: '상태 값을 문자열에서 역직렬화하는 함수예요.',
     },
   ]"
 />
@@ -49,7 +62,7 @@ function useStorageState(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void]"
+  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
   description="튜플이에요:"
   :nested="[
     {
@@ -62,7 +75,13 @@ function useStorageState(
       name: 'setState',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
-      description: '상태를 업데이트하고 저장하는 함수예요.',
+      description: '상태를 업데이트하고 지속하는 함수예요.',
+    },
+    {
+      name: 'refreshState',
+      type: '() => void',
+      required: false,
+      description: '저장소에서 상태를 새롭게 고치는 함수예요.',
     },
   ]"
 />
@@ -70,7 +89,7 @@ function useStorageState(
 ## 예시
 
 ```tsx
-// 지속적인 상태를 가진 카운터
+// 지속되는 상태를 가진 카운터
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {

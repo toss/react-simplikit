@@ -38,7 +38,7 @@ right-title="with-react-simplikit.tsx">
 <template #left>
 
 ```tsx
-// without react simplikit
+// `react-simplikit`을 사용하지 않은 코드
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
@@ -61,7 +61,7 @@ function Page() {
 <template #right>
 
 ```tsx
-// with react simplikit
+// `react-simplikit`을 사용한 코드
 const texts = ['hello', 'react', 'world'];
 
 function Page() {
@@ -87,7 +87,7 @@ function Page() {
 ```tsx
 function Page() {
   // useIntersectionObserver는 intersection을 감지하는 최소한의 기능을 제공하고,
-  // 감지 후 콜백, intersection 옵션은 외부로부터 주입 받습니다.
+  // 감지 후, 콜백과 intersection 옵션은 외부로부터 주입받아요.
   const ref = useIntersectionObserver<HTMLDivElement>(
     entry => {
       if (entry.isIntersecting) {
@@ -113,7 +113,7 @@ SSR 환경이 적극적으로 도입되면서, 컴포넌트나 훅을 자칫 잘
 
 ## React 외의 의존성을 두지 않아요
 
-react-use가 React와 React-DOM 제외 [14개의 의존성](https://www.npmjs.com/package/react-use?activeTab=dependencies)을 가지고 있는 것에 비해, `react-simplikit`은 React 및 React-DOM에 대한 peer-dependency를 제외하고, 그 어떤 라이브러리에도 의존하지 않아요.
+react-use가 React와 React-DOM 제외 [14개의 의존성](https://www.npmjs.com/package/react-use?activeTab=dependencies)을 가지고 있는 것에 비해, `react-simplikit`은 React에 대한 peer-dependency를 제외하고, 그 어떤 라이브러리에도 의존하지 않아요.
 
 ## 링크
 

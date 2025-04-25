@@ -11,6 +11,7 @@ function useStorageState(
 ): readonly [
   state: Serializable<T> | undefined,
   setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
+  refreshState: () => void,
 ];
 ```
 
@@ -42,6 +43,18 @@ function useStorageState(
       required: false,
       description: 'The initial value if no existing value is found.',
     },
+    {
+      name: 'options.serializer',
+      type: 'Function',
+      required: false,
+      description: 'A function to serialize the state value to a string.',
+    },
+    {
+      name: 'options.deserializer',
+      type: 'Function',
+      required: false,
+      description: 'A function to deserialize the state value from a string.',
+    },
   ]"
 />
 
@@ -49,7 +62,7 @@ function useStorageState(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void]"
+  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
   description="tuple:"
   :nested="[
     {
@@ -63,6 +76,12 @@ function useStorageState(
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
       description: 'A function to update and persist the state.',
+    },
+    {
+      name: 'refreshState',
+      type: '() => void',
+      required: false,
+      description: 'A function to refresh the state from storage.',
     },
   ]"
 />
