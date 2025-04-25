@@ -6,7 +6,7 @@ This hook runs synchronously after DOM updates but before paint, making it ideal
 - Measuring DOM elements after render
 - Applying DOM changes before paint
 - Preventing UI flashes or layout shifts
-- Supporting both client and server environments.
+- Supporting both client and server environments
 
 ## Interface
 
