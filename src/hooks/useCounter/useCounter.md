@@ -5,24 +5,28 @@
 ## Interface
 
 ```ts
-function useCounter(options: UseCounterOptions): UseCounterReturn;
+function useCounter(
+  initialValue?: number,
+  options?: UseCounterOptions
+): UseCounterReturn;
 ```
 
 ### Parameters
 
 <Interface
-  required
+  name="initialValue"
+  type="number"
+  required={false}
+  defaultValue="0"
+  description="Initial value for the counter. Defaults to 0."
+/>
+
+<Interface
   name="options"
   type="UseCounterOptions"
+  required={false}
   description="The options for the counter."
   :nested="[
-    {
-      name: 'options.initialValue',
-      type: 'number',
-      required: false,
-      defaultValue: '0',
-      description: 'Initial value for the counter. Defaults to 0.',
-    },
     {
       name: 'options.min',
       type: 'number',
@@ -94,8 +98,7 @@ function useCounter(options: UseCounterOptions): UseCounterReturn;
 import { useCounter } from 'react-simplikit';
 
 function ShoppingCart() {
-  const { count, increment, decrement, reset } = useCounter({
-    initialValue: 1,
+  const { count, increment, decrement, reset } = useCounter(1, {
     min: 1,
     max: 10,
   });
