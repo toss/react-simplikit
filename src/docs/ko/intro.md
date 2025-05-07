@@ -31,7 +31,7 @@ function Page() {
 
 ### 특정 요소로 구분하여 배열 렌더링하기
 
-<SplitView 
+<SplitView
 left-title="without-react-simplikit.tsx"
 right-title="with-react-simplikit.tsx">
 
@@ -46,6 +46,7 @@ function Page() {
     <>
       {texts.map((text, idx) => (
         <Fragment key={text}>
+          <div>{text}</div>
           {idx < texts.length - 1 ? (
             <Border type="padding24" />
           ) : null}

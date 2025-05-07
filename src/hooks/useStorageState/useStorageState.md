@@ -1,6 +1,6 @@
 # useStorageState
 
-A React hook that functions like `useState` but persists the state value in browser storage. The value is retained across page reloads and can be shared between tabs when using `localStorage`.
+`useStorageState` is a React hook that functions like `useState` but persists the state value in browser storage. The value is retained across page reloads and can be shared between tabs when using `localStorage`.
 
 ## Interface
 
