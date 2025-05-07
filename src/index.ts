@@ -5,6 +5,7 @@ export { useAsyncEffect } from './hooks/useAsyncEffect/index.ts';
 export { useBooleanState } from './hooks/useBooleanState/index.ts';
 export { useCallbackOncePerRender } from './hooks/useCallbackOncePerRender/index.ts';
 export { useControlledState } from './hooks/useControlledState/index.ts';
+export { useCountdown } from './hooks/useCountdown/index.ts';
 export { useCounter } from './hooks/useCounter/index.ts';
 export { useDebounce } from './hooks/useDebounce/index.ts';
 export { useDebouncedCallback } from './hooks/useDebouncedCallback/index.ts';
