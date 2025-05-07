@@ -8,6 +8,7 @@ const isServer = typeof window === 'undefined';
  * During SSR, there is no DOM to synchronously measure or mutate, so React warns about using `useLayoutEffect`.
  *
  * This hook runs synchronously after DOM updates but before paint, making it ideal for:
+ *
  * - Measuring DOM elements after render
  * - Applying DOM changes before paint
  * - Preventing UI flashes or layout shifts
