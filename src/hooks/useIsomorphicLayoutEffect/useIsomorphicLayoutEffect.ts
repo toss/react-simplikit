@@ -4,11 +4,10 @@ const isServer = typeof window === 'undefined';
 
 /**
  * @description
- * During SSR, there is no DOM to synchronously measure or mutate, so React warns about using useLayoutEffect.
+ * `useIsomorphicLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering.
+ * During SSR, there is no DOM to synchronously measure or mutate, so React warns about using `useLayoutEffect`.
  *
- * This hook provides the behavior of useLayoutEffect in the browser without triggering SSR warnings.
- *
- * It runs synchronously after DOM updates but before paint, making it ideal for:
+ * This hook runs synchronously after DOM updates but before paint, making it ideal for:
  * - Measuring DOM elements after render
  * - Applying DOM changes before paint
  * - Preventing UI flashes or layout shifts
