@@ -11,21 +11,13 @@ describe('useCounter', () => {
   });
 
   it('should initialize with provided initial value', () => {
-    const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 10,
-      })
-    );
+    const { result } = renderHook(() => useCounter(10));
 
     expect(result.current.count).toBe(10);
   });
 
   it('should increment the counter', () => {
-    const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 5,
-      })
-    );
+    const { result } = renderHook(() => useCounter(5));
 
     act(() => {
       result.current.increment();
@@ -35,11 +27,7 @@ describe('useCounter', () => {
   });
 
   it('should decrement the counter', () => {
-    const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 5,
-      })
-    );
+    const { result } = renderHook(() => useCounter(5));
 
     act(() => {
       result.current.decrement();
@@ -49,11 +37,7 @@ describe('useCounter', () => {
   });
 
   it('should reset the counter to initial value', () => {
-    const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 5,
-      })
-    );
+    const { result } = renderHook(() => useCounter(5));
 
     act(() => {
       result.current.increment();
@@ -71,8 +55,7 @@ describe('useCounter', () => {
 
   it('should not go below minimum value', () => {
     const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 5,
+      useCounter(5, {
         min: 3,
       })
     );
@@ -88,8 +71,7 @@ describe('useCounter', () => {
 
   it('should not go above maximum value', () => {
     const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 5,
+      useCounter(5, {
         max: 7,
       })
     );
@@ -105,8 +87,7 @@ describe('useCounter', () => {
 
   it('should use the provided step value for increment and decrement', () => {
     const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 5,
+      useCounter(5, {
         step: 2,
       })
     );
@@ -126,8 +107,7 @@ describe('useCounter', () => {
 
   it('should adjust initial value to match constraints', () => {
     const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 1,
+      useCounter(1, {
         min: 3,
       })
     );
@@ -135,8 +115,7 @@ describe('useCounter', () => {
     expect(result.current.count).toBe(3);
 
     const { result: result2 } = renderHook(() =>
-      useCounter({
-        initialValue: 10,
+      useCounter(10, {
         max: 8,
       })
     );
@@ -146,7 +125,7 @@ describe('useCounter', () => {
 
   it('should allow setting arbitrary value within constraints', () => {
     const { result } = renderHook(() =>
-      useCounter({
+      useCounter(0, {
         min: 3,
         max: 8,
       })
@@ -172,11 +151,7 @@ describe('useCounter', () => {
   });
 
   it('should work with updater function for setCount', () => {
-    const { result } = renderHook(() =>
-      useCounter({
-        initialValue: 5,
-      })
-    );
+    const { result } = renderHook(() => useCounter(5));
 
     act(() => {
       result.current.setCount(prev => prev + 3);
