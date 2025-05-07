@@ -26,4 +26,5 @@ export { useTimeout } from './hooks/useTimeout/index.ts';
 export { useToggle } from './hooks/useToggle/index.ts';
 export { useVisibilityEvent } from './hooks/useVisibilityEvent/index.ts';
 export { buildContext } from './utils/buildContext/index.ts';
+export { mergeProps } from './utils/mergeProps/index.ts';
 export { mergeRefs } from './utils/mergeRefs/index.ts';
