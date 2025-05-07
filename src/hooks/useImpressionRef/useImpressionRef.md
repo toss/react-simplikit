@@ -1,6 +1,6 @@
 # useImpressionRef
 
-`useImpressionRef` is a custom hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. This hook uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
+`useImpressionRef` is a React hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. It uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
 
 ## Interface
 
