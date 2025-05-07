@@ -6,8 +6,8 @@
 
 ```ts
 function useCounter(
-  initialValue?: number,
-  options?: UseCounterOptions
+  initialValue: number = 0,
+  options: UseCounterOptions
 ): UseCounterReturn;
 ```
 
@@ -16,15 +16,13 @@ function useCounter(
 <Interface
   name="initialValue"
   type="number"
-  required={false}
-  defaultValue="0"
   description="Initial value for the counter. Defaults to 0."
 />
 
 <Interface
+  required
   name="options"
   type="UseCounterOptions"
-  required={false}
   description="The options for the counter."
   :nested="[
     {
