@@ -6,7 +6,7 @@ type Options = {
 
 /**
  * @description
- * A React hook that listens to changes in the document's visibility state and triggers a callback.
+ * `useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback.
  *
  * @param {(visibilityState: 'visible' | 'hidden') => void} callback - A function to be called
  * when the visibility state changes. It receives the current visibility state ('visible' or 'hidden') as an argument.
