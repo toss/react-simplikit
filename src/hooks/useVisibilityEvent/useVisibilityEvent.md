@@ -6,7 +6,7 @@ A React hook that listens to changes in the document's visibility state and trig
 
 ```ts
 function useVisibilityEvent(
-  callback: (visibilityState: 'visible' | 'hidden') => void,
+  callback: (visibilityState: DocumentVisibilityState) => void,
   options: object
 ): void;
 ```
@@ -16,7 +16,7 @@ function useVisibilityEvent(
 <Interface
   required
   name="callback"
-  type="(visibilityState: 'visible' | 'hidden') => void"
+  type="(visibilityState: DocumentVisibilityState) => void"
   description="A function to be called when the visibility state changes. It receives the current visibility state ('visible' or 'hidden') as an argument."
 />
 

@@ -6,7 +6,7 @@
 
 ```ts
 function useVisibilityEvent(
-  callback: (visibilityState: 'visible' | 'hidden') => void,
+  callback: (visibilityState: DocumentVisibilityState) => void,
   options: object
 ): void;
 ```
@@ -16,7 +16,7 @@ function useVisibilityEvent(
 <Interface
   required
   name="callback"
-  type="(visibilityState: 'visible' | 'hidden') => void"
+  type="(visibilityState: DocumentVisibilityState) => void"
   description="가시성 상태가 변할 때 호출되는 함수예요. 현재 가시성 상태('visible' 또는 'hidden')를 인자로 받아요."
 />
 
