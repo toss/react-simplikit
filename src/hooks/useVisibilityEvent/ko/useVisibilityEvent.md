@@ -1,6 +1,6 @@
 # useVisibilityEvent
 
-문서의 가시성 상태 변화를 감지하고 콜백을 실행하는 리액트 훅이에요.
+`useVisibilityEvent`는 문서의 가시성 상태 변화에 귀를 기울이고 콜백을 호출하는 리액트 훅이에요.
 
 ## 인터페이스
 
@@ -17,13 +17,13 @@ function useVisibilityEvent(
   required
   name="callback"
   type="(visibilityState: 'visible' | 'hidden') => void"
-  description="가시성 상태가 변할 때 호출되는 함수예요. 현재 가시성 상태('visible' 또는 'hidden')를 인자로 받아요."
+  description="가시성 상태가 변할 때 호출되는 함수예요. 현재 가시성 상태('visible' 또는 'hidden')를 인수로 받아요."
 />
 
 <Interface
   name="options"
   type="object"
-  description="훅의 선택적 설정값이에요."
+  description="훅에 대한 선택적 설정이에요."
   :nested="[
     {
       name: 'options.immediate',
@@ -31,7 +31,7 @@ function useVisibilityEvent(
       required: false,
       defaultValue: 'false',
       description:
-        'true이면, 현재 가시성 상태로 마운트 시에 즉시 콜백이 호출돼요.',
+        '만약 true이면, 마운트 시 현재 가시성 상태로 콜백이 즉시 호출돼요.',
     },
   ]"
 />
@@ -47,9 +47,9 @@ import { useVisibilityEvent } from 'react-simplikit';
 
 function Component() {
   useVisibilityEvent(visibilityState => {
-    console.log(`Document is now ${visibilityState}`);
+    console.log(`문서가 이제 ${visibilityState} 상태예요`);
   });
 
-  return <p>가시성 변화는 콘솔을 확인해 주세요.</p>;
+  return <p>가시성 변화는 콘솔에서 확인하세요.</p>;
 }
 ```

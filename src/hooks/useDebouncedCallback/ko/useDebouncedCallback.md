@@ -1,6 +1,6 @@
 # useDebouncedCallback
 
-`useDebouncedCallback`는 제공된 콜백 함수를 디바운스된 버전으로 반환하는 리액트 훅이에요. 이는 함수 실행을 지연시키고 여러 호출을 하나로 묶어 이벤트 처리를 최적화하는 데 도움이 돼요. 'leading'과 'trailing'이 모두 포함된 경우, 함수는 지연 기간의 시작과 끝에 모두 호출돼요. 하지만 이렇게 동작하려면 디바운스 밀리초(ms) 내에 최소 두 번 호출되어야 해요, 한 번의 디바운스된 함수 호출로 함수가 두 번 호출되지 않아요.
+`useDebouncedCallback`는 제공된 콜백 함수를 디바운스한 버전을 반환하는 리액트 훅이에요. 이는 함수 실행을 지연시키고 여러 호출을 하나로 그룹화하여 이벤트 처리를 최적화하는 데 도움이 돼요. 'leading'과 'trailing'이 모두 설정된 경우, 함수는 지연 기간의 시작과 끝에서 모두 호출돼요. 그러나, 이 상황이 발생하려면 디바운스 시간 간격 내에 적어도 두 번 호출되어야 해요. 왜냐하면 한 번의 디바운스 함수 호출만으로는 함수가 두 번 호출되지 않기 때문이에요.
 
 ## 인터페이스
 
@@ -27,7 +27,7 @@ function useDebouncedCallback(options: Object): Function;
       type: 'number',
       required: true,
       description:
-        '함수 실행을 지연할 밀리초(ms)이에요.',
+        '함수 실행을 지연시킬 밀리세컨드 시간이에요.',
     },
     {
       name: 'options.leading',
@@ -53,7 +53,7 @@ function useDebouncedCallback(options: Object): Function;
 <Interface
   name=""
   type="Function"
-  description="콜백 호출을 지연시키는 디바운스된 함수예요."
+  description="콜백 호출을 지연시키는 디바운스 함수예요."
 />
 
 ## 예시

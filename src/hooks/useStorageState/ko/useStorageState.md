@@ -1,8 +1,8 @@
 # useStorageState
 
-리액트 훅으로, `useState`처럼 작동하지만 상태 값을 브라우저 저장소에 저장해요. 이 값은 페이지룰 새로고침해도 유지되며, `localStorage`를 사용할 경우 탭 간에 공유될 수 있어요.
+`useStorageState`는 상태 값을 브라우저 저장소에 보존하면서 `useState`처럼 작동하는 리액트예요. 이 값은 페이지를 새로고침해도 유지되며 `localStorage`를 사용할 때 탭 간에 공유될 수 있어요.
 
-## 인터페이스
+## Interface
 
 ```ts
 function useStorageState(
@@ -21,7 +21,7 @@ function useStorageState(
   required
   name="key"
   type="string"
-  description="값을 저장소에 저장하기 위해 사용하는 키예요."
+  description="저장소에 값을 저장하는 데 사용되는 키예요."
 />
 
 <Interface
@@ -35,13 +35,13 @@ function useStorageState(
       required: false,
       defaultValue: 'localStorage',
       description:
-        '스토리지 타입 (<code>localStorage</code> 또는 <code>sessionStorage</code>). 기본값은 <code>localStorage</code>예요.',
+        '저장소 유형 (<code>localStorage</code> 또는 <code>sessionStorage</code>). 기본값은 <code>localStorage</code>예요.',
     },
     {
       name: 'options.defaultValue',
       type: 'T',
       required: false,
-      description: '기존의 값을 찾을 수 없을 때의 초기 값이에요.',
+      description: '기존 값이 없을 때의 초기 값이에요.',
     },
     {
       name: 'options.serializer',
@@ -53,7 +53,7 @@ function useStorageState(
       name: 'options.deserializer',
       type: 'Function',
       required: false,
-      description: '상태 값을 문자열에서 역직렬화하는 함수예요.',
+      description: '문자열에서 상태 값을 역직렬화하는 함수예요.',
     },
   ]"
 />
@@ -63,7 +63,7 @@ function useStorageState(
 <Interface
   name=""
   type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="튜플이에요:"
+  description="튜플:"
   :nested="[
     {
       name: 'state',
@@ -75,13 +75,13 @@ function useStorageState(
       name: 'setState',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
-      description: '상태를 업데이트하고 지속하는 함수예요.',
+      description: '상태를 업데이트하고 지속시키는 함수예요.',
     },
     {
       name: 'refreshState',
       type: '() => void',
       required: false,
-      description: '저장소에서 상태를 새롭게 고치는 함수예요.',
+      description: '저장소에서 상태를 새로고침하는 함수예요.',
     },
   ]"
 />
@@ -89,7 +89,7 @@ function useStorageState(
 ## 예시
 
 ```tsx
-// 지속되는 상태를 가진 카운터
+// 지속적인 상태를 가진 카운터
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {

@@ -24,7 +24,27 @@ function useIntersectionObserver(
   required
   name="options"
   type="IntersectionObserverInit"
-  description="Options for the <code>IntersectionObserver</code>. You can specify values such as <code>root</code>, <code>rootMargin</code>, and <code>threshold</code>."
+  description="Options for the <code>IntersectionObserver</code>."
+  :nested="[
+            {
+                     name: 'options.root',
+type: 'boolean',
+required: false,
+description: 'The element that is used as the viewport for checking visibility of the target.'
+            },
+{
+                     name: 'options.rootMargin',
+type: 'string',
+required: false,
+description: 'Margin around the root.'
+            },
+{
+                     name: 'options.threshold',
+type: 'number | number[]',
+required: false,
+description: 'Either a single number or an array of numbers which indicate at what percentage of the target's visibility the observer's callback should be executed.'
+            }
+          ]"
 />
 
 ### Return Value
