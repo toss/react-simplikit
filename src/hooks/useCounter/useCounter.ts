@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 
 type UseCounterOptions = {
-  initialValue?: number;
   min?: number;
   max?: number;
   step?: number;
@@ -20,8 +19,8 @@ type UseCounterReturn = {
  * `useCounter` is a React hook that manages a numeric counter state with increment, decrement, and reset capabilities.
  * Optionally, you can provide minimum and maximum values to constrain the counter's range.
  *
+ * @param {number} [initialValue=0] - Initial value for the counter. Defaults to 0.
  * @param {UseCounterOptions} options - The options for the counter.
- * @param {number} [options.initialValue=0] - Initial value for the counter. Defaults to 0.
  * @param {number} [options.min] - Minimum value the counter can reach. If not provided, there is no lower limit.
  * @param {number} [options.max] - Maximum value the counter can reach. If not provided, there is no upper limit.
  * @param {number} [options.step=1] - Value to increment or decrement by. Defaults to 1.
@@ -37,8 +36,7 @@ type UseCounterReturn = {
  * import { useCounter } from 'react-simplikit';
  *
  * function ShoppingCart() {
- *   const { count, increment, decrement, reset } = useCounter({
- *     initialValue: 1,
+ *   const { count, increment, decrement, reset } = useCounter(1, {
  *     min: 1,
  *     max: 10,
  *   });
@@ -53,7 +51,7 @@ type UseCounterReturn = {
  *   );
  * }
  */
-export function useCounter({ initialValue = 0, min, max, step = 1 }: UseCounterOptions = {}): UseCounterReturn {
+export function useCounter(initialValue = 0, { min, max, step = 1 }: UseCounterOptions = {}): UseCounterReturn {
   const validateValue = (value: number): number => {
     let validatedValue = value;
 
