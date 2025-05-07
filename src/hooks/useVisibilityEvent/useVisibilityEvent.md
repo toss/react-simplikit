@@ -1,6 +1,6 @@
 # useVisibilityEvent
 
-A React hook that listens to changes in the document's visibility state and triggers a callback.
+`useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback.
 
 ## Interface
 

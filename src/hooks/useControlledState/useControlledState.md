@@ -1,6 +1,6 @@
 # useControlledState
 
-`useControlledState` is a hook that allows you to control both controlled and uncontrolled states. If you pass the state to `value`, it will be a controlled state, and if you pass the state to `defaultValue`, it will be an uncontrolled state. If both `value` and `defaultValue` are passed, `value` will take precedence.
+`useControlledState` is a React hook that allows you to control both controlled and uncontrolled states. If you pass the state to `value`, it will be a controlled state, and if you pass the state to `defaultValue`, it will be an uncontrolled state. If both `value` and `defaultValue` are passed, `value` will take precedence.
 
 ## Interface
 

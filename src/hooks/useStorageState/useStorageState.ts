@@ -63,7 +63,7 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
 
 /**
  * @description
- * A React hook that functions like `useState` but persists the state value in browser storage.
+ * `useStorageState` is a React that functions like `useState` but persists the state value in browser storage.
  * The value is retained across page reloads and can be shared between tabs when using `localStorage`.
  *
  * @param {string} key - The key used to store the value in storage.
