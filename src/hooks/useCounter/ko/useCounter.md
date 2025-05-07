@@ -44,7 +44,7 @@ function useCounter(
       type: 'number',
       required: false,
       defaultValue: '1',
-      description: '증가 또는 감소할 값이에요. 기본값은 1이에요.',
+      description: '증가 또는 감소의 단위 값이에요. 기본값은 1이에요.',
     },
   ]"
 />
