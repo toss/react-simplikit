@@ -1,6 +1,6 @@
 # useThrottle
 
-A React hook that creates a throttled version of a callback function. This is useful for limiting the rate at which a function can be called, such as when handling scroll or resize events.
+`useThrottle` is a React hook that creates a throttled version of a callback function. This is useful for limiting the rate at which a function can be called, such as when handling scroll or resize events.
 
 ## Interface
 
