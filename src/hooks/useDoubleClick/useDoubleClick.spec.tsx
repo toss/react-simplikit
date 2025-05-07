@@ -33,7 +33,6 @@ describe('useDoubleClick', () => {
   });
 
   afterEach(() => {
-    vi.clearAllTimers();
     vi.useRealTimers();
   });
 
