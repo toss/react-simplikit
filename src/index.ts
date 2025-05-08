@@ -13,6 +13,7 @@ export { useImpressionRef } from './hooks/useImpressionRef/index.ts';
 export { useInputState } from './hooks/useInputState/index.ts';
 export { useIntersectionObserver } from './hooks/useIntersectionObserver/index.ts';
 export { useInterval } from './hooks/useInterval/index.ts';
+export { useIsClient } from './hooks/useIsClient/index.ts';
 export { useIsomorphicLayoutEffect } from './hooks/useIsomorphicLayoutEffect/index.ts';
 export { useLoading } from './hooks/useLoading/index.ts';
 export { useOutsideClickEffect } from './hooks/useOutsideClickEffect/index.ts';
