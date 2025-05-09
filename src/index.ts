@@ -15,6 +15,7 @@ export { useIntersectionObserver } from './hooks/useIntersectionObserver/index.t
 export { useInterval } from './hooks/useInterval/index.ts';
 export { useIsomorphicLayoutEffect } from './hooks/useIsomorphicLayoutEffect/index.ts';
 export { useLoading } from './hooks/useLoading/index.ts';
+export { useMap } from './hooks/useMap/index.ts';
 export { useOutsideClickEffect } from './hooks/useOutsideClickEffect/index.ts';
 export { usePreservedCallback } from './hooks/usePreservedCallback/index.ts';
 export { usePreservedReference } from './hooks/usePreservedReference/index.ts';
