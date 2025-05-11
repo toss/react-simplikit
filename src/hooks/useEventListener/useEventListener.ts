@@ -75,7 +75,9 @@ export function useEventListener<
   T extends HTMLElement | SVGAElement = HTMLElement,
 >(
   eventName: KW | KD | KH,
-  handler: (event: WindowEventMap[KW] | HTMLElementEventMap[KH] | DocumentEventMap[KD] | Event) => void,
+  handler: (
+    event: WindowEventMap[KW] | DocumentEventMap[KD] | HTMLElementEventMap[KH] | SVGElementEventMap[KH] | Event
+  ) => void,
   element?: RefObject<T | null> | Document,
   options?: boolean | AddEventListenerOptions
 ) {
