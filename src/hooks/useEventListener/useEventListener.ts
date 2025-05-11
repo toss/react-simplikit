@@ -4,21 +4,19 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 /**
  * @description
- * `useEventListener` is a React hook that simplifies adding and cleaning up event listeners on various targets
+ * `useEventListener` is a React hook that allows you to easily add and clean up event listeners on various targets,
  * such as `window`, `document`, HTML elements, or SVG elements.
- * It automatically updates the handler without needing to reattach the event listener on every render,
+ * The listener is automatically updated with the latest handler on each render without reattaching,
  * ensuring stable performance and correct behavior.
  *
- * @template KW - The type of event for window events.
- * @template KD - The type of event for document events.
- * @template KH - The type of event for HTML or SVG element events.
- * @template T - The type of the DOM element (default is `HTMLElement`).
+ * @template KW - Event name type for `window` events, determining the corresponding event object type.
+ * @template KD - Event name type for `document` events, determining the corresponding event object type.
+ * @template KH - Event name type for HTML or SVG element events, determining the corresponding event object type.
+ * @template T - Type of the DOM element being referenced (default is `HTMLElement`, but can be an SVG element).
  * @param {KW | KD | KH} eventName - The name of the event to listen for.
- * @param {(event: WindowEventMap[KW] | DocumentEventMap[KD] | HTMLElementEventMap[KH] | SVGElementEventMap[KH]) => void} handler - The callback function to execute when the event is triggered.
- * @param {RefObject<T | null> | Document} [element] - A React ref object targeting the element to attach the event listener to, or a `Document` object to attach directly to the document. Defaults to `window` if not provided.
- * @param {boolean | AddEventListenerOptions} [options] - Optional parameters for the event listener, such as `capture`, `once`, or `passive`.
- *
- * @returns {void} This hook does not return anything.
+ * @param {(event: WindowEventMap[KW] | DocumentEventMap[KD] | HTMLElementEventMap[KH] | SVGElementEventMap[KH]) => void} handler - The callback function that will be triggered when the event occurs.
+ * @param {RefObject<T | null> | Document} [element] - The target to attach the event listener to. Can be a React `ref` object or the `document`. If omitted or `undefined`, the listener is attached to the `window`.
+ * @param {boolean | AddEventListenerOptions} [options] - Optional parameters for the event listener such as `capture`, `once`, or `passive`.
  *
  * @example
  * function WindowResize() {
