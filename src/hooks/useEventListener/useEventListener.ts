@@ -52,7 +52,7 @@ export function useEventListener<
   T extends Element = K extends keyof HTMLElementEventMap ? HTMLElement : SVGElement,
 >(
   eventName: K,
-  handler: ((event: HTMLElementEventMap[K]) => void) | ((event: SVGElementEventMap[K]) => void),
+  handler: (event: HTMLElementEventMap[K] | SVGElementEventMap[K]) => void,
   element: RefObject<T | null>,
   options?: boolean | AddEventListenerOptions
 ): void;
