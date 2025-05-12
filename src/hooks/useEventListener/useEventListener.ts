@@ -72,7 +72,7 @@ export function useEventListener<
   KW extends keyof WindowEventMap,
   KD extends keyof DocumentEventMap,
   KH extends keyof HTMLElementEventMap & keyof SVGElementEventMap,
-  T extends HTMLElement | SVGAElement = HTMLElement,
+  T extends HTMLElement | SVGElement = HTMLElement,
 >(
   eventName: KW | KD | KH,
   handler: (
