@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { useEventListener } from './useEventListener.ts';
 
-describe('useEventListener Hook', () => {
+describe('useEventListener', () => {
   let handlerSpy: Mock;
 
   beforeEach(() => {
