@@ -39,6 +39,21 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  * }
  *
  * @example
+ * function ScrollTracker() {
+ *   const scrollRef = useRef<HTMLDivElement>(null);
+ *
+ *   useEventListener('scroll', () => {
+ *     console.log('Scroll event detected!');
+ *   }, scrollRef, { passive: true });
+ *
+ *   return (
+ *     <div ref={scrollRef} style={{ height: '100px', overflowY: 'scroll' }}>
+ *       <div style={{ height: '300px' }}>Scroll Me!</div>
+ *     </div>
+ *   );
+ * }
+ *
+ * @example
  * function Document() {
  *   useEventListener('click', (event) => {
  *     console.log('Document clicked at coordinates', event.clientX, event.clientY);
