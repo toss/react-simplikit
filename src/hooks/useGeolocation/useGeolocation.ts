@@ -34,8 +34,8 @@ type GeolocationOptions = {
 
 /**
  * @description
- * A React custom hook that retrieves and tracks the user's geographical location.
- * It supports both one-time position retrieval and continuous location tracking.
+ * `useGeolocation` is a React hook that retrieves and tracks the user's geographical location.
+ * It uses the browser's `Geolocation API` to support both one-time position retrieval and continuous location tracking.
  *
  * @param {GeolocationOptions} [options] - Geolocation options configuration
  * @param {GeolocationMountBehaviorType} [options.mountBehavior] - How the hook behaves on mount:
