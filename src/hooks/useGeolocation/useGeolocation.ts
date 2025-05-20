@@ -55,6 +55,14 @@ type GeolocationOptions = {
  *   - 2: Position unavailable
  *   - 3: Timeout - geolocation request took too long
  * - `data` {GeolocationData|null} - Location data object or null
+ *   - `latitude` {number} - The latitude in decimal degrees
+ *   - `longitude` {number} - The longitude in decimal degrees
+ *   - `accuracy` {number} - The accuracy of position in meters
+ *   - `altitude` {number|null} - The altitude in meters above the WGS84 ellipsoid
+ *   - `altitudeAccuracy` {number|null} - The altitude accuracy in meters
+ *   - `heading` {number|null} - The heading in degrees clockwise from true north
+ *   - `speed` {number|null} - The speed in meters per second
+ *   - `timestamp` {number|null} - The time when the position was retrieved
  * - `getCurrentPosition` {Function} - Function to get the current position once
  * - `startTracking` {Function} - Function to start tracking location changes
  * - `stopTracking` {Function} - Function to stop tracking location
