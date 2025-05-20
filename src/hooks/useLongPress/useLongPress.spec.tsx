@@ -88,7 +88,6 @@ describe('useLongPress', () => {
     render(<TestComponent />);
     const button = screen.getByTestId('test-button');
 
-    // Short press (mouseDown followed quickly by mouseUp)
     fireEvent.mouseDown(button);
     fireEvent.mouseUp(button);
 
@@ -208,7 +207,7 @@ describe('useLongPress', () => {
 
     const TestComponent = () => {
       const longPressHandlers = useLongPress(onLongPress, {
-        moveThreshold: { x: 10 }, // y는 지정하지 않음
+        moveThreshold: { x: 10 },
       });
       return (
         <button data-testid="test-button" {...longPressHandlers}>
