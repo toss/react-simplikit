@@ -18,7 +18,7 @@ type GeolocationData = {
   altitudeAccuracy: number | null;
   heading: number | null;
   speed: number | null;
-  timestamp: number | null;
+  timestamp: number;
 };
 
 const GeolocationMountBehavior = {
@@ -62,7 +62,7 @@ type GeolocationOptions = {
  *   - `altitudeAccuracy` {number|null} - The altitude accuracy in meters
  *   - `heading` {number|null} - The heading in degrees clockwise from true north
  *   - `speed` {number|null} - The speed in meters per second
- *   - `timestamp` {number|null} - The time when the position was retrieved
+ *   - `timestamp` {number} - The time when the position was retrieved
  * - `getCurrentPosition` {Function} - Function to get the current position once
  * - `startTracking` {Function} - Function to start tracking location changes
  * - `stopTracking` {Function} - Function to stop tracking location
