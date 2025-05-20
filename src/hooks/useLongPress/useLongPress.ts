@@ -80,8 +80,6 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
 
   const isMovedBeyondThreshold = useCallback(
     (event: MouseEvent<E> | TouchEvent<E>) => {
-      if (!hasThreshold) return false;
-
       const { x, y } = getClientPosition(event);
       const deltaX = Math.abs(x - initialPositionRef.current.x);
       const deltaY = Math.abs(y - initialPositionRef.current.y);
@@ -91,7 +89,7 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
         (moveThreshold?.y !== undefined && deltaY > moveThreshold.y)
       );
     },
-    [getClientPosition, hasThreshold, moveThreshold]
+    [getClientPosition, moveThreshold]
   );
 
   const cancelLongPress = useCallback(() => {
