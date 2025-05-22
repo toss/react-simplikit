@@ -36,6 +36,23 @@ describe('useConditionalEffect', () => {
     expect(effect).toHaveBeenCalled();
   });
 
+  it('should warn when an empty dependency array is provided', async () => {
+    const originalWarn = console.warn;
+    console.warn = vi.fn();
+
+    const effect = vi.fn();
+    const condition = vi.fn(() => true);
+
+    await renderHookSSR(() => useConditionalEffect(effect, [], condition));
+
+    expect(console.warn).toHaveBeenCalledWith(
+      'useConditionalEffect received an empty dependency array. ' +
+        'This may indicate missing dependencies and could lead to unexpected behavior.'
+    );
+
+    console.warn = originalWarn;
+  });
+
   it('should run effect multiple times when condition is repeatedly true', async () => {
     const effect = vi.fn();
     const condition = vi.fn(() => true);
