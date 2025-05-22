@@ -55,7 +55,6 @@ export function useConditionalEffect<T extends DependencyList>(
     );
   }
 
-  // Run the condition check regardless of SSR/CSR
   const shouldRun = memoizedCondition(prevDepsRef.current, deps);
 
   useEffect(() => {

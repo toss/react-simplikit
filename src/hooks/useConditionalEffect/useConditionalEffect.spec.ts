@@ -63,7 +63,6 @@ describe('useConditionalEffect', () => {
 
     expect(effect).toHaveBeenCalledTimes(1);
 
-    // First rerender
     effect.mockClear();
     await act(async () => {
       rerender({ deps: [2] as const });
@@ -72,7 +71,6 @@ describe('useConditionalEffect', () => {
     expect(condition).toHaveBeenCalledWith([1], [2]);
     expect(effect).toHaveBeenCalledTimes(1);
 
-    // Second rerender
     effect.mockClear();
     await act(async () => {
       rerender({ deps: [3] as const });
@@ -102,23 +100,20 @@ describe('useConditionalEffect', () => {
       initialProps: { deps: [1] as const },
     });
 
-    // First call receives undefined for prevDeps
     expect(condition).toHaveBeenCalledWith(undefined, [1]);
 
     condition.mockClear();
 
-    // Rerender with new deps
     await act(async () => {
       rerender({ deps: [2] as const });
     });
 
-    // Second call should receive the previous deps
     expect(condition).toHaveBeenCalledWith([1], [2]);
   });
 
   it('should run effect based on conditional logic', async () => {
     const effect = vi.fn();
-    // Only run when the number increases
+
     const condition = vi.fn((prev: readonly number[] | undefined, current: readonly number[]) => {
       if (prev === undefined) return false;
       return current[0] > prev[0];
@@ -130,7 +125,6 @@ describe('useConditionalEffect', () => {
 
     expect(effect).not.toHaveBeenCalled();
 
-    // Increase the count
     effect.mockClear();
     condition.mockClear();
 
@@ -141,7 +135,6 @@ describe('useConditionalEffect', () => {
     expect(condition).toHaveBeenCalledWith([0], [1]);
     expect(effect).toHaveBeenCalled();
 
-    // Decrease the count
     effect.mockClear();
     condition.mockClear();
 
