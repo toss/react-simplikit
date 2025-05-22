@@ -4,6 +4,7 @@ export { SwitchCase } from './components/SwitchCase/index.ts';
 export { useAsyncEffect } from './hooks/useAsyncEffect/index.ts';
 export { useBooleanState } from './hooks/useBooleanState/index.ts';
 export { useCallbackOncePerRender } from './hooks/useCallbackOncePerRender/index.ts';
+export { useConditionalEffect } from './hooks/useConditionalEffect/index.ts';
 export { useControlledState } from './hooks/useControlledState/index.ts';
 export { useCounter } from './hooks/useCounter/index.ts';
 export { useDebounce } from './hooks/useDebounce/index.ts';
