@@ -268,7 +268,7 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
                        .filter(([_, value]) => value != null)
                        .map(([key, value]) =>
                          typeof value === 'string'
-                           ? `${key}: '${key === 'description' ? replaceDescription(value as string) : value!.replace(/'/g, "\\'")}'`
+                           ? `${key}: '${key === 'description' ? replaceDescription(value as string) : value!.replace(/'/g, '&apos;')}'`
                            : `${key}: ${value}`
                        )
                        .join(',\n')}
@@ -293,5 +293,6 @@ function replaceDescription(value: string) {
     .replace(/\*([^*]*)\*/g, '<em>$1</em>')
     .replace(/_([^*]*)_/g, '<em>$1</em>')
     .replace(/\n/g, '<br />')
+    .replace(/'/g, `\\'`)
     .replace(/"/g, '&quot;');
 }
