@@ -49,7 +49,7 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  * }
  */
 export const ImpressionArea = forwardRef(ImpressionAreaImpl) as <T extends ElementType = 'div'>(
-  props: Props<T>
+  props: Props<T> & { ref?: Ref<Element<T>> }
 ) => React.ReactNode;
 
 function ImpressionAreaImpl<T extends ElementType = 'div'>(
