@@ -22,13 +22,14 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  * and executes callbacks when the element enters or exits the viewport. This component uses the `useImpressionRef`
  * hook to track the element's visibility.
  *
- * @param {ElementType} [as='div'] - The HTML tag to render. Defaults to `div`.
+ * @template {ElementType} T - The HTML tag to render. Defaults to `div`.
+ * @param {T} [as='div'] - The HTML tag to render. Defaults to `div`.
  * @param {string} [rootMargin] - Margin to adjust the detection area.
  * @param {number} [areaThreshold] - Minimum ratio of the element that must be visible (0 to 1).
  * @param {number} [timeThreshold] - Minimum time the element must be visible (in milliseconds).
  * @param {() => void} [onImpressionStart] - Callback function executed when the element enters the view.
  * @param {() => void} [onImpressionEnd] - Callback function executed when the element exits the view.
- * @param {Ref<HTMLElement>} [ref] - Reference to the element.
+ * @param {Ref<Element<T>>} [ref] - Reference to the element.
  * @param {React.ReactNode} [children] - Child elements to be rendered inside the component.
  * @param {string} [className] - Additional class names for styling.
  *
