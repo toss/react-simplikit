@@ -33,7 +33,7 @@ type UseMapReturn<K, V> = [Omit<Map<K, V>, 'set' | 'clear' | 'delete'>, MapActio
  * Provides efficient state management and stable action functions.
  *
  * @param {MapOrEntries<K, V>} initialState - Initial Map state (Map object or array of key-value pairs)
- * @returns A tuple containing the Map state and actions to manipulate it
+ * @returns {UseMapReturn<K, V>} A tuple containing the Map state and actions to manipulate it
  *
  * @example
  * ```tsx
