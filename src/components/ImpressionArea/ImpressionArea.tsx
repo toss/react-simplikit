@@ -1,4 +1,4 @@
-import { ElementType, ReactNode, Ref } from 'react';
+import { ElementType, forwardRef, ReactNode, Ref } from 'react';
 
 import { useImpressionRef, UseImpressionRefOptions } from '../../hooks/useImpressionRef/index.ts';
 import { mergeRefs } from '../../utils/mergeRefs/mergeRefs.ts';
@@ -43,24 +43,22 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  *   );
  * }
  */
-export function ImpressionArea<T extends ElementType = 'div'>({
-  as,
-  rootMargin,
-  areaThreshold,
-  timeThreshold,
-  onImpressionStart,
-  onImpressionEnd,
-  ref,
-  ...props
-}: Props<T>) {
-  const Component = as ?? 'div';
-  const impressionRef = useImpressionRef<HTMLElement>({
-    onImpressionStart,
-    onImpressionEnd,
-    areaThreshold,
-    timeThreshold,
-    rootMargin,
-  });
+export const ImpressionArea = forwardRef(
+  <T extends ElementType = 'div'>(
+    { as, rootMargin, areaThreshold, timeThreshold, onImpressionStart, onImpressionEnd, ...props }: Props<T>,
+    ref: React.Ref<Element>
+  ) => {
+    const Component = as ?? 'div';
+    const impressionRef = useImpressionRef<HTMLElement>({
+      onImpressionStart,
+      onImpressionEnd,
+      areaThreshold,
+      timeThreshold,
+      rootMargin,
+    });
 
-  return <Component ref={mergeRefs(ref, impressionRef)} {...props} />;
-}
+    return <Component ref={mergeRefs(ref, impressionRef)} {...props} />;
+  }
+);
+
+ImpressionArea.displayName = 'ImpressionArea';
