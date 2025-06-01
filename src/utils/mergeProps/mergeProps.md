@@ -6,7 +6,7 @@
 
 ```ts
 function mergeProps<PropsList>(
-  props: PropsList
+  ...props: PropsList
 ): TupleToIntersection<PropsList>;
 ```
 
