@@ -1,12 +1,17 @@
-import { ElementType, ReactNode, Ref } from 'react';
+import { ElementType, ReactNode, Ref, RefCallback } from 'react';
 
 import { useImpressionRef, UseImpressionRefOptions } from '../../hooks/useImpressionRef/index.ts';
 import { mergeRefs } from '../../utils/mergeRefs/mergeRefs.ts';
 
+type Element<
+  T extends ElementType,
+  InstrinsicElements = T extends keyof React.JSX.IntrinsicElements ? React.JSX.IntrinsicElements[T] : HTMLElement,
+> = InstrinsicElements extends React.ClassAttributes<infer E extends HTMLElement> ? E : HTMLElement;
+
 type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
   UseImpressionRefOptions & {
     as?: Tag;
-    ref?: Ref<HTMLElement>;
+    ref?: Ref<Element<Tag>>;
     children?: ReactNode;
     className?: string;
   };
@@ -54,7 +59,7 @@ export function ImpressionArea<T extends ElementType = 'div'>({
   ...props
 }: Props<T>) {
   const Component = as ?? 'div';
-  const impressionRef = useImpressionRef<HTMLElement>({
+  const impressionRef = useImpressionRef<Element<T>>({
     onImpressionStart,
     onImpressionEnd,
     areaThreshold,
@@ -62,5 +67,5 @@ export function ImpressionArea<T extends ElementType = 'div'>({
     rootMargin,
   });
 
-  return <Component ref={mergeRefs(ref, impressionRef)} {...props} />;
+  return <Component ref={mergeRefs(ref, impressionRef) as RefCallback<HTMLElement>} {...props} />;
 }
