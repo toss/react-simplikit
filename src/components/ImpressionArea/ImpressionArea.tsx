@@ -48,27 +48,6 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  *   );
  * }
  */
-// export function ImpressionArea<T extends ElementType = 'div'>({
-//   as,
-//   rootMargin,
-//   areaThreshold,
-//   timeThreshold,
-//   onImpressionStart,
-//   onImpressionEnd,
-//   ref,
-//   ...props
-// }: Props<T>) {
-//   const Component = as ?? 'div';
-//   const impressionRef = useImpressionRef<Element<T>>({
-//     onImpressionStart,
-//     onImpressionEnd,
-//     areaThreshold,
-//     timeThreshold,
-//     rootMargin,
-//   });
-
-//   return <Component ref={mergeRefs(ref, impressionRef) as RefCallback<HTMLElement>} {...props} />;
-// }
 export const ImpressionArea = forwardRef(ImpressionAreaImpl) as <T extends ElementType = 'div'>(
   props: Props<T>
 ) => React.ReactNode;
