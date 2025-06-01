@@ -1,4 +1,4 @@
-import { ElementType, ReactNode, Ref, RefCallback } from 'react';
+import { ElementType, forwardRef, ReactNode, Ref, RefCallback } from 'react';
 
 import { useImpressionRef, UseImpressionRefOptions } from '../../hooks/useImpressionRef/index.ts';
 import { mergeRefs } from '../../utils/mergeRefs/mergeRefs.ts';
@@ -11,7 +11,6 @@ type Element<
 type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
   UseImpressionRefOptions & {
     as?: Tag;
-    ref?: Ref<Element<Tag>>;
     children?: ReactNode;
     className?: string;
   };
@@ -49,16 +48,35 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  *   );
  * }
  */
-export function ImpressionArea<T extends ElementType = 'div'>({
-  as,
-  rootMargin,
-  areaThreshold,
-  timeThreshold,
-  onImpressionStart,
-  onImpressionEnd,
-  ref,
-  ...props
-}: Props<T>) {
+// export function ImpressionArea<T extends ElementType = 'div'>({
+//   as,
+//   rootMargin,
+//   areaThreshold,
+//   timeThreshold,
+//   onImpressionStart,
+//   onImpressionEnd,
+//   ref,
+//   ...props
+// }: Props<T>) {
+//   const Component = as ?? 'div';
+//   const impressionRef = useImpressionRef<Element<T>>({
+//     onImpressionStart,
+//     onImpressionEnd,
+//     areaThreshold,
+//     timeThreshold,
+//     rootMargin,
+//   });
+
+//   return <Component ref={mergeRefs(ref, impressionRef) as RefCallback<HTMLElement>} {...props} />;
+// }
+export const ImpressionArea = forwardRef(ImpressionAreaImpl) as <T extends ElementType = 'div'>(
+  props: Props<T>
+) => React.ReactNode;
+
+function ImpressionAreaImpl<T extends ElementType = 'div'>(
+  { as, rootMargin, areaThreshold, timeThreshold, onImpressionStart, onImpressionEnd, ...props }: Props<T>,
+  ref: Ref<unknown>
+) {
   const Component = as ?? 'div';
   const impressionRef = useImpressionRef<Element<T>>({
     onImpressionStart,
@@ -70,3 +88,7 @@ export function ImpressionArea<T extends ElementType = 'div'>({
 
   return <Component ref={mergeRefs(ref, impressionRef) as RefCallback<HTMLElement>} {...props} />;
 }
+
+Object.assign(ImpressionArea, {
+  displayName: 'ImpressionArea',
+});
