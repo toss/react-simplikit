@@ -260,3 +260,51 @@ jobs:
               fi
             fi
           done
+
+  verify-exports:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check exports
+        run: |
+          IMPL_DIRS=("components" "hooks" "utils")
+          ROOT_INDEX="src/index.ts"
+
+          for dir in "${IMPL_DIRS[@]}"; do
+            for impl_dir in src/$dir/*/; do
+              if [ ! -d "$impl_dir" ]; then
+                continue
+              fi
+              
+              impl_name=$(basename "$impl_dir")
+              impl_index="$impl_dir/index.ts"
+              impl_file=""
+              
+              if [ -f "$impl_dir$impl_name.ts" ]; then
+                impl_file="$impl_name.ts"
+              elif [ -f "$impl_dir$impl_name.tsx" ]; then
+                impl_file="$impl_name.tsx"
+              else
+                echo "Error: Implementation file not found for $impl_name"
+                exit 1
+              fi
+              
+              if [ ! -f "$impl_index" ]; then
+                echo "Error: Missing index.ts in $impl_dir"
+                exit 1
+              fi
+              
+              if ! grep -q "export.*from.*['\"]\./$impl_file['\"]" "$impl_index"; then
+                echo "Error: $impl_name is not exported in $impl_index"
+                exit 1
+              fi
+              
+              relative_path="./$dir/$impl_name/index.ts"
+              if ! grep -q "export.*from.*['\"]$relative_path['\"]" "$ROOT_INDEX"; then
+                echo "Error: $impl_name is not exported in root index.ts"
+                exit 1
+              fi
+            done
+          done
