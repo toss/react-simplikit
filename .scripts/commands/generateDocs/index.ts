@@ -286,12 +286,15 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
 }
 
 function replaceDescription(value: string) {
+  console.log(value);
   return value
     .replace(/^\s*-\s*/, '')
+    .replace(/--/g, '\n-')
     .replace(/`([^`]*)`/g, '<code>$1</code>')
     .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]*)\*/g, '<em>$1</em>')
     .replace(/_([^*]*)_/g, '<em>$1</em>')
     .replace(/\n/g, '<br />')
+    .replace(/'/g, `\\'`)
     .replace(/"/g, '&quot;');
 }

@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        command: ['format', 'lint', 'type']
+        command: ['format', 'lint', 'type', 'spec']
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -260,3 +260,63 @@ jobs:
               fi
             fi
           done
+
+  verify-exports:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check exports
+        run: |
+          IMPL_DIRS=("components" "hooks" "utils")
+          ROOT_INDEX="src/index.ts"
+          ERROR_LOG=""
+          HAS_ERROR=0
+
+          for dir in "${IMPL_DIRS[@]}"; do
+            for impl_dir in src/$dir/*/; do
+              if [ ! -d "$impl_dir" ]; then
+                continue
+              fi
+              
+              impl_name=$(basename "$impl_dir")
+              impl_index="$impl_dir/index.ts"
+              impl_file=""
+              
+              if [ -f "$impl_dir$impl_name.ts" ]; then
+                impl_file="$impl_name.ts"
+              elif [ -f "$impl_dir$impl_name.tsx" ]; then
+                impl_file="$impl_name.tsx"
+              else
+                ERROR_LOG+="❌ Implementation file not found for $impl_name\n"
+                HAS_ERROR=1
+                continue
+              fi
+              
+              if [ ! -f "$impl_index" ]; then
+                ERROR_LOG+="❌ Missing index.ts in $impl_dir\n"
+                HAS_ERROR=1
+              fi
+              
+              if ! grep -q "export.*from.*['\"]\./$impl_file['\"]" "$impl_index"; then
+                ERROR_LOG+="❌ $impl_name is not exported in $impl_index\n"
+                HAS_ERROR=1
+              fi
+              
+              relative_path="./$dir/$impl_name/index.ts"
+              if ! grep -q "export.*from.*['\"]$relative_path['\"]" "$ROOT_INDEX"; then
+                ERROR_LOG+="❌ $impl_name is not exported in root index.ts\n"
+                HAS_ERROR=1
+              fi
+            done
+          done
+
+          if [ $HAS_ERROR -eq 1 ]; then
+            echo -e "\n🚨 Export Validation Errors:\n"
+            echo -e "$ERROR_LOG"
+            echo -e "\nPlease fix the above export issues."
+            exit 1
+          else
+            echo "✅ All exports are valid!"
+          fi

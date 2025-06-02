@@ -11,3 +11,6 @@ esm
 out
 *.d.ts
 *.tgz
+src/components/**/*.md
+src/hooks/**/*.md
+src/utils/**/*.md
