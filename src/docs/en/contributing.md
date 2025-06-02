@@ -35,6 +35,7 @@ JSDoc comments must include `@description` and `@example`, and if there are para
   - For required parameters: `@param {<type>} <parameter name> - <parameter description>`
   - For optional parameters: `@param {<type>} [<parameter name>] - <parameter description>`
   - For object parameters, both the object itself and its properties need `@param` tags.
+  - If you want to write a list under a description, use `--` instead of `-`.
 
     ```ts
     type Props = {
@@ -61,6 +62,8 @@ JSDoc comments must include `@description` and `@example`, and if there are para
      * @param {Object} [paymentMethod] - Payment information of the user.
      * @param {string} [paymentMethod.type] - Payment method.
      * @param {string} [paymentMethod.number] - Card or account number.
+     *   -- Card or account number without `-`.
+     *   -- If the number is a card number, it should be 15 or 16 digits.
      */
     ```
 
@@ -117,7 +120,7 @@ JSDoc comments must include `@description` and `@example`, and if there are para
           {
             name: 'paymentMethod.number',
             type: 'string',
-            description: 'Card or account number.',
+            description: 'Card or account number.<br/>- Card or account number without `-`.<br/>- If the number is a card number, it should be 15 or 16 digits.',
           },
         ]"
       />
@@ -127,13 +130,16 @@ JSDoc comments must include `@description` and `@example`, and if there are para
 
   - Format: `@returns {<type>} <return value description>`
   - For object or tuple return values, include descriptions for each member.
+  - If additional details are needed for each member, please use `:`.
 
     ```ts
-    type ReturnValue = [string, () => void];
+    type ReturnValue = [Object, () => void];
 
     /**
-     * @returns {[value: string, onChange: () => void]} A tuple containing:
-     * - value `string` - The value of the input.
+     * @returns {[Object, () => void]} A tuple containing:
+     * - obj `Object` - An object containing:
+     *   : label `string` - The label of the input.
+     *   : value `string` - The value of the input.
      * - onChange `() => void` - A function to update the value.
      */
     ```
@@ -147,9 +153,9 @@ JSDoc comments must include `@description` and `@example`, and if there are para
         description="A tuple containing:"
         :nested="[
           {
-            name: 'value',
-            type: 'string',
-            description: 'The value of the input.',
+            name: 'obj',
+            type: 'Object',
+            description: 'The value of the input. <br />  : label <code>string</code> - The label of the input. <br />  : value <code>string</code> - The value of the input.',
           },
           {
             name: 'onChange',
