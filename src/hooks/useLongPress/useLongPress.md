@@ -7,7 +7,7 @@
 ```ts
 function useLongPress<E extends HTMLElement>(
   onLongPress: (event: React.MouseEvent<E> | React.TouchEvent<E>) => void,
-  options: Object
+  options: UseLongPressOptions
 ): Object;
 ```
 
@@ -22,7 +22,7 @@ function useLongPress<E extends HTMLElement>(
 
 <Interface
   name="options"
-  type="Object"
+  type="UseLongPressOptions"
   description="Configuration options for the long press behavior."
   :nested="[
     {
@@ -73,6 +73,15 @@ function useLongPress<E extends HTMLElement>(
   name=""
   type="Object"
   description="handlers to attach to an element."
+  :nested="[
+    {
+      name: 'onMouseDown',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description:
+        'Event handler for mouse down events. - onMouseUp <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for mouse up events. - onMouseLeave <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for mouse leave events. - onTouchStart <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for touch start events. - onTouchEnd <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for touch end events. - onMouseMove <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for mouse move events. Included if <code>moveThreshold</code> is provided. - onTouchMove <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for touch move events. Included if <code>moveThreshold</code> is provided..',
+    },
+  ]"
 />
 
 ## Example
@@ -83,11 +92,14 @@ import { useLongPress } from 'react-simplikit';
 function ContextMenu() {
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const longPressHandlers = useLongPress(() => setMenuVisible(true), {
-    delay: 400,
-    onClick: () => console.log('Normal click'),
-    onLongPressEnd: () => console.log('Long press completed'),
-  });
+  const longPressHandlers = useLongPress(
+    () => setMenuVisible(true),
+    {
+      delay: 400,
+      onClick: () => console.log('Normal click'),
+      onLongPressEnd: () => console.log('Long press completed')
+    }
+  );
 
   return (
     <div>

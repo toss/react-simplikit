@@ -20,7 +20,7 @@ export type UseLongPressOptions<E extends HTMLElement> = {
  *
  * @template {HTMLElement} E - The HTML element type that will use the long press handlers.
  * @param {(event: React.MouseEvent<E> | React.TouchEvent<E>) => void} onLongPress - The callback function to be executed when a long press is detected.
- * @param {Object} [options] - Configuration options for the long press behavior.
+ * @param {UseLongPressOptions} [options] - Configuration options for the long press behavior.
  * @param {number} [options.delay=500] - The time in milliseconds before triggering the long press. Defaults to 500ms.
  * @param {Object} [options.moveThreshold] - Maximum movement allowed before canceling a long press.
  * @param {number} [options.moveThreshold.x] - Maximum horizontal movement in pixels.
@@ -29,6 +29,13 @@ export type UseLongPressOptions<E extends HTMLElement> = {
  * @param {(event) => void} [options.onLongPressEnd] - Optional function to execute when a long press ends.
  *
  * @returns {Object} Event handlers to attach to an element.
+ * - onMouseDown `(event: MouseEvent<E> | TouchEvent<E>) => void` - Event handler for mouse down events.
+ * - onMouseUp `(event: MouseEvent<E> | TouchEvent<E>) => void` - Event handler for mouse up events.
+ * - onMouseLeave `(event: MouseEvent<E> | TouchEvent<E>) => void` - Event handler for mouse leave events.
+ * - onTouchStart `(event: MouseEvent<E> | TouchEvent<E>) => void` - Event handler for touch start events.
+ * - onTouchEnd `(event: MouseEvent<E> | TouchEvent<E>) => void` - Event handler for touch end events.
+ * - onMouseMove `(event: MouseEvent<E> | TouchEvent<E>) => void` - Event handler for mouse move events. Included if `moveThreshold` is provided.
+ * - onTouchMove `(event: MouseEvent<E> | TouchEvent<E>) => void` - Event handler for touch move events. Included if `moveThreshold` is provided.
  *
  * @example
  * import { useLongPress } from 'react-simplikit';
