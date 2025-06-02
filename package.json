@@ -1,6 +1,6 @@
 {
   "name": "react-simplikit",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "main": "./src/index.ts",
   "type": "module",
   "sideEffects": false,
