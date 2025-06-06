@@ -128,6 +128,22 @@ describe('SwitchCase', () => {
     expect(screen.getByText('True Case')).toBeInTheDocument();
   });
 
+  it('should render nothing when boolean value has no matching case', () => {
+    const value = false;
+
+    const { container } = render(
+      <SwitchCase
+        value={value}
+        caseBy={{
+          true: () => <div>True Case</div>,
+        }}
+        defaultComponent={() => null}
+      />
+    );
+
+    expect(container.firstChild).toBeNull();
+  });
+
   it('should render nothing when no matching case and default is null', () => {
     const getValue = () => {
       const value = undefined;
