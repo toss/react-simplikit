@@ -60,6 +60,23 @@ describe('SwitchCase', () => {
     expect(screen.getByText('One')).toBeInTheDocument();
   });
 
+  it('should render correct component for symbol value', () => {
+    const symbolA = Symbol('symbol-a');
+    const symbolB = Symbol('symbol-b');
+
+    render(
+      <SwitchCase
+        value={symbolA}
+        caseBy={{
+          [symbolA]: () => <div>Symbol A Component</div>,
+          [symbolB]: () => <div>Symbol B Component</div>,
+        }}
+      />
+    );
+
+    expect(screen.getByText('Symbol A Component')).toBeInTheDocument();
+  });
+
   it('should render default component when case not found', () => {
     const getStringValue = () => {
       const value = 'c';

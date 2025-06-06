@@ -1,9 +1,6 @@
 import { ReactElement } from 'react';
 
-type StringifiedValue<T> =
-  | (T extends boolean ? 'true' | 'false' : never)
-  | (T extends number ? `${T}` : never)
-  | (T extends string ? T : never);
+type StringifiedValue<T> = (T extends boolean ? 'true' | 'false' : never) | (T extends PropertyKey ? T : never);
 
 type Props<Case> = {
   value: Case;
@@ -45,6 +42,10 @@ type Props<Case> = {
  * }
  */
 export function SwitchCase<Case>({ value, caseBy, defaultComponent = () => null }: Props<Case>): ReactElement | null {
-  const stringifiedValue = String(value) as StringifiedValue<Case>;
-  return (caseBy[stringifiedValue] ?? defaultComponent)();
+  if (typeof value === 'boolean') {
+    const stringifiedValue = String(value) as StringifiedValue<Case>;
+    return (caseBy[stringifiedValue] ?? defaultComponent)();
+  }
+
+  return (caseBy[value as StringifiedValue<Case>] ?? defaultComponent)();
 }
