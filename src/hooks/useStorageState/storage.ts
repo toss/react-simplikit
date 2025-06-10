@@ -97,7 +97,7 @@ function generateTestKey() {
     .join('');
 }
 
-export function generateStorage(): Storage {
+export function generateLocalStorage(): Storage {
   if (LocalStorage.canUse()) {
     return new LocalStorage();
   }
@@ -111,6 +111,6 @@ export function generateSessionStorage(): Storage {
   return new MemoStorage();
 }
 
-export const safeLocalStorage = generateStorage();
+export const safeLocalStorage = generateLocalStorage();
 
 export const safeSessionStorage = generateSessionStorage();
