@@ -5,7 +5,7 @@ import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import {
   generateSessionStorage,
-  generateStorage,
+  generateLocalStorage,
   LocalStorage,
   MemoStorage,
   safeLocalStorage,
@@ -62,7 +62,7 @@ describe('Storage', () => {
       // @ts-ignore
       delete window.localStorage;
 
-      const disabledLocalStorage = generateStorage();
+      const disabledLocalStorage = generateLocalStorage();
 
       expect(disabledLocalStorage).toBeInstanceOf(MemoStorage);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
