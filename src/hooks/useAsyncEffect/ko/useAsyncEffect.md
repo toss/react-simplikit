@@ -6,7 +6,7 @@
 
 ```ts
 function useAsyncEffect(
-  effect: () => Promise<void | (() => void)>,
+  effect: () => Promise<undefined | (() => void)>,
   deps: DependencyList
 ): void;
 ```
@@ -15,7 +15,7 @@ function useAsyncEffect(
 
 <Interface
   name="effect"
-  type="() => Promise<void | (() => void)>"
+  type="() => Promise<undefined | (() => void)>"
   description="<code>useEffect</code> 패턴으로 실행되는 비동기 함수예요. 이 함수는 선택적으로 정리(clean-up) 함수를 반환할 수 있어요."
 />
 
