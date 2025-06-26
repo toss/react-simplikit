@@ -27,8 +27,9 @@ function useMap(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
 
 ## Example
 
-````tsx
 ```tsx
+import { useMap } from 'react-simplikit';
+
 const [userMap, actions] = useMap<string, User>([
   ['user1', { name: 'John', age: 30 }]
 ]);
@@ -38,8 +39,4 @@ const user1 = userMap.get('user1');
 
 // Updating the Map
 actions.set('user2', { name: 'Jane', age: 25 });
-````
-
-```
-
 ```
