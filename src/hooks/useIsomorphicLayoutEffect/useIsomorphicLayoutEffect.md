@@ -1,6 +1,6 @@
-# useIsomorphicLayoutEffect
+# useClientLayoutEffect
 
-`useIsomorphicLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering. During SSR, there is no DOM to synchronously measure or mutate, so React warns about using `useLayoutEffect`.
+`useClientLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering. During SSR, there is no DOM to synchronously measure or mutate, so React warns about using `useLayoutEffect`.
 
 This hook runs synchronously after DOM updates but before paint, making it ideal for:
 
@@ -12,7 +12,7 @@ This hook runs synchronously after DOM updates but before paint, making it ideal
 ## Interface
 
 ```ts
-function useIsomorphicLayoutEffect(
+function useClientLayoutEffect(
   effect: React.EffectCallback,
   deps: React.DependencyList
 ): void;
@@ -40,7 +40,7 @@ This hook does not return anything.
 ## Example
 
 ```tsx
-useIsomorphicLayoutEffect(() => {
+useClientLayoutEffect(() => {
   // Code to be executed during the layout phase on the client side
 }, [dep1, dep2, ...]);
 ```

@@ -1,1 +1,1 @@
-export { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect.ts';
+export { useClientLayoutEffect } from './useClientLayoutEffect.ts';

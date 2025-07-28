@@ -1,4 +1,4 @@
-# useIsomorphicLayoutEffect
+# useClientLayoutEffect
 
 SSR 환경에서는 DOM에 대한 접근이 불가하기 때문에 useLayoutEffect 훅 사용 시 경고가 발생해요. 이 훅은 브라우저에서 SSR 경고를 트리거하지 않고 useLayoutEffect의 동작을 제공해요. DOM 업데이트 후 페인트 전에 동기적으로 실행되며, 다음과 같은 상황에서 효과적으로 사용할 수 있어요:
 
@@ -10,7 +10,7 @@ SSR 환경에서는 DOM에 대한 접근이 불가하기 때문에 useLayoutEffe
 ## 인터페이스
 
 ```ts
-function useIsomorphicLayoutEffect(
+function useClientLayoutEffect(
   effect: React.EffectCallback,
   deps: React.DependencyList
 ): void;
@@ -38,7 +38,7 @@ function useIsomorphicLayoutEffect(
 ## 예시
 
 ```tsx
-useIsomorphicLayoutEffect(() => {
+useClientLayoutEffect(() => {
   // 클라이언트 측의 레이아웃 단계에서 실행될 코드
 }, [dep1, dep2, ...]);
 ```

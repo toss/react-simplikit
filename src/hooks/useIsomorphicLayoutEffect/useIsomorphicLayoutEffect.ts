@@ -4,7 +4,7 @@ const isServer = typeof window === 'undefined';
 
 /**
  * @description
- * `useIsomorphicLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering.
+ * `useClientLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering.
  * During SSR, there is no DOM to synchronously measure or mutate, so React warns about using `useLayoutEffect`.
  *
  * This hook runs synchronously after DOM updates but before paint, making it ideal for:
@@ -18,8 +18,8 @@ const isServer = typeof window === 'undefined';
  * @param {React.DependencyList} [deps] - An optional array of dependencies.
  *
  * @example
- * useIsomorphicLayoutEffect(() => {
+ * useClientLayoutEffect(() => {
  *   // Code to be executed during the layout phase on the client side
  * }, [dep1, dep2, ...]);
  */
-export const useIsomorphicLayoutEffect = isServer ? useEffect : useLayoutEffect;
+export const useClientLayoutEffect = isServer ? useEffect : useLayoutEffect;

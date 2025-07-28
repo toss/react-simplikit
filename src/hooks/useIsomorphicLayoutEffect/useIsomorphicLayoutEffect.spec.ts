@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-describe('useIsomorphicLayoutEffect', () => {
+describe('useClientLayoutEffect', () => {
   const originalWindow = global.window;
 
   beforeEach(() => {
@@ -11,20 +11,20 @@ describe('useIsomorphicLayoutEffect', () => {
     global.window = undefined as unknown as Window & typeof globalThis;
 
     const { useEffect, useLayoutEffect } = await import('react');
-    const { useIsomorphicLayoutEffect } = await import('./useIsomorphicLayoutEffect.ts');
+    const { useClientLayoutEffect } = await import('./useClientLayoutEffect.ts');
 
-    expect(useIsomorphicLayoutEffect).toBe(useEffect);
-    expect(useIsomorphicLayoutEffect).not.toBe(useLayoutEffect);
+    expect(useClientLayoutEffect).toBe(useEffect);
+    expect(useClientLayoutEffect).not.toBe(useLayoutEffect);
   });
 
   it('should use useLayoutEffect on client side', async () => {
     global.window = originalWindow;
 
     const { useEffect, useLayoutEffect } = await import('react');
-    const { useIsomorphicLayoutEffect } = await import('./useIsomorphicLayoutEffect.ts');
+    const { useClientLayoutEffect } = await import('./useClientLayoutEffect.ts');
 
-    expect(useIsomorphicLayoutEffect).toBe(useLayoutEffect);
-    expect(useIsomorphicLayoutEffect).not.toBe(useEffect);
+    expect(useClientLayoutEffect).toBe(useLayoutEffect);
+    expect(useClientLayoutEffect).not.toBe(useEffect);
   });
 
   afterEach(() => {
