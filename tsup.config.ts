@@ -1,6 +1,9 @@
 import { defineConfig } from 'tsup';
 
 const defaultConfig = {
+  banner: {
+    js: '"use client";',
+  },
   entry: ['**/index.ts'],
   splitting: false,
   clean: true,
