@@ -126,7 +126,6 @@ function useLongPress<E extends HTMLElement>(
   ]"
 />
 
-
 ## Example
 
 ```tsx
