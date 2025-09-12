@@ -18,7 +18,7 @@ function useDebouncedCallback(options: Object): Function;
   :nested="[
     {
       name: 'options.onChange',
-      type: 'Function',
+      type: '(newValue: T) => void',
       required: true,
       description: 'The callback function to debounce.',
     },

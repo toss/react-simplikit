@@ -18,7 +18,7 @@ function useDebouncedCallback(options: Object): Function;
   :nested="[
     {
       name: 'options.onChange',
-      type: 'Function',
+      type: '(newValue: T) => void',
       required: true,
       description: '디바운스할 콜백 함수예요.',
     },
