@@ -140,6 +140,6 @@ describe('useImpressionRef', () => {
     act(() => document.dispatchEvent(new Event('visibilitychange')));
 
     expect(mockOnImpressionStart).not.toHaveBeenCalled();
-    expect(mockOnImpressionEnd).toHaveBeenCalledOnce();
+    expect(mockOnImpressionEnd).not.toHaveBeenCalled();
   });
 });
