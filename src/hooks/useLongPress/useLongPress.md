@@ -79,49 +79,49 @@ function useLongPress<E extends HTMLElement>(
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        'Event handler for mouse down events.'
+        'Event handler for mouse down events.',
     },
     {
       name: 'onMouseUp',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        'Event handler for mouse up events.'
+        'Event handler for mouse up events.',
     },
     {
       name: 'onMouseLeave',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        'Event handler for mouse leave events.'
+        'Event handler for mouse leave events.',
     },
     {
       name: 'onTouchStart',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        'Event handler for touch start events.'
+        'Event handler for touch start events.',
     },
     {
       name: 'onTouchEnd',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        'Event handler for touch end events.'
+        'Event handler for touch end events.',
     },
     {
       name: 'onMouseMove',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        'Event handler for mouse move events. Included if <code>moveThreshold</code> is provided.'
+        'Event handler for mouse move events. Included if <code>moveThreshold</code> is provided.',
     },
     {
       name: 'onTouchMove',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        'Event handler for touch move events. Included if <code>moveThreshold</code> is provided.'
+        'Event handler for touch move events. Included if <code>moveThreshold</code> is provided.',
     }
   ]"
 />
