@@ -44,10 +44,6 @@ function AutoCompleteInput() {
   }, []);
 
   useEffect(() => {
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-
     if (query.trim().length === 0) {
       setResults([]);
       return;
@@ -145,7 +141,7 @@ function AutoCompleteInput() {
   }, 300);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  useOutsideClickEffect(containerRef.current, () => closeSearchBox());
+  useOutsideClickEffect(containerRef.current, closeSearchBox);
 
   return (
     <div ref={containerRef} className="relative">
@@ -166,7 +162,7 @@ function AutoCompleteInput() {
           LOADING: () => <div>검색 중...</div>,
           EMPTY: () => <div>검색 결과가 없습니다.</div>,
           RESULT_EXISTS: () => (
-            <Separated with={<Divider />}>
+            <Separated by={<Divider />}>
               {results.map(result => (
                 <Fragment key={result.id}>
                   <div
