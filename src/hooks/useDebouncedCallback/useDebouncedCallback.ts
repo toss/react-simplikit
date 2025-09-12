@@ -30,17 +30,20 @@ type DebounceOptions = {
  *   return <input type="text" onChange={(e) => debouncedSetQuery(e.target.value)} />;
  * }
  */
-export function useDebouncedCallback({
+export function useDebouncedCallback<T>({
   onChange,
   timeThreshold,
   leading = false,
   trailing = true,
 }: DebounceOptions & {
-  onChange: (newValue: boolean) => void;
+  onChange: (newValue: T) => void;
   timeThreshold: number;
 }) {
   const handleChange = usePreservedCallback(onChange);
-  const ref = useRef({ value: false, clearPreviousDebounce: () => {} });
+  const ref = useRef<{ value: T | null; clearPreviousDebounce: () => void }>({
+    value: null,
+    clearPreviousDebounce: () => {},
+  });
 
   useEffect(() => {
     const current = ref.current;
@@ -63,7 +66,7 @@ export function useDebouncedCallback({
   }, [leading, trailing]);
 
   return useCallback(
-    (nextValue: boolean) => {
+    (nextValue: T) => {
       if (nextValue === ref.current.value) {
         return;
       }
