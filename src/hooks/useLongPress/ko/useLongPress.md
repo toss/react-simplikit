@@ -79,8 +79,45 @@ function useLongPress<E extends HTMLElement>(
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        '마우스 다운 이벤트에 대한 이벤트 핸들러예요. - onMouseUp <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - 마우스 업 이벤트에 대한 이벤트 핸들러예요. - onMouseLeave <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - 마우스 리브 이벤트에 대한 이벤트 핸들러예요. - onTouchStart <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - 터치 시작 이벤트에 대한 이벤트 핸들러예요. - onTouchEnd <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - 터치 종료 이벤트에 대한 이벤트 핸들러예요. - onMouseMove <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - 마우스 이동 이벤트에 대한 이벤트 핸들러예요. 만약 <code>moveThreshold</code>가 제공되면 포함돼요. - onTouchMove <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - 터치 이동 이벤트에 대한 이벤트 핸들러예요. 만약 <code>moveThreshold</code>가 제공되면 포함돼요.',
+        '마우스 다운 이벤트에 대한 이벤트 핸들러예요.',
     },
+     {
+      name: 'onMouseUp',
+      type: '(event : MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description:
+        '마우스 업 이벤트에 대한 이벤트 핸들러예요.',
+    },
+        {
+      name: 'onMouseLeave',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: '마우스 리브 이벤트에 대한 이벤트 핸들러예요.'
+    },
+    {
+      name: 'onTouchStart',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: '터치 시작 이벤트에 대한 이벤트 핸들러예요.'
+    },
+    {
+      name: 'onTouchEnd',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: '터치 종료 이벤트에 대한 이벤트 핸들러예요.'
+    },
+    {
+      name: 'onMouseMove',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: '마우스 이동 이벤트에 대한 이벤트 핸들러예요. 만약 <code>moveThreshold</code>가 제공되면 포함돼요.'
+    },
+    {
+      name: 'onTouchMove',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: '터치 이동 이벤트에 대한 이벤트 핸들러예요. 만약 <code>moveThreshold</code>가 제공되면 포함돼요.'
+    }
   ]"
 />
 
