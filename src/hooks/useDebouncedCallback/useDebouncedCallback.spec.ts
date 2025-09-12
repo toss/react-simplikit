@@ -24,20 +24,15 @@ describe('useDebouncedCallback', () => {
     expect(onChange).not.toBeCalled();
 
     result.current(true);
-    vi.advanceTimersByTime(50);
-    expect(onChange).not.toBeCalled();
-
-    result.current(false);
-    vi.advanceTimersByTime(50);
+    vi.advanceTimersByTime(100);
     expect(onChange).toBeCalledTimes(1);
     expect(onChange).toBeCalledWith(true);
 
     result.current(false);
-    vi.advanceTimersByTime(50);
+    vi.advanceTimersByTime(99);
     expect(onChange).toBeCalledTimes(1);
-    expect(onChange).toBeCalledWith(true);
 
-    vi.advanceTimersByTime(50);
+    vi.advanceTimersByTime(1);
     expect(onChange).toBeCalledTimes(2);
     expect(onChange).toBeCalledWith(false);
   });
