@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useStorageState(
+function useStorageState<T>(
   key: string,
   options: Object
 ): readonly [
@@ -45,13 +45,13 @@ function useStorageState(
     },
     {
       name: 'options.serializer',
-      type: 'Function',
+      type: '(value: Serializable<T>) => string',
       required: false,
       description: '상태 값을 문자열로 직렬화하는 함수예요.',
     },
     {
       name: 'options.deserializer',
-      type: 'Function',
+      type: '(value: string) => Serializable<T>',
       required: false,
       description: '상태 값을 문자열에서 역직렬화하는 함수예요.',
     },

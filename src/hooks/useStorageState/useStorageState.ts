@@ -70,8 +70,8 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
  * @param {Object} [options] - Configuration options for storage behavior.
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
  * @param {T} [options.defaultValue] - The initial value if no existing value is found.
- * @param {Function} [options.serializer] - A function to serialize the state value to a string.
- * @param {Function} [options.deserializer] - A function to deserialize the state value from a string.
+ * @param {(value: Serializable<T>) => string} [options.serializer] - A function to serialize the state value to a string.
+ * @param {(value: string) => Serializable<T>} [options.deserializer] - A function to deserialize the state value from a string.
  *
  * @returns {readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]} A tuple:
  * - state `Serializable<T> | undefined` - The current state value retrieved from storage;

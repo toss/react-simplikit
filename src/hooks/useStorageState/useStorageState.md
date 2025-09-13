@@ -45,13 +45,13 @@ function useStorageState(
     },
     {
       name: 'options.serializer',
-      type: 'Function',
+      type: '(value: Serializable<T>) => string',
       required: false,
       description: 'A function to serialize the state value to a string.',
     },
     {
       name: 'options.deserializer',
-      type: 'Function',
+      type: '(value: string) => Serializable<T>',
       required: false,
       description: 'A function to deserialize the state value from a string.',
     },
