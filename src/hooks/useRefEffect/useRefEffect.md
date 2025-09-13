@@ -5,10 +5,10 @@
 ## Interface
 
 ```ts
-function useRefEffect(
-  callback: (element: Element) => CleanupCallback | void,
+function useRefEffect<E extends HTMLElement>(
+  callback: (element: E) => CleanupCallback | void,
   deps: DependencyList
-): (element: Element | null) => void;
+): (element: E | null) => void;
 ```
 
 ### Parameters
@@ -16,7 +16,7 @@ function useRefEffect(
 <Interface
   required
   name="callback"
-  type="(element: Element) => CleanupCallback | void"
+  type="(element: E) => CleanupCallback | void"
   description="A callback function that is executed when the element is set. This function can return a cleanup function."
 />
 
@@ -31,7 +31,7 @@ function useRefEffect(
 
 <Interface
   name=""
-  type="(element: Element | null) => void"
+  type="(element: E | null) => void"
   description="function to set the element. Pass this function to the <code>ref</code> attribute, and the <code>callback</code> will be called whenever the element changes."
 />
 
