@@ -52,7 +52,7 @@ function useDebouncedCallback(options: Object): Function;
 
 <Interface
   name=""
-  type="Function"
+  type="(newValue: T) => void"
   description="콜백 호출을 지연시키는 디바운스된 함수예요."
 />
 

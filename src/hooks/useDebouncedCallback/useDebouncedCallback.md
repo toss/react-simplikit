@@ -52,7 +52,7 @@ function useDebouncedCallback(options: Object): Function;
 
 <Interface
   name=""
-  type="Function"
+  type="(newValue: T) => void"
   description="debounced function that delays invoking the callback."
 />
 

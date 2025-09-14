@@ -16,12 +16,12 @@ type DebounceOptions = {
  * Note that if both 'leading' and 'trailing' are set, the function will be called at both the start and end of the delay period. However, it must be called at least twice within debounceMs interval for this to happen, since one debounced function call cannot trigger the function twice.
  *
  * @param {Object} options - The options object.
- * @param {Function} options.onChange - The callback function to debounce.
+ * @param {(newValue: T) => void} options.onChange - The callback function to debounce.
  * @param {number} options.timeThreshold - The number of milliseconds to delay the function execution.
  * @param {boolean} [options.leading=false] - If `true`, the function is called at the start of the sequence.
  * @param {boolean} [options.trailing=true] - If `true`, the function is called at the end of the sequence.
  *
- * @returns {Function} A debounced function that delays invoking the callback.
+ * @returns {(newValue: T) => void} A debounced function that delays invoking the callback.
  *
  * @example
  * function SearchInput() {
