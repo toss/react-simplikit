@@ -31,7 +31,7 @@ function useVisibilityEvent(
       required: false,
       defaultValue: 'false',
       description:
-        'If true, the callback is invoked immediately upon mounting with the current visibility state.',
+        'If true, the callback is invoked immediately upon mounting with the current visibility state. <br />: The initial value is <code>false</code>.',
     },
   ]"
 />

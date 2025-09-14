@@ -31,7 +31,7 @@ function useVisibilityEvent(
       required: false,
       defaultValue: 'false',
       description:
-        'true이면, 현재 가시성 상태로 마운트 시에 즉시 콜백이 호출돼요.',
+        'true이면, 현재 가시성 상태로 마운트 시에 즉시 콜백이 호출돼요. <br />: 초기값은 <code>false</code>이에요.',
     },
   ]"
 />
