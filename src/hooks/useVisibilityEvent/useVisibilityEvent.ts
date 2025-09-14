@@ -1,4 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
+
+import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 type Options = {
   immediate?: boolean;
@@ -27,9 +29,7 @@ type Options = {
  */
 
 export function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') => void, options: Options = {}) {
-  const handleVisibilityChange = useCallback(() => {
-    callback(document.visibilityState);
-  }, [callback]);
+  const handleVisibilityChange = usePreservedCallback(() => callback(document.visibilityState));
 
   useEffect(() => {
     if (options?.immediate ?? false) {
