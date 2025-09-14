@@ -20,21 +20,26 @@ describe('useDebouncedCallback', () => {
     const onChange = vi.fn();
     const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
 
-    result.current(true);
+    result.current('hi');
     expect(onChange).not.toBeCalled();
 
-    result.current(true);
-    vi.advanceTimersByTime(100);
-    expect(onChange).toBeCalledTimes(1);
-    expect(onChange).toBeCalledWith(true);
+    result.current('hi');
+    vi.advanceTimersByTime(50);
+    expect(onChange).not.toBeCalled();
 
-    result.current(false);
-    vi.advanceTimersByTime(99);
+    result.current(null);
+    vi.advanceTimersByTime(50);
     expect(onChange).toBeCalledTimes(1);
+    expect(onChange).toBeCalledWith('hi');
 
-    vi.advanceTimersByTime(1);
+    result.current(null);
+    vi.advanceTimersByTime(50);
+    expect(onChange).toBeCalledTimes(1);
+    expect(onChange).toBeCalledWith('hi');
+
+    vi.advanceTimersByTime(50);
     expect(onChange).toBeCalledTimes(2);
-    expect(onChange).toBeCalledWith(false);
+    expect(onChange).toBeCalledWith(null);
   });
 
   it('should handle leading edge', () => {
