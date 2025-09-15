@@ -33,7 +33,7 @@ export function buildContext<ContextValuesType extends object>(
   contextName: string,
   defaultContextValues?: ContextValuesType
 ) {
-  const Context = createContext<ContextValuesType | undefined>(defaultContextValues ?? undefined);
+  const Context = createContext<ContextValuesType | null>(defaultContextValues ?? null);
 
   function Provider({ children, ...contextValues }: ProviderProps<ContextValuesType>) {
     const value = useMemo(
@@ -48,11 +48,11 @@ export function buildContext<ContextValuesType extends object>(
   function useInnerContext() {
     const context = useContext(Context);
 
-    if (context != null) {
+    if (context !== null) {
       return context;
     }
 
-    if (defaultContextValues != null) {
+    if (defaultContextValues !== undefined) {
       return defaultContextValues;
     }
 
