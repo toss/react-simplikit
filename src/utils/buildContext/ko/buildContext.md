@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function buildContext(
+function buildContext<ContextValuesType extends object>(
   contextName: string,
   defaultContextValues: ContextValuesType
 ): [
@@ -54,7 +54,7 @@ function buildContext(
 ```tsx
 const [Provider, useContext] = buildContext<{ title: string }>(
   'TestContext',
-  null
+  { title: "" },
 );
 
 function Inner() {
