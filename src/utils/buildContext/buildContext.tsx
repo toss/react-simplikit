@@ -45,6 +45,8 @@ export function buildContext<ContextValuesType extends object>(
     return <Context.Provider value={value}>{children}</Context.Provider>;
   }
 
+  Object.assign(Provider, { displayName: `${contextName}Provider` });
+
   function useInnerContext() {
     const context = useContext(Context);
 
