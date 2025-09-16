@@ -6,7 +6,7 @@
 
 ```ts
 function mergeRefs<T>(
-  ...refs: Array<RefObject<T> | RefCallback<T> | null | undefined>
+  ...refs: Array<Ref<T> | undefined>
 ): RefCallback<T>;
 ```
 
@@ -15,7 +15,7 @@ function mergeRefs<T>(
 <Interface
   required
   name="refs"
-  type="Array<RefObject<T> | RefCallback<T> | null | undefined>"
+  type="Array<Ref<T> | undefined>"
   description="합쳐질 refs의 배열이에요. 각 ref는 RefObject 또는 RefCallback 중 하나일 수 있어요."
 />
 
