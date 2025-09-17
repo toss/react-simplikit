@@ -48,7 +48,7 @@ function assignRef<T>(ref: StrictRef<T>, value: T | null): RefCleanup<T> {
 
 export function mergeRefs<T>(...refs: Array<Ref<T> | undefined>): RefCallback<T> {
   const availableRefs = refs.filter(ref => ref != null);
-  const cleanupMap = new Map<Ref<T>, Exclude<RefCleanup<T>, void>>();
+  const cleanupMap = new Map<StrictRef<T>, Exclude<RefCleanup<T>, void>>();
 
   return value => {
     for (const ref of availableRefs) {
