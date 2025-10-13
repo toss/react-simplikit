@@ -25,3 +25,5 @@ coverage
 .vitepress/dist
 
 .env
+
+.DS_Store
