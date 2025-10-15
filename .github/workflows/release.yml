@@ -66,14 +66,14 @@ jobs:
         run: yarn version patch
 
       - name: Publish package
-        run: yarn npm publish
+        run: yarn npm publish --provenance --access public
         env:
           NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Set git username with email
         run: |
-          git config user.name "seungrodotlee"
-          git config user.email "seungrodotlee@gmail.com"
+          git config user.name "김윤호 yunho"
+          git config user.email "kimyouknow9@gmail.com"
 
       - name: Tag version
         run: |
