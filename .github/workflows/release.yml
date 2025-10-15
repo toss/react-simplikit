@@ -32,13 +32,13 @@ jobs:
               - 'src/**/*.ts'
               - 'src/**/*.tsx'
               - 'tsup.config.ts'
+              - '.github/workflows/release.yml'
 
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: write
-      pull-requests: write
+      id-token: write
     needs: check-changes
     if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
