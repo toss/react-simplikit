@@ -32,7 +32,7 @@ jobs:
               - 'src/**/*.ts'
               - 'src/**/*.tsx'
               - 'tsup.config.ts'
-              - '.github/workflows/release.yml'
+              - 'package.json'
 
   release:
     runs-on: ubuntu-latest
