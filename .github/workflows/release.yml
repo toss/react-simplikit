@@ -34,7 +34,7 @@ jobs:
               - 'tsup.config.ts'
               - '.github/workflows/release.yml'
 
-  deploy:
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
