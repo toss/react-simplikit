@@ -3,7 +3,7 @@ name: Other Issue
 about: Create a report for issues that don't fit the above templates
 title: ''
 labels: 'question'
-assignees: 'seungrodotlee, pumpkiinbell, choi2021'
+assignees: 'kimyouknow, pumpkiinbell, choi2021'
 ---
 
 **Describe the issue**

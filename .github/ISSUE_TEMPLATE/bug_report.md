@@ -3,7 +3,7 @@ name: Bug Report
 about: Help us improve react-simplikit by reporting a bug
 title: '[BUG] '
 labels: 'bug'
-assignees: 'seungrodotlee, pumpkiinbell, choi2021'
+assignees: 'kimyouknow, pumpkiinbell, choi2021'
 ---
 
 **Describe the bug**
