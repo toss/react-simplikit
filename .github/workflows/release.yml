@@ -1,4 +1,4 @@
-name: Deployment
+name: Release
 
 on:
   push:
@@ -35,6 +35,10 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
     needs: check-changes
     if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:

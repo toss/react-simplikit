@@ -275,9 +275,9 @@ All `react-simplikit` implementations use special rendering functions to verify 
 
 :::
 
-### Deployment
+### Release
 
-When changes are merged into the `main` branch, deployment happens automatically. You can view the deployment results in [GitHub Actions](https://github.com/toss/react-simplikit/actions).
+When changes are merged into the `main` branch, release happens automatically. You can view the release results in [GitHub Actions](https://github.com/toss/react-simplikit/actions).
 
 ## Documentation Contribution
 
