@@ -44,8 +44,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.TOSS_REACTIVE_KIT_GITHUB_ACCESS_TOKEN }}
 
       - name: Enable Corepack
         run: corepack enable
@@ -147,5 +145,5 @@ jobs:
           title: 'docs(${{ needs.get-diffs.outputs.result }}): auto-generated docs'
           body: 'This PR includes documentation updates for: ${{ needs.get-diffs.outputs.result }}'
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          reviewers: kimyouknow,pumpkiinbell,choi2021
+          reviewers: kimyouknow
           commit-message: 'Generate docs for ${{ needs.get-diffs.outputs.result }}'
