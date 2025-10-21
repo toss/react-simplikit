@@ -288,6 +288,7 @@ yarn changeset
 ```
 
 2. Select the type of change:
+
    - `patch`: Bug fixes or minor changes
    - `minor`: New features (maintaining backward compatibility)
    - `major`: Breaking changes (breaking backward compatibility)
