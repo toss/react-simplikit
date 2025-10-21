@@ -6,98 +6,52 @@ on:
       - main
 
 jobs:
-  check-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.filter.outputs.changed }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Check for changes in .ts and .tsx files
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            changed:
-              - 'src/**/*.ts'
-              - 'src/**/*.tsx'
-              - 'tsup.config.ts'
-              - 'package.json'
-
   release:
+    if: github.repository == 'toss/react-simplikit'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       id-token: write
-    needs: check-changes
-    if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v5
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
-      - name: Update npm
-        run: npm install -g npm@11.5.1
-
-      - name: Install dependencies
+      - name: Install Dependencies
         run: yarn install
 
-      - name: Bump version
-        run: yarn version patch
+      - name: Build
+        run: yarn prepack
 
-      - name: Publish package
-        run: yarn npm publish --provenance --access public
+      - name: Type Check
+        run: yarn test:type
+
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@v1
+        with:
+          title: 'chore: version packages'
+          commit: 'chore: version packages'
+          version: yarn changeset:version
+          publish: yarn changeset:publish
         env:
-          NODE_OPTIONS: --max-old-space-size=8192
-
-      - name: Set git username with email
-        run: |
-          git config user.name "김윤호 yunho"
-          git config user.email "kimyouknow9@gmail.com"
-
-      - name: Tag version
-        run: |
-          VERSION=$(jq -r '.version' package.json)
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          git tag -a "v$VERSION" -m "$COMMIT_MESSAGE"
-
-      - name: Commit version bump
-        run: |
-          VERSION=$(jq -r '.version' package.json)
-          git add package.json
-          git commit -m "chore: bump version to $VERSION"
-
-      - name: Push changes and tags
-        run: |
-          git push -u origin HEAD --follow-tags --force
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
 
   get-diffs:
     runs-on: ubuntu-latest
-    needs: check-changes
-    if: ${{ needs.check-changes.outputs.changed == 'true' }}
     outputs:
       result: ${{ steps.diffs.outputs.result }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -116,13 +70,13 @@ jobs:
     if: ${{ needs.get-diffs.outputs.result != '' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
