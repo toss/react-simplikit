@@ -269,9 +269,40 @@ yarn test:coverage
 
   :::
 
+### Changeset 작성
+
+코드 변경 사항이 패키지에 영향을 미치는 경우 changeset을 작성해야 해요. Changeset은 버전 관리와 changelog 생성을 자동화하는 도구예요.
+
+#### Changeset 생성 방법
+
+1. 변경 사항을 구현한 후, 다음 명령어를 실행하세요:
+
+```bash
+yarn changeset
+```
+
+2. 변경 유형을 선택하세요:
+   - `patch`: 버그 수정이나 작은 변경사항
+   - `minor`: 새로운 기능 추가 (하위 호환성 유지)
+   - `major`: 주요 변경사항 (하위 호환성 깨짐)
+
+3. 변경 사항에 대한 간단한 설명을 작성하세요.
+
+4. 생성된 changeset 파일을 PR에 포함하여 커밋하세요.
+
+::: tip
+Changeset 파일은 `.changeset` 폴더에 생성되며, 이 파일은 PR과 함께 커밋되어야 해요. PR이 병합되면 자동으로 버전이 업데이트되고 changelog가 생성돼요.
+:::
+
 ### 배포
 
-`main` 브랜치에 병합되면 자동으로 배포가 진행돼요. 배포 결과는 [GitHub Actions](https://github.com/toss/react-simplikit/actions)에서 확인할 수 있어요.
+`main` 브랜치에 병합되면 자동으로 배포가 진행돼요. 배포 과정은 다음과 같아요:
+
+1. PR이 `main` 브랜치에 병합되면 GitHub Actions가 실행돼요.
+2. Changeset이 있는 경우, 버전 업데이트 PR이 자동으로 생성돼요.
+3. 버전 업데이트 PR이 병합되면 새로운 버전이 npm에 배포돼요.
+
+배포 결과는 [GitHub Actions](https://github.com/toss/react-simplikit/actions)에서 확인할 수 있어요.
 
 ## 문서 기여
 

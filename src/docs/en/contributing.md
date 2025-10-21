@@ -275,9 +275,40 @@ All `react-simplikit` implementations use special rendering functions to verify 
 
 :::
 
+### Creating a Changeset
+
+When your code changes affect the package, you need to create a changeset. Changesets are a tool that automates version management and changelog generation.
+
+#### How to Create a Changeset
+
+1. After implementing your changes, run the following command:
+
+```bash
+yarn changeset
+```
+
+2. Select the type of change:
+   - `patch`: Bug fixes or minor changes
+   - `minor`: New features (maintaining backward compatibility)
+   - `major`: Breaking changes (breaking backward compatibility)
+
+3. Write a brief summary of your changes.
+
+4. Commit the generated changeset file with your PR.
+
+::: tip
+Changeset files are created in the `.changeset` folder and must be committed with your PR. When the PR is merged, the version will be automatically updated and a changelog will be generated.
+:::
+
 ### Release
 
-When changes are merged into the `main` branch, release happens automatically. You can view the release results in [GitHub Actions](https://github.com/toss/react-simplikit/actions).
+When changes are merged into the `main` branch, the release process happens automatically:
+
+1. When a PR is merged into the `main` branch, GitHub Actions will run.
+2. If there are changesets, a version update PR will be automatically created.
+3. When the version update PR is merged, the new version will be published to npm.
+
+You can view the release results in [GitHub Actions](https://github.com/toss/react-simplikit/actions).
 
 ## Documentation Contribution
 
