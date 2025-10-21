@@ -28,6 +28,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@changesets/changelog-github", "npm:0.5.1"],\
           ["@changesets/cli", "npm:2.29.7"],\
           ["@eslint/js", "npm:9.24.0"],\
           ["@testing-library/dom", "npm:10.4.0"],\
@@ -535,6 +536,18 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@changesets/changelog-github", [\
+      ["npm:0.5.1", {\
+        "packageLocation": "./.yarn/cache/@changesets-changelog-github-npm-0.5.1-ffa78a3948-0ce02d3d7d.zip/node_modules/@changesets/changelog-github/",\
+        "packageDependencies": [\
+          ["@changesets/changelog-github", "npm:0.5.1"],\
+          ["@changesets/get-github-info", "npm:0.6.0"],\
+          ["@changesets/types", "npm:6.1.0"],\
+          ["dotenv", "npm:8.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@changesets/cli", [\
       ["npm:2.29.7", {\
         "packageLocation": "./.yarn/cache/@changesets-cli-npm-2.29.7-d06a80abdb-a868fd39ac.zip/node_modules/@changesets/cli/",\
@@ -607,6 +620,17 @@ const RAW_RUNTIME_STATE =
           ["@manypkg/get-packages", "npm:1.1.3"],\
           ["picocolors", "npm:1.1.1"],\
           ["semver", "npm:7.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@changesets/get-github-info", [\
+      ["npm:0.6.0", {\
+        "packageLocation": "./.yarn/cache/@changesets-get-github-info-npm-0.6.0-6c129e4581-21fde8a8cb.zip/node_modules/@changesets/get-github-info/",\
+        "packageDependencies": [\
+          ["@changesets/get-github-info", "npm:0.6.0"],\
+          ["dataloader", "npm:1.4.0"],\
+          ["node-fetch", "virtual:6c129e45814a3432fa3c05e870d274f2f753f3f4633ff943a2fbc215c4d7f321a72fbaf14ccf59b94633ad16c808307452f6b51b361bdaf5c08d9870df597c13#npm:2.7.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3891,6 +3915,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["dataloader", [\
+      ["npm:1.4.0", {\
+        "packageLocation": "./.yarn/cache/dataloader-npm-1.4.0-ba03bd2183-5fa4c843b9.zip/node_modules/dataloader/",\
+        "packageDependencies": [\
+          ["dataloader", "npm:1.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["debug", [\
       ["npm:3.2.7", {\
         "packageLocation": "./.yarn/cache/debug-npm-3.2.7-754e818c7a-37d96ae42c.zip/node_modules/debug/",\
@@ -4064,6 +4097,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/dotenv-npm-16.5.0-67343a179e-5bc94c919f.zip/node_modules/dotenv/",\
         "packageDependencies": [\
           ["dotenv", "npm:16.5.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:8.6.0", {\
+        "packageLocation": "./.yarn/cache/dotenv-npm-8.6.0-2ce3e9f7bb-6750431dea.zip/node_modules/dotenv/",\
+        "packageDependencies": [\
+          ["dotenv", "npm:8.6.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6847,12 +6887,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:27b0c3408940ce2d12443bd72b5a1767ec4c2ee12b670853957710ccd5524d678ecbcfa3e59b7df6164d145a63d820149421a166fe3250d31140fde1b7991846#npm:2.7.0", {\
-        "packageLocation": "./.yarn/__virtual__/node-fetch-virtual-a6bb72b56b/0/cache/node-fetch-npm-2.7.0-587d57004e-b55786b602.zip/node_modules/node-fetch/",\
+      ["virtual:6c129e45814a3432fa3c05e870d274f2f753f3f4633ff943a2fbc215c4d7f321a72fbaf14ccf59b94633ad16c808307452f6b51b361bdaf5c08d9870df597c13#npm:2.7.0", {\
+        "packageLocation": "./.yarn/__virtual__/node-fetch-virtual-a223233efc/0/cache/node-fetch-npm-2.7.0-587d57004e-b55786b602.zip/node_modules/node-fetch/",\
         "packageDependencies": [\
           ["@types/encoding", null],\
           ["encoding", null],\
-          ["node-fetch", "virtual:27b0c3408940ce2d12443bd72b5a1767ec4c2ee12b670853957710ccd5524d678ecbcfa3e59b7df6164d145a63d820149421a166fe3250d31140fde1b7991846#npm:2.7.0"],\
+          ["node-fetch", "virtual:6c129e45814a3432fa3c05e870d274f2f753f3f4633ff943a2fbc215c4d7f321a72fbaf14ccf59b94633ad16c808307452f6b51b361bdaf5c08d9870df597c13#npm:2.7.0"],\
           ["whatwg-url", "npm:5.0.0"]\
         ],\
         "packagePeers": [\
@@ -7034,7 +7074,7 @@ const RAW_RUNTIME_STATE =
           ["agentkeepalive", "npm:4.6.0"],\
           ["form-data-encoder", "npm:1.7.2"],\
           ["formdata-node", "npm:4.4.1"],\
-          ["node-fetch", "virtual:27b0c3408940ce2d12443bd72b5a1767ec4c2ee12b670853957710ccd5524d678ecbcfa3e59b7df6164d145a63d820149421a166fe3250d31140fde1b7991846#npm:2.7.0"],\
+          ["node-fetch", "virtual:6c129e45814a3432fa3c05e870d274f2f753f3f4633ff943a2fbc215c4d7f321a72fbaf14ccf59b94633ad16c808307452f6b51b361bdaf5c08d9870df597c13#npm:2.7.0"],\
           ["openai", "virtual:58f1f645458156471f2dd4bfe69f887061e36f232f989d41ce7ee0c9c6542f794a4662e41944ab04718e40cc5d7284a0aa8cb5039289908ecfcadbccf753070f#npm:4.93.0"],\
           ["ws", null],\
           ["zod", null]\
@@ -7593,6 +7633,7 @@ const RAW_RUNTIME_STATE =
       ["workspace:.", {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@changesets/changelog-github", "npm:0.5.1"],\
           ["@changesets/cli", "npm:2.29.7"],\
           ["@eslint/js", "npm:9.24.0"],\
           ["@testing-library/dom", "npm:10.4.0"],\
