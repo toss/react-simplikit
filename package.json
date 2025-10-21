@@ -21,6 +21,9 @@
   "scripts": {
     "clean": "rimraf ./dist ./esm ./coverage ./node_modules",
     "scaffold": "tsx .scripts/index.ts scaffold",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
     "docs:gen": "tsx .scripts/index.ts generate-docs",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
