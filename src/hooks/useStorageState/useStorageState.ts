@@ -4,8 +4,12 @@ import { SetStateAction, useCallback, useRef, useSyncExternalStore } from 'react
 import { safeLocalStorage, Storage } from './storage.ts';
 
 type ToObject<T> = T extends unknown[] | Record<string, unknown> ? T : never;
+type ToClosedObject<T> = { [K in keyof T]: T[K] };
+type NotFunction<T> = T extends (...args: unknown[]) => unknown ? never : T;
 
-export type Serializable<T> = T extends string | number | boolean ? T : ToObject<T>;
+export type Serializable<T> = T extends string | number | boolean
+  ? T
+  : ToObject<T> | (ToClosedObject<T> & NotFunction<T>);
 
 type StorageStateOptions<T> = {
   storage?: Storage;
