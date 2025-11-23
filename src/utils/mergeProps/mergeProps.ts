@@ -47,9 +47,10 @@ function pushProp(prev: BaseProps, curr: BaseProps): BaseProps {
 
         if (mergedFunction) {
           prev[key] = mergedFunction;
-        } else if (curr[key] !== undefined) {
-          prev[key] = curr[key];
+          break;
         }
+
+        prev[key] = curr[key];
       }
     }
   }
@@ -57,7 +58,6 @@ function pushProp(prev: BaseProps, curr: BaseProps): BaseProps {
 }
 
 function mergeStyle(a?: CSSProperties, b?: CSSProperties): CSSProperties | undefined {
-  if (a == null) return b;
   return { ...a, ...b };
 }
 
