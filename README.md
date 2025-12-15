@@ -10,6 +10,46 @@ English | [Korean](./README-ko_kr.md)
 - `react-simplikit` guarantees reliability with 100% test coverage.
 - `react-simplikit` offers JSDoc comments, detailed documentation, and examples to ensure any developer can easily use it.
 
+## Library Direction
+
+**react-simplikit is now maintained as a Universal Hook Library providing only pure state/logic hooks.**
+
+We are repositioning react-simplikit to focus exclusively on **platform-independent hooks** that work seamlessly across web and mobile (React Native, etc.).
+
+### What's Maintained: Pure State/Logic Hooks
+
+Hooks that don't depend on specific platform APIs will continue to be actively maintained:
+
+- State management hooks like `useToggle`, `useBooleanState`, `useCounter`
+- Lifecycle hooks like `usePrevious`, `useMount`
+- Utility hooks like `useDebounce`, `useThrottle`
+- **Backward compatibility (BC) is preserved** for these existing pure logic hooks
+
+### What's Deprecated: Browser/Platform-Dependent Hooks
+
+The following hooks that strongly depend on browser-specific APIs are now deprecated:
+
+- `useGeolocation` - depends on `navigator.geolocation`
+- `useStorageState` - depends on `localStorage`/`sessionStorage`
+- `useIntersectionObserver` - depends on `IntersectionObserver` API
+- `useImpressionRef` - depends on `IntersectionObserver` + Visibility API
+- `useDoubleClick`, `useLongPress` - depend on DOM events + `window.setTimeout`
+- `useOutsideClickEffect` - depends on DOM events + `document`
+- `useVisibilityEvent` - depends on `document.visibilityState`
+
+These hooks:
+
+- Will not receive new features or major enhancements
+- Are marked as `@deprecated` in documentation
+- May be removed in future major versions
+
+### Package Status
+
+- react-simplikit will **not be archived**
+- Pure state/logic hooks will continue to be maintained
+- Critical bug fixes and minimal maintenance will continue
+- No new browser/platform-dependent hooks will be added
+
 ## Example
 
 ```tsx
