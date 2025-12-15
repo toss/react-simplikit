@@ -9,6 +9,10 @@ type UseDoubleClickProps<E extends HTMLElement> = {
 };
 
 /**
+ * @deprecated This hook is deprecated as it depends on browser-specific APIs (DOM events, window.setTimeout).
+ * react-simplikit is now focused on platform-independent, pure state/logic hooks.
+ * This hook will be removed in a future major version.
+ *
  * @description
  * `useDoubleClick` is a React hook that differentiates between single and double click events.
  * It delays the single click callback execution for a specified time, and cancels it if a second click (i.e. a double click) occurs within that time.

@@ -5,6 +5,10 @@ type Options = {
 };
 
 /**
+ * @deprecated This hook is deprecated as it depends on browser-specific APIs (document.visibilityState).
+ * react-simplikit is now focused on platform-independent, pure state/logic hooks.
+ * This hook will be removed in a future major version.
+ *
  * @description
  * `useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback.
  *

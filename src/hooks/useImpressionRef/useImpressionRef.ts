@@ -14,6 +14,10 @@ export type UseImpressionRefOptions = Partial<{
 }>;
 
 /**
+ * @deprecated This hook is deprecated as it depends on browser-specific APIs (IntersectionObserver, Visibility API).
+ * react-simplikit is now focused on platform-independent, pure state/logic hooks.
+ * This hook will be removed in a future major version.
+ *
  * @description
  * `useImpressionRef` is a React hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport.
  * It uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.

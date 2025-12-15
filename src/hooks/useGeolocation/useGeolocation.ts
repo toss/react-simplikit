@@ -33,6 +33,10 @@ type GeolocationOptions = {
 } & PositionOptions;
 
 /**
+ * @deprecated This hook is deprecated as it depends on browser-specific APIs (navigator.geolocation).
+ * react-simplikit is now focused on platform-independent, pure state/logic hooks.
+ * This hook will be removed in a future major version.
+ *
  * @description
  * `useGeolocation` is a React hook that retrieves and tracks the user's geographical location.
  * It uses the browser's `Geolocation API` to support both one-time position retrieval and continuous location tracking.

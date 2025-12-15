@@ -4,6 +4,10 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 import { useRefEffect } from '../useRefEffect/index.ts';
 
 /**
+ * @deprecated This hook is deprecated as it depends on browser-specific APIs (IntersectionObserver).
+ * react-simplikit is now focused on platform-independent, pure state/logic hooks.
+ * This hook will be removed in a future major version.
+ *
  * @description
  * `useIntersectionObserver` is a React hook that detects whether a specific DOM element is visible on the screen.
  * It uses the `IntersectionObserver` API to execute a callback when the element enters or exits the viewport.

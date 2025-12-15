@@ -62,6 +62,10 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
 };
 
 /**
+ * @deprecated This hook is deprecated as it depends on browser-specific APIs (localStorage/sessionStorage).
+ * react-simplikit is now focused on platform-independent, pure state/logic hooks.
+ * This hook will be removed in a future major version.
+ *
  * @description
  * `useStorageState` is a React that functions like `useState` but persists the state value in browser storage.
  * The value is retained across page reloads and can be shared between tabs when using `localStorage`.

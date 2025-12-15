@@ -14,6 +14,10 @@ export type UseLongPressOptions<E extends HTMLElement> = {
 };
 
 /**
+ * @deprecated This hook is deprecated as it depends on browser-specific APIs (DOM events, window.setTimeout).
+ * react-simplikit is now focused on platform-independent, pure state/logic hooks.
+ * This hook will be removed in a future major version.
+ *
  * @description
  * `useLongPress` is a React hook that detects when an element is pressed and held for a specified duration.
  * It handles both mouse and touch events, making it work consistently across desktop and mobile devices.
