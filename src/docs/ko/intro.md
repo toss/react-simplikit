@@ -1,8 +1,22 @@
 # react-simplikit 소개
 
-어떻게 하면 React 기반 앱을 좀 더 안전하고 탄탄하게 만들 수 있을까? 우리는 그 답을 ‘리액트를 리액트답게’ 작성하는 것이라고 정의했고, `react-simplikit`으로 그 답을 구체화했어요.
+어떻게 하면 React 기반 앱을 좀 더 안전하고 탄탄하게 만들 수 있을까? 우리는 그 답을 '리액트를 리액트답게' 작성하는 것이라고 정의했고, `react-simplikit`으로 그 답을 구체화했어요.
 
 `react-simplikit`은 React 환경에서 유용하게 사용할 수 있는 다양한 도구들을 제공하는 가볍고 강력한 라이브러리예요. React의 설계 원칙을 존중하면서 동시에, React의 개발 경험을 개선하기 위해 설계되었어요.
+
+## 라이브러리 운영 방향
+
+**react-simplikit은 이제 완전히 순수한 상태/로직 훅만을 위한 Universal Hook Library로 유지됩니다.**
+
+react-simplikit은 웹/앱(React Native 등) 어디서든 동작 가능한, **플랫폼에 종속되지 않은 순수 상태/로직 훅만을 제공하는 라이브러리**로 재편됩니다. 네트워크, 브라우저 API, DOM 등에 강하게 결합된 기능은 더 이상 react-simplikit의 관심사가 아니에요.
+
+### 유지되는 것
+
+특정 플랫폼 API에 의존하지 않는 순수 로직 기반 훅들은 계속 제공돼요. 상태 관리 훅(`useToggle`, `useBooleanState`), 라이프사이클 훅(`usePrevious`), 유틸리티 훅(`useDebounce`, `useThrottle`) 등이 해당되며, 기존 프로젝트의 Backward Compatibility는 보존돼요.
+
+### Deprecated 되는 것
+
+`useGeolocation`, `useStorageState`, `useIntersectionObserver`, `useImpressionRef`, `useDoubleClick`, `useLongPress`, `useOutsideClickEffect`, `useVisibilityEvent` 같은 브라우저/플랫폼 의존 훅들은 Deprecated 처리돼요. 이 훅들은 새 기능을 추가하지 않으며, 장기적으로는 메이저 버전 업데이트에서 제거를 검토할 수 있어요.
 
 ## 더 직관적이고 익숙한 인터페이스
 

@@ -4,6 +4,20 @@ How can we build React-based applications more safely and reliably? We defined t
 
 `react-simplikit` is a lightweight yet powerful library that provides various useful tools in React environments. It is designed to respect React's design principles while improving the React development experience.
 
+## Library Direction
+
+**react-simplikit is now maintained as a Universal Hook Library providing only pure state/logic hooks.**
+
+We are repositioning react-simplikit to focus exclusively on **platform-independent hooks** that work seamlessly across web and mobile (React Native, etc.). Network-intensive, browser API-dependent, and DOM-coupled features are no longer part of react-simplikit's scope.
+
+### What's Maintained
+
+Hooks that don't depend on specific platform APIs will continue to be actively maintained, such as state management hooks (`useToggle`, `useBooleanState`), lifecycle hooks (`usePrevious`), and utility hooks (`useDebounce`, `useThrottle`). Backward compatibility is preserved for these pure logic hooks.
+
+### What's Deprecated
+
+Browser/platform-dependent hooks like `useGeolocation`, `useStorageState`, `useIntersectionObserver`, `useImpressionRef`, `useDoubleClick`, `useLongPress`, `useOutsideClickEffect`, and `useVisibilityEvent` are now deprecated. These hooks will not receive new features and may be removed in future major versions.
+
 ## More Intuitive and Familiar Interface
 
 We provide a development experience as similar as possible to using React's declarative API. Write less and do more, more easily.
