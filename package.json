@@ -4,6 +4,9 @@
   "main": "./src/index.ts",
   "type": "module",
   "sideEffects": false,
+  "workspaces": [
+    "packages/*"
+  ],
   "keywords": [
     "react"
   ],
@@ -20,6 +23,7 @@
   ],
   "scripts": {
     "clean": "rimraf ./dist ./esm ./coverage ./node_modules",
+    "clean:all": "yarn clean && yarn workspace @react-simplikit/mobile clean",
     "scaffold": "tsx .scripts/index.ts scaffold",
     "changeset": "changeset",
     "changeset:version": "changeset version",
@@ -37,6 +41,10 @@
     "test:type": "tsc --noEmit",
     "test:spec": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:mobile": "yarn workspace @react-simplikit/mobile test",
+    "build": "tsup",
+    "build:mobile": "yarn workspace @react-simplikit/mobile build",
+    "build:all": "yarn build && yarn build:mobile",
     "prepack": "tsup"
   },
   "publishConfig": {
