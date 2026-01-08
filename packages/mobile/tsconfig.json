@@ -11,10 +11,10 @@
     "strict": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
-    "types": ["@testing-library/jest-dom"]
+    "paths": {
+      "@react-simplikit/mobile": ["./src/index.ts"]
+    }
   },
-  "include": ["src", "packages/**/src", ".scripts/**/*"],
-  "vueCompilerOptions": {
-    "vitePressExtensions": [".md"]
-  }
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

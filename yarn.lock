@@ -1508,6 +1508,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-simplikit/mobile@workspace:packages/mobile":
+  version: 0.0.0-use.local
+  resolution: "@react-simplikit/mobile@workspace:packages/mobile"
+  dependencies:
+    "@testing-library/dom": "npm:^10.4.0"
+    "@testing-library/jest-dom": "npm:^6.6.3"
+    "@testing-library/react": "npm:^16.1.0"
+    "@types/react": "npm:^19.0.0"
+    "@types/react-dom": "npm:^19.0.0"
+    react: "npm:^19.0.0"
+    react-dom: "npm:^19.0.0"
+    rimraf: "npm:^6.0.1"
+    tsup: "npm:^8.3.5"
+    typescript: "npm:^5.7.2"
+    vitest: "npm:^2.1.8"
+  peerDependencies:
+    react: ">=18.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@rollup/rollup-android-arm-eabi@npm:4.39.0":
   version: 4.39.0
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.39.0"
