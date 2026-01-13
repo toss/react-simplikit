@@ -1,3 +1,5 @@
+import { isServer } from '../isServer.ts';
+
 /**
  * Returns the current on-screen keyboard height in pixels.
  *
@@ -24,6 +26,10 @@
  * ```
  */
 export function getKeyboardHeight(): number {
+  if (isServer()) {
+    return 0;
+  }
+
   const visualViewport = window.visualViewport;
   if (visualViewport == null) {
     // Defensive guard; not expected to run in supported environments
