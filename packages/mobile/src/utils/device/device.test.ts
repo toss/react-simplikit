@@ -19,8 +19,8 @@ describe('device utils', () => {
 
     expect(isIOS('Mozilla/5.0 (Macintosh; Intel Mac OS X)')).toBe(true);
   });
-});
 
-it('should detect Android', () => {
-  expect(isAndroid('Mozilla/5.0 (Linux; Android 12; Pixel 6) Chrome/120')).toBe(true);
+  it('should detect Android', () => {
+    expect(isAndroid('Mozilla/5.0 (Linux; Android 12; Pixel 6) Chrome/120')).toBe(true);
+  });
 });
