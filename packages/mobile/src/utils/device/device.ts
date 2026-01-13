@@ -1,3 +1,5 @@
+import { isServer } from '../isServer.ts';
+
 /**
  * Detects whether the current device is running iOS or iPadOS.
  *
@@ -6,12 +8,19 @@
  * - Starting from iPadOS 13, Apple changed the platform string to "MacIntel"
  *   to make websites treat iPadOS as desktop-class Safari.
  *   However, these devices still expose multi-touch capabilities.
+ *
+ * @returns `false` on server-side rendering environments.
  */
-export function isIOS(userAgent: string = navigator.userAgent): boolean {
+export function isIOS(userAgent?: string): boolean {
+  if (isServer()) {
+    return false;
+  }
+
+  const ua = userAgent ?? navigator.userAgent;
   const platform = navigator.platform;
   const maxTouchPoints = navigator.maxTouchPoints;
 
-  const matchesClassicIOS = /iPhone|iPad|iPod/i.test(userAgent);
+  const matchesClassicIOS = /iPhone|iPad|iPod/i.test(ua);
   const matchesModernIPad = platform === 'MacIntel' && typeof maxTouchPoints === 'number' && maxTouchPoints > 1;
 
   return matchesClassicIOS || matchesModernIPad;
@@ -22,7 +31,14 @@ export function isIOS(userAgent: string = navigator.userAgent): boolean {
  *
  * Notes:
  * - All Android browsers include the token "Android" in the user agent.
+ *
+ * @returns `false` on server-side rendering environments.
  */
-export function isAndroid(userAgent: string = navigator.userAgent): boolean {
-  return /Android/i.test(userAgent);
+export function isAndroid(userAgent?: string): boolean {
+  if (isServer()) {
+    return false;
+  }
+
+  const ua = userAgent ?? navigator.userAgent;
+  return /Android/i.test(ua);
 }
