@@ -8,7 +8,7 @@ type UseAvoidKeyboardOptions = {
    * Base bottom offset in pixels when keyboard is hidden.
    * @default 0
    */
-  baseBottom?: number;
+  safeAreaBottom?: number;
   /**
    * Transition duration in milliseconds for smooth animation.
    * @default 200
@@ -32,34 +32,26 @@ type UseAvoidKeyboardResult = {
    * Contains transform and transition properties.
    */
   style: CSSProperties;
-  /**
-   * Current keyboard height in pixels.
-   */
-  keyboardHeight: number;
-  /**
-   * Whether the keyboard is currently visible.
-   */
-  isKeyboardVisible: boolean;
 };
 
 /**
  * React hook to help fixed-bottom elements avoid the on-screen keyboard.
  *
- * Returns style properties that can be applied to position:fixed elements
+ * Returns an object containing a CSS style that can be applied to position:fixed elements
  * to smoothly move them above the keyboard when it appears.
  *
  * @param options - Configuration options
- * @param options.baseBottom - Base bottom offset in pixels when keyboard is hidden (default: 0)
+ * @param options.safeAreaBottom - Base bottom offset in pixels when keyboard is hidden (default: 0)
  * @param options.transitionDuration - Transition duration in milliseconds (default: 200)
  * @param options.transitionTimingFunction - Transition timing function (default: 'ease-out')
  * @param options.immediate - If true, gets the initial keyboard height on mount (default: true)
  *
- * @returns An object containing style, keyboardHeight, and isKeyboardVisible
+ * @returns An object containing the style property
  *
  * @example
  * ```tsx
  * function FixedBottomCTA() {
- *   const { style, isKeyboardVisible } = useAvoidKeyboard();
+ *   const { style } = useAvoidKeyboard();
  *
  *   return (
  *     <div
@@ -79,9 +71,9 @@ type UseAvoidKeyboardResult = {
  *
  * @example
  * ```tsx
- * // With base bottom offset (e.g., for safe area)
+ * // With safe area bottom offset (e.g., for iPhone home indicator)
  * function FixedBottomCTA() {
- *   const { style } = useAvoidKeyboard({ baseBottom: 20 });
+ *   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
  *
  *   return (
  *     <div
@@ -100,23 +92,23 @@ type UseAvoidKeyboardResult = {
  * ```
  */
 export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoidKeyboardResult {
-  const { baseBottom = 0, transitionDuration = 200, transitionTimingFunction = 'ease-out', immediate = true } = options;
+  const {
+    safeAreaBottom = 0,
+    transitionDuration = 200,
+    transitionTimingFunction = 'ease-out',
+    immediate = true,
+  } = options;
 
   const keyboardHeight = useKeyboardHeight({ immediate });
-  const isKeyboardVisible = keyboardHeight > 0;
 
   const style = useMemo<CSSProperties>(() => {
-    const translateY = -(keyboardHeight + baseBottom);
+    const translateY = -(keyboardHeight + safeAreaBottom);
 
     return {
       transform: `translateY(${translateY}px)`,
       transition: `transform ${transitionDuration}ms ${transitionTimingFunction}`,
     };
-  }, [keyboardHeight, baseBottom, transitionDuration, transitionTimingFunction]);
+  }, [keyboardHeight, safeAreaBottom, transitionDuration, transitionTimingFunction]);
 
-  return {
-    style,
-    keyboardHeight,
-    isKeyboardVisible,
-  };
+  return { style };
 }
