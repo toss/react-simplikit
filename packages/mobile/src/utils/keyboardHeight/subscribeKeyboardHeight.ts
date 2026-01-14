@@ -12,6 +12,12 @@ type SubscribeKeyboardHeightOptions = {
    * @default false
    */
   immediate?: boolean;
+  /**
+   * Throttle interval in milliseconds.
+   * Events within this interval will be ignored to improve performance.
+   * @default 16 (~60fps)
+   */
+  throttleMs?: number;
 };
 
 type SubscribeKeyboardHeightResult = {
@@ -33,9 +39,14 @@ type SubscribeKeyboardHeightResult = {
  * - `scroll`: triggered when the visual viewport offset changes
  *   (important for iOS where the viewport can shift without resizing)
  *
+ * Performance optimizations:
+ * - Throttled by default (16ms, ~60fps) to prevent excessive callback invocations
+ * - Skips callback when height hasn't changed (deduplication)
+ *
  * @param options - Configuration options
  * @param options.callback - A function that will be called with the updated keyboard height in pixels.
  * @param options.immediate - If true, the callback will be invoked immediately with the current keyboard height.
+ * @param options.throttleMs - Throttle interval in milliseconds (default: 16ms).
  *
  * @returns An object containing the unsubscribe function.
  *
@@ -55,20 +66,46 @@ type SubscribeKeyboardHeightResult = {
 export function subscribeKeyboardHeight({
   callback,
   immediate = false,
+  throttleMs = 16,
 }: SubscribeKeyboardHeightOptions): SubscribeKeyboardHeightResult {
   if (isServer()) {
     return { unsubscribe: () => {} };
   }
-
-  const handler = () => callback(getKeyboardHeight());
 
   const visualViewport = window.visualViewport;
   if (!visualViewport) {
     return { unsubscribe: () => {} };
   }
 
+  let lastHeight: number | null = null;
+  let throttleTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const handler = () => {
+    // Skip if throttled
+    if (throttleTimer != null) {
+      return;
+    }
+
+    const currentHeight = getKeyboardHeight();
+
+    // Skip if height hasn't changed (deduplication)
+    if (lastHeight === currentHeight) {
+      return;
+    }
+
+    lastHeight = currentHeight;
+    callback(currentHeight);
+
+    // Start throttle timer
+    throttleTimer = setTimeout(() => {
+      throttleTimer = null;
+    }, throttleMs);
+  };
+
   if (immediate) {
-    handler();
+    const currentHeight = getKeyboardHeight();
+    lastHeight = currentHeight;
+    callback(currentHeight);
   }
 
   visualViewport.addEventListener('resize', handler);
@@ -78,6 +115,9 @@ export function subscribeKeyboardHeight({
     unsubscribe: () => {
       visualViewport.removeEventListener('resize', handler);
       visualViewport.removeEventListener('scroll', handler);
+      if (throttleTimer != null) {
+        clearTimeout(throttleTimer);
+      }
     },
   };
 }
