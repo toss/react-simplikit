@@ -1,3 +1,5 @@
+import { isServer } from '../isServer.ts';
+
 import { getKeyboardHeight } from './getKeyboardHeight.ts';
 
 type SubscribeKeyboardHeightOptions = {
@@ -54,6 +56,10 @@ export function subscribeKeyboardHeight({
   callback,
   immediate = false,
 }: SubscribeKeyboardHeightOptions): SubscribeKeyboardHeightResult {
+  if (isServer()) {
+    return { unsubscribe: () => {} };
+  }
+
   const handler = () => callback(getKeyboardHeight());
 
   const visualViewport = window.visualViewport;
