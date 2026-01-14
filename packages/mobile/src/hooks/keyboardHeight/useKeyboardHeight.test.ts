@@ -27,7 +27,7 @@ describe('useKeyboardHeight', () => {
     it('should return 0 as initial keyboard height', () => {
       const { result } = renderHook(() => useKeyboardHeight());
 
-      expect(result.current).toBe(0);
+      expect(result.current.keyboardHeight).toBe(0);
     });
   });
 
@@ -58,7 +58,7 @@ describe('useKeyboardHeight', () => {
 
       const { result } = renderHook(() => useKeyboardHeight());
 
-      expect(result.current).toBe(300);
+      expect(result.current.keyboardHeight).toBe(300);
     });
   });
 
@@ -98,19 +98,19 @@ describe('useKeyboardHeight', () => {
 
       const { result } = renderHook(() => useKeyboardHeight());
 
-      expect(result.current).toBe(0);
+      expect(result.current.keyboardHeight).toBe(0);
 
       act(() => {
         capturedCallback?.(250);
       });
 
-      expect(result.current).toBe(250);
+      expect(result.current.keyboardHeight).toBe(250);
 
       act(() => {
         capturedCallback?.(0);
       });
 
-      expect(result.current).toBe(0);
+      expect(result.current.keyboardHeight).toBe(0);
     });
 
     it('should handle various keyboard heights', () => {
@@ -124,7 +124,7 @@ describe('useKeyboardHeight', () => {
 
         const { result } = renderHook(() => useKeyboardHeight());
 
-        expect(result.current).toBe(expectedHeight);
+        expect(result.current.keyboardHeight).toBe(expectedHeight);
       }
     });
   });
@@ -138,7 +138,7 @@ describe('useKeyboardHeight', () => {
 
       const { result } = renderHook(() => useKeyboardHeight());
 
-      const paddingBottom = `${result.current}px`;
+      const paddingBottom = `${result.current.keyboardHeight}px`;
       expect(paddingBottom).toBe('300px');
     });
 
@@ -150,7 +150,7 @@ describe('useKeyboardHeight', () => {
 
       const { result } = renderHook(() => useKeyboardHeight());
 
-      const isKeyboardVisible = result.current > 0;
+      const isKeyboardVisible = result.current.keyboardHeight > 0;
       expect(isKeyboardVisible).toBe(true);
     });
 
@@ -162,7 +162,7 @@ describe('useKeyboardHeight', () => {
 
       const { result } = renderHook(() => useKeyboardHeight());
 
-      const isKeyboardVisible = result.current > 0;
+      const isKeyboardVisible = result.current.keyboardHeight > 0;
       expect(isKeyboardVisible).toBe(false);
     });
   });
@@ -190,8 +190,8 @@ describe('useKeyboardHeight', () => {
         callback2?.(200);
       });
 
-      expect(result1.current).toBe(200);
-      expect(result2.current).toBe(200);
+      expect(result1.current.keyboardHeight).toBe(200);
+      expect(result2.current.keyboardHeight).toBe(200);
     });
   });
 });

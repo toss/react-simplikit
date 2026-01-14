@@ -10,20 +10,27 @@ type UseKeyboardHeightOptions = {
   immediate?: boolean;
 };
 
+type UseKeyboardHeightResult = {
+  /**
+   * The current keyboard height in pixels.
+   */
+  keyboardHeight: number;
+};
+
 /**
  * React hook to track the on-screen keyboard height.
  *
- * Returns the current keyboard height in pixels, which updates automatically
- * when the keyboard appears, disappears, or changes size.
+ * Returns an object containing the current keyboard height in pixels,
+ * which updates automatically when the keyboard appears, disappears, or changes size.
  *
  * @param options - Configuration options
  * @param options.immediate - If true, gets the initial keyboard height on mount (default: true)
- * @returns The current keyboard height in pixels
+ * @returns An object containing the current keyboard height
  *
  * @example
  * ```tsx
  * function ChatInput() {
- *   const keyboardHeight = useKeyboardHeight();
+ *   const { keyboardHeight } = useKeyboardHeight();
  *
  *   return (
  *     <div style={{ paddingBottom: `${keyboardHeight}px` }}>
@@ -33,7 +40,7 @@ type UseKeyboardHeightOptions = {
  * }
  * ```
  */
-export function useKeyboardHeight(options: UseKeyboardHeightOptions = {}): number {
+export function useKeyboardHeight(options: UseKeyboardHeightOptions = {}): UseKeyboardHeightResult {
   const { immediate = true } = options;
 
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -50,5 +57,5 @@ export function useKeyboardHeight(options: UseKeyboardHeightOptions = {}): numbe
     [immediate]
   );
 
-  return keyboardHeight;
+  return { keyboardHeight };
 }
