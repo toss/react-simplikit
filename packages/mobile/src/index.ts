@@ -1,4 +1,6 @@
 // Hooks
+export { useScrollDirection } from './hooks/useScrollDirection.ts';
+export { useVisualViewport } from './hooks/useVisualViewport.ts';
 export { useBodyScrollLock } from './hooks/useBodyScrollLock.ts';
 
 // Utils
