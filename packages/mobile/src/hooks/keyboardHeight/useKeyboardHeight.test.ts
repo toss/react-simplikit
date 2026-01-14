@@ -5,7 +5,7 @@ import { subscribeKeyboardHeight } from '../../utils/keyboardHeight/subscribeKey
 
 import { useKeyboardHeight } from './useKeyboardHeight.ts';
 
-vi.mock('@webview-kit/core', () => ({
+vi.mock('../../utils/keyboardHeight/subscribeKeyboardHeight.ts', () => ({
   subscribeKeyboardHeight: vi.fn(),
 }));
 
