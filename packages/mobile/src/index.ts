@@ -11,3 +11,4 @@ export { isServer } from './utils/isServer.ts';
 export { getKeyboardHeight } from './utils/keyboard/getKeyboardHeight.ts';
 export { isKeyboardVisible } from './utils/keyboard/isKeyboardVisible.ts';
 export { subscribeKeyboardHeight } from './utils/keyboard/subscribeKeyboardHeight.ts';
+export { getSafeAreaInset } from './utils/safeArea/getSafeAreaInset.ts';
