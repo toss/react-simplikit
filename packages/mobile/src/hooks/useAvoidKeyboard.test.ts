@@ -1,22 +1,20 @@
-import { act, renderHook } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { subscribeKeyboardHeight } from '../utils/keyboardHeight/subscribeKeyboardHeight.ts';
 
 import { useAvoidKeyboard } from './useAvoidKeyboard.ts';
 
-vi.mock('../../utils/keyboardHeight/subscribeKeyboardHeight.ts', () => ({
-  subscribeKeyboardHeight: vi.fn(),
+// Mock useKeyboardHeight hook
+vi.mock('./keyboardHeight/useKeyboardHeight.ts', () => ({
+  useKeyboardHeight: vi.fn(() => 0),
 }));
 
-const mockSubscribeKeyboardHeight = vi.mocked(subscribeKeyboardHeight);
+// Get reference to the mocked function
+import { useKeyboardHeight } from './keyboardHeight/useKeyboardHeight.ts';
+const mockUseKeyboardHeight = vi.mocked(useKeyboardHeight);
 
 describe('useAvoidKeyboard', () => {
-  let mockUnsubscribe: ReturnType<typeof vi.fn>;
-
   beforeEach(() => {
-    mockUnsubscribe = vi.fn();
-    mockSubscribeKeyboardHeight.mockReturnValue({ unsubscribe: mockUnsubscribe });
+    mockUseKeyboardHeight.mockReturnValue(0);
   });
 
   afterEach(() => {
@@ -24,11 +22,9 @@ describe('useAvoidKeyboard', () => {
   });
 
   describe('initial state', () => {
-    it('should return initial state with keyboard hidden', () => {
+    it('should return initial style with keyboard hidden', () => {
       const { result } = renderHook(() => useAvoidKeyboard());
 
-      expect(result.current.keyboardHeight).toBe(0);
-      expect(result.current.isKeyboardVisible).toBe(false);
       expect(result.current.style).toEqual({
         transform: 'translateY(0px)',
         transition: 'transform 200ms ease-out',
@@ -38,10 +34,7 @@ describe('useAvoidKeyboard', () => {
 
   describe('style generation', () => {
     it('should generate correct transform when keyboard is visible', () => {
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        callback(300);
-        return { unsubscribe: mockUnsubscribe };
-      });
+      mockUseKeyboardHeight.mockReturnValue(300);
 
       const { result } = renderHook(() => useAvoidKeyboard());
 
@@ -51,13 +44,10 @@ describe('useAvoidKeyboard', () => {
       });
     });
 
-    it('should include baseBottom in transform calculation', () => {
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        callback(300);
-        return { unsubscribe: mockUnsubscribe };
-      });
+    it('should include safeAreaBottom in transform calculation', () => {
+      mockUseKeyboardHeight.mockReturnValue(300);
 
-      const { result } = renderHook(() => useAvoidKeyboard({ baseBottom: 20 }));
+      const { result } = renderHook(() => useAvoidKeyboard({ safeAreaBottom: 20 }));
 
       expect(result.current.style).toEqual({
         transform: 'translateY(-320px)',
@@ -80,14 +70,11 @@ describe('useAvoidKeyboard', () => {
     });
 
     it('should apply all custom options together', () => {
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        callback(250);
-        return { unsubscribe: mockUnsubscribe };
-      });
+      mockUseKeyboardHeight.mockReturnValue(250);
 
       const { result } = renderHook(() =>
         useAvoidKeyboard({
-          baseBottom: 30,
+          safeAreaBottom: 30,
           transitionDuration: 150,
           transitionTimingFunction: 'linear',
         })
@@ -100,57 +87,21 @@ describe('useAvoidKeyboard', () => {
     });
   });
 
-  describe('keyboard visibility', () => {
-    it('should return isKeyboardVisible as true when keyboard height > 0', () => {
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        callback(100);
-        return { unsubscribe: mockUnsubscribe };
-      });
-
-      const { result } = renderHook(() => useAvoidKeyboard());
-
-      expect(result.current.isKeyboardVisible).toBe(true);
-    });
-
-    it('should return isKeyboardVisible as false when keyboard height is 0', () => {
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        callback(0);
-        return { unsubscribe: mockUnsubscribe };
-      });
-
-      const { result } = renderHook(() => useAvoidKeyboard());
-
-      expect(result.current.isKeyboardVisible).toBe(false);
-    });
-  });
-
   describe('keyboard height updates', () => {
     it('should update style when keyboard height changes', () => {
-      let capturedCallback: ((height: number) => void) | null = null;
-
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        capturedCallback = callback;
-        return { unsubscribe: mockUnsubscribe };
-      });
-
-      const { result } = renderHook(() => useAvoidKeyboard());
+      const { result, rerender } = renderHook(() => useAvoidKeyboard());
 
       expect(result.current.style.transform).toBe('translateY(0px)');
-      expect(result.current.isKeyboardVisible).toBe(false);
 
-      act(() => {
-        capturedCallback?.(350);
-      });
+      mockUseKeyboardHeight.mockReturnValue(350);
+      rerender();
 
       expect(result.current.style.transform).toBe('translateY(-350px)');
-      expect(result.current.isKeyboardVisible).toBe(true);
 
-      act(() => {
-        capturedCallback?.(0);
-      });
+      mockUseKeyboardHeight.mockReturnValue(0);
+      rerender();
 
       expect(result.current.style.transform).toBe('translateY(0px)');
-      expect(result.current.isKeyboardVisible).toBe(false);
     });
   });
 
@@ -158,40 +109,19 @@ describe('useAvoidKeyboard', () => {
     it('should pass immediate: true by default to useKeyboardHeight', () => {
       renderHook(() => useAvoidKeyboard());
 
-      expect(mockSubscribeKeyboardHeight).toHaveBeenCalledWith({
-        callback: expect.any(Function),
-        immediate: true,
-      });
+      expect(mockUseKeyboardHeight).toHaveBeenCalledWith({ immediate: true });
     });
 
     it('should pass immediate: false when specified', () => {
       renderHook(() => useAvoidKeyboard({ immediate: false }));
 
-      expect(mockSubscribeKeyboardHeight).toHaveBeenCalledWith({
-        callback: expect.any(Function),
-        immediate: false,
-      });
-    });
-  });
-
-  describe('cleanup behavior', () => {
-    it('should clean up subscription on unmount', () => {
-      const { unmount } = renderHook(() => useAvoidKeyboard());
-
-      expect(mockUnsubscribe).not.toHaveBeenCalled();
-
-      unmount();
-
-      expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(mockUseKeyboardHeight).toHaveBeenCalledWith({ immediate: false });
     });
   });
 
   describe('use cases', () => {
     it('should provide style for fixed bottom CTA', () => {
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        callback(300);
-        return { unsubscribe: mockUnsubscribe };
-      });
+      mockUseKeyboardHeight.mockReturnValue(300);
 
       const { result } = renderHook(() => useAvoidKeyboard());
 
@@ -207,39 +137,12 @@ describe('useAvoidKeyboard', () => {
       expect(elementStyle.transition).toBe('transform 200ms ease-out');
     });
 
-    it('should handle safe area with baseBottom', () => {
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        callback(300);
-        return { unsubscribe: mockUnsubscribe };
-      });
+    it('should handle safe area with safeAreaBottom', () => {
+      mockUseKeyboardHeight.mockReturnValue(300);
 
-      const safeAreaBottom = 34;
-      const { result } = renderHook(() => useAvoidKeyboard({ baseBottom: safeAreaBottom }));
+      const { result } = renderHook(() => useAvoidKeyboard({ safeAreaBottom: 34 }));
 
       expect(result.current.style.transform).toBe('translateY(-334px)');
-    });
-
-    it('should conditionally render based on keyboard visibility', () => {
-      let capturedCallback: ((height: number) => void) | null = null;
-
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        capturedCallback = callback;
-        return { unsubscribe: mockUnsubscribe };
-      });
-
-      const { result } = renderHook(() => useAvoidKeyboard());
-
-      // Initial state: keyboard hidden, show element normally
-      expect(result.current.isKeyboardVisible).toBe(false);
-
-      // Keyboard appears
-      act(() => {
-        capturedCallback?.(300);
-      });
-
-      // Element should move up
-      expect(result.current.isKeyboardVisible).toBe(true);
-      expect(result.current.keyboardHeight).toBe(300);
     });
   });
 
@@ -255,20 +158,12 @@ describe('useAvoidKeyboard', () => {
     });
 
     it('should return new style object when keyboard height changes', () => {
-      let capturedCallback: ((height: number) => void) | null = null;
-
-      mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
-        capturedCallback = callback;
-        return { unsubscribe: mockUnsubscribe };
-      });
-
-      const { result } = renderHook(() => useAvoidKeyboard());
+      const { result, rerender } = renderHook(() => useAvoidKeyboard());
 
       const firstStyle = result.current.style;
 
-      act(() => {
-        capturedCallback?.(100);
-      });
+      mockUseKeyboardHeight.mockReturnValue(100);
+      rerender();
 
       expect(result.current.style).not.toBe(firstStyle);
     });
