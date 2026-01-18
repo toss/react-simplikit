@@ -26,6 +26,7 @@ export default [
       'tsup.*',
       'vitest.*',
       '.vitepress',
+      '.next',
     ],
   },
   {
@@ -33,6 +34,14 @@ export default [
       globals: globals.browser,
       parserOptions: {
         project: './tsconfig.json',
+      },
+    },
+  },
+  {
+    files: ['examples/**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        project: './examples/*/tsconfig.json',
       },
     },
   },

@@ -5,7 +5,8 @@
   "type": "module",
   "sideEffects": false,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "keywords": [
     "react"
@@ -24,6 +25,8 @@
   "scripts": {
     "clean": "rimraf ./dist ./esm ./coverage ./node_modules",
     "clean:all": "yarn clean && yarn workspace @react-simplikit/mobile clean",
+    "example:vite": "yarn workspace with-vite dev",
+    "example:next": "yarn workspace with-nextjs dev",
     "scaffold": "tsx .scripts/index.ts scaffold",
     "changeset": "changeset",
     "changeset:version": "changeset version",
