@@ -1,6 +1,5 @@
 import { isServer } from '../isServer.ts';
-
-import { getKeyboardHeight } from './getKeyboardHeight.ts';
+import { getKeyboardHeight } from '../keyboard/getKeyboardHeight.ts';
 
 type SubscribeKeyboardHeightOptions = {
   /**
