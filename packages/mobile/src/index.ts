@@ -1,7 +1,8 @@
 // Hooks
+export { useAvoidKeyboard } from './hooks/useAvoidKeyboard.ts';
+export { useBodyScrollLock } from './hooks/useBodyScrollLock.ts';
 export { useScrollDirection } from './hooks/useScrollDirection.ts';
 export { useVisualViewport } from './hooks/useVisualViewport.ts';
-export { useBodyScrollLock } from './hooks/useBodyScrollLock.ts';
 
 // Utils
 export { disableBodyScrollLock, enableBodyScrollLock } from './utils/bodyScrollLock.ts';
