@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { subscribeKeyboardHeight } from '../../utils/keyboardHeight/subscribeKeyboardHeight.ts';
+import { subscribeKeyboardHeight } from '../../utils/keyboard/subscribeKeyboardHeight.ts';
 
 import { useKeyboardHeight } from './useKeyboardHeight.ts';
 
