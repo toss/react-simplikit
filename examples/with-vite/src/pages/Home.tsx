@@ -27,6 +27,26 @@ export function Home() {
             </Link>
             <p style={{ color: '#666', fontSize: 14, marginTop: 4 }}>Check if code is running on the server</p>
           </li>
+          <li style={{ marginTop: 12, padding: 12, background: '#f5f5f5', borderRadius: 8 }}>
+            <Link to="/demos/get-safe-area-inset" style={{ textDecoration: 'none' }}>
+              <strong style={{ color: '#000' }}>getSafeAreaInset</strong>
+              <span
+                style={{
+                  marginLeft: 8,
+                  fontSize: 12,
+                  color: '#888',
+                  background: '#e0e0e0',
+                  padding: '2px 6px',
+                  borderRadius: 4,
+                }}
+              >
+                utils
+              </span>
+            </Link>
+            <p style={{ color: '#666', fontSize: 14, marginTop: 4 }}>
+              Get device safe area insets (notch, home indicator)
+            </p>
+          </li>
         </ul>
       </nav>
     </div>
