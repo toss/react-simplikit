@@ -5,7 +5,7 @@ import { useAvoidKeyboard } from './useAvoidKeyboard.ts';
 
 // Mock useKeyboardHeight hook
 vi.mock('./keyboardHeight/useKeyboardHeight.ts', () => ({
-  useKeyboardHeight: vi.fn(() => 0),
+  useKeyboardHeight: vi.fn(() => ({ keyboardHeight: 0 })),
 }));
 
 // Get reference to the mocked function
@@ -14,7 +14,7 @@ const mockUseKeyboardHeight = vi.mocked(useKeyboardHeight);
 
 describe('useAvoidKeyboard', () => {
   beforeEach(() => {
-    mockUseKeyboardHeight.mockReturnValue(0);
+    mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 0 });
   });
 
   afterEach(() => {
@@ -34,7 +34,7 @@ describe('useAvoidKeyboard', () => {
 
   describe('style generation', () => {
     it('should generate correct transform when keyboard is visible', () => {
-      mockUseKeyboardHeight.mockReturnValue(300);
+      mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 300 });
 
       const { result } = renderHook(() => useAvoidKeyboard());
 
@@ -45,7 +45,7 @@ describe('useAvoidKeyboard', () => {
     });
 
     it('should include safeAreaBottom in transform calculation', () => {
-      mockUseKeyboardHeight.mockReturnValue(300);
+      mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 300 });
 
       const { result } = renderHook(() => useAvoidKeyboard({ safeAreaBottom: 20 }));
 
@@ -70,7 +70,7 @@ describe('useAvoidKeyboard', () => {
     });
 
     it('should apply all custom options together', () => {
-      mockUseKeyboardHeight.mockReturnValue(250);
+      mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 250 });
 
       const { result } = renderHook(() =>
         useAvoidKeyboard({
@@ -93,12 +93,12 @@ describe('useAvoidKeyboard', () => {
 
       expect(result.current.style.transform).toBe('translateY(0px)');
 
-      mockUseKeyboardHeight.mockReturnValue(350);
+      mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 350 });
       rerender();
 
       expect(result.current.style.transform).toBe('translateY(-350px)');
 
-      mockUseKeyboardHeight.mockReturnValue(0);
+      mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 0 });
       rerender();
 
       expect(result.current.style.transform).toBe('translateY(0px)');
@@ -121,7 +121,7 @@ describe('useAvoidKeyboard', () => {
 
   describe('use cases', () => {
     it('should provide style for fixed bottom CTA', () => {
-      mockUseKeyboardHeight.mockReturnValue(300);
+      mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 300 });
 
       const { result } = renderHook(() => useAvoidKeyboard());
 
@@ -138,7 +138,7 @@ describe('useAvoidKeyboard', () => {
     });
 
     it('should handle safe area with safeAreaBottom', () => {
-      mockUseKeyboardHeight.mockReturnValue(300);
+      mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 300 });
 
       const { result } = renderHook(() => useAvoidKeyboard({ safeAreaBottom: 34 }));
 
@@ -162,7 +162,7 @@ describe('useAvoidKeyboard', () => {
 
       const firstStyle = result.current.style;
 
-      mockUseKeyboardHeight.mockReturnValue(100);
+      mockUseKeyboardHeight.mockReturnValue({ keyboardHeight: 100 });
       rerender();
 
       expect(result.current.style).not.toBe(firstStyle);
