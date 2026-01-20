@@ -2223,7 +2223,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-simplikit/mobile@workspace:*, @react-simplikit/mobile@workspace:packages/mobile":
+"@react-simplikit/mobile@workspace:*, @react-simplikit/mobile@workspace:^, @react-simplikit/mobile@workspace:packages/mobile":
   version: 0.0.0-use.local
   resolution: "@react-simplikit/mobile@workspace:packages/mobile"
   dependencies:
@@ -9839,7 +9839,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "with-vite@workspace:examples/with-vite"
   dependencies:
-    "@react-simplikit/mobile": "workspace:*"
+    "@react-simplikit/mobile": "workspace:^"
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
     "@vitejs/plugin-react": "npm:^4.3.4"
