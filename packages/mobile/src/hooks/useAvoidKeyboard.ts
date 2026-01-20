@@ -99,7 +99,7 @@ export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoi
     immediate = true,
   } = options;
 
-  const keyboardHeight = useKeyboardHeight({ immediate });
+  const { keyboardHeight } = useKeyboardHeight({ immediate });
 
   const style = useMemo<CSSProperties>(() => {
     const translateY = -(keyboardHeight.keyboardHeight + safeAreaBottom);
