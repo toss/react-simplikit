@@ -11416,10 +11416,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "with-nextjs@workspace:examples/with-nextjs"
   dependencies:
-    "@examples/shared": "workspace:*"
-    "@radix-ui/themes": "npm:^3.2.1"
     "@react-simplikit/mobile": "workspace:*"
-    "@suspensive/react": "npm:^3.18.0"
     "@types/node": "npm:^22.10.2"
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"

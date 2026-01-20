@@ -73,7 +73,6 @@ export function Home() {
           <DemoLink to="/demos/is-server" title="isServer" description="Check if code is running on server" />
         </nav>
       </section>
-
     </div>
   );
 }

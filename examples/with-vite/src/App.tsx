@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { BodyScrollLockUtilDemo } from './pages/demos/BodyScrollLockUtilDemo.tsx';
+import { GetSafeAreaInsetDemo } from './pages/demos/GetSafeAreaInsetDemo.tsx';
 import { IsServerDemo } from './pages/demos/IsServerDemo.tsx';
 import { UseBodyScrollLockDemo } from './pages/demos/UseBodyScrollLockDemo.tsx';
 import { UseScrollDirectionDemo } from './pages/demos/UseScrollDirectionDemo.tsx';
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/demos/use-scroll-direction" element={<UseScrollDirectionDemo />} />
         <Route path="/demos/use-visual-viewport" element={<UseVisualViewportDemo />} />
         <Route path="/demos/body-scroll-lock-util" element={<BodyScrollLockUtilDemo />} />
+        <Route path="/demos/get-safe-area-inset" element={<GetSafeAreaInsetDemo />} />
       </Routes>
     </BrowserRouter>
   );
