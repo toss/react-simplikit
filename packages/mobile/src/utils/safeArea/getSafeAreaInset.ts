@@ -1,11 +1,20 @@
 import { isServer } from '../isServer.ts';
 
-type SafeAreaPosition = 'top' | 'bottom' | 'left' | 'right';
+type SafeAreaInset = {
+  /** Top safe area inset in pixels (notch, Dynamic Island, or status bar) */
+  top: number;
+  /** Bottom safe area inset in pixels (home indicator on Face ID devices) */
+  bottom: number;
+  /** Left safe area inset in pixels (rounded corners in landscape mode) */
+  left: number;
+  /** Right safe area inset in pixels (rounded corners in landscape mode) */
+  right: number;
+};
 
 /**
- * Returns the safe area inset for the specified position in pixels.
+ * Returns all safe area insets in pixels as an object.
  *
- * This function reads the CSS `env(safe-area-inset-*)` value by creating
+ * This function reads the CSS `env(safe-area-inset-*)` values by creating
  * a temporary DOM element and reading its computed style.
  *
  * Safe area insets account for device-specific UI elements:
@@ -18,31 +27,37 @@ type SafeAreaPosition = 'top' | 'bottom' | 'left' | 'right';
  * - bottom: 34px (home indicator)
  * - left/right: 0px
  *
- * @param position - The position to get the inset for ('top', 'bottom', 'left', 'right')
- * @returns The safe area inset in pixels, or 0 if not available.
+ * @returns Object containing safe area insets for all four sides, or all 0 if not available.
  *
  * @example
  * ```ts
- * const topInset = getSafeAreaInset('top');
- * const bottomInset = getSafeAreaInset('bottom');
+ * const { top, bottom, left, right } = getSafeAreaInset();
  *
- * header.style.paddingTop = `${topInset}px`;
- * footer.style.paddingBottom = `${bottomInset}px`;
+ * header.style.paddingTop = `${top}px`;
+ * footer.style.paddingBottom = `${bottom}px`;
  * ```
  */
-export function getSafeAreaInset(position: SafeAreaPosition): number {
+export function getSafeAreaInset(): SafeAreaInset {
   if (isServer()) {
-    return 0;
+    return { top: 0, bottom: 0, left: 0, right: 0 };
   }
 
   const div = document.createElement('div');
   div.style.position = 'fixed';
-  div.style.setProperty(`padding-${position}`, `env(safe-area-inset-${position})`);
+  div.style.setProperty('padding-top', 'env(safe-area-inset-top)');
+  div.style.setProperty('padding-bottom', 'env(safe-area-inset-bottom)');
+  div.style.setProperty('padding-left', 'env(safe-area-inset-left)');
+  div.style.setProperty('padding-right', 'env(safe-area-inset-right)');
   document.body.appendChild(div);
 
   const computedStyle = window.getComputedStyle(div);
-  const value = parseFloat(computedStyle.getPropertyValue(`padding-${position}`)) || 0;
+  const inset: SafeAreaInset = {
+    top: parseFloat(computedStyle.getPropertyValue('padding-top')) || 0,
+    bottom: parseFloat(computedStyle.getPropertyValue('padding-bottom')) || 0,
+    left: parseFloat(computedStyle.getPropertyValue('padding-left')) || 0,
+    right: parseFloat(computedStyle.getPropertyValue('padding-right')) || 0,
+  };
 
   document.body.removeChild(div);
-  return value;
+  return inset;
 }
