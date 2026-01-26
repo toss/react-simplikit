@@ -19,20 +19,26 @@ describe('getSafeAreaInset', () => {
   });
 
   describe('basic functionality', () => {
-    it('should return 0 when safe area inset is not supported', () => {
+    it('should return object with all zeros when safe area inset is not supported', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '',
       } as CSSStyleDeclaration);
 
-      expect(getSafeAreaInset('bottom')).toBe(0);
+      expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
     });
 
-    it('should return the safe area inset value as number', () => {
+    it('should return the safe area inset values as object', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '34px',
+        getPropertyValue: (prop: string) => {
+          if (prop === 'padding-top') return '47px';
+          if (prop === 'padding-bottom') return '34px';
+          if (prop === 'padding-left') return '0px';
+          if (prop === 'padding-right') return '0px';
+          return '0px';
+        },
       } as CSSStyleDeclaration);
 
-      expect(getSafeAreaInset('bottom')).toBe(34);
+      expect(getSafeAreaInset()).toEqual({ top: 47, bottom: 34, left: 0, right: 0 });
     });
 
     it('should return 0 for non-numeric values', () => {
@@ -40,7 +46,7 @@ describe('getSafeAreaInset', () => {
         getPropertyValue: () => 'auto',
       } as CSSStyleDeclaration);
 
-      expect(getSafeAreaInset('top')).toBe(0);
+      expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
     });
   });
 
@@ -50,7 +56,7 @@ describe('getSafeAreaInset', () => {
         getPropertyValue: () => '34px',
       } as CSSStyleDeclaration);
 
-      getSafeAreaInset('bottom');
+      getSafeAreaInset();
 
       expect(document.createElement).toHaveBeenCalledWith('div');
     });
@@ -60,7 +66,7 @@ describe('getSafeAreaInset', () => {
         getPropertyValue: () => '34px',
       } as CSSStyleDeclaration);
 
-      getSafeAreaInset('bottom');
+      getSafeAreaInset();
 
       expect(mockDiv.style.position).toBe('fixed');
     });
@@ -70,126 +76,85 @@ describe('getSafeAreaInset', () => {
         getPropertyValue: () => '34px',
       } as CSSStyleDeclaration);
 
-      getSafeAreaInset('bottom');
+      getSafeAreaInset();
 
       expect(appendChildSpy).toHaveBeenCalledWith(mockDiv);
       expect(removeChildSpy).toHaveBeenCalledWith(mockDiv);
     });
-  });
 
-  describe('position-specific behavior', () => {
-    it('should set env(safe-area-inset-top) for top position', () => {
+    it('should set all env() properties at once', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '47px',
+        getPropertyValue: () => '0px',
       } as CSSStyleDeclaration);
 
       const setPropertySpy = vi.spyOn(mockDiv.style, 'setProperty');
 
-      getSafeAreaInset('top');
+      getSafeAreaInset();
 
       expect(setPropertySpy).toHaveBeenCalledWith('padding-top', 'env(safe-area-inset-top)');
-    });
-
-    it('should set env(safe-area-inset-bottom) for bottom position', () => {
-      vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '34px',
-      } as CSSStyleDeclaration);
-
-      const setPropertySpy = vi.spyOn(mockDiv.style, 'setProperty');
-
-      getSafeAreaInset('bottom');
-
       expect(setPropertySpy).toHaveBeenCalledWith('padding-bottom', 'env(safe-area-inset-bottom)');
-    });
-
-    it('should set env(safe-area-inset-left) for left position', () => {
-      vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '0px',
-      } as CSSStyleDeclaration);
-
-      const setPropertySpy = vi.spyOn(mockDiv.style, 'setProperty');
-
-      getSafeAreaInset('left');
-
       expect(setPropertySpy).toHaveBeenCalledWith('padding-left', 'env(safe-area-inset-left)');
-    });
-
-    it('should set env(safe-area-inset-right) for right position', () => {
-      vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '0px',
-      } as CSSStyleDeclaration);
-
-      const setPropertySpy = vi.spyOn(mockDiv.style, 'setProperty');
-
-      getSafeAreaInset('right');
-
       expect(setPropertySpy).toHaveBeenCalledWith('padding-right', 'env(safe-area-inset-right)');
     });
 
-    it('should read correct padding property for each position', () => {
-      const positions = ['top', 'bottom', 'left', 'right'] as const;
+    it('should only create one DOM element for all values', () => {
+      vi.spyOn(window, 'getComputedStyle').mockReturnValue({
+        getPropertyValue: () => '0px',
+      } as CSSStyleDeclaration);
 
-      for (const position of positions) {
-        vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-          getPropertyValue: (prop: string) => {
-            if (prop === `padding-${position}`) {
-              return '10px';
-            }
-            return '0px';
-          },
-        } as CSSStyleDeclaration);
+      getSafeAreaInset();
 
-        expect(getSafeAreaInset(position)).toBe(10);
-        vi.restoreAllMocks();
-
-        mockDiv = document.createElement('div');
-        vi.spyOn(document, 'createElement').mockReturnValue(mockDiv);
-        vi.spyOn(document.body, 'appendChild').mockReturnValue(mockDiv);
-        vi.spyOn(document.body, 'removeChild').mockReturnValue(mockDiv);
-      }
+      expect(document.createElement).toHaveBeenCalledTimes(1);
+      expect(appendChildSpy).toHaveBeenCalledTimes(1);
+      expect(removeChildSpy).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('typical device values', () => {
-    it('should handle Dynamic Island top inset (59px)', () => {
+    it('should handle Dynamic Island device (iPhone 14 Pro)', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '59px',
+        getPropertyValue: (prop: string) => {
+          if (prop === 'padding-top') return '59px';
+          if (prop === 'padding-bottom') return '34px';
+          return '0px';
+        },
       } as CSSStyleDeclaration);
 
-      expect(getSafeAreaInset('top')).toBe(59);
+      expect(getSafeAreaInset()).toEqual({ top: 59, bottom: 34, left: 0, right: 0 });
     });
 
-    it('should handle notch top inset (47px)', () => {
+    it('should handle notch device (iPhone X/11/12/13)', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '47px',
+        getPropertyValue: (prop: string) => {
+          if (prop === 'padding-top') return '47px';
+          if (prop === 'padding-bottom') return '34px';
+          return '0px';
+        },
       } as CSSStyleDeclaration);
 
-      expect(getSafeAreaInset('top')).toBe(47);
+      expect(getSafeAreaInset()).toEqual({ top: 47, bottom: 34, left: 0, right: 0 });
     });
 
-    it('should handle home indicator bottom inset (34px)', () => {
+    it('should handle landscape mode with side insets', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '34px',
+        getPropertyValue: (prop: string) => {
+          if (prop === 'padding-top') return '0px';
+          if (prop === 'padding-bottom') return '21px';
+          if (prop === 'padding-left') return '47px';
+          if (prop === 'padding-right') return '47px';
+          return '0px';
+        },
       } as CSSStyleDeclaration);
 
-      expect(getSafeAreaInset('bottom')).toBe(34);
+      expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 21, left: 47, right: 47 });
     });
 
-    it('should handle landscape bottom inset (21px)', () => {
-      vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: () => '21px',
-      } as CSSStyleDeclaration);
-
-      expect(getSafeAreaInset('bottom')).toBe(21);
-    });
-
-    it('should handle no inset (0px)', () => {
+    it('should handle no inset (desktop or older devices)', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '0px',
       } as CSSStyleDeclaration);
 
-      expect(getSafeAreaInset('left')).toBe(0);
-      expect(getSafeAreaInset('right')).toBe(0);
+      expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
     });
   });
 });

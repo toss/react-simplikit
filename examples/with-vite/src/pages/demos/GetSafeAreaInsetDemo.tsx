@@ -13,13 +13,12 @@ type SafeAreaValues = {
 
 const USAGE_CODE = `import { getSafeAreaInset } from '@react-simplikit/mobile';
 
-// Get individual insets
-const topInset = getSafeAreaInset('top');
-const bottomInset = getSafeAreaInset('bottom');
+// Get all insets at once
+const { top, bottom, left, right } = getSafeAreaInset();
 
 // Apply to styles
-header.style.paddingTop = \`\${topInset}px\`;
-footer.style.paddingBottom = \`\${bottomInset}px\`;`;
+header.style.paddingTop = \`\${top}px\`;
+footer.style.paddingBottom = \`\${bottom}px\`;`;
 
 const VIEWPORT_META = `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">`;
 
@@ -32,12 +31,7 @@ export function GetSafeAreaInsetDemo() {
   });
 
   useEffect(() => {
-    setSafeArea({
-      top: getSafeAreaInset('top'),
-      bottom: getSafeAreaInset('bottom'),
-      left: getSafeAreaInset('left'),
-      right: getSafeAreaInset('right'),
-    });
+    setSafeArea(getSafeAreaInset());
   }, []);
 
   const hasInsets = safeArea.top > 0 || safeArea.bottom > 0 || safeArea.left > 0 || safeArea.right > 0;

@@ -8,33 +8,25 @@ import { describe, expect, it } from 'vitest';
 import { getSafeAreaInset } from './getSafeAreaInset.ts';
 
 describe('getSafeAreaInset SSR environment', () => {
-  it('should return 0 for all positions on server', () => {
+  it('should return object with all zeros on server', () => {
     // In Node environment, window is undefined
     expect(typeof window).toBe('undefined');
-    expect(getSafeAreaInset('top')).toBe(0);
-    expect(getSafeAreaInset('bottom')).toBe(0);
-    expect(getSafeAreaInset('left')).toBe(0);
-    expect(getSafeAreaInset('right')).toBe(0);
+    expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
   });
 
   it('should not throw when called on server', () => {
     // In Node environment, window is undefined
     expect(typeof window).toBe('undefined');
-    expect(() => getSafeAreaInset('top')).not.toThrow();
-    expect(() => getSafeAreaInset('bottom')).not.toThrow();
-    expect(() => getSafeAreaInset('left')).not.toThrow();
-    expect(() => getSafeAreaInset('right')).not.toThrow();
+    expect(() => getSafeAreaInset()).not.toThrow();
   });
 
   it('should return consistent results on multiple calls in SSR', () => {
-    const top1 = getSafeAreaInset('top');
-    const top2 = getSafeAreaInset('top');
-    const top3 = getSafeAreaInset('top');
+    const result1 = getSafeAreaInset();
+    const result2 = getSafeAreaInset();
+    const result3 = getSafeAreaInset();
 
-    expect(top1).toBe(0);
-    expect(top2).toBe(0);
-    expect(top3).toBe(0);
-    expect(top1).toBe(top2);
-    expect(top2).toBe(top3);
+    expect(result1).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
+    expect(result2).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
+    expect(result3).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
   });
 });
