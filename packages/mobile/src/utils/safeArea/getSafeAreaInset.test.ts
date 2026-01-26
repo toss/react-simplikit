@@ -4,14 +4,12 @@ import { getSafeAreaInset } from './getSafeAreaInset.ts';
 
 describe('getSafeAreaInset', () => {
   let mockDiv: HTMLDivElement;
-  let appendChildSpy: ReturnType<typeof vi.spyOn>;
-  let removeChildSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     mockDiv = document.createElement('div');
     vi.spyOn(document, 'createElement').mockReturnValue(mockDiv);
-    appendChildSpy = vi.spyOn(document.body, 'appendChild').mockReturnValue(mockDiv);
-    removeChildSpy = vi.spyOn(document.body, 'removeChild').mockReturnValue(mockDiv);
+    vi.spyOn(document.body, 'appendChild').mockReturnValue(mockDiv);
+    vi.spyOn(document.body, 'removeChild').mockReturnValue(mockDiv);
   });
 
   afterEach(() => {
@@ -22,7 +20,7 @@ describe('getSafeAreaInset', () => {
     it('should return object with all zeros when safe area inset is not supported', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '',
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
     });
@@ -36,7 +34,7 @@ describe('getSafeAreaInset', () => {
           if (prop === 'padding-right') return '0px';
           return '0px';
         },
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       expect(getSafeAreaInset()).toEqual({ top: 47, bottom: 34, left: 0, right: 0 });
     });
@@ -44,7 +42,7 @@ describe('getSafeAreaInset', () => {
     it('should return 0 for non-numeric values', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => 'auto',
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
     });
@@ -54,7 +52,7 @@ describe('getSafeAreaInset', () => {
     it('should create a temporary div element', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '34px',
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       getSafeAreaInset();
 
@@ -64,7 +62,7 @@ describe('getSafeAreaInset', () => {
     it('should set position to fixed on the div', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '34px',
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       getSafeAreaInset();
 
@@ -74,18 +72,18 @@ describe('getSafeAreaInset', () => {
     it('should append and remove the div from document body', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '34px',
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       getSafeAreaInset();
 
-      expect(appendChildSpy).toHaveBeenCalledWith(mockDiv);
-      expect(removeChildSpy).toHaveBeenCalledWith(mockDiv);
+      expect(document.body.appendChild).toHaveBeenCalledWith(mockDiv);
+      expect(document.body.removeChild).toHaveBeenCalledWith(mockDiv);
     });
 
     it('should set all env() properties at once', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '0px',
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       const setPropertySpy = vi.spyOn(mockDiv.style, 'setProperty');
 
@@ -100,13 +98,13 @@ describe('getSafeAreaInset', () => {
     it('should only create one DOM element for all values', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '0px',
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       getSafeAreaInset();
 
       expect(document.createElement).toHaveBeenCalledTimes(1);
-      expect(appendChildSpy).toHaveBeenCalledTimes(1);
-      expect(removeChildSpy).toHaveBeenCalledTimes(1);
+      expect(document.body.appendChild).toHaveBeenCalledTimes(1);
+      expect(document.body.removeChild).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -118,7 +116,7 @@ describe('getSafeAreaInset', () => {
           if (prop === 'padding-bottom') return '34px';
           return '0px';
         },
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       expect(getSafeAreaInset()).toEqual({ top: 59, bottom: 34, left: 0, right: 0 });
     });
@@ -130,7 +128,7 @@ describe('getSafeAreaInset', () => {
           if (prop === 'padding-bottom') return '34px';
           return '0px';
         },
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       expect(getSafeAreaInset()).toEqual({ top: 47, bottom: 34, left: 0, right: 0 });
     });
@@ -144,7 +142,7 @@ describe('getSafeAreaInset', () => {
           if (prop === 'padding-right') return '47px';
           return '0px';
         },
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 21, left: 47, right: 47 });
     });
@@ -152,7 +150,7 @@ describe('getSafeAreaInset', () => {
     it('should handle no inset (desktop or older devices)', () => {
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
         getPropertyValue: () => '0px',
-      } as CSSStyleDeclaration);
+      } as unknown as CSSStyleDeclaration);
 
       expect(getSafeAreaInset()).toEqual({ top: 0, bottom: 0, left: 0, right: 0 });
     });
