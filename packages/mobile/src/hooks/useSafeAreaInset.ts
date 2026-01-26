@@ -112,4 +112,3 @@ function getSafeAreaInsetAll(): SafeAreaInset {
     right: getSafeAreaInset('right'),
   };
 }
-

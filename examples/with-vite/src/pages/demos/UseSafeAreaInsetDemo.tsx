@@ -212,4 +212,3 @@ function InsetCard({ label, value, description }: { label: string; value: number
     </div>
   );
 }
-
