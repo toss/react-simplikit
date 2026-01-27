@@ -14,11 +14,6 @@ import { getSafeAreaInset, type SafeAreaInset } from '../utils/safeArea/getSafeA
  * - **bottom**: Home indicator on Face ID devices
  * - **left/right**: Rounded corners in landscape mode
  *
- * Typical values (iPhone with Face ID, portrait mode):
- * - top: 47-59px (notch/Dynamic Island)
- * - bottom: 34px (home indicator)
- * - left/right: 0px
- *
  * @returns Object containing safe area insets for all four sides
  *
  * @example
