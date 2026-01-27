@@ -1,18 +1,7 @@
 import { startTransition, useCallback, useEffect, useState } from 'react';
 
 import { isServer } from '../utils/isServer.ts';
-import { getSafeAreaInset } from '../utils/safeArea/getSafeAreaInset.ts';
-
-type SafeAreaInset = {
-  /** Top safe area inset in pixels (notch, Dynamic Island, or status bar) */
-  top: number;
-  /** Bottom safe area inset in pixels (home indicator on Face ID devices) */
-  bottom: number;
-  /** Left safe area inset in pixels (rounded corners in landscape mode) */
-  left: number;
-  /** Right safe area inset in pixels (rounded corners in landscape mode) */
-  right: number;
-};
+import { getSafeAreaInset, type SafeAreaInset } from '../utils/safeArea/getSafeAreaInset.ts';
 
 /**
  * React hook to track safe area inset changes
@@ -69,11 +58,11 @@ type SafeAreaInset = {
  * ```
  */
 export function useSafeAreaInset(): SafeAreaInset {
-  const [inset, setInset] = useState<SafeAreaInset>(() => getSafeAreaInsetAll());
+  const [inset, setInset] = useState<SafeAreaInset>(() => getSafeAreaInset());
 
   const updateInset = useCallback(() => {
     startTransition(() => {
-      setInset(getSafeAreaInsetAll());
+      setInset(getSafeAreaInset());
     });
   }, []);
 
@@ -98,17 +87,4 @@ export function useSafeAreaInset(): SafeAreaInset {
   );
 
   return inset;
-}
-
-function getSafeAreaInsetAll(): SafeAreaInset {
-  if (isServer()) {
-    return { top: 0, bottom: 0, left: 0, right: 0 };
-  }
-
-  return {
-    top: getSafeAreaInset('top'),
-    bottom: getSafeAreaInset('bottom'),
-    left: getSafeAreaInset('left'),
-    right: getSafeAreaInset('right'),
-  };
 }
