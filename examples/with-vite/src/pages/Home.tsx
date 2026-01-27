@@ -55,6 +55,11 @@ export function Home() {
             title="bodyScrollLock Utils"
             description="Programmatic scroll lock control"
           />
+          <DemoLink
+            to="/demos/get-safe-area-inset"
+            title="getSafeAreaInset"
+            description="Get device safe area insets (notch, home indicator)"
+          />
         </nav>
       </section>
 
@@ -73,7 +78,6 @@ export function Home() {
           <DemoLink to="/demos/is-server" title="isServer" description="Check if code is running on server" />
         </nav>
       </section>
-
     </div>
   );
 }
