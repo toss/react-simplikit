@@ -5,7 +5,7 @@ import { subscribeKeyboardHeight } from '../../utils/keyboard/subscribeKeyboardH
 
 import { useKeyboardHeight } from './useKeyboardHeight.ts';
 
-vi.mock('../../utils/keyboardHeight/subscribeKeyboardHeight.ts', () => ({
+vi.mock('../../utils/keyboard/subscribeKeyboardHeight.ts', () => ({
   subscribeKeyboardHeight: vi.fn(),
 }));
 
