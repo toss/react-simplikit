@@ -34,15 +34,25 @@ export function IsServerDemo() {
     <DemoLayout title="isServer" description="Check if code is running on the server">
       {/* Status */}
       <StatusCard title="Environment State" description="Current execution environment">
-        <StatusRow label="isServer()" value={currentValue ? 'true' : 'false'} variant={currentValue ? 'warning' : 'success'} monospace />
-        <StatusRow label="Component mounted" value={mounted ? 'true' : 'false'} variant={mounted ? 'success' : 'muted'} monospace />
+        <StatusRow
+          label="is Server()"
+          value={currentValue ? 'true' : 'false'}
+          variant={currentValue ? 'warning' : 'success'}
+          monospace
+        />
+        <StatusRow
+          label="Component mounted"
+          value={mounted ? 'true' : 'false'}
+          variant={mounted ? 'success' : 'muted'}
+          monospace
+        />
       </StatusCard>
 
       {/* Explanation */}
       <Card title="How it works">
         <InfoBox variant="info">
           <p style={{ margin: 0 }}>
-            In <strong>CSR (Vite)</strong>, <code>isServer()</code> always returns <code>false</code>.
+            During <strong>CSR (Vite)</strong>, <code>isServer()</code> always returns <code>false</code>.
             <br />
             There is no SSR step, so it&apos;s always running on the client.
           </p>
@@ -51,8 +61,8 @@ export function IsServerDemo() {
         <div style={{ marginTop: '16px' }}>
           <InfoBox variant="tip">
             <p style={{ margin: 0 }}>
-              <strong>Tip:</strong> In <strong>SSR (Next.js)</strong>, <code>isServer()</code> returns <code>true</code> during
-              server rendering and <code>false</code> after hydration.
+              <strong>Tip:</strong> In <strong>SSR (Next.js)</strong>, <code>isServer()</code> returns <code>true</code>{' '}
+              during server rendering and <code>false</code> after hydration.
             </p>
           </InfoBox>
         </div>
