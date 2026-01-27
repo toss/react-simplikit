@@ -21,7 +21,6 @@ export default function App() {
         <Route path="/demos/use-scroll-direction" element={<UseScrollDirectionDemo />} />
         <Route path="/demos/use-visual-viewport" element={<UseVisualViewportDemo />} />
         <Route path="/demos/body-scroll-lock-util" element={<BodyScrollLockUtilDemo />} />
-        <Route path="/demos/get-safe-area-inset" element={<GetSafeAreaInsetDemo />} />
       </Routes>
     </BrowserRouter>
   );

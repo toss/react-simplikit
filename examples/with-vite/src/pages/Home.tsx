@@ -38,7 +38,7 @@ export function Home() {
           <DemoLink
             to="/demos/use-safe-area-inset"
             title="useSafeAreaInset"
-            description="Reactive hook for safe area insets (auto-updates on orientation change)"
+            description="Reactive safe area insets (auto-updates on rotation)"
           />
         </nav>
       </section>

@@ -1,96 +1,9 @@
+import { Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
 import { useSafeAreaInset } from '@react-simplikit/mobile';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
-export function UseSafeAreaInsetDemo() {
-  const safeArea = useSafeAreaInset();
-
-  return (
-    <DemoLayout
-      title="useSafeAreaInset"
-      description="React hook that tracks safe area insets and automatically updates on orientation change"
-    >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 12,
-        }}
-      >
-        <InsetCard label="Top" value={safeArea.top} description="Notch, Dynamic Island, or status bar" />
-        <InsetCard label="Bottom" value={safeArea.bottom} description="Home indicator on Face ID devices" />
-        <InsetCard label="Left" value={safeArea.left} description="Rounded corners (landscape)" />
-        <InsetCard label="Right" value={safeArea.right} description="Rounded corners (landscape)" />
-      </div>
-
-      <div
-        style={{
-          marginTop: 24,
-          padding: 16,
-          background: '#e6f7e6',
-          borderRadius: 8,
-          border: '1px solid #a3d9a3',
-        }}
-      >
-        <strong style={{ color: '#2d862d' }}>🔄 Reactive Updates</strong>
-        <p style={{ marginTop: 8, color: '#444', fontSize: 14 }}>
-          Unlike <code style={{ background: '#fff', padding: '2px 4px' }}>getSafeAreaInset()</code>, this hook
-          automatically updates when:
-        </p>
-        <ul style={{ marginTop: 8, color: '#444', fontSize: 14, paddingLeft: 20 }}>
-          <li>Screen orientation changes (portrait ↔ landscape)</li>
-          <li>Window is resized</li>
-        </ul>
-        <p style={{ marginTop: 8, color: '#444', fontSize: 14 }}>
-          <strong>Try rotating your device</strong> to see the values update in real-time!
-        </p>
-      </div>
-
-      <div
-        style={{
-          marginTop: 24,
-          padding: 16,
-          background: '#e8f4fd',
-          borderRadius: 8,
-          border: '1px solid #b3d9f2',
-        }}
-      >
-        <strong style={{ color: '#0066cc' }}>💡 Tip</strong>
-        <p style={{ marginTop: 8, color: '#444', fontSize: 14 }}>
-          On desktop browsers, all values will be 0px. Test on a real iOS device or iOS Simulator with notch/home
-          indicator to see actual values.
-        </p>
-        <p style={{ marginTop: 8, color: '#444', fontSize: 14 }}>
-          Make sure to set <code style={{ background: '#fff', padding: '2px 4px' }}>viewport-fit=cover</code> in your
-          HTML meta tag:
-        </p>
-        <pre
-          style={{
-            marginTop: 8,
-            padding: 12,
-            background: '#fff',
-            borderRadius: 4,
-            fontSize: 12,
-            overflow: 'auto',
-          }}
-        >
-          {`<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">`}
-        </pre>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <h3>Usage Example</h3>
-        <pre
-          style={{
-            padding: 16,
-            background: '#1e1e1e',
-            color: '#d4d4d4',
-            borderRadius: 8,
-            fontSize: 13,
-            overflow: 'auto',
-          }}
-        >
-          {`import { useSafeAreaInset } from '@react-simplikit/mobile';
+const USAGE_CODE = `import { useSafeAreaInset } from '@react-simplikit/mobile';
 
 function MyComponent() {
   // Automatically updates on orientation change!
@@ -106,109 +19,111 @@ function MyComponent() {
       Content that respects safe areas
     </div>
   );
-}`}
-        </pre>
+}`;
+
+export function UseSafeAreaInsetDemo() {
+  const safeArea = useSafeAreaInset();
+
+  const hasInsets = safeArea.top > 0 || safeArea.bottom > 0 || safeArea.left > 0 || safeArea.right > 0;
+
+  return (
+    <DemoLayout
+      title="useSafeAreaInset"
+      description="React hook that tracks safe area insets and auto-updates on orientation change"
+    >
+      {/* Current Values */}
+      <StatusCard title="Safe Area Insets" description="Current values (auto-updates on rotation)">
+        <StatusRow label="Top" value={`${safeArea.top}px`} variant={safeArea.top > 0 ? 'success' : 'muted'} monospace />
+        <StatusRow
+          label="Bottom"
+          value={`${safeArea.bottom}px`}
+          variant={safeArea.bottom > 0 ? 'success' : 'muted'}
+          monospace
+        />
+        <StatusRow
+          label="Left"
+          value={`${safeArea.left}px`}
+          variant={safeArea.left > 0 ? 'success' : 'muted'}
+          monospace
+        />
+        <StatusRow
+          label="Right"
+          value={`${safeArea.right}px`}
+          variant={safeArea.right > 0 ? 'success' : 'muted'}
+          monospace
+        />
+      </StatusCard>
+
+      {/* Reactive Info */}
+      <div style={{ marginBottom: '12px' }}>
+        <InfoBox variant="tip">
+          <strong>🔄 Reactive Updates</strong>
+          <p style={{ margin: '8px 0 0 0' }}>
+            Unlike{' '}
+            <code style={{ background: '#fff', padding: '2px 4px', borderRadius: '4px' }}>getSafeAreaInset()</code>,
+            this hook automatically updates when screen orientation changes.
+          </p>
+          <p style={{ margin: '8px 0 0 0' }}>
+            <strong>Try rotating your device</strong> to see the values update in real-time!
+          </p>
+        </InfoBox>
       </div>
 
-      <div style={{ marginTop: 24 }}>
-        <h3>Comparison with getSafeAreaInset</h3>
-        <table
-          style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            fontSize: 14,
-          }}
-        >
-          <thead>
-            <tr style={{ background: '#f5f5f5' }}>
-              <th style={{ padding: 12, textAlign: 'left', borderBottom: '1px solid #ddd' }}>Feature</th>
-              <th style={{ padding: 12, textAlign: 'left', borderBottom: '1px solid #ddd' }}>getSafeAreaInset()</th>
-              <th style={{ padding: 12, textAlign: 'left', borderBottom: '1px solid #ddd' }}>useSafeAreaInset()</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>Type</td>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>Utility function</td>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>React hook</td>
-            </tr>
-            <tr>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>Auto-updates</td>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>❌ No</td>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>✅ Yes</td>
-            </tr>
-            <tr>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>Orientation change</td>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>Manual re-call needed</td>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>Automatic</td>
-            </tr>
-            <tr>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>Use case</td>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>One-time read</td>
-              <td style={{ padding: 12, borderBottom: '1px solid #eee' }}>Reactive UI</td>
-            </tr>
-          </tbody>
-        </table>
+      {/* Device Status */}
+      <div style={{ marginBottom: '12px' }}>
+        <InfoBox variant={hasInsets ? 'info' : 'neutral'}>
+          {hasInsets ? (
+            <>
+              <strong>✅ Safe area detected!</strong>
+              <p style={{ margin: '8px 0 0 0' }}>
+                This device has safe area insets. The values above reflect your device.
+              </p>
+            </>
+          ) : (
+            <>
+              <strong>💡 No safe area on this device</strong>
+              <p style={{ margin: '8px 0 0 0' }}>
+                All values are 0px. Test on a real iOS device with notch/home indicator.
+              </p>
+            </>
+          )}
+        </InfoBox>
       </div>
 
-      <div
-        style={{
-          marginTop: 24,
-          padding: 16,
-          background: '#fff3e0',
-          borderRadius: 8,
-          border: '1px solid #ffcc80',
-        }}
-      >
-        <strong style={{ color: '#e65100' }}>📱 Live Preview</strong>
-        <p style={{ marginTop: 8, color: '#444', fontSize: 14 }}>
-          The box below demonstrates safe area padding applied in real-time:
-        </p>
+      {/* Comparison */}
+      <Card title="Hook vs Utility Comparison">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <StatusRow label="getSafeAreaInset()" value="One-time read" />
+          <StatusRow label="useSafeAreaInset()" value="Reactive (auto-updates)" variant="success" />
+        </div>
+      </Card>
+
+      {/* Usage Example */}
+      <Card title="Usage Example">
+        <CodeBlock code={USAGE_CODE} />
+      </Card>
+
+      {/* Live Preview */}
+      <Card title="Live Preview">
+        <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '12px' }}>Box with safe area padding applied:</p>
         <div
           style={{
-            marginTop: 12,
             padding: `${safeArea.top}px ${safeArea.right}px ${safeArea.bottom}px ${safeArea.left}px`,
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            borderRadius: 8,
+            borderRadius: '8px',
             color: 'white',
             textAlign: 'center',
-            minHeight: 100,
+            minHeight: '80px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <span>
-            Paddings: {safeArea.top}px / {safeArea.right}px / {safeArea.bottom}px / {safeArea.left}px
+          <span style={{ fontSize: '14px' }}>
+            Padding: {safeArea.top} / {safeArea.right} / {safeArea.bottom} / {safeArea.left}
           </span>
         </div>
-      </div>
+      </Card>
     </DemoLayout>
-  );
-}
-
-function InsetCard({ label, value, description }: { label: string; value: number; description: string }) {
-  return (
-    <div
-      style={{
-        padding: 16,
-        background: '#f5f5f5',
-        borderRadius: 8,
-      }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <strong>{label}</strong>
-        <span
-          style={{
-            fontSize: 18,
-            fontWeight: 600,
-            color: value > 0 ? '#0066cc' : '#888',
-          }}
-        >
-          {value}px
-        </span>
-      </div>
-      <p style={{ marginTop: 4, fontSize: 12, color: '#666' }}>{description}</p>
-    </div>
   );
 }
