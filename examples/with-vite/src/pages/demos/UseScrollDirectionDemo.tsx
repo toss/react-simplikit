@@ -48,7 +48,13 @@ export function UseScrollDirectionDemo() {
         }}
       >
         <div
-          style={{ maxWidth: '672px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          style={{
+            maxWidth: '672px',
+            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
         >
           <h1 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>Demo Navigation</h1>
           <div style={{ fontSize: '14px', fontWeight: 600 }}>
@@ -81,7 +87,14 @@ export function UseScrollDirectionDemo() {
                 </ol>
               </InfoBox>
 
-              <div style={{ marginTop: '16px', padding: '16px', borderLeft: '4px solid #2563eb', backgroundColor: '#f9fafb' }}>
+              <div
+                style={{
+                  marginTop: '16px',
+                  padding: '16px',
+                  borderLeft: '4px solid #2563eb',
+                  backgroundColor: '#f9fafb',
+                }}
+              >
                 <p style={{ fontSize: '14px', margin: 0 }}>
                   <strong>Use Case:</strong> Common in mobile apps to maximize screen real estate. Navigation hides when
                   reading (scroll down) and appears when navigating (scroll up).
