@@ -1,70 +1,111 @@
 {
   "name": "react-simplikit",
   "version": "0.0.46",
-  "description": "Lightweight yet powerful library providing various utilities for React",
+  "main": "./src/index.ts",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./esm/index.js",
-  "types": "./dist/index.d.cts",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./esm/index.d.ts",
-        "default": "./esm/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
-    },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "dist/**/*",
-    "esm/**/*"
-  ],
   "sideEffects": false,
   "keywords": [
-    "react",
-    "hooks",
-    "utilities",
-    "components"
+    "react"
   ],
   "homepage": "https://react-simplikit.slash.page",
   "bugs": "https://github.com/toss/react-simplikit/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/toss/react-simplikit.git",
-    "directory": "packages/core"
+    "url": "git+https://github.com/toss/react-simplikit.git"
   },
   "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "esm/**/*"
+  ],
   "scripts": {
     "build": "tsup",
-    "clean": "rimraf ./dist ./esm",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "clean": "rimraf ./dist ./esm ./coverage ./node_modules",
+    "scaffold": "tsx .scripts/index.ts scaffold",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "docs:gen": "tsx .scripts/index.ts generate-docs",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview",
+    "fix": "yarn run fix:lint && yarn run fix:format",
+    "fix:format": "prettier . --write",
+    "fix:lint": "eslint src --fix",
+    "test": "yarn run test:lint && yarn run test:format && yarn run test:type && yarn run test:spec && yarn run test:coverage",
+    "test:format": "prettier . --list-different",
+    "test:lint": "eslint src",
+    "test:type": "tsc --noEmit",
+    "test:spec": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint src",
-    "typecheck": "tsc --noEmit"
+    "prepack": "tsup"
   },
-  "peerDependencies": {
-    "react": ">=18.0.0"
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.cjs",
+    "types": "./dist/index.d.cts",
+    "module": "./esm/index.js",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./esm/index.d.ts",
+          "default": "./esm/index.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
+      },
+      "./package.json": "./package.json"
+    }
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.7",
+    "@eslint/js": "^9.16.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.0",
+    "@types/node": "^22.10.2",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitest/coverage-v8": "^2.1.8",
+    "commander": "^13.1.0",
+    "comment-parser": "^1.4.1",
+    "corepack": "^0.30.0",
+    "dotenv": "^16.4.7",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "fast-glob": "^3.3.3",
+    "globals": "^15.13.0",
+    "jsdom": "^25.0.1",
+    "listr2": "^8.2.5",
+    "nanoid": "^5.1.5",
+    "openai": "^4.93.0",
+    "ora": "^8.2.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-sort-re-exports": "^0.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "rimraf": "^6.0.1",
     "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "typescript-eslint": "^8.18.0",
+    "vitepress": "^1.5.0",
+    "vitest": "^2.1.8",
+    "vue": "^3.5.13"
   },
-  "publishConfig": {
-    "access": "public"
-  }
+  "peerDependencies": {
+    "react": "*"
+  },
+  "packageManager": "yarn@4.10.2"
 }
