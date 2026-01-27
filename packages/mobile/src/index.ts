@@ -1,6 +1,12 @@
 // Hooks
 export { useAvoidKeyboard } from './hooks/useAvoidKeyboard.ts';
 export { useBodyScrollLock } from './hooks/useBodyScrollLock.ts';
+export {
+  type ConnectionType,
+  type EffectiveConnectionType,
+  type NetworkStatus,
+  useNetworkStatus,
+} from './hooks/useNetworkStatus/index.ts';
 export { useSafeAreaInset } from './hooks/useSafeAreaInset.ts';
 export { useScrollDirection } from './hooks/useScrollDirection.ts';
 export { useVisualViewport } from './hooks/useVisualViewport.ts';

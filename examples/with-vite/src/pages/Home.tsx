@@ -26,6 +26,11 @@ export function Home() {
             description="Prevent body scroll with nested modals"
           />
           <DemoLink
+            to="/demos/use-network-status"
+            title="useNetworkStatus"
+            description="Access Network Information API"
+          />
+          <DemoLink
             to="/demos/use-scroll-direction"
             title="useScrollDirection"
             description="Auto-hide navigation on scroll down"

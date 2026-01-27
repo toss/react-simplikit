@@ -13,8 +13,6 @@
     "jsx": "react-jsx",
     "types": ["@testing-library/jest-dom"]
   },
-  "include": ["packages/**/src", ".scripts/**/*"],
-  "vueCompilerOptions": {
-    "vitePressExtensions": [".md"]
-  }
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

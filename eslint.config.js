@@ -38,6 +38,14 @@ export default [
     },
   },
   {
+    files: ['packages/**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        project: './packages/*/tsconfig.json',
+      },
+    },
+  },
+  {
     files: ['examples/**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {

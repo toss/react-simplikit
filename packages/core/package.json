@@ -1,9 +1,11 @@
 {
-  "name": "@react-simplikit/root",
+  "name": "react-simplikit",
+  "version": "0.0.46",
+  "main": "./src/index.ts",
   "type": "module",
-  "workspaces": [
-    "packages/*",
-    "examples/*"
+  "sideEffects": false,
+  "keywords": [
+    "react"
   ],
   "homepage": "https://react-simplikit.slash.page",
   "bugs": "https://github.com/toss/react-simplikit/issues",
@@ -12,11 +14,13 @@
     "url": "git+https://github.com/toss/react-simplikit.git"
   },
   "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "esm/**/*"
+  ],
   "scripts": {
-    "clean": "rimraf ./coverage ./node_modules",
-    "clean:all": "yarn clean && yarn workspaces foreach -Ap run clean",
-    "example:vite": "yarn workspace with-vite dev",
-    "example:next": "yarn workspace with-nextjs dev",
+    "build": "tsup",
+    "clean": "rimraf ./dist ./esm ./coverage ./node_modules",
     "scaffold": "tsx .scripts/index.ts scaffold",
     "changeset": "changeset",
     "changeset:version": "changeset version",
@@ -25,17 +29,35 @@
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
-    "fix": "yarn fix:lint && yarn fix:format",
+    "fix": "yarn run fix:lint && yarn run fix:format",
     "fix:format": "prettier . --write",
-    "fix:lint": "yarn workspaces foreach -Ap run lint --fix",
-    "test": "yarn test:lint && yarn test:format && yarn test:type && yarn test:spec",
+    "fix:lint": "eslint src --fix",
+    "test": "yarn run test:lint && yarn run test:format && yarn run test:type && yarn run test:spec && yarn run test:coverage",
     "test:format": "prettier . --list-different",
-    "test:lint": "yarn workspaces foreach -Ap run lint",
-    "test:type": "yarn workspaces foreach -Ap run typecheck",
-    "test:spec": "yarn workspaces foreach -Ap run test",
-    "test:coverage": "yarn workspaces foreach -Ap run test:coverage",
-    "build": "yarn workspaces foreach -Apt run build",
-    "prepack": "yarn build"
+    "test:lint": "eslint src",
+    "test:type": "tsc --noEmit",
+    "test:spec": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "prepack": "tsup"
+  },
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.cjs",
+    "types": "./dist/index.d.cts",
+    "module": "./esm/index.js",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./esm/index.d.ts",
+          "default": "./esm/index.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
+      },
+      "./package.json": "./package.json"
+    }
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
@@ -81,6 +103,9 @@
     "vitepress": "^1.5.0",
     "vitest": "^2.1.8",
     "vue": "^3.5.13"
+  },
+  "peerDependencies": {
+    "react": "*"
   },
   "packageManager": "yarn@4.10.2"
 }
