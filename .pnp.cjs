@@ -2070,9 +2070,7 @@ const RAW_RUNTIME_STATE =
         ],\
         "packagePeers": [\
           "@react-simplikit/mobile",\
-          "@types/react-dom",\
           "@types/react-simplikit__mobile",\
-          "@types/react",\
           "react-dom",\
           "react"\
         ],\
@@ -4619,7 +4617,6 @@ const RAW_RUNTIME_STATE =
           ["vitest", "virtual:b8ca648f23ac8db9e48f501f3417b5d22664f520096d4c3f324c7f27acb059637b178631fb2aa9474c5307a2c176eb80c2a4069538d26cb000262efba27773fe#npm:2.1.9"]\
         ],\
         "packagePeers": [\
-          "@types/react",\
           "react"\
         ],\
         "linkType": "SOFT"\
@@ -19061,7 +19058,8 @@ class ZipFS extends BasePortableFakeFS {
         const entries = Array.from(directoryListing, (name) => {
           return Object.assign(this.statImpl(`lstat`, ppath.join(p, name)), {
             name,
-            path: PortablePath.dot
+            path: PortablePath.dot,
+            parentPath: PortablePath.dot
           });
         });
         for (const entry of entries) {
@@ -19072,7 +19070,8 @@ class ZipFS extends BasePortableFakeFS {
           for (const child of subListing) {
             entries.push(Object.assign(this.statImpl(`lstat`, ppath.join(p, subPath, child)), {
               name: child,
-              path: subPath
+              path: subPath,
+              parentPath: subPath
             }));
           }
         }
@@ -19093,7 +19092,8 @@ class ZipFS extends BasePortableFakeFS {
       return Array.from(directoryListing, (name) => {
         return Object.assign(this.statImpl(`lstat`, ppath.join(p, name)), {
           name,
-          path: void 0
+          path: void 0,
+          parentPath: void 0
         });
       });
     } else {
