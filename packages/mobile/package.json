@@ -31,8 +31,11 @@
   "scripts": {
     "build": "tsup",
     "clean": "rimraf ./dist",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "peerDependencies": {
     "react": ">=18.0.0"

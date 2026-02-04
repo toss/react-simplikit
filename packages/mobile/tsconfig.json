@@ -11,9 +11,7 @@
     "strict": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
-    "paths": {
-      "@react-simplikit/mobile": ["./src/index.ts"]
-    }
+    "types": ["@testing-library/jest-dom"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
