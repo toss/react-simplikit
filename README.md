@@ -1,82 +1,99 @@
-![react-simplikit](./src/public/images/og.png)
+![react-simplikit](./.vitepress/dist/images/og.png)
 
-# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit) [![Discord Badge](https://discord.com/api/guilds/1281071127052943361/widget.png?style=shield)](https://discord.gg/vGXbVjP2nY)
+# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/react-simplikit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit) [![Discord Badge](https://discord.com/api/guilds/1281071127052943361/widget.png?style=shield)](https://discord.gg/vGXbVjP2nY)
 
-English | [Korean](./README-ko_kr.md)
+English | [한국어](./README-ko_kr.md)
 
-`react-simplikit` is a lightweight yet powerful library that provides various utilities for use in React environments.
+A collection of lightweight, zero-dependency React utilities for building robust applications.
 
-- `react-simplikit` is dependency-free, making it extremely lightweight.
-- `react-simplikit` guarantees reliability with 100% test coverage.
-- `react-simplikit` offers JSDoc comments, detailed documentation, and examples to ensure any developer can easily use it.
+## Packages
 
-## Library Direction
+| Package                                      | Description                                                    | Version                                                                                                                   |
+| -------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/core)           | Universal hooks - pure state/logic hooks (platform-independent) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [@react-simplikit/mobile](./packages/mobile) | Mobile web utilities (viewport, keyboard, scroll)              | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
 
-**react-simplikit is now maintained as a Universal Hook Library providing only pure state/logic hooks.**
+> **Note**: `react-simplikit` is now maintained as a Universal Hook Library providing only pure state/logic hooks that work across web and mobile (React Native). Browser/platform-dependent hooks are deprecated. See [packages/core/README.md](./packages/core/README.md) for details.
 
-We are repositioning react-simplikit to focus exclusively on **platform-independent hooks** that work seamlessly across web and mobile (React Native, etc.).
+## Features
 
-### What's Maintained: Pure State/Logic Hooks
+- **Zero dependencies** - Extremely lightweight
+- **100% TypeScript** - Full type safety
+- **100% Test coverage** - Reliable and stable
+- **SSR-safe** - Works with Next.js and other SSR frameworks
+- **Tree-shakeable** - Only bundle what you use
 
-Hooks that don't depend on specific platform APIs will continue to be actively maintained:
+## Installation
 
-- State management hooks like `useToggle`, `useBooleanState`, `useCounter`
-- Lifecycle hooks like `usePrevious`, `useMount`
-- Utility hooks like `useDebounce`, `useThrottle`
-- **Backward compatibility (BC) is preserved** for these existing pure logic hooks
+```bash
+# Core utilities
+npm install react-simplikit
 
-### What's Deprecated: Browser/Platform-Dependent Hooks
+# Mobile web utilities
+npm install @react-simplikit/mobile
+```
 
-The following hooks that strongly depend on browser-specific APIs are now deprecated:
+## Quick Start
 
-- `useGeolocation` - depends on `navigator.geolocation`
-- `useStorageState` - depends on `localStorage`/`sessionStorage`
-- `useIntersectionObserver` - depends on `IntersectionObserver` API
-- `useImpressionRef` - depends on `IntersectionObserver` + Visibility API
-- `useDoubleClick`, `useLongPress` - depend on DOM events + `window.setTimeout`
-- `useOutsideClickEffect` - depends on DOM events + `document`
-- `useVisibilityEvent` - depends on `document.visibilityState`
-
-These hooks:
-
-- Will not receive new features or major enhancements
-- Are marked as `@deprecated` in documentation
-- May be removed in future major versions
-
-### Package Status
-
-- react-simplikit will **not be archived**
-- Pure state/logic hooks will continue to be maintained
-- Critical bug fixes and minimal maintenance will continue
-- No new browser/platform-dependent hooks will be added
-
-## Example
+### react-simplikit
 
 ```tsx
-import { useBooleanState } from 'react-simplikit';
+import { useState, useEffect } from 'react';
+import { useDebounce } from 'react-simplikit';
 
-function Component() {
-  // using the `useBooleanState` hook to manage state.
-  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
-    useBooleanState(false);
+function SearchInput() {
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() => {
+    if (debouncedQuery) {
+      searchAPI(debouncedQuery);
+    }
+  }, [debouncedQuery]);
+
+  return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
+}
+```
+
+### @react-simplikit/mobile
+
+```tsx
+import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
+
+function ChatInput() {
+  const { ref, style } = useAvoidKeyboard();
 
   return (
-    <div>
-      <p>Bottom Sheet State: {open ? 'Open' : 'Closed'}</p>
-      <button onClick={openBottomSheet}>Open</button>
-      <button onClick={closeBottomSheet}>Close</button>
-      <button onClick={toggleBottomSheet}>Toggle</button>
+    <div ref={ref} style={style}>
+      <input type="text" placeholder="Type a message..." />
     </div>
   );
 }
+
+function Modal({ isOpen }) {
+  useBodyScrollLock(isOpen);
+  // ...
+}
+```
+
+## Documentation
+
+Visit [react-simplikit.slash.page](https://react-simplikit.slash.page) for full documentation.
+
+## Repository Structure
+
+```
+packages/
+├── core/    # react-simplikit (hooks, components, utils)
+└── mobile/  # @react-simplikit/mobile (mobile web utilities)
 ```
 
 ## Contributing
 
-Contributions are welcome from everyone in the community. Please check the contribution guide linked below.
+We welcome contributions from everyone! Please check our contribution guide.
 
-[CONTRIBUTING](./src/docs/en/contributing.md)
+[CONTRIBUTING](./CONTRIBUTING.md)
 
 ## License
 
-MIT © Viva Republica, Inc. For more details, see [LICENSE](./LICENSE)
+MIT © Viva Republica, Inc. See [LICENSE](./LICENSE) for details.

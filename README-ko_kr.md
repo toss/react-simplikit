@@ -1,81 +1,98 @@
-![react-simplikit](src/public/images/og.png)
+![react-simplikit](./.vitepress/dist/images/og.png)
 
-# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit)
+# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/react-simplikit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit) [![Discord Badge](https://discord.com/api/guilds/1281071127052943361/widget.png?style=shield)](https://discord.gg/vGXbVjP2nY)
 
 [English](./README.md) | 한국어
 
-`react-simplikit`은 React 환경에서 유용하게 사용할 수 있는 다양한 유틸리티를 제공하는 가볍고 강력한 라이브러리예요.
+견고한 애플리케이션을 만들기 위한 가볍고 의존성 없는 React 유틸리티 모음이에요.
 
-- `react-simplikit`은 의존성이 없어서 매우 가벼워요.
-- `react-simplikit`은 100% 테스트 커버리지를 통해 신뢰성을 보장해요.
-- `react-simplikit`은 JSDoc과 풍부한 문서, 예제를 제공해서 어떤 개발자도 쉽게 사용할 수 있어요.
+## 패키지
 
-## 라이브러리 운영 방향
+| 패키지                                       | 설명                                                       | 버전                                                                                                                      |
+| -------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/core)           | Universal hooks - 순수 상태/로직 훅 (플랫폼 독립적)         | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [@react-simplikit/mobile](./packages/mobile) | 모바일 웹 유틸리티 (viewport, keyboard, scroll)            | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
 
-**react-simplikit은 이제 완전히 순수한 상태/로직 훅만을 위한 Universal Hook Library로 유지됩니다.**
+> **참고**: `react-simplikit`은 이제 웹과 모바일(React Native)에서 모두 동작하는 순수 상태/로직 훅만을 제공하는 Universal Hook Library로 유지됩니다. 브라우저/플랫폼 종속 훅들은 Deprecated 처리됩니다. 자세한 내용은 [packages/core/README-ko_kr.md](./packages/core/README-ko_kr.md)를 참고하세요.
 
-react-simplikit은 웹/앱(React Native 등) 어디서든 동작 가능한, **플랫폼에 종속되지 않은 순수 상태/로직 훅만을 제공하는 라이브러리**로 재편됩니다.
+## 특징
 
-### 유지되는 것: 순수 상태/로직 훅
+- **의존성 없음** - 매우 가벼워요
+- **100% TypeScript** - 완벽한 타입 안전성
+- **100% 테스트 커버리지** - 신뢰할 수 있어요
+- **SSR 안전** - Next.js 등 SSR 프레임워크에서 동작해요
+- **Tree-shakeable** - 사용하는 것만 번들에 포함돼요
 
-특정 플랫폼 API에 의존하지 않는 순수 로직 기반 훅들은 계속 제공돼요:
+## 설치
 
-- `useToggle`, `useBooleanState`, `useCounter` 같은 상태 관리 훅
-- `usePrevious`, `useMount` 같은 라이프사이클 훅
-- `useDebounce`, `useThrottle` 같은 유틸리티 훅
-- **기존 프로젝트의 Backward Compatibility(BC)는 보존돼요**
+```bash
+# Core utilities
+npm install react-simplikit
 
-### Deprecated 되는 것: 브라우저/플랫폼 결합 훅
+# Mobile web utilities
+npm install @react-simplikit/mobile
+```
 
-다음과 같이 브라우저에 강하게 의존하는 훅들은 Deprecated 처리돼요:
+## 빠른 시작
 
-- `useGeolocation` - `navigator.geolocation` 의존
-- `useStorageState` - `localStorage`/`sessionStorage` 의존
-- `useIntersectionObserver` - `IntersectionObserver` API 의존
-- `useImpressionRef` - `IntersectionObserver` + Visibility API 의존
-- `useDoubleClick`, `useLongPress` - DOM 이벤트 + `window.setTimeout` 의존
-- `useOutsideClickEffect` - DOM 이벤트 + `document` 의존
-- `useVisibilityEvent` - `document.visibilityState` 의존
-
-이 훅들은:
-
-- 새 기능 추가나 적극적인 고도화는 진행하지 않고
-- 문서 상에서 `@deprecated`로 명시하고
-- 장기적으로는 메이저 버전 업데이트에서 제거를 검토할 수 있어요
-
-### 패키지 상태
-
-- react-simplikit은 **아카이브하지 않아요**
-- 순수 상태/로직 훅들은 계속 유지돼요
-- 치명적인 버그 수정, 최소한의 유지보수는 계속 진행할 예정이에요
-- 새로운 브라우저/플랫폼 종속 훅을 추가하는 일은 이제 지양해요
-
-## 예시
+### react-simplikit
 
 ```tsx
-import { useBooleanState } from 'react-simplikit';
+import { useState, useEffect } from 'react';
+import { useDebounce } from 'react-simplikit';
 
-function Component() {
-  // `useBooleanState` 훅을 사용해 상태를 관리해요.
-  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
-    useBooleanState(false);
+function SearchInput() {
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() => {
+    if (debouncedQuery) {
+      searchAPI(debouncedQuery);
+    }
+  }, [debouncedQuery]);
+
+  return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
+}
+```
+
+### @react-simplikit/mobile
+
+```tsx
+import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
+
+function ChatInput() {
+  const { ref, style } = useAvoidKeyboard();
 
   return (
-    <div>
-      <p>Bottom Sheet 상태: {open ? '열림' : '닫힘'}</p>
-      <button onClick={openBottomSheet}>열기</button>
-      <button onClick={closeBottomSheet}>닫기</button>
-      <button onClick={toggleBottomSheet}>토글</button>
+    <div ref={ref} style={style}>
+      <input type="text" placeholder="메시지를 입력하세요..." />
     </div>
   );
 }
+
+function Modal({ isOpen }) {
+  useBodyScrollLock(isOpen);
+  // ...
+}
+```
+
+## 문서
+
+자세한 문서는 [react-simplikit.slash.page](https://react-simplikit.slash.page/ko)를 참고하세요.
+
+## 레포지토리 구조
+
+```
+packages/
+├── core/    # react-simplikit (hooks, components, utils)
+└── mobile/  # @react-simplikit/mobile (mobile web utilities)
 ```
 
 ## 기여하기
 
-커뮤니티에 있는 모든 분들에게 기여를 환영해요. 아래에 작성되어 있는 기여 가이드를 확인하세요.
+커뮤니티의 모든 분들의 기여를 환영해요! 기여 가이드를 확인하세요.
 
-[CONTRIBUTING](./src/docs/ko/contributing.md)
+[CONTRIBUTING](./CONTRIBUTING.md)
 
 ## 라이선스
 
