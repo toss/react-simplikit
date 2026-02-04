@@ -41,7 +41,7 @@ export default [
     files: ['packages/**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
-        project: './packages/*/tsconfig.json',
+        project: './packages/**/tsconfig.json',
       },
     },
   },
