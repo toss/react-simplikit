@@ -1,41 +1,98 @@
-![react-simplikit](src/public/images/og.png)
+![react-simplikit](./.vitepress/dist/images/og.png)
 
-# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/slash/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit)
+# react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/react-simplikit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit) [![Discord Badge](https://discord.com/api/guilds/1281071127052943361/widget.png?style=shield)](https://discord.gg/vGXbVjP2nY)
 
 [English](./README.md) | 한국어
 
-`react-simplikit`은 React 환경에서 유용하게 사용할 수 있는 다양한 유틸리티를 제공하는 가볍고 강력한 라이브러리예요.
+견고한 애플리케이션을 만들기 위한 가볍고 의존성 없는 React 유틸리티 모음이에요.
 
-- `react-simplikit`은 의존성이 없어서 매우 가벼워요.
-- `react-simplikit`은 100% 테스트 커버리지를 통해 신뢰성을 보장해요.
-- `react-simplikit`은 JSDoc과 풍부한 문서, 예제를 제공해서 어떤 개발자도 쉽게 사용할 수 있어요.
+## 패키지
 
-## 예시
+| 패키지                                       | 설명                                                       | 버전                                                                                                                      |
+| -------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/core)           | Universal hooks - 순수 상태/로직 훅 (플랫폼 독립적)         | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [@react-simplikit/mobile](./packages/mobile) | 모바일 웹 유틸리티 (viewport, keyboard, scroll)            | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
+
+> **참고**: `react-simplikit`은 이제 웹과 모바일(React Native)에서 모두 동작하는 순수 상태/로직 훅만을 제공하는 Universal Hook Library로 유지됩니다. 브라우저/플랫폼 종속 훅들은 Deprecated 처리됩니다. 자세한 내용은 [packages/core/README-ko_kr.md](./packages/core/README-ko_kr.md)를 참고하세요.
+
+## 특징
+
+- **의존성 없음** - 매우 가벼워요
+- **100% TypeScript** - 완벽한 타입 안전성
+- **100% 테스트 커버리지** - 신뢰할 수 있어요
+- **SSR 안전** - Next.js 등 SSR 프레임워크에서 동작해요
+- **Tree-shakeable** - 사용하는 것만 번들에 포함돼요
+
+## 설치
+
+```bash
+# Core utilities
+npm install react-simplikit
+
+# Mobile web utilities
+npm install @react-simplikit/mobile
+```
+
+## 빠른 시작
+
+### react-simplikit
 
 ```tsx
-import { useBooleanState } from 'react-simplikit';
+import { useState, useEffect } from 'react';
+import { useDebounce } from 'react-simplikit';
 
-function Component() {
-  // `useBooleanState` 훅을 사용해 상태를 관리해요.
-  const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
-    useBooleanState(false);
+function SearchInput() {
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() => {
+    if (debouncedQuery) {
+      searchAPI(debouncedQuery);
+    }
+  }, [debouncedQuery]);
+
+  return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
+}
+```
+
+### @react-simplikit/mobile
+
+```tsx
+import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
+
+function ChatInput() {
+  const { ref, style } = useAvoidKeyboard();
 
   return (
-    <div>
-      <p>Bottom Sheet 상태: {open ? '열림' : '닫힘'}</p>
-      <button onClick={openBottomSheet}>열기</button>
-      <button onClick={closeBottomSheet}>닫기</button>
-      <button onClick={toggleBottomSheet}>토글</button>
+    <div ref={ref} style={style}>
+      <input type="text" placeholder="메시지를 입력하세요..." />
     </div>
   );
 }
+
+function Modal({ isOpen }) {
+  useBodyScrollLock(isOpen);
+  // ...
+}
+```
+
+## 문서
+
+자세한 문서는 [react-simplikit.slash.page](https://react-simplikit.slash.page/ko)를 참고하세요.
+
+## 레포지토리 구조
+
+```
+packages/
+├── core/    # react-simplikit (hooks, components, utils)
+└── mobile/  # @react-simplikit/mobile (mobile web utilities)
 ```
 
 ## 기여하기
 
-커뮤니티에 있는 모든 분들에게 기여를 환영해요. 아래에 작성되어 있는 기여 가이드를 확인하세요.
+커뮤니티의 모든 분들의 기여를 환영해요! 기여 가이드를 확인하세요.
 
-[CONTRIBUTING](./src/docs/ko/contributing.md)
+[CONTRIBUTING](./CONTRIBUTING.md)
 
 ## 라이선스
 
