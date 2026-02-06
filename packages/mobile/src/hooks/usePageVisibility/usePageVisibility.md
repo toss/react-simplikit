@@ -1,0 +1,3 @@
+# usePageVisibility
+
+<!-- TODO: Add documentation -->
