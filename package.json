@@ -1,5 +1,6 @@
 {
   "name": "@react-simplikit/root",
+  "private": true,
   "type": "module",
   "workspaces": [
     "packages/*",

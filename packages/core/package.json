@@ -11,7 +11,8 @@
   "bugs": "https://github.com/toss/react-simplikit/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/toss/react-simplikit.git"
+    "url": "git+https://github.com/toss/react-simplikit.git",
+    "directory": "packages/core"
   },
   "license": "MIT",
   "files": [
@@ -20,25 +21,12 @@
   ],
   "scripts": {
     "build": "tsup",
-    "clean": "rimraf ./dist ./esm ./coverage ./node_modules",
-    "scaffold": "tsx .scripts/index.ts scaffold",
-    "changeset": "changeset",
-    "changeset:version": "changeset version",
-    "changeset:publish": "changeset publish",
-    "docs:gen": "tsx .scripts/index.ts generate-docs",
-    "docs:dev": "vitepress dev",
-    "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview",
-    "fix": "yarn run fix:lint && yarn run fix:format",
-    "fix:format": "prettier . --write",
-    "fix:lint": "eslint src --fix",
-    "test": "yarn run test:lint && yarn run test:format && yarn run test:type && yarn run test:spec && yarn run test:coverage",
-    "test:format": "prettier . --list-different",
-    "test:lint": "eslint src",
-    "test:type": "tsc --noEmit",
-    "test:spec": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "prepack": "tsup"
+    "clean": "rimraf ./dist ./esm",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "publishConfig": {
     "access": "public",
@@ -106,6 +94,5 @@
   },
   "peerDependencies": {
     "react": "*"
-  },
-  "packageManager": "yarn@4.10.2"
+  }
 }

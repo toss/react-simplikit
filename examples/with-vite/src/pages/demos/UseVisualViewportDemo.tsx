@@ -71,7 +71,12 @@ export function UseVisualViewportDemo() {
             variant={offsetTop !== 0 ? 'warning' : 'default'}
             monospace
           />
-          <StatusRow label="Scale" value={`${scale.toFixed(2)}x`} variant={scale !== 1 ? 'warning' : 'default'} monospace />
+          <StatusRow
+            label="Scale"
+            value={`${scale.toFixed(2)}x`}
+            variant={scale !== 1 ? 'warning' : 'default'}
+            monospace
+          />
           <StatusRow
             label="Keyboard Height (iOS)"
             value={`${Math.round(keyboardHeight)}px`}

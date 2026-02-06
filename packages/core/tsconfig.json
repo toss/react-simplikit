@@ -13,6 +13,6 @@
     "jsx": "react-jsx",
     "types": ["@testing-library/jest-dom"]
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
