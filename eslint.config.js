@@ -1,3 +1,6 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import js from '@eslint/js';
 import importPlugin from 'eslint-plugin-import';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -7,6 +10,8 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -34,6 +39,7 @@ export default [
       globals: globals.browser,
       parserOptions: {
         project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
       },
     },
   },
@@ -42,6 +48,7 @@ export default [
     languageOptions: {
       parserOptions: {
         project: './packages/**/tsconfig.json',
+        tsconfigRootDir: __dirname,
       },
     },
   },
@@ -50,6 +57,7 @@ export default [
     languageOptions: {
       parserOptions: {
         project: './examples/*/tsconfig.json',
+        tsconfigRootDir: __dirname,
       },
     },
   },
