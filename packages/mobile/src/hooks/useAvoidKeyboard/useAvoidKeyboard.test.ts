@@ -4,12 +4,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAvoidKeyboard } from './useAvoidKeyboard.ts';
 
 // Mock useKeyboardHeight hook
-vi.mock('./keyboardHeight/useKeyboardHeight.ts', () => ({
+vi.mock('../keyboardHeight/useKeyboardHeight.ts', () => ({
   useKeyboardHeight: vi.fn(() => ({ keyboardHeight: 0 })),
 }));
 
 // Get reference to the mocked function
-import { useKeyboardHeight } from './keyboardHeight/useKeyboardHeight.ts';
+import { useKeyboardHeight } from '../keyboardHeight/useKeyboardHeight.ts';
 const mockUseKeyboardHeight = vi.mocked(useKeyboardHeight);
 
 describe('useAvoidKeyboard', () => {
