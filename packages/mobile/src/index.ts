@@ -1,6 +1,6 @@
 // Hooks
-export { useAvoidKeyboard } from './hooks/useAvoidKeyboard.ts';
-export { useBodyScrollLock } from './hooks/useBodyScrollLock.ts';
+export { useAvoidKeyboard } from './hooks/useAvoidKeyboard/index.ts';
+export { useBodyScrollLock } from './hooks/useBodyScrollLock/index.ts';
 export {
   type ConnectionType,
   type EffectiveConnectionType,
@@ -8,9 +8,9 @@ export {
   useNetworkStatus,
 } from './hooks/useNetworkStatus/index.ts';
 export { type PageVisibility, usePageVisibility, type VisibilityState } from './hooks/usePageVisibility/index.ts';
-export { useSafeAreaInset } from './hooks/useSafeAreaInset.ts';
-export { useScrollDirection } from './hooks/useScrollDirection.ts';
-export { useVisualViewport } from './hooks/useVisualViewport.ts';
+export { useSafeAreaInset } from './hooks/useSafeAreaInset/index.ts';
+export { useScrollDirection } from './hooks/useScrollDirection/index.ts';
+export { useVisualViewport } from './hooks/useVisualViewport/index.ts';
 
 // Utils
 export { disableBodyScrollLock, enableBodyScrollLock } from './utils/bodyScrollLock.ts';
