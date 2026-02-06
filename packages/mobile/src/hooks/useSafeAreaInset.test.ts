@@ -278,4 +278,3 @@ describe('useSafeAreaInset', () => {
     });
   });
 });
-
