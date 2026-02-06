@@ -1,0 +1,3 @@
+# useNetworkStatus
+
+<!-- TODO: Add documentation -->

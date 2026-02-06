@@ -39,4 +39,5 @@ coverage
 .claude
 CLAUDE.md
 
-docs/
+# context files (session notes, etc.)
+context/
