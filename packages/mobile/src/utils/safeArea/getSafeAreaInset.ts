@@ -1,6 +1,6 @@
 import { isServer } from '../isServer.ts';
 
-type SafeAreaInset = {
+export type SafeAreaInset = {
   /** Top safe area inset in pixels (notch, Dynamic Island, or status bar) */
   top: number;
   /** Bottom safe area inset in pixels (home indicator on Face ID devices) */

@@ -45,6 +45,11 @@ export function Home() {
             title="useVisualViewport"
             description="Track keyboard, zoom, and viewport changes"
           />
+          <DemoLink
+            to="/demos/use-safe-area-inset"
+            title="useSafeAreaInset"
+            description="Reactive safe area insets (auto-updates on rotation)"
+          />
         </nav>
       </section>
 
