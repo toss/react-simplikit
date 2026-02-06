@@ -38,6 +38,7 @@ function useConditionalEffect(
 ### Return Value
 
 This hook does not return anything.
+
 ## Example
 
 ```tsx
@@ -64,5 +65,4 @@ function Component() {
     </button>
   );
 }
-
 ```

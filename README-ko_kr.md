@@ -8,10 +8,10 @@
 
 ## 패키지
 
-| 패키지                                       | 설명                                                       | 버전                                                                                                                      |
-| -------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/core)           | Universal hooks - 순수 상태/로직 훅 (플랫폼 독립적)         | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [@react-simplikit/mobile](./packages/mobile) | 모바일 웹 유틸리티 (viewport, keyboard, scroll)            | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
+| 패키지                                       | 설명                                                | 버전                                                                                                                      |
+| -------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/core)           | Universal hooks - 순수 상태/로직 훅 (플랫폼 독립적) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [@react-simplikit/mobile](./packages/mobile) | 모바일 웹 유틸리티 (viewport, keyboard, scroll)     | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
 
 > **참고**: `react-simplikit`은 이제 웹과 모바일(React Native)에서 모두 동작하는 순수 상태/로직 훅만을 제공하는 Universal Hook Library로 유지됩니다. 브라우저/플랫폼 종속 훅들은 Deprecated 처리됩니다. 자세한 내용은 [packages/core/README-ko_kr.md](./packages/core/README-ko_kr.md)를 참고하세요.
 
@@ -51,7 +51,7 @@ function SearchInput() {
     }
   }, [debouncedQuery]);
 
-  return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
+  return <input value={query} onChange={e => setQuery(e.target.value)} />;
 }
 ```
 

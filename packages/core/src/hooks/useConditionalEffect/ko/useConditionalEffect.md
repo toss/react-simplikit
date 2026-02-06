@@ -60,11 +60,7 @@ function Component() {
   );
 
   return (
-    <button onClick={() => setCount(prev => prev + 1)}>
-      증가: {count}
-    </button>
+    <button onClick={() => setCount(prev => prev + 1)}>증가: {count}</button>
   );
 }
-
 ```
-

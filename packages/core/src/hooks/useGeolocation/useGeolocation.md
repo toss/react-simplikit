@@ -107,29 +107,14 @@ function useGeolocation(options: GeolocationOptions): Object;
 
 ```tsx
 // Basic usage
-const {
-  loading,
-  error,
-  data,
-  getCurrentPosition
-} = useGeolocation();
+const { loading, error, data, getCurrentPosition } = useGeolocation();
 
 // Automatically fetch location when component mounts
-const {
-  loading,
-  error,
-  data
-} = useGeolocation({ mountBehavior: 'get' });
+const { loading, error, data } = useGeolocation({ mountBehavior: 'get' });
 
 // Location tracking
-const {
-  loading,
-  error,
-  data,
-  startTracking,
-  stopTracking,
-  isTracking
-} = useGeolocation();
+const { loading, error, data, startTracking, stopTracking, isTracking } =
+  useGeolocation();
 
 const handleStartTracking = () => {
   startTracking();

@@ -11,7 +11,14 @@ Guidelines for writing new demo pages.
 ## Demo Page Structure
 
 ```tsx
-import { Button, Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
+import {
+  Button,
+  Card,
+  CodeBlock,
+  InfoBox,
+  StatusCard,
+  StatusRow,
+} from '@examples/shared';
 import { useMyHook } from '@react-simplikit/mobile';
 import { DemoLayout } from '../../components/DemoLayout';
 
@@ -57,8 +64,8 @@ Displays status values in key-value format.
 <StatusRow
   label="Direction"
   value={direction || 'none'}
-  variant="success"  // 'default' | 'success' | 'warning' | 'error' | 'muted'
-  monospace          // Use for code values
+  variant="success" // 'default' | 'success' | 'warning' | 'error' | 'muted'
+  monospace // Use for code values
 />
 ```
 
@@ -93,7 +100,7 @@ const CODE = `function example() {
   return 'hello';
 }`;
 
-<CodeBlock code={CODE} />
+<CodeBlock code={CODE} />;
 ```
 
 ## File Structure
@@ -131,7 +138,9 @@ When writing a new demo:
 
 ```tsx
 // 220 lines, core logic buried in styles
-<div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+<div
+  style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}
+>
   <span style={{ fontWeight: 500 }}>Modal 1:</span>
   <span style={{ color: showModal1 ? '#16a34a' : '#9ca3af' }}>
     {showModal1 ? 'Open' : 'Closed'}

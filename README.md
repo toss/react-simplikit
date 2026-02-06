@@ -8,10 +8,10 @@ A collection of lightweight, zero-dependency React utilities for building robust
 
 ## Packages
 
-| Package                                      | Description                                                    | Version                                                                                                                   |
-| -------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Package                                      | Description                                                     | Version                                                                                                                   |
+| -------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | [react-simplikit](./packages/core)           | Universal hooks - pure state/logic hooks (platform-independent) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [@react-simplikit/mobile](./packages/mobile) | Mobile web utilities (viewport, keyboard, scroll)              | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
+| [@react-simplikit/mobile](./packages/mobile) | Mobile web utilities (viewport, keyboard, scroll)               | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
 
 > **Note**: `react-simplikit` is now maintained as a Universal Hook Library providing only pure state/logic hooks that work across web and mobile (React Native). Browser/platform-dependent hooks are deprecated. See [packages/core/README.md](./packages/core/README.md) for details.
 
@@ -51,7 +51,7 @@ function SearchInput() {
     }
   }, [debouncedQuery]);
 
-  return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
+  return <input value={query} onChange={e => setQuery(e.target.value)} />;
 }
 ```
 

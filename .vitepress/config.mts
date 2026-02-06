@@ -9,7 +9,14 @@ export default defineConfig({
     ko: { label: '한국어', ...ko },
   },
   srcDir: '.',
-  srcExclude: ['**/node_modules/**', '**/README*.md', '**/CHANGELOG.md', 'CONTRIBUTING.md', 'packages/**/*.ts', 'packages/**/*.tsx'],
+  srcExclude: [
+    '**/node_modules/**',
+    '**/README*.md',
+    '**/CHANGELOG.md',
+    'CONTRIBUTING.md',
+    'packages/**/*.ts',
+    'packages/**/*.tsx',
+  ],
   vite: {
     resolve: {
       dedupe: ['vue', 'vitepress'],

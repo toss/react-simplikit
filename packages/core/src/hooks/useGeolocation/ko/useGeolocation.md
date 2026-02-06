@@ -107,29 +107,14 @@ function useGeolocation(options: GeolocationOptions): Object;
 
 ```tsx
 // 기본 사용법
-const {
-  loading,
-  error,
-  data,
-  getCurrentPosition
-} = useGeolocation();
+const { loading, error, data, getCurrentPosition } = useGeolocation();
 
 // 컴포넌트가 마운트 될 때 자동으로 위치를 가져와요
-const {
-  loading,
-  error,
-  data
-} = useGeolocation({ mountBehavior: 'get' });
+const { loading, error, data } = useGeolocation({ mountBehavior: 'get' });
 
 // 위치 추적
-const {
-  loading,
-  error,
-  data,
-  startTracking,
-  stopTracking,
-  isTracking
-} = useGeolocation();
+const { loading, error, data, startTracking, stopTracking, isTracking } =
+  useGeolocation();
 
 const handleStartTracking = () => {
   startTracking();
@@ -138,4 +123,4 @@ const handleStartTracking = () => {
 const handleStopTracking = () => {
   stopTracking();
 };
-```  
+```
