@@ -56,10 +56,7 @@ export function UseNetworkStatusDemo() {
   const isSupported = effectiveType !== undefined;
 
   return (
-    <DemoLayout
-      title="useNetworkStatus"
-      description="Access Network Information API for adaptive content loading"
-    >
+    <DemoLayout title="useNetworkStatus" description="Access Network Information API for adaptive content loading">
       <div style={{ paddingBottom: '128px' }}>
         {/* Offline Warning */}
         {!isOnline && (

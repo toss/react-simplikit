@@ -92,14 +92,11 @@ import { useLongPress } from 'react-simplikit';
 function ContextMenu() {
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const longPressHandlers = useLongPress(
-    () => setMenuVisible(true),
-    {
-      delay: 400,
-      onClick: () => console.log('일반 클릭'),
-      onLongPressEnd: () => console.log('길게 누름 완료')
-    }
-  );
+  const longPressHandlers = useLongPress(() => setMenuVisible(true), {
+    delay: 400,
+    onClick: () => console.log('일반 클릭'),
+    onLongPressEnd: () => console.log('길게 누름 완료'),
+  });
 
   return (
     <div>

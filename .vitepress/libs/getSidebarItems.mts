@@ -33,9 +33,7 @@ export function getSidebarItems(
     })
     .map(file => {
       const filename = path.basename(file, '.md');
-      const link = locale
-        ? `/${locale}${prefix}/${category}/${filename}`
-        : `${prefix}/${category}/${filename}`;
+      const link = locale ? `/${locale}${prefix}/${category}/${filename}` : `${prefix}/${category}/${filename}`;
 
       return { text: filename, link };
     })
