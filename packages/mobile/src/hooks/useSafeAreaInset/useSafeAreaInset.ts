@@ -1,10 +1,11 @@
 import { startTransition, useCallback, useEffect, useState } from 'react';
 
-import { isServer } from '../utils/isServer.ts';
-import { getSafeAreaInset, type SafeAreaInset } from '../utils/safeArea/getSafeAreaInset.ts';
+import { isServer } from '../../utils/isServer.ts';
+import { getSafeAreaInset, type SafeAreaInset } from '../../utils/safeArea/getSafeAreaInset.ts';
 
 /**
- * React hook to track safe area inset changes
+ * @description
+ * React hook to track safe area inset changes.
  *
  * Returns the safe area insets that automatically update when the screen
  * orientation changes (e.g., portrait to landscape).
@@ -14,10 +15,13 @@ import { getSafeAreaInset, type SafeAreaInset } from '../utils/safeArea/getSafeA
  * - **bottom**: Home indicator on Face ID devices
  * - **left/right**: Rounded corners in landscape mode
  *
- * @returns Object containing safe area insets for all four sides
+ * @returns {SafeAreaInset} Object containing safe area insets for all four sides.
+ * - top `number` - Top safe area inset in pixels (notch, Dynamic Island, or status bar).
+ * - bottom `number` - Bottom safe area inset in pixels (home indicator on Face ID devices).
+ * - left `number` - Left safe area inset in pixels (rounded corners in landscape mode).
+ * - right `number` - Right safe area inset in pixels (rounded corners in landscape mode).
  *
  * @example
- * ```tsx
  * function MyComponent() {
  *   const safeArea = useSafeAreaInset();
  *
@@ -32,10 +36,8 @@ import { getSafeAreaInset, type SafeAreaInset } from '../utils/safeArea/getSafeA
  *     </div>
  *   );
  * }
- * ```
  *
  * @example
- * ```tsx
  * // Automatically updates when screen rotates
  * function RotationAwareHeader() {
  *   const { top, left, right } = useSafeAreaInset();
@@ -50,7 +52,6 @@ import { getSafeAreaInset, type SafeAreaInset } from '../utils/safeArea/getSafeA
  *     </header>
  *   );
  * }
- * ```
  */
 export function useSafeAreaInset(): SafeAreaInset {
   const [inset, setInset] = useState<SafeAreaInset>(() => getSafeAreaInset());

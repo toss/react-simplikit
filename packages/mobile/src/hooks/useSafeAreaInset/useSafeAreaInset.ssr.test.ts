@@ -23,4 +23,3 @@ describe('useSafeAreaInset SSR environment', () => {
     expect(typeof useSafeAreaInset).toBe('function');
   });
 });
-
