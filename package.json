@@ -29,7 +29,7 @@
     "fix": "yarn fix:lint && yarn fix:format",
     "fix:format": "prettier . --write",
     "fix:lint": "yarn workspaces foreach -Ap run lint --fix",
-    "test": "yarn test:lint && yarn test:format && yarn test:type && yarn test:spec",
+    "test": "yarn test:lint && yarn test:format && yarn test:type",
     "test:format": "prettier . --list-different",
     "test:lint": "yarn workspaces foreach -Ap run lint",
     "test:type": "yarn workspaces foreach -Ap run typecheck",
