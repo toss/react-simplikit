@@ -77,6 +77,8 @@ function mobileSidebar(): DefaultTheme.SidebarItem[] {
         { text: 'Introduction', link: '/mobile/intro' },
         { text: 'Roadmap', link: '/mobile/roadmap' },
         { text: 'Installation', link: '/mobile/installation' },
+        { text: 'Design Principles', link: '/mobile/design-principles' },
+        { text: 'Contributing', link: '/mobile/contributing' },
       ],
     },
     {
