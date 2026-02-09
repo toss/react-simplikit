@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": ["@react-simplikit/root", "with-vite", "with-nextjs", "@examples/shared"]
 }
