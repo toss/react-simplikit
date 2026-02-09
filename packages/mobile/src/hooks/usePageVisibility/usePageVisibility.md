@@ -1,7 +1,5 @@
 # usePageVisibility
 
-
-
 ## Interface
 
 ```ts
@@ -9,7 +7,6 @@ function usePageVisibility(): PageVisibility;
 ```
 
 ### Parameters
-
 
 ### Return Value
 
@@ -48,4 +45,5 @@ function VideoPlayer() {
   return <video ref={videoRef} src="video.mp4" />;
 }
 ```
+
 ```

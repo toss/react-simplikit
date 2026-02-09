@@ -1,7 +1,5 @@
 # useBodyScrollLock
 
-
-
 ## Interface
 
 ```ts
@@ -10,10 +8,10 @@ function useBodyScrollLock(): void;
 
 ### Parameters
 
-
 ### Return Value
 
 This hook does not return anything.
+
 ## Example
 
 ```tsx
@@ -23,4 +21,5 @@ function Modal() {
   return <div className="modal">Modal content</div>;
 }
 ```
+
 ```

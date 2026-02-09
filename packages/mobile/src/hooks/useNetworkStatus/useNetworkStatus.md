@@ -1,7 +1,5 @@
 # useNetworkStatus
 
-
-
 ## Interface
 
 ```ts
@@ -9,7 +7,6 @@ function useNetworkStatus(): NetworkStatus;
 ```
 
 ### Parameters
-
 
 ### Return Value
 
@@ -46,4 +43,5 @@ function AdaptiveImage() {
   );
 }
 ```
+
 ```

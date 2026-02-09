@@ -1,7 +1,5 @@
 # useScrollDirection
 
-
-
 ## Interface
 
 ```ts
@@ -42,4 +40,5 @@ function Header() {
   );
 }
 ```
+
 ```
