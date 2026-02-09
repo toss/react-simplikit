@@ -25,6 +25,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
         run: yarn install
