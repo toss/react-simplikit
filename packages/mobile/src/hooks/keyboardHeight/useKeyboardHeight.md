@@ -5,7 +5,9 @@ A React hook that tracks the on-screen keyboard height in real time. It automati
 ## Interface
 
 ```ts
-function useKeyboardHeight(options?: UseKeyboardHeightOptions): UseKeyboardHeightResult;
+function useKeyboardHeight(
+  options?: UseKeyboardHeightOptions
+): UseKeyboardHeightResult;
 ```
 
 ### Parameters

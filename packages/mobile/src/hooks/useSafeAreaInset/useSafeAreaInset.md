@@ -3,6 +3,7 @@
 A React hook that tracks device safe area insets in real time. It automatically updates when the screen orientation changes (e.g., portrait to landscape).
 
 Safe area insets account for device-specific UI elements:
+
 - **top**: Notch, Dynamic Island, or status bar
 - **bottom**: Home indicator on Face ID devices
 - **left/right**: Rounded corners in landscape mode
@@ -90,4 +91,3 @@ function RotationAwareHeader() {
   );
 }
 ```
-

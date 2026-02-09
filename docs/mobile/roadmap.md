@@ -39,4 +39,3 @@ Where a specific API is unavailable (e.g., `window.visualViewport` in older brow
 ## What's Next
 
 We're continuing to expand the set of hooks available in `@react-simplikit/mobile`, always guided by the same principle: **make mobile UI development predictable and reliable, regardless of device or OS**. If there's a common mobile UI pain point, chances are we're working on a clean, declarative solution for it.
-

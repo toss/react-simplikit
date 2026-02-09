@@ -5,7 +5,9 @@
 ## Interface
 
 ```ts
-function useKeyboardHeight(options?: UseKeyboardHeightOptions): UseKeyboardHeightResult;
+function useKeyboardHeight(
+  options?: UseKeyboardHeightOptions
+): UseKeyboardHeightResult;
 ```
 
 ### 파라미터

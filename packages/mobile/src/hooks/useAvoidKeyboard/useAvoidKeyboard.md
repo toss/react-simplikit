@@ -5,7 +5,9 @@ A React hook that helps fixed-bottom elements smoothly avoid the on-screen keybo
 ## Interface
 
 ```ts
-function useAvoidKeyboard(options?: UseAvoidKeyboardOptions): UseAvoidKeyboardResult;
+function useAvoidKeyboard(
+  options?: UseAvoidKeyboardOptions
+): UseAvoidKeyboardResult;
 ```
 
 ### Parameters

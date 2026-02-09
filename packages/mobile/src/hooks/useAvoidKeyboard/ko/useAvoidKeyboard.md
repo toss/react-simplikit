@@ -5,7 +5,9 @@
 ## Interface
 
 ```ts
-function useAvoidKeyboard(options?: UseAvoidKeyboardOptions): UseAvoidKeyboardResult;
+function useAvoidKeyboard(
+  options?: UseAvoidKeyboardOptions
+): UseAvoidKeyboardResult;
 ```
 
 ### 파라미터
