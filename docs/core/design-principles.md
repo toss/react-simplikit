@@ -26,3 +26,12 @@ If you're looking for a reliable library, `react-simplikit` will be an excellent
 - **Practical Examples**: Examples demonstrating how to utilize implementations in real-world scenarios.
 
 While the primary documentation is in English, Korean documentation is also supported, making it accessible to Korean users.
+
+## Type Safe with Full TypeScript Support
+
+`react-simplikit` is built with TypeScript from the ground up. Every hook and utility comes with:
+
+- **Strict Type Definitions**: All parameters, return values, and options are fully typed
+- **IntelliSense Support**: Get autocompletion and inline documentation in your IDE
+- **Generic Types**: Flexible APIs that preserve your type information
+- **No `any` Types**: We avoid escape hatches that compromise type safety
