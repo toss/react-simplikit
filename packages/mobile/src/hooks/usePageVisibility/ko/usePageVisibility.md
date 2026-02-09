@@ -29,7 +29,7 @@ description: '페이지가 현재 사용자에게 보이면 <code>true</code>',
 },
 {
 name: 'visibilityState',
-type: \"'visible' | 'hidden'\",
+type: &quot;'visible' | 'hidden'&quot;,
 required: false,
 description: '페이지의 현재 가시성 상태',
 },

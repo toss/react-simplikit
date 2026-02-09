@@ -38,7 +38,7 @@ description="스크롤 방향과 위치를 담은 객체예요."
 :nested="[
 {
 name: 'direction',
-type: \"'up' | 'down' | null\",
+type: &quot;'up' | 'down' | null&quot;,
 required: false,
 description: '현재 스크롤 방향. 초기 렌더링 시에는 <code>null</code>',
 },

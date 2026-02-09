@@ -21,13 +21,13 @@ description="네트워크 연결 데이터를 담은 객체예요."
 :nested="[
 {
 name: 'effectiveType',
-type: \"'slow-2g' | '2g' | '3g' | '4g' | undefined\",
+type: &quot;'slow-2g' | '2g' | '3g' | '4g' | undefined&quot;,
 required: false,
 description: '연결 품질 지표 - API가 지원되지 않으면 undefined',
 },
 {
 name: 'type',
-type: \"'bluetooth' | 'cellular' | 'ethernet' | 'mixed' | 'none' | 'other' | 'unknown' | 'wifi' | 'wimax' | undefined\",
+type: &quot;'bluetooth' | 'cellular' | 'ethernet' | 'mixed' | 'none' | 'other' | 'unknown' | 'wifi' | 'wimax' | undefined&quot;,
 required: false,
 description: '물리적 연결 타입 - API가 지원되지 않으면 undefined',
 },
