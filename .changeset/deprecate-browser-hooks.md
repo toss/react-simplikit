@@ -1,5 +1,5 @@
 ---
-"react-simplikit": patch
+'react-simplikit': patch
 ---
 
 Deprecate hooks that depend on browser-specific APIs
