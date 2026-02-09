@@ -5,6 +5,7 @@
 Deprecate hooks that depend on browser-specific APIs
 
 The following hooks are now marked as deprecated:
+
 - `useDoubleClick`
 - `useGeolocation`
 - `useImpressionRef`
