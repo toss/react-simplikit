@@ -1,2 +1,2 @@
+export { disableBodyScrollLock, enableBodyScrollLock } from './bodyScrollLock.ts';
 export { isServer } from './isServer.ts';
-export { enableBodyScrollLock, disableBodyScrollLock } from './bodyScrollLock.ts';
