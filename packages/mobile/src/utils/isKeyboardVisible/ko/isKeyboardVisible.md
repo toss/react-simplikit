@@ -1,4 +1,4 @@
-# 키보드가 표시됐는지 확인하는 기능인 isKeyboardVisible
+# isKeyboardVisible
 
 `isKeyboardVisible`은 현재 화면 키보드가 표시되어 있는지를 확인하는 유틸리티 함수에요. 이 함수는 내부적으로 `getKeyboardHeight()`를 사용하고, 키보드 높이가 0보다 크면 `true`를 반환해요.
 
