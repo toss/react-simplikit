@@ -1,6 +1,6 @@
 {
   "name": "@react-simplikit/mobile",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Mobile web utilities for React - fixing viewport, keyboard, and layout issues",
   "type": "module",
   "main": "./src/index.ts",
