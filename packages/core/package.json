@@ -1,7 +1,22 @@
 {
   "name": "react-simplikit",
   "version": "0.0.47",
-  "main": "./src/index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./esm/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "type": "module",
   "sideEffects": false,
   "keywords": [
@@ -29,23 +44,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "publishConfig": {
-    "access": "public",
-    "main": "./dist/index.cjs",
-    "types": "./dist/index.d.cts",
-    "module": "./esm/index.js",
-    "exports": {
-      ".": {
-        "import": {
-          "types": "./esm/index.d.ts",
-          "default": "./esm/index.js"
-        },
-        "require": {
-          "types": "./dist/index.d.cts",
-          "default": "./dist/index.cjs"
-        }
-      },
-      "./package.json": "./package.json"
-    }
+    "access": "public"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
