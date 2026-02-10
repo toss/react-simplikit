@@ -1,9 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getKeyboardHeight } from './getKeyboardHeight.ts';
+import { getKeyboardHeight } from '../getKeyboardHeight/index.ts';
+
 import { isKeyboardVisible } from './isKeyboardVisible.ts';
 
-vi.mock('./getKeyboardHeight.ts', () => ({
+vi.mock('../getKeyboardHeight/index.ts', () => ({
   getKeyboardHeight: vi.fn(),
 }));
 

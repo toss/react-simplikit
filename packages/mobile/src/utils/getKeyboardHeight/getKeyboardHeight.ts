@@ -1,29 +1,27 @@
-import { isServer } from '../isServer.ts';
+import { isServer } from '../isServer/index.ts';
 
 /**
- * Returns the current on-screen keyboard height in pixels.
+ * @description
+ * `getKeyboardHeight` is a utility function that returns the current on-screen keyboard height in pixels.
  *
  * This function uses the Visual Viewport API to calculate the keyboard height.
  * It assumes a modern environment where Visual Viewport is supported
  * (Safari / WKWebView 14+, Chrome / Android WebView 80+).
  *
  * The keyboard height is computed as:
- *   window.innerHeight - visualViewport.height - visualViewport.offsetTop
+ *   `window.innerHeight - visualViewport.height - visualViewport.offsetTop`
  *
  * The subtraction of `offsetTop` is required to correctly handle iOS behavior
  * where the visual viewport may shift vertically when the keyboard appears.
  *
- * @returns {number} The keyboard height in pixels. Returns 0 if the keyboard
- * is not visible.
+ * @returns {number} The keyboard height in pixels. Returns 0 if the keyboard is not visible.
  *
  * @example
- * ```ts
  * const height = getKeyboardHeight();
  *
  * if (height > 0) {
  *   footer.style.paddingBottom = `${height}px`;
  * }
- * ```
  */
 export function getKeyboardHeight(): number {
   if (isServer()) {
