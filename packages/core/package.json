@@ -1,6 +1,6 @@
 {
   "name": "react-simplikit",
-  "version": "0.0.47",
+  "version": "0.0.48",
   "main": "./dist/index.cjs",
   "module": "./esm/index.js",
   "types": "./dist/index.d.cts",
