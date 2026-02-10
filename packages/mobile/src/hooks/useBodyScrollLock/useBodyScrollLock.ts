@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
-import { disableBodyScrollLock, enableBodyScrollLock } from '../../utils/bodyScrollLock.ts';
+import { disableBodyScrollLock } from '../../utils/disableBodyScrollLock/index.ts';
+import { enableBodyScrollLock } from '../../utils/enableBodyScrollLock/index.ts';
 
 /**
  * Hook to lock body scroll
