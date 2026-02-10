@@ -1,6 +1,7 @@
 # isIOS
 
 `isIOS`는 현재 기기가 iOS 또는 iPadOS를 실행 중인지 감지하는 유틸리티 함수에요. 플랫폼 불일치에 대한 참고 사항:
+
 - iPadOS 13 이전에는 iPads가 플랫폼을 'iPad'로 보고했었어요 (또는 UA에서 /iPad/와 일치함).
 - iPadOS 13부터 Apple은 웹 사이트가 iPadOS를 데스크톱급 Safari로 취급하게하기 위해 플랫폼 문자열을 'MacIntel'로 변경했어요. 그러나 이러한 기기는 여전히 멀티터치 기능을 노출해요.
 

@@ -10,7 +10,6 @@ function enableBodyScrollLock(): void;
 
 ### Parameters
 
-
 ### 반환 값
 
 <Interface name="" type="void" description="" />

@@ -10,7 +10,6 @@ function getSafeAreaInset(): SafeAreaInset;
 
 ### Parameters
 
-
 ### Return Value
 
 <Interface

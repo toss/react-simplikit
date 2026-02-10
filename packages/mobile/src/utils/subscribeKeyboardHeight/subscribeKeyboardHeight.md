@@ -64,7 +64,7 @@ function subscribeKeyboardHeight(
 
 ```tsx
 const { unsubscribe } = subscribeKeyboardHeight({
-  callback: (height) => {
+  callback: height => {
     footer.style.paddingBottom = `${height}px`;
   },
   immediate: true,

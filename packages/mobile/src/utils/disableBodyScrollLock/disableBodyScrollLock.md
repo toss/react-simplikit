@@ -10,7 +10,6 @@ function disableBodyScrollLock(): void;
 
 ### Parameters
 
-
 ### Return Value
 
 <Interface name="" type="void" description="" />

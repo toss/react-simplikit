@@ -10,7 +10,6 @@ function isServer(): boolean;
 
 ### 파라미터
 
-
 ### 반환 값
 
 <Interface

@@ -10,7 +10,6 @@ function getKeyboardHeight(): number;
 
 ### Parameters
 
-
 ### Return Value
 
 <Interface

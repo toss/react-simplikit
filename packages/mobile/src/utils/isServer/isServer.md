@@ -10,7 +10,6 @@ function isServer(): boolean;
 
 ### Parameters
 
-
 ### Return Value
 
 <Interface

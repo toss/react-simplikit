@@ -10,7 +10,6 @@ function isKeyboardVisible(): boolean;
 
 ### Parameters
 
-
 ### Return Value
 
 <Interface
