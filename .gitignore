@@ -35,12 +35,11 @@ coverage
 
 .DS_Store
 
-# Claude Code - public files are committed (.claude/skills/, CLAUDE.md)
+# Claude Code - public files are committed (.claude/skills/, .claude/agents/, CLAUDE.md)
 # Private/personal files:
 .claude/settings.local.json
 .claude/memory/
 .claude/plans/
-.claude/agents/
 .claude/skills/project-decisions/
 # Session notes (contain internal references)
 .claude/*.md
