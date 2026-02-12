@@ -109,5 +109,5 @@ jobs:
           title: 'docs(${{ needs.get-diffs.outputs.result }}): auto-generated docs'
           body: 'This PR includes documentation updates for: ${{ needs.get-diffs.outputs.result }}'
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          reviewers: kimyouknow
+          reviewers: kimyouknow,zztnrudzz13
           commit-message: 'Generate docs for ${{ needs.get-diffs.outputs.result }}'
