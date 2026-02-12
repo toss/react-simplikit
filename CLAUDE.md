@@ -3,6 +3,7 @@
 ## Project Overview
 
 React utility hooks/components library. Monorepo with two packages:
+
 - `react-simplikit` (`packages/core`) — Platform-independent React hooks & components
 - `@react-simplikit/mobile` (`packages/mobile`) — Mobile web utilities (viewport, keyboard, layout)
 
@@ -25,10 +26,10 @@ Layer dependency is **unidirectional** — no upward or circular imports allowed
 components → hooks → utils → _internal
 ```
 
-- Components may use hooks, utils, _internal
-- Hooks may use utils, _internal
-- Utils may use _internal only
-- _internal has no internal dependencies
+- Components may use hooks, utils, \_internal
+- Hooks may use utils, \_internal
+- Utils may use \_internal only
+- \_internal has no internal dependencies
 - Mobile may depend on core; core must NOT depend on mobile
 
 ## File Structure Convention
@@ -191,17 +192,18 @@ packages/
 
 ```jsonc
 {
-  "main": "./dist/index.cjs",        // CJS entry (top level, NOT in publishConfig)
-  "module": "./esm/index.js",        // ESM entry for bundlers
-  "types": "./dist/index.d.cts",     // TypeScript types
-  "exports": {                        // Modern Node.js/bundler resolution
+  "main": "./dist/index.cjs", // CJS entry (top level, NOT in publishConfig)
+  "module": "./esm/index.js", // ESM entry for bundlers
+  "types": "./dist/index.d.cts", // TypeScript types
+  "exports": {
+    // Modern Node.js/bundler resolution
     ".": {
       "import": { "types": "...", "default": "..." },
-      "require": { "types": "...", "default": "..." }
-    }
+      "require": { "types": "...", "default": "..." },
+    },
   },
   "publishConfig": {
-    "access": "public"                // ONLY access here, nothing else
-  }
+    "access": "public", // ONLY access here, nothing else
+  },
 }
 ```
