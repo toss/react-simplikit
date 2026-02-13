@@ -92,7 +92,7 @@ packages/
 
 커뮤니티의 모든 분들의 기여를 환영해요! 기여 가이드를 확인하세요.
 
-[CONTRIBUTING](./CONTRIBUTING.md)
+[CONTRIBUTING](./.github/CONTRIBUTING.md)
 
 ## 라이선스
 
