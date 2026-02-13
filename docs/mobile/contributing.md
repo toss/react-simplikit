@@ -89,6 +89,11 @@ Select the type of change:
 - `minor`: New features (maintaining backward compatibility)
 - `major`: Breaking changes (breaking backward compatibility)
 
+::: tip
+Both packages are currently in the `0.0.x` stage. During this phase, most changes should use `patch`.
+If you're unsure about the version type, please discuss with the maintainers.
+:::
+
 ## Mobile-Specific Guidelines
 
 ### Testing on Real Devices
