@@ -7,19 +7,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
       - name: Check bundle size
-        uses: preactjs/compressed-size-action@v2
+        uses: preactjs/compressed-size-action@e2bfc4b346d78f9a3c7e8a2e22bcbd285a25fafa # v2.0.1
         with:
           build-script: 'prepack'
           pattern: './{dist,esm}/**/*.{js,cjs}'

@@ -17,13 +17,13 @@ jobs:
         command: ['format', 'lint', 'type', 'spec']
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -41,20 +41,20 @@ jobs:
       changed_files: ${{ steps.filter.outputs.changed_files }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
       - name: Check for changes in .ts and .tsx files
         id: filter
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         with:
           list-files: shell
           filters: |
@@ -73,13 +73,13 @@ jobs:
     if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -91,7 +91,7 @@ jobs:
         run: yarn run test:coverage
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -156,7 +156,7 @@ jobs:
     if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Check for JSDoc comments
         run: |
@@ -196,13 +196,13 @@ jobs:
     if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -265,7 +265,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Check exports
         run: |
