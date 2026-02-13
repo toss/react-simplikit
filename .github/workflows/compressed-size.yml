@@ -19,7 +19,7 @@ jobs:
           cache: 'yarn'
 
       - name: Check bundle size
-        uses: preactjs/compressed-size-action@e2bfc4b346d78f9a3c7e8a2e22bcbd285a25fafa # v2.0.1
+        uses: preactjs/compressed-size-action@8518045ed95e94e971b83333085e1cb99aa18aa8 # v2.9.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           build-script: 'prepack'
