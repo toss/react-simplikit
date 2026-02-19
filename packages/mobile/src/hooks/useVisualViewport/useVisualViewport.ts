@@ -1,6 +1,6 @@
 import { startTransition, useCallback, useEffect, useState } from 'react';
 
-import { isServer } from '../../utils/isServer.ts';
+import { isServer } from '../../utils/isServer/index.ts';
 
 type VisualViewportState = {
   /** Viewport width (px) */

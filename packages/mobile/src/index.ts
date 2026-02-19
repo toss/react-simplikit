@@ -13,10 +13,13 @@ export { useScrollDirection } from './hooks/useScrollDirection/index.ts';
 export { useVisualViewport } from './hooks/useVisualViewport/index.ts';
 
 // Utils
-export { disableBodyScrollLock, enableBodyScrollLock } from './utils/bodyScrollLock.ts';
-export { isAndroid, isIOS } from './utils/device/device.ts';
-export { isServer } from './utils/isServer.ts';
-export { getKeyboardHeight } from './utils/keyboard/getKeyboardHeight.ts';
-export { isKeyboardVisible } from './utils/keyboard/isKeyboardVisible.ts';
-export { subscribeKeyboardHeight } from './utils/keyboard/subscribeKeyboardHeight.ts';
-export { getSafeAreaInset } from './utils/safeArea/getSafeAreaInset.ts';
+export { disableBodyScrollLock } from './utils/disableBodyScrollLock/index.ts';
+export { enableBodyScrollLock } from './utils/enableBodyScrollLock/index.ts';
+export { getKeyboardHeight } from './utils/getKeyboardHeight/index.ts';
+export type { SafeAreaInset } from './utils/getSafeAreaInset/index.ts';
+export { getSafeAreaInset } from './utils/getSafeAreaInset/index.ts';
+export { isAndroid } from './utils/isAndroid/index.ts';
+export { isIOS } from './utils/isIOS/index.ts';
+export { isKeyboardVisible } from './utils/isKeyboardVisible/index.ts';
+export { isServer } from './utils/isServer/index.ts';
+export { subscribeKeyboardHeight } from './utils/subscribeKeyboardHeight/index.ts';

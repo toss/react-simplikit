@@ -92,7 +92,7 @@ packages/
 
 We welcome contributions from everyone! Please check our contribution guide.
 
-[CONTRIBUTING](./CONTRIBUTING.md)
+[CONTRIBUTING](./.github/CONTRIBUTING.md)
 
 ## License
 

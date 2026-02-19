@@ -295,6 +295,11 @@ yarn changeset
 
 3. Write a brief summary of your changes.
 
+::: tip
+Both packages are currently in the `0.0.x` stage. During this phase, most changes should use `patch`.
+If you're unsure about the version type, please discuss with the maintainers.
+:::
+
 4. Commit the generated changeset file with your PR.
 
 ::: tip
