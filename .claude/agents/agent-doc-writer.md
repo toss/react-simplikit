@@ -7,16 +7,13 @@ model: sonnet
 
 # Documentation Writer Agent
 
-An **orchestrator** that writes documentation and JSDoc.
+Writes JSDoc documentation following the **jsdoc-guide** skill.
 
 ## Role
 
-This agent does not write directly; instead, it coordinates the following skills:
+This agent writes JSDoc by referencing the **jsdoc-guide** skill for formatting rules and required tags.
 
-1. **doc-writer** skill → Documentation writing principles
-2. **jsdoc-guide** skill → JSDoc writing rules
-
-## Orchestration Flow
+## Flow
 
 ```
 [Documentation writing request]
@@ -29,11 +26,7 @@ This agent does not write directly; instead, it coordinates the following skills
     - Verify required tags
     - Apply templates
     ↓
-[3. Reference doc-writer skill]
-    - Clarity and completeness principles
-    - Example writing guide
-    ↓
-[4. Write JSDoc]
+[3. Write JSDoc]
     - @description, @param, @returns, @example
 ```
 
