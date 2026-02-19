@@ -48,6 +48,57 @@ src/hooks/useHookName/
 - **No `any` types** — Full TypeScript strict mode
 - **Zero runtime dependencies**
 
+### Nullish Checks and Control Flow
+
+**Use `== null` for nullish checks** — checks both null and undefined:
+
+```ts
+// ✅ Good
+if (ref == null) {
+  continue;
+}
+items.filter(item => item != null);
+
+// ✅ Use !== undefined only when null/undefined distinction matters
+const controlled = valueProp !== undefined;
+```
+
+**Prefer early returns (guard clauses)** over nested if-else:
+
+```ts
+// ✅ Good — guard clause
+function process(value: string | null) {
+  if (value == null) {
+    return DEFAULT;
+  }
+  return transform(value);
+}
+
+// ❌ Bad — nested if-else
+function process(value: string | null) {
+  if (value != null) {
+    return transform(value);
+  } else {
+    return DEFAULT;
+  }
+}
+```
+
+**Function declarations use `function` keyword**, arrow functions only for short inline callbacks:
+
+```ts
+// ✅ Good — function keyword for declarations
+function toggle(state: boolean) {
+  return !state;
+}
+
+// ✅ Good — arrow for inline callbacks
+items.filter(item => item != null);
+
+// ❌ Bad — arrow for function declarations
+const toggle = (state: boolean) => !state;
+```
+
 ### SSR-Safe Pattern
 
 All hooks/utils accessing browser APIs must be SSR-safe:

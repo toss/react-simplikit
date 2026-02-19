@@ -16,6 +16,19 @@
 - Strict boolean checks: `value !== undefined` not `if (value)`
 - Zero runtime dependencies
 - Always return cleanup in useEffect to remove listeners
+- Nullish checks: use `== null` for both null and undefined:
+  ```ts
+  if (ref == null) { continue; }
+  items.filter(item => item != null);
+  const controlled = valueProp !== undefined; // only when distinction matters
+  ```
+- Prefer early returns (guard clauses) over nested if-else blocks
+- Function declarations use `function` keyword, not arrow functions:
+  ```ts
+  // ✅ function toggle(state: boolean) { return !state; }
+  // ✅ items.filter(item => item != null)  ← inline callback arrow OK
+  // ❌ const toggle = (state: boolean) => !state;
+  ```
 
 ## SSR-Safe Pattern (CRITICAL)
 
