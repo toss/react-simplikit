@@ -21,7 +21,7 @@ components → hooks → utils → _internal
 - Components may use hooks, utils, \_internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
-- Mobile may depend on core; core must NOT depend on mobile
+- Core and mobile are independent packages — no cross-package dependencies
 
 ## File Structure
 
@@ -42,7 +42,7 @@ src/hooks/useHookName/
 
 - **`type` over `interface`** — Always use `type` for type aliases
 - **Named functions in useEffect** — `useEffect(function handleResize() { ... }, [])` not arrow functions
-- **Strict boolean checks** — `value !== undefined` not `if (value)`
+- **No implicit boolean coercion** — `if (value)` → `if (value != null)` (enforced by `strict-boolean-expressions`)
 - **Import extensions** — Use `.ts`/`.tsx` extensions in source imports (tsup converts to `.js` for ESM output)
 - **Named exports only** — No default exports
 - **No `any` types** — Full TypeScript strict mode

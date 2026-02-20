@@ -1,5 +1,7 @@
 # react-simplikit Cursor Rules
 
+> Full coding standards with examples: see AGENTS.md
+
 ## Project
 
 React hooks/components library. Monorepo: `packages/core` + `packages/mobile`.
@@ -7,7 +9,7 @@ React hooks/components library. Monorepo: `packages/core` + `packages/mobile`.
 ## Architecture
 
 Unidirectional layers: `components → hooks → utils → _internal`
-Mobile depends on core. Core must NOT depend on mobile.
+Core and mobile are independent packages. No cross-package dependencies.
 
 ## Code Style
 
@@ -16,62 +18,10 @@ Mobile depends on core. Core must NOT depend on mobile.
 - Named exports only, no default exports
 - No `any` — strict TypeScript
 - `.ts`/`.tsx` extensions in source imports (tsup converts to `.js`)
-- Strict boolean checks: `value !== undefined` not `if (value)`
+- No implicit boolean coercion: `if (value)` → `if (value != null)` (enforced by `strict-boolean-expressions`)
+- Nullish checks: `== null` for both null and undefined, `!== undefined` only when distinction matters
 - Zero runtime dependencies
 - Always return cleanup in useEffect to remove listeners
-- Nullish checks: `== null` for both null and undefined, `!== undefined` only when distinction matters
 - Early returns (guard clauses) over nested if-else blocks
 - Function declarations use `function` keyword, not arrow: `function toggle(state: boolean) { return !state; }`
 - Short inline callbacks (map, filter args) are OK with arrow functions
-
-## SSR-Safe Pattern
-
-```ts
-const [state, setState] = useState(FIXED_INITIAL_VALUE);
-useEffect(function syncBrowserState() {
-  if (isServer()) return;
-  setState(getBrowserAPI());
-}, []);
-```
-
-## Hook Returns
-
-- 1 value → direct return
-- 2 values → tuple `[state, action]`
-- 3+ values → object `{ a, b, c }`
-
-## Testing
-
-- 100% coverage (Vitest)
-- SSR tests required for browser API hooks (`.ssr.test.ts`)
-- Use `renderHookSSR.serverOnly()` for SSR tests
-
-## File Structure
-
-Each hook in own folder: `src/hooks/useHookName/`
-
-- `index.ts`, `useHookName.ts`, `useHookName.spec.ts` (core) / `.test.ts` (mobile), `useHookName.ssr.test.ts`
-- Docs: `useHookName.md` + `ko/useHookName.md`
-
-## JSDoc
-
-Required tags: `@description`, `@param`, `@returns`, `@example`
-
-## Performance
-
-- Throttle subscriptions at ~16ms (60fps)
-- Use `startTransition` for non-urgent state updates
-
-## Commands
-
-```bash
-yarn build      # Build all (tsup)
-yarn test       # Run tests (Vitest)
-yarn fix        # Auto-fix lint + format
-yarn typecheck  # Type check (tsc --noEmit)
-```
-
-## Commits
-
-Format: `<type>(<scope>): <description>`
-Types: feat, fix, docs, chore, refactor, test
