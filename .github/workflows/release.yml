@@ -1,0 +1,113 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    if: github.repository == 'toss/react-simplikit'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Update npm for OIDC trusted publishing
+        run: npm install -g npm@latest
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn run prepack
+
+      - name: Type Check
+        run: yarn run test:type
+
+      - name: Create Release Pull Request
+        id: changesets
+        uses: changesets/action@6a0a831ff30acef54f2c6aa1cbbc1096b066edaf # v1.7.0
+        with:
+          title: 'chore: version packages'
+          commit: 'chore: version packages'
+          version: yarn run changeset:version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: yarn run changeset:publish
+        env:
+          NPM_CONFIG_PROVENANCE: true
+
+  get-diffs:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.diffs.outputs.result }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files from merged PR
+        id: diffs
+        run: |
+          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
+
+          echo $MATCHED_NAMES
+
+          echo "result=$MATCHED_NAMES" >> "$GITHUB_OUTPUT"
+
+  generate-docs:
+    runs-on: ubuntu-latest
+    needs: get-diffs
+    if: ${{ needs.get-diffs.outputs.result != '' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Generate docs
+        run: |
+          yarn run docs:gen ${{ needs.get-diffs.outputs.result }}
+          yarn run fix:format
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: new-docgen-branch-${{ github.run_id }}
+          title: 'docs(${{ needs.get-diffs.outputs.result }}): auto-generated docs'
+          body: 'This PR includes documentation updates for: ${{ needs.get-diffs.outputs.result }}'
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          reviewers: kimyouknow,zztnrudzz13
+          commit-message: 'Generate docs for ${{ needs.get-diffs.outputs.result }}'
