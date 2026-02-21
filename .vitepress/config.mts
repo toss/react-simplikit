@@ -8,16 +8,56 @@ export default defineConfig({
     root: { label: 'English', ...en },
     ko: { label: '한국어', ...ko },
   },
-  srcDir: 'src',
+  srcDir: '.',
+  srcExclude: [
+    '**/node_modules/**',
+    '**/README*.md',
+    '**/CHANGELOG.md',
+    'CONTRIBUTING.md',
+    'packages/**/*.ts',
+    'packages/**/*.tsx',
+  ],
+  vite: {
+    resolve: {
+      dedupe: ['vue', 'vitepress'],
+    },
+  },
   rewrites: {
-    'docs/ko/:document.md': 'ko/:document.md',
-    'docs/en/:document.md': ':document.md',
-    'components/:implementation/ko/:implementation.md': 'ko/components/:implementation.md',
-    'components/:implementation/:implementation.md': 'components/:implementation.md',
-    'hooks/:implementation/ko/:implementation.md': 'ko/hooks/:implementation.md',
-    'hooks/:implementation/:implementation.md': 'hooks/:implementation.md',
-    'utils/:implementation/ko/:implementation.md': 'ko/utils/:implementation.md',
-    'utils/:implementation/:implementation.md': 'utils/:implementation.md',
+    // Landing page
+    'docs/index.md': 'index.md',
+    'docs/ko/index.md': 'ko/index.md',
+
+    // Core guide docs
+    'docs/core/:doc.md': 'core/:doc.md',
+    'docs/ko/core/:doc.md': 'ko/core/:doc.md',
+
+    // Mobile guide docs
+    'docs/mobile/:doc.md': 'mobile/:doc.md',
+    'docs/ko/mobile/:doc.md': 'ko/mobile/:doc.md',
+
+    // Core hooks
+    'packages/core/src/hooks/:hook/:hook.md': 'core/hooks/:hook.md',
+    'packages/core/src/hooks/:hook/ko/:hook.md': 'ko/core/hooks/:hook.md',
+
+    // Core components
+    'packages/core/src/components/:component/:component.md': 'core/components/:component.md',
+    'packages/core/src/components/:component/ko/:component.md': 'ko/core/components/:component.md',
+
+    // Core utils
+    'packages/core/src/utils/:util/:util.md': 'core/utils/:util.md',
+    'packages/core/src/utils/:util/ko/:util.md': 'ko/core/utils/:util.md',
+
+    // Mobile hooks
+    'packages/mobile/src/hooks/:hook/:hook.md': 'mobile/hooks/:hook.md',
+    'packages/mobile/src/hooks/:hook/ko/:hook.md': 'ko/mobile/hooks/:hook.md',
+
+    // Mobile utils
+    'packages/mobile/src/utils/:util/:util.md': 'mobile/utils/:util.md',
+    'packages/mobile/src/utils/:util/ko/:util.md': 'ko/mobile/utils/:util.md',
+
+    // Mobile keyboardHeight (special case - folder name differs from hook name)
+    'packages/mobile/src/hooks/keyboardHeight/useKeyboardHeight.md': 'mobile/hooks/useKeyboardHeight.md',
+    'packages/mobile/src/hooks/keyboardHeight/ko/useKeyboardHeight.md': 'ko/mobile/hooks/useKeyboardHeight.md',
   },
   head: [
     ['link', { rel: 'stylesheet', href: 'https://static.toss.im/tps/main.css' }],
@@ -28,7 +68,7 @@ export default defineConfig({
     ['link', { rel: 'apple-touch-icon', href: '/favicon/apple-touch-icon.png' }],
     ['link', { rel: 'manifest', href: '/favicon/site.webmanifest' }],
     ['meta', { name: 'author', content: 'Viva Republica, Inc.' }],
-    ['meta', { name: 'keywords', content: 'react, hooks, utility, library, react-simplikit' }],
+    ['meta', { name: 'keywords', content: 'react, hooks, utility, library, react-simplikit, mobile' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'react-simplikit' }],
