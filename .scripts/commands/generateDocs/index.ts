@@ -41,6 +41,17 @@ export async function generateDocs(names: string[]) {
                   },
                 },
                 {
+                  title: `Write English document`,
+                  task: async ctx => {
+                    const { docSource } = ctx;
+                    const dirname = path.dirname(sourceFilePath);
+
+                    if (docSource != null) {
+                      await fs.writeFile(`${dirname}/${name}.md`, docSource);
+                    }
+                  },
+                },
+                {
                   title: `Translate markdown to Korean`,
                   task: async ctx => {
                     const { docSource } = ctx;
@@ -48,36 +59,44 @@ export async function generateDocs(names: string[]) {
 
                     let isFileExists = false;
                     try {
-                      await fs.access(`${dirname}/${name}.md`);
                       await fs.access(`${dirname}/ko/${name}.md`);
                       isFileExists = true;
                     } catch {
                       isFileExists = false;
                     }
 
-                    if (isFileExists && (await fs.readFile(`${dirname}/${name}.md`)).toString() === docSource) {
-                      return;
+                    // Skip if Korean file already exists and English file hasn't changed
+                    if (isFileExists) {
+                      try {
+                        const existingEnglish = await fs.readFile(`${dirname}/${name}.md`, 'utf-8');
+                        if (existingEnglish === docSource) {
+                          return;
+                        }
+                      } catch {
+                        // Continue with translation if we can't read existing file
+                      }
                     }
 
                     if (docSource == null) {
                       throw new Error('docSource is not found');
                     }
 
-                    const translatedDoc = await translate(docSource);
-
-                    ctx.translatedDoc = translatedDoc;
+                    try {
+                      const translatedDoc = await translate(docSource);
+                      ctx.translatedDoc = translatedDoc;
+                    } catch (error) {
+                      // Log the error but don't fail the task - English doc is already saved
+                      console.warn(`Translation failed for ${name}: ${error instanceof Error ? error.message : error}`);
+                      ctx.translatedDoc = null;
+                    }
                   },
                 },
                 {
-                  title: `Write document files`,
+                  title: `Write Korean document`,
+                  skip: ctx => ctx.translatedDoc == null,
                   task: async ctx => {
-                    const { docSource, translatedDoc } = ctx;
-
+                    const { translatedDoc } = ctx;
                     const dirname = path.dirname(sourceFilePath);
-
-                    if (docSource != null) {
-                      await fs.writeFile(`${dirname}/${name}.md`, docSource);
-                    }
 
                     if (translatedDoc != null) {
                       await fs.mkdir(`${dirname}/ko`).catch(e => {
@@ -92,7 +111,7 @@ export async function generateDocs(names: string[]) {
                   },
                 },
               ],
-              { concurrent: false, ctx: subCtx }
+              { concurrent: false, ctx: subCtx, exitOnError: false }
             ),
         },
       ]);
@@ -108,7 +127,8 @@ function parseJSDoc(source: string) {
 
   const template = targetComment.tags.find(tag => tag.tag === 'template');
 
-  const description = targetComment.tags.find(tag => tag.tag === 'description')?.description ?? '';
+  const description =
+    targetComment.tags.find(tag => tag.tag === 'description')?.description ?? targetComment.description ?? '';
 
   const params = targetComment.tags.filter(tag => tag.tag === 'param');
 
