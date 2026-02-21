@@ -5,10 +5,7 @@
 ## 인터페이스
 
 ```ts
-function usePrevious<T>(
-  state: T,
-  compare: (prev: T, next: T) => boolean
-): T;
+function usePrevious<T>(state: T, compare: (prev: T, next: T) => boolean): T;
 ```
 
 ### 파라미터

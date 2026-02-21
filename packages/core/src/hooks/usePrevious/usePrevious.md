@@ -5,10 +5,7 @@
 ## Interface
 
 ```ts
-function usePrevious<T>(
-  state: T,
-  compare: (prev: T, next: T) => boolean
-): T;
+function usePrevious<T>(state: T, compare: (prev: T, next: T) => boolean): T;
 ```
 
 ### Parameters
