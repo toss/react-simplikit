@@ -1,5 +1,1 @@
-lts/iron
-
-# 'iron' is the 20.x node release line
-# ESLint requires Node.js >=18.18.0, >=20.9.0, or >=21.1.0 — ensure 20.9.0+ if using iron
-# See: https://eslint.org/docs/latest/use/getting-started#prerequisites
+v22.18.0
