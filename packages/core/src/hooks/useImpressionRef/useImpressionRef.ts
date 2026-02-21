@@ -56,10 +56,23 @@ export function useImpressionRef<Element extends HTMLElement>({
   const impressionEndHandler = usePreservedCallback(onImpressionEnd);
 
   const isIntersectingRef = useRef(false);
+  const hasImpressedRef = useRef(false);
+
   const impressionEventHandler = useDebouncedCallback({
     timeThreshold,
     onChange: (impressed: boolean) => {
-      (impressed ? impressionStartHandler : impressionEndHandler)();
+      if (impressed) {
+        impressionStartHandler();
+        hasImpressedRef.current = true;
+        return;
+      }
+
+      if (!hasImpressedRef.current) {
+        return;
+      }
+
+      impressionEndHandler();
+      hasImpressedRef.current = false;
     },
     leading: true,
   });
