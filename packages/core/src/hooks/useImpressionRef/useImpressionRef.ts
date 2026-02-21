@@ -58,7 +58,7 @@ export function useImpressionRef<Element extends HTMLElement>({
   const isIntersectingRef = useRef(false);
   const impressionEventHandler = useDebouncedCallback({
     timeThreshold,
-    onChange: impressed => {
+    onChange: (impressed: boolean) => {
       (impressed ? impressionStartHandler : impressionEndHandler)();
     },
     leading: true,
