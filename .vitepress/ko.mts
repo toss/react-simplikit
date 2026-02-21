@@ -1,7 +1,7 @@
 import { defineConfig, DefaultTheme } from 'vitepress';
 import { getSidebarItems } from './libs/getSidebarItems.mts';
 import { sortByText } from './libs/sortByText.mts';
-import { sourceRoot } from './shared.mts';
+import { corePackageRoot, mobilePackageRoot } from './shared.mts';
 
 export const ko = defineConfig({
   lang: 'ko',
@@ -9,7 +9,7 @@ export const ko = defineConfig({
     nav: nav(),
     sidebar: sidebar(),
     editLink: {
-      pattern: 'https://github.com/toss/react-simplikit/edit/main/src/:path',
+      pattern: 'https://github.com/toss/react-simplikit/edit/main/:path',
       text: 'GitHub에서 수정하기',
     },
     footer: {
@@ -21,22 +21,29 @@ export const ko = defineConfig({
 
 function nav(): DefaultTheme.NavItem[] {
   return [
-    { text: '홈', link: '/ko' },
-    { text: '소개', link: '/ko/intro.html' },
-    { text: '레퍼런스', link: '/ko/components/ImpressionArea.html' },
+    { text: '홈', link: '/ko/' },
+    { text: 'Mobile', link: '/ko/mobile/intro' },
+    { text: 'Core', link: '/ko/core/intro' },
   ];
 }
 
 function sidebar(): DefaultTheme.Sidebar {
+  return {
+    '/ko/core/': coreSidebar(),
+    '/ko/mobile/': mobileSidebar(),
+  };
+}
+
+function coreSidebar(): DefaultTheme.SidebarItem[] {
   return [
     {
       text: '가이드',
       items: [
-        { text: '소개', link: '/ko/intro' },
-        { text: 'react-simplikit, 선택의 이유', link: '/ko/why-react-simplikit-matters' },
-        { text: '설치하기', link: '/ko/installation' },
-        { text: '설계 원칙', link: '/ko/design-principles' },
-        { text: '기여하기', link: '/ko/contributing' },
+        { text: '소개', link: '/ko/core/intro' },
+        { text: 'react-simplikit, 선택의 이유', link: '/ko/core/why-react-simplikit-matters' },
+        { text: '설치하기', link: '/ko/core/installation' },
+        { text: '설계 원칙', link: '/ko/core/design-principles' },
+        { text: '기여하기', link: '/ko/core/contributing' },
       ],
     },
     {
@@ -44,17 +51,50 @@ function sidebar(): DefaultTheme.Sidebar {
       items: sortByText([
         {
           text: '컴포넌트',
-          items: getSidebarItems(sourceRoot, 'components', '*', 'ko'),
+          collapsed: false,
+          items: getSidebarItems(corePackageRoot, 'components', '/core', 'ko'),
         },
         {
           text: '훅',
-          items: getSidebarItems(sourceRoot, 'hooks', '*', 'ko'),
+          collapsed: false,
+          items: getSidebarItems(corePackageRoot, 'hooks', '/core', 'ko'),
         },
         {
           text: '유틸리티',
-          items: getSidebarItems(sourceRoot, 'utils', '*', 'ko'),
+          collapsed: false,
+          items: getSidebarItems(corePackageRoot, 'utils', '/core', 'ko'),
         },
       ]),
+    },
+  ];
+}
+
+function mobileSidebar(): DefaultTheme.SidebarItem[] {
+  return [
+    {
+      text: '가이드',
+      items: [
+        { text: '소개', link: '/ko/mobile/intro' },
+        { text: '앞으로의 방향', link: '/ko/mobile/roadmap' },
+        { text: '설치하기', link: '/ko/mobile/installation' },
+        { text: '설계 원칙', link: '/ko/mobile/design-principles' },
+        { text: '기여하기', link: '/ko/mobile/contributing' },
+      ],
+    },
+    {
+      text: '레퍼런스',
+      items: [
+        {
+          text: '훅',
+          collapsed: false,
+          items: getSidebarItems(mobilePackageRoot, 'hooks', '/mobile', 'ko'),
+        },
+        {
+          text: '유틸리티',
+          collapsed: false,
+          items: getSidebarItems(mobilePackageRoot, 'utils', '/mobile', 'ko'),
+        },
+      ],
     },
   ];
 }
