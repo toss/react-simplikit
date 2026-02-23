@@ -2,6 +2,21 @@
 
 `react-simplikit`에는 누구나 쉽게 기여할 수 있어요. 기여하고 싶다면 아래 가이드를 참고해 주세요.
 
+## 패키지 범위
+
+`react-simplikit`은 모든 JavaScript 환경(브라우저, 서버, React Native 등)에서 동작하는 **플랫폼 독립적인 훅, 컴포넌트, 유틸리티**에 집중해요.
+
+기여하기 전에, 구현체가 어떤 패키지에 속하는지 확인해 주세요:
+
+| 패키지                    | 범위                           | 예시                                                         |
+| ------------------------- | ------------------------------ | ------------------------------------------------------------ |
+| `react-simplikit`         | 플랫폼 독립적인 순수 상태/로직 | `useToggle`, `useAsyncEffect`, `useLoading`                  |
+| `@react-simplikit/mobile` | 모바일 웹 환경의 문제 해결     | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
+
+::: tip
+mobile 패키지는 모든 브라우저 API 의존 훅을 위한 것이 **아니에요**. **모바일 웹 환경에서 겪는 문제**를 해결하는 훅/유틸리티만 해당돼요(뷰포트 관리, 키보드 처리, iOS Safari/Android Chrome의 레이아웃 이슈 등). 예를 들어, 키보드 단축키 훅은 브라우저 API를 사용하지만 mobile 패키지에 속하지 않아요.
+:::
+
 ## 구현체 기여
 
 구현체에 기여할 때는 구현체의 유형에 따라 `components`, `hooks`, `utils` 디렉터리에 추가해 주세요. 모든 구현체는 아래 요소를 반드시 포함해야 해요.
