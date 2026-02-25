@@ -59,4 +59,4 @@ This agent coordinates the following skills:
 
 - Never commit sensitive files (.env, credentials)
 - Push only when explicitly requested
-- Never use --amend
+- Never use --amend unless explicitly requested (if a pre-commit hook fails, --amend would unintentionally modify the previous commit)

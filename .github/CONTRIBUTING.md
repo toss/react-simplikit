@@ -42,4 +42,4 @@ Select the version bump type (`patch`, `minor`, or `major`).
 
 - [Documentation Site](https://react-simplikit.slash.page)
 - [Design Principles](https://react-simplikit.slash.page/core/design-principles.html)
-- [Discord](https://discord.gg/vGXbVjP2nY)
+- [Discord](https://discord.gg/vGXbVjP2nY) — Community chat for questions and discussions
