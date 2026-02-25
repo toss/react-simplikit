@@ -89,6 +89,11 @@ function mobileSidebar(): DefaultTheme.SidebarItem[] {
           collapsed: false,
           items: getSidebarItems(mobilePackageRoot, 'hooks', '/mobile'),
         },
+        {
+          text: 'Utils',
+          collapsed: false,
+          items: getSidebarItems(mobilePackageRoot, 'utils', '/mobile'),
+        },
       ],
     },
   ];
