@@ -1,4 +1,4 @@
-![react-simplikit](./.vitepress/dist/images/og.png)
+![react-simplikit](./public/images/og.png)
 
 # react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/react-simplikit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit) [![Discord Badge](https://discord.com/api/guilds/1281071127052943361/widget.png?style=shield)](https://discord.gg/vGXbVjP2nY)
 
@@ -92,8 +92,15 @@ packages/
 
 We welcome contributions from everyone! Please check our contribution guide.
 
-[CONTRIBUTING](./CONTRIBUTING.md)
+[CONTRIBUTING](./.github/CONTRIBUTING.md)
 
 ## License
 
 MIT © Viva Republica, Inc. See [LICENSE](./LICENSE) for details.
+
+<a title="Toss" href="https://toss.im">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://static.toss.im/logos/png/4x/logo-toss-reverse.png">
+    <img alt="Toss" src="https://static.toss.im/logos/png/4x/logo-toss.png" width="100">
+  </picture>
+</a>

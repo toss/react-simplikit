@@ -1,4 +1,4 @@
-import { isServer } from '../isServer.ts';
+import { isServer } from '../isServer/index.ts';
 
 export type SafeAreaInset = {
   /** Top safe area inset in pixels (notch, Dynamic Island, or status bar) */
@@ -12,7 +12,8 @@ export type SafeAreaInset = {
 };
 
 /**
- * Returns all safe area insets in pixels as an object.
+ * @description
+ * `getSafeAreaInset` is a utility function that returns all safe area insets in pixels as an object.
  *
  * This function reads the CSS `env(safe-area-inset-*)` values by creating
  * a temporary DOM element and reading its computed style.
@@ -27,15 +28,17 @@ export type SafeAreaInset = {
  * - bottom: 34px (home indicator)
  * - left/right: 0px
  *
- * @returns Object containing safe area insets for all four sides, or all 0 if not available.
+ * @returns {SafeAreaInset} Object containing safe area insets for all four sides, or all 0 if not available.
+ * - top `number` - Top safe area inset in pixels;
+ * - bottom `number` - Bottom safe area inset in pixels;
+ * - left `number` - Left safe area inset in pixels;
+ * - right `number` - Right safe area inset in pixels;
  *
  * @example
- * ```ts
  * const { top, bottom, left, right } = getSafeAreaInset();
  *
  * header.style.paddingTop = `${top}px`;
  * footer.style.paddingBottom = `${bottom}px`;
- * ```
  */
 export function getSafeAreaInset(): SafeAreaInset {
   if (isServer()) {

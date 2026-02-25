@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { subscribeKeyboardHeight } from '../../utils/keyboard/subscribeKeyboardHeight.ts';
+import { subscribeKeyboardHeight } from '../../utils/subscribeKeyboardHeight/index.ts';
 
 type UseKeyboardHeightOptions = {
   /**

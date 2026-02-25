@@ -2,6 +2,21 @@
 
 `react-simplikit` is designed to encourage contributions from anyone. If you'd like to contribute, please follow the guide below.
 
+## Package Scope
+
+`react-simplikit` focuses on **platform-independent hooks, components, and utilities** that work across all JavaScript environments (browser, server, React Native, etc.).
+
+Before contributing, check which package your implementation belongs to:
+
+| Package                   | Scope                                  | Examples                                                     |
+| ------------------------- | -------------------------------------- | ------------------------------------------------------------ |
+| `react-simplikit`         | Platform-independent pure state/logic  | `useToggle`, `useAsyncEffect`, `useLoading`                  |
+| `@react-simplikit/mobile` | Solving mobile web-specific challenges | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
+
+::: tip
+The mobile package is **not** for all browser API-dependent hooks. It specifically targets **problems encountered in mobile web environments** (viewport management, keyboard handling, layout issues on iOS Safari and Android Chrome). For example, a keyboard shortcut hook uses browser APIs but doesn't belong in the mobile package.
+:::
+
 ## Implementation Contribution
 
 When contributing implementations, add them to the appropriate directory based on their type (`components`, `hooks`, or `utils`). Each implementation must include the following elements:
@@ -294,6 +309,11 @@ yarn changeset
    - `major`: Breaking changes (breaking backward compatibility)
 
 3. Write a brief summary of your changes.
+
+::: tip
+Both packages are currently in the `0.0.x` stage. During this phase, most changes should use `patch`.
+If you're unsure about the version type, please discuss with the maintainers.
+:::
 
 4. Commit the generated changeset file with your PR.
 

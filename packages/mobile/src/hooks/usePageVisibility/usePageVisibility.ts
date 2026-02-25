@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { isServer } from '../../utils/isServer.ts';
+import { isServer } from '../../utils/isServer/index.ts';
 
 /**
  * Page visibility state derived from browser's DocumentVisibilityState.

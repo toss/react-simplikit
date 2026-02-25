@@ -1,5 +1,5 @@
-import { isServer } from '../isServer.ts';
-import { getKeyboardHeight } from '../keyboard/getKeyboardHeight.ts';
+import { getKeyboardHeight } from '../getKeyboardHeight/index.ts';
+import { isServer } from '../isServer/index.ts';
 
 type SubscribeKeyboardHeightOptions = {
   /**
@@ -27,7 +27,8 @@ type SubscribeKeyboardHeightResult = {
 };
 
 /**
- * Subscribes to changes in the on-screen keyboard height.
+ * @description
+ * `subscribeKeyboardHeight` is a utility function that subscribes to changes in the on-screen keyboard height.
  *
  * The provided callback is invoked whenever the keyboard height may change,
  * including when the keyboard appears, disappears, or changes size.
@@ -42,15 +43,15 @@ type SubscribeKeyboardHeightResult = {
  * - Throttled by default (16ms, ~60fps) to prevent excessive callback invocations
  * - Skips callback when height hasn't changed (deduplication)
  *
- * @param options - Configuration options
- * @param options.callback - A function that will be called with the updated keyboard height in pixels.
- * @param options.immediate - If true, the callback will be invoked immediately with the current keyboard height.
- * @param options.throttleMs - Throttle interval in milliseconds (default: 16ms).
+ * @param {SubscribeKeyboardHeightOptions} options - Configuration options
+ * @param {(height: number) => void} options.callback - A function that will be called with the updated keyboard height in pixels.
+ * @param {boolean} [options.immediate=false] - If true, the callback will be invoked immediately with the current keyboard height.
+ * @param {number} [options.throttleMs=16] - Throttle interval in milliseconds.
  *
- * @returns An object containing the unsubscribe function.
+ * @returns {SubscribeKeyboardHeightResult} An object containing the unsubscribe function.
+ * - unsubscribe `() => void` - Unsubscribes all listeners and stops receiving keyboard height updates.
  *
  * @example
- * ```ts
  * const { unsubscribe } = subscribeKeyboardHeight({
  *   callback: (height) => {
  *     footer.style.paddingBottom = `${height}px`;
@@ -60,7 +61,6 @@ type SubscribeKeyboardHeightResult = {
  *
  * // Later, when cleanup is needed
  * unsubscribe();
- * ```
  */
 export function subscribeKeyboardHeight({
   callback,

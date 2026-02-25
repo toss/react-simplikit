@@ -5,15 +5,9 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { disableBodyScrollLock, enableBodyScrollLock } from './bodyScrollLock.ts';
+import { disableBodyScrollLock } from './disableBodyScrollLock.ts';
 
-describe('bodyScrollLock SSR environment', () => {
-  it('should do nothing when enableBodyScrollLock is called on server', () => {
-    // In Node environment, window is undefined
-    expect(typeof window).toBe('undefined');
-    expect(() => enableBodyScrollLock()).not.toThrow();
-  });
-
+describe('disableBodyScrollLock SSR environment', () => {
   it('should do nothing when disableBodyScrollLock is called on server', () => {
     // In Node environment, window is undefined
     expect(typeof window).toBe('undefined');

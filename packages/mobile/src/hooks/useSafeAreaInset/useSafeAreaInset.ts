@@ -1,7 +1,7 @@
 import { startTransition, useCallback, useEffect, useState } from 'react';
 
-import { isServer } from '../../utils/isServer.ts';
-import { getSafeAreaInset, type SafeAreaInset } from '../../utils/safeArea/getSafeAreaInset.ts';
+import { getSafeAreaInset, type SafeAreaInset } from '../../utils/getSafeAreaInset/index.ts';
+import { isServer } from '../../utils/isServer/index.ts';
 
 /**
  * React hook to track safe area inset changes

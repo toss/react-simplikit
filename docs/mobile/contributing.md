@@ -2,6 +2,19 @@
 
 This guide extends the [core contributing guide](/core/contributing).
 
+## Package Scope
+
+`@react-simplikit/mobile` is a dedicated package for **solving problems encountered in mobile web environments**.
+
+This includes:
+
+- Viewport management (visual viewport, safe area)
+- Keyboard handling (avoiding keyboard-hidden content)
+- Layout issues specific to iOS Safari and Android Chrome
+- Scroll behavior in mobile browsers
+
+This package is **not** for all browser API-dependent utilities. A hook that uses browser APIs but solves a desktop or general-purpose concern (e.g., keyboard shortcuts, mouse coordinates) does not belong here.
+
 ## Development Workflow
 
 ```
@@ -88,6 +101,11 @@ Select the type of change:
 - `patch`: Bug fixes or minor changes
 - `minor`: New features (maintaining backward compatibility)
 - `major`: Breaking changes (breaking backward compatibility)
+
+::: tip
+Both packages are currently in the `0.0.x` stage. During this phase, most changes should use `patch`.
+If you're unsure about the version type, please discuss with the maintainers.
+:::
 
 ## Mobile-Specific Guidelines
 

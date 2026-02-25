@@ -89,6 +89,11 @@ function mobileSidebar(): DefaultTheme.SidebarItem[] {
           collapsed: false,
           items: getSidebarItems(mobilePackageRoot, 'hooks', '/mobile', 'ko'),
         },
+        {
+          text: '유틸리티',
+          collapsed: false,
+          items: getSidebarItems(mobilePackageRoot, 'utils', '/mobile', 'ko'),
+        },
       ],
     },
   ];

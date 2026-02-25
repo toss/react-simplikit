@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { isServer } from '../../utils/isServer.ts';
+import { isServer } from '../../utils/isServer/index.ts';
 
 type ScrollDirection = 'up' | 'down' | null;
 
