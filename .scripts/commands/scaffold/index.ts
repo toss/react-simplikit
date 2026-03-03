@@ -15,7 +15,7 @@ const prettierConfig: prettier.Options = {
 };
 
 export async function scaffold(name: string, type: 'hook' | 'component' | 'util') {
-  const directory = path.join(getRootPath(), `./src/${type}s/${name}`);
+  const directory = path.join(getRootPath(), `./packages/core/src/${type}s/${name}`);
   const ext = type === 'component' ? 'tsx' : 'ts';
 
   const tasks = new Listr(

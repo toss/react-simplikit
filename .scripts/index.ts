@@ -1,6 +1,12 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
 
 import { Command } from 'commander';
+
+import { getRootPath } from './utils/getRootPath.ts';
+
+// Load .env from project root
+dotenv.config({ path: path.join(getRootPath(), '.env') });
 
 import { generateDocs } from './commands/generateDocs/index.ts';
 import { scaffold } from './commands/scaffold/index.ts';
