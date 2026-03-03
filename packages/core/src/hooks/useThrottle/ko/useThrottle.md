@@ -39,7 +39,7 @@ function useThrottle<F extends (...args: any[]) => any>(
       required: false,
       defaultValue: '[\'leading\', \'trailing\']',
       description:
-        '함수가 시작점, 끝점 또는 둘 다에서 호출될지 여부를 지정하는 선택적 배열이에요.',
+        '함수가 시작점, 끝점 또는 둘 다에서 호출될지 여부를 지정하는 선택적 배열이에요. <br />: 초기값은 <code>[\'leading\', \'trailing\']</code>이에요.',
     },
   ]"
 />
