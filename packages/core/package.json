@@ -1,0 +1,97 @@
+{
+  "name": "react-simplikit",
+  "version": "0.0.48",
+  "main": "./dist/index.cjs",
+  "module": "./esm/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "keywords": [
+    "react"
+  ],
+  "homepage": "https://react-simplikit.slash.page",
+  "bugs": "https://github.com/toss/react-simplikit/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toss/react-simplikit.git",
+    "directory": "packages/core"
+  },
+  "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "esm/**/*"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf ./dist ./esm",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.7",
+    "@eslint/js": "^9.16.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.0",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "commander": "^13.1.0",
+    "comment-parser": "^1.4.1",
+    "corepack": "^0.30.0",
+    "dotenv": "^16.4.7",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "fast-glob": "^3.3.3",
+    "globals": "^15.13.0",
+    "jsdom": "^25.0.1",
+    "listr2": "^8.2.5",
+    "nanoid": "^5.1.5",
+    "openai": "^4.93.0",
+    "ora": "^8.2.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-sort-re-exports": "^0.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vitepress": "^1.5.0",
+    "vitest": "^2.1.8",
+    "vue": "^3.5.13"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}
