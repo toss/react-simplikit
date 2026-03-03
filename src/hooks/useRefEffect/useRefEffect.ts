@@ -41,7 +41,7 @@ export function useRefEffect<Element extends HTMLElement = HTMLElement>(
       cleanupCallbackRef.current();
       cleanupCallbackRef.current = () => {};
 
-      if (element === null) {
+      if (element == null) {
         return;
       }
 
