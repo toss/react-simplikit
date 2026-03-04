@@ -13,12 +13,12 @@ describe('useControlledState', () => {
     expect(value).toBe('testing');
   });
 
-  it('should be uncontrolled when defaultValue is passed', () => {
+  it('should be uncontrolled when defaultValue is passed', async () => {
     const { result } = renderHookSSR(() => useControlledState({ defaultValue: 'testing' }));
     const [value] = result.current;
     expect(value).toBe('testing');
 
-    act(() => {
+    await act(async () => {
       const [, setValue] = result.current;
       setValue('naruto');
     });
@@ -27,12 +27,12 @@ describe('useControlledState', () => {
     expect(next).toBe('naruto');
   });
 
-  it('should be controlled when value is passed', () => {
+  it('should be controlled when value is passed', async () => {
     const { result } = renderHookSSR(() => useControlledState({ value: 'testing' }));
     const [value] = result.current;
     expect(value).toBe('testing');
 
-    act(() => {
+    await act(async () => {
       const [, setValue] = result.current;
       setValue('naruto');
     });
@@ -71,12 +71,12 @@ describe('useControlledState', () => {
     expect(screen.getByTestId('value')).toHaveTextContent('0');
   });
 
-  it('should not change when the value is the same', () => {
+  it('should not change when the value is the same', async () => {
     const { result } = renderHookSSR(() => useControlledState({ value: 'testing' }));
     const [value] = result.current;
     expect(value).toBe('testing');
 
-    act(() => {
+    await act(async () => {
       const [, setValue] = result.current;
       setValue('testing');
     });
@@ -85,7 +85,7 @@ describe('useControlledState', () => {
     expect(next).toBe('testing');
   });
 
-  it('should handle controlled undefined value correctly', () => {
+  it('should handle controlled undefined value correctly', async () => {
     const { result } = renderHookSSR(() =>
       useControlledState({
         value: 'test',
@@ -93,7 +93,7 @@ describe('useControlledState', () => {
       })
     );
 
-    act(() => {
+    await act(async () => {
       const [, setValue] = result.current;
       setValue(undefined as never);
     });
@@ -102,12 +102,12 @@ describe('useControlledState', () => {
     expect(value).toBe('test');
   });
 
-  it('should handle function setState action', () => {
+  it('should handle function setState action', async () => {
     const { result } = renderHookSSR(() => useControlledState({ defaultValue: 5 }));
     const [value] = result.current;
     expect(value).toBe(5);
 
-    act(() => {
+    await act(async () => {
       const [, setValue] = result.current;
       setValue(prev => prev + 3);
     });

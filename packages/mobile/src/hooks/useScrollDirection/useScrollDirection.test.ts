@@ -167,11 +167,11 @@ describe('useScrollDirection', () => {
     expect(removeEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
   });
 
-  it('should clear throttle timer on unmount', () => {
+  it('should clear throttle timer on unmount', async () => {
     const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
     const { unmount } = renderHook(() => useScrollDirection());
 
-    act(() => {
+    await act(async () => {
       Object.defineProperty(window, 'scrollY', { value: 100 });
       window.dispatchEvent(new Event('scroll'));
       // Don't run timers - timer should be pending
