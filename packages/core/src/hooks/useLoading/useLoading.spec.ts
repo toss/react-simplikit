@@ -30,14 +30,14 @@ describe('useLoading', () => {
       resolvePromise = resolve;
     });
 
-    act(() => {
+    await act(async () => {
       startLoading(mockPromise);
     });
 
     const [isLoading] = result.current;
     expect(isLoading).toBe(true);
 
-    act(() => {
+    await act(async () => {
       resolvePromise?.();
     });
 
@@ -69,7 +69,7 @@ describe('useLoading', () => {
 
     const mockPromise = new Promise(resolve => setTimeout(() => resolve('test-value'), 100));
 
-    act(() => {
+    await act(async () => {
       startLoading(mockPromise);
     });
 

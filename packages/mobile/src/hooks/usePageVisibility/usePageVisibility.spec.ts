@@ -64,12 +64,12 @@ describe('usePageVisibility', () => {
       addEventListenerSpy.mockRestore();
     });
 
-    it('should update state when page becomes hidden', () => {
+    it('should update state when page becomes hidden', async () => {
       const { result } = renderHook(() => usePageVisibility());
 
       expect(result.current.isVisible).toBe(true);
 
-      act(() => {
+      await act(async () => {
         setVisibilityState('hidden');
       });
 
@@ -79,14 +79,14 @@ describe('usePageVisibility', () => {
       });
     });
 
-    it('should update state when page becomes visible', () => {
+    it('should update state when page becomes visible', async () => {
       visibilityState = 'hidden';
 
       const { result } = renderHook(() => usePageVisibility());
 
       expect(result.current.isVisible).toBe(false);
 
-      act(() => {
+      await act(async () => {
         setVisibilityState('visible');
       });
 
@@ -108,10 +108,10 @@ describe('usePageVisibility', () => {
       removeEventListenerSpy.mockRestore();
     });
 
-    it('should handle multiple rapid visibility changes', () => {
+    it('should handle multiple rapid visibility changes', async () => {
       const { result } = renderHook(() => usePageVisibility());
 
-      act(() => {
+      await act(async () => {
         setVisibilityState('hidden');
         setVisibilityState('visible');
         setVisibilityState('hidden');
@@ -123,13 +123,13 @@ describe('usePageVisibility', () => {
       });
     });
 
-    it('should handle multiple hook instances independently', () => {
+    it('should handle multiple hook instances independently', async () => {
       const { result: result1 } = renderHook(() => usePageVisibility());
       const { result: result2 } = renderHook(() => usePageVisibility());
 
       expect(result1.current).toEqual(result2.current);
 
-      act(() => {
+      await act(async () => {
         setVisibilityState('hidden');
       });
 

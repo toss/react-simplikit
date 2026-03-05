@@ -11,11 +11,11 @@ describe('useVisibilityEvent', () => {
 
     await renderHookSSR(() => useVisibilityEvent(mockCallback));
 
-    act(() => simulateVisibilityChange('hidden'));
+    await act(async () => simulateVisibilityChange('hidden'));
 
     expect(mockCallback).toHaveBeenCalledWith('hidden');
 
-    act(() => simulateVisibilityChange('visible'));
+    await act(async () => simulateVisibilityChange('visible'));
 
     expect(mockCallback).toHaveBeenCalledWith('visible');
   });
@@ -38,7 +38,7 @@ describe('useVisibilityEvent', () => {
   it('should call the callback immediately on initial render if immediate is true', async () => {
     const mockCallback = vi.fn();
 
-    act(() => simulateVisibilityChange('visible'));
+    await act(async () => simulateVisibilityChange('visible'));
 
     await renderHookSSR(() => useVisibilityEvent(mockCallback, { immediate: true }));
 
@@ -52,7 +52,7 @@ describe('useVisibilityEvent', () => {
 
     unmount();
 
-    act(() => simulateVisibilityChange('hidden'));
+    await act(async () => simulateVisibilityChange('hidden'));
 
     expect(mockCallback).not.toHaveBeenCalled();
   });

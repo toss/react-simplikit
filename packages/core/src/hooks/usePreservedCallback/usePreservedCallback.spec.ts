@@ -32,7 +32,7 @@ describe('usePreservedCallback', () => {
     });
 
     // Call the preserved callback with the initial callback
-    act(() => {
+    await act(async () => {
       result.current();
     });
     expect(initialCallback).toHaveBeenCalledTimes(1);
@@ -41,7 +41,7 @@ describe('usePreservedCallback', () => {
     rerender({ callback: updatedCallback });
 
     // Call the preserved callback with the updated callback
-    act(() => {
+    await act(async () => {
       result.current();
     });
     expect(updatedCallback).toHaveBeenCalledTimes(1);
@@ -52,7 +52,7 @@ describe('usePreservedCallback', () => {
     const callback = vi.fn((a: number, b: number) => a + b);
     const { result } = await renderHookSSR(() => usePreservedCallback(callback));
 
-    act(() => {
+    await act(async () => {
       result.current(2, 3);
     });
 

@@ -47,13 +47,13 @@ describe('useGeolocation', () => {
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeNull();
 
-    act(() => {
+    await act(async () => {
       result.current.getCurrentPosition();
     });
 
     expect(result.current.loading).toBe(true);
 
-    act(() => {
+    await act(async () => {
       successCallback(mockPosition);
     });
 
@@ -71,7 +71,7 @@ describe('useGeolocation', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should return appropriate error and terminate function calls when used in unsupported environments', () => {
+  it('should return appropriate error and terminate function calls when used in unsupported environments', async () => {
     Object.defineProperty(global.navigator, 'geolocation', { value: undefined });
 
     const { result } = renderHookSSR(() => useGeolocation({ mountBehavior: 'get' }));
@@ -87,7 +87,7 @@ describe('useGeolocation', () => {
 
     vi.clearAllMocks();
 
-    act(() => {
+    await act(async () => {
       result.current.startTracking();
     });
 
@@ -96,7 +96,7 @@ describe('useGeolocation', () => {
     expect(result.current.error?.message).toBe('Geolocation is not supported by this environment.');
     expect(customError.name).toBe('CustomGeoLocationError');
 
-    act(() => {
+    await act(async () => {
       result.current.stopTracking();
     });
 
@@ -115,7 +115,7 @@ describe('useGeolocation', () => {
 
     const { result } = renderHookSSR(() => useGeolocation());
 
-    act(() => {
+    await act(async () => {
       result.current.getCurrentPosition();
     });
 
@@ -210,11 +210,11 @@ describe('useGeolocation', () => {
 
     const { result } = renderHookSSR(() => useGeolocation());
 
-    act(() => {
+    await act(async () => {
       result.current.startTracking();
     });
 
-    act(() => {
+    await act(async () => {
       watchCallback(mockPosition);
     });
 
@@ -229,7 +229,7 @@ describe('useGeolocation', () => {
       timestamp: mockPosition.timestamp,
     });
 
-    act(() => {
+    await act(async () => {
       watchCallback(updatedPosition);
     });
 
@@ -245,25 +245,25 @@ describe('useGeolocation', () => {
     });
   });
 
-  it('should call clearWatch if watchId already exists when startTracking is called', () => {
+  it('should call clearWatch if watchId already exists when startTracking is called', async () => {
     mockGeolocation.watchPosition.mockReturnValue(123);
 
     const { result } = renderHookSSR(() => useGeolocation());
 
-    act(() => {
+    await act(async () => {
       result.current.startTracking();
     });
 
     expect(mockGeolocation.clearWatch).not.toHaveBeenCalled();
 
-    act(() => {
+    await act(async () => {
       result.current.startTracking();
     });
 
     expect(mockGeolocation.clearWatch).toHaveBeenCalledWith(123);
   });
 
-  it('should properly update isTracking state when starting and stopping location tracking', () => {
+  it('should properly update isTracking state when starting and stopping location tracking', async () => {
     let watchPositionCallback: PositionCallback;
 
     mockGeolocation.watchPosition.mockImplementation(success => {
@@ -276,18 +276,18 @@ describe('useGeolocation', () => {
 
     expect(result.current.isTracking).toBe(false);
 
-    act(() => {
+    await act(async () => {
       result.current.startTracking();
     });
 
-    act(() => {
+    await act(async () => {
       watchPositionCallback(mockPosition);
     });
 
     expect(result.current.isTracking).toBe(true);
     expect(mockGeolocation.watchPosition).toHaveBeenCalledTimes(1);
 
-    act(() => {
+    await act(async () => {
       result.current.stopTracking();
     });
 
@@ -295,12 +295,12 @@ describe('useGeolocation', () => {
     expect(mockGeolocation.clearWatch).toHaveBeenCalledWith(123);
   });
 
-  it('should clean up watchPosition when component unmounts', () => {
+  it('should clean up watchPosition when component unmounts', async () => {
     mockGeolocation.watchPosition.mockReturnValue(123);
 
     const { result, unmount } = renderHookSSR(() => useGeolocation());
 
-    act(() => {
+    await act(async () => {
       result.current.startTracking();
     });
 

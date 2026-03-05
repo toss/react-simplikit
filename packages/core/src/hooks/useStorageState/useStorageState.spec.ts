@@ -166,7 +166,7 @@ describe('useStorageState', () => {
 
     it('should set and get value', async () => {
       const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
-      act(() => {
+      await act(async () => {
         result.current[1]('new value');
       });
       expect(result.current[0]).toBe('new value');
@@ -174,7 +174,7 @@ describe('useStorageState', () => {
 
     it('should update value using function', async () => {
       const { result } = await renderHookSSR(() => useStorageState<number>('test-key', { defaultValue: 0, storage }));
-      act(() => {
+      await act(async () => {
         result.current[1](prev => prev + 1);
       });
       expect(result.current[0]).toBe(1);
@@ -184,7 +184,7 @@ describe('useStorageState', () => {
       const { result: result1 } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
       const { result: result2 } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
 
-      act(() => {
+      await act(async () => {
         result1.current[1]('updated value');
       });
 
@@ -196,7 +196,7 @@ describe('useStorageState', () => {
 
       storage.set('test-key', JSON.stringify({ hello: 'world' }));
 
-      act(() => {
+      await act(async () => {
         result.current[2]();
       });
 
@@ -211,7 +211,7 @@ describe('useStorageState', () => {
 
       const { result } = await renderHookSSR(() => useStorageState('test-key', { storage, serializer, deserializer }));
 
-      act(() => {
+      await act(async () => {
         result.current[1]('hello');
       });
 
@@ -219,11 +219,11 @@ describe('useStorageState', () => {
     });
 
     it('should throw error when value is not serializable', async () => {
-      expect(
+      await expect(
         async () => await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: () => 'world' }))
       ).rejects.toThrow('Received a non-serializable value');
 
-      expect(
+      await expect(
         async () =>
           await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: new (class Cls {})() }))
       ).rejects.toThrow('Received a non-serializable value');
@@ -243,7 +243,7 @@ describe('useStorageState', () => {
     it('should persist value after rerender', async () => {
       const { result, rerender } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
 
-      act(() => {
+      await act(async () => {
         result.current[1]('memo value');
       });
 
@@ -265,7 +265,7 @@ describe('useStorageState', () => {
         useStorageState<string>('test-key', { storage: safeSessionStorage })
       );
 
-      act(() => {
+      await act(async () => {
         result.current[1]('session value');
       });
 
@@ -278,7 +278,7 @@ describe('useStorageState', () => {
         useStorageState<string>('test-key', { storage: safeSessionStorage })
       );
 
-      act(() => {
+      await act(async () => {
         window.dispatchEvent(
           new StorageEvent('storage', {
             key: 'test-key',
@@ -303,7 +303,7 @@ describe('useStorageState', () => {
         useStorageState<string>('test-key', { storage: safeLocalStorage })
       );
 
-      act(() => {
+      await act(async () => {
         result.current[1]('local value');
       });
 
@@ -314,7 +314,7 @@ describe('useStorageState', () => {
     it('should sync between different tabs', async () => {
       const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
 
-      act(() => {
+      await act(async () => {
         localStorage.setItem('test-key', JSON.stringify('value from other tab'));
         window.dispatchEvent(
           new StorageEvent('storage', {
@@ -332,7 +332,7 @@ describe('useStorageState', () => {
         useStorageState<string>('test-key', { storage: safeLocalStorage, defaultValue: 'default' })
       );
 
-      act(() => {
+      await act(async () => {
         localStorage.setItem('test-key', '{ "test": "hi" ');
         window.dispatchEvent(
           new StorageEvent('storage', {
@@ -348,13 +348,13 @@ describe('useStorageState', () => {
     it('should remove value when set value to undefined', async () => {
       const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
 
-      act(() => {
+      await act(async () => {
         result.current[1]('value');
       });
 
       expect(result.current[0]).toBe('value');
 
-      act(() => {
+      await act(async () => {
         result.current[1](undefined);
       });
 
