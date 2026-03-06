@@ -2,6 +2,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import react from 'eslint-plugin-react';
@@ -13,8 +14,7 @@ import tseslint from 'typescript-eslint';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
+export default defineConfig(
   {
     ignores: [
       '**/*.d.ts',
@@ -120,5 +120,5 @@ export default [
       },
     },
   },
-  prettierRecommended,
-];
+  prettierRecommended
+);
