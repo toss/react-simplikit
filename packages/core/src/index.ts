@@ -11,6 +11,7 @@ export { useDebounce } from './hooks/useDebounce/index.ts';
 export { useDebouncedCallback } from './hooks/useDebouncedCallback/index.ts';
 export { useDoubleClick } from './hooks/useDoubleClick/index.ts';
 export { useGeolocation } from './hooks/useGeolocation/index.ts';
+export { useHistory } from './hooks/useHistory/index.ts';
 export { useImpressionRef } from './hooks/useImpressionRef/index.ts';
 export { useInputState } from './hooks/useInputState/index.ts';
 export { useIntersectionObserver } from './hooks/useIntersectionObserver/index.ts';
