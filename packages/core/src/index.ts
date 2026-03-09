@@ -25,6 +25,7 @@ export { usePreservedCallback } from './hooks/usePreservedCallback/index.ts';
 export { usePreservedReference } from './hooks/usePreservedReference/index.ts';
 export { usePrevious } from './hooks/usePrevious/index.ts';
 export { useRefEffect } from './hooks/useRefEffect/index.ts';
+export { useSet } from './hooks/useSet/index.ts';
 export { useStorageState } from './hooks/useStorageState/index.ts';
 export { useThrottle } from './hooks/useThrottle/index.ts';
 export { useTimeout } from './hooks/useTimeout/index.ts';
