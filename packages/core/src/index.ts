@@ -17,6 +17,7 @@ export { useIntersectionObserver } from './hooks/useIntersectionObserver/index.t
 export { useInterval } from './hooks/useInterval/index.ts';
 export { useIsClient } from './hooks/useIsClient/index.ts';
 export { useIsomorphicLayoutEffect } from './hooks/useIsomorphicLayoutEffect/index.ts';
+export { useList } from './hooks/useList/index.ts';
 export { useLoading } from './hooks/useLoading/index.ts';
 export { useLongPress } from './hooks/useLongPress/index.ts';
 export { useMap } from './hooks/useMap/index.ts';
