@@ -93,9 +93,10 @@ export function useList<T>(initialState: T[] = []): UseListReturn<T> {
     setList(preservedInitialState);
   });
 
-  const actions = useMemo<ListActions<T>>(() => {
-    return { push, insertAt, updateAt, removeAt, setAll, reset };
-  }, [push, insertAt, updateAt, removeAt, setAll, reset]);
+  const actions = useMemo<ListActions<T>>(
+    () => ({ push, insertAt, updateAt, removeAt, setAll, reset }),
+    [push, insertAt, updateAt, removeAt, setAll, reset]
+  );
 
   return [list, actions];
 }
