@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -7,6 +7,10 @@ import { useThrottledCallback } from './useThrottledCallback.ts';
 describe('useThrottledCallback', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('is safe on server side rendering', () => {
