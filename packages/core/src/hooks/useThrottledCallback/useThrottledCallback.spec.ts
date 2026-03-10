@@ -83,6 +83,20 @@ describe('useThrottledCallback', () => {
     expect(onChange).not.toBeCalled();
   });
 
+  it('should handle leading and trailing edges together', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() =>
+      useThrottledCallback({ onChange, timeThreshold: 100, edges: ['leading', 'trailing'] })
+    );
+
+    result.current(true);
+    expect(onChange).toBeCalledTimes(1);
+    expect(onChange).toBeCalledWith(true);
+
+    vi.advanceTimersByTime(100);
+    expect(onChange).toBeCalledTimes(1);
+  });
+
   it('should handle value toggling', () => {
     const onChange = vi.fn();
     const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));

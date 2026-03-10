@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
+import { usePreservedReference } from '../usePreservedReference/index.ts';
 import { throttle } from '../useThrottle/throttle.ts';
 
 type ThrottleOptions = {
@@ -39,16 +40,14 @@ export function useThrottledCallback({
   const handleChange = usePreservedCallback(onChange);
   const ref = useRef({ value: false, clearPreviousThrottle: () => {} });
 
-  useEffect(() => {
+  useEffect(function cleanupThrottleOnUnmount() {
     const current = ref.current;
     return () => {
       current.clearPreviousThrottle();
     };
   }, []);
 
-  const preservedEdges = useMemo(() => {
-    return edges;
-  }, [edges]);
+  const preservedEdges = usePreservedReference(edges);
 
   return useCallback(
     (nextValue: boolean) => {
