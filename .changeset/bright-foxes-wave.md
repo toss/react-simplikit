@@ -1,5 +1,5 @@
 ---
-'react-simplikit': minor
+'react-simplikit': patch
 ---
 
 feat(core/hooks): add 'useSelection' hook
