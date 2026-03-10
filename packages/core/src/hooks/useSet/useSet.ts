@@ -83,9 +83,10 @@ export function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetRetur
     setSet(() => new Set(preservedInitialState));
   });
 
-  const actions = useMemo<SetActions<T>>(() => {
-    return { add, remove, toggle, setAll, reset };
-  }, [add, remove, toggle, setAll, reset]);
+  const actions = useMemo<SetActions<T>>(
+    () => ({ add, remove, toggle, setAll, reset }),
+    [add, remove, toggle, setAll, reset]
+  );
 
   return [set, actions];
 }
