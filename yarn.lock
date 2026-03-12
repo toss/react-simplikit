@@ -3685,6 +3685,7 @@ __metadata:
     "@testing-library/react": "npm:^16.1.0"
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
+    "@vitest/coverage-v8": "npm:^2.1.8"
     eslint: "npm:^9.16.0"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
