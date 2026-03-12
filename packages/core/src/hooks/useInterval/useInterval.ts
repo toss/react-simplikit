@@ -57,7 +57,7 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
       return;
     }
 
-    const id = window.setInterval(preservedCallback, delay);
-    return () => window.clearInterval(id);
+    const id = setInterval(preservedCallback, delay);
+    return () => clearInterval(id);
   }, [delay, preservedCallback, enabled]);
 }
