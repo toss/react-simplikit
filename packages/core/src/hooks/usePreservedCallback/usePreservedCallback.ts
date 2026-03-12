@@ -32,9 +32,12 @@ export function usePreservedCallback<Arguments extends any[] = any[], ReturnValu
 ) {
   const callbackRef = useRef(callback);
 
-  useEffect(() => {
-    callbackRef.current = callback;
-  }, [callback]);
+  useEffect(
+    function syncCallbackRef() {
+      callbackRef.current = callback;
+    },
+    [callback]
+  );
 
   return useCallback((...args: Arguments) => {
     return callbackRef.current(...args);
