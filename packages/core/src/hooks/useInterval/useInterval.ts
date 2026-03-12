@@ -46,18 +46,24 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
 
   const preservedCallback = usePreservedCallback(callback);
 
-  useEffect(() => {
-    if (immediate === true && enabled) {
-      preservedCallback();
-    }
-  }, [immediate, preservedCallback, enabled]);
+  useEffect(
+    function runImmediateCallback() {
+      if (immediate === true && enabled) {
+        preservedCallback();
+      }
+    },
+    [immediate, preservedCallback, enabled]
+  );
 
-  useEffect(() => {
-    if (!enabled) {
-      return;
-    }
+  useEffect(
+    function startInterval() {
+      if (!enabled) {
+        return;
+      }
 
-    const id = setInterval(preservedCallback, delay);
-    return () => clearInterval(id);
-  }, [delay, preservedCallback, enabled]);
+      const id = setInterval(preservedCallback, delay);
+      return () => clearInterval(id);
+    },
+    [delay, preservedCallback, enabled]
+  );
 }
