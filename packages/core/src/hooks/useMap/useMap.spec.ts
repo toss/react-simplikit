@@ -1,3 +1,4 @@
+import { act } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
@@ -30,8 +31,10 @@ describe('useMap', () => {
 
     expect(result.current[0].get(1)).toBeUndefined();
 
-    actions.set(1, 'added');
-    rerender();
+    await act(async () => {
+      actions.set(1, 'added');
+      rerender();
+    });
 
     expect(result.current[0].get(1)).toBe('added');
   });
@@ -41,8 +44,10 @@ describe('useMap', () => {
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
     const [, actions] = result.current;
 
-    actions.set(1, 'edited');
-    rerender();
+    await act(async () => {
+      actions.set(1, 'edited');
+      rerender();
+    });
 
     expect(result.current[0].get(1)).toBe('edited');
   });
@@ -59,8 +64,10 @@ describe('useMap', () => {
     expect(result.current[0].get(2)).toBe('example');
     expect(result.current[0].size).toBe(2);
 
-    actions.setAll([[1, 'edited']]);
-    rerender();
+    await act(async () => {
+      actions.setAll([[1, 'edited']]);
+      rerender();
+    });
 
     expect(result.current[0].get(1)).toBe('edited');
     expect(result.current[0].get(2)).toBeUndefined();
@@ -72,8 +79,10 @@ describe('useMap', () => {
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
     const [, actions] = result.current;
 
-    actions.remove(1);
-    rerender();
+    await act(async () => {
+      actions.remove(1);
+      rerender();
+    });
 
     expect(result.current[0].get(1)).toBeUndefined();
     expect(result.current[0].size).toBe(0);
@@ -85,17 +94,21 @@ describe('useMap', () => {
     const [, actions] = result.current;
 
     // First modify the map
-    actions.set(2, 'added');
-    actions.set(1, 'modified');
-    rerender();
+    await act(async () => {
+      actions.set(2, 'added');
+      actions.set(1, 'modified');
+      rerender();
+    });
 
     expect(result.current[0].get(1)).toBe('modified');
     expect(result.current[0].get(2)).toBe('added');
     expect(result.current[0].size).toBe(2);
 
     // Then reset to initial state
-    actions.reset();
-    rerender();
+    await act(async () => {
+      actions.reset();
+      rerender();
+    });
 
     // Should be back to initial state
     expect(result.current[0].get(1)).toBe('initial');
@@ -108,15 +121,19 @@ describe('useMap', () => {
     const [, actions] = result.current;
 
     // Add some items
-    actions.set(1, 'one');
-    actions.set(2, 'two');
-    rerender();
+    await act(async () => {
+      actions.set(1, 'one');
+      actions.set(2, 'two');
+      rerender();
+    });
 
     expect(result.current[0].size).toBe(2);
 
     // Reset should restore to empty state
-    actions.reset();
-    rerender();
+    await act(async () => {
+      actions.reset();
+      rerender();
+    });
 
     expect(result.current[0].size).toBe(0);
   });
@@ -126,8 +143,10 @@ describe('useMap', () => {
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
     const [originalMapRef, actions] = result.current;
 
-    actions.set(1, 1);
-    rerender();
+    await act(async () => {
+      actions.set(1, 1);
+      rerender();
+    });
 
     expect(originalMapRef).not.toBe(result.current[0]);
     expect(originalMapRef.get(1)).toBeUndefined();
@@ -141,8 +160,10 @@ describe('useMap', () => {
 
     expect(result.current[1]).toBe(originalActionsRef);
 
-    originalActionsRef.set(1, 1);
-    rerender();
+    await act(async () => {
+      originalActionsRef.set(1, 1);
+      rerender();
+    });
 
     expect(result.current[1]).toBe(originalActionsRef);
   });

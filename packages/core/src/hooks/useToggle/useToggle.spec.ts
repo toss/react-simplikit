@@ -31,14 +31,14 @@ describe('useToggle', () => {
     const { result } = await renderHookSSR(() => useToggle(false));
     const [, toggle] = result.current;
 
-    act(() => {
+    await act(async () => {
       toggle();
     });
 
     let [bool] = result.current;
     expect(bool).toBe(true);
 
-    act(() => {
+    await act(async () => {
       toggle();
     });
 

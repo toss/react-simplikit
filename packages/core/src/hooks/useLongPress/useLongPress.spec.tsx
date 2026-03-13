@@ -21,7 +21,7 @@ describe('useLongPress', () => {
     expect(onLongPress).not.toHaveBeenCalled();
   });
 
-  it('should trigger onLongPress after the default delay', () => {
+  it('should trigger onLongPress after the default delay', async () => {
     const onLongPress = vi.fn();
     const TestComponent = () => {
       const longPressHandlers = useLongPress(onLongPress);
@@ -38,14 +38,14 @@ describe('useLongPress', () => {
     fireEvent.mouseDown(button);
     expect(onLongPress).not.toHaveBeenCalled();
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
     expect(onLongPress).toHaveBeenCalledTimes(1);
   });
 
-  it('should respect custom delay timing', () => {
+  it('should respect custom delay timing', async () => {
     const onLongPress = vi.fn();
     const TestComponent = () => {
       const longPressHandlers = useLongPress(onLongPress, { delay: 1000 });
@@ -61,12 +61,12 @@ describe('useLongPress', () => {
 
     fireEvent.mouseDown(button);
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(800);
     });
     expect(onLongPress).not.toHaveBeenCalled();
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(200);
     });
     expect(onLongPress).toHaveBeenCalledTimes(1);
@@ -95,7 +95,7 @@ describe('useLongPress', () => {
     expect(onLongPress).not.toHaveBeenCalled();
   });
 
-  it('should call onLongPressEnd after a successful long press', () => {
+  it('should call onLongPressEnd after a successful long press', async () => {
     const onLongPress = vi.fn();
     const onLongPressEnd = vi.fn();
 
@@ -113,7 +113,7 @@ describe('useLongPress', () => {
 
     fireEvent.mouseDown(button);
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
@@ -123,7 +123,7 @@ describe('useLongPress', () => {
     expect(onLongPressEnd).toHaveBeenCalledTimes(1);
   });
 
-  it('should cancel long press on mouse leave', () => {
+  it('should cancel long press on mouse leave', async () => {
     const onLongPress = vi.fn();
 
     const TestComponent = () => {
@@ -141,14 +141,14 @@ describe('useLongPress', () => {
     fireEvent.mouseDown(button);
     fireEvent.mouseLeave(button);
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
     expect(onLongPress).not.toHaveBeenCalled();
   });
 
-  it('should cancel long press when movement exceeds threshold', () => {
+  it('should cancel long press when movement exceeds threshold', async () => {
     const onLongPress = vi.fn();
 
     const TestComponent = () => {
@@ -169,14 +169,14 @@ describe('useLongPress', () => {
 
     fireEvent.mouseMove(button, { clientX: 20, clientY: 0 });
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
     expect(onLongPress).not.toHaveBeenCalled();
   });
 
-  it('should handle touch events', () => {
+  it('should handle touch events', async () => {
     const onLongPress = vi.fn();
 
     const TestComponent = () => {
@@ -195,14 +195,14 @@ describe('useLongPress', () => {
       touches: [{ clientX: 0, clientY: 0 }],
     });
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
     expect(onLongPress).toHaveBeenCalledTimes(1);
   });
 
-  it('should cancel long press when X movement exceeds threshold', () => {
+  it('should cancel long press when X movement exceeds threshold', async () => {
     const onLongPress = vi.fn();
 
     const TestComponent = () => {
@@ -223,14 +223,14 @@ describe('useLongPress', () => {
 
     fireEvent.mouseMove(button, { clientX: 20, clientY: 0 });
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
     expect(onLongPress).not.toHaveBeenCalled();
   });
 
-  it('should cancel long press when Y movement exceeds threshold', () => {
+  it('should cancel long press when Y movement exceeds threshold', async () => {
     const onLongPress = vi.fn();
 
     const TestComponent = () => {
@@ -251,14 +251,14 @@ describe('useLongPress', () => {
 
     fireEvent.mouseMove(button, { clientX: 0, clientY: 20 });
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
     expect(onLongPress).not.toHaveBeenCalled();
   });
 
-  it('should not cancel long press when movement is within threshold', () => {
+  it('should not cancel long press when movement is within threshold', async () => {
     const onLongPress = vi.fn();
 
     const TestComponent = () => {
@@ -279,14 +279,14 @@ describe('useLongPress', () => {
 
     fireEvent.mouseMove(button, { clientX: 5, clientY: 5 });
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
     expect(onLongPress).toHaveBeenCalledTimes(1);
   });
 
-  it('should not track movement when no threshold is specified', () => {
+  it('should not track movement when no threshold is specified', async () => {
     const onLongPress = vi.fn();
 
     const TestComponent = () => {
@@ -305,14 +305,14 @@ describe('useLongPress', () => {
 
     fireEvent.mouseMove(button, { clientX: 100, clientY: 100 });
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 
     expect(onLongPress).toHaveBeenCalledTimes(1);
   });
 
-  it('should not track movement when threshold object is empty', () => {
+  it('should not track movement when threshold object is empty', async () => {
     const onLongPress = vi.fn();
 
     const TestComponent = () => {
@@ -333,7 +333,7 @@ describe('useLongPress', () => {
 
     fireEvent.mouseMove(button, { clientX: 100, clientY: 100 });
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(500);
     });
 

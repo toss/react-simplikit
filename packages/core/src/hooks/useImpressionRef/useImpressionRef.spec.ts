@@ -48,10 +48,10 @@ describe('useImpressionRef', () => {
     Object.defineProperty(document, 'visibilityState', { value: originalVisibilityState, writable: true });
   });
 
-  const setup = (options = defaultOptions) => {
+  const setup = async (options = defaultOptions) => {
     const { result } = renderHookSSR(() => useImpressionRef(options));
     const mockElement = document.createElement('div');
-    act(() => result.current(mockElement));
+    await act(async () => result.current(mockElement));
     return { result, observerCallback: mockInstances[0].callback };
   };
 
@@ -60,8 +60,8 @@ describe('useImpressionRef', () => {
   });
 
   it('should call onImpressionStart when element becomes visible', async () => {
-    const { observerCallback } = setup();
-    act(() => {
+    const { observerCallback } = await setup();
+    await act(async () => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
       vi.runAllTimers();
     });
@@ -71,8 +71,8 @@ describe('useImpressionRef', () => {
   });
 
   it('should call onImpressionEnd when element goes out of view', async () => {
-    const { observerCallback } = setup();
-    act(() => {
+    const { observerCallback } = await setup();
+    await act(async () => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
       vi.runAllTimers();
       observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
@@ -84,8 +84,8 @@ describe('useImpressionRef', () => {
   });
 
   it('should handle default options without errors', async () => {
-    const { observerCallback } = setup({});
-    act(() => {
+    const { observerCallback } = await setup({});
+    await act(async () => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
       vi.runAllTimers();
     });
@@ -95,10 +95,10 @@ describe('useImpressionRef', () => {
   });
 
   it('should not call handlers when document is hidden', async () => {
-    const { observerCallback } = setup();
+    const { observerCallback } = await setup();
     Object.defineProperty(document, 'visibilityState', { value: 'hidden', writable: true });
 
-    act(() => {
+    await act(async () => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
       vi.runAllTimers();
     });
@@ -108,9 +108,9 @@ describe('useImpressionRef', () => {
   });
 
   it('should handle visibility change to hidden', async () => {
-    const { observerCallback } = setup();
+    const { observerCallback } = await setup();
 
-    act(() => {
+    await act(async () => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
       vi.runAllTimers();
     });
@@ -118,7 +118,7 @@ describe('useImpressionRef', () => {
     expect(mockOnImpressionStart).toHaveBeenCalledTimes(1);
 
     Object.defineProperty(document, 'visibilityState', { value: 'hidden', writable: true });
-    act(() => {
+    await act(async () => {
       document.dispatchEvent(new Event('visibilitychange'));
       vi.runAllTimers();
     });
@@ -127,17 +127,17 @@ describe('useImpressionRef', () => {
   });
 
   it('should not call handlers if element is not intersecting on visibility change', async () => {
-    const { observerCallback } = setup();
-    act(() => {
+    const { observerCallback } = await setup();
+    await act(async () => {
       observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
       vi.runAllTimers();
     });
 
     Object.defineProperty(document, 'visibilityState', { value: 'hidden', writable: true });
-    act(() => document.dispatchEvent(new Event('visibilitychange')));
+    await act(async () => document.dispatchEvent(new Event('visibilitychange')));
 
     Object.defineProperty(document, 'visibilityState', { value: 'visible', writable: true });
-    act(() => document.dispatchEvent(new Event('visibilitychange')));
+    await act(async () => document.dispatchEvent(new Event('visibilitychange')));
 
     expect(mockOnImpressionStart).not.toHaveBeenCalled();
     expect(mockOnImpressionEnd).not.toHaveBeenCalled();
