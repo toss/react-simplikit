@@ -54,7 +54,7 @@ describe('useIntersectionObserver', () => {
 
   it('should observe the element when it is set', async () => {
     const { result, mockElement } = await setup();
-    act(() => {
+    await act(async () => {
       result.current(mockElement);
     });
 
@@ -63,7 +63,7 @@ describe('useIntersectionObserver', () => {
 
   it('should unobserve the element when it is removed', async () => {
     const { result, mockElement } = await setup();
-    act(() => {
+    await act(async () => {
       result.current(mockElement);
       result.current(null);
     });
@@ -74,13 +74,13 @@ describe('useIntersectionObserver', () => {
   it('should call the callback when an entry is observed', async () => {
     const mockCallback = vi.fn();
     const { result, mockElement } = await setup(mockCallback);
-    act(() => {
+    await act(async () => {
       result.current(mockElement);
     });
 
     const observerCallback = IntersectionObserverSpy.mock.calls[0][0];
     const mockEntry = { target: mockElement, isIntersecting: true } as unknown as IntersectionObserverEntry;
-    act(() => {
+    await act(async () => {
       observerCallback([mockEntry], null as unknown as IntersectionObserver);
     });
 
@@ -93,7 +93,7 @@ describe('useIntersectionObserver', () => {
 
     const mockCallback = vi.fn();
     const { result, mockElement } = await setup(mockCallback);
-    act(() => {
+    await act(async () => {
       result.current(mockElement);
     });
 

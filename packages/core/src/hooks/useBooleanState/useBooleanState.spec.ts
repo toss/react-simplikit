@@ -25,7 +25,7 @@ describe('useBooleanState', () => {
     const { result } = await renderHookSSR(() => useBooleanState(false));
     const [, setTrue] = result.current;
 
-    act(() => {
+    await act(async () => {
       setTrue();
     });
 
@@ -37,7 +37,7 @@ describe('useBooleanState', () => {
     const { result } = await renderHookSSR(() => useBooleanState(true));
     const [, , setFalse] = result.current;
 
-    act(() => {
+    await act(async () => {
       setFalse();
     });
 
@@ -49,14 +49,14 @@ describe('useBooleanState', () => {
     const { result } = await renderHookSSR(() => useBooleanState(false));
     const [, , , toggle] = result.current;
 
-    act(() => {
+    await act(async () => {
       toggle();
     });
 
     let [bool] = result.current;
     expect(bool).toBe(true);
 
-    act(() => {
+    await act(async () => {
       toggle();
     });
 

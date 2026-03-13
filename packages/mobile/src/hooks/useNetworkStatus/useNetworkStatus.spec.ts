@@ -80,7 +80,7 @@ describe('useNetworkStatus', () => {
       expect(mockConnection.addEventListener).toHaveBeenCalledTimes(1);
     });
 
-    it('should update network status on change event', () => {
+    it('should update network status on change event', async () => {
       const { result } = renderHook(() => useNetworkStatus());
 
       const changeHandler = mockConnection.addEventListener.mock.calls[0][1];
@@ -88,7 +88,7 @@ describe('useNetworkStatus', () => {
       mockConnection.effectiveType = '3g';
       mockConnection.downlink = 1;
 
-      act(() => {
+      await act(async () => {
         changeHandler();
       });
 
@@ -135,12 +135,12 @@ describe('useNetworkStatus', () => {
       });
     });
 
-    it('should handle multiple rapid connection changes', () => {
+    it('should handle multiple rapid connection changes', async () => {
       const { result } = renderHook(() => useNetworkStatus());
 
       const changeHandler = mockConnection.addEventListener.mock.calls[0][1];
 
-      act(() => {
+      await act(async () => {
         mockConnection.effectiveType = '3g';
         changeHandler();
         mockConnection.effectiveType = '2g';

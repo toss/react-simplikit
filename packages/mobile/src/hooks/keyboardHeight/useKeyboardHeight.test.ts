@@ -88,7 +88,7 @@ describe('useKeyboardHeight', () => {
   });
 
   describe('keyboard height updates', () => {
-    it('should track keyboard height changes', () => {
+    it('should track keyboard height changes', async () => {
       let capturedCallback: ((height: number) => void) | null = null;
 
       mockSubscribeKeyboardHeight.mockImplementation(({ callback }) => {
@@ -100,13 +100,13 @@ describe('useKeyboardHeight', () => {
 
       expect(result.current.keyboardHeight).toBe(0);
 
-      act(() => {
+      await act(async () => {
         capturedCallback?.(250);
       });
 
       expect(result.current.keyboardHeight).toBe(250);
 
-      act(() => {
+      await act(async () => {
         capturedCallback?.(0);
       });
 
@@ -168,7 +168,7 @@ describe('useKeyboardHeight', () => {
   });
 
   describe('multiple instances', () => {
-    it('should allow multiple independent hook instances', () => {
+    it('should allow multiple independent hook instances', async () => {
       let callback1: ((height: number) => void) | null = null;
       let callback2: ((height: number) => void) | null = null;
 
@@ -185,7 +185,7 @@ describe('useKeyboardHeight', () => {
       const { result: result1 } = renderHook(() => useKeyboardHeight());
       const { result: result2 } = renderHook(() => useKeyboardHeight());
 
-      act(() => {
+      await act(async () => {
         callback1?.(200);
         callback2?.(200);
       });

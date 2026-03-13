@@ -12,7 +12,7 @@ describe('mergeRefs', () => {
     const mergedRef = mergeRefs<string | null>(ref);
     const value = 'test-value';
 
-    act(() => {
+    await act(async () => {
       mergedRef(value);
     });
 
@@ -27,7 +27,7 @@ describe('mergeRefs', () => {
     const mergedRef = mergeRefs<string>(callbackRef);
     const value = 'test-value';
 
-    act(() => {
+    await act(async () => {
       mergedRef(value);
     });
 
@@ -46,7 +46,7 @@ describe('mergeRefs', () => {
     const mergedRef = mergeRefs<string | null>(ref1, ref2, ref3, ref4);
     const value = 'test-value';
 
-    act(() => {
+    await act(async () => {
       mergedRef(value);
     });
 
@@ -68,7 +68,7 @@ describe('mergeRefs', () => {
 
     const value = 'test-value';
 
-    act(() => {
+    await act(async () => {
       result.current.mergedRef(value);
     });
 
