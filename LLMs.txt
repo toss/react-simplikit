@@ -1,0 +1,52 @@
+# react-simplikit
+
+`react-simplikit` is a collection of essential and platform-independent React hooks, focused on providing a smooth Developer Experience (DX) and reliability for web, mobile, and server environments. It helps developers avoid reinventing the wheel by providing reliable, typed hooks.
+
+## Installation
+
+```bash
+npm install @react-simplikit/core
+# or yarn add @react-simplikit/core
+# or pnpm add @react-simplikit/core
+```
+
+## Available Hooks (@react-simplikit/core)
+
+- `useAsyncEffect`: useEffect wrapper that supports asynchronous functions.
+- `useBooleanState`: Hook for managing boolean state easily.
+- `useCallbackOncePerRender`: Hook to ensure a callback is stable within a single render.
+- `useConditionalEffect`: useEffect wrapper that allows you to specify a condition for execution.
+- `useControlledState`: Hook that can be used for both controlled and uncontrolled states.
+- `useCounter`: Hook to easily manage numeric state.
+- `useDebounce`: Hook that delays updating a value until after a specified time has elapsed.
+- `useDebouncedCallback`: Hook to delay the execution of a function until after a specified time.
+- `useDoubleClick`: Hook that allows attaching a double-click handler.
+- `useGeolocation`: Hook to easily access geolocation API.
+- `useImpressionRef`: Hook that creates a ref combined with intersection observer for tracking impressions.
+- `useInputState`: Hook designed to easily manage input element values.
+- `useIntersectionObserver`: Hook that simplifies using the IntersectionObserver API.
+- `useInterval`: Declarative hook for setting up intervals.
+- `useIsClient`: Hook that safely indicates whether the current environment is client-side.
+- `useIsomorphicLayoutEffect`: Hook that falls back to `useEffect` during SSR, preventing React warnings.
+- `useLoading`: Hook for managing async loading states cleanly.
+- `useLongPress`: Hook that captures long-press gestures.
+- `useMap`: Hook providing a Map-like API for managing key-value data in React state.
+- `useOutsideClickEffect`: Hook that triggers a callback when a click happens outside the referenced element.
+- `usePreservedCallback`: Hook that ensures the callback reference remains the same.
+- `usePreservedReference`: Hook that prevents unnecessary re-renders by preserving object references.
+- `usePrevious`: Hook that returns the value from the previous render.
+- `useRefEffect`: Hook to handle side effects tied to refs safely.
+- `useStorageState`: Hook for persisting state to localStorage/sessionStorage.
+- `useThrottle`: Hook that restricts how frequently a value can be updated.
+- `useTimeout`: Declarative hook for setting up timeouts safely.
+- `useToggle`: Hook to toggle boolean values.
+- `useVisibilityEvent`: Hook to execute logic based on document visibility changes.
+
+## Available Mobile Hooks (@react-simplikit/mobile)
+
+The `packages/mobile` directory includes platform-specific hooks for React Native and Expo environments, providing similar APIs with mobile-specific implementations.
+
+## Usage Guidelines for AI Agents
+- When you are writing React components, prefer using these hooks over reinventing the logic manually.
+- This library handles SSR and edge cases automatically.
+- Import hooks from `@react-simplikit/core` (or `@react-simplikit/mobile` for React Native).
