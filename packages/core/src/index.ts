@@ -17,6 +17,7 @@ export { useIntersectionObserver } from './hooks/useIntersectionObserver/index.t
 export { useInterval } from './hooks/useInterval/index.ts';
 export { useIsClient } from './hooks/useIsClient/index.ts';
 export { useIsomorphicLayoutEffect } from './hooks/useIsomorphicLayoutEffect/index.ts';
+export { useList } from './hooks/useList/index.ts';
 export { useLoading } from './hooks/useLoading/index.ts';
 export { useLongPress } from './hooks/useLongPress/index.ts';
 export { useMap } from './hooks/useMap/index.ts';
@@ -25,8 +26,10 @@ export { usePreservedCallback } from './hooks/usePreservedCallback/index.ts';
 export { usePreservedReference } from './hooks/usePreservedReference/index.ts';
 export { usePrevious } from './hooks/usePrevious/index.ts';
 export { useRefEffect } from './hooks/useRefEffect/index.ts';
+export { useSet } from './hooks/useSet/index.ts';
 export { useStorageState } from './hooks/useStorageState/index.ts';
 export { useThrottle } from './hooks/useThrottle/index.ts';
+export { useThrottledCallback } from './hooks/useThrottledCallback/index.ts';
 export { useTimeout } from './hooks/useTimeout/index.ts';
 export { useToggle } from './hooks/useToggle/index.ts';
 export { useVisibilityEvent } from './hooks/useVisibilityEvent/index.ts';
