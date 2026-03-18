@@ -47,18 +47,21 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
   const preservedCallback = usePreservedCallback(callback);
   const immediateCalledRef = useRef(false);
 
-  useEffect(function callImmediately() {
-    if (immediate !== true || !enabled) {
-      return;
-    }
+  useEffect(
+    function callImmediately() {
+      if (immediate !== true || !enabled) {
+        return;
+      }
 
-    if (immediateCalledRef.current) {
-      return;
-    }
+      if (immediateCalledRef.current) {
+        return;
+      }
 
-    immediateCalledRef.current = true;
-    preservedCallback();
-  }, [immediate, preservedCallback, enabled]);
+      immediateCalledRef.current = true;
+      preservedCallback();
+    },
+    [immediate, preservedCallback, enabled]
+  );
 
   useEffect(() => {
     if (!enabled) {
