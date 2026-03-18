@@ -48,7 +48,7 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
   const immediateCalledRef = useRef(false);
 
   useEffect(
-    function callImmediately() {
+    function runImmediateCallback() {
       if (immediate !== true || !enabled) {
         return;
       }
