@@ -89,6 +89,25 @@ describe('useAsyncEffect', () => {
     expect(cleanup).toHaveBeenCalled();
   });
 
+  it('should call cleanup even when component unmounts before async effect resolves', async () => {
+    const cleanup = vi.fn();
+    const { unmount } = await renderHookSSR(() =>
+      useAsyncEffect(async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return cleanup;
+      }, [])
+    );
+
+    await flushPromises();
+    unmount();
+    expect(cleanup).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1000);
+    await flushPromises();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+  });
+
   it('should call effect every rerender when deps are undefined', async () => {
     const effect = vi.fn().mockResolvedValue(undefined);
 
