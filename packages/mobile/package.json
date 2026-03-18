@@ -61,6 +61,7 @@
     "@testing-library/react": "^16.1.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9.16.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
