@@ -44,9 +44,12 @@ npm install react-simplikit
 The `@react-simplikit/mobile` package is designed for **mobile web** (iOS Safari, Android Chrome), providing viewport management, keyboard handling, and layout utilities. See docs: https://react-simplikit.slash.page/mobile/intro.html
 
 - `useAvoidKeyboard`: Hook to adjust layouts to avoid the on-screen keyboard.
+- `useBodyScrollLock`: Hook to temporarily lock body scrolling.
 - `useKeyboardHeight`: Hook to track the current height of the virtual keyboard.
 - `useNetworkStatus`: Hook to monitor the device's online/offline status.
 - `usePageVisibility`: Hook to track the visibility state of the document.
+- `useSafeAreaInset`: Hook to handle safe area insets for notched devices.
+- `useScrollDirection`: Hook to track scroll direction.
 - `useVisualViewport`: Hook to access and respond to visual viewport changes.
 
 ## Usage Guidelines for AI Agents
