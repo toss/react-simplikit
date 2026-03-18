@@ -24,12 +24,17 @@ import { DependencyList, useEffect } from 'react';
 export function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps?: DependencyList) {
   useEffect(() => {
     let cleanup: (() => void) | void;
+    let isCleaned = false;
 
     effect().then(result => {
       cleanup = result;
+      if (isCleaned) {
+        cleanup?.();
+      }
     });
 
     return () => {
+      isCleaned = true;
       cleanup?.();
     };
 
