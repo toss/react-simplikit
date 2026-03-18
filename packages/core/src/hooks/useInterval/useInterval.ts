@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
@@ -45,11 +45,19 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
   const enabled = typeof options === 'number' ? true : (options.enabled ?? true);
 
   const preservedCallback = usePreservedCallback(callback);
+  const immediateCalledRef = useRef(false);
 
-  useEffect(() => {
-    if (immediate === true && enabled) {
-      preservedCallback();
+  useEffect(function callImmediately() {
+    if (immediate !== true || !enabled) {
+      return;
     }
+
+    if (immediateCalledRef.current) {
+      return;
+    }
+
+    immediateCalledRef.current = true;
+    preservedCallback();
   }, [immediate, preservedCallback, enabled]);
 
   useEffect(() => {
