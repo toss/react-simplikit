@@ -5,10 +5,10 @@
 ## 인터페이스
 
 ```ts
-function useRefEffect(
-  callback: (element: Element) => CleanupCallback | void,
+function useRefEffect<RefElement extends HTMLElement>(
+  callback: (element: RefElement) => CleanupCallback | void,
   deps: DependencyList
-): (element: Element | null) => void;
+): (element: RefElement | null) => void;
 ```
 
 ### 파라미터
@@ -16,7 +16,7 @@ function useRefEffect(
 <Interface
   required
   name="callback"
-  type="(element: Element) => CleanupCallback | void"
+  type="(element: RefElement) => CleanupCallback | void"
   description="요소가 설정될 때 실행되는 콜백 함수예요. 이 함수는 정리 함수를 반환할 수 있어요."
 />
 
@@ -31,7 +31,7 @@ function useRefEffect(
 
 <Interface
   name=""
-  type="(element: Element | null) => void"
+  type="(element: RefElement | null) => void"
   description="요소를 설정하는 함수예요. 이 함수를 <code>ref</code> 속성에 전달하면, 요소가 변경될 때마다 <code>callback</code>이 호출돼요."
 />
 

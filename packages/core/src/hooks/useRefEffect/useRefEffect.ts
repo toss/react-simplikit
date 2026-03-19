@@ -9,10 +9,10 @@ export type CleanupCallback = () => void;
  * `useRefEffect` is a React hook that helps you set a reference to a specific DOM element and execute a callback whenever the element changes.
  * This hook calls a cleanup function whenever the element changes to prevent memory leaks.
  *
- * @param {(element: Element) => CleanupCallback | void} callback - A callback function that is executed when the element is set. This function can return a cleanup function.
+ * @param {(element: RefElement) => CleanupCallback | void} callback - A callback function that is executed when the element is set. This function can return a cleanup function.
  * @param {DependencyList} deps - An array of dependencies that define when the callback should be re-executed. The `callback` is re-executed whenever the `deps` change.
  *
- * @returns {(element: Element | null) => void} A function to set the element. Pass this function to the `ref` attribute, and the `callback` will be called whenever the element changes.
+ * @returns {(element: RefElement | null) => void} A function to set the element. Pass this function to the `ref` attribute, and the `callback` will be called whenever the element changes.
  *
  * @example
  * import { useRefEffect } from 'react-simplikit';
@@ -29,15 +29,15 @@ export type CleanupCallback = () => void;
  *   return <div ref={ref}>Basic Example</div>;
  * }
  */
-export function useRefEffect<Element extends HTMLElement = HTMLElement>(
-  callback: (element: Element) => CleanupCallback | void,
+export function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
+  callback: (element: RefElement) => CleanupCallback | void,
   deps: DependencyList
-): (element: Element | null) => void {
+): (element: RefElement | null) => void {
   const preservedCallback = usePreservedCallback(callback);
   const cleanupCallbackRef = useRef<CleanupCallback>(() => {});
 
   const effect = useCallback(
-    (element: Element | null) => {
+    (element: RefElement | null) => {
       cleanupCallbackRef.current();
       cleanupCallbackRef.current = () => {};
 
