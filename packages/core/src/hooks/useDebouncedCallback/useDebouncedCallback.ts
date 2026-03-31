@@ -42,7 +42,7 @@ export function useDebouncedCallback({
   const handleChange = usePreservedCallback(onChange);
   const ref = useRef({ value: false, clearPreviousDebounce: () => {} });
 
-  useEffect(() => {
+  useEffect(function clearDebouncedOnUnmount() {
     const current = ref.current;
     return () => {
       current.clearPreviousDebounce();
