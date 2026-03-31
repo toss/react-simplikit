@@ -73,11 +73,14 @@ export function useDebounce<F extends (...args: any[]) => unknown>(
     return debounce<F>(preservedCallback, wait, { edges });
   }, [preservedCallback, wait, edges]);
 
-  useEffect(() => {
-    return () => {
-      debounced.cancel();
-    };
-  }, [debounced]);
+  useEffect(
+    function cancelDebouncedOnUnmount() {
+      return () => {
+        debounced.cancel();
+      };
+    },
+    [debounced]
+  );
 
   return debounced;
 }
