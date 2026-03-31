@@ -49,7 +49,12 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
 
   useEffect(
     function runImmediateCallback() {
-      if (immediate !== true || !enabled) {
+      if (immediate !== true) {
+        immediateCalledRef.current = false;
+        return;
+      }
+
+      if (!enabled) {
         return;
       }
 
