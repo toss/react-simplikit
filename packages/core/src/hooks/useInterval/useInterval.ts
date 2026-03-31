@@ -68,12 +68,15 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
     [immediate, preservedCallback, enabled]
   );
 
-  useEffect(() => {
-    if (!enabled) {
-      return;
-    }
+  useEffect(
+    function startInterval() {
+      if (!enabled) {
+        return;
+      }
 
-    const id = window.setInterval(preservedCallback, delay);
-    return () => window.clearInterval(id);
-  }, [delay, preservedCallback, enabled]);
+      const id = setInterval(preservedCallback, delay);
+      return () => clearInterval(id);
+    },
+    [delay, preservedCallback, enabled]
+  );
 }
