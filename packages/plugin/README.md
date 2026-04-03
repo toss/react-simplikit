@@ -1,0 +1,48 @@
+# react-hook-philosophy
+
+React hook design philosophy plugin for Claude Code. Two skills for reviewing and writing hooks with principled patterns.
+
+## Install
+
+```bash
+claude plugin install --source git-subdir \
+  --url https://github.com/kimyouknow/react-simplikit.git \
+  --path packages/plugin
+```
+
+## Skills
+
+### /react-hook-review
+
+Review hooks against 31 design principles. Structured feedback with severity levels.
+
+- 14 coding principles (C1-C14): return values, SSR safety, TypeScript, cleanup, performance
+- 17 usage patterns (U1-U17): state design, effect usage, memoization, hook design
+- Output: Great Work / Required Changes / Suggestions / Next Steps
+
+### /react-hook-writing
+
+Write hooks following design philosophy. Themed guide with code examples.
+
+- State management patterns (derive, useRef vs useState, useReducer)
+- Effect patterns (when to use, cleanup, external store subscription)
+- TypeScript, performance, JSDoc templates
+- Reference implementations in `patterns.md`
+
+## Principles Overview
+
+| Category | Count | Examples |
+|----------|-------|---------|
+| Coding (C1-C14) | 14 | Always return objects, SSR-safe init, no `any`, cleanup |
+| State Design (U1-U7) | 7 | Derive don't sync, useRef for non-rendered, discriminated unions |
+| Effect Usage (U8-U14) | 7 | Effects for sync only, no chains, key reset, async cleanup |
+| Memoization (U15-U16) | 2 | useMemo >= 1ms, useCallback + memo() only |
+| Hook Design (U17) | 1 | Extract reusable logic, not lifecycle wrappers |
+
+## Philosophy
+
+Every rule includes a "Why" explanation. Opinionated items are transparently marked with trade-offs.
+
+## License
+
+MIT
