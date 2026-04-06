@@ -226,7 +226,7 @@ export function useExample({ param }: { param: ParamType }): { value: ReturnType
 | Missing cleanup on addEventListener | C3 (Cleanup) | Return removeEventListener |
 | `function useData(url: any): any` | C4 (No any) | Use generic `<T>` |
 | `export default useHook` | C5 (Named exports) | `export function useHook` |
-| `if (count)` where count can be 0 | C6 (Strict booleans) | `if (count !== undefined)` |
+| `if (count)` where count can be 0 | C6 (Strict booleans) | `if (count != null)` |
 | `useEffect(() => { setFullName(...) }, [first, last])` | U1 (Derive) | `const fullName = first + last` |
 | `const [color] = useState(colorProp)` | U2 (Mirror props) | `const color = colorProp` |
 | `const [id, setId] = useState(null)` for non-rendered | U3 (useRef) | `useRef(null)` |

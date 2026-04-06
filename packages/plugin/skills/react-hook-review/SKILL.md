@@ -8,7 +8,7 @@ Review hooks against coding principles and usage patterns. Report findings by se
 
 ## Coding Principles Checklist
 
-### Required (13 items)
+### Required (11 items)
 
 1. **Return values (C1)** — Always return objects, even for single values. `{ value }` not bare primitives.
    Why: Named fields, order-independent, extensible without breaking changes.
@@ -30,22 +30,24 @@ Review hooks against coding principles and usage patterns. Report findings by se
 7. **Object parameters (C7)** — Hook params as object props, not positional args.
    Why: Order-independent, self-documenting, extensible.
 
-8. **Guard clauses (C8)** — Early return over nested if-else. Flat success path.
-
-9. **JSDoc 4-tag (C9)** — @description + @param + @returns + @example on every public API.
+8. **JSDoc 4-tag (C9)** — @description + @param + @returns + @example on every public API.
    Why: AI doc generation quality + IDE tooltips.
 
-10. **Performance (C10)** — Throttle (16ms) for >30 events/sec, deduplicate unchanged, startTransition for non-urgent.
+9. **Performance (C10)** — Throttle (16ms) for >30 events/sec, deduplicate unchanged, startTransition for non-urgent.
     Only applies to high-frequency event hooks.
 
-11. **Function keyword (C11)** — `function` for declarations, arrows for inline callbacks only.
+10. **Zero deps (C12)** — No runtime dependencies. peerDependencies only.
 
-12. **Zero deps (C12)** — No runtime dependencies. peerDependencies only.
-
-13. **Dependency isolation (C13)** — Inject external dependencies as params, don't import directly in hooks.
+11. **Dependency isolation (C13)** — Inject external dependencies as parameters rather than importing them directly inside hooks.
     Why: Testability + replaceability.
 
-### Recommended (1 item)
+### Recommended (3 items)
+
+12. **Guard clauses (C8)** — Early return over nested if-else. Flat success path.
+    Trade-off: Stylistic preference with no functional impact.
+
+13. **Function keyword (C11)** — `function` for declarations, arrows for inline callbacks only.
+    Trade-off: Consistent style, but arrow declarations are valid JS.
 
 14. **Named useEffect (C14)** — `useEffect(function handleX() {...})` not arrows.
     Why: "handleResize" vs "anonymous" in error stacks. Trade-off: more verbose.

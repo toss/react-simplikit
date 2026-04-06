@@ -64,6 +64,8 @@ const fullName = firstName + ' ' + lastName;
 
 **Parent notify in handler (U13):** Call parent callback in same event handler, not effect.
 
+**useSyncExternalStore (U12):** For browser API or third-party store subscriptions, prefer `useSyncExternalStore` over `useState` + `useEffect`. Prevents tearing in concurrent rendering and supports SSR server snapshots.
+
 ## 5. Cleanup (C3)
 
 Every side effect needs cleanup. Three patterns:
