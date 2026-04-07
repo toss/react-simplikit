@@ -26,7 +26,6 @@ function AutoCompleteInput() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
-  const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,17 +43,13 @@ function AutoCompleteInput() {
   }, []);
 
   useEffect(() => {
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-
     if (query.trim().length === 0) {
       setResults([]);
       return;
     }
 
     setLoading(true);
-    searchTimeoutRef.current = setTimeout(async () => {
+    const timeoutId = setTimeout(async () => {
       try {
         const response = await fetch(`/api/search?q=${query}`);
         const data = await response.json();
@@ -66,11 +61,7 @@ function AutoCompleteInput() {
       }
     }, 300);
 
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
+    return () => clearTimeout(timeoutId);
   }, [query]);
 
   return (

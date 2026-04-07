@@ -1,6 +1,14 @@
 # subscribeKeyboardHeight
 
-`subscribeKeyboardHeight` is a utility function that subscribes to changes in the on-screen keyboard height. The provided callback is invoked whenever the keyboard height may change, including when the keyboard appears, disappears, or changes size. Internally, this function listens to both `resize` and `scroll` events on the Visual Viewport: - `resize`: triggered when the visual viewport height changes - `scroll`: triggered when the visual viewport offset changes (important for iOS where the viewport can shift without resizing) Performance optimizations: - Throttled by default (16ms, ~60fps) to prevent excessive callback invocations - Skips callback when height hasn't changed (deduplication)
+`subscribeKeyboardHeight` is a utility function that subscribes to changes in the on-screen keyboard height. The provided callback is invoked whenever the keyboard height may change, including when the keyboard appears, disappears, or changes size. Internally, this function listens to both `resize` and `scroll` events on the Visual Viewport:
+
+- `resize`: triggered when the visual viewport height changes
+- `scroll`: triggered when the visual viewport offset changes (important for iOS where the viewport can shift without resizing)
+
+Performance optimizations:
+
+- Throttled by default (16ms, ~60fps) to prevent excessive callback invocations
+- Skips callback when height hasn't changed (deduplication)
 
 ## Interface
 

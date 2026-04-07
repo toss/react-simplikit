@@ -16,51 +16,51 @@ describe('useCounter', () => {
     expect(result.current.count).toBe(10);
   });
 
-  it('should increment the counter', () => {
+  it('should increment the counter', async () => {
     const { result } = renderHook(() => useCounter(5));
 
-    act(() => {
+    await act(async () => {
       result.current.increment();
     });
 
     expect(result.current.count).toBe(6);
   });
 
-  it('should decrement the counter', () => {
+  it('should decrement the counter', async () => {
     const { result } = renderHook(() => useCounter(5));
 
-    act(() => {
+    await act(async () => {
       result.current.decrement();
     });
 
     expect(result.current.count).toBe(4);
   });
 
-  it('should reset the counter to initial value', () => {
+  it('should reset the counter to initial value', async () => {
     const { result } = renderHook(() => useCounter(5));
 
-    act(() => {
+    await act(async () => {
       result.current.increment();
       result.current.increment();
     });
 
     expect(result.current.count).toBe(7);
 
-    act(() => {
+    await act(async () => {
       result.current.reset();
     });
 
     expect(result.current.count).toBe(5);
   });
 
-  it('should not go below minimum value', () => {
+  it('should not go below minimum value', async () => {
     const { result } = renderHook(() =>
       useCounter(5, {
         min: 3,
       })
     );
 
-    act(() => {
+    await act(async () => {
       result.current.decrement();
       result.current.decrement();
       result.current.decrement();
@@ -69,14 +69,14 @@ describe('useCounter', () => {
     expect(result.current.count).toBe(3);
   });
 
-  it('should not go above maximum value', () => {
+  it('should not go above maximum value', async () => {
     const { result } = renderHook(() =>
       useCounter(5, {
         max: 7,
       })
     );
 
-    act(() => {
+    await act(async () => {
       result.current.increment();
       result.current.increment();
       result.current.increment();
@@ -85,20 +85,20 @@ describe('useCounter', () => {
     expect(result.current.count).toBe(7);
   });
 
-  it('should use the provided step value for increment and decrement', () => {
+  it('should use the provided step value for increment and decrement', async () => {
     const { result } = renderHook(() =>
       useCounter(5, {
         step: 2,
       })
     );
 
-    act(() => {
+    await act(async () => {
       result.current.increment();
     });
 
     expect(result.current.count).toBe(7);
 
-    act(() => {
+    await act(async () => {
       result.current.decrement();
     });
 
@@ -123,7 +123,7 @@ describe('useCounter', () => {
     expect(result2.current.count).toBe(8);
   });
 
-  it('should allow setting arbitrary value within constraints', () => {
+  it('should allow setting arbitrary value within constraints', async () => {
     const { result } = renderHook(() =>
       useCounter(0, {
         min: 3,
@@ -131,29 +131,29 @@ describe('useCounter', () => {
       })
     );
 
-    act(() => {
+    await act(async () => {
       result.current.setCount(6);
     });
 
     expect(result.current.count).toBe(6);
 
-    act(() => {
+    await act(async () => {
       result.current.setCount(1);
     });
 
     expect(result.current.count).toBe(3);
 
-    act(() => {
+    await act(async () => {
       result.current.setCount(10);
     });
 
     expect(result.current.count).toBe(8);
   });
 
-  it('should work with updater function for setCount', () => {
+  it('should work with updater function for setCount', async () => {
     const { result } = renderHook(() => useCounter(5));
 
-    act(() => {
+    await act(async () => {
       result.current.setCount(prev => prev + 3);
     });
 

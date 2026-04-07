@@ -41,6 +41,7 @@ coverage
 .claude/memory/
 .claude/plans/
 .claude/skills/project-decisions/
+.claude/skills/skill-open-source-maintainer/
 # Session notes (contain internal references)
 .claude/*.md
 

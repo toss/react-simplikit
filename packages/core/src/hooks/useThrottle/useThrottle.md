@@ -39,7 +39,7 @@ function useThrottle<F extends (...args: any[]) => any>(
       required: false,
       defaultValue: '[\'leading\', \'trailing\']',
       description:
-        'An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.',
+        'An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both. <br />: The initial value is <code>[\'leading\', \'trailing\']</code>.',
     },
   ]"
 />
