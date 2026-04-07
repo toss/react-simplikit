@@ -237,7 +237,7 @@ React 공식 문서(react.dev) 기반 17개 패턴 (U1-U17):
 
 | 카테고리 | 개수 | 핵심 |
 |----------|------|------|
-| State Design | U1-U7 | 파생값 계산, props 복사 금지, useRef, useReducer, union type |
+| State Design | U1-U7 | 파생값 계산, props 복사 금지, useRef, union type, state 그룹화 |
 | Effect Usage | U8-U14 | effect는 외부 동기화 전용, 체인 금지, key 리셋, 비동기 cleanup |
 | Memoization | U15-U16 | useMemo 1ms+, useCallback + memo() 조합만 |
 | Hook Design | U17 | lifecycle wrapper 금지, 구체적 목적 훅만 |

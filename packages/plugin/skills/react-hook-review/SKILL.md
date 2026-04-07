@@ -59,7 +59,6 @@ Review hooks against coding principles and usage patterns. Report findings by se
 - **Derive, don't sync (U1)** — Compute from props/state during render. No `useEffect` for derived values.
 - **Don't mirror props (U2)** — Use prop directly or name it `initialX`.
 - **useRef for non-rendered (U3)** — Interval IDs, flags, previous values.
-- **useReducer for complex (U4)** — 3+ related states changing together.
 - **Discriminated unions (U5)** — Replace boolean combos with status union type.
 - **IDs not objects (U6)** — Store selected ID, derive object from list.
 - **Group related state (U7)** — Always-together values in one object.

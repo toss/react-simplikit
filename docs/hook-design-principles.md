@@ -238,7 +238,7 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 | Category | Count | Key Patterns |
 |----------|-------|-------------|
-| State Design | U1-U7 | Derive don't sync, don't mirror props, useRef, useReducer, discriminated unions |
+| State Design | U1-U7 | Derive don't sync, don't mirror props, useRef, discriminated unions, group state |
 | Effect Usage | U8-U14 | Effects for sync only, no chains, key reset, async cleanup |
 | Memoization | U15-U16 | useMemo >= 1ms, useCallback + memo() only |
 | Hook Design | U17 | No lifecycle wrappers, extract reusable stateful logic only |

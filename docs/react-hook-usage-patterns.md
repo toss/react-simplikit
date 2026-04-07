@@ -9,7 +9,7 @@ Patterns for **correctly using hooks** — not coding style, but React-specific 
 
 ---
 
-## State Design (7)
+## State Design (6)
 
 ### U1. Derive Instead of Syncing with State
 
@@ -47,18 +47,6 @@ Interval IDs, previous values, internal flags — use useRef instead of useState
 ```ts
 // ❌ const [intervalId, setIntervalId] = useState<number | null>(null);
 // ✅ const intervalRef = useRef<number | null>(null);
-```
-
-### U4. Use useReducer for Complex Related State
-
-When 3+ state values change together or update logic is scattered across handlers, consolidate into useReducer. Pure function — easy to test.
-
-> 📖 [Extracting State Logic into a Reducer](https://react.dev/learn/extracting-state-logic-into-a-reducer)
-> *"To reduce complexity and keep all your logic in one easy-to-access place, you can move that state logic into a single function outside your component, called a 'reducer'."*
-
-```ts
-// ❌ Scattered setTasks(...) across handlers
-// ✅ const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 ```
 
 ### U5. Eliminate Impossible States with Discriminated Unions

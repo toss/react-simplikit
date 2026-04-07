@@ -8,7 +8,7 @@
 
 ---
 
-## State Design (7개)
+## State Design (6개)
 
 ### U1. 파생 가능한 값은 state에 넣지 마라
 
@@ -37,15 +37,6 @@ interval ID, 이전값, 내부 플래그 → useState 대신 useRef. `ref.curren
 ```ts
 // ❌ const [intervalId, setIntervalId] = useState<number | null>(null);
 // ✅ const intervalRef = useRef<number | null>(null);
-```
-
-### U4. 복잡한 관련 state는 useReducer
-
-3개+ state가 함께 변하거나 업데이트 로직이 흩어지면 useReducer로 통합. 순수 함수 → 테스트 용이.
-
-```ts
-// ❌ 핸들러마다 setTasks(...) 흩어짐
-// ✅ const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 ```
 
 ### U5. 불가능한 상태를 discriminated union으로 제거
