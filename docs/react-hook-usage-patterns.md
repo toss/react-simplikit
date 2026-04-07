@@ -1,18 +1,22 @@
 # React Hook Usage Patterns
 
-> 최종 업데이트: 2026-04-03
-> 출처: React 공식 문서 (react.dev)
-> 관련: [Hook Design Principles](./hook-design-principles.md)
+> Last Updated: 2026-04-07
+> Source: React official documentation (react.dev)
+> Related: [Hook Design Principles](./hook-design-principles.md)
+> Korean version: [ko/react-hook-usage-patterns.md](./ko/react-hook-usage-patterns.md)
 
-코딩 스타일이 아닌 **hooks를 올바르게 사용하는 패턴**. 17개 원칙.
+Patterns for **correctly using hooks** — not coding style, but React-specific best practices. 17 principles.
 
 ---
 
-## State Design (7개)
+## State Design (7)
 
-### U1. 파생 가능한 값은 state에 넣지 마라
+### U1. Derive Instead of Syncing with State
 
-기존 props/state에서 계산 가능한 값은 렌더 중에 계산. useEffect 동기화 → 1렌더 지연 + 불필요한 추가 렌더.
+If a value can be computed from existing props or state, calculate it during render. Syncing with useEffect causes a 1-render delay + unnecessary extra render.
+
+> 📖 [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
+> *"If something can be calculated from the existing props or state, don't put it in state. Instead, calculate it during rendering."*
 
 ```ts
 // ❌ const [fullName, setFullName] = useState('');
@@ -20,9 +24,12 @@
 // ✅ const fullName = first + ' ' + last;
 ```
 
-### U2. props를 state에 복사하지 마라
+### U2. Don't Mirror Props in State
 
-prop을 useState에 넣으면 부모 변경 무시됨. 직접 사용하거나 `initialX`로 명명.
+Copying a prop into useState means parent changes are silently ignored. Use the prop directly, or name it `initialX` if intentional.
+
+> 📖 [Choosing the State Structure — Avoid redundant state](https://react.dev/learn/choosing-the-state-structure#avoid-redundant-state)
+> *"If you can calculate some information from the component's props or its existing state variables during rendering, you should not put that information into that component's state."*
 
 ```ts
 // ❌ const [color, setColor] = useState(messageColor);
@@ -30,27 +37,36 @@ prop을 useState에 넣으면 부모 변경 무시됨. 직접 사용하거나 `i
 // ✅ function Message({ initialColor }: ...) { const [color, setColor] = useState(initialColor); }
 ```
 
-### U3. 렌더에 영향 없는 값은 useRef
+### U3. Use useRef for Non-Rendered Values
 
-interval ID, 이전값, 내부 플래그 → useState 대신 useRef. `ref.current`는 렌더 중 읽기/쓰기 금지.
+Interval IDs, previous values, internal flags — use useRef instead of useState. Avoids unnecessary re-renders. Never read/write `ref.current` during rendering.
+
+> 📖 [Referencing Values with Refs](https://react.dev/learn/referencing-values-with-refs)
+> *"When you want a component to 'remember' some information, but you don't want that information to trigger new renders, you can use a ref."*
 
 ```ts
 // ❌ const [intervalId, setIntervalId] = useState<number | null>(null);
 // ✅ const intervalRef = useRef<number | null>(null);
 ```
 
-### U4. 복잡한 관련 state는 useReducer
+### U4. Use useReducer for Complex Related State
 
-3개+ state가 함께 변하거나 업데이트 로직이 흩어지면 useReducer로 통합. 순수 함수 → 테스트 용이.
+When 3+ state values change together or update logic is scattered across handlers, consolidate into useReducer. Pure function — easy to test.
+
+> 📖 [Extracting State Logic into a Reducer](https://react.dev/learn/extracting-state-logic-into-a-reducer)
+> *"To reduce complexity and keep all your logic in one easy-to-access place, you can move that state logic into a single function outside your component, called a 'reducer'."*
 
 ```ts
-// ❌ 핸들러마다 setTasks(...) 흩어짐
+// ❌ Scattered setTasks(...) across handlers
 // ✅ const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 ```
 
-### U5. 불가능한 상태를 discriminated union으로 제거
+### U5. Eliminate Impossible States with Discriminated Unions
 
-N개 boolean → 2^N 조합. 단일 status union으로 불가능한 상태 타입 레벨 차단.
+N booleans → 2^N combinations with invalid states. A single status union type prevents impossible states at the type level.
+
+> 📖 [Choosing the State Structure — Avoid contradictions in state](https://react.dev/learn/choosing-the-state-structure#avoid-contradictions-in-state)
+> *"Since isSending and isSent should never be true at the same time, it is better to replace them with one status state variable."*
 
 ```ts
 // ❌ const [isSending, setIsSending] = useState(false);
@@ -59,9 +75,12 @@ N개 boolean → 2^N 조합. 단일 status union으로 불가능한 상태 타�
 //    const [status, setStatus] = useState<Status>('typing');
 ```
 
-### U6. 객체 복사 대신 ID 저장
+### U6. Store IDs Instead of Duplicating Objects
 
-리스트에서 선택된 항목을 state에 복사 → 원본 수정 시 stale. ID만 저장 + 렌더 시 파생.
+Copying a selected item from a list into state → stale when source updates. Store the ID and derive during render.
+
+> 📖 [Choosing the State Structure — Avoid duplication in state](https://react.dev/learn/choosing-the-state-structure#avoid-duplication-in-state)
+> *"If you were to duplicate the selected item object, you'd have a problem: if you edit the item, the selected version wouldn't update."*
 
 ```ts
 // ❌ const [selectedItem, setSelectedItem] = useState(items[0]);
@@ -69,9 +88,12 @@ N개 boolean → 2^N 조합. 단일 status union으로 불가능한 상태 타�
 //    const selectedItem = items.find(i => i.id === selectedId);
 ```
 
-### U7. 관련 state는 하나의 객체로 그룹화
+### U7. Group Related State into a Single Object
 
-항상 함께 변하는 state → 하나의 setState로 원자적 업데이트.
+State values that always change together → single setState for atomic updates.
+
+> 📖 [Choosing the State Structure — Group related state](https://react.dev/learn/choosing-the-state-structure#group-related-state)
+> *"If some two state variables always change together, it might be a good idea to unify them into a single state variable."*
 
 ```ts
 // ❌ const [x, setX] = useState(0); const [y, setY] = useState(0);
@@ -80,33 +102,45 @@ N개 boolean → 2^N 조합. 단일 status union으로 불가능한 상태 타�
 
 ---
 
-## Effect Usage (7개)
+## Effect Usage (7)
 
-### U8. useEffect는 외부 시스템 동기화 전용
+### U8. useEffect Is for External System Synchronization Only
 
-네트워크, DOM API, 브라우저 API 동기화에만 사용. 이벤트 핸들링, 데이터 변환에는 쓰지 마라.
+Network, DOM APIs, browser APIs — synchronization only. Not for event handling or data transformation.
+
+> 📖 [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
+> *"Effects are an escape hatch from the React paradigm. They let you 'step outside' of React and synchronize your components with some external system."*
 
 ```ts
 // ❌ useEffect(() => { if (product.isInCart) showNotification('Added!'); }, [product]);
 // ✅ function handleBuy() { addToCart(product); showNotification('Added!'); }
 ```
 
-### U9. useEffect 체인 금지
+### U9. No useEffect Chains
 
-하나의 effect가 setState → 다음 effect 트리거 → 순차 리렌더 + 추적 불가. 이벤트 핸들러나 reducer로 통합.
+One effect sets state → triggers next effect → cascading re-renders + untraceable. Consolidate in event handlers or reducers.
 
-### U10. state 리셋은 key prop으로
+> 📖 [You Might Not Need an Effect — Chains of computations](https://react.dev/learn/you-might-not-need-an-effect#chains-of-computations)
+> *"Each setState call triggers a re-render. The component would re-render three times before it has even finished rendering."*
 
-`key={id}`로 재마운트. useEffect 리셋 → stale 값 한 프레임 노출.
+### U10. Reset State with key Prop
+
+`key={id}` forces a clean remount. useEffect reset → stale value visible for one frame.
+
+> 📖 [You Might Not Need an Effect — Resetting all state when a prop changes](https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes)
+> *"You can tell React to treat it as a conceptually different component by giving it an explicit key."*
 
 ```ts
 // ❌ useEffect(() => { setComment(''); }, [userId]);
 // ✅ <Profile userId={userId} key={userId} />
 ```
 
-### U11. effect 안에서만 쓰는 객체/함수는 effect 내부에 선언
+### U11. Declare Effect-Only Objects/Functions Inside the Effect
 
-컴포넌트 본문에 선언 → 매 렌더 새 참조 → effect 매번 재실행.
+Objects/functions declared in the component body get new references every render → effect re-runs every render.
+
+> 📖 [Removing Effect Dependencies — Move dynamic objects and functions inside your Effect](https://react.dev/learn/removing-effect-dependencies#move-dynamic-objects-and-functions-inside-your-effect)
+> *"If your Effect depends on an object or a function created during rendering, it might run too often."*
 
 ```ts
 // ❌ const options = { serverUrl, roomId };
@@ -117,22 +151,31 @@ N개 boolean → 2^N 조합. 단일 status union으로 불가능한 상태 타�
 //    }, [roomId]);
 ```
 
-### U12. 외부 스토어 구독은 useSyncExternalStore
+### U12. Use useSyncExternalStore for External Store Subscriptions
 
-브라우저 API, 서드파티 스토어 구독 → useState+useEffect 대신 useSyncExternalStore. concurrent rendering tearing 방지 + SSR 서버 스냅샷 지원.
+Browser APIs, third-party stores → use useSyncExternalStore instead of useState + useEffect. Prevents tearing in concurrent rendering + supports SSR server snapshots.
 
-### U13. 부모 알림은 이벤트 핸들러에서
+> 📖 [You Might Not Need an Effect — Subscribing to an external store](https://react.dev/learn/you-might-not-need-an-effect#subscribing-to-an-external-store)
+> *"Although it's common to use Effects for this, React has a purpose-built Hook for subscribing to an external store that is preferred instead."*
 
-자식이 부모에게 state 변경 알릴 때 useEffect가 아닌 같은 이벤트 핸들러에서 콜백 호출. 연쇄 리렌더 방지.
+### U13. Notify Parents from Event Handlers
+
+When a child needs to notify a parent about state changes, call the parent's callback in the same event handler — not in useEffect. Prevents cascading re-renders.
+
+> 📖 [You Might Not Need an Effect — Notifying parent components about state changes](https://react.dev/learn/you-might-not-need-an-effect#notifying-parent-components-about-state-changes)
+> *"You'd want to call onChange during the event handler instead."*
 
 ```ts
 // ❌ useEffect(() => { onChange(isOn); }, [isOn]);
 // ✅ function handleClick() { setIsOn(!isOn); onChange(!isOn); }
 ```
 
-### U14. 비동기 effect는 반드시 cleanup
+### U14. Async Effects Must Have Cleanup
 
-fetch/timer/subscription → cleanup 없으면 race condition. 빠른 prop 변경 시 이전 응답이 이후 응답을 덮어씀.
+fetch/timer/subscription without cleanup → race condition. Fast prop changes cause older responses to overwrite newer ones.
+
+> 📖 [Synchronizing with Effects — Fetching data](https://react.dev/learn/synchronizing-with-effects#fetching-data)
+> *"The cleanup function should either abort the fetch or ensure its result gets ignored."*
 
 ```ts
 useEffect(function fetchResults() {
@@ -144,21 +187,30 @@ useEffect(function fetchResults() {
 
 ---
 
-## Memoization (2개)
+## Memoization (2)
 
-### U15. useMemo는 1ms 이상 측정된 연산에만
+### U15. useMemo Only for Measured Expensive Computations
 
-`console.time`으로 측정해서 1ms 미만이면 useMemo 오버헤드가 더 큼.
+Measure with `console.time`. If under 1ms, useMemo overhead exceeds saved computation.
 
-### U16. useCallback은 memo() 래핑된 자식에 전달할 때만
+> 📖 [useMemo — How to tell if a calculation is expensive](https://react.dev/reference/react/useMemo#how-to-tell-if-a-calculation-is-expensive)
+> *"If the overall logged time adds up to a significant amount (say, 1ms or more), it might make sense to memoize that calculation."*
 
-memo() 없는 자식에 stable reference → 리렌더 방지 효과 없음.
+### U16. useCallback Only When Passing to memo()-Wrapped Children
+
+Stable reference to a non-memo() child has zero re-render prevention effect.
+
+> 📖 [useCallback](https://react.dev/reference/react/useCallback)
+> *"You should only rely on useCallback as a performance optimization. If your code doesn't work without it, find the underlying problem first."*
 
 ---
 
-## Hook Design (1개)
+## Hook Design (1)
 
-### U17. 커스텀 훅은 재사용 가능한 상태 로직 추출용
+### U17. Extract Custom Hooks for Reusable Stateful Logic
 
-lifecycle wrapper(`useMount`, `useEffectOnce`) 금지. 구체적 동기화 목적 훅(`useWindowSize`, `useOnlineStatus`)만.
-추출 기준: 동일 state+effect 패턴이 2개+ 컴포넌트에서 반복되는지?
+No lifecycle wrappers (`useMount`, `useEffectOnce`). Only purpose-specific hooks (`useWindowSize`, `useOnlineStatus`).
+Extraction criterion: Does the same state+effect pattern repeat in 2+ components?
+
+> 📖 [Reusing Logic with Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
+> *"Custom Hooks let you share stateful logic, not state itself."*
