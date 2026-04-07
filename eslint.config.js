@@ -1,4 +1,8 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import react from 'eslint-plugin-react';
@@ -8,8 +12,9 @@ import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export default defineConfig(
   {
     ignores: [
       '**/*.d.ts',
@@ -26,6 +31,7 @@ export default [
       'tsup.*',
       'vitest.*',
       '.vitepress',
+      '.next',
     ],
   },
   {
@@ -33,6 +39,25 @@ export default [
       globals: globals.browser,
       parserOptions: {
         project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
+      },
+    },
+  },
+  {
+    files: ['packages/**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        project: './packages/**/tsconfig.json',
+        tsconfigRootDir: __dirname,
+      },
+    },
+  },
+  {
+    files: ['examples/**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        project: './examples/*/tsconfig.json',
+        tsconfigRootDir: __dirname,
       },
     },
   },
@@ -95,5 +120,5 @@ export default [
       },
     },
   },
-  prettierRecommended,
-];
+  prettierRecommended
+);

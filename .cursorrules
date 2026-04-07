@@ -1,0 +1,27 @@
+# react-simplikit Cursor Rules
+
+> Full coding standards with examples: see AGENTS.md
+
+## Project
+
+React hooks/components library. Monorepo: `packages/core` + `packages/mobile`.
+
+## Architecture
+
+Unidirectional layers: `components → hooks → utils → _internal`
+Core and mobile are independent packages. No cross-package dependencies.
+
+## Code Style
+
+- `type` over `interface` for type aliases
+- Named functions in useEffect: `useEffect(function handleResize() { ... }, [])`
+- Named exports only, no default exports
+- No `any` — strict TypeScript
+- `.ts`/`.tsx` extensions in source imports (tsup converts to `.js`)
+- No implicit boolean coercion: `if (value)` → `if (value != null)` (enforced by `strict-boolean-expressions`)
+- Nullish checks: `== null` for both null and undefined, `!== undefined` only when distinction matters
+- Zero runtime dependencies
+- Always return cleanup in useEffect to remove listeners
+- Early returns (guard clauses) over nested if-else blocks
+- Function declarations use `function` keyword, not arrow: `function toggle(state: boolean) { return !state; }`
+- Short inline callbacks (map, filter args) are OK with arrow functions

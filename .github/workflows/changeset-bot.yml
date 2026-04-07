@@ -1,0 +1,14 @@
+name: Changeset Bot
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: changesets/bot@v1
