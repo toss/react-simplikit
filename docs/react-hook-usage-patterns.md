@@ -68,7 +68,7 @@ N booleans → 2^N combinations with invalid states. A single status union type 
 Copying a selected item from a list into state → stale when source updates. Store the ID and derive during render.
 
 > 📖 [Choosing the State Structure — Avoid duplication in state](https://react.dev/learn/choosing-the-state-structure#avoid-duplication-in-state)
-> *"If you were to duplicate the selected item object, you'd have a problem: if you edit the item, the selected version wouldn't update."*
+> *"The contents of the selectedItem is the same object as one of the items inside the items list. This means that the information about the item itself is duplicated in two places."*
 
 ```ts
 // ❌ const [selectedItem, setSelectedItem] = useState(items[0]);
@@ -109,14 +109,14 @@ Network, DOM APIs, browser APIs — synchronization only. Not for event handling
 One effect sets state → triggers next effect → cascading re-renders + untraceable. Consolidate in event handlers or reducers.
 
 > 📖 [You Might Not Need an Effect — Chains of computations](https://react.dev/learn/you-might-not-need-an-effect#chains-of-computations)
-> *"Each setState call triggers a re-render. The component would re-render three times before it has even finished rendering."*
+> *"The component (and its children) have to re-render between each set call in the chain."*
 
 ### U10. Reset State with key Prop
 
 `key={id}` forces a clean remount. useEffect reset → stale value visible for one frame.
 
 > 📖 [You Might Not Need an Effect — Resetting all state when a prop changes](https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes)
-> *"You can tell React to treat it as a conceptually different component by giving it an explicit key."*
+> *"Instead, you can tell React that each user's profile is conceptually a different profile by giving it an explicit key."*
 
 ```ts
 // ❌ useEffect(() => { setComment(''); }, [userId]);
@@ -128,7 +128,7 @@ One effect sets state → triggers next effect → cascading re-renders + untrac
 Objects/functions declared in the component body get new references every render → effect re-runs every render.
 
 > 📖 [Removing Effect Dependencies — Move dynamic objects and functions inside your Effect](https://react.dev/learn/removing-effect-dependencies#move-dynamic-objects-and-functions-inside-your-effect)
-> *"If your Effect depends on an object or a function created during rendering, it might run too often."*
+> *"Object and function dependencies can make your Effect re-synchronize more often than you need."*
 
 ```ts
 // ❌ const options = { serverUrl, roomId };
@@ -151,7 +151,7 @@ Browser APIs, third-party stores → use useSyncExternalStore instead of useStat
 When a child needs to notify a parent about state changes, call the parent's callback in the same event handler — not in useEffect. Prevents cascading re-renders.
 
 > 📖 [You Might Not Need an Effect — Notifying parent components about state changes](https://react.dev/learn/you-might-not-need-an-effect#notifying-parent-components-about-state-changes)
-> *"You'd want to call onChange during the event handler instead."*
+> *"Delete the Effect and instead update the state of both components within the same event handler."*
 
 ```ts
 // ❌ useEffect(() => { onChange(isOn); }, [isOn]);
@@ -163,7 +163,7 @@ When a child needs to notify a parent about state changes, call the parent's cal
 fetch/timer/subscription without cleanup → race condition. Fast prop changes cause older responses to overwrite newer ones.
 
 > 📖 [Synchronizing with Effects — Fetching data](https://react.dev/learn/synchronizing-with-effects#fetching-data)
-> *"The cleanup function should either abort the fetch or ensure its result gets ignored."*
+> *"If your Effect fetches something, the cleanup function should either abort the fetch or ignore its result."*
 
 ```ts
 useEffect(function fetchResults() {
@@ -189,7 +189,7 @@ Measure with `console.time`. If under 1ms, useMemo overhead exceeds saved comput
 Stable reference to a non-memo() child has zero re-render prevention effect.
 
 > 📖 [useCallback](https://react.dev/reference/react/useCallback)
-> *"You should only rely on useCallback as a performance optimization. If your code doesn't work without it, find the underlying problem first."*
+> *"You should only rely on useCallback as a performance optimization. If your code doesn't work without it, find the underlying problem and fix it first. Then you may add useCallback back."*
 
 ---
 

@@ -51,9 +51,12 @@ Coding style principles extracted from CLAUDE.md + AGENTS.md + internal skills.
 
 ### 🟢 Best Practice (13)
 
-#### C1. Always Return Objects
+#### C1. Always Return Objects 🟡
 
 Return objects even for single values — `{ value }` form. Objects are order-independent, self-documenting via named fields, and extensible without breaking changes.
+
+> Note: This is a **project convention**. React docs say "Hooks may return arbitrary values." React's own `useState` returns a tuple. We chose objects for extensibility.
+> 📖 [react.dev — Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
 
 ```ts
 function useDebounce<T>(value: T, delay: number): { value: T }
@@ -64,6 +67,8 @@ function usePagination(): { page: number; next: () => void; prev: () => void }
 #### C2. SSR-Safe Initialization
 
 `useState(FIXED_VALUE)` + `useEffect(sync)`. Never initialize state with browser APIs. Server has no `window` — crashes or hydration mismatch.
+
+> 📖 [react.dev — hydrateRoot](https://react.dev/reference/react-dom/client/hydrateRoot)
 
 ```ts
 // ✅ SSR safe
@@ -80,9 +85,12 @@ const [width, setWidth] = useState(() => {
 });
 ```
 
-#### C3. useEffect Cleanup Required
+#### C3. useEffect Cleanup When Subscribing
 
-Return cleanup from every side effect. Prevents memory leaks. StrictMode double-mount exposes missing cleanup immediately.
+Return cleanup when your effect sets up subscriptions, listeners, timers, or ongoing connections. React docs: cleanup is *optional*, not required for every effect — but mandatory when synchronizing with external systems.
+
+> 📖 [react.dev — useEffect](https://react.dev/reference/react/useEffect)
+> *"Your setup function may also optionally return a cleanup function."*
 
 ```ts
 // Event listeners
@@ -132,9 +140,11 @@ const controlled = valueProp !== undefined; // ✅ when distinction needed
 if (count) { ... }                         // ❌ fails when count = 0
 ```
 
-#### C7. Object Parameters
+#### C7. Object Parameters 🟡
 
 Hook params as object props, not positional args. Order-independent, self-documenting, extensible without breaking changes.
+
+> Note: This is a **project convention**. React's own hooks use positional args (`useState(initialValue)`). We chose objects for extensibility and self-documentation.
 
 ```ts
 // ✅ Object params
