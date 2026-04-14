@@ -1,10 +1,13 @@
 ---
+name: react-hook-review
 description: Review React hooks against design philosophy. Checks return values, SSR safety, state design, effect usage, TypeScript patterns, and performance.
 ---
 
 # React Hook Review
 
 Review hooks against coding principles and usage patterns. Report findings by severity.
+
+Treat C1, C7, and C14 as opinionated conventions unless the target codebase explicitly adopts them. Report them as stronger findings when the repository standard is clear; otherwise phrase them as consistency recommendations.
 
 ## Coding Principles Checklist
 
@@ -15,6 +18,7 @@ Review hooks against coding principles and usage patterns. Report findings by se
 
 2. **SSR-safe init (C2)** — `useState(FIXED)` + `useEffect(sync)`. No browser API in initializer.
    Why: Server has no `window` — crashes or hydration mismatch.
+   Note: For explicitly client-only hooks, a guarded lazy initializer can be acceptable.
 
 3. **Cleanup (C3)** — Every useEffect with side effects returns cleanup (listeners, timers, AbortController).
    Why: Memory leaks. StrictMode double-mount exposes missing cleanup immediately.
@@ -81,6 +85,13 @@ Review hooks against coding principles and usage patterns. Report findings by se
 ### Hook Design
 
 - **Extract logic, not lifecycle (U17)** — No `useMount`. Purpose-specific hooks only.
+
+## Review Heuristics
+
+- Flag React guidance from U1-U17 as behavior or maintainability issues first.
+- Flag C1 and C7 as API consistency issues unless the repo treats them as hard requirements.
+- Lower the severity of C14 unless debugging quality is materially affected.
+- When a hook mirrors props, chains effects, or hides lifecycle wrappers, explain the runtime consequence, not just the rule number.
 
 ## Output Format
 

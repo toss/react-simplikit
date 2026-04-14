@@ -1,10 +1,13 @@
 ---
+name: react-hook-writing
 description: Write React hooks following design philosophy. Covers naming, return values, SSR safety, state design, effect patterns, TypeScript, and performance.
 ---
 
 # React Hook Writing Guide
 
 Design principles for writing React hooks. Each section covers What + Why.
+
+Treat C1 and C7 as project conventions rather than universal React rules. React itself allows tuple returns and positional arguments, but this philosophy prefers objects for extensibility and self-documenting APIs.
 
 ## 1. API Design
 
@@ -52,6 +55,8 @@ const fullName = firstName + ' ' + lastName;
 
 **IDs not objects (U6), group related state (U7).**
 
+**Guard clauses (C8):** Prefer early returns over nested conditionals so the happy path stays flat and the failure path is obvious.
+
 ## 4. Effect Patterns
 
 **Effects for sync only (U8).** External systems (network, DOM, browser APIs). Not for event handling or data transforms.
@@ -65,6 +70,8 @@ const fullName = firstName + ' ' + lastName;
 **Parent notify in handler (U13):** Call parent callback in same event handler, not effect.
 
 **useSyncExternalStore (U12):** For browser API or third-party store subscriptions, prefer `useSyncExternalStore` over `useState` + `useEffect`. Prevents tearing in concurrent rendering and supports SSR server snapshots.
+
+**Named useEffect functions (C14):** Optional but recommended for stack traces and debugging clarity.
 
 ## 5. Cleanup (C3)
 
@@ -122,3 +129,4 @@ Apply only to >30 events/sec (scroll, resize, keyboard):
 ## Reference
 
 See [patterns.md](references/patterns.md) for 3 complete hook implementations.
+Use `react-design-principles` when the question is about higher-level React API or abstraction design rather than a specific hook implementation.

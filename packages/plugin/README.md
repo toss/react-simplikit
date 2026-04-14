@@ -1,6 +1,6 @@
 # react-hook-philosophy
 
-React hook design philosophy plugin for Claude Code. Two skills for reviewing and writing hooks with principled patterns.
+React design philosophy plugin for Claude Code. Includes skills for reviewing and writing hooks, plus a higher-level React abstraction guide.
 
 ## Install
 
@@ -11,6 +11,15 @@ claude plugin install --source git-subdir \
 ```
 
 ## Skills
+
+### /react-design-principles
+
+Design React APIs and abstractions in a React-like way.
+
+- Declarative interfaces over orchestration-heavy helpers
+- Lifecycle-safe abstractions instead of generic lifecycle wrappers
+- Minimal surfaces, zero-dependency bias, type safety, and documentation
+- Best used for library design, API review, and deciding whether an abstraction should exist
 
 ### /react-hook-review
 
@@ -33,6 +42,7 @@ Write hooks following design philosophy. Themed guide with code examples.
 
 | Category | Count | Examples |
 |----------|-------|---------|
+| React design | 4 | Declarative interface, lifecycle respect, minimal surfaces, reliability |
 | Coding (C1-C14) | 14 | Always return objects, SSR-safe init, no `any`, cleanup |
 | State Design (U1-U7) | 7 | Derive don't sync, useRef for non-rendered, discriminated unions |
 | Effect Usage (U8-U14) | 7 | Effects for sync only, no chains, key reset, async cleanup |
