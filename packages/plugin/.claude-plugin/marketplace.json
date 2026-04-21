@@ -1,0 +1,14 @@
+{
+  "name": "react-design-philosophy",
+  "owner": { "name": "toss" },
+  "metadata": {
+    "description": "React design philosophy skills for hook review, hook writing, and higher-level API abstraction decisions."
+  },
+  "plugins": [
+    {
+      "name": "react-design-philosophy",
+      "source": "./",
+      "description": "React design philosophy for abstraction design, hook review, and hook writing."
+    }
+  ]
+}
