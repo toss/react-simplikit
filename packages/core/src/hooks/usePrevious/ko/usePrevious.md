@@ -5,10 +5,7 @@
 ## 인터페이스
 
 ```ts
-function usePrevious<T>(
-  state: T,
-  compare: (prev: T | undefined, next: T) => boolean
-): T | undefined;
+function usePrevious<T>(state: T, compare: (prev: T, next: T) => boolean): T;
 ```
 
 ### 파라미터
@@ -22,7 +19,7 @@ function usePrevious<T>(
 
 <Interface
   name="compare"
-  type="(prev: T | undefined, next: T) => boolean"
+  type="(prev: T, next: T) => boolean"
   description="상태가 변경되었는지를 판단하기 위한 선택적 비교 함수예요."
 />
 
@@ -30,7 +27,7 @@ function usePrevious<T>(
 
 <Interface
   name=""
-  type="T | undefined"
+  type="T"
   description="상태의 이전 값이에요."
 />
 
