@@ -2,7 +2,7 @@
 
 `useDebounce`는 제공된 콜백 함수의 디바운스 버전을 반환하는 리액트 훅이에요. 함수 실행을 지연시키고 여러 호출을 하나로 그룹화하여 이벤트 처리를 최적화하는 데 도움을 줘요.
 
-## Interface
+## 인터페이스
 
 ```ts
 function useDebounce<F extends (...args: any[]) => unknown>(

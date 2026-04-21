@@ -14,6 +14,18 @@ type UseCounterReturn = {
   setCount: (value: number | ((prev: number) => number)) => void;
 };
 
+const validateValue = (value: number, { min, max }: Omit<UseCounterOptions, 'step'>): number => {
+  if (min !== undefined && value < min) {
+    return min;
+  }
+
+  if (max !== undefined && value > max) {
+    return max;
+  }
+
+  return value;
+};
+
 /**
  * @description
  * `useCounter` is a React hook that manages a numeric counter state with increment, decrement, and reset capabilities.
@@ -52,33 +64,17 @@ type UseCounterReturn = {
  * }
  */
 export function useCounter(initialValue = 0, { min, max, step = 1 }: UseCounterOptions = {}): UseCounterReturn {
-  const validateValue = (value: number): number => {
-    let validatedValue = value;
-
-    if (min !== undefined && validatedValue < min) {
-      validatedValue = min;
-    }
-
-    if (max !== undefined && validatedValue > max) {
-      validatedValue = max;
-    }
-
-    return validatedValue;
-  };
-
-  const [count, setCountState] = useState<number>(() => validateValue(initialValue));
-
-  const validateValueMemoized = useCallback(validateValue, [min, max]);
+  const [count, setCountState] = useState<number>(() => validateValue(initialValue, { min, max }));
 
   const setCount = useCallback(
     (value: number | ((prev: number) => number)) => {
       setCountState(prev => {
         const nextValue = typeof value === 'function' ? value(prev) : value;
 
-        return validateValueMemoized(nextValue);
+        return validateValue(nextValue, { min, max });
       });
     },
-    [validateValueMemoized]
+    [min, max]
   );
 
   const increment = useCallback(() => {

@@ -1,6 +1,11 @@
 # isIOS
 
-`isIOS` is a utility function that detects whether the current device is running iOS or iPadOS. Notes on platform inconsistencies: - Prior to iPadOS 13, iPads reported their platform as "iPad" (or matched /iPad/ in UA). - Starting from iPadOS 13, Apple changed the platform string to "MacIntel" to make websites treat iPadOS as desktop-class Safari. However, these devices still expose multi-touch capabilities.
+`isIOS` is a utility function that detects whether the current device is running iOS or iPadOS.
+
+Notes on platform inconsistencies:
+
+- Prior to iPadOS 13, iPads reported their platform as "iPad" (or matched /iPad/ in UA).
+- Starting from iPadOS 13, Apple changed the platform string to "MacIntel" to make websites treat iPadOS as desktop-class Safari. However, these devices still expose multi-touch capabilities.
 
 ## Interface
 

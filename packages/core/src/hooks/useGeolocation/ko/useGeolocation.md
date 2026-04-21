@@ -2,7 +2,7 @@
 
 `useGeolocation`는 사용자의 지리적 위치를 검색하고 추적하는 리액트 훅이에요. 브라우저의 `Geolocation API`를 사용하여 단회 위치 검색과 지속적인 위치 추적을 모두 지원해요.
 
-## Interface
+## 인터페이스
 
 ```ts
 function useGeolocation(options: GeolocationOptions): Object;

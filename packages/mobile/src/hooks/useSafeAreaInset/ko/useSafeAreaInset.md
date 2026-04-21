@@ -8,7 +8,7 @@ Safe Area Inset은 디바이스별 UI 요소를 고려해요:
 - **bottom**: Face ID 디바이스의 홈 인디케이터
 - **left/right**: 가로 모드에서의 둥근 모서리
 
-## Interface
+## 인터페이스
 
 ```ts
 function useSafeAreaInset(): SafeAreaInset;

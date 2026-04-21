@@ -8,7 +8,7 @@
 function enableBodyScrollLock(): void;
 ```
 
-### Parameters
+### 파라미터
 
 ### 반환 값
 

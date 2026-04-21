@@ -58,12 +58,15 @@ export function useLoading(): [boolean, <T>(promise: Promise<T>) => Promise<T>] 
 function useIsMountedRef() {
   const ref = useRef({ isMounted: true }).current;
 
-  useEffect(() => {
-    ref.isMounted = true;
-    return () => {
-      ref.isMounted = false;
-    };
-  }, [ref]);
+  useEffect(
+    function trackMountedState() {
+      ref.isMounted = true;
+      return () => {
+        ref.isMounted = false;
+      };
+    },
+    [ref]
+  );
 
   return ref;
 }
