@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-const strictEquals = <T>(prev: T | undefined, next: T) => prev === next;
+const strictEquals = <T>(prev: T, next: T) => prev === next;
 
 /**
  * @description
@@ -11,9 +11,9 @@ const strictEquals = <T>(prev: T | undefined, next: T) => prev === next;
  *
  * @template T - The type of the state.
  * @param {T} state - The state whose previous value is to be tracked.
- * @param {(prev: T | undefined, next: T) => boolean} [compare] - An optional comparison function to determine if the state has changed.
+ * @param {(prev: T, next: T) => boolean} [compare] - An optional comparison function to determine if the state has changed.
  *
- * @returns {T | undefined} The previous value of the state.
+ * @returns {T} The previous value of the state.
  *
  * @example
  * const [count, setCount] = useState(0);
