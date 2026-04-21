@@ -15,8 +15,13 @@ Treat C1 and C7 as project conventions rather than universal React rules. React 
 Why: Named fields, order-independent, extensible without breaking changes.
 
 ```ts
-function useDebounce<T>({ value, delay }: { value: T; delay: number }): { value: T }
-function useToggle({ initial }: { initial?: boolean }): { value: boolean; toggle: () => void }
+function useDebounce<T>({ value, delay }: { value: T; delay: number }): {
+  value: T;
+};
+function useToggle({ initial }: { initial?: boolean }): {
+  value: boolean;
+  toggle: () => void;
+};
 ```
 
 **Parameters (C7):** Object props, not positional. Order-independent + self-documenting.
@@ -92,6 +97,7 @@ Async effects need ignore flags or AbortController to prevent race conditions (U
 ## 6. Performance (C10)
 
 Apply only to >30 events/sec (scroll, resize, keyboard):
+
 - **Throttle** at 16ms (60fps)
 - **Deduplicate**: skip setState when value unchanged
 - **startTransition**: expensive non-urgent computations

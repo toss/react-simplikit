@@ -72,18 +72,23 @@ import { useState, useEffect, useRef } from 'react';
  *   fetch(`/api/search?q=${debouncedQuery}`);
  * }, [debouncedQuery]);
  */
-export function useDebounce<T>({ value, delay }: { value: T; delay: number }): { value: T } {
+export function useDebounce<T>({ value, delay }: { value: T; delay: number }): {
+  value: T;
+} {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
-  useEffect(function scheduleUpdate() {
-    const timer = setTimeout(function applyUpdate() {
-      setDebouncedValue(value);
-    }, delay);
+  useEffect(
+    function scheduleUpdate() {
+      const timer = setTimeout(function applyUpdate() {
+        setDebouncedValue(value);
+      }, delay);
 
-    return function cancelPendingUpdate() {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
+      return function cancelPendingUpdate() {
+        clearTimeout(timer);
+      };
+    },
+    [value, delay]
+  );
 
   return { value: debouncedValue };
 }
@@ -120,38 +125,43 @@ import { useState, useEffect, useRef } from 'react';
  * const { matches: isMobile } = useMediaQuery({ query: '(max-width: 768px)' });
  * return isMobile ? <MobileLayout /> : <DesktopLayout />;
  */
-export function useMediaQuery({ query }: { query: string }): { matches: boolean } {
+export function useMediaQuery({ query }: { query: string }): {
+  matches: boolean;
+} {
   const [matches, setMatches] = useState(false); // C2: Fixed initial value (SSR-safe)
   const prevMatchesRef = useRef(false); // U3: Non-rendered value
 
-  useEffect(function syncMediaQuery() {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const mediaQueryList = window.matchMedia(query);
-
-    function handleChange() {
-      const nextMatches = mediaQueryList.matches;
-
-      // C10: Deduplicate — skip if unchanged
-      if (prevMatchesRef.current === nextMatches) {
+  useEffect(
+    function syncMediaQuery() {
+      if (typeof window === 'undefined') {
         return;
       }
-      prevMatchesRef.current = nextMatches;
-      setMatches(nextMatches);
-    }
 
-    // Initial sync
-    handleChange();
+      const mediaQueryList = window.matchMedia(query);
 
-    // Subscribe
-    mediaQueryList.addEventListener('change', handleChange);
+      function handleChange() {
+        const nextMatches = mediaQueryList.matches;
 
-    return function cleanupMediaQuery() {
-      mediaQueryList.removeEventListener('change', handleChange);
-    };
-  }, [query]);
+        // C10: Deduplicate — skip if unchanged
+        if (prevMatchesRef.current === nextMatches) {
+          return;
+        }
+        prevMatchesRef.current = nextMatches;
+        setMatches(nextMatches);
+      }
+
+      // Initial sync
+      handleChange();
+
+      // Subscribe
+      mediaQueryList.addEventListener('change', handleChange);
+
+      return function cleanupMediaQuery() {
+        mediaQueryList.removeEventListener('change', handleChange);
+      };
+    },
+    [query]
+  );
 
   return { matches };
 }
@@ -183,34 +193,41 @@ function handleChange() {
 Generic template for hooks that access browser APIs:
 
 ```ts
-export function useExample({ param }: { param: ParamType }): { value: ReturnType } {
+export function useExample({ param }: { param: ParamType }): {
+  value: ReturnType;
+} {
   const [value, setValue] = useState<ReturnType>(FIXED_INITIAL); // C2: SSR-safe
-  const prevRef = useRef<ReturnType>(FIXED_INITIAL);             // U3: non-rendered
+  const prevRef = useRef<ReturnType>(FIXED_INITIAL); // U3: non-rendered
 
-  useEffect(function syncBrowserValue() {
-    if (typeof window === 'undefined') {
-      return;
-    }
+  useEffect(
+    function syncBrowserValue() {
+      if (typeof window === 'undefined') {
+        return;
+      }
 
-    // Initial sync
-    const current = getBrowserValue(param);
-    prevRef.current = current;
-    setValue(current);
+      // Initial sync
+      const current = getBrowserValue(param);
+      prevRef.current = current;
+      setValue(current);
 
-    // Subscribe to changes
-    function handleChange() {
-      const next = getBrowserValue(param);
-      if (prevRef.current === next) { return; } // C10: dedup
-      prevRef.current = next;
-      setValue(next);
-    }
+      // Subscribe to changes
+      function handleChange() {
+        const next = getBrowserValue(param);
+        if (prevRef.current === next) {
+          return;
+        } // C10: dedup
+        prevRef.current = next;
+        setValue(next);
+      }
 
-    window.addEventListener('event', handleChange);
+      window.addEventListener('event', handleChange);
 
-    return function cleanup() {
-      window.removeEventListener('event', handleChange);
-    };
-  }, [param]);
+      return function cleanup() {
+        window.removeEventListener('event', handleChange);
+      };
+    },
+    [param]
+  );
 
   return { value };
 }
@@ -220,15 +237,15 @@ export function useExample({ param }: { param: ParamType }): { value: ReturnType
 
 ## Anti-Pattern Collection
 
-| Anti-Pattern | Principle Violated | Fix |
-|---|---|---|
-| `useState(window.innerWidth)` | C2 (SSR) | `useState(0)` + useEffect sync |
-| Missing cleanup on addEventListener | C3 (Cleanup) | Return removeEventListener |
-| `function useData(url: any): any` | C4 (No any) | Use generic `<T>` |
-| `export default useHook` | C5 (Named exports) | `export function useHook` |
-| `if (count)` where count can be 0 | C6 (Strict booleans) | `if (count != null)` |
-| `useEffect(() => { setFullName(...) }, [first, last])` | U1 (Derive) | `const fullName = first + last` |
-| `const [color] = useState(colorProp)` | U2 (Mirror props) | `const color = colorProp` |
-| `const [id, setId] = useState(null)` for non-rendered | U3 (useRef) | `useRef(null)` |
-| chained useEffects setting state | U9 (No chains) | Consolidate in handler |
-| `useMemo(() => items.filter(...), [items])` on 20 items | U15 (Measure first) | Plain computation |
+| Anti-Pattern                                            | Principle Violated   | Fix                             |
+| ------------------------------------------------------- | -------------------- | ------------------------------- |
+| `useState(window.innerWidth)`                           | C2 (SSR)             | `useState(0)` + useEffect sync  |
+| Missing cleanup on addEventListener                     | C3 (Cleanup)         | Return removeEventListener      |
+| `function useData(url: any): any`                       | C4 (No any)          | Use generic `<T>`               |
+| `export default useHook`                                | C5 (Named exports)   | `export function useHook`       |
+| `if (count)` where count can be 0                       | C6 (Strict booleans) | `if (count != null)`            |
+| `useEffect(() => { setFullName(...) }, [first, last])`  | U1 (Derive)          | `const fullName = first + last` |
+| `const [color] = useState(colorProp)`                   | U2 (Mirror props)    | `const color = colorProp`       |
+| `const [id, setId] = useState(null)` for non-rendered   | U3 (useRef)          | `useRef(null)`                  |
+| chained useEffects setting state                        | U9 (No chains)       | Consolidate in handler          |
+| `useMemo(() => items.filter(...), [items])` on 20 items | U15 (Measure first)  | Plain computation               |

@@ -38,7 +38,7 @@ Treat C1, C7, and C14 as opinionated conventions unless the target codebase expl
    Why: AI doc generation quality + IDE tooltips.
 
 9. **Performance (C10)** — Throttle (16ms) for >30 events/sec, deduplicate unchanged, startTransition for non-urgent.
-    Only applies to high-frequency event hooks.
+   Only applies to high-frequency event hooks.
 
 10. **Zero deps (C12)** — No runtime dependencies. peerDependencies only.
 
@@ -96,18 +96,22 @@ Treat C1, C7, and C14 as opinionated conventions unless the target codebase expl
 ## Output Format
 
 ### Great Work
+
 - [What was done well]
 
 ### Required Changes
+
 1. **[C#/U#]** Issue description
    - Current: `code`
    - Suggested: `code`
    - Why: [reason]
 
 ### Suggestions
+
 - [Non-blocking improvements]
 
 ### Next Steps
+
 1. Fix required changes
 2. Run test suite
 3. Commit

@@ -125,11 +125,18 @@ N개 boolean → 2^N 조합. 단일 status union으로 불가능한 상태 타�
 fetch/timer/subscription → cleanup 없으면 race condition. 빠른 prop 변경 시 이전 응답이 이후 응답을 덮어씀.
 
 ```ts
-useEffect(function fetchResults() {
-  let ignore = false;
-  fetchAPI(query).then(data => { if (!ignore) setResults(data); });
-  return () => { ignore = true; };
-}, [query]);
+useEffect(
+  function fetchResults() {
+    let ignore = false;
+    fetchAPI(query).then(data => {
+      if (!ignore) setResults(data);
+    });
+    return () => {
+      ignore = true;
+    };
+  },
+  [query]
+);
 ```
 
 ---

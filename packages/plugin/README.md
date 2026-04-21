@@ -40,14 +40,14 @@ Write hooks following design philosophy. Themed guide with code examples.
 
 ## Principles Overview
 
-| Category | Count | Examples |
-|----------|-------|---------|
-| React design | 5 | Declarative interface, lifecycle respect, minimal surfaces, reliability, zero-dependency bias |
-| Coding (C1-C14) | 14 | Always return objects, SSR-safe init, no `any`, cleanup |
-| State Design (U1-U3, U5-U7) | 6 | Derive don't sync, useRef for non-rendered, discriminated unions |
-| Effect Usage (U8-U14) | 7 | Effects for sync only, no chains, key reset, async cleanup |
-| Memoization (U15-U16) | 2 | useMemo >= 1ms, useCallback + memo() only |
-| Hook Design (U17) | 1 | Extract reusable logic, not lifecycle wrappers |
+| Category                    | Count | Examples                                                                                      |
+| --------------------------- | ----- | --------------------------------------------------------------------------------------------- |
+| React design                | 5     | Declarative interface, lifecycle respect, minimal surfaces, reliability, zero-dependency bias |
+| Coding (C1-C14)             | 14    | Always return objects, SSR-safe init, no `any`, cleanup                                       |
+| State Design (U1-U3, U5-U7) | 6     | Derive don't sync, useRef for non-rendered, discriminated unions                              |
+| Effect Usage (U8-U14)       | 7     | Effects for sync only, no chains, key reset, async cleanup                                    |
+| Memoization (U15-U16)       | 2     | useMemo >= 1ms, useCallback + memo() only                                                     |
+| Hook Design (U17)           | 1     | Extract reusable logic, not lifecycle wrappers                                                |
 
 ## Philosophy
 
