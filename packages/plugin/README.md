@@ -1,6 +1,8 @@
-# react-hook-philosophy
+# react-design-philosophy
 
 React design philosophy plugin for Claude Code. Includes skills for reviewing and writing hooks, plus a higher-level React abstraction guide.
+
+> Renamed from `react-hook-philosophy` to reflect broader scope after the `react-design-principles` skill was added.
 
 ## Install
 
