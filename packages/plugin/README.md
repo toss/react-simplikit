@@ -7,7 +7,7 @@ React design philosophy plugin for Claude Code. Includes skills for reviewing an
 ```bash
 # 1. Add this plugin's marketplace (sparse-checkout keeps the clone minimal)
 claude plugin marketplace add https://github.com/toss/react-simplikit \
-  --sparse packages/plugin
+  --sparse .claude-plugin packages/plugin
 
 # 2. Install the plugin
 claude plugin install react-design-philosophy@react-design-philosophy

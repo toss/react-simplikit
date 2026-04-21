@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "react-design-philosophy",
-      "source": "./"
+      "source": "./packages/plugin"
     }
   ]
 }
