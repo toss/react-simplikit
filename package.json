@@ -16,7 +16,7 @@
   "scripts": {
     "clean": "rimraf ./coverage ./node_modules",
     "clean:all": "yarn clean && yarn workspaces foreach -Ap run clean",
-    "example:vite": "yarn workspace with-vite dev",
+    "example:vite": "yarn build && yarn workspace with-vite dev",
     "example:next": "yarn workspace with-nextjs dev",
     "scaffold": "tsx .scripts/index.ts scaffold",
     "changeset": "changeset",
