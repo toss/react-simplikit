@@ -257,7 +257,7 @@ All `react-simplikit` implementations use special rendering functions to verify 
     expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('should hydration mismatch error occured', async () => {
+  it('should hydration mismatch error occurred', async () => {
     // This test code will fail due to a hydration mismatch error.
     await renderSSR(() => (
       <Component>

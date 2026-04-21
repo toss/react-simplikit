@@ -81,7 +81,7 @@ function useStorageState(
       name: 'refreshState',
       type: '() => void',
       required: false,
-      description: '저장소에서 상태를 새롭게 고치는 함수예요.',
+      description: '저장소에서 상태를 다시 가져오는 함수예요.',
     },
   ]"
 />

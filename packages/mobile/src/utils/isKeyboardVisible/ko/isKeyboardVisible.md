@@ -15,7 +15,7 @@ function isKeyboardVisible(): boolean;
 <Interface
   name=""
   type="boolean"
-  description="만약 키보드가 보이면, <code>false</code>를 반환해요."
+  description="만약 키보드가 보이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요."
 />
 
 ## 예시
