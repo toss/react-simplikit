@@ -251,7 +251,7 @@ yarn test:coverage
     expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('should hydration mismatch error occured', async () => {
+  it('should hydration mismatch error occurred', async () => {
     // 이 테스트 코드는 하이드레이션 오류가 발생하여 테스트가 실패해요.
     await renderSSR(() => (
       <Component>

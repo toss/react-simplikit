@@ -6,7 +6,7 @@ import { enableBodyScrollLock } from '../../utils/enableBodyScrollLock/index.ts'
 /**
  * Hook to lock body scroll
  *
- * Automatically locks body scroll when mounted,  unlocks when unmounted.
+ * Automatically locks body scroll when mounted, unlocks when unmounted.
  *
  * **Note:** For multiple overlapping modals, use a single lock at the parent level.
  *

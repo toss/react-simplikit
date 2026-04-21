@@ -5,7 +5,7 @@ const strictEquals = <T>(prev: T, next: T) => prev === next;
 /**
  * @description
  * `usePrevious` is a React hook that returns the previous value of the input state.
- * It preserves the previous value unchanged when re-render occur without state changes.
+ * It preserves the previous value unchanged when re-renders occur without state changes.
  * If the state is an object or requires custom change detection, a `compare` function can be provided.
  * By default, state changes are detected using `prev === next`.
  *

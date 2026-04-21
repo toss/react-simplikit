@@ -21,47 +21,47 @@ function useSet<T>(
 ### 반환 값
 
 <Interface
-name=""
-type="[Set, SetActions]"
-description="Set 상태와 이를 조작하는 액션을 포함한 튜플이에요."
-:nested="[
-{
-name: '[0]',
-type: 'Omit<Set<T>, \"add\" | \"clear\" | \"delete\">',
-required: false,
-description: '변경 메서드가 숨겨진 현재 Set 상태예요.',
-},
-{
-name: '[1].add',
-type: '(value: T) => void',
-required: false,
-description: 'Set에 값을 추가해요.',
-},
-{
-name: '[1].remove',
-type: '(value: T) => void',
-required: false,
-description: 'Set에서 값을 제거해요.',
-},
-{
-name: '[1].toggle',
-type: '(value: T) => void',
-required: false,
-description: '값이 없으면 추가하고, 있으면 제거해요.',
-},
-{
-name: '[1].setAll',
-type: '(values: Set<T> | T[]) => void',
-required: false,
-description: 'Set의 모든 값을 교체해요.',
-},
-{
-name: '[1].reset',
-type: '() => void',
-required: false,
-description: 'Set을 초기 상태로 리셋해요.',
-},
-]"
+  name=""
+  type="[Set, SetActions]"
+  description="Set 상태와 이를 조작하는 액션을 포함한 튜플이에요."
+  :nested="[
+    {
+      name: '[0]',
+      type: 'Omit<Set<T>, add | clear | delete>',
+      required: false,
+      description: '변경 메서드가 숨겨진 현재 Set 상태예요.',
+    },
+    {
+      name: '[1].add',
+      type: '(value: T) => void',
+      required: false,
+      description: 'Set에 값을 추가해요.',
+    },
+    {
+      name: '[1].remove',
+      type: '(value: T) => void',
+      required: false,
+      description: 'Set에서 값을 제거해요.',
+    },
+    {
+      name: '[1].toggle',
+      type: '(value: T) => void',
+      required: false,
+      description: '값이 없으면 추가하고, 있으면 제거해요.',
+    },
+    {
+      name: '[1].setAll',
+      type: '(values: Set<T> | T[]) => void',
+      required: false,
+      description: 'Set의 모든 값을 교체해요.',
+    },
+    {
+      name: '[1].reset',
+      type: '() => void',
+      required: false,
+      description: 'Set을 초기 상태로 리셋해요.',
+    },
+  ]"
 />
 
 ## 예시

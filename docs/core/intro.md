@@ -110,7 +110,7 @@ function Page() {
 
 ## Ensuring Safe Operation in SSR Environments
 
-With the active adoption of SSR environments, poorly written components or hooks can cause errors in SSR environments or hydration mismatches. `react-simplikit` was designed to minimize these issues and guarantees this through 100% test coverage in SSR environments.
+With the active adoption of SSR environments, poorly written components or hooks can cause errors in SSR environments or hydration mismatches. `react-simplikit` was designed to minimize these issues and guarantee this through 100% test coverage in SSR environments.
 
 ## No Dependencies Beyond React
 

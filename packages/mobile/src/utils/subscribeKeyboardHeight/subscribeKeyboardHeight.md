@@ -63,7 +63,7 @@ function subscribeKeyboardHeight(
       type: '() => void',
       required: false,
       description:
-        'Unsubscribes all listeners and stops receiving keyboard height updates..',
+        'Unsubscribes all listeners and stops receiving keyboard height updates.',
     },
   ]"
 />

@@ -27,7 +27,6 @@ function usePageVisibility(): PageVisibility;
 
 ## Example
 
-````tsx
 ```tsx
 function VideoPlayer() {
   const { isVisible } = usePageVisibility();
@@ -44,8 +43,4 @@ function VideoPlayer() {
 
   return <video ref={videoRef} src="video.mp4" />;
 }
-````
-
-```
-
 ```
