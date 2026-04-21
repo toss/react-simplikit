@@ -7,8 +7,7 @@
   "plugins": [
     {
       "name": "react-design-philosophy",
-      "source": "./",
-      "description": "React design philosophy for abstraction design, hook review, and hook writing."
+      "source": "./"
     }
   ]
 }
