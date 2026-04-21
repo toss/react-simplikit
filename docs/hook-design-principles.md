@@ -1,6 +1,5 @@
 # React Hook Design Principles
 
-> Last Updated: 2026-04-21
 > Status: Draft (pending discussion)
 > Korean version: [ko/hook-design-principles.md](./ko/hook-design-principles.md)
 

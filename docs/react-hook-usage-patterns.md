@@ -1,11 +1,10 @@
 # React Hook Usage Patterns
 
-> Last Updated: 2026-04-07
 > Source: React official documentation (react.dev)
 > Related: [Hook Design Principles](./hook-design-principles.md)
 > Korean version: [ko/react-hook-usage-patterns.md](./ko/react-hook-usage-patterns.md)
 
-Patterns for **correctly using hooks** — not coding style, but React-specific best practices. 17 principles.
+Patterns for **correctly using hooks** — not coding style, but React-specific best practices. 16 principles (U1-U17, U4 removed).
 
 ---
 

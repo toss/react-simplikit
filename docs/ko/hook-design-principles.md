@@ -1,6 +1,5 @@
 # React Hook Design Principles
 
-> 최종 업데이트: 2026-04-21
 > 상태: Draft (논의 후 확정)
 
 ---

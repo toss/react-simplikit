@@ -1,10 +1,9 @@
 # React Hook Usage Patterns
 
-> 최종 업데이트: 2026-04-03
 > 출처: React 공식 문서 (react.dev)
 > 관련: [Hook Design Principles](./hook-design-principles.md)
 
-코딩 스타일이 아닌 **hooks를 올바르게 사용하는 패턴**. 17개 원칙.
+코딩 스타일이 아닌 **hooks를 올바르게 사용하는 패턴**. 16개 원칙 (U1-U17, U4 제거).
 
 ---
 
