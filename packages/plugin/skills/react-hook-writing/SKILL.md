@@ -47,8 +47,6 @@ const fullName = firstName + ' ' + lastName;
 
 **useRef for non-rendered values (U3):** Interval IDs, flags, previous values.
 
-**useReducer for complex state (U4):** 3+ related states changing together.
-
 **Discriminated unions (U5):** Replace boolean combos with `type Status = 'idle' | 'loading' | 'done'`.
 
 **Don't mirror props (U2):** Use directly, or name `initialX`.

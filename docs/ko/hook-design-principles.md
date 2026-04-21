@@ -1,6 +1,6 @@
 # React Hook Design Principles
 
-> 최종 업데이트: 2026-04-03
+> 최종 업데이트: 2026-04-21
 > 상태: Draft (논의 후 확정)
 
 ---
@@ -48,9 +48,11 @@ react-simplikit을 운영하며 축적한 훅 설계 철학을 **하나의 공�
 
 CLAUDE.md + AGENTS.md + 내부 스킬에서 추출한 **코딩 스타일** 원칙.
 
-### 🟢 Best Practice (13개)
+### 🟢 Best Practice (11개) + 🟡 Opinionated (3개: C1, C7, C14)
 
-#### C1. 항상 객체 반환
+> C1과 C7은 React 전역 베스트 프랙티스가 아니라 프로젝트 컨벤션이므로 인라인 🟡로 표기. C14는 아래 별도 🟡 섹션에 위치.
+
+#### C1. 항상 객체 반환 🟡
 
 반환값이 1개여도 `{ value }` 형태. 객체는 순서 무관, 이름으로 의미 전달, 확장 시 breaking change 없음.
 
@@ -131,7 +133,7 @@ const controlled = valueProp !== undefined; // ✅ 구분 필요할 때
 if (count) { ... }                         // ❌ count=0 통과 못함
 ```
 
-#### C7. Parameter는 객체로 받기
+#### C7. Parameter는 객체로 받기 🟡
 
 훅의 인자를 개별 파라미터 대신 객체(props)로. 순서 무관 + 이름으로 의미 전달 + 확장 시 breaking change 없음.
 
@@ -213,7 +215,7 @@ function useFetch<T>(fetcher: (url: string) => Promise<T>, url: string) { ... }
 function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 ```
 
-### 🟡 Opinionated (1개)
+### 🟡 Opinionated (C14)
 
 #### C14. Named useEffect Functions
 
@@ -233,11 +235,11 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 > 별도 문서: [react-hook-usage-patterns.md](./react-hook-usage-patterns.md)
 
-React 공식 문서(react.dev) 기반 17개 패턴 (U1-U17):
+React 공식 문서(react.dev) 기반 16개 패턴 (U1-U17, U4 제거):
 
 | 카테고리 | 개수 | 핵심 |
 |----------|------|------|
-| State Design | U1-U7 | 파생값 계산, props 복사 금지, useRef, union type, state 그룹화 |
+| State Design | U1-U3, U5-U7 (6개) | 파생값 계산, props 복사 금지, useRef, union type, state 그룹화 |
 | Effect Usage | U8-U14 | effect는 외부 동기화 전용, 체인 금지, key 리셋, 비동기 cleanup |
 | Memoization | U15-U16 | useMemo 1ms+, useCallback + memo() 조합만 |
 | Hook Design | U17 | lifecycle wrapper 금지, 구체적 목적 훅만 |

@@ -42,7 +42,16 @@ Good React abstractions are predictable in SSR, testable in isolation, and clear
 - Document the public API with JSDoc so usage stays discoverable.
 - Treat cleanup, tests, and edge cases as part of the API design.
 
-## 5. Review Questions
+## 5. Zero-Dependency Bias
+
+Dependencies add bundle weight, version pressure, and replacement cost.
+
+- Reach for dependencies only when they solve more than they introduce.
+- Prefer `peerDependencies` over runtime dependencies for shared React packages.
+- Inject external clients rather than importing them inside hooks when practical.
+- Keep abstractions portable across projects and environments.
+
+## 6. Review Questions
 
 Use these questions before finalizing an abstraction:
 
@@ -50,6 +59,7 @@ Use these questions before finalizing an abstraction:
 2. Does it respect React's existing lifecycle instead of recreating it?
 3. Is the API minimal, typed, and easy to extend?
 4. Would the abstraction still make sense without project-specific helpers?
+5. Does it avoid unnecessary runtime dependencies?
 
 ## Reference
 

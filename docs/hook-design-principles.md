@@ -1,6 +1,6 @@
 # React Hook Design Principles
 
-> Last Updated: 2026-04-07
+> Last Updated: 2026-04-21
 > Status: Draft (pending discussion)
 > Korean version: [ko/hook-design-principles.md](./ko/hook-design-principles.md)
 
@@ -49,7 +49,9 @@ Hook design philosophy accumulated from operating react-simplikit is defined as 
 
 Coding style principles extracted from CLAUDE.md + AGENTS.md + internal skills.
 
-### 🟢 Best Practice (13)
+### 🟢 Best Practice (11) + 🟡 Opinionated (3: C1, C7, C14)
+
+> C1 and C7 are marked 🟡 inline because they are project conventions rather than React-wide best practices. C14 is listed in its own 🟡 section below.
 
 #### C1. Always Return Objects 🟡
 
@@ -224,7 +226,7 @@ function useFetch<T>(fetcher: (url: string) => Promise<T>, url: string) { ... }
 function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 ```
 
-### 🟡 Opinionated (1)
+### 🟡 Opinionated (C14)
 
 #### C14. Named useEffect Functions
 
@@ -244,11 +246,11 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 > Separate document: [react-hook-usage-patterns.md](./react-hook-usage-patterns.md)
 
-17 patterns based on React official docs (react.dev), with source URLs and quotes (U1-U17):
+16 patterns based on React official docs (react.dev), with source URLs and quotes (U1-U17, U4 removed):
 
 | Category | Count | Key Patterns |
 |----------|-------|-------------|
-| State Design | U1-U7 | Derive don't sync, don't mirror props, useRef, discriminated unions, group state |
+| State Design | U1-U3, U5-U7 (6) | Derive don't sync, don't mirror props, useRef, discriminated unions, group state |
 | Effect Usage | U8-U14 | Effects for sync only, no chains, key reset, async cleanup |
 | Memoization | U15-U16 | useMemo >= 1ms, useCallback + memo() only |
 | Hook Design | U17 | No lifecycle wrappers, extract reusable stateful logic only |
