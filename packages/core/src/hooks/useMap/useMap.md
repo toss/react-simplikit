@@ -29,7 +29,7 @@ function useMap(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
 
 ```tsx
 const [userMap, actions] = useMap<string, User>([
-  ['user1', { name: 'John', age: 30 }]
+  ['user1', { name: 'John', age: 30 }],
 ]);
 
 // Using values from the Map
