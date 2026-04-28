@@ -15,7 +15,7 @@ function isServer(): boolean;
 <Interface
   name=""
   type="boolean"
-  description="서버 환경 (SSR)에서 실행 중이면 <code>false</code>이고, 그렇지 않으면 <code>true</code>야요."/>
+  description="서버 환경 (SSR)에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요."/>
 
 ## 예시
 

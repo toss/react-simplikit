@@ -2,7 +2,7 @@
 
 `useLongPress`는 요소가 지정된 기간 동안 눌려지고 유지될 때를 감지하는 리액트 훅이에요. 마우스와 터치 이벤트를 모두 처리하여 데스크탑과 모바일 장치에서 일관되게 작동해요.
 
-## Interface
+## 인터페이스
 
 ```ts
 function useLongPress<E extends HTMLElement>(

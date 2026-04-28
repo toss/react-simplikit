@@ -2,7 +2,7 @@
 
 제공된 콜백 함수의 스로틀링된 버전을 반환하는 React 훅이에요. 스로틀링된 콜백은 지정된 간격당 최대 한 번만 호출돼요.
 
-## Interface
+## 인터페이스
 
 ```ts
 function useThrottledCallback<F extends (...args: any[]) => any>(

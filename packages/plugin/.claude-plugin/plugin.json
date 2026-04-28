@@ -1,0 +1,10 @@
+{
+  "name": "react-design-philosophy",
+  "version": "0.1.0",
+  "description": "React design philosophy for abstraction design, hook review, and hook writing. Covers declarative APIs, lifecycle safety, SSR, state design, effect patterns, TypeScript, and performance.",
+  "author": { "name": "kimyouknow, zztnrudzz13" },
+  "homepage": "https://react-simplikit.slash.page",
+  "repository": "https://github.com/toss/react-simplikit",
+  "license": "MIT",
+  "keywords": ["react", "hooks", "philosophy", "code-review", "api-design", "ssr", "typescript"]
+}
