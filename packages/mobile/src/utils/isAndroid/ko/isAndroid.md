@@ -21,7 +21,7 @@ function isAndroid(userAgent: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="기기가 안드로이드에서 실행 중인 경우, 그렇지 않으면 <code>false</code>를 반환해요. 서버에서는 <code>false</code>를 반환해요"
+  description="기기가 안드로이드에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요. 서버에서는 <code>false</code>를 반환해요"
   :nested="[
     {
       required: false,

@@ -2,7 +2,7 @@
 
 하단 고정 요소가 온스크린 키보드를 자연스럽게 피할 수 있도록 도와주는 리액트 훅이에요. 키보드가 나타나면 `transform`을 사용해 요소를 위로 부드럽게 이동시켜요.
 
-## Interface
+## 인터페이스
 
 ```ts
 function useAvoidKeyboard(

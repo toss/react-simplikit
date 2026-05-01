@@ -25,7 +25,6 @@ function useScrollDirection(): void;
 
 ## Example
 
-````tsx
 ```tsx
 function Header() {
   const { direction, position } = useScrollDirection();
@@ -33,14 +32,6 @@ function Header() {
   // Hide header on scroll down
   const isHidden = direction === 'down' && position > 100;
 
-  return (
-    <header className={isHidden ? 'hidden' : 'visible'}>
-      My Header
-    </header>
-  );
+  return <header className={isHidden ? 'hidden' : 'visible'}>My Header</header>;
 }
-````
-
-```
-
 ```

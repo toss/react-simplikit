@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Simplified version of https://github.com/toss/es-toolkit/blob/main/src/function/debounce.ts
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function constraint requires `any[]` due to parameter contravariance
 export type DebouncedFunction<F extends (...args: any[]) => void> = {
   (...args: Parameters<F>): void;
   cancel: () => void;
@@ -17,12 +17,13 @@ type DebounceOptions = {
   edges?: Array<'leading' | 'trailing'>;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function constraint requires `any[]` due to parameter contravariance
 export function debounce<F extends (...args: any[]) => void>(
   func: F,
   debounceMs: number,
   { edges = ['leading', 'trailing'] }: DebounceOptions = {}
 ): DebouncedFunction<F> {
-  let pendingThis: any = undefined;
+  let pendingThis: ThisParameterType<F> | undefined = undefined;
   let pendingArgs: Parameters<F> | null = null;
 
   const leading = edges != null && edges.includes('leading');
@@ -71,7 +72,7 @@ export function debounce<F extends (...args: any[]) => void>(
     pendingArgs = null;
   };
 
-  const debounced = function (this: any, ...args: Parameters<F>) {
+  const debounced = function (this: ThisParameterType<F>, ...args: Parameters<F>) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     pendingThis = this;
     pendingArgs = args;

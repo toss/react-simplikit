@@ -24,7 +24,7 @@ function isIOS(userAgent: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="기기가 iOS 또는 iPadOS에서 실행 중이면 <code>false</code>이 아니면<code>false</code>를 반환해요. 서버에서는 <code>false</code>를 반환해요"
+  description="기기가 iOS 또는 iPadOS에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요. 서버에서는 <code>false</code>를 반환해요"
   :nested="[
     {
       required: false,

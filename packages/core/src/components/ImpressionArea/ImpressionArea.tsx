@@ -5,8 +5,8 @@ import { mergeRefs } from '../../utils/mergeRefs/mergeRefs.ts';
 
 type Element<
   T extends ElementType,
-  InstrinsicElements = T extends keyof React.JSX.IntrinsicElements ? React.JSX.IntrinsicElements[T] : HTMLElement,
-> = InstrinsicElements extends React.ClassAttributes<infer E extends HTMLElement> ? E : HTMLElement;
+  IntrinsicElementsOf = T extends keyof React.JSX.IntrinsicElements ? React.JSX.IntrinsicElements[T] : HTMLElement,
+> = IntrinsicElementsOf extends React.ClassAttributes<infer E extends HTMLElement> ? E : HTMLElement;
 
 type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
   UseImpressionRefOptions & {
