@@ -14,14 +14,9 @@ This hook does not return anything.
 
 ## Example
 
-````tsx
 ```tsx
 function Modal() {
   useBodyScrollLock();
   return <div className="modal">Modal content</div>;
 }
-````
-
-```
-
 ```

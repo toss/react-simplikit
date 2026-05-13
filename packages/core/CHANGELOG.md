@@ -1,5 +1,15 @@
 # react-simplikit
 
+## 0.0.50
+
+### Patch Changes
+
+- [#362](https://github.com/toss/react-simplikit/pull/362) [`fc9b1dc`](https://github.com/toss/react-simplikit/commit/fc9b1dcc2be7902ffe487c5868180317b9f07730) Thanks [@guesung](https://github.com/guesung)! - refactor(core): narrow types in `debounce` utility to reduce `any` usage
+
+- [#259](https://github.com/toss/react-simplikit/pull/259) [`1d9ec79`](https://github.com/toss/react-simplikit/commit/1d9ec7984899d1d8dcda16d15efa66f458c347fa) Thanks [@wo-o29](https://github.com/wo-o29)! - refactor(useCounter): extract validateValue as pure function and remove unnecessary useCallback
+
+- [#272](https://github.com/toss/react-simplikit/pull/272) [`75ab148`](https://github.com/toss/react-simplikit/commit/75ab1484a1af68a2f27fa31da8f6094f0c63d37f) Thanks [@wo-o29](https://github.com/wo-o29)! - refactor(usePrevious): remove unnecessary `undefined` from compare argument and return type
+
 ## 0.0.49
 
 ### Patch Changes

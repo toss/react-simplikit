@@ -327,7 +327,7 @@ describe('useStorageState', () => {
       expect(result.current[0]).toBe('value from other tab');
     });
 
-    it('should return defaultValue when an error occured while parsing data', async () => {
+    it('should return defaultValue when an error occurred while parsing data', async () => {
       const { result } = await renderHookSSR(() =>
         useStorageState<string>('test-key', { storage: safeLocalStorage, defaultValue: 'default' })
       );
