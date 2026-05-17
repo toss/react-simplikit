@@ -22,7 +22,7 @@ const strictEquals = <T>(prev: T, next: T) => prev === next;
  */
 export function usePrevious<T>(state: T, compare: (prev: T, next: T) => boolean = strictEquals): T {
   // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
-  // because this hook intentionally violates React's refs rules.
+  // because this hook intentionally reads and updates refs during render.
   'use no memo';
 
   const prevRef = useRef<T>(state);
