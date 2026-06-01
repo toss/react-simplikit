@@ -267,14 +267,15 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 > Separate document: [react-hook-usage-patterns.md](./react-hook-usage-patterns.md)
 
-16 patterns based on React official docs (react.dev), with source URLs and quotes (U1-U17, U4 removed):
+17 patterns based on React official docs (react.dev), with source URLs and quotes (U1-U18, U4 removed):
 
-| Category     | Count            | Key Patterns                                                                     |
-| ------------ | ---------------- | -------------------------------------------------------------------------------- |
-| State Design | U1-U3, U5-U7 (6) | Derive don't sync, don't mirror props, useRef, discriminated unions, group state |
-| Effect Usage | U8-U14           | Effects for sync only, no chains, key reset, async cleanup                       |
-| Memoization  | U15-U16          | useMemo >= 1ms, useCallback + memo() only                                        |
-| Hook Design  | U17              | No lifecycle wrappers, extract reusable stateful logic only                      |
+| Category               | Count            | Key Patterns                                                                     |
+| ---------------------- | ---------------- | -------------------------------------------------------------------------------- |
+| State Design           | U1-U3, U5-U7 (6) | Derive don't sync, don't mirror props, useRef, discriminated unions, group state |
+| Effect Usage           | U8-U14           | Effects for sync only, no chains, key reset, async cleanup                       |
+| Memoization            | U15-U16          | useMemo >= 1ms, useCallback + memo() only                                        |
+| Hook Design            | U17              | No lifecycle wrappers, extract reusable stateful logic only                      |
+| Identity and Rendering | U18              | Stable keys, intentional remounts, rendering efficiency                          |
 
 ---
 
@@ -301,7 +302,8 @@ packages/plugin/  (planned)
 ├── .codex-plugin/plugin.json
 ├── principles/                      ← Shared principles single source
 ├── skills/
-│   ├── react-hook-review/SKILL.md   ← C1-C14 + U1-U17 checklist
+│   ├── react-hook-review/SKILL.md   ← C1-C14 + U1-U18 checklist
+│   ├── react-hook-review/references/key-rendering.md
 │   └── react-hook-writing/
 │       ├── SKILL.md                 ← Themed guide
 │       └── references/patterns.md   ← 3 hook implementations
@@ -342,7 +344,7 @@ packages/plugin/  (planned)
 | Phase | Content                                   | Output                         |
 | ----- | ----------------------------------------- | ------------------------------ |
 | 1     | Directory + plugin.json + README          | `packages/plugin/` structure   |
-| 2     | react-hook-review SKILL.md                | C1-C14 + U1-U17 checklist      |
+| 2     | react-hook-review SKILL.md                | C1-C14 + U1-U18 checklist      |
 | 3     | react-hook-writing SKILL.md + patterns.md | Themed guide + 3 hook examples |
 | 4     | Generalization validation (grep)          | 0 project references           |
 | 5     | Plugin validate + local test              | Working confirmation           |

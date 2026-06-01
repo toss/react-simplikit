@@ -4,7 +4,7 @@
 > Related: [Hook Design Principles](./hook-design-principles.md)
 > Korean version: [ko/react-hook-usage-patterns.md](./ko/react-hook-usage-patterns.md)
 
-Patterns for **correctly using hooks** — not coding style, but React-specific best practices. 16 principles (U1-U17, U4 removed).
+Patterns for **correctly using hooks** — not coding style, but React-specific best practices. 17 principles (U1-U18, U4 removed).
 
 ---
 
@@ -192,3 +192,25 @@ No lifecycle wrappers (`useMount`, `useEffectOnce`). Only purpose-specific hooks
 Extraction criterion: Does the same state+effect pattern repeat in 2+ components?
 
 > 📖 [Reusing Logic with Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks) > _"Custom Hooks let you share stateful logic, not state itself."_
+
+---
+
+## Identity and Rendering (1)
+
+### U18. Use Stable Keys for List and Subtree Identity
+
+Use stable, unique sibling keys from data for dynamic lists. Keys let React match the same item across insert/delete/reorder updates, preserving state and avoiding unnecessary DOM/component recreation. Change a key intentionally when a subtree should remount and reset.
+
+> 📖 [Rendering Lists — Keeping list items in order with key](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key) > _"Keys tell React which array item each component corresponds to"_
+> 📖 [Preserving and Resetting State — Resetting state with a key](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key)
+
+```tsx
+// ❌ Dynamic list with duplicate or unstable identity
+items.map(item => <Row key={item.label} item={item} />);
+
+// ✅ Stable data identity
+items.map(item => <Row key={item.id} item={item} />);
+
+// ✅ Intentional subtree reset
+<Chat key={recipient.id} recipient={recipient} />;
+```

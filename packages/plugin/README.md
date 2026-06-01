@@ -33,10 +33,10 @@ Design React APIs and abstractions in a React-like way.
 
 ### /react-hook-review
 
-Review hooks against 30 design principles. Structured feedback with severity levels.
+Review hooks against 31 design principles. Structured feedback with severity levels.
 
 - 14 coding principles (C1-C14): return values, SSR safety, TypeScript, cleanup, performance
-- 16 usage patterns (U1-U17, excluding U4): state design, effect usage, memoization, hook design
+- 17 usage patterns (U1-U18, excluding U4): state design, effect usage, memoization, hook design, key identity
 - Output: Great Work / Required Changes / Suggestions / Next Steps
 
 ### /react-hook-writing
@@ -50,14 +50,15 @@ Write hooks following design philosophy. Themed guide with code examples.
 
 ## Principles Overview
 
-| Category                    | Count | Examples                                                                                      |
-| --------------------------- | ----- | --------------------------------------------------------------------------------------------- |
-| React design                | 5     | Declarative interface, lifecycle respect, minimal surfaces, reliability, zero-dependency bias |
-| Coding (C1-C14)             | 14    | Always return objects, SSR-safe init, no `any`, cleanup                                       |
-| State Design (U1-U3, U5-U7) | 6     | Derive don't sync, useRef for non-rendered, discriminated unions                              |
-| Effect Usage (U8-U14)       | 7     | Effects for sync only, no chains, key reset, async cleanup                                    |
-| Memoization (U15-U16)       | 2     | useMemo >= 1ms, useCallback + memo() only                                                     |
-| Hook Design (U17)           | 1     | Extract reusable logic, not lifecycle wrappers                                                |
+| Category                     | Count | Examples                                                                                      |
+| ---------------------------- | ----- | --------------------------------------------------------------------------------------------- |
+| React design                 | 5     | Declarative interface, lifecycle respect, minimal surfaces, reliability, zero-dependency bias |
+| Coding (C1-C14)              | 14    | Always return objects, SSR-safe init, no `any`, cleanup                                       |
+| State Design (U1-U3, U5-U7)  | 6     | Derive don't sync, useRef for non-rendered, discriminated unions                              |
+| Effect Usage (U8-U14)        | 7     | Effects for sync only, no chains, key reset, async cleanup                                    |
+| Memoization (U15-U16)        | 2     | useMemo >= 1ms, useCallback + memo() only                                                     |
+| Hook Design (U17)            | 1     | Extract reusable logic, not lifecycle wrappers                                                |
+| Identity and Rendering (U18) | 1     | Stable keys for list identity, intentional remounts, and rendering efficiency                 |
 
 ## Philosophy
 

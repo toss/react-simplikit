@@ -257,14 +257,15 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 > 별도 문서: [react-hook-usage-patterns.md](./react-hook-usage-patterns.md)
 
-React 공식 문서(react.dev) 기반 16개 패턴 (U1-U17, U4 제거):
+React 공식 문서(react.dev) 기반 17개 패턴 (U1-U18, U4 제거):
 
-| 카테고리     | 개수               | 핵심                                                           |
-| ------------ | ------------------ | -------------------------------------------------------------- |
-| State Design | U1-U3, U5-U7 (6개) | 파생값 계산, props 복사 금지, useRef, union type, state 그룹화 |
-| Effect Usage | U8-U14             | effect는 외부 동기화 전용, 체인 금지, key 리셋, 비동기 cleanup |
-| Memoization  | U15-U16            | useMemo 1ms+, useCallback + memo() 조합만                      |
-| Hook Design  | U17                | lifecycle wrapper 금지, 구체적 목적 훅만                       |
+| 카테고리               | 개수               | 핵심                                                           |
+| ---------------------- | ------------------ | -------------------------------------------------------------- |
+| State Design           | U1-U3, U5-U7 (6개) | 파생값 계산, props 복사 금지, useRef, union type, state 그룹화 |
+| Effect Usage           | U8-U14             | effect는 외부 동기화 전용, 체인 금지, key 리셋, 비동기 cleanup |
+| Memoization            | U15-U16            | useMemo 1ms+, useCallback + memo() 조합만                      |
+| Hook Design            | U17                | lifecycle wrapper 금지, 구체적 목적 훅만                       |
+| Identity and Rendering | U18                | 안정적인 key, 의도적 remount, 렌더링 효율                      |
 
 ---
 
@@ -291,7 +292,8 @@ packages/plugin/  (planned)
 ├── .codex-plugin/plugin.json
 ├── principles/                      ← 공통 원칙 Single Source
 ├── skills/
-│   ├── react-hook-review/SKILL.md   ← C1-C14 + U1-U17 체크리스트
+│   ├── react-hook-review/SKILL.md   ← C1-C14 + U1-U18 체크리스트
+│   ├── react-hook-review/references/key-rendering.md
 │   └── react-hook-writing/
 │       ├── SKILL.md                 ← 테마별 가이드
 │       └── references/patterns.md   ← 구현 예시 3개
@@ -332,7 +334,7 @@ packages/plugin/  (planned)
 | Phase | 내용                                      | 산출물                      |
 | ----- | ----------------------------------------- | --------------------------- |
 | 1     | 디렉토리 + plugin.json + README           | `packages/plugin/` 구조     |
-| 2     | react-hook-review SKILL.md                | C1-C14 + U1-U17 체크리스트  |
+| 2     | react-hook-review SKILL.md                | C1-C14 + U1-U18 체크리스트  |
 | 3     | react-hook-writing SKILL.md + patterns.md | 테마별 가이드 + 3개 훅 예시 |
 | 4     | 일반화 검증 (grep)                        | 프로젝트 참조 0건           |
 | 5     | 플러그인 validate + 로컬 테스트           | 동작 확인                   |

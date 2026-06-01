@@ -3,7 +3,7 @@
 > 출처: React 공식 문서 (react.dev)
 > 관련: [Hook Design Principles](./hook-design-principles.md)
 
-코딩 스타일이 아닌 **hooks를 올바르게 사용하는 패턴**. 16개 원칙 (U1-U17, U4 제거).
+코딩 스타일이 아닌 **hooks를 올바르게 사용하는 패턴**. 17개 원칙 (U1-U18, U4 제거).
 
 ---
 
@@ -159,3 +159,25 @@ memo() 없는 자식에 stable reference → 리렌더 방지 효과 없음.
 
 lifecycle wrapper(`useMount`, `useEffectOnce`) 금지. 구체적 동기화 목적 훅(`useWindowSize`, `useOnlineStatus`)만.
 추출 기준: 동일 state+effect 패턴이 2개+ 컴포넌트에서 반복되는지?
+
+---
+
+## Identity and Rendering (1개)
+
+### U18. 리스트와 서브트리 identity에는 안정적인 key 사용
+
+동적인 리스트에는 데이터에서 온 안정적이고 sibling 사이에서 유일한 key를 사용한다. key는 insert/delete/reorder 업데이트에서 같은 아이템을 다시 매칭해 state를 보존하고 불필요한 DOM/component 재생성을 줄인다. 반대로 서브트리를 리셋해야 할 때만 의도적으로 key를 바꾼다.
+
+> 📖 [Rendering Lists — Keeping list items in order with key](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key)
+> 📖 [Preserving and Resetting State — Resetting state with a key](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key)
+
+```tsx
+// ❌ 중복되거나 불안정한 identity
+items.map(item => <Row key={item.label} item={item} />);
+
+// ✅ 데이터 기반의 안정적인 identity
+items.map(item => <Row key={item.id} item={item} />);
+
+// ✅ 의도적인 서브트리 리셋
+<Chat key={recipient.id} recipient={recipient} />;
+```

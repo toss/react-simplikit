@@ -7,6 +7,8 @@ description: Review React hooks against design philosophy. Checks return values,
 
 Review hooks against coding principles and usage patterns. Report findings by severity.
 
+When review involves lists, arrays of JSX, state reset/preservation, component identity, remounting, or rendering efficiency through React `key`, read [key-rendering.md](references/key-rendering.md) before writing findings.
+
 Treat C1, C7, and C14 as opinionated conventions unless the target codebase explicitly adopts them. Report them as stronger findings when the repository standard is clear; otherwise phrase them as consistency recommendations.
 
 ## Coding Principles Checklist
@@ -86,12 +88,17 @@ Treat C1, C7, and C14 as opinionated conventions unless the target codebase expl
 
 - **Extract logic, not lifecycle (U17)** — No `useMount`. Purpose-specific hooks only.
 
+### Identity and Rendering
+
+- **Stable keys (U18)** — Use stable, unique sibling keys from data for dynamic lists; use keys intentionally to preserve or reset subtree identity. See [key-rendering.md](references/key-rendering.md).
+
 ## Review Heuristics
 
-- Flag React guidance from U1-U17 as behavior or maintainability issues first.
+- Flag React guidance from U1-U18 as behavior or maintainability issues first.
 - Flag C1 and C7 as API consistency issues unless the repo treats them as hard requirements.
 - Lower the severity of C14 unless debugging quality is materially affected.
 - When a hook mirrors props, chains effects, or hides lifecycle wrappers, explain the runtime consequence, not just the rule number.
+- For U18 findings, distinguish correctness from efficiency: duplicate/unstable keys can corrupt identity and state first; unnecessary remounts and DOM recreation are the performance consequence.
 
 ## Output Format
 
