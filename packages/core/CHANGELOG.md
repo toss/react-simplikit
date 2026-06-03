@@ -1,5 +1,13 @@
 # react-simplikit
 
+## 0.0.51
+
+### Patch Changes
+
+- [#351](https://github.com/toss/react-simplikit/pull/351) [`da1f51c`](https://github.com/toss/react-simplikit/commit/da1f51cc9b860dde91dcfd120605eb6a93de3b55) Thanks [@eunwoo-levi](https://github.com/eunwoo-levi)! - fix(core/hooks): call cleanup when unmount occurs before async effect resolves
+
+- [#352](https://github.com/toss/react-simplikit/pull/352) [`fa3daa5`](https://github.com/toss/react-simplikit/commit/fa3daa52d18644ac90a35fc8a79501eae7bb0269) Thanks [@eunwoo-levi](https://github.com/eunwoo-levi)! - fix(core/hooks): prevent immediate callback from re-firing when enabled is toggled
+
 ## 0.0.50
 
 ### Patch Changes

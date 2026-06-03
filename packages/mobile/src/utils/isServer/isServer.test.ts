@@ -13,7 +13,8 @@ describe('isServer', () => {
     const secondCall = isServer();
     const thirdCall = isServer();
 
-    expect(firstCall).toBe(secondCall);
-    expect(secondCall).toBe(thirdCall);
+    expect(firstCall).toBe(false);
+    expect(secondCall).toBe(false);
+    expect(thirdCall).toBe(false);
   });
 });

@@ -124,6 +124,26 @@ describe('useInterval', () => {
     });
   });
 
+  it('should not re-fire immediate callback when enabled is toggled', async () => {
+    const callback = vi.fn();
+    const { rerender } = await renderHookSSR(
+      ({ enabled }) =>
+        useInterval(callback, {
+          delay: 1000,
+          immediate: true,
+          enabled,
+        }),
+      { initialProps: { enabled: true } }
+    );
+
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    rerender({ enabled: false });
+    rerender({ enabled: true });
+
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+
   it('should handle enabled flag changes appropriately', async () => {
     const callback = vi.fn();
     const { rerender } = await renderHookSSR(
