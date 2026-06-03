@@ -4,6 +4,8 @@ React design philosophy plugin for Claude Code. Includes skills for reviewing an
 
 ## Install
 
+### Claude Code
+
 ```bash
 # 1. Add this plugin's marketplace (sparse-checkout keeps the clone minimal)
 claude plugin marketplace add https://github.com/toss/react-simplikit \
@@ -13,11 +15,27 @@ claude plugin marketplace add https://github.com/toss/react-simplikit \
 claude plugin install react-design-philosophy@react-design-philosophy
 ```
 
+### Codex
+
+```bash
+codex plugin marketplace add https://github.com/toss/react-simplikit
+```
+
+Then install `React Design Philosophy` from the Codex plugin UI.
+
 To uninstall:
+
+### Claude Code
 
 ```bash
 claude plugin uninstall react-design-philosophy@react-design-philosophy
 claude plugin marketplace remove react-design-philosophy
+```
+
+### Codex
+
+```bash
+codex plugin marketplace remove react-simplikit
 ```
 
 ## Skills

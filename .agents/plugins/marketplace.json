@@ -1,0 +1,20 @@
+{
+  "name": "react-simplikit",
+  "interface": {
+    "displayName": "React Simplikit"
+  },
+  "plugins": [
+    {
+      "name": "react-design-philosophy",
+      "source": {
+        "source": "local",
+        "path": "./packages/plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    }
+  ]
+}
