@@ -54,7 +54,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
-    "@types/node": "^22.10.2",
+    "@types/node": "^24.13.3",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitest/coverage-v8": "^2.1.8",

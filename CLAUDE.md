@@ -162,7 +162,8 @@ PR with changeset merged → release.yml triggers
 
 - npm auth uses GitHub Actions OIDC (no secret tokens needed)
 - Requires `id-token: write` permission in workflow
-- Node 22 ships npm v10 which doesn't support OIDC → `npm install -g npm@latest` upgrades to npm 11+
+- OIDC publishing requires npm >= 11.5.0 ([npm/cli#8336](https://github.com/npm/cli/pull/8336)); Node 24 bundles npm 11.17+, so no manual npm upgrade is needed
+- Do NOT reinstate `npm install -g npm@latest` — it is unpinned, and it broke the release job once npm 12 raised its Node floor above `.nvmrc`
 - `changesets/action` must NOT have `publish` option (it overwrites `.npmrc` and breaks OIDC)
 - Publish is done in a separate step after changesets/action
 

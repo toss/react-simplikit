@@ -27,9 +27,6 @@ jobs:
           cache: 'yarn'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Update npm for OIDC trusted publishing
-        run: npm install -g npm@latest
-
       - name: Install Dependencies
         run: yarn install
 
