@@ -3,7 +3,7 @@ name: Feature Request
 about: Suggest an idea for react-simplikit
 title: '[FEATURE] '
 labels: 'enhancement'
-assignees: 'kimyouknow'
+assignees: 'mnxmnz, hyesungoh'
 ---
 
 **Is your feature request related to a problem? Please describe.**
