@@ -25,12 +25,12 @@ export async function generateDocs(names: string[]) {
   names
     .map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]])
     .forEach(([name, sourceFilePath]) => {
-      const subCtx: { docSource?: string; translatedDoc?: string } = {};
+      const subCtx: { docSource?: string; translatedDoc?: string | null } = {};
       tasks.add([
         {
           title: `Generate documents: ${sourceFilePath}`,
           task: async (_, task) =>
-            task.newListr<{ docSource?: string; translatedDoc?: string }>(
+            task.newListr<{ docSource?: string; translatedDoc?: string | null }>(
               [
                 {
                   title: `Convert JSDoc to markdown`,
