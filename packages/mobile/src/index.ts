@@ -1,6 +1,7 @@
 // Hooks
 export { useAvoidKeyboard } from './hooks/useAvoidKeyboard/index.ts';
 export { useBodyScrollLock } from './hooks/useBodyScrollLock/index.ts';
+export { useKeyboardHeight } from './hooks/useKeyboardHeight/index.ts';
 export {
   type ConnectionType,
   type EffectiveConnectionType,

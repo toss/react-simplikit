@@ -29,7 +29,7 @@ export function getSidebarItems(
       // Only include files that match the folder name (e.g., useBooleanState/useBooleanState.md)
       const dirname = path.basename(path.dirname(locale ? path.dirname(file) : file));
       const filename = path.basename(file, '.md');
-      return dirname === filename || dirname === 'keyboardHeight'; // Special case for keyboardHeight
+      return dirname === filename;
     })
     .map(file => {
       const filename = path.basename(file, '.md');
