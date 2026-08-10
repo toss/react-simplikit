@@ -47,3 +47,6 @@ coverage
 
 # context files (session notes, etc.)
 context/
+# oh-my-claudecode session state
+.omc/
+.omx/
