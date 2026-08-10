@@ -3,11 +3,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useSafeAreaInset } from './useSafeAreaInset.ts';
 
+const serverEnvironmentFlag = vi.hoisted(() => ({ current: false }));
+
+vi.mock('../../utils/isServer/index.ts', async importOriginal => {
+  const original = await importOriginal<typeof import('../../utils/isServer/index.ts')>();
+  return {
+    isServer: () => serverEnvironmentFlag.current || original.isServer(),
+  };
+});
+
 describe('useSafeAreaInset', () => {
   let mockGetComputedStyle: ReturnType<typeof vi.fn>;
   let createdElements: HTMLElement[] = [];
 
   beforeEach(() => {
+    serverEnvironmentFlag.current = false;
     createdElements = [];
 
     // Mock document.createElement
@@ -51,6 +61,22 @@ describe('useSafeAreaInset', () => {
       left: 0,
       right: 0,
     });
+  });
+
+  it('should return zero insets without subscribing to resize in a server-like environment', () => {
+    serverEnvironmentFlag.current = true;
+    const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
+
+    const { result } = renderHook(() => useSafeAreaInset());
+
+    expect(result.current).toEqual({
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+    });
+    expect(addEventListenerSpy).not.toHaveBeenCalledWith('resize', expect.any(Function));
+    expect(addEventListenerSpy).not.toHaveBeenCalledWith('orientationchange', expect.any(Function));
   });
 
   it('should register resize and orientationchange event listeners on mount', () => {
