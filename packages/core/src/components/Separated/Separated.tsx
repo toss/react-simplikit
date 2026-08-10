@@ -38,8 +38,9 @@ export function Separated({ children, by: separator }: Props) {
 
   return (
     <>
+      {/* Children.toArray always assigns a key, so no positional fallback is needed */}
       {childrenArray.map((child, i, { length }) => (
-        <Fragment key={child.key ?? i}>
+        <Fragment key={child.key}>
           {child}
           {i + 1 !== length && separator}
         </Fragment>

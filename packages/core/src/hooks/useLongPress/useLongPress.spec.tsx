@@ -45,6 +45,35 @@ describe('useLongPress', () => {
     expect(onLongPress).toHaveBeenCalledTimes(1);
   });
 
+  it('should handle press and release without onClick and onLongPressEnd options', async () => {
+    const onLongPress = vi.fn();
+    const TestComponent = () => {
+      const longPressHandlers = useLongPress(onLongPress);
+      return (
+        <button data-testid="test-button" {...longPressHandlers}>
+          Press me
+        </button>
+      );
+    };
+
+    render(<TestComponent />);
+    const button = screen.getByTestId('test-button');
+
+    // Short press falls back to the noop onClick
+    fireEvent.mouseDown(button);
+    fireEvent.mouseUp(button);
+    expect(onLongPress).not.toHaveBeenCalled();
+
+    // Completed long press falls back to the noop onLongPressEnd
+    fireEvent.mouseDown(button);
+    await act(async () => {
+      vi.advanceTimersByTime(500);
+    });
+    fireEvent.mouseUp(button);
+
+    expect(onLongPress).toHaveBeenCalledTimes(1);
+  });
+
   it('should respect custom delay timing', async () => {
     const onLongPress = vi.fn();
     const TestComponent = () => {
