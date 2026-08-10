@@ -1,5 +1,7 @@
 # useNetworkStatus
 
+`useNetworkStatus` is a React hook that provides access to the Network Information API. It provides raw network connection data. Returns undefined for all properties if the API is not supported (e.g., Safari, Firefox). **Browser Support**: - Chrome/Edge (Android): Full support - Chrome/Edge (Desktop): Partial support (effectiveType, downlink, rtt, saveData) - Firefox: Not supported - Safari: Not supported
+
 ## Interface
 
 ```ts

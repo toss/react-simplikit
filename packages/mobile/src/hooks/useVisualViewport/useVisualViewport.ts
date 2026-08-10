@@ -53,7 +53,13 @@ type VisualViewportState = {
  * **Tip:** If you only need keyboard height, use `useKeyboardHeight()` instead
  * for a simpler API.
  *
- * @returns {{ viewport: VisualViewportState | null }} Object containing Visual Viewport state, or `null` viewport if not supported.
+ * @returns {{ viewport: VisualViewportState | null }} An object containing the Visual Viewport state.
+ * - viewport `VisualViewportState | null` - Visual Viewport state object, or `null` if not supported (SSR or browsers without the Visual Viewport API);
+ * - viewport.width `number` - Viewport width in pixels;
+ * - viewport.height `number` - Viewport height in pixels;
+ * - viewport.offsetLeft `number` - Viewport left offset in pixels from the layout viewport. Typically 0 unless horizontal scrolling or panning occurs;
+ * - viewport.offsetTop `number` - Viewport top offset in pixels from the layout viewport. Becomes negative on iOS when the keyboard appears, so use `-offsetTop` for the keyboard height. Typically remains 0 on Android;
+ * - viewport.scale `number` - Pinch-zoom scaling factor. 1.0 means no zoom, greater than 1.0 means zoomed in;
  *
  * @see {@link useKeyboardHeight} - Simpler hook for keyboard height only
  *

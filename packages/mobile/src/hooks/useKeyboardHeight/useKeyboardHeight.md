@@ -32,7 +32,16 @@ function useKeyboardHeight(
 <Interface
   name=""
   type="UseKeyboardHeightResult"
-  description="object containing the current keyboard height in pixels."
+  description="object containing the current keyboard height."
+  :nested="[
+    {
+      name: 'keyboardHeight',
+      type: 'number',
+      required: false,
+      description:
+        'The current keyboard height in pixels. 0 when the keyboard is hidden.',
+    },
+  ]"
 />
 
 ## Example
