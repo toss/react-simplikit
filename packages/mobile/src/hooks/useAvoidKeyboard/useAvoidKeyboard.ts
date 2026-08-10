@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useMemo } from 'react';
 
-import { useKeyboardHeight } from '../keyboardHeight/useKeyboardHeight.ts';
+import { useKeyboardHeight } from '../useKeyboardHeight/useKeyboardHeight.ts';
 
 type UseAvoidKeyboardOptions = {
   /**
