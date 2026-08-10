@@ -65,7 +65,7 @@ jobs:
       - name: Get changed files from merged PR
         id: diffs
         run: |
-          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
+          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^packages/[^/]+/src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
 
           echo $MATCHED_NAMES
 
