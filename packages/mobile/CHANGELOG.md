@@ -1,5 +1,11 @@
 # @react-simplikit/mobile
 
+## 0.1.0
+
+### Minor Changes
+
+- [#393](https://github.com/toss/react-simplikit/pull/393) [`a01348f`](https://github.com/toss/react-simplikit/commit/a01348f3921485d936bfc4bb4ab55a55b752fa0e) Thanks [@hyesungoh](https://github.com/hyesungoh)! - Export `useKeyboardHeight` from the package entry. The hook was documented but not importable: its folder was named `keyboardHeight`, breaking the folder-name convention, and the re-export was missing from `src/index.ts`. The folder is renamed to `useKeyboardHeight` and the hook is now part of the public API.
+
 ## 0.0.2
 
 ### Patch Changes
