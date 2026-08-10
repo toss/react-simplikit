@@ -4,9 +4,9 @@ import { getSafeAreaInset, type SafeAreaInset } from '../../utils/getSafeAreaIns
 import { isServer } from '../../utils/isServer/index.ts';
 
 /**
- * React hook to track safe area inset changes
- *
- * Returns the safe area insets that automatically update when the screen
+ * @description
+ * `useSafeAreaInset` is a React hook that tracks safe area inset changes.
+ * It returns the safe area insets that automatically update when the screen
  * orientation changes (e.g., portrait to landscape).
  *
  * Safe area insets account for device-specific UI elements:
@@ -14,10 +14,9 @@ import { isServer } from '../../utils/isServer/index.ts';
  * - **bottom**: Home indicator on Face ID devices
  * - **left/right**: Rounded corners in landscape mode
  *
- * @returns Object containing safe area insets for all four sides
+ * @returns {SafeAreaInset} Object containing safe area insets for all four sides.
  *
  * @example
- * ```tsx
  * function MyComponent() {
  *   const safeArea = useSafeAreaInset();
  *
@@ -32,10 +31,8 @@ import { isServer } from '../../utils/isServer/index.ts';
  *     </div>
  *   );
  * }
- * ```
  *
  * @example
- * ```tsx
  * // Automatically updates when screen rotates
  * function RotationAwareHeader() {
  *   const { top, left, right } = useSafeAreaInset();
@@ -50,7 +47,6 @@ import { isServer } from '../../utils/isServer/index.ts';
  *     </header>
  *   );
  * }
- * ```
  */
 export function useSafeAreaInset(): SafeAreaInset {
   const [inset, setInset] = useState<SafeAreaInset>(() => getSafeAreaInset());

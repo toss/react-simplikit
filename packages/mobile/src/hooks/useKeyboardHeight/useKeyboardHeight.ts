@@ -29,7 +29,6 @@ type UseKeyboardHeightResult = {
  * @returns {UseKeyboardHeightResult} An object containing the current keyboard height in pixels.
  *
  * @example
- * ```tsx
  * function ChatInput() {
  *   const { keyboardHeight } = useKeyboardHeight();
  *
@@ -39,7 +38,6 @@ type UseKeyboardHeightResult = {
  *     </div>
  *   );
  * }
- * ```
  */
 export function useKeyboardHeight(options: UseKeyboardHeightOptions = {}): UseKeyboardHeightResult {
   const { immediate = true } = options;

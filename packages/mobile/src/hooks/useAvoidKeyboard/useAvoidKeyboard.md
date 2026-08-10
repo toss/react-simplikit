@@ -58,7 +58,6 @@ function useAvoidKeyboard(
 
 ## Example
 
-````tsx
 ```tsx
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard();
@@ -77,8 +76,4 @@ function FixedBottomCTA() {
     </div>
   );
 }
-````
-
-```
-
 ```

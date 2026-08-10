@@ -37,7 +37,6 @@ function useKeyboardHeight(
 
 ## Example
 
-````tsx
 ```tsx
 function ChatInput() {
   const { keyboardHeight } = useKeyboardHeight();
@@ -48,8 +47,4 @@ function ChatInput() {
     </div>
   );
 }
-````
-
-```
-
 ```
