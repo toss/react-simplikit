@@ -147,6 +147,9 @@ function parseJSDoc(source: string) {
       : (exampleSource
           .splice(1, exampleSource.length - 2)
           .map(line => line.source.replace(/\s\*\s{0,1}/, ''))
+          // the doc template wraps the example in its own ```tsx fence, so fences
+          // inside @example would nest and render as literal backticks
+          .filter(line => !/^\s*```/.test(line))
           .join('\n') ?? '');
 
   return {
