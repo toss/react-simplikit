@@ -47,3 +47,5 @@ coverage
 
 # context files (session notes, etc.)
 context/
+.omc/
+.omx/

@@ -42,9 +42,9 @@ type VisualViewportState = {
 };
 
 /**
- * React hook to track Visual Viewport changes
- *
- * Returns the actual visible area in mobile WebView, which changes when
+ * @description
+ * `useVisualViewport` is a React hook that tracks Visual Viewport changes.
+ * It returns the actual visible area in mobile WebView, which changes when
  * the keyboard appears or the user zooms/scrolls.
  *
  * **Important:** `viewport` is `null` on SSR or in browsers that don't support Visual Viewport API.
@@ -53,12 +53,11 @@ type VisualViewportState = {
  * **Tip:** If you only need keyboard height, use `useKeyboardHeight()` instead
  * for a simpler API.
  *
- * @returns Object containing Visual Viewport state or `null` if not supported
+ * @returns {{ viewport: VisualViewportState | null }} Object containing Visual Viewport state, or `null` viewport if not supported.
  *
  * @see {@link useKeyboardHeight} - Simpler hook for keyboard height only
  *
  * @example
- * ```tsx
  * function CustomLayout() {
  *   const { viewport } = useVisualViewport();
  *
@@ -79,7 +78,6 @@ type VisualViewportState = {
  *     </div>
  *   );
  * }
- * ```
  */
 export function useVisualViewport(): { viewport: VisualViewportState | null } {
   const visualViewport = isServer() ? null : window.visualViewport;

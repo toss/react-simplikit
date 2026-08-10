@@ -49,7 +49,6 @@ type UseAvoidKeyboardResult = {
  * @returns {UseAvoidKeyboardResult} An object containing the `style` property to apply to the fixed bottom element.
  *
  * @example
- * ```tsx
  * function FixedBottomCTA() {
  *   const { style } = useAvoidKeyboard();
  *
@@ -67,10 +66,8 @@ type UseAvoidKeyboardResult = {
  *     </div>
  *   );
  * }
- * ```
  *
  * @example
- * ```tsx
  * // With safe area bottom offset (e.g., for iPhone home indicator)
  * function FixedBottomCTA() {
  *   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
@@ -89,7 +86,6 @@ type UseAvoidKeyboardResult = {
  *     </div>
  *   );
  * }
- * ```
  */
 export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoidKeyboardResult {
   const {
