@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { renderHookSSR } from '../../../test/renderHookSSR.tsx';
+
 import { useVisualViewport } from './useVisualViewport.ts';
 
 describe('useVisualViewport', () => {
@@ -158,6 +160,31 @@ describe('useVisualViewport', () => {
     });
 
     const { result } = renderHook(() => useVisualViewport());
+
+    expect(result.current.viewport).toBeNull();
+  });
+
+  it('is safe on server side rendering', () => {
+    const result = renderHookSSR.serverOnly(() => useVisualViewport());
+
+    expect(result.current.viewport).toBeNull();
+  });
+
+  it('should return null when visualViewport disappears before an update', async () => {
+    const { result } = renderHook(() => useVisualViewport());
+
+    const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(([event]) => event === 'resize')?.[1];
+
+    Object.defineProperty(window, 'visualViewport', {
+      writable: true,
+      configurable: true,
+      value: undefined,
+    });
+
+    await act(async () => {
+      resizeHandler?.();
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
 
     expect(result.current.viewport).toBeNull();
   });

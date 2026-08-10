@@ -88,6 +88,8 @@ describe('useImpressionRef', () => {
     await act(async () => {
       observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
       vi.runAllTimers();
+      observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
+      vi.runAllTimers();
     });
 
     expect(mockOnImpressionStart).not.toHaveBeenCalled();

@@ -13,7 +13,8 @@ export default defineConfig({
       reporter: ['text', 'json'],
       extension: ['.ts', '.tsx'],
       include: ['src/**/*.ts?(x)'],
-      exclude: ['src/**/index.ts', 'src/**/*.spec.ts?(x)'],
+      exclude: ['src/**/index.ts', 'src/**/*.{spec,test}.ts?(x)', 'src/_internal/test-utils/**'],
+      thresholds: { statements: 100, branches: 100, functions: 100, lines: 100 },
     },
   },
 });
