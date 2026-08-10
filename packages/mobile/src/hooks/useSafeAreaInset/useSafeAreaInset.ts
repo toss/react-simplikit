@@ -14,7 +14,11 @@ import { isServer } from '../../utils/isServer/index.ts';
  * - **bottom**: Home indicator on Face ID devices
  * - **left/right**: Rounded corners in landscape mode
  *
- * @returns {SafeAreaInset} Object containing safe area insets for all four sides.
+ * @returns {SafeAreaInset} An object containing safe area insets for all four sides.
+ * - top `number` - Top safe area inset in pixels. Accounts for the notch, Dynamic Island, or status bar;
+ * - bottom `number` - Bottom safe area inset in pixels. Accounts for the home indicator on Face ID devices;
+ * - left `number` - Left safe area inset in pixels. Accounts for rounded corners in landscape mode;
+ * - right `number` - Right safe area inset in pixels. Accounts for rounded corners in landscape mode;
  *
  * @example
  * function MyComponent() {

@@ -15,7 +15,37 @@ function useSafeAreaInset(): SafeAreaInset;
 <Interface
   name=""
   type="SafeAreaInset"
-  description="containing safe area insets for all four sides."
+  description="object containing safe area insets for all four sides."
+  :nested="[
+    {
+      name: 'top',
+      type: 'number',
+      required: false,
+      description:
+        'Top safe area inset in pixels. Accounts for the notch, Dynamic Island, or status bar.',
+    },
+    {
+      name: 'bottom',
+      type: 'number',
+      required: false,
+      description:
+        'Bottom safe area inset in pixels. Accounts for the home indicator on Face ID devices.',
+    },
+    {
+      name: 'left',
+      type: 'number',
+      required: false,
+      description:
+        'Left safe area inset in pixels. Accounts for rounded corners in landscape mode.',
+    },
+    {
+      name: 'right',
+      type: 'number',
+      required: false,
+      description:
+        'Right safe area inset in pixels. Accounts for rounded corners in landscape mode.',
+    },
+  ]"
 />
 
 ## Example
@@ -35,6 +65,23 @@ function MyComponent() {
     >
       Content that respects safe areas
     </div>
+  );
+}
+
+// Automatically updates when screen rotates
+function RotationAwareHeader() {
+  const { top, left, right } = useSafeAreaInset();
+
+  return (
+    <header
+      style={{
+        paddingTop: top,
+        paddingLeft: left,
+        paddingRight: right,
+      }}
+    >
+      Header content
+    </header>
   );
 }
 ```

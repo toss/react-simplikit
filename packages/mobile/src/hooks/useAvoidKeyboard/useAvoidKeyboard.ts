@@ -41,12 +41,13 @@ type UseAvoidKeyboardResult = {
  * to smoothly move them above the keyboard when it appears.
  *
  * @param {UseAvoidKeyboardOptions} [options] - Configuration options.
- * @param {number} [options.safeAreaBottom=0] - Base bottom offset in pixels when keyboard is hidden.
+ * @param {number} [options.safeAreaBottom=0] - Base bottom offset in pixels when the keyboard is hidden. Useful for accounting for the iPhone home indicator area.
  * @param {number} [options.transitionDuration=200] - Transition duration in milliseconds for smooth animation.
  * @param {CSSProperties['transitionTimingFunction']} [options.transitionTimingFunction='ease-out'] - Transition timing function for the animation.
  * @param {boolean} [options.immediate=true] - If true, gets the initial keyboard height on mount.
  *
- * @returns {UseAvoidKeyboardResult} An object containing the `style` property to apply to the fixed bottom element.
+ * @returns {UseAvoidKeyboardResult} An object containing the CSS style for keyboard avoidance.
+ * - style `CSSProperties` - CSS style object to apply to the fixed bottom element. Contains `transform` and `transition` properties;
  *
  * @example
  * function FixedBottomCTA() {

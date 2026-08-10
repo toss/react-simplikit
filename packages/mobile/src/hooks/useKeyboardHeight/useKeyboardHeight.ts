@@ -26,7 +26,8 @@ type UseKeyboardHeightResult = {
  * @param {UseKeyboardHeightOptions} [options] - Configuration options.
  * @param {boolean} [options.immediate=true] - If true, gets the initial keyboard height on mount.
  *
- * @returns {UseKeyboardHeightResult} An object containing the current keyboard height in pixels.
+ * @returns {UseKeyboardHeightResult} An object containing the current keyboard height.
+ * - keyboardHeight `number` - The current keyboard height in pixels. 0 when the keyboard is hidden;
  *
  * @example
  * function ChatInput() {

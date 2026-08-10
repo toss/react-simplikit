@@ -22,7 +22,8 @@ function useAvoidKeyboard(
       type: 'number',
       required: false,
       defaultValue: '0',
-      description: 'Base bottom offset in pixels when keyboard is hidden.',
+      description:
+        'Base bottom offset in pixels when the keyboard is hidden. Useful for accounting for the iPhone home indicator area.',
     },
     {
       name: 'options.transitionDuration',
@@ -53,7 +54,16 @@ function useAvoidKeyboard(
 <Interface
   name=""
   type="UseAvoidKeyboardResult"
-  description="object containing the <code>style</code> property to apply to the fixed bottom element."
+  description="object containing the CSS style for keyboard avoidance."
+  :nested="[
+    {
+      name: 'style',
+      type: 'CSSProperties',
+      required: false,
+      description:
+        'CSS style object to apply to the fixed bottom element. Contains <code>transform</code> and <code>transition</code> properties.',
+    },
+  ]"
 />
 
 ## Example
@@ -61,6 +71,25 @@ function useAvoidKeyboard(
 ```tsx
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard();
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        ...style,
+      }}
+    >
+      <button>Submit</button>
+    </div>
+  );
+}
+
+// With safe area bottom offset (e.g., for iPhone home indicator)
+function FixedBottomCTA() {
+  const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
 
   return (
     <div
