@@ -45,10 +45,10 @@ pnpm add @react-simplikit/mobile
 import { useAvoidKeyboard } from '@react-simplikit/mobile';
 
 function ChatInput() {
-  const { ref, style } = useAvoidKeyboard();
+  const { style } = useAvoidKeyboard();
 
   return (
-    <div ref={ref} style={style}>
+    <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, ...style }}>
       <input type="text" placeholder="메시지를 입력하세요..." />
     </div>
   );
@@ -57,14 +57,23 @@ function ChatInput() {
 
 ### Body Scroll Lock
 
+`useBodyScrollLock`은 컴포넌트가 마운트될 때 body 스크롤을 잠그고, 언마운트될 때 자동으로 해제해요. 잠그는 시점을 제어하려면 이 훅을 호출하는 컴포넌트를 조건부로 렌더링하세요.
+
 ```tsx
 import { useBodyScrollLock } from '@react-simplikit/mobile';
 
-function Modal({ isOpen, children }) {
-  useBodyScrollLock(isOpen);
+function BodyScrollLock() {
+  useBodyScrollLock();
+  return null;
+}
 
-  if (!isOpen) return null;
-  return <div className="modal">{children}</div>;
+function ModalContainer({ isOpen, children }) {
+  return (
+    <>
+      {isOpen && <BodyScrollLock />}
+      {isOpen && <div className="modal">{children}</div>}
+    </>
+  );
 }
 ```
 
@@ -74,7 +83,12 @@ function Modal({ isOpen, children }) {
 import { useVisualViewport } from '@react-simplikit/mobile';
 
 function Component() {
-  const viewport = useVisualViewport();
+  const { viewport } = useVisualViewport();
+
+  // viewport 속성에 접근하기 전에 항상 null 체크를 해야 해요
+  if (!viewport) {
+    return null;
+  }
 
   return (
     <div style={{ height: viewport.height }}>
@@ -99,13 +113,13 @@ function Component() {
 
 ### Utilities
 
-| Utility               | 설명                      |
-| --------------------- | ------------------------- |
-| `bodyScrollLock`      | 명령형 스크롤 잠금 제어   |
-| `getSafeArea`         | safe area insets 가져오기 |
-| `getKeyboardHeight`   | 키보드 높이 추정          |
-| `isIOS` / `isAndroid` | 기기 감지                 |
-| `isServer`            | SSR 환경 체크             |
+| Utility                                          | 설명                      |
+| ------------------------------------------------ | ------------------------- |
+| `enableBodyScrollLock` / `disableBodyScrollLock` | 명령형 스크롤 잠금 제어   |
+| `getSafeAreaInset`                               | safe area insets 가져오기 |
+| `getKeyboardHeight`                              | 키보드 높이 추정          |
+| `isIOS` / `isAndroid`                            | 기기 감지                 |
+| `isServer`                                       | SSR 환경 체크             |
 
 ## 브라우저 지원
 

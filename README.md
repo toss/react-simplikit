@@ -61,18 +61,20 @@ function SearchInput() {
 import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
 
 function ChatInput() {
-  const { ref, style } = useAvoidKeyboard();
+  const { style } = useAvoidKeyboard();
 
   return (
-    <div ref={ref} style={style}>
+    <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, ...style }}>
       <input type="text" placeholder="Type a message..." />
     </div>
   );
 }
 
-function Modal({ isOpen }) {
-  useBodyScrollLock(isOpen);
-  // ...
+// `useBodyScrollLock` locks body scroll while the component is mounted,
+// and unlocks it automatically on unmount. Render this only while the modal is open.
+function BodyScrollLock() {
+  useBodyScrollLock();
+  return null;
 }
 ```
 

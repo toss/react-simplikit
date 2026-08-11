@@ -45,10 +45,10 @@ pnpm add @react-simplikit/mobile
 import { useAvoidKeyboard } from '@react-simplikit/mobile';
 
 function ChatInput() {
-  const { ref, style } = useAvoidKeyboard();
+  const { style } = useAvoidKeyboard();
 
   return (
-    <div ref={ref} style={style}>
+    <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, ...style }}>
       <input type="text" placeholder="Type a message..." />
     </div>
   );
@@ -57,14 +57,23 @@ function ChatInput() {
 
 ### Body Scroll Lock
 
+`useBodyScrollLock` locks body scroll while the component is mounted, and unlocks it automatically on unmount. To control when the lock applies, conditionally render a component that calls it.
+
 ```tsx
 import { useBodyScrollLock } from '@react-simplikit/mobile';
 
-function Modal({ isOpen, children }) {
-  useBodyScrollLock(isOpen);
+function BodyScrollLock() {
+  useBodyScrollLock();
+  return null;
+}
 
-  if (!isOpen) return null;
-  return <div className="modal">{children}</div>;
+function ModalContainer({ isOpen, children }) {
+  return (
+    <>
+      {isOpen && <BodyScrollLock />}
+      {isOpen && <div className="modal">{children}</div>}
+    </>
+  );
 }
 ```
 
@@ -74,7 +83,12 @@ function Modal({ isOpen, children }) {
 import { useVisualViewport } from '@react-simplikit/mobile';
 
 function Component() {
-  const viewport = useVisualViewport();
+  const { viewport } = useVisualViewport();
+
+  // Always check for null first
+  if (!viewport) {
+    return null;
+  }
 
   return (
     <div style={{ height: viewport.height }}>
@@ -99,13 +113,13 @@ function Component() {
 
 ### Utilities
 
-| Utility               | Description                    |
-| --------------------- | ------------------------------ |
-| `bodyScrollLock`      | Imperative scroll lock control |
-| `getSafeArea`         | Get safe area insets           |
-| `getKeyboardHeight`   | Estimate keyboard height       |
-| `isIOS` / `isAndroid` | Device detection               |
-| `isServer`            | SSR environment check          |
+| Utility                                          | Description                    |
+| ------------------------------------------------ | ------------------------------ |
+| `enableBodyScrollLock` / `disableBodyScrollLock` | Imperative scroll lock control |
+| `getSafeAreaInset`                               | Get safe area insets           |
+| `getKeyboardHeight`                              | Estimate keyboard height       |
+| `isIOS` / `isAndroid`                            | Device detection               |
+| `isServer`                                       | SSR environment check          |
 
 ## Browser Support
 
