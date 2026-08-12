@@ -52,6 +52,12 @@ jobs:
         env:
           NPM_CONFIG_PROVENANCE: true
 
+      # changeset publish creates tags locally but never pushes them.
+      # --tags, not --follow-tags: changesets creates lightweight tags.
+      - name: Push tags
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: git push origin --tags
+
   get-diffs:
     runs-on: ubuntu-latest
     outputs:
