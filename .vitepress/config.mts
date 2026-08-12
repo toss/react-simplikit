@@ -54,10 +54,6 @@ export default defineConfig({
     // Mobile utils
     'packages/mobile/src/utils/:util/:util.md': 'mobile/utils/:util.md',
     'packages/mobile/src/utils/:util/ko/:util.md': 'ko/mobile/utils/:util.md',
-
-    // Mobile keyboardHeight (special case - folder name differs from hook name)
-    'packages/mobile/src/hooks/keyboardHeight/useKeyboardHeight.md': 'mobile/hooks/useKeyboardHeight.md',
-    'packages/mobile/src/hooks/keyboardHeight/ko/useKeyboardHeight.md': 'ko/mobile/hooks/useKeyboardHeight.md',
   },
   head: [
     ['link', { rel: 'stylesheet', href: 'https://static.toss.im/tps/main.css' }],

@@ -3,7 +3,7 @@ name: Documentation
 about: Help us improve react-simplikit's documentation
 title: '[DOCS] '
 labels: 'documentation'
-assignees: 'kimyouknow'
+assignees: 'mnxmnz, hyesungoh'
 ---
 
 **Location of the documentation**

@@ -25,12 +25,12 @@ export async function generateDocs(names: string[]) {
   names
     .map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]])
     .forEach(([name, sourceFilePath]) => {
-      const subCtx: { docSource?: string; translatedDoc?: string } = {};
+      const subCtx: { docSource?: string; previousDocSource?: string | null; translatedDoc?: string | null } = {};
       tasks.add([
         {
           title: `Generate documents: ${sourceFilePath}`,
           task: async (_, task) =>
-            task.newListr<{ docSource?: string; translatedDoc?: string }>(
+            task.newListr<{ docSource?: string; previousDocSource?: string | null; translatedDoc?: string | null }>(
               [
                 {
                   title: `Convert JSDoc to markdown`,
@@ -38,6 +38,14 @@ export async function generateDocs(names: string[]) {
                     const docSource = await jsdocToMd(name, parseJSDoc(await fs.readFile(sourceFilePath, 'utf-8')));
 
                     ctx.docSource = docSource;
+
+                    // captured before "Write English" overwrites the file on disk; reading it at
+                    // translate time would always compare equal and skip the translation
+                    try {
+                      ctx.previousDocSource = await fs.readFile(`${path.dirname(sourceFilePath)}/${name}.md`, 'utf-8');
+                    } catch {
+                      ctx.previousDocSource = null;
+                    }
                   },
                 },
                 {
@@ -66,15 +74,8 @@ export async function generateDocs(names: string[]) {
                     }
 
                     // Skip if Korean file already exists and English file hasn't changed
-                    if (isFileExists) {
-                      try {
-                        const existingEnglish = await fs.readFile(`${dirname}/${name}.md`, 'utf-8');
-                        if (existingEnglish === docSource) {
-                          return;
-                        }
-                      } catch {
-                        // Continue with translation if we can't read existing file
-                      }
+                    if (isFileExists && ctx.previousDocSource === docSource) {
+                      return;
                     }
 
                     if (docSource == null) {
@@ -139,15 +140,22 @@ function parseJSDoc(source: string) {
 
   const nestedValueOfReturns = returns.length === 0 ? undefined : getNestedValuesFromReturn(returns[0]);
 
-  const exampleSource = targetComment.tags.find(tag => tag.tag === 'example')?.source;
-
-  const example =
-    exampleSource == null
-      ? ''
-      : (exampleSource
-          .splice(1, exampleSource.length - 2)
-          .map(line => line.source.replace(/\s\*\s{0,1}/, ''))
-          .join('\n') ?? '');
+  const example = targetComment.tags
+    .filter(tag => tag.tag === 'example')
+    .map(tag =>
+      tag.source
+        .map(line => line.source.replace(/\s\*\s{0,1}/, ''))
+        // fence lines are dropped because the doc template wraps the example in its
+        // own ```tsx fence; nested fences would render as literal backticks
+        .filter(line => {
+          const trimmed = line.trim();
+          return trimmed !== '@example' && trimmed !== '/' && !/^\s*```/.test(line);
+        })
+        .join('\n')
+        .trim()
+    )
+    .filter(text => text.length > 0)
+    .join('\n\n');
 
   return {
     description,

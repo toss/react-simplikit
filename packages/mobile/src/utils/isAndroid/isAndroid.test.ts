@@ -22,4 +22,19 @@ describe('isAndroid', () => {
   it('should return false for Mac browser', () => {
     expect(isAndroid('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/537.36')).toBe(false);
   });
+
+  it('should fall back to navigator.userAgent when no argument is given', () => {
+    const originalUserAgent = navigator.userAgent;
+    Object.defineProperty(navigator, 'userAgent', {
+      value: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) Chrome/126',
+      configurable: true,
+    });
+
+    expect(isAndroid()).toBe(true);
+
+    Object.defineProperty(navigator, 'userAgent', {
+      value: originalUserAgent,
+      configurable: true,
+    });
+  });
 });

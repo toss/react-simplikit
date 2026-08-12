@@ -1,12 +1,12 @@
 # useAvoidKeyboard
 
-A React hook that helps fixed-bottom elements smoothly avoid the on-screen keyboard. When the keyboard appears, it moves the element upward using `transform` with a smooth transition.
+`useAvoidKeyboard` is a React hook that helps fixed-bottom elements avoid the on-screen keyboard. It returns a CSS style that can be applied to `position: fixed` elements to smoothly move them above the keyboard when it appears.
 
 ## Interface
 
 ```ts
 function useAvoidKeyboard(
-  options?: UseAvoidKeyboardOptions
+  options: UseAvoidKeyboardOptions
 ): UseAvoidKeyboardResult;
 ```
 
@@ -15,7 +15,7 @@ function useAvoidKeyboard(
 <Interface
   name="options"
   type="UseAvoidKeyboardOptions"
-  description="Options to configure the keyboard avoidance behavior."
+  description="Configuration options."
   :nested="[
     {
       name: 'options.safeAreaBottom',
@@ -30,22 +30,21 @@ function useAvoidKeyboard(
       type: 'number',
       required: false,
       defaultValue: '200',
-      description:
-        'Transition duration in milliseconds for smooth animation.',
+      description: 'Transition duration in milliseconds for smooth animation.',
     },
     {
       name: 'options.transitionTimingFunction',
-      type: 'string',
+      type: 'CSSProperties[\'transitionTimingFunction\']',
       required: false,
-      description:
-        'Transition timing function for the animation. Defaults to <code>ease-out</code>.',
+      defaultValue: '\'ease-out\'',
+      description: 'Transition timing function for the animation.',
     },
     {
       name: 'options.immediate',
       type: 'boolean',
       required: false,
-      description:
-        'If <code>true</code>, gets the current keyboard height immediately on mount. Defaults to <code>true</code>.',
+      defaultValue: 'true',
+      description: 'If true, gets the initial keyboard height on mount.',
     },
   ]"
 />
@@ -55,13 +54,14 @@ function useAvoidKeyboard(
 <Interface
   name=""
   type="UseAvoidKeyboardResult"
-  description="An object containing the CSS style for keyboard avoidance."
+  description="object containing the CSS style for keyboard avoidance."
   :nested="[
     {
       name: 'style',
       type: 'CSSProperties',
+      required: false,
       description:
-        'CSS style object to apply to the fixed-bottom element. Contains <code>transform</code> and <code>transition</code> properties.',
+        'CSS style object to apply to the fixed bottom element. Contains <code>transform</code> and <code>transition</code> properties.',
     },
   ]"
 />
@@ -86,9 +86,7 @@ function FixedBottomCTA() {
     </div>
   );
 }
-```
 
-```tsx
 // With safe area bottom offset (e.g., for iPhone home indicator)
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });

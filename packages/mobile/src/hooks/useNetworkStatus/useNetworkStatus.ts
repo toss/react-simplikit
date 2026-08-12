@@ -54,9 +54,9 @@ type NavigatorWithConnection = {
 } & Navigator;
 
 /**
- * React hook to access Network Information API
- *
- * Provides raw network connection data. Returns undefined for all properties
+ * @description
+ * `useNetworkStatus` is a React hook that provides access to the Network Information API.
+ * It provides raw network connection data. Returns undefined for all properties
  * if the API is not supported (e.g., Safari, Firefox).
  *
  * **Browser Support**:
@@ -73,7 +73,6 @@ type NavigatorWithConnection = {
  * - `saveData` - User's data saver preference
  *
  * @example
- * ```tsx
  * function AdaptiveImage() {
  *   const { effectiveType, saveData } = useNetworkStatus();
  *
@@ -87,10 +86,8 @@ type NavigatorWithConnection = {
  *     />
  *   );
  * }
- * ```
  *
  * @example
- * ```tsx
  * function VideoPlayer() {
  *   const { type, downlink } = useNetworkStatus();
  *
@@ -99,7 +96,6 @@ type NavigatorWithConnection = {
  *
  *   return <video src="video.mp4" autoPlay={shouldAutoplay} />;
  * }
- * ```
  *
  * @see https://wicg.github.io/netinfo/
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API

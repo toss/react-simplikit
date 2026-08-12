@@ -27,9 +27,6 @@ jobs:
           cache: 'yarn'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Update npm for OIDC trusted publishing
-        run: npm install -g npm@latest
-
       - name: Install Dependencies
         run: yarn install
 
@@ -55,6 +52,12 @@ jobs:
         env:
           NPM_CONFIG_PROVENANCE: true
 
+      # changeset publish creates tags locally but never pushes them.
+      # --tags, not --follow-tags: changesets creates lightweight tags.
+      - name: Push tags
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: git push origin --tags
+
   get-diffs:
     runs-on: ubuntu-latest
     outputs:
@@ -68,7 +71,7 @@ jobs:
       - name: Get changed files from merged PR
         id: diffs
         run: |
-          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
+          MATCHED_NAMES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^packages/[^/]+/src/[^/]+/([^/]+)/\1\.tsx?$' | sed -r "s/.+\/(.+)\..+/\1/" | tr "\n" "," | sed 's/,$//')
 
           echo $MATCHED_NAMES
 
@@ -109,5 +112,5 @@ jobs:
           title: 'docs(${{ needs.get-diffs.outputs.result }}): auto-generated docs'
           body: 'This PR includes documentation updates for: ${{ needs.get-diffs.outputs.result }}'
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          reviewers: kimyouknow,zztnrudzz13
+          reviewers: mnxmnz,hyesungoh
           commit-message: 'Generate docs for ${{ needs.get-diffs.outputs.result }}'
