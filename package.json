@@ -39,6 +39,7 @@
     "prepack": "yarn build"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
     "@eslint/js": "^9.39.3",
@@ -54,7 +55,7 @@
     "comment-parser": "^1.4.1",
     "corepack": "^0.30.0",
     "dotenv": "^16.4.7",
-    "esbuild": "^0.24.0",
+    "esbuild": "0.28.2",
     "eslint": "^9.39.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
@@ -72,6 +73,7 @@
     "ora": "^8.2.0",
     "prettier": "^3.4.2",
     "prettier-plugin-sort-re-exports": "^0.1.0",
+    "publint": "^0.3.23",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "rimraf": "^6.0.1",
