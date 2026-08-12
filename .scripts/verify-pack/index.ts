@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { buildAll, packPackage } from './checks/pack.ts';
-import { checkBanner, checkExportsExist, extractTarball } from './checks/staticChecks.ts';
+import { checkBanner, checkExportsExist, extractTarball, runAttw, runPublint } from './checks/staticChecks.ts';
 import { TARGET_PACKAGES } from './packages.ts';
 
 const failures: string[] = [];
@@ -29,6 +29,8 @@ async function main() {
 
     report(pkg.name, 'use client banner', checkBanner(extractedDir));
     report(pkg.name, 'exports files exist in tarball', checkExportsExist(extractedDir));
+    report(pkg.name, 'publint', runPublint(extractedDir));
+    report(pkg.name, 'attw type resolution', runAttw(tgzPath));
   }
 
   if (failures.length > 0) {

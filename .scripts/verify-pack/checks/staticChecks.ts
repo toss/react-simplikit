@@ -2,6 +2,8 @@ import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { getRootPath } from '../../utils/getRootPath.ts';
+
 export function extractTarball(tgzPath: string, workDir: string): string {
   fs.mkdirSync(workDir, { recursive: true });
   execSync(`tar -xzf ${JSON.stringify(tgzPath)} -C ${JSON.stringify(workDir)}`);
@@ -53,4 +55,33 @@ export function checkExportsExist(extractedDir: string): string[] {
 
   console.log(`Scanned ${uniqueDeclared.length} declared export paths.`);
   return uniqueDeclared.filter(declaredPath => !fs.existsSync(path.join(extractedDir, declaredPath)));
+}
+
+// Running `yarn publint`/`yarn attw` with cwd inside the extracted tarball makes Yarn PnP
+// try to resolve the extracted package.json as a workspace member and throw an internal
+// resolution error instead of linting. Run from the repo root and pass the path as an argument.
+export function runPublint(extractedDir: string): string[] {
+  try {
+    execSync(`yarn publint ${JSON.stringify(extractedDir)} --strict`, {
+      cwd: getRootPath(),
+      encoding: 'utf8',
+      stdio: 'pipe',
+    });
+    return [];
+  } catch (error) {
+    return [String((error as { stdout?: string }).stdout ?? error)];
+  }
+}
+
+export function runAttw(tgzPath: string): string[] {
+  try {
+    execSync(`yarn attw ${JSON.stringify(tgzPath)}`, {
+      cwd: getRootPath(),
+      encoding: 'utf8',
+      stdio: 'pipe',
+    });
+    return [];
+  } catch (error) {
+    return [String((error as { stdout?: string }).stdout ?? error)];
+  }
 }
