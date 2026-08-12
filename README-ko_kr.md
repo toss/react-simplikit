@@ -61,18 +61,20 @@ function SearchInput() {
 import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
 
 function ChatInput() {
-  const { ref, style } = useAvoidKeyboard();
+  const { style } = useAvoidKeyboard();
 
   return (
-    <div ref={ref} style={style}>
+    <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, ...style }}>
       <input type="text" placeholder="메시지를 입력하세요..." />
     </div>
   );
 }
 
-function Modal({ isOpen }) {
-  useBodyScrollLock(isOpen);
-  // ...
+// `useBodyScrollLock`은 컴포넌트가 마운트될 때 body 스크롤을 잠그고,
+// 언마운트될 때 자동으로 해제해요. 모달이 열려 있는 동안에만 렌더링하세요.
+function BodyScrollLock() {
+  useBodyScrollLock();
+  return null;
 }
 ```
 
