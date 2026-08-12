@@ -60,10 +60,12 @@ export function checkExportsExist(extractedDir: string): string[] {
 // `??` would leave a blank entry when the process dies without writing to stdout
 // (internal crash, signal kill) — stderr or the error's own message is the only
 // diagnostic left in that case, so fall through to whichever is non-empty.
-function describeExecError(error: unknown): string {
-  const { stdout, stderr } = error as { stdout?: string; stderr?: string };
-  if (stdout !== undefined && stdout !== '') return stdout;
-  if (stderr !== undefined && stderr !== '') return stderr;
+// stdout/stderr are `null` (not `undefined`) when the child ran with `stdio: 'inherit'`,
+// so the guard must check the type rather than just `!== undefined`.
+export function describeExecError(error: unknown): string {
+  const { stdout, stderr } = error as { stdout?: unknown; stderr?: unknown };
+  if (typeof stdout === 'string' && stdout !== '') return stdout;
+  if (typeof stderr === 'string' && stderr !== '') return stderr;
   return String(error);
 }
 
