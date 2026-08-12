@@ -428,6 +428,8 @@ jobs:
               - '.scripts/verify-pack/**'
               - '.github/workflows/integration.yml'
               - 'package.json'
+              - 'yarn.lock'
+              - '.yarnrc.yml'
 
       - name: Install dependencies
         if: steps.filter.outputs.packaging == 'true'
