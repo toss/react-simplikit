@@ -65,7 +65,7 @@ src/
   useEffect(() => { ... }, []);                     // ❌
   ```
 - **Strict boolean checks** — Use explicit comparisons (`value !== undefined`, not `if (value)`)
-- **Import extensions** — Include `.js` in relative imports for ESM compliance
+- **Import extensions** — Use `.ts`/`.tsx` extensions in source imports (tsdown rewrites them to `.mjs`/`.cjs` in the output)
 - **useEffect cleanup** — Always return cleanup to remove listeners/subscriptions
 - **`"use client"` banner** — tsdown adds this to every emitted file for RSC compatibility
 - **Named exports only** — No default exports
