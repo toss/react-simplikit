@@ -37,6 +37,8 @@ jobs:
   spec:
     name: spec (node ${{ matrix.node }})
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
