@@ -400,5 +400,4 @@ jobs:
         run: yarn install
 
       - name: Verify packaging
-        # --skip-size is temporary: the current flat bundle fails the tree-shaking size budget; remove once the build tool migration lands.
-        run: yarn verify:pack --skip-size
+        run: yarn verify:pack

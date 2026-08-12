@@ -43,7 +43,7 @@ src/hooks/useHookName/
 - **`type` over `interface`** — Always use `type` for type aliases
 - **Named functions in useEffect** — `useEffect(function handleResize() { ... }, [])` not arrow functions
 - **No implicit boolean coercion** — `if (value)` → `if (value != null)` (enforced by `strict-boolean-expressions`)
-- **Import extensions** — Use `.ts`/`.tsx` extensions in source imports (tsup converts to `.js` for ESM output)
+- **Import extensions** — Use `.ts`/`.tsx` extensions in source imports (tsdown rewrites them to `.mjs`/`.cjs` in the output)
 - **Named exports only** — No default exports
 - **No `any` types** — Full TypeScript strict mode
 - **Zero runtime dependencies**
@@ -154,7 +154,7 @@ Scope: `core`, `mobile`, or area name
 ## Commands
 
 ```bash
-yarn build          # Build all packages (tsup)
+yarn build          # Build all packages (tsdown)
 yarn test           # Run tests (Vitest)
 yarn fix            # Auto-fix lint + format
 yarn typecheck      # Type check (tsc --noEmit)

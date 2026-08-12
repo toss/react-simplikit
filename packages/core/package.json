@@ -2,13 +2,13 @@
   "name": "react-simplikit",
   "version": "0.0.51",
   "main": "./dist/index.cjs",
-  "module": "./esm/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.cts",
   "exports": {
     ".": {
       "import": {
-        "types": "./esm/index.d.ts",
-        "default": "./esm/index.js"
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
       },
       "require": {
         "types": "./dist/index.d.cts",
@@ -31,12 +31,11 @@
   },
   "license": "MIT",
   "files": [
-    "dist/**/*",
-    "esm/**/*"
+    "dist/**/*"
   ],
   "scripts": {
-    "build": "tsup",
-    "clean": "rimraf ./dist ./esm",
+    "build": "tsdown",
+    "clean": "rimraf ./dist",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -83,7 +82,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "rimraf": "^6.0.1",
-    "tsup": "^8.3.5",
+    "tsdown": "^0.22.14",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0",

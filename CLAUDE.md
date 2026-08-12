@@ -10,7 +10,7 @@ React utility hooks/components library. Monorepo with two packages:
 ## Development Quick Start
 
 ```bash
-yarn build          # Build all packages (tsup)
+yarn build          # Build all packages (tsdown)
 yarn test           # Run tests (Vitest)
 yarn fix            # Auto-fix lint + format (ESLint + Prettier)
 yarn typecheck      # Type check (tsc --noEmit) - alias: yarn run test:type
@@ -67,7 +67,7 @@ src/
 - **Strict boolean checks** — Use explicit comparisons (`value !== undefined`, not `if (value)`)
 - **Import extensions** — Include `.js` in relative imports for ESM compliance
 - **useEffect cleanup** — Always return cleanup to remove listeners/subscriptions
-- **`"use client"` banner** — tsup adds this for RSC compatibility
+- **`"use client"` banner** — tsdown adds this to every emitted file for RSC compatibility
 - **Named exports only** — No default exports
 - **No `any` types** — Full TypeScript strict mode, no escape hatches
 - **Zero dependencies** — No runtime dependencies in production code
@@ -180,12 +180,11 @@ yarn changeset publish --tag canary  # Requires npm login + OTP
 packages/
 ├── core/          # react-simplikit
 │   ├── src/       # Source (hooks, components, utils)
-│   ├── dist/      # CJS build output
-│   ├── esm/       # ESM build output
+│   ├── dist/      # Build output (per-module, mirrors src/)
 │   └── package.json
 └── mobile/        # @react-simplikit/mobile
     ├── src/
-    ├── dist/      # CJS + ESM build output
+    ├── dist/      # Build output (per-module, mirrors src/)
     └── package.json
 ```
 
@@ -194,7 +193,7 @@ packages/
 ```jsonc
 {
   "main": "./dist/index.cjs", // CJS entry (top level, NOT in publishConfig)
-  "module": "./esm/index.js", // ESM entry for bundlers
+  "module": "./dist/index.mjs", // ESM entry for bundlers
   "types": "./dist/index.d.cts", // TypeScript types
   "exports": {
     // Modern Node.js/bundler resolution
