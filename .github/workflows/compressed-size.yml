@@ -23,4 +23,4 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           build-script: 'prepack'
-          pattern: './{dist,esm}/**/*.{js,cjs}'
+          pattern: './packages/*/dist/**/*.{mjs,cjs}'

@@ -401,3 +401,63 @@ jobs:
 
       - name: Verify packaging
         run: yarn verify:pack
+
+  verify-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Detect packaging changes
+        id: filter
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
+        with:
+          filters: |
+            packaging:
+              - 'packages/*/package.json'
+              - 'packages/*/tsdown.config.ts'
+              - '.scripts/verify-pack/**'
+              - '.github/workflows/integration.yml'
+              - 'package.json'
+
+      - name: Install dependencies
+        if: steps.filter.outputs.packaging == 'true'
+        run: yarn install
+
+      - name: Build and pack
+        if: steps.filter.outputs.packaging == 'true'
+        run: |
+          yarn workspaces foreach -Apt --include 'packages/*' run build
+          CORE_TGZ=$(cd packages/core && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
+          MOBILE_TGZ=$(cd packages/mobile && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
+          echo "CORE_TGZ=$RUNNER_TEMP/$CORE_TGZ" >> "$GITHUB_ENV"
+          echo "MOBILE_TGZ=$RUNNER_TEMP/$MOBILE_TGZ" >> "$GITHUB_ENV"
+
+      - name: Point examples at tarballs
+        if: steps.filter.outputs.packaging == 'true'
+        run: |
+          for example in examples/with-vite examples/with-nextjs; do
+            jq --arg core "file:$CORE_TGZ" --arg mobile "file:$MOBILE_TGZ" \
+              '.dependencies |= with_entries(
+                 if .key == "react-simplikit" then .value = $core
+                 elif .key == "@react-simplikit/mobile" then .value = $mobile
+                 else . end)' \
+              "$example/package.json" > "$example/package.json.tmp"
+            mv "$example/package.json.tmp" "$example/package.json"
+          done
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
+
+      - name: Build examples against tarballs
+        if: steps.filter.outputs.packaging == 'true'
+        run: |
+          yarn workspace with-vite run build
+          yarn workspace with-nextjs run build
