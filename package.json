@@ -36,6 +36,7 @@
     "test:spec": "yarn workspaces foreach -Ap run test",
     "test:coverage": "yarn workspaces foreach -Ap run test:coverage",
     "build": "yarn workspaces foreach -Apt run build",
+    "verify:pack": "tsx .scripts/verify-pack/index.ts",
     "prepack": "yarn build"
   },
   "devDependencies": {
