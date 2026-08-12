@@ -57,6 +57,16 @@ export function checkExportsExist(extractedDir: string): string[] {
   return uniqueDeclared.filter(declaredPath => !fs.existsSync(path.join(extractedDir, declaredPath)));
 }
 
+// `??` would leave a blank entry when the process dies without writing to stdout
+// (internal crash, signal kill) — stderr or the error's own message is the only
+// diagnostic left in that case, so fall through to whichever is non-empty.
+function describeExecError(error: unknown): string {
+  const { stdout, stderr } = error as { stdout?: string; stderr?: string };
+  if (stdout !== undefined && stdout !== '') return stdout;
+  if (stderr !== undefined && stderr !== '') return stderr;
+  return String(error);
+}
+
 // Running `yarn publint`/`yarn attw` with cwd inside the extracted tarball makes Yarn PnP
 // try to resolve the extracted package.json as a workspace member and throw an internal
 // resolution error instead of linting. Run from the repo root and pass the path as an argument.
@@ -69,7 +79,7 @@ export function runPublint(extractedDir: string): string[] {
     });
     return [];
   } catch (error) {
-    return [String((error as { stdout?: string }).stdout ?? error)];
+    return [describeExecError(error)];
   }
 }
 
@@ -82,6 +92,6 @@ export function runAttw(tgzPath: string): string[] {
     });
     return [];
   } catch (error) {
-    return [String((error as { stdout?: string }).stdout ?? error)];
+    return [describeExecError(error)];
   }
 }
