@@ -3,11 +3,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { execWithOutput } from '../../utils/execWithOutput.ts';
+
 import { describeExecError } from './staticChecks.ts';
 
 const FIXTURE_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '../fixtures/consumer');
 
-export function setupConsumer(tgzPaths: Record<string, string>, workRoot: string): string {
+export async function setupConsumer(tgzPaths: Record<string, string>, workRoot: string): Promise<string> {
   const consumerDir = path.join(workRoot, 'consumer');
   fs.cpSync(FIXTURE_DIR, consumerDir, { recursive: true });
 
@@ -18,7 +20,7 @@ export function setupConsumer(tgzPaths: Record<string, string>, workRoot: string
   });
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
-  execSync('npm install --no-audit --no-fund --loglevel=error', { cwd: consumerDir, stdio: 'inherit' });
+  await execWithOutput('npm', ['install', '--no-audit', '--no-fund', '--loglevel=error'], { cwd: consumerDir });
   return consumerDir;
 }
 

@@ -25,11 +25,25 @@ function report(pkgName: string, step: string, problems: string[]) {
   }
 }
 
+function exitIfFailed() {
+  if (failures.length > 0) {
+    console.error(`\nverify-pack failed:\n\n${failures.join('\n\n')}`);
+    process.exit(1);
+  }
+}
+
 async function main() {
   const workRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'verify-pack-'));
   console.log(`work dir: ${workRoot}`);
 
-  buildAll();
+  // A failed build leaves no valid dist to pack — report it and stop here rather
+  // than packing stale output and reporting misleading downstream results.
+  try {
+    await buildAll();
+  } catch (error) {
+    report('build', 'workspace build', [describeExecError(error)]);
+    exitIfFailed();
+  }
 
   const tgzPaths: Record<string, string> = {};
 
@@ -48,16 +62,13 @@ async function main() {
   // install would skip `report()` entirely and exit with a raw stack trace instead
   // of a diagnosable failure entry.
   try {
-    const consumerDir = setupConsumer(tgzPaths, workRoot);
+    const consumerDir = await setupConsumer(tgzPaths, workRoot);
     report('consumer', 'smoke (require/import/types)', runSmoke(consumerDir));
   } catch (error) {
     report('consumer', 'smoke (require/import/types)', [describeExecError(error)]);
   }
 
-  if (failures.length > 0) {
-    console.error(`\nverify-pack failed:\n\n${failures.join('\n\n')}`);
-    process.exit(1);
-  }
+  exitIfFailed();
   console.log('\nverify-pack passed');
 }
 
