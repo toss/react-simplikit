@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { buildAll, packPackage } from './checks/pack.ts';
+import { checkSizeLimit, measureImportCost } from './checks/size.ts';
 import { runSmoke, setupConsumer } from './checks/smoke.ts';
 import {
   checkBanner,
@@ -61,11 +62,33 @@ async function main() {
   // Isolate `npm install` failures from an uncaught crash: without this, a failed
   // install would skip `report()` entirely and exit with a raw stack trace instead
   // of a diagnosable failure entry.
+  let consumerDir: string | undefined;
   try {
-    const consumerDir = await setupConsumer(tgzPaths, workRoot);
+    consumerDir = await setupConsumer(tgzPaths, workRoot);
     report('consumer', 'smoke (require/import/types)', runSmoke(consumerDir));
   } catch (error) {
     report('consumer', 'smoke (require/import/types)', [describeExecError(error)]);
+  }
+
+  const skipSize = process.argv.includes('--skip-size');
+  if (skipSize) {
+    console.log('⏭️  size gate skipped (--skip-size)');
+  } else if (consumerDir === undefined) {
+    // Consumer setup already failed and was reported above — silently skipping the
+    // size gate here (no report() call) would hide that it never ran either.
+    report('consumer', 'tree-shaking size gate', [
+      'consumer setup failed — size gate could not run without an installed consumer',
+    ]);
+  } else {
+    for (const pkg of TARGET_PACKAGES) {
+      try {
+        const bytes = await measureImportCost(pkg.sizeEntry, consumerDir);
+        console.log(`[${pkg.name}] single-export import cost: ${bytes}B`);
+        report(pkg.name, 'tree-shaking size gate', checkSizeLimit(bytes));
+      } catch (error) {
+        report(pkg.name, 'tree-shaking size gate', [describeExecError(error)]);
+      }
+    }
   }
 
   exitIfFailed();
