@@ -16,9 +16,16 @@ function walkFiles(dir: string): string[] {
 }
 
 export function checkBanner(extractedDir: string): string[] {
-  return walkFiles(extractedDir)
-    .filter(file => file.endsWith('.js') || file.endsWith('.cjs') || file.endsWith('.mjs'))
-    .filter(file => !fs.readFileSync(file, 'utf8').startsWith('"use client";'));
+  const jsFiles = walkFiles(extractedDir).filter(
+    file => file.endsWith('.js') || file.endsWith('.cjs') || file.endsWith('.mjs')
+  );
+
+  if (jsFiles.length === 0) {
+    return ['🚨 Scanned 0 .js/.cjs/.mjs files — the paths in this check no longer match the build output layout.'];
+  }
+
+  console.log(`Scanned ${jsFiles.length} .js/.cjs/.mjs files for the "use client" banner.`);
+  return jsFiles.filter(file => !fs.readFileSync(file, 'utf8').startsWith('"use client";'));
 }
 
 function collectExportPaths(value: unknown, acc: string[]): string[] {
@@ -38,5 +45,12 @@ export function checkExportsExist(extractedDir: string): string[] {
       declared.push(pkg[field]);
     }
   });
-  return [...new Set(declared)].filter(declaredPath => !fs.existsSync(path.join(extractedDir, declaredPath)));
+  const uniqueDeclared = [...new Set(declared)];
+
+  if (uniqueDeclared.length === 0) {
+    return ['🚨 Scanned 0 declared export paths — the paths in this check no longer match the package.json layout.'];
+  }
+
+  console.log(`Scanned ${uniqueDeclared.length} declared export paths.`);
+  return uniqueDeclared.filter(declaredPath => !fs.existsSync(path.join(extractedDir, declaredPath)));
 }
