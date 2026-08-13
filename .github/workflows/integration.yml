@@ -421,6 +421,12 @@ jobs:
         run: yarn install
 
       - name: Build and pack
+        # Naming the shell adds `-o pipefail`, which the default `bash -e {0}` lacks:
+        # without it a failed `npm pack` is masked by `tail` exiting 0, and the empty
+        # tarball path only surfaces several steps later as a resolution error.
+        # Scoped to this step -- `release.yml` and `verify-jsdoc` pipe through `grep`,
+        # where a no-match exit 1 is expected and pipefail would break them.
+        shell: bash
         run: |
           yarn workspaces foreach -Apt --include 'packages/*' run build
           CORE_TGZ=$(cd packages/core && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
