@@ -83,8 +83,8 @@ async function main() {
     for (const pkg of TARGET_PACKAGES) {
       try {
         const bytes = await measureImportCost(pkg.sizeEntry, consumerDir);
-        console.log(`[${pkg.name}] single-export import cost: ${bytes}B`);
-        report(pkg.name, 'tree-shaking size gate', checkSizeLimit(bytes));
+        console.log(`[${pkg.name}] single-export import cost: ${bytes}B (limit ${pkg.sizeLimitBytes}B)`);
+        report(pkg.name, 'tree-shaking size gate', checkSizeLimit(bytes, pkg.sizeLimitBytes));
       } catch (error) {
         report(pkg.name, 'tree-shaking size gate', [describeExecError(error)]);
       }

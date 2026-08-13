@@ -1,7 +1,5 @@
 import { build } from 'esbuild';
 
-const SIZE_LIMIT_BYTES = 1024;
-
 export async function measureImportCost(entry: string, consumerDir: string): Promise<number> {
   const result = await build({
     stdin: { contents: entry, resolveDir: consumerDir, loader: 'js' },
@@ -22,11 +20,9 @@ export async function measureImportCost(entry: string, consumerDir: string): Pro
 // A 0B result means esbuild tree-shook the entry away entirely (e.g. the export
 // resolved to something with no live code), not that the export is free — that is
 // a broken measurement, not a passing one, so it must fail rather than read as 0 < limit.
-export function checkSizeLimit(bytes: number): string[] {
+export function checkSizeLimit(bytes: number, limitBytes: number): string[] {
   if (bytes <= 0) {
     return [`import cost measured ${bytes}B — the entry was tree-shaken away instead of measured`];
   }
-  return bytes < SIZE_LIMIT_BYTES
-    ? []
-    : [`import cost ${bytes}B >= limit ${SIZE_LIMIT_BYTES}B — tree-shaking regression`];
+  return bytes < limitBytes ? [] : [`import cost ${bytes}B >= limit ${limitBytes}B — tree-shaking regression`];
 }
