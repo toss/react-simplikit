@@ -9,6 +9,15 @@ type ThrottleOptions = {
 };
 
 /**
+ * Marks that no value has been forwarded to `onChange` yet.
+ *
+ * The hook skips redundant invocations by comparing against the last forwarded value, but it
+ * receives no initial value from the caller. Seeding that comparison with `false` would treat the
+ * first `false` as redundant and swallow it, so an unreachable sentinel is used instead.
+ */
+const NOT_INVOKED = Symbol('NOT_INVOKED');
+
+/**
  * @description
  * `useThrottledCallback` is a React hook that returns a throttled version of the provided callback function.
  * The throttled callback will only be invoked at most once per specified interval.
@@ -38,7 +47,10 @@ export function useThrottledCallback({
   timeThreshold: number;
 }) {
   const handleChange = usePreservedCallback(onChange);
-  const ref = useRef({ value: false, clearPreviousThrottle: () => {} });
+  const ref = useRef<{ value: boolean | typeof NOT_INVOKED; clearPreviousThrottle: () => void }>({
+    value: NOT_INVOKED,
+    clearPreviousThrottle: () => {},
+  });
 
   useEffect(function cleanupThrottleOnUnmount() {
     const current = ref.current;
