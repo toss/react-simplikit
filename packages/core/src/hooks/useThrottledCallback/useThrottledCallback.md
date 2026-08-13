@@ -5,41 +5,36 @@
 ## Interface
 
 ```ts
-function useThrottledCallback<F extends (...args: any[]) => any>(
-  callback: F,
-  wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
-): F & { cancel: () => void };
+function useThrottledCallback(options: Object): Function;
 ```
 
 ### Parameters
 
 <Interface
   required
-  name="callback"
-  type="F"
-  description="The function to throttle."
-/>
-
-<Interface
-  required
-  name="wait"
-  type="number"
-  description="The number of milliseconds to throttle invocations to."
-/>
-
-<Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
-  description="Options to control the behavior of the throttle."
+  type="Object"
+  description="The options object."
   :nested="[
+    {
+      name: 'options.onChange',
+      type: 'Function',
+      required: true,
+      description: 'The callback function to throttle.',
+    },
+    {
+      name: 'options.timeThreshold',
+      type: 'number',
+      required: true,
+      description: 'The number of milliseconds to throttle invocations to.',
+    },
     {
       name: 'options.edges',
       type: 'Array<\'leading\' | \'trailing\'>',
       required: false,
       defaultValue: '[\'leading\', \'trailing\']',
       description:
-        'An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both. <br />: The initial value is <code>[\'leading\', \'trailing\']</code>.',
+        'An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.',
     },
   ]"
 />
@@ -48,18 +43,18 @@ function useThrottledCallback<F extends (...args: any[]) => any>(
 
 <Interface
   name=""
-  type="F & { cancel: () => void }"
-  description="Returns the throttled function with a <code>cancel</code> method to cancel any pending invocation."
+  type="Function"
+  description="throttled function that limits invoking the callback."
 />
 
 ## Example
 
 ```tsx
-function SearchInput() {
-  const throttledSearch = useThrottledCallback((query: string) => {
-    console.log('Searching for:', query);
-  }, 300);
-
-  return <input onChange={e => throttledSearch(e.target.value)} />;
+function ScrollTracker() {
+  const throttledScroll = useThrottledCallback({
+    onChange: (scrollY: number) => console.log(scrollY),
+    timeThreshold: 200,
+  });
+  return <div onScroll={e => throttledScroll(e.currentTarget.scrollTop)} />;
 }
 ```
