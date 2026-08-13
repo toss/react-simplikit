@@ -61,7 +61,6 @@
     "comment-parser": "^1.4.1",
     "corepack": "^0.30.0",
     "dotenv": "^16.4.7",
-    "esbuild": "^0.24.0",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
