@@ -14,7 +14,7 @@
 - Named functions in useEffect: `useEffect(function handleResize() { ... }, [])`
 - No default exports — named exports only
 - No `any` types — strict TypeScript
-- Use `.ts`/`.tsx` extensions in source imports (tsup converts to `.js`)
+- Use `.ts`/`.tsx` extensions in source imports (tsdown rewrites them to `.mjs`/`.cjs`)
 - No implicit boolean coercion: `if (value)` → `if (value != null)` (enforced by `strict-boolean-expressions`)
 - Nullish checks: `== null` for both null and undefined, `!== undefined` only when distinction matters
 - Zero runtime dependencies

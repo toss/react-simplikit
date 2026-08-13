@@ -13,7 +13,6 @@
 
 # build
 dist
-esm
 
 # caches
 node_modules

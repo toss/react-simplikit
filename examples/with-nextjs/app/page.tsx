@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div style={{ padding: 20, fontFamily: 'system-ui, sans-serif' }}>
-      <h1>@react-simplikit/mobile</h1>
+      <h1>react-simplikit</h1>
       <p style={{ color: '#666' }}>Examples for Next.js (App Router)</p>
 
       <nav style={{ marginTop: 24 }}>
@@ -26,6 +26,26 @@ export default function Home() {
               </span>
             </Link>
             <p style={{ color: '#666', fontSize: 14, marginTop: 4 }}>Check if code is running on the server</p>
+          </li>
+          <li style={{ marginTop: 12, padding: 12, background: '#f5f5f5', borderRadius: 8 }}>
+            <Link href="/demos/core-impression-area" style={{ textDecoration: 'none' }}>
+              <strong style={{ color: '#000' }}>ImpressionArea</strong>
+              <span
+                style={{
+                  marginLeft: 8,
+                  fontSize: 12,
+                  color: '#888',
+                  background: '#e0e0e0',
+                  padding: '2px 6px',
+                  borderRadius: 4,
+                }}
+              >
+                core
+              </span>
+            </Link>
+            <p style={{ color: '#666', fontSize: 14, marginTop: 4 }}>
+              react-simplikit core renders across the RSC boundary
+            </p>
           </li>
         </ul>
       </nav>
