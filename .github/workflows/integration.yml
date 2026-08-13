@@ -417,26 +417,10 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
-      - name: Detect packaging changes
-        id: filter
-        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
-        with:
-          filters: |
-            packaging:
-              - 'packages/*/package.json'
-              - 'packages/*/tsdown.config.ts'
-              - '.scripts/verify-pack/**'
-              - '.github/workflows/integration.yml'
-              - 'package.json'
-              - 'yarn.lock'
-              - '.yarnrc.yml'
-
       - name: Install dependencies
-        if: steps.filter.outputs.packaging == 'true'
         run: yarn install
 
       - name: Build and pack
-        if: steps.filter.outputs.packaging == 'true'
         run: |
           yarn workspaces foreach -Apt --include 'packages/*' run build
           CORE_TGZ=$(cd packages/core && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
@@ -445,7 +429,6 @@ jobs:
           echo "MOBILE_TGZ=$RUNNER_TEMP/$MOBILE_TGZ" >> "$GITHUB_ENV"
 
       - name: Point examples at tarballs
-        if: steps.filter.outputs.packaging == 'true'
         run: |
           for example in examples/with-vite examples/with-nextjs; do
             jq --arg core "file:$CORE_TGZ" --arg mobile "file:$MOBILE_TGZ" \
@@ -459,7 +442,6 @@ jobs:
           YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
 
       - name: Build examples against tarballs
-        if: steps.filter.outputs.packaging == 'true'
         run: |
           yarn workspace with-vite run build
           yarn workspace with-nextjs run build
