@@ -26,6 +26,8 @@
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
+    "lint": "eslint .scripts",
+    "typecheck": "tsc --noEmit",
     "fix": "yarn fix:lint && yarn fix:format",
     "fix:format": "prettier . --write",
     "fix:lint": "yarn workspaces foreach -Ap run lint --fix",

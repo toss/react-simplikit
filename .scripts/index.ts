@@ -1,7 +1,6 @@
+import { Command } from 'commander';
 import dotenv from 'dotenv';
 import path from 'path';
-
-import { Command } from 'commander';
 
 import { getRootPath } from './utils/getRootPath.ts';
 
