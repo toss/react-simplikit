@@ -27,7 +27,7 @@ react-simplikit은 웹/앱(React Native 등) 어디서든 동작 가능한, **�
 특정 플랫폼 API에 의존하지 않는 순수 로직 기반 훅들은 계속 제공돼요:
 
 - `useToggle`, `useBooleanState`, `useCounter` 같은 상태 관리 훅
-- `usePrevious`, `useMount` 같은 라이프사이클 훅
+- `usePrevious` 같은 라이프사이클 훅
 - `useDebounce`, `useThrottle` 같은 유틸리티 훅
 - **기존 프로젝트의 Backward Compatibility(BC)는 보존돼요**
 
@@ -111,10 +111,11 @@ function SearchInput() {
 
 ### Utilities
 
-| Utility  | 설명             |
-| -------- | ---------------- |
-| `assert` | 런타임 assertion |
-| `noop`   | 빈 함수          |
+| Utility        | 설명                                           |
+| -------------- | ---------------------------------------------- |
+| `buildContext` | 반복 코드 없이 React Context 정의              |
+| `mergeProps`   | `className`·`style`·이벤트를 합성해 props 병합 |
+| `mergeRefs`    | 여러 ref를 하나의 ref로 결합                   |
 
 ## 문서
 

@@ -27,7 +27,7 @@ We are repositioning react-simplikit to focus exclusively on **platform-independ
 Hooks that don't depend on specific platform APIs will continue to be actively maintained:
 
 - State management hooks like `useToggle`, `useBooleanState`, `useCounter`
-- Lifecycle hooks like `usePrevious`, `useMount`
+- Lifecycle hooks like `usePrevious`
 - Utility hooks like `useDebounce`, `useThrottle`
 - **Backward compatibility (BC) is preserved** for these existing pure logic hooks
 
@@ -111,10 +111,11 @@ function SearchInput() {
 
 ### Utilities
 
-| Utility  | Description       |
-| -------- | ----------------- |
-| `assert` | Runtime assertion |
-| `noop`   | Empty function    |
+| Utility        | Description                                         |
+| -------------- | --------------------------------------------------- |
+| `buildContext` | Define React Context with less boilerplate          |
+| `mergeProps`   | Merge props, composing `className`, `style`, events |
+| `mergeRefs`    | Combine multiple refs into a single ref             |
 
 ## Documentation
 
