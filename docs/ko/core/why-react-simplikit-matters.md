@@ -125,12 +125,14 @@ function AutoCompleteInput() {
       return;
     }
 
-    const response = await fetch(`/api/search?q=${searchQuery}`)
-      .then(res => res.json())
-      .catch(error => {
-        console.error('Failed to fetch results:', error);
-        return [];
-      });
+    const response = await startLoading(
+      fetch(`/api/search?q=${searchQuery}`)
+        .then(res => res.json())
+        .catch(error => {
+          console.error('Failed to fetch results:', error);
+          return [];
+        })
+    );
 
     setResults(response);
   }, 300);
@@ -146,7 +148,7 @@ function AutoCompleteInput() {
         onChange={e => {
           setQuery(e.target.value);
           openSearchBox();
-          startLoading(searchResults(e.target.value));
+          searchResults(e.target.value);
         }}
         onFocus={openSearchBox}
         placeholder="검색어를 입력하세요"
@@ -157,7 +159,7 @@ function AutoCompleteInput() {
           LOADING: () => <div>검색 중...</div>,
           EMPTY: () => <div>검색 결과가 없습니다.</div>,
           RESULT_EXISTS: () => (
-            <Separated with={<Divider />}>
+            <Separated by={<Divider />}>
               {results.map(result => (
                 <Fragment key={result.id}>
                   <div
