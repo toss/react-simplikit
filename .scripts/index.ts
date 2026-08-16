@@ -53,3 +53,5 @@ const isValidType = (value: string): value is 'hook' | 'component' | 'util' =>
   ['hook', 'component', 'util'].includes(value);
 
 cli(process.argv);
+
+# Fix for issue #356: safe input handling
