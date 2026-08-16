@@ -27,7 +27,7 @@ We are repositioning react-simplikit to focus exclusively on **platform-independ
 Hooks that don't depend on specific platform APIs will continue to be actively maintained:
 
 - State management hooks like `useToggle`, `useBooleanState`, `useCounter`
-- Lifecycle hooks like `usePrevious`, `useMount`
+- Lifecycle hooks like `usePrevious`
 - Utility hooks like `useDebounce`, `useThrottle`
 - **Backward compatibility (BC) is preserved** for these existing pure logic hooks
 
@@ -69,37 +69,46 @@ pnpm add react-simplikit
 ## Quick Start
 
 ```tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query, 300);
 
-  useEffect(() => {
-    if (debouncedQuery) {
-      searchAPI(debouncedQuery);
-    }
-  }, [debouncedQuery]);
+  const debouncedSearch = useDebounce((value: string) => {
+    // Actual API call
+    searchAPI(value);
+  }, 300);
 
-  return <input value={query} onChange={e => setQuery(e.target.value)} />;
+  return (
+    <input
+      value={query}
+      onChange={e => {
+        setQuery(e.target.value);
+        debouncedSearch(e.target.value);
+      }}
+      placeholder="Enter search term"
+    />
+  );
 }
 ```
+
+The debounced function exposes `.cancel()`, and pending calls are cancelled automatically when the component unmounts.
 
 ## What's Included
 
 ### Hooks
 
-| Hook                      | Description                                         |
-| ------------------------- | --------------------------------------------------- |
-| `useBooleanState`         | Manage boolean state with handlers                  |
-| `useDebounce`             | Debounce a value                                    |
-| `useDebouncedCallback`    | Debounce a callback function                        |
-| `useInterval`             | Set up intervals declaratively                      |
-| `useIntersectionObserver` | Observe element visibility                          |
-| `usePreservedCallback`    | Stable callback reference                           |
-| `usePreservedReference`   | Stable object reference                             |
-| ...                       | [See all hooks](https://react-simplikit.slash.page) |
+| Hook                      | Description                                           |
+| ------------------------- | ----------------------------------------------------- |
+| `useBooleanState`         | Manage boolean state with handlers                    |
+| `useDebounce`             | Debounce a callback function                          |
+| `useDebouncedCallback`    | Debounce an `onChange` callback via an options object |
+| `useInterval`             | Set up intervals declaratively                        |
+| `useIntersectionObserver` | Observe element visibility                            |
+| `usePreservedCallback`    | Stable callback reference                             |
+| `usePreservedReference`   | Stable object reference                               |
+| ...                       | [See all hooks](https://react-simplikit.slash.page)   |
 
 ### Components
 
@@ -111,10 +120,11 @@ function SearchInput() {
 
 ### Utilities
 
-| Utility  | Description       |
-| -------- | ----------------- |
-| `assert` | Runtime assertion |
-| `noop`   | Empty function    |
+| Utility        | Description                                         |
+| -------------- | --------------------------------------------------- |
+| `buildContext` | Define React Context with less boilerplate          |
+| `mergeProps`   | Merge props, composing `className`, `style`, events |
+| `mergeRefs`    | Combine multiple refs into a single ref             |
 
 ## Documentation
 
