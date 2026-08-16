@@ -38,22 +38,31 @@ npm install @react-simplikit/mobile
 ### react-simplikit
 
 ```tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query, 300);
 
-  useEffect(() => {
-    if (debouncedQuery) {
-      searchAPI(debouncedQuery);
-    }
-  }, [debouncedQuery]);
+  const debouncedSearch = useDebounce((value: string) => {
+    // Actual API call
+    searchAPI(value);
+  }, 300);
 
-  return <input value={query} onChange={e => setQuery(e.target.value)} />;
+  return (
+    <input
+      value={query}
+      onChange={e => {
+        setQuery(e.target.value);
+        debouncedSearch(e.target.value);
+      }}
+      placeholder="Enter search term"
+    />
+  );
 }
 ```
+
+The debounced function exposes `.cancel()`, and pending calls are cancelled automatically when the component unmounts.
 
 ### @react-simplikit/mobile
 

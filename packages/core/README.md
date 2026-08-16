@@ -69,37 +69,46 @@ pnpm add react-simplikit
 ## Quick Start
 
 ```tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query, 300);
 
-  useEffect(() => {
-    if (debouncedQuery) {
-      searchAPI(debouncedQuery);
-    }
-  }, [debouncedQuery]);
+  const debouncedSearch = useDebounce((value: string) => {
+    // Actual API call
+    searchAPI(value);
+  }, 300);
 
-  return <input value={query} onChange={e => setQuery(e.target.value)} />;
+  return (
+    <input
+      value={query}
+      onChange={e => {
+        setQuery(e.target.value);
+        debouncedSearch(e.target.value);
+      }}
+      placeholder="Enter search term"
+    />
+  );
 }
 ```
+
+The debounced function exposes `.cancel()`, and pending calls are cancelled automatically when the component unmounts.
 
 ## What's Included
 
 ### Hooks
 
-| Hook                      | Description                                         |
-| ------------------------- | --------------------------------------------------- |
-| `useBooleanState`         | Manage boolean state with handlers                  |
-| `useDebounce`             | Debounce a value                                    |
-| `useDebouncedCallback`    | Debounce a callback function                        |
-| `useInterval`             | Set up intervals declaratively                      |
-| `useIntersectionObserver` | Observe element visibility                          |
-| `usePreservedCallback`    | Stable callback reference                           |
-| `usePreservedReference`   | Stable object reference                             |
-| ...                       | [See all hooks](https://react-simplikit.slash.page) |
+| Hook                      | Description                                           |
+| ------------------------- | ----------------------------------------------------- |
+| `useBooleanState`         | Manage boolean state with handlers                    |
+| `useDebounce`             | Debounce a callback function                          |
+| `useDebouncedCallback`    | Debounce an `onChange` callback via an options object |
+| `useInterval`             | Set up intervals declaratively                        |
+| `useIntersectionObserver` | Observe element visibility                            |
+| `usePreservedCallback`    | Stable callback reference                             |
+| `usePreservedReference`   | Stable object reference                               |
+| ...                       | [See all hooks](https://react-simplikit.slash.page)   |
 
 ### Components
 
