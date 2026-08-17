@@ -21,6 +21,10 @@ const strictEquals = <T>(prev: T, next: T) => prev === next;
  * const previousCount = usePrevious(count);
  */
 export function usePrevious<T>(state: T, compare: (prev: T, next: T) => boolean = strictEquals): T {
+  // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
+  // because this hook intentionally reads and updates refs during render.
+  'use no memo';
+
   const prevRef = useRef<T>(state);
   const currentRef = useRef<T>(state);
   const isFirstRender = useRef<boolean>(true);
