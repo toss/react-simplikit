@@ -1,5 +1,15 @@
 # react-simplikit
 
+## 0.0.53
+
+### Patch Changes
+
+- [#379](https://github.com/toss/react-simplikit/pull/379) [`e2030a2`](https://github.com/toss/react-simplikit/commit/e2030a2deac81fb247b9f601fab19d87a067cc9c) Thanks [@lumirlumir](https://github.com/lumirlumir)! - fix(usePrevious): opt out `usePrevious` hook from React Compiler
+
+- [#404](https://github.com/toss/react-simplikit/pull/404) [`cac80cb`](https://github.com/toss/react-simplikit/commit/cac80cb41897b834bb3661336faa84197c558c1e) Thanks [@bbjbc](https://github.com/bbjbc)! - fix(useThrottledCallback): invoke the callback when the first value is `false`
+
+  The hook skips redundant invocations by comparing the incoming value against the last one it forwarded, but that comparison was seeded with `false`. Because the hook takes no initial value from the caller, a first call of `false` looked redundant and was dropped — so consumers whose state starts as `true` lost the transition back to `false`. The comparison now starts from a sentinel, so the first call is always forwarded regardless of its value.
+
 ## 0.0.52
 
 ### Patch Changes
