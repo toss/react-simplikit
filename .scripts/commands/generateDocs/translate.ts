@@ -284,9 +284,23 @@ ${origin}
   `;
 
   const response = await client.chat.completions.create({
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-5.6-terra',
     messages: [{ role: 'user', content: prompt }],
-    response_format: { type: 'json_object' },
+    // gpt-5.6-terra's endpoint compatibility lists structured_outputs but not the
+    // legacy json_object mode, so declare the shape via json_schema
+    response_format: {
+      type: 'json_schema',
+      json_schema: {
+        name: 'translation',
+        strict: true,
+        schema: {
+          type: 'object',
+          properties: { result: { type: 'string' } },
+          required: ['result'],
+          additionalProperties: false,
+        },
+      },
+    },
   });
 
   const translatedItem = response.choices[0].message.content;

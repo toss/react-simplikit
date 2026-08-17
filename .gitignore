@@ -13,7 +13,6 @@
 
 # build
 dist
-esm
 
 # caches
 node_modules
@@ -47,3 +46,5 @@ coverage
 
 # context files (session notes, etc.)
 context/
+.omc/
+.omx/

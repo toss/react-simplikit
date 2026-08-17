@@ -10,7 +10,7 @@ React utility hooks/components library. Monorepo with two packages:
 ## Development Quick Start
 
 ```bash
-yarn build          # Build all packages (tsup)
+yarn build          # Build all packages (tsdown)
 yarn test           # Run tests (Vitest)
 yarn fix            # Auto-fix lint + format (ESLint + Prettier)
 yarn typecheck      # Type check (tsc --noEmit) - alias: yarn run test:type
@@ -65,9 +65,9 @@ src/
   useEffect(() => { ... }, []);                     // ❌
   ```
 - **Strict boolean checks** — Use explicit comparisons (`value !== undefined`, not `if (value)`)
-- **Import extensions** — Include `.js` in relative imports for ESM compliance
+- **Import extensions** — Use `.ts`/`.tsx` extensions in source imports (tsdown rewrites them to `.mjs`/`.cjs` in the output)
 - **useEffect cleanup** — Always return cleanup to remove listeners/subscriptions
-- **`"use client"` banner** — tsup adds this for RSC compatibility
+- **`"use client"` banner** — tsdown adds this to every emitted file for RSC compatibility
 - **Named exports only** — No default exports
 - **No `any` types** — Full TypeScript strict mode, no escape hatches
 - **Zero dependencies** — No runtime dependencies in production code
@@ -162,7 +162,8 @@ PR with changeset merged → release.yml triggers
 
 - npm auth uses GitHub Actions OIDC (no secret tokens needed)
 - Requires `id-token: write` permission in workflow
-- Node 22 ships npm v10 which doesn't support OIDC → `npm install -g npm@latest` upgrades to npm 11+
+- OIDC publishing requires npm >= 11.5.0 ([npm/cli#8336](https://github.com/npm/cli/pull/8336)); Node 24 bundles npm 11.17+, so no manual npm upgrade is needed
+- Do NOT reinstate `npm install -g npm@latest` — it is unpinned, and it broke the release job once npm 12 raised its Node floor above `.nvmrc`
 - `changesets/action` must NOT have `publish` option (it overwrites `.npmrc` and breaks OIDC)
 - Publish is done in a separate step after changesets/action
 
@@ -179,12 +180,11 @@ yarn changeset publish --tag canary  # Requires npm login + OTP
 packages/
 ├── core/          # react-simplikit
 │   ├── src/       # Source (hooks, components, utils)
-│   ├── dist/      # CJS build output
-│   ├── esm/       # ESM build output
+│   ├── dist/      # Build output (per-module, mirrors src/)
 │   └── package.json
 └── mobile/        # @react-simplikit/mobile
     ├── src/
-    ├── dist/      # CJS + ESM build output
+    ├── dist/      # Build output (per-module, mirrors src/)
     └── package.json
 ```
 
@@ -193,7 +193,7 @@ packages/
 ```jsonc
 {
   "main": "./dist/index.cjs", // CJS entry (top level, NOT in publishConfig)
-  "module": "./esm/index.js", // ESM entry for bundlers
+  "module": "./dist/index.mjs", // ESM entry for bundlers
   "types": "./dist/index.d.cts", // TypeScript types
   "exports": {
     // Modern Node.js/bundler resolution

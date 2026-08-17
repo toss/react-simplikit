@@ -20,15 +20,16 @@ export default defineConfig(
       '**/*.d.ts',
       '**/*.tgz',
       '**/dist/**',
-      '**/esm/**',
       '**/cache/**',
       '.yarn/**',
       '.pnp.*',
+      // Consumer fixture is typechecked by its own tsconfig against the installed
+      // tarball, not the workspace graph — the root project can't resolve its imports.
+      '.scripts/verify-pack/fixtures/**',
       'coverage',
       'docs',
       'node_modules',
       'eslint.*',
-      'tsup.*',
       'vitest.*',
       '.vitepress',
       '.next',

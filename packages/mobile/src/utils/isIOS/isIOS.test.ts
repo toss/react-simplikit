@@ -80,4 +80,19 @@ describe('isIOS', () => {
 
     expect(isIOS('Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120')).toBe(false);
   });
+
+  it('should fall back to navigator.userAgent when no argument is given', () => {
+    const originalUserAgent = navigator.userAgent;
+    Object.defineProperty(navigator, 'userAgent', {
+      value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)',
+      configurable: true,
+    });
+
+    expect(isIOS()).toBe(true);
+
+    Object.defineProperty(navigator, 'userAgent', {
+      value: originalUserAgent,
+      configurable: true,
+    });
+  });
 });

@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useMemo } from 'react';
 
-import { useKeyboardHeight } from '../keyboardHeight/useKeyboardHeight.ts';
+import { useKeyboardHeight } from '../useKeyboardHeight/useKeyboardHeight.ts';
 
 type UseAvoidKeyboardOptions = {
   /**
@@ -35,21 +35,21 @@ type UseAvoidKeyboardResult = {
 };
 
 /**
- * React hook to help fixed-bottom elements avoid the on-screen keyboard.
- *
- * Returns an object containing a CSS style that can be applied to position:fixed elements
+ * @description
+ * `useAvoidKeyboard` is a React hook that helps fixed-bottom elements avoid the on-screen keyboard.
+ * It returns a CSS style that can be applied to `position: fixed` elements
  * to smoothly move them above the keyboard when it appears.
  *
- * @param options - Configuration options
- * @param options.safeAreaBottom - Base bottom offset in pixels when keyboard is hidden (default: 0)
- * @param options.transitionDuration - Transition duration in milliseconds (default: 200)
- * @param options.transitionTimingFunction - Transition timing function (default: 'ease-out')
- * @param options.immediate - If true, gets the initial keyboard height on mount (default: true)
+ * @param {UseAvoidKeyboardOptions} [options] - Configuration options.
+ * @param {number} [options.safeAreaBottom=0] - Base bottom offset in pixels when the keyboard is hidden. Useful for accounting for the iPhone home indicator area.
+ * @param {number} [options.transitionDuration=200] - Transition duration in milliseconds for smooth animation.
+ * @param {CSSProperties['transitionTimingFunction']} [options.transitionTimingFunction='ease-out'] - Transition timing function for the animation.
+ * @param {boolean} [options.immediate=true] - If true, gets the initial keyboard height on mount.
  *
- * @returns An object containing the style property
+ * @returns {UseAvoidKeyboardResult} An object containing the CSS style for keyboard avoidance.
+ * - style `CSSProperties` - CSS style object to apply to the fixed bottom element. Contains `transform` and `transition` properties;
  *
  * @example
- * ```tsx
  * function FixedBottomCTA() {
  *   const { style } = useAvoidKeyboard();
  *
@@ -67,10 +67,8 @@ type UseAvoidKeyboardResult = {
  *     </div>
  *   );
  * }
- * ```
  *
  * @example
- * ```tsx
  * // With safe area bottom offset (e.g., for iPhone home indicator)
  * function FixedBottomCTA() {
  *   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
@@ -89,7 +87,6 @@ type UseAvoidKeyboardResult = {
  *     </div>
  *   );
  * }
- * ```
  */
 export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoidKeyboardResult {
   const {

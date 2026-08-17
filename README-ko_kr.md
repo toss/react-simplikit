@@ -38,22 +38,31 @@ npm install @react-simplikit/mobile
 ### react-simplikit
 
 ```tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query, 300);
 
-  useEffect(() => {
-    if (debouncedQuery) {
-      searchAPI(debouncedQuery);
-    }
-  }, [debouncedQuery]);
+  const debouncedSearch = useDebounce((value: string) => {
+    // 실제 API 호출
+    searchAPI(value);
+  }, 300);
 
-  return <input value={query} onChange={e => setQuery(e.target.value)} />;
+  return (
+    <input
+      value={query}
+      onChange={e => {
+        setQuery(e.target.value);
+        debouncedSearch(e.target.value);
+      }}
+      placeholder="검색어를 입력하세요"
+    />
+  );
 }
 ```
+
+디바운스된 함수는 `.cancel()` 메서드를 제공하고, 컴포넌트가 언마운트되면 대기 중인 호출을 자동으로 취소해요.
 
 ### @react-simplikit/mobile
 
@@ -61,18 +70,20 @@ function SearchInput() {
 import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
 
 function ChatInput() {
-  const { ref, style } = useAvoidKeyboard();
+  const { style } = useAvoidKeyboard();
 
   return (
-    <div ref={ref} style={style}>
+    <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, ...style }}>
       <input type="text" placeholder="메시지를 입력하세요..." />
     </div>
   );
 }
 
-function Modal({ isOpen }) {
-  useBodyScrollLock(isOpen);
-  // ...
+// `useBodyScrollLock`은 컴포넌트가 마운트될 때 body 스크롤을 잠그고,
+// 언마운트될 때 자동으로 해제해요. 모달이 열려 있는 동안에만 렌더링하세요.
+function BodyScrollLock() {
+  useBodyScrollLock();
+  return null;
 }
 ```
 

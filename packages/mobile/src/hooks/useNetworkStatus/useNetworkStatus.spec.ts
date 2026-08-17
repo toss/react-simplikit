@@ -5,6 +5,15 @@ import { renderHookSSR } from '../../../test/renderHookSSR.tsx';
 
 import { useNetworkStatus } from './useNetworkStatus.ts';
 
+const serverEnvironmentFlag = vi.hoisted(() => ({ current: false }));
+
+vi.mock('../../utils/isServer/index.ts', async importOriginal => {
+  const original = await importOriginal<typeof import('../../utils/isServer/index.ts')>();
+  return {
+    isServer: () => serverEnvironmentFlag.current || original.isServer(),
+  };
+});
+
 describe('useNetworkStatus', () => {
   it('is safe on server side rendering', () => {
     const result = renderHookSSR.serverOnly(() => useNetworkStatus());
@@ -24,6 +33,7 @@ describe('useNetworkStatus', () => {
     };
 
     beforeEach(() => {
+      serverEnvironmentFlag.current = false;
       mockConnection = {
         effectiveType: '4g',
         type: 'wifi',
@@ -115,6 +125,28 @@ describe('useNetworkStatus', () => {
       const { result } = renderHook(() => useNetworkStatus());
 
       expect(result.current).toEqual({});
+    });
+
+    it('should return empty object when accessing the connection API throws', () => {
+      Object.defineProperty(navigator, 'connection', {
+        configurable: true,
+        get() {
+          throw new Error('connection access blocked');
+        },
+      });
+
+      const { result } = renderHook(() => useNetworkStatus());
+
+      expect(result.current).toEqual({});
+    });
+
+    it('should return empty object without subscribing in a server-like environment', () => {
+      serverEnvironmentFlag.current = true;
+
+      const { result } = renderHook(() => useNetworkStatus());
+
+      expect(result.current).toEqual({});
+      expect(mockConnection.addEventListener).not.toHaveBeenCalled();
     });
 
     it('should handle undefined values gracefully', () => {

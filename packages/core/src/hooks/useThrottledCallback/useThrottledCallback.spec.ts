@@ -97,6 +97,29 @@ describe('useThrottledCallback', () => {
     expect(onChange).toBeCalledTimes(1);
   });
 
+  it('should invoke the callback when the first value is false', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));
+
+    result.current(false);
+
+    expect(onChange).toBeCalledTimes(1);
+    expect(onChange).toBeCalledWith(false);
+  });
+
+  it('should still skip a repeated false after the first one', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));
+
+    result.current(false);
+    vi.advanceTimersByTime(100);
+    expect(onChange).toBeCalledTimes(1);
+
+    result.current(false);
+    vi.advanceTimersByTime(100);
+    expect(onChange).toBeCalledTimes(1);
+  });
+
   it('should handle value toggling', () => {
     const onChange = vi.fn();
     const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));

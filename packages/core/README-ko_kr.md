@@ -27,7 +27,7 @@ react-simplikit은 웹/앱(React Native 등) 어디서든 동작 가능한, **�
 특정 플랫폼 API에 의존하지 않는 순수 로직 기반 훅들은 계속 제공돼요:
 
 - `useToggle`, `useBooleanState`, `useCounter` 같은 상태 관리 훅
-- `usePrevious`, `useMount` 같은 라이프사이클 훅
+- `usePrevious` 같은 라이프사이클 훅
 - `useDebounce`, `useThrottle` 같은 유틸리티 훅
 - **기존 프로젝트의 Backward Compatibility(BC)는 보존돼요**
 
@@ -69,22 +69,31 @@ pnpm add react-simplikit
 ## 빠른 시작
 
 ```tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query, 300);
 
-  useEffect(() => {
-    if (debouncedQuery) {
-      searchAPI(debouncedQuery);
-    }
-  }, [debouncedQuery]);
+  const debouncedSearch = useDebounce((value: string) => {
+    // 실제 API 호출
+    searchAPI(value);
+  }, 300);
 
-  return <input value={query} onChange={e => setQuery(e.target.value)} />;
+  return (
+    <input
+      value={query}
+      onChange={e => {
+        setQuery(e.target.value);
+        debouncedSearch(e.target.value);
+      }}
+      placeholder="검색어를 입력하세요"
+    />
+  );
 }
 ```
+
+디바운스된 함수는 `.cancel()` 메서드를 제공하고, 컴포넌트가 언마운트되면 대기 중인 호출을 자동으로 취소해요.
 
 ## 포함된 기능
 
@@ -93,8 +102,8 @@ function SearchInput() {
 | Hook                      | 설명                                                  |
 | ------------------------- | ----------------------------------------------------- |
 | `useBooleanState`         | boolean 상태를 핸들러와 함께 관리                     |
-| `useDebounce`             | 값을 디바운스                                         |
-| `useDebouncedCallback`    | 콜백 함수를 디바운스                                  |
+| `useDebounce`             | 콜백 함수를 디바운스                                  |
+| `useDebouncedCallback`    | 옵션 객체로 `onChange` 콜백을 디바운스                |
 | `useInterval`             | 선언적으로 인터벌 설정                                |
 | `useIntersectionObserver` | 요소 가시성 관찰                                      |
 | `usePreservedCallback`    | 안정적인 콜백 참조                                    |
@@ -111,10 +120,11 @@ function SearchInput() {
 
 ### Utilities
 
-| Utility  | 설명             |
-| -------- | ---------------- |
-| `assert` | 런타임 assertion |
-| `noop`   | 빈 함수          |
+| Utility        | 설명                                           |
+| -------------- | ---------------------------------------------- |
+| `buildContext` | 반복 코드 없이 React Context 정의              |
+| `mergeProps`   | `className`·`style`·이벤트를 합성해 props 병합 |
+| `mergeRefs`    | 여러 ref를 하나의 ref로 결합                   |
 
 ## 문서
 

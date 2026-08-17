@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { renderHookSSR } from '../../../test/renderHookSSR.tsx';
+
 import { useScrollDirection } from './useScrollDirection.ts';
 
 describe('useScrollDirection', () => {
@@ -26,6 +28,42 @@ describe('useScrollDirection', () => {
     expect(result.current).toEqual({
       direction: null,
       position: 0,
+    });
+  });
+
+  it('is safe on server side rendering', () => {
+    const result = renderHookSSR.serverOnly(() => useScrollDirection());
+
+    expect(result.current).toEqual({
+      direction: null,
+      position: 0,
+    });
+  });
+
+  it('should ignore scroll events that arrive while the throttle timer is pending', async () => {
+    const { result } = renderHook(() => useScrollDirection());
+
+    await act(async () => {
+      Object.defineProperty(window, 'scrollY', { value: 100 });
+      window.dispatchEvent(new Event('scroll'));
+      // Second scroll before the 50ms throttle timer expires
+      Object.defineProperty(window, 'scrollY', { value: 999 });
+      window.dispatchEvent(new Event('scroll'));
+    });
+
+    expect(result.current).toEqual({
+      direction: 'down',
+      position: 100,
+    });
+
+    await act(async () => {
+      vi.runAllTimers();
+    });
+
+    // The throttled second event is dropped, not deferred
+    expect(result.current).toEqual({
+      direction: 'down',
+      position: 100,
     });
   });
 

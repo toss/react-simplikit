@@ -14,16 +14,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        command: ['format', 'lint', 'type', 'spec']
+        command: ['format', 'lint', 'type']
     steps:
       - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -34,6 +34,41 @@ jobs:
       - name: Run test:${{ matrix.command }}
         run: yarn run test:${{ matrix.command }}
 
+  spec:
+    name: spec (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run test:coverage
+        run: yarn run test:coverage
+
+      - name: Upload coverage reports to Codecov
+        if: ${{ matrix.node == '24' }}
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./packages/core/coverage/coverage-final.json,./packages/mobile/coverage/coverage-final.json
+
   check-changes:
     runs-on: ubuntu-latest
     outputs:
@@ -41,31 +76,31 @@ jobs:
       changed_files: ${{ steps.filter.outputs.changed_files }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
       - name: Check for changes in .ts and .tsx files
         id: filter
-        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         with:
           list-files: shell
           filters: |
             changed:
               - added|modified:
-                - 'src/components/**/!(index|*.spec).ts'
-                - 'src/components/**/!(*.spec).tsx'
-                - 'src/hooks/**/!(index|*.spec).ts'
-                - 'src/hooks/**/!(*.spec).tsx'
-                - 'src/utils/**/!(index|*.spec).ts'
-                - 'src/utils/**/!(*.spec).tsx'
+                - 'packages/*/src/components/**/!(index|*.spec|*.test).ts'
+                - 'packages/*/src/components/**/!(*.spec|*.test).tsx'
+                - 'packages/*/src/hooks/**/!(index|*.spec|*.test).ts'
+                - 'packages/*/src/hooks/**/!(*.spec|*.test).tsx'
+                - 'packages/*/src/utils/**/!(index|*.spec|*.test).ts'
+                - 'packages/*/src/utils/**/!(*.spec|*.test).tsx'
 
   verify-test:
     runs-on: ubuntu-latest
@@ -73,13 +108,13 @@ jobs:
     if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -90,33 +125,33 @@ jobs:
       - name: Run tests and generate coverage
         run: yarn run test:coverage
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
       - name: Verify test coverage
         run: |
           changed_files="${{ needs.check-changes.outputs.changed_files }}"
-          coverage_file="coverage/coverage-final.json"
-
-          if [ ! -f "$coverage_file" ]; then
-            echo "Coverage file not found!"
-            exit 1
-          fi
 
           for file in $changed_files; do
+            package_dir="${file%%/src/*}"
+            coverage_file="$package_dir/coverage/coverage-final.json"
+
+            if [ ! -f "$coverage_file" ]; then
+              echo "Coverage file not found: $coverage_file"
+              exit 1
+            fi
+
             dir_name=$(basename $(dirname "$file"))
             base_name=$(basename $dir_name)
-            test_file="$(dirname "$file")/$base_name.spec.ts"
+            test_file=""
 
-            if [ ! -f "$test_file" ]; then
-              test_file="$(dirname "$file")/$base_name.spec.tsx"
-
-              if [ ! -f "$test_file" ]; then
-                echo "Test file missing for $base_name"
-                exit 1
+            for candidate in "$base_name.spec.ts" "$base_name.spec.tsx" "$base_name.test.ts" "$base_name.test.tsx"; do
+              if [ -f "$(dirname "$file")/$candidate" ]; then
+                test_file="$(dirname "$file")/$candidate"
+                break
               fi
+            done
+
+            if [ -z "$test_file" ]; then
+              echo "Test file missing for $base_name"
+              exit 1
             fi
 
             # Debugging: Print the file path
@@ -135,6 +170,11 @@ jobs:
               total_lines=$((total_lines + entry_total_lines))
               covered_lines=$((covered_lines + entry_covered_lines))
             done
+
+            if [ "$total_lines" -eq 0 ]; then
+              echo "No coverage data found for $base_name"
+              exit 1
+            fi
 
             # Calculate overall coverage percentage
             coverage=$(echo "scale=2; ($covered_lines / $total_lines) * 100" | bc)
@@ -156,7 +196,7 @@ jobs:
     if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Check for JSDoc comments
         run: |
@@ -196,13 +236,13 @@ jobs:
     if: ${{ needs.check-changes.outputs.changed == 'true' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Set up Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -265,52 +305,72 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Check exports
         run: |
           IMPL_DIRS=("components" "hooks" "utils")
-          ROOT_INDEX="src/index.ts"
           ERROR_LOG=""
           HAS_ERROR=0
+          FOUND=0
 
-          for dir in "${IMPL_DIRS[@]}"; do
-            for impl_dir in src/$dir/*/; do
-              if [ ! -d "$impl_dir" ]; then
-                continue
-              fi
-              
-              impl_name=$(basename "$impl_dir")
-              impl_index="$impl_dir/index.ts"
-              impl_file=""
-              
-              if [ -f "$impl_dir$impl_name.ts" ]; then
-                impl_file="$impl_name.ts"
-              elif [ -f "$impl_dir$impl_name.tsx" ]; then
-                impl_file="$impl_name.tsx"
-              else
-                ERROR_LOG+="❌ Implementation file not found for $impl_name\n"
-                HAS_ERROR=1
-                continue
-              fi
-              
-              if [ ! -f "$impl_index" ]; then
-                ERROR_LOG+="❌ Missing index.ts in $impl_dir\n"
-                HAS_ERROR=1
-              fi
-              
-              if ! grep -q "export.*from.*['\"]\./$impl_file['\"]" "$impl_index"; then
-                ERROR_LOG+="❌ $impl_name is not exported in $impl_index\n"
-                HAS_ERROR=1
-              fi
-              
-              relative_path="./$dir/$impl_name/index.ts"
-              if ! grep -q "export.*from.*['\"]$relative_path['\"]" "$ROOT_INDEX"; then
-                ERROR_LOG+="❌ $impl_name is not exported in root index.ts\n"
-                HAS_ERROR=1
-              fi
+          for pkg in packages/*/; do
+            ROOT_INDEX="${pkg}src/index.ts"
+
+            if [ ! -f "$ROOT_INDEX" ]; then
+              continue
+            fi
+
+            for dir in "${IMPL_DIRS[@]}"; do
+              for impl_dir in ${pkg}src/$dir/*/; do
+                if [ ! -d "$impl_dir" ]; then
+                  continue
+                fi
+
+                impl_name=$(basename "$impl_dir")
+                impl_index="$impl_dir/index.ts"
+                impl_file=""
+
+                if [ -f "$impl_dir$impl_name.ts" ]; then
+                  impl_file="$impl_name.ts"
+                elif [ -f "$impl_dir$impl_name.tsx" ]; then
+                  impl_file="$impl_name.tsx"
+                else
+                  ERROR_LOG+="❌ Implementation file not found for $impl_name\n"
+                  HAS_ERROR=1
+                  continue
+                fi
+
+                FOUND=$((FOUND + 1))
+
+                if [ ! -f "$impl_index" ]; then
+                  ERROR_LOG+="❌ Missing index.ts in $impl_dir\n"
+                  HAS_ERROR=1
+                  continue
+                fi
+
+                # `from` alone, not `export.*from`: prettier splits long re-exports
+                # across lines, leaving `export {` and `} from './x.ts'` on different lines
+                if ! grep -q "from.*['\"]\./$impl_file['\"]" "$impl_index"; then
+                  ERROR_LOG+="❌ $impl_name is not exported in $impl_index\n"
+                  HAS_ERROR=1
+                fi
+
+                relative_path="./$dir/$impl_name/index.ts"
+                if ! grep -q "from.*['\"]$relative_path['\"]" "$ROOT_INDEX"; then
+                  ERROR_LOG+="❌ $impl_name is not exported in $ROOT_INDEX\n"
+                  HAS_ERROR=1
+                fi
+              done
             done
           done
+
+          if [ "$FOUND" -eq 0 ]; then
+            echo "🚨 Scanned 0 implementations — the paths in this check no longer match the repository layout."
+            exit 1
+          fi
+
+          echo "Scanned $FOUND implementations."
 
           if [ $HAS_ERROR -eq 1 ]; then
             echo -e "\n🚨 Export Validation Errors:\n"
@@ -320,3 +380,74 @@ jobs:
           else
             echo "✅ All exports are valid!"
           fi
+
+  verify-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Verify packaging
+        run: yarn verify:pack
+
+  verify-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build and pack
+        # Naming the shell adds `-o pipefail`, which the default `bash -e {0}` lacks:
+        # without it a failed `npm pack` is masked by `tail` exiting 0, and the empty
+        # tarball path only surfaces several steps later as a resolution error.
+        # Scoped to this step -- `release.yml` and `verify-jsdoc` pipe through `grep`,
+        # where a no-match exit 1 is expected and pipefail would break them.
+        shell: bash
+        run: |
+          yarn workspaces foreach -Apt --include 'packages/*' run build
+          CORE_TGZ=$(cd packages/core && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
+          MOBILE_TGZ=$(cd packages/mobile && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
+          echo "CORE_TGZ=$RUNNER_TEMP/$CORE_TGZ" >> "$GITHUB_ENV"
+          echo "MOBILE_TGZ=$RUNNER_TEMP/$MOBILE_TGZ" >> "$GITHUB_ENV"
+
+      - name: Point examples at tarballs
+        run: |
+          for example in examples/with-vite examples/with-nextjs; do
+            jq --arg core "file:$CORE_TGZ" --arg mobile "file:$MOBILE_TGZ" \
+              '.dependencies |= with_entries(
+                 if .key == "react-simplikit" then .value = $core
+                 elif .key == "@react-simplikit/mobile" then .value = $mobile
+                 else . end)' \
+              "$example/package.json" > "$example/package.json.tmp"
+            mv "$example/package.json.tmp" "$example/package.json"
+          done
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
+
+      - name: Build examples against tarballs
+        run: |
+          yarn workspace with-vite run build
+          yarn workspace with-nextjs run build

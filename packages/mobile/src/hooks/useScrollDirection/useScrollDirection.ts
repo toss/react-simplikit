@@ -17,16 +17,16 @@ type UseScrollDirectionOptions = {
 };
 
 /**
- * React hook to detect scroll direction
- *
- * Returns scroll direction (up/down) and current scroll position.
+ * @description
+ * `useScrollDirection` is a React hook that detects scroll direction.
+ * It returns scroll direction (up/down) and current scroll position.
  * Throttled by default (50ms) for performance.
  *
- * @param options.throttleMs - Throttle interval (default: 50ms)
- * @returns Scroll direction state (direction: 'up' | 'down' | null, position: number)
+ * @param {UseScrollDirectionOptions} [options] - Configuration options.
+ * @param {number} [options.throttleMs=50] - Throttle interval in milliseconds.
+ * @returns {ScrollDirectionState} Scroll direction state: `direction` (`'up' | 'down' | null`) and `position` (px).
  *
  * @example
- * ```tsx
  * function Header() {
  *   const { direction, position } = useScrollDirection();
  *
@@ -39,7 +39,6 @@ type UseScrollDirectionOptions = {
  *     </header>
  *   );
  * }
- * ```
  */
 export function useScrollDirection(options: UseScrollDirectionOptions = {}): ScrollDirectionState {
   const { throttleMs = 50 } = options;

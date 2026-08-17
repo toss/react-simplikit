@@ -1,26 +1,38 @@
 # useScrollDirection
 
+`useScrollDirection` is a React hook that detects scroll direction. It returns scroll direction (up/down) and current scroll position. Throttled by default (50ms) for performance.
+
 ## Interface
 
 ```ts
-function useScrollDirection(): void;
+function useScrollDirection(
+  options: UseScrollDirectionOptions
+): ScrollDirectionState;
 ```
 
 ### Parameters
 
 <Interface
-  required
-  name="options.throttleMs"
-  type=""
-  description="Throttle interval (default: 50ms)"
+  name="options"
+  type="UseScrollDirectionOptions"
+  description="Configuration options."
+  :nested="[
+    {
+      name: 'options.throttleMs',
+      type: 'number',
+      required: false,
+      defaultValue: '50',
+      description: 'Throttle interval in milliseconds.',
+    },
+  ]"
 />
 
 ### Return Value
 
 <Interface
   name=""
-  type=""
-  description="direction state (direction: \'up\' | \'down\' | null, position: number)"
+  type="ScrollDirectionState"
+  description="direction state: <code>direction</code> (<code>\'up\' | \'down\' | null</code>) and <code>position</code> (px)."
 />
 
 ## Example

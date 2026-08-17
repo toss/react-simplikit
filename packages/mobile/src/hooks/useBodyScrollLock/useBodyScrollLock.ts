@@ -4,22 +4,19 @@ import { disableBodyScrollLock } from '../../utils/disableBodyScrollLock/index.t
 import { enableBodyScrollLock } from '../../utils/enableBodyScrollLock/index.ts';
 
 /**
- * Hook to lock body scroll
- *
- * Automatically locks body scroll when mounted, unlocks when unmounted.
+ * @description
+ * `useBodyScrollLock` is a React hook that locks body scroll while the component is mounted.
+ * It automatically locks on mount and unlocks on unmount.
  *
  * **Note:** For multiple overlapping modals, use a single lock at the parent level.
  *
  * @example
- * ```tsx
  * function Modal() {
  *   useBodyScrollLock();
  *   return <div className="modal">Modal content</div>;
  * }
- * ```
  *
  * @example
- * ```tsx
  * // Multiple modals - single lock pattern
  * function BodyScrollLock() {
  *   useBodyScrollLock();
@@ -37,7 +34,6 @@ import { enableBodyScrollLock } from '../../utils/enableBodyScrollLock/index.ts'
  *     </>
  *   );
  * }
- * ```
  */
 export function useBodyScrollLock(): void {
   useEffect(() => {
