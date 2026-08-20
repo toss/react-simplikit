@@ -33,6 +33,11 @@ export function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
   callback: (element: RefElement) => CleanupCallback | void,
   deps: DependencyList
 ): (element: RefElement | null) => void {
+  // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`:
+  // it requires the `useCallback` dependency list to be an array literal, but `deps` is
+  // supplied by the caller.
+  'use no memo';
+
   const preservedCallback = usePreservedCallback(callback);
   const cleanupCallbackRef = useRef<CleanupCallback>(() => {});
 
@@ -51,7 +56,8 @@ export function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
         cleanupCallbackRef.current = cleanup;
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    /* eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/use-memo -- `deps` is
+       the caller's dependency list, so it can be neither verified nor written as a literal. */
     [preservedCallback, ...deps]
   );
 

@@ -218,6 +218,9 @@ export function useGeolocation(options?: GeolocationOptions) {
 
   useEffect(() => {
     if (options?.mountBehavior === GeolocationMountBehavior.WATCH) {
+      /* eslint-disable-next-line react-hooks/set-state-in-effect -- `mountBehavior` is an
+         explicit opt-in to start geolocation on mount, and the browser API can only be
+         reached from an effect. The resulting state update is the requested behavior. */
       startTracking();
     } else if (options?.mountBehavior === GeolocationMountBehavior.GET) {
       getCurrentPosition();

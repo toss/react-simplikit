@@ -39,6 +39,11 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  * }
  */
 export function useCallbackOncePerRender<F extends (...args: any[]) => void>(callback: F, deps: DependencyList) {
+  // Same reason as `useAsyncEffect`: the body itself is compiler-clean, but React Compiler
+  // bails on any function carrying a React ESLint suppression, and the
+  // `react-hooks/exhaustive-deps` suppression below is unavoidable for a caller-supplied `deps`.
+  'use no memo';
+
   const hasFired = useRef(false);
 
   useEffect(() => {

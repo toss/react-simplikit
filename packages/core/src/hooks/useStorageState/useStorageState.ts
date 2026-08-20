@@ -124,6 +124,12 @@ export function useStorageState<T>(
 ): SerializableGuard<
   readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
 > {
+  // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
+  // because `cache.current` is read from `getSnapshot`, which `useSyncExternalStore` calls
+  // during render. Belongs on this implementation signature — the overload declarations
+  // above have no body to carry a directive.
+  'use no memo';
+
   const serializedDefaultValue = defaultValue as Serializable<T>;
   const cache = useRef<{
     data: string | null;
@@ -190,5 +196,9 @@ export function useStorageState<T>(
     setStorageState(getSnapshot());
   }, [storage, getSnapshot, setStorageState]);
 
+  /* eslint-disable-next-line react-hooks/refs -- the two callbacks close over `cache` through
+     `getSnapshot`, so the rule treats handing them to any function as a possible ref read
+     during render. `ensureSerializable` only inspects element 0 — `storageState`, a plain
+     value — and never calls them; passing either callback alone reproduces the report. */
   return ensureSerializable([storageState, setStorageState, refreshStorageState] as const);
 }

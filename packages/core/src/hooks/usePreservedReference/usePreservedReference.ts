@@ -1,3 +1,9 @@
+/* eslint-disable react-hooks/refs -- Preserving a reference across renders means comparing
+   the incoming value against the stored one during render; that is the hook's entire
+   contract. Scoped to the file because every ref access in it is part of that contract.
+   The matching `'use no memo'` directive below keeps React Compiler off this hook, but does
+   not silence this rule. Narrow this to line-level suppressions if anything that is not part
+   of the reference-preserving contract is ever added to this file. */
 import { useMemo, useRef } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -47,6 +53,10 @@ export function usePreservedReference<T extends NotNullishValue>(
   value: T,
   areValuesEqual: (a: T, b: T) => boolean = areDeeplyEqual
 ): T {
+  // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
+  // because this hook intentionally reads and updates refs during render, inside `useMemo`.
+  'use no memo';
+
   const ref = useRef(value);
 
   return useMemo(() => {

@@ -1,3 +1,9 @@
+/* eslint-disable react-hooks/refs -- Tracking "the value from the previous render" requires
+   comparing and updating refs during render; that is the hook's entire contract, not an
+   oversight. Scoped to the file because every ref access in it is part of that contract.
+   The matching `'use no memo'` directive below keeps React Compiler off this hook, but does
+   not silence this rule. Narrow this to line-level suppressions if anything that is not part
+   of the previous-value contract is ever added to this file. */
 import { useRef } from 'react';
 
 const strictEquals = <T>(prev: T, next: T) => prev === next;
