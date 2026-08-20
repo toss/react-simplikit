@@ -19,6 +19,18 @@ function createTestInput(...params: Parameters<typeof useInputState>) {
   };
 }
 
+function createTestTextarea(...params: Parameters<typeof useInputState>) {
+  return function Textarea() {
+    const [value, onChange] = useInputState(...params);
+
+    return createElement('textarea', {
+      'data-testid': 'textarea',
+      value,
+      onChange,
+    });
+  };
+}
+
 describe('useInputState', () => {
   it('should return empty string for initial value when no argument is provided', async () => {
     const { result } = await renderHookSSR(() => useInputState());
@@ -56,4 +68,14 @@ it('should transform value according to the provided function', async () => {
   fireEvent.change(input, { target: { value: 'must be uppercase' } });
 
   expect(input.value).toBe('MUST BE UPPERCASE');
+});
+
+it('should update value when change event occurs on a textarea', async () => {
+  const { getByTestId } = render(createElement(createTestTextarea()));
+  const textarea = getByTestId('textarea') as HTMLTextAreaElement;
+
+  expect(textarea.value).toBe('');
+
+  fireEvent.change(textarea, { target: { value: 'changed' } });
+  expect(textarea.value).toBe('changed');
 });
