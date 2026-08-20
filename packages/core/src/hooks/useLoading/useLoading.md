@@ -24,13 +24,13 @@ function useLoading(): [
       name: 'loading',
       type: 'boolean',
       description:
-        'Represents the current loading state. <br />  : The initial value is <code>false</code>. <br />  : It is set to <code>true</code> when an asynchronous task is in progress.',
+        'Represents the current loading state. The initial value is <code>false</code>. It is set to <code>true</code> when an asynchronous task is in progress.',
     },
     {
       name: 'startLoading',
       type: '<T>(promise: Promise<T>) => Promise<T>',
       description:
-        'A function that executes asynchronous tasks while managing the loading state. <br />  : This function takes a <code>Promise</code> as an argument and automatically resets the <code>isLoading</code> state to <code>false</code> when the <code>Promise</code> completes.',
+        'A function that executes asynchronous tasks while managing the loading state. This function takes a <code>Promise</code> as an argument and automatically resets the <code>isLoading</code> state to <code>false</code> when the <code>Promise</code> completes.',
     },
   ]"
 />
