@@ -1,6 +1,6 @@
 # useInputState
 
-`useInputState` is a React hook that manages an input state with optional value transformation.
+`useInputState` is a React hook that manages an input state with optional value transformation. The returned `onChange` handler works with both `<input>` and `<textarea>` elements.
 
 ## Interface
 
@@ -8,7 +8,10 @@
 function useInputState(
   initialValue: string = '',
   transformValue: (value: string) => string = (v: string) => v
-): [value: string, onChange: ChangeEventHandler<HTMLInputElement>];
+): [
+  value: string,
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
+];
 ```
 
 ### Parameters
@@ -29,17 +32,19 @@ function useInputState(
 
 <Interface
   name=""
-  type="[value: string, onChange: ChangeEventHandler<HTMLInputElement>]"
+  type="[value: string, onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>]"
   description="tuple containing:"
   :nested="[
     {
       name: 'value',
       type: 'string',
+      required: false,
       description: 'The current state value.',
     },
     {
       name: 'onChange',
-      type: 'ChangeEventHandler<HTMLInputElement>',
+      type: 'ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>',
+      required: false,
       description: 'A function to update the state.',
     },
   ]"
@@ -50,6 +55,11 @@ function useInputState(
 ```tsx
 function Example() {
   const [value, onChange] = useInputState('');
-  return <input type="text" value={value} onChange={onChange} />;
+  return (
+    <>
+      <input type="text" value={value} onChange={onChange} />
+      <textarea value={value} onChange={onChange} />
+    </>
+  );
 }
 ```
