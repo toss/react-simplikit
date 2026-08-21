@@ -108,6 +108,87 @@ describe('useAsyncEffect', () => {
     expect(cleanup).toHaveBeenCalledTimes(1);
   });
 
+  it('should pass an AbortSignal to the effect', async () => {
+    let receivedSignal: AbortSignal | null = null;
+
+    await renderHookSSR(() =>
+      useAsyncEffect(async signal => {
+        receivedSignal = signal;
+      }, [])
+    );
+
+    await flushPromises();
+
+    expect(receivedSignal).toBeInstanceOf(AbortSignal);
+    expect(receivedSignal!.aborted).toBe(false);
+  });
+
+  it('should abort the signal when the component unmounts', async () => {
+    let receivedSignal: AbortSignal | null = null;
+    const { unmount } = await renderHookSSR(() =>
+      useAsyncEffect(async signal => {
+        receivedSignal = signal;
+      }, [])
+    );
+
+    await flushPromises();
+    expect(receivedSignal!.aborted).toBe(false);
+
+    unmount();
+    expect(receivedSignal!.aborted).toBe(true);
+  });
+
+  it('should fully clean up the previous instance when dependencies change', async () => {
+    const signals: AbortSignal[] = [];
+    const cleanup = vi.fn();
+
+    const { rerender } = await renderHookSSR(
+      ({ dep }) =>
+        useAsyncEffect(
+          async signal => {
+            signals.push(signal);
+            return cleanup;
+          },
+          [dep]
+        ),
+      {
+        initialProps: { dep: 1 },
+      }
+    );
+
+    await flushPromises();
+    rerender({ dep: 2 });
+    await flushPromises();
+
+    expect(signals).toHaveLength(2);
+    // The previous instance is fully torn down: its cleanup ran and its signal was aborted.
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(signals[0].aborted).toBe(true);
+    // The current instance stays active.
+    expect(signals[1].aborted).toBe(false);
+  });
+
+  it('should abort the signal with the provided reason', async () => {
+    let receivedSignal: AbortSignal | null = null;
+    const reason = new Error('aborted reason');
+
+    const { unmount } = await renderHookSSR(() =>
+      useAsyncEffect(
+        async signal => {
+          receivedSignal = signal;
+        },
+        [],
+        reason
+      )
+    );
+
+    await flushPromises();
+    unmount();
+
+    expect(receivedSignal!.aborted).toBe(true);
+    expect(receivedSignal!.reason).toBe(reason);
+  });
+
   it('should call effect every rerender when deps are undefined', async () => {
     const effect = vi.fn().mockResolvedValue(undefined);
 
