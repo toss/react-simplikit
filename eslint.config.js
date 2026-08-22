@@ -65,7 +65,9 @@ export default defineConfig(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   react.configs.flat.recommended,
-  reactHooks.configs['recommended-latest'],
+  // v7 moved the flat-config presets under `configs.flat`; the top-level `recommended-latest`
+  // is now eslintrc-shaped and crashes flat config with "plugins must be an object".
+  reactHooks.configs.flat['recommended-latest'],
   {
     plugins: {
       'simple-import-sort': simpleImportSort,

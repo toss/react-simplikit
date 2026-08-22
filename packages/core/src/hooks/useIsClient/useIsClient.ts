@@ -41,6 +41,9 @@ export function useIsClient() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(function syncClientState() {
+    /* eslint-disable-next-line react-hooks/set-state-in-effect -- the extra render is the
+       point: a fixed server value flipped in an effect is the only way to tell client from
+       server without a hydration mismatch, and it is the SSR-safe pattern this repo documents. */
     setIsClient(true);
   }, []);
 

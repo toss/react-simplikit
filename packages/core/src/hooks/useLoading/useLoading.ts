@@ -6,12 +6,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
  * It provides a state to track whether an asynchronous operation is in progress and a function to handle the loading state automatically.
  *
  * @returns {[loading: boolean, startLoading: <T>(promise: Promise<T>) => Promise<T>]} A tuple containing:
- * - loading `boolean` - Represents the current loading state.
- *    : The initial value is `false`.
- *    : It is set to `true` when an asynchronous task is in progress;
+ * - loading `boolean` - Represents the current loading state. The initial value is `false`. It is set to `true` when an asynchronous task is in progress;
  *
- * - startLoading `<T>(promise: Promise<T>) => Promise<T>` - A function that executes asynchronous tasks while managing the loading state.
- *    : This function takes a `Promise` as an argument and automatically resets the `isLoading` state to `false` when the `Promise` completes;
+ * - startLoading `<T>(promise: Promise<T>) => Promise<T>` - A function that executes asynchronous tasks while managing the loading state. This function takes a `Promise` as an argument and automatically resets the `isLoading` state to `false` when the `Promise` completes;
  *
  * @example
  * function ConfirmButton() {
@@ -56,6 +53,13 @@ export function useLoading(): [boolean, <T>(promise: Promise<T>) => Promise<T>] 
 }
 
 function useIsMountedRef() {
+  // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
+  // because `.current` is read during render. The directive has to live here rather than on
+  // `useLoading` — it applies only to the function that carries it, not to the whole module.
+  'use no memo';
+
+  /* eslint-disable-next-line react-hooks/refs -- reading `.current` here is what makes the
+     returned object stable across renders; the effect below is its only writer. */
   const ref = useRef({ isMounted: true }).current;
 
   useEffect(

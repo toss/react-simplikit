@@ -36,6 +36,12 @@ export function buildContext<ContextValuesType extends object>(
   const Context = createContext<ContextValuesType | undefined>(defaultContextValues ?? undefined);
 
   function Provider({ children, ...contextValues }: ProviderProps<ContextValuesType>) {
+    // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`:
+    // it bails on any function carrying a React ESLint suppression, and the
+    // `react-hooks/exhaustive-deps` suppression below is unavoidable — the dependency list
+    // is a spread of runtime values, which the compiler also rejects as a non-literal array.
+    'use no memo';
+
     const value = useMemo(
       () => (Object.keys(contextValues).length > 0 ? contextValues : null),
       // eslint-disable-next-line react-hooks/exhaustive-deps

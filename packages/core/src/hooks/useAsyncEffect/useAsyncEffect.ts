@@ -22,6 +22,13 @@ import { DependencyList, useEffect } from 'react';
  */
 
 export function useAsyncEffect(effect: () => Promise<void | (() => void)>, deps?: DependencyList) {
+  // Unlike the other opt-outs here, this body breaks no Rule of React — it compiles cleanly
+  // once the `react-hooks/exhaustive-deps` suppression below is removed. React Compiler
+  // refuses to optimize any function carrying a React ESLint suppression, and that
+  // suppression is unavoidable because `deps` is forwarded from the caller. Revisit if the
+  // compiler ever narrows that bail-out.
+  'use no memo';
+
   useEffect(() => {
     let cleanup: (() => void) | void;
     let isCleaned = false;

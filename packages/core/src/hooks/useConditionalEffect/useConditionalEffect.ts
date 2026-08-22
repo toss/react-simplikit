@@ -43,8 +43,14 @@ export function useConditionalEffect<T extends DependencyList>(
   deps: T,
   condition: (prevDeps: T | undefined, currentDeps: T) => boolean
 ): void {
+  // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`:
+  // it rejects `useCallback(condition, deps)` because `deps` is a caller-supplied variable
+  // rather than an array literal, and `condition` is not an inline function expression.
+  'use no memo';
+
   const prevDepsRef = useRef<T | undefined>(undefined);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  /* eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/use-memo -- `deps` is
+     the caller's dependency list, so it can be neither verified nor written as a literal. */
   const memoizedCondition = useCallback(condition, deps);
 
   if (deps.length === 0) {
@@ -54,6 +60,8 @@ export function useConditionalEffect<T extends DependencyList>(
     );
   }
 
+  /* eslint-disable-next-line react-hooks/refs -- comparing this render's deps against the
+     previous ones has to happen during render; that comparison is the hook's contract. */
   const shouldRun = memoizedCondition(prevDepsRef.current, deps);
 
   useEffect(() => {
