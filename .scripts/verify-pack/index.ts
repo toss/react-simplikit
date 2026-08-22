@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import { checkUseNoMemoDirectives } from './checks/directives.ts';
 import { buildAll, packPackage } from './checks/pack.ts';
 import { checkSizeLimit, measureImportCost } from './checks/size.ts';
 import { runSmoke, setupConsumer } from './checks/smoke.ts';
@@ -54,6 +55,7 @@ async function main() {
     const extractedDir = extractTarball(tgzPath, path.join(workRoot, pkg.name.replace('/', '__')));
 
     report(pkg.name, 'use client banner', checkBanner(extractedDir));
+    report(pkg.name, 'use no memo directives', checkUseNoMemoDirectives(pkg, extractedDir));
     report(pkg.name, 'exports files exist in tarball', checkExportsExist(extractedDir));
     report(pkg.name, 'publint', runPublint(extractedDir));
     report(pkg.name, 'attw type resolution', runAttw(tgzPath));

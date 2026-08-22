@@ -10,7 +10,7 @@ export function extractTarball(tgzPath: string, workDir: string): string {
   return path.join(workDir, 'package');
 }
 
-function walkFiles(dir: string): string[] {
+export function walkFiles(dir: string): string[] {
   return fs
     .readdirSync(dir, { recursive: true, withFileTypes: true })
     .filter(entry => entry.isFile())
