@@ -40,12 +40,16 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:compiled": "vitest run -c vitest.compiled.config.ts"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-react": "^7.27.0",
+    "@babel/preset-typescript": "^7.28.0",
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
     "@eslint/js": "^9.16.0",
@@ -57,6 +61,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitest/coverage-v8": "^2.1.8",
+    "babel-plugin-react-compiler": "1.0.0",
     "commander": "^13.1.0",
     "comment-parser": "^1.4.1",
     "corepack": "^0.30.0",
