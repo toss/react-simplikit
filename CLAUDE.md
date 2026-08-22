@@ -145,16 +145,21 @@ Uses **Changesets** + **GitHub Actions OIDC** for automated releases.
 ```
 PR with changeset merged → release.yml triggers
   → changesets/action detects changeset → creates "Version PR"
-  → Version PR merged → changesets/action: hasChangesets=false
-  → "Publish to npm" step → changeset publish (uses npm publish internally)
+  → Version PR merged → changesets/action: has-changesets=false
+  → action runs `publish-script` (changeset publish → `yarn npm publish`), pushes tags, creates GitHub Releases
 ```
+
+### Changesets v3 + Yarn PnP
+
+- `changesets/action` v2 requires `@changesets/cli` v3 — bump both majors together.
+- `.changeset/config.json` points `changelog` at the shim `.changeset/changelog.mjs`, not `@changesets/changelog-github` directly — the bare package name does not resolve under PnP (see the shim). Do not "simplify" it back.
 
 ### Critical: publishConfig does NOT work with npm
 
 **npm does NOT support `publishConfig` overrides for manifest fields** (`main`, `types`, `module`, `exports`). Only `access`, `registry`, `tag` are supported. See [npm/cli#7586](https://github.com/npm/cli/issues/7586).
 
 - `yarn npm publish` DOES support publishConfig field overrides
-- `changeset publish` internally calls `npm publish` (not yarn)
+- `changeset publish` v3 calls `yarn npm publish` for Yarn Berry, but manifests must stay valid for plain `npm pack` (`verify-pack`)
 - Therefore: **always declare `main`/`types`/`module`/`exports` at the top level** of package.json
 - `publishConfig` should only contain `access: "public"`
 
@@ -162,10 +167,10 @@ PR with changeset merged → release.yml triggers
 
 - npm auth uses GitHub Actions OIDC (no secret tokens needed)
 - Requires `id-token: write` permission in workflow
-- OIDC publishing requires npm >= 11.5.0 ([npm/cli#8336](https://github.com/npm/cli/pull/8336)); Node 24 bundles npm 11.17+, so no manual npm upgrade is needed
+- The OIDC exchange is done by Yarn (`yarn npm publish`; the pinned `yarnPath` 4.18 supports it), not by the npm CLI
 - Do NOT reinstate `npm install -g npm@latest` — it is unpinned, and it broke the release job once npm 12 raised its Node floor above `.nvmrc`
-- `changesets/action` must NOT have `publish` option (it overwrites `.npmrc` and breaks OIDC)
-- Publish is done in a separate step after changesets/action
+- Publish runs via the action's `publish-script`; it must keep invoking the Changesets CLI (it reads `CHANGESETS_OUTPUT` to know what to tag/release)
+- Provenance: `YARN_NPM_PUBLISH_PROVENANCE: true` — `NPM_CONFIG_PROVENANCE` is ignored by Yarn
 
 ### Snapshot/Canary Releases
 
