@@ -36,6 +36,7 @@
     "test:lint": "yarn workspaces foreach -Ap run lint",
     "test:type": "yarn workspaces foreach -Ap run typecheck",
     "test:spec": "yarn workspaces foreach -Ap run test",
+    "test:compiled": "yarn workspaces foreach -Ap run test:compiled",
     "test:coverage": "yarn workspaces foreach -Ap run test:coverage",
     "build": "yarn workspaces foreach -Apt run build",
     "verify:compiler": "tsx .scripts/verify-compiler/index.ts",
