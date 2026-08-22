@@ -8,26 +8,47 @@
 function useIsClient(): boolean;
 ```
 
+### Parameters
+
 ### Return Value
 
 <Interface
   name=""
   type="boolean"
-  description="Returns <code>true</code> in a client-side environment, and <code>false</code> otherwise."
+  description="<code>true</code> in a client"
+  :nested="[
+    {
+      required: false,
+    },
+  ]"
 />
 
 ## Example
 
 ```tsx
-import { useIsClient } from 'react-simplikit';
-
 function ClientSideContent() {
   const isClient = useIsClient();
 
   if (!isClient) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // Rendered on the server side
   }
 
-  return <div>Client-side rendered content</div>;
+  return <div>Client-side rendered content</div>; // Rendered on the client side
+}
+
+function ClientOnlyMap() {
+  const isClient = useIsClient();
+
+  if (!isClient) return null;
+
+  return <div id="map" />;
+}
+
+function ClientTheme() {
+  const isClient = useIsClient();
+
+  const theme = isClient ? localStorage.getItem('theme') : 'light';
+
+  return <div>Current theme: {theme}</div>;
 }
 ```

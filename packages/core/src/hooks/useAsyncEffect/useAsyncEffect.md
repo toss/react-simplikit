@@ -22,7 +22,7 @@ function useAsyncEffect(
 <Interface
   name="deps"
   type="DependencyList"
-  description="A dependency array. The effect will re-run whenever any value in this array changes. If omitted, the effect will run on every component re-render."
+  description="A dependency array. The effect will re-run whenever any value in this array changes. If omitted, it runs only once when the component mounts."
 />
 
 ### Return Value

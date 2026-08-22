@@ -47,4 +47,17 @@ function Component() {
 
   return <button onClick={handleOneTimeEvent}>Click me</button>;
 }
+
+// With dependencies
+function TrackingComponent({ userId }: { userId: string }) {
+  const trackUserVisit = useCallbackOncePerRender(() => {
+    analytics.trackVisit(userId);
+  }, [userId]);
+
+  useEffect(() => {
+    trackUserVisit();
+  }, [trackUserVisit]);
+
+  return <div>User page</div>;
+}
 ```

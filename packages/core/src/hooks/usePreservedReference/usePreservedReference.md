@@ -47,4 +47,18 @@ function ExampleComponent() {
 
   return <div>{preservedState.key}</div>;
 }
+
+import { usePreservedReference } from 'react-simplikit';
+import { useState } from 'react';
+
+function ExampleComponent() {
+  const [state, setState] = useState({ key: 'value' });
+
+  const preservedState = usePreservedReference(
+    state,
+    (a, b) => a.key === b.key
+  );
+
+  return <div>{preservedState.key}</div>;
+}
 ```
