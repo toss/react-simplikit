@@ -4154,12 +4154,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-simplikit/mobile@workspace:packages/mobile"
   dependencies:
+    "@babel/core": "npm:^7.29.0"
+    "@babel/preset-react": "npm:^7.27.0"
+    "@babel/preset-typescript": "npm:^7.28.0"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
     "@testing-library/react": "npm:^16.1.0"
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
     "@vitest/coverage-v8": "npm:^2.1.8"
+    babel-plugin-react-compiler: "npm:1.0.0"
     eslint: "npm:^9.16.0"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
@@ -10507,6 +10511,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-simplikit@workspace:packages/core"
   dependencies:
+    "@babel/core": "npm:^7.29.0"
+    "@babel/preset-react": "npm:^7.27.0"
+    "@babel/preset-typescript": "npm:^7.28.0"
     "@changesets/changelog-github": "npm:^0.5.1"
     "@changesets/cli": "npm:^2.29.7"
     "@eslint/js": "npm:^9.16.0"
@@ -10518,6 +10525,7 @@ __metadata:
     "@types/react": "npm:^19.0.0"
     "@types/react-dom": "npm:^19.0.0"
     "@vitest/coverage-v8": "npm:^2.1.8"
+    babel-plugin-react-compiler: "npm:1.0.0"
     commander: "npm:^13.1.0"
     comment-parser: "npm:^1.4.1"
     corepack: "npm:^0.30.0"
