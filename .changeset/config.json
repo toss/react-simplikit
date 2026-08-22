@@ -1,6 +1,6 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "toss/react-simplikit" }],
+  "$schema": "https://unpkg.com/@changesets/config@4.0.0/schema.json",
+  "changelog": ["./changelog.mjs", { "repo": "toss/react-simplikit" }],
   "commit": false,
   "fixed": [],
   "linked": [],

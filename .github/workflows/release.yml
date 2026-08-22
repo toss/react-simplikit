@@ -36,27 +36,30 @@ jobs:
       - name: Type Check
         run: yarn run test:type
 
-      - name: Create Release Pull Request
+      # v2.1.1, not v2.1.0: v2.1.0 ignores `commit-message` due to a typo.
+      # Publishing goes through `yarn npm publish` (changesets v3 + Yarn Berry), so
+      # provenance is Yarn's setting; `NPM_CONFIG_PROVENANCE` would be ignored.
+      - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@198f833dd7d863100ea6e28967bc9a9fdefadb0a # v2.1.0
+        uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
         with:
-          title: 'chore: version packages'
-          commit: 'chore: version packages'
-          version: yarn run changeset:version
+          pr-title: 'chore: version packages'
+          commit-message: 'chore: version packages'
+          version-script: yarn run changeset:version
+          publish-script: yarn run changeset:publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YARN_NPM_PUBLISH_PROVENANCE: true
 
-      - name: Publish to npm
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        run: yarn run changeset:publish
+      - name: Summarize published packages
+        if: steps.changesets.outputs.published == 'true'
         env:
-          NPM_CONFIG_PROVENANCE: true
-
-      # changeset publish creates tags locally but never pushes them.
-      # --tags, not --follow-tags: changesets creates lightweight tags.
-      - name: Push tags
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        run: git push origin --tags
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.published-packages }}
+        run: |
+          {
+            echo "## Published to npm"
+            echo
+            echo "$PUBLISHED_PACKAGES" | jq -r '.[] | "- [\(.name)@\(.version)](https://www.npmjs.com/package/\(.name)/v/\(.version))"'
+          } >> "$GITHUB_STEP_SUMMARY"
 
   get-diffs:
     runs-on: ubuntu-latest
