@@ -1,10 +1,46 @@
+import { DefaultTheme } from 'vitepress';
+
+import { en } from './locales/en.mts';
+import { ko } from './locales/ko.mts';
+
 export type LocaleCode = 'root' | 'ko';
 
-type LocaleDefinition = {
+type GuidePageTitles = {
+  core: {
+    intro: string;
+    whyReactSimplikitMatters: string;
+    installation: string;
+    designPrinciples: string;
+    contributing: string;
+  };
+  mobile: {
+    intro: string;
+    roadmap: string;
+    installation: string;
+    designPrinciples: string;
+    contributing: string;
+  };
+};
+
+export type LocaleThemeStrings = {
+  homeNavLabel: string;
+  guideLabel: string;
+  referenceLabel: string;
+  componentsLabel: string;
+  hooksLabel: string;
+  utilsLabel: string;
+  guidePages: GuidePageTitles;
+  editLinkText: string;
+  footerMessage: string;
+  search?: NonNullable<DefaultTheme.LocalSearchOptions['locales']>[string];
+};
+
+export type LocaleDefinition = {
   label: string;
   lang: string;
   path: string;
   untranslatedNotice: string;
+  themeStrings: LocaleThemeStrings;
 };
 
 type RouteDefinition = {
@@ -20,12 +56,14 @@ export const localeDefinitions: Record<LocaleCode, LocaleDefinition> = {
     lang: 'en',
     path: '',
     untranslatedNotice: 'This page is currently shown in English while its translation is being prepared.',
+    themeStrings: en,
   },
   ko: {
     label: '한국어',
     lang: 'ko',
     path: 'ko',
     untranslatedNotice: '이 페이지는 번역을 준비하는 동안 영어 원문으로 보여드려요.',
+    themeStrings: ko,
   },
 };
 
