@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        command: ['format', 'lint', 'type']
+        command: ['format', 'lint', 'type', 'docs']
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -68,6 +68,30 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./packages/core/coverage/coverage-final.json,./packages/mobile/coverage/coverage-final.json
+
+  spec-compiled:
+    name: spec (react compiler compiled)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run test:compiled
+        run: yarn run test:compiled
 
   check-changes:
     runs-on: ubuntu-latest

@@ -1,13 +1,23 @@
 import { defineConfig, HeadConfig } from 'vitepress';
-import { en } from './en.mts';
-import { ko, search as koSearch } from './ko.mts';
+import { buildLocaleConfig } from './libs/buildLocaleConfig.mts';
+import { generatedRewrites, localeDefinitions, rewrites } from './locales.mts';
+
+const locales = Object.fromEntries(
+  Object.entries(localeDefinitions).map(([code, definition]) => [
+    code,
+    { label: definition.label, ...buildLocaleConfig(definition) },
+  ])
+);
+
+const searchLocales = Object.fromEntries(
+  Object.entries(localeDefinitions)
+    .filter(([, definition]) => definition.themeStrings.search !== undefined)
+    .map(([code, definition]) => [code, definition.themeStrings.search])
+);
 
 export default defineConfig({
   title: 'react-simplikit',
-  locales: {
-    root: { label: 'English', ...en },
-    ko: { label: '한국어', ...ko },
-  },
+  locales,
   srcDir: '.',
   srcExclude: [
     '**/node_modules/**',
@@ -16,10 +26,8 @@ export default defineConfig({
     'CONTRIBUTING.md',
     'CLAUDE.md',
     'AGENTS.md',
-    'docs/hook-design-principles.md',
-    'docs/ko/hook-design-principles.md',
-    'docs/react-hook-usage-patterns.md',
-    'docs/ko/react-hook-usage-patterns.md',
+    '**/hook-design-principles.md',
+    '**/react-hook-usage-patterns.md',
     'examples/**',
     'packages/plugin/**',
     'packages/**/*.ts',
@@ -30,39 +38,7 @@ export default defineConfig({
       dedupe: ['vue', 'vitepress'],
     },
   },
-  rewrites: {
-    // Landing page
-    'docs/index.md': 'index.md',
-    'docs/ko/index.md': 'ko/index.md',
-
-    // Core guide docs
-    'docs/core/:doc.md': 'core/:doc.md',
-    'docs/ko/core/:doc.md': 'ko/core/:doc.md',
-
-    // Mobile guide docs
-    'docs/mobile/:doc.md': 'mobile/:doc.md',
-    'docs/ko/mobile/:doc.md': 'ko/mobile/:doc.md',
-
-    // Core hooks
-    'packages/core/src/hooks/:hook/:hook.md': 'core/hooks/:hook.md',
-    'packages/core/src/hooks/:hook/ko/:hook.md': 'ko/core/hooks/:hook.md',
-
-    // Core components
-    'packages/core/src/components/:component/:component.md': 'core/components/:component.md',
-    'packages/core/src/components/:component/ko/:component.md': 'ko/core/components/:component.md',
-
-    // Core utils
-    'packages/core/src/utils/:util/:util.md': 'core/utils/:util.md',
-    'packages/core/src/utils/:util/ko/:util.md': 'ko/core/utils/:util.md',
-
-    // Mobile hooks
-    'packages/mobile/src/hooks/:hook/:hook.md': 'mobile/hooks/:hook.md',
-    'packages/mobile/src/hooks/:hook/ko/:hook.md': 'ko/mobile/hooks/:hook.md',
-
-    // Mobile utils
-    'packages/mobile/src/utils/:util/:util.md': 'mobile/utils/:util.md',
-    'packages/mobile/src/utils/:util/ko/:util.md': 'ko/mobile/utils/:util.md',
-  },
+  rewrites: { ...rewrites, ...generatedRewrites },
   head: [
     ['link', { rel: 'stylesheet', href: 'https://static.toss.im/tps/main.css' }],
     ['link', { rel: 'stylesheet', href: 'https://static.toss.im/tps/others.css' }],
@@ -98,9 +74,7 @@ export default defineConfig({
     search: {
       provider: 'local',
       options: {
-        locales: {
-          ...koSearch,
-        },
+        locales: searchLocales,
       },
     },
     socialLinks: [
