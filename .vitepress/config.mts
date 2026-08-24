@@ -1,14 +1,23 @@
 import { defineConfig, HeadConfig } from 'vitepress';
-import { en } from './en.mts';
-import { ko, search as koSearch } from './ko.mts';
+import { buildLocaleConfig } from './libs/buildLocaleConfig.mts';
 import { generatedRewrites, localeDefinitions, rewrites } from './locales.mts';
+
+const locales = Object.fromEntries(
+  Object.entries(localeDefinitions).map(([code, definition]) => [
+    code,
+    { label: definition.label, ...buildLocaleConfig(definition) },
+  ])
+);
+
+const searchLocales = Object.fromEntries(
+  Object.entries(localeDefinitions)
+    .filter(([, definition]) => definition.themeStrings.search !== undefined)
+    .map(([code, definition]) => [code, definition.themeStrings.search])
+);
 
 export default defineConfig({
   title: 'react-simplikit',
-  locales: {
-    root: { label: localeDefinitions.root.label, ...en },
-    ko: { label: localeDefinitions.ko.label, ...ko },
-  },
+  locales,
   srcDir: '.',
   srcExclude: [
     '**/node_modules/**',
@@ -65,9 +74,7 @@ export default defineConfig({
     search: {
       provider: 'local',
       options: {
-        locales: {
-          ...koSearch,
-        },
+        locales: searchLocales,
       },
     },
     socialLinks: [

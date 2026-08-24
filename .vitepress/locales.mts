@@ -1,10 +1,43 @@
+import { DefaultTheme } from 'vitepress';
+
 export type LocaleCode = 'root' | 'ko';
 
-type LocaleDefinition = {
+type GuidePageTitles = {
+  core: {
+    intro: string;
+    whyReactSimplikitMatters: string;
+    installation: string;
+    designPrinciples: string;
+    contributing: string;
+  };
+  mobile: {
+    intro: string;
+    roadmap: string;
+    installation: string;
+    designPrinciples: string;
+    contributing: string;
+  };
+};
+
+export type LocaleThemeStrings = {
+  homeNavLabel: string;
+  guideLabel: string;
+  referenceLabel: string;
+  componentsLabel: string;
+  hooksLabel: string;
+  utilsLabel: string;
+  guidePages: GuidePageTitles;
+  editLinkText: string;
+  footerMessage: string;
+  search?: NonNullable<DefaultTheme.LocalSearchOptions['locales']>[string];
+};
+
+export type LocaleDefinition = {
   label: string;
   lang: string;
   path: string;
   untranslatedNotice: string;
+  themeStrings: LocaleThemeStrings;
 };
 
 type RouteDefinition = {
@@ -20,12 +53,87 @@ export const localeDefinitions: Record<LocaleCode, LocaleDefinition> = {
     lang: 'en',
     path: '',
     untranslatedNotice: 'This page is currently shown in English while its translation is being prepared.',
+    themeStrings: {
+      homeNavLabel: 'Home',
+      guideLabel: 'Guide',
+      referenceLabel: 'Reference',
+      componentsLabel: 'Components',
+      hooksLabel: 'Hooks',
+      utilsLabel: 'Utils',
+      guidePages: {
+        core: {
+          intro: 'Introduction',
+          whyReactSimplikitMatters: 'Why react-simplikit matters',
+          installation: 'Installation',
+          designPrinciples: 'Design Principles',
+          contributing: 'Contributing',
+        },
+        mobile: {
+          intro: 'Introduction',
+          roadmap: 'Roadmap',
+          installation: 'Installation',
+          designPrinciples: 'Design Principles',
+          contributing: 'Contributing',
+        },
+      },
+      editLinkText: 'Edit this page on GitHub',
+      footerMessage: 'Released under the MIT License.',
+    },
   },
   ko: {
     label: '한국어',
     lang: 'ko',
     path: 'ko',
     untranslatedNotice: '이 페이지는 번역을 준비하는 동안 영어 원문으로 보여드려요.',
+    themeStrings: {
+      homeNavLabel: '홈',
+      guideLabel: '가이드',
+      referenceLabel: '레퍼런스',
+      componentsLabel: '컴포넌트',
+      hooksLabel: '훅',
+      utilsLabel: '유틸리티',
+      guidePages: {
+        core: {
+          intro: '소개',
+          whyReactSimplikitMatters: 'react-simplikit, 선택의 이유',
+          installation: '설치하기',
+          designPrinciples: '설계 원칙',
+          contributing: '기여하기',
+        },
+        mobile: {
+          intro: '소개',
+          roadmap: '앞으로의 방향',
+          installation: '설치하기',
+          designPrinciples: '설계 원칙',
+          contributing: '기여하기',
+        },
+      },
+      editLinkText: 'GitHub에서 수정하기',
+      footerMessage: 'MIT 라이선스에 따라 배포됩니다.',
+      search: {
+        translations: {
+          button: {
+            buttonText: '검색',
+            buttonAriaLabel: '검색',
+          },
+          modal: {
+            backButtonTitle: '뒤로가기',
+            displayDetails: '더보기',
+            footer: {
+              closeKeyAriaLabel: '닫기',
+              closeText: '닫기',
+              navigateDownKeyAriaLabel: '아래로',
+              navigateText: '이동',
+              navigateUpKeyAriaLabel: '위로',
+              selectKeyAriaLabel: '선택',
+              selectText: '선택',
+            },
+            noResultsText: '검색 결과를 찾지 못했어요.',
+            resetButtonTitle: '모두 지우기',
+          },
+        },
+      },
+    },
   },
 };
 

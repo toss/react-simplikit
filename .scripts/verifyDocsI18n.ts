@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { DefaultTheme } from 'vitepress';
 
+import { buildLocaleConfig } from '../.vitepress/libs/buildLocaleConfig.mts';
 import { getSidebarItems } from '../.vitepress/libs/getSidebarItems.mts';
 import { generatedLocalesDirectory, generatedRewrites, localeDefinitions, rewrites } from '../.vitepress/locales.mts';
 import { corePackageRoot } from '../.vitepress/shared.mts';
@@ -106,4 +108,84 @@ try {
   await fs.rm(hookFixtureDirectory, { force: true, recursive: true });
   await fs.rm(path.join(root, generatedLocalesDirectory), { force: true, recursive: true });
   await fs.rm(buildOutputDirectory, { force: true, recursive: true });
+}
+
+const jaFixtureDefinition = {
+  label: '日本語',
+  lang: 'ja',
+  path: 'ja',
+  untranslatedNotice: 'このページは翻訳準備中のため、英語の原文を表示しています。',
+  themeStrings: {
+    homeNavLabel: 'ホーム',
+    guideLabel: 'ガイド',
+    referenceLabel: 'リファレンス',
+    componentsLabel: 'コンポーネント',
+    hooksLabel: 'フック',
+    utilsLabel: 'ユーティリティ',
+    guidePages: {
+      core: {
+        intro: '紹介',
+        whyReactSimplikitMatters: 'なぜ react-simplikit なのか',
+        installation: 'インストール',
+        designPrinciples: '設計原則',
+        contributing: '貢献ガイド',
+      },
+      mobile: {
+        intro: '紹介',
+        roadmap: 'ロードマップ',
+        installation: 'インストール',
+        designPrinciples: '設計原則',
+        contributing: '貢献ガイド',
+      },
+    },
+    editLinkText: 'GitHub で編集する',
+    footerMessage: 'MIT ライセンスの下で配布されています。',
+  },
+} satisfies Parameters<typeof buildLocaleConfig>[0];
+
+const jaConfig = buildLocaleConfig(jaFixtureDefinition);
+
+assert.equal(jaConfig.lang, 'ja');
+assert.deepEqual(jaConfig.themeConfig?.nav, [
+  { text: 'ホーム', link: '/ja/' },
+  { text: 'Mobile', link: '/ja/mobile/intro' },
+  { text: 'Core', link: '/ja/core/intro' },
+]);
+assert.deepEqual(Object.keys(jaConfig.themeConfig?.sidebar ?? {}), ['/ja/core/', '/ja/mobile/']);
+assert.equal(jaConfig.themeConfig?.editLink?.text, 'GitHub で編集する');
+
+const koConfig = buildLocaleConfig(localeDefinitions.ko);
+const rootConfig = buildLocaleConfig(localeDefinitions.root);
+
+assert.deepEqual(koConfig.themeConfig?.nav, [
+  { text: '홈', link: '/ko/' },
+  { text: 'Mobile', link: '/ko/mobile/intro' },
+  { text: 'Core', link: '/ko/core/intro' },
+]);
+assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/ko/core/'][0], {
+  text: '가이드',
+  items: [
+    { text: '소개', link: '/ko/core/intro' },
+    { text: 'react-simplikit, 선택의 이유', link: '/ko/core/why-react-simplikit-matters' },
+    { text: '설치하기', link: '/ko/core/installation' },
+    { text: '설계 원칙', link: '/ko/core/design-principles' },
+    { text: '기여하기', link: '/ko/core/contributing' },
+  ],
+});
+assert.equal(koConfig.themeConfig?.editLink?.text, 'GitHub에서 수정하기');
+assert.equal(koConfig.themeConfig?.footer?.message, 'MIT 라이선스에 따라 배포됩니다.');
+
+assert.deepEqual(rootConfig.themeConfig?.nav, [
+  { text: 'Home', link: '/' },
+  { text: 'Mobile', link: '/mobile/intro' },
+  { text: 'Core', link: '/core/intro' },
+]);
+assert.equal(rootConfig.lang, 'en');
+assert.equal(rootConfig.themeConfig?.editLink?.text, 'Edit this page on GitHub');
+
+for (const retiredLocaleFile of ['.vitepress/en.mts', '.vitepress/ko.mts']) {
+  await assert.rejects(
+    fs.access(path.join(root, retiredLocaleFile)),
+    `${retiredLocaleFile} must be deleted — locale config now comes from the registry`
+  );
 }
