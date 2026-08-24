@@ -15,9 +15,26 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./mobile": {
+      "import": {
+        "types": "./dist/mobile/index.d.mts",
+        "default": "./dist/mobile/index.mjs"
+      },
+      "require": {
+        "types": "./dist/mobile/index.d.cts",
+        "default": "./dist/mobile/index.cjs"
+      }
+    },
     "./package.json": "./package.json"
   },
   "type": "module",
+  "typesVersions": {
+    "*": {
+      "mobile": [
+        "./dist/mobile/index.d.cts"
+      ]
+    }
+  },
   "sideEffects": false,
   "keywords": [
     "react"

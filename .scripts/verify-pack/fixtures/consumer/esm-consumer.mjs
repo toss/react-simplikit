@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 
-import { useNetworkStatus } from '@react-simplikit/mobile';
+import { useNetworkStatus } from 'react-simplikit/mobile';
 import { ImpressionArea, useToggle } from 'react-simplikit';
 
 assert.strictEqual(typeof useToggle, 'function');

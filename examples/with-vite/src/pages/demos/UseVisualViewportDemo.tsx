@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Button, Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
-import { useVisualViewport } from '@react-simplikit/mobile';
+import { useVisualViewport } from 'react-simplikit/mobile';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
-const EXAMPLE_CODE = `import { useVisualViewport } from '@react-simplikit/mobile';
+const EXAMPLE_CODE = `import { useVisualViewport } from 'react-simplikit/mobile';
 
 function CustomLayout() {
   const { viewport } = useVisualViewport();

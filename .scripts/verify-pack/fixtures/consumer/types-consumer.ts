@@ -1,4 +1,4 @@
-import { useNetworkStatus } from '@react-simplikit/mobile';
+import { useNetworkStatus } from 'react-simplikit/mobile';
 import { useToggle } from 'react-simplikit';
 
 type UseToggleReturn = ReturnType<typeof useToggle>;

@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { renderHookSSR } from '../../test/renderHookSSR.tsx';
+import { renderHookSSR } from '../../../_internal/test-utils/renderHookSSR.tsx';
 
 import { usePageVisibility } from './usePageVisibility.ts';
 

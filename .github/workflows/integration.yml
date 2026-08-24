@@ -67,7 +67,7 @@ jobs:
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./packages/react-simplikit/coverage/coverage-final.json,./packages/mobile/coverage/coverage-final.json
+          files: ./packages/react-simplikit/coverage/coverage-final.json
 
   spec-compiled:
     name: spec (react compiler compiled)
@@ -475,17 +475,14 @@ jobs:
         run: |
           yarn workspaces foreach -Apt --include 'packages/*' run build
           CORE_TGZ=$(cd packages/react-simplikit && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
-          MOBILE_TGZ=$(cd packages/mobile && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
           echo "CORE_TGZ=$RUNNER_TEMP/$CORE_TGZ" >> "$GITHUB_ENV"
-          echo "MOBILE_TGZ=$RUNNER_TEMP/$MOBILE_TGZ" >> "$GITHUB_ENV"
 
       - name: Point examples at tarballs
         run: |
           for example in examples/with-vite examples/with-nextjs; do
-            jq --arg core "file:$CORE_TGZ" --arg mobile "file:$MOBILE_TGZ" \
+            jq --arg core "file:$CORE_TGZ" \
               '.dependencies |= with_entries(
                  if .key == "react-simplikit" then .value = $core
-                 elif .key == "@react-simplikit/mobile" then .value = $mobile
                  else . end)' \
               "$example/package.json" > "$example/package.json.tmp"
             mv "$example/package.json.tmp" "$example/package.json"

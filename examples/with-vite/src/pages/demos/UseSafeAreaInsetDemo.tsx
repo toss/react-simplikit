@@ -1,9 +1,9 @@
 import { Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
-import { useSafeAreaInset } from '@react-simplikit/mobile';
+import { useSafeAreaInset } from 'react-simplikit/mobile';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
-const USAGE_CODE = `import { useSafeAreaInset } from '@react-simplikit/mobile';
+const USAGE_CODE = `import { useSafeAreaInset } from 'react-simplikit/mobile';
 
 function MyComponent() {
   // Automatically updates on orientation change!
