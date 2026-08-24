@@ -2,6 +2,7 @@ export { ImpressionArea } from './components/ImpressionArea/index.ts';
 export { Separated } from './components/Separated/index.ts';
 export { SwitchCase } from './components/SwitchCase/index.ts';
 export { useAsyncEffect } from './hooks/useAsyncEffect/index.ts';
+export { useAsyncLock } from './hooks/useAsyncLock/index.ts';
 export { useBooleanState } from './hooks/useBooleanState/index.ts';
 export { useCallbackOncePerRender } from './hooks/useCallbackOncePerRender/index.ts';
 export { useConditionalEffect } from './hooks/useConditionalEffect/index.ts';
