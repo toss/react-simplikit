@@ -1,8 +1,8 @@
-# @react-simplikit/mobile
+# react-simplikit/mobile
 
 모바일 웹 환경에서 발생하는 다양한 UI 문제를 해결하는 React 훅 모음이에요.
 
-## Why @react-simplikit/mobile?
+## Why react-simplikit/mobile?
 
 모바일 웹 개발에는 데스크톱에서는 없는 고유한 문제들이 있어요:
 
@@ -12,12 +12,12 @@
 - **페이지 가시성 추적**: 앱이 백그라운드로 갈 때 비디오나 분석 일시정지하기
 - **Visual Viewport 변화**: 모바일 브라우저에서 줌, 키보드, 뷰포트 리사이즈 처리하기
 
-`@react-simplikit/mobile`은 이러한 시나리오를 최소한의 설정으로 처리할 수 있는 검증된 훅들을 제공해요.
+`react-simplikit/mobile`은 이러한 시나리오를 최소한의 설정으로 처리할 수 있는 검증된 훅들을 제공해요.
 
 ## Quick Start
 
 ```bash
-npm install @react-simplikit/mobile
+npm install react-simplikit
 ```
 
 ### Button CTA 예제
@@ -25,7 +25,7 @@ npm install @react-simplikit/mobile
 가장 흔한 모바일 UI 패턴 - 키보드 위로 이동하는 하단 고정 버튼:
 
 ```tsx
-import { useAvoidKeyboard } from '@react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit/mobile';
 
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard();
@@ -52,7 +52,7 @@ function FixedBottomCTA() {
 
 ```tsx
 import { useState } from 'react';
-import { useAvoidKeyboard } from '@react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit/mobile';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -89,7 +89,7 @@ function ChatInput() {
 홈 인디케이터가 있는 기기(예: iPhone)의 경우 safe area 오프셋을 추가할 수 있어요:
 
 ```tsx
-import { useAvoidKeyboard } from '@react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit/mobile';
 
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });

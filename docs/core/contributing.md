@@ -8,10 +8,10 @@
 
 Before contributing, check which package your implementation belongs to:
 
-| Package                   | Scope                                  | Examples                                                     |
-| ------------------------- | -------------------------------------- | ------------------------------------------------------------ |
-| `react-simplikit`         | Platform-independent pure state/logic  | `useToggle`, `useAsyncEffect`, `useLoading`                  |
-| `@react-simplikit/mobile` | Solving mobile web-specific challenges | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
+| Package                  | Scope                                  | Examples                                                     |
+| ------------------------ | -------------------------------------- | ------------------------------------------------------------ |
+| `react-simplikit`        | Platform-independent pure state/logic  | `useToggle`, `useAsyncEffect`, `useLoading`                  |
+| `react-simplikit/mobile` | Solving mobile web-specific challenges | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
 
 ::: tip
 The mobile package is **not** for all browser API-dependent hooks. It specifically targets **problems encountered in mobile web environments** (viewport management, keyboard handling, layout issues on iOS Safari and Android Chrome). For example, a keyboard shortcut hook uses browser APIs but doesn't belong in the mobile package.

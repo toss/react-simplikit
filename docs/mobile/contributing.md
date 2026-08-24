@@ -1,10 +1,10 @@
-# Contributing to @react-simplikit/mobile
+# Contributing to react-simplikit/mobile
 
 This guide extends the [core contributing guide](/core/contributing).
 
 ## Package Scope
 
-`@react-simplikit/mobile` is a dedicated package for **solving problems encountered in mobile web environments**.
+`react-simplikit/mobile` is a dedicated package for **solving problems encountered in mobile web environments**.
 
 This includes:
 
