@@ -20,7 +20,7 @@ function useGeolocation(options: GeolocationOptions): Object;
       type: 'GeolocationMountBehaviorType',
       required: false,
       description:
-        'How the hook behaves on mount: <br />- If not provided, no automatic location fetching occurs <br />- \'get\': automatically fetches location once when component mounts <br />- \'watch\': automatically starts tracking location changes when component mounts',
+        'How the hook behaves on mount: <br />- If not provided, no automatic location fetching occurs <br />- <code>get</code>: automatically fetches location once when component mounts <br />- <code>watch</code>: automatically starts tracking location changes when component mounts',
     },
     {
       name: 'options.enableHighAccuracy',

@@ -39,11 +39,13 @@ function buildContext(
     {
       name: 'Provider',
       type: '(props: ProviderProps<ContextValuesType>) => JSX.Element',
+      required: false,
       description: 'The component that provides the context.',
     },
     {
       name: 'useContext',
       type: '() => ContextValuesType',
+      required: false,
       description: 'The hook that uses the context.',
     },
   ]"
