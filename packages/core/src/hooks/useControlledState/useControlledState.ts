@@ -1,4 +1,8 @@
-import { type Dispatch, type SetStateAction, useCallback, useState } from 'react';
+import React, { type Dispatch, type SetStateAction, useCallback, useReducer, useRef, useState } from 'react';
+
+const useSafeInsertionEffect: typeof React.useLayoutEffect =
+  /* c8 ignore next */
+  typeof document !== 'undefined' ? (React['useInsertionEffect'] ?? React.useLayoutEffect) : () => {};
 
 type ControlledState<T> = { value: T; defaultValue?: never } | { defaultValue: T; value?: T };
 
@@ -49,19 +53,35 @@ export function useControlledState<T>({
   equalityFn = Object.is,
 }: UseControlledStateProps<T>): [T, Dispatch<SetStateAction<T>>] {
   const [uncontrolledState, setUncontrolledState] = useState(defaultValue as T);
+  const valueRef = useRef(uncontrolledState);
+
   const controlled = valueProp !== undefined;
   const value = controlled ? valueProp : uncontrolledState;
 
+  // After each render, reset valueRef to the actual value.
+  // This keeps the ref in sync with the actual value after optimistic updates.
+  const [, triggerRerender] = useReducer(() => ({}), {});
+  useSafeInsertionEffect(() => {
+    valueRef.current = value;
+  });
+
   const setValue = useCallback(
     (next: SetStateAction<T>) => {
-      const nextValue = isSetStateAction(next) ? next(value) : next;
+      const nextValue = isSetStateAction(next) ? next(valueRef.current) : next;
 
-      if (equalityFn(value, nextValue) === true) return;
+      if (equalityFn(valueRef.current, nextValue) === true) return;
+
+      valueRef.current = nextValue;
+      // In controlled mode the parent may decide not to update the value
+      // (e.g. conditional logic inside onChange).
+      // Force a re-render so the effect above can resync the ref with the actual value.
+      triggerRerender();
+
       if (controlled === false) setUncontrolledState(nextValue);
       if (controlled === true && nextValue === undefined) setUncontrolledState(nextValue);
       onChange?.(nextValue);
     },
-    [controlled, onChange, equalityFn, value]
+    [controlled, onChange, equalityFn]
   );
 
   return [value, setValue];

@@ -115,4 +115,19 @@ describe('useControlledState', () => {
     const [nextValue] = result.current;
     expect(nextValue).toBe(8);
   });
+
+  it('should handle multiple function setState actions', async () => {
+    const { result } = renderHookSSR(() => useControlledState({ defaultValue: 5 }));
+    const [value] = result.current;
+    expect(value).toBe(5);
+
+    await act(async () => {
+      const [, setValue] = result.current;
+      setValue(prev => prev + 3);
+      setValue(prev => prev + 3);
+    });
+
+    const [nextValue] = result.current;
+    expect(nextValue).toBe(11);
+  });
 });
