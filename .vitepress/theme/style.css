@@ -221,3 +221,14 @@ div.codeblock {
 html.dark div.codeblock {
   background-color: var(--vp-c-bg-alt);
 }
+
+.untranslated-banner {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--vp-custom-block-warning-border);
+  background-color: var(--vp-custom-block-warning-bg);
+  color: var(--vp-custom-block-warning-text);
+  font-size: 14px;
+  line-height: 22px;
+}

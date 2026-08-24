@@ -6,6 +6,7 @@
 node_modules
 coverage
 dist
+generated-locales
 esm
 .junit
 out

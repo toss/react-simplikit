@@ -8,6 +8,7 @@ import { getRootPath } from './utils/getRootPath.ts';
 dotenv.config({ path: path.join(getRootPath(), '.env') });
 
 import { generateDocs } from './commands/generateDocs/index.ts';
+import { prepareLocalizedFallbacks } from './commands/prepareLocalizedFallbacks/index.ts';
 import { scaffold } from './commands/scaffold/index.ts';
 
 export function cli(args: string[]) {
@@ -22,6 +23,13 @@ export function cli(args: string[]) {
     )
     .action((names: string) => {
       generateDocs(names.split(','));
+    });
+
+  program
+    .command('prepare-localized-fallbacks')
+    .description('Generate English fallback sources for documents that have no translation yet')
+    .action(async () => {
+      await prepareLocalizedFallbacks();
     });
 
   program
