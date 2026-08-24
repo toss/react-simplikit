@@ -12,7 +12,7 @@ export type TargetPackage = {
 export const TARGET_PACKAGES: TargetPackage[] = [
   {
     name: 'react-simplikit',
-    dir: 'packages/core',
+    dir: 'packages/react-simplikit',
     sizeEntry: `export { useToggle } from 'react-simplikit';`,
     sizeLimitBytes: 256,
   },

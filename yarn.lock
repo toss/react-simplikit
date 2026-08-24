@@ -10218,9 +10218,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-simplikit@workspace:*, react-simplikit@workspace:packages/core":
+"react-simplikit@workspace:*, react-simplikit@workspace:packages/react-simplikit":
   version: 0.0.0-use.local
-  resolution: "react-simplikit@workspace:packages/core"
+  resolution: "react-simplikit@workspace:packages/react-simplikit"
   dependencies:
     "@babel/core": "npm:^7.29.0"
     "@babel/preset-react": "npm:^7.27.0"

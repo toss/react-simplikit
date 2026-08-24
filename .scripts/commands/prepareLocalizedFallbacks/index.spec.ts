@@ -28,13 +28,13 @@ describe('prepareLocalizedFallbacks', () => {
 
   it('does not create a fallback when a localized document exists', async () => {
     const root = await createFixtureDirectory();
-    await writeFile(root, 'packages/core/src/hooks/useExample/useExample.md', '# useExample\n');
-    await writeFile(root, 'packages/core/src/hooks/useExample/ja/useExample.md', '# useExample Japanese\n');
+    await writeFile(root, 'packages/react-simplikit/src/hooks/useExample/useExample.md', '# useExample\n');
+    await writeFile(root, 'packages/react-simplikit/src/hooks/useExample/ja/useExample.md', '# useExample Japanese\n');
 
     await prepareLocalizedFallbacks({ localeDirectories: ['ja'], root });
 
     await assert.rejects(
-      fs.access(path.join(root, 'generated-locales/packages/core/src/hooks/useExample/ja/useExample.md'))
+      fs.access(path.join(root, 'generated-locales/packages/react-simplikit/src/hooks/useExample/ja/useExample.md'))
     );
   });
 });

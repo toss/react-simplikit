@@ -30,7 +30,7 @@ generated-locales/
 
 # transient fixtures written by `yarn test:docs`, which a killed run cannot clean up
 docs/core/untranslated-fallback-fixture.md
-packages/core/src/hooks/useUntranslatedFallbackFixture/
+packages/react-simplikit/src/hooks/useUntranslatedFallbackFixture/
 
 # next
 .next

@@ -31,9 +31,9 @@ for (const requiredText of ['release:', 'changesets/action@', 'changeset:publish
 assert.deepEqual(Object.keys(localeDefinitions), ['root', 'ko', 'ja']);
 assert.equal(rewrites['docs/index.md'], 'index.md');
 assert.equal(rewrites['docs/ko/index.md'], 'ko/index.md');
-assert.equal(rewrites['packages/core/src/hooks/:hook/ko/:hook.md'], 'ko/core/hooks/:hook.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ko/:hook.md'], 'ko/core/hooks/:hook.md');
 assert.equal(rewrites['docs/ja/index.md'], 'ja/index.md');
-assert.equal(rewrites['packages/core/src/hooks/:hook/ja/:hook.md'], 'ja/core/hooks/:hook.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ja/:hook.md'], 'ja/core/hooks/:hook.md');
 assert.equal(generatedRewrites['generated-locales/docs/ko/index.md'], 'ko/index.md');
 assert.equal(generatedRewrites['generated-locales/docs/ja/index.md'], 'ja/index.md');
 assert.equal(packageJson.scripts['docs:prepare'], 'tsx .scripts/index.ts prepare-localized-fallbacks');
@@ -65,7 +65,7 @@ try {
 const guideFixtureTitle = 'Untranslated Fallback Fixture';
 const guideFixturePath = path.join(root, 'docs/core/untranslated-fallback-fixture.md');
 const hookFixtureName = 'useUntranslatedFallbackFixture';
-const hookFixtureDirectory = path.join(root, 'packages/core/src/hooks', hookFixtureName);
+const hookFixtureDirectory = path.join(root, 'packages/react-simplikit/src/hooks', hookFixtureName);
 const buildOutputDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-docs-'));
 
 // Korean translates every routed English document, so its fallback path only has a route to
