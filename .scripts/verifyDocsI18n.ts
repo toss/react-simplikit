@@ -28,11 +28,14 @@ for (const requiredText of ['release:', 'changesets/action@', 'changeset:publish
   assert.equal(releaseWorkflow.includes(requiredText), true, `release workflow must contain ${requiredText}`);
 }
 
-assert.deepEqual(Object.keys(localeDefinitions), ['root', 'ko']);
+assert.deepEqual(Object.keys(localeDefinitions), ['root', 'ko', 'ja']);
 assert.equal(rewrites['docs/index.md'], 'index.md');
 assert.equal(rewrites['docs/ko/index.md'], 'ko/index.md');
 assert.equal(rewrites['packages/core/src/hooks/:hook/ko/:hook.md'], 'ko/core/hooks/:hook.md');
+assert.equal(rewrites['docs/ja/index.md'], 'ja/index.md');
+assert.equal(rewrites['packages/core/src/hooks/:hook/ja/:hook.md'], 'ja/core/hooks/:hook.md');
 assert.equal(generatedRewrites['generated-locales/docs/ko/index.md'], 'ko/index.md');
+assert.equal(generatedRewrites['generated-locales/docs/ja/index.md'], 'ja/index.md');
 assert.equal(packageJson.scripts['docs:prepare'], 'tsx .scripts/index.ts prepare-localized-fallbacks');
 assert.equal(packageJson.scripts['docs:dev'], 'yarn docs:prepare && vitepress dev');
 assert.equal(packageJson.scripts['docs:build'], 'yarn docs:prepare && vitepress build');
@@ -65,8 +68,9 @@ const hookFixtureName = 'useUntranslatedFallbackFixture';
 const hookFixtureDirectory = path.join(root, 'packages/core/src/hooks', hookFixtureName);
 const buildOutputDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-docs-'));
 
-// The repository currently has a Korean translation for every routed English document, so the
-// fallback path only has a route to render on while these English-only fixtures exist.
+// Korean translates every routed English document, so its fallback path only has a route to
+// render on while these English-only fixtures exist. Japanese ships without translated API
+// reference pages, so those routes render from generated fallbacks on every build.
 await fs.writeFile(guideFixturePath, `# ${guideFixtureTitle}\n`);
 await fs.mkdir(hookFixtureDirectory, { recursive: true });
 await fs.writeFile(path.join(hookFixtureDirectory, `${hookFixtureName}.md`), `# ${hookFixtureName}\n`);
@@ -110,49 +114,49 @@ try {
   await fs.rm(buildOutputDirectory, { force: true, recursive: true });
 }
 
-const jaFixtureDefinition = {
-  label: '日本語',
-  lang: 'ja',
-  path: 'ja',
-  untranslatedNotice: 'このページは翻訳準備中のため、英語の原文を表示しています。',
+const unregisteredLocaleFixture = {
+  label: '简体中文',
+  lang: 'zh-Hans',
+  path: 'zh-Hans',
+  untranslatedNotice: '此页面的翻译正在准备中，暂时显示英文原文。',
   themeStrings: {
-    homeNavLabel: 'ホーム',
-    guideLabel: 'ガイド',
-    referenceLabel: 'リファレンス',
-    componentsLabel: 'コンポーネント',
-    hooksLabel: 'フック',
-    utilsLabel: 'ユーティリティ',
+    homeNavLabel: '首页',
+    guideLabel: '指南',
+    referenceLabel: '参考',
+    componentsLabel: '组件',
+    hooksLabel: 'Hooks',
+    utilsLabel: '工具函数',
     guidePages: {
       core: {
-        intro: '紹介',
-        whyReactSimplikitMatters: 'なぜ react-simplikit なのか',
-        installation: 'インストール',
-        designPrinciples: '設計原則',
-        contributing: '貢献ガイド',
+        intro: '介绍',
+        whyReactSimplikitMatters: '为什么选择 react-simplikit',
+        installation: '安装',
+        designPrinciples: '设计原则',
+        contributing: '贡献指南',
       },
       mobile: {
-        intro: '紹介',
-        roadmap: 'ロードマップ',
-        installation: 'インストール',
-        designPrinciples: '設計原則',
-        contributing: '貢献ガイド',
+        intro: '介绍',
+        roadmap: '路线图',
+        installation: '安装',
+        designPrinciples: '设计原则',
+        contributing: '贡献指南',
       },
     },
-    editLinkText: 'GitHub で編集する',
-    footerMessage: 'MIT ライセンスの下で配布されています。',
+    editLinkText: '在 GitHub 上编辑此页',
+    footerMessage: '基于 MIT 许可证发布。',
   },
 } satisfies Parameters<typeof buildLocaleConfig>[0];
 
-const jaConfig = buildLocaleConfig(jaFixtureDefinition);
+const unregisteredConfig = buildLocaleConfig(unregisteredLocaleFixture);
 
-assert.equal(jaConfig.lang, 'ja');
-assert.deepEqual(jaConfig.themeConfig?.nav, [
-  { text: 'ホーム', link: '/ja/' },
-  { text: 'Mobile', link: '/ja/mobile/intro' },
-  { text: 'Core', link: '/ja/core/intro' },
+assert.equal(unregisteredConfig.lang, 'zh-Hans');
+assert.deepEqual(unregisteredConfig.themeConfig?.nav, [
+  { text: '首页', link: '/zh-Hans/' },
+  { text: 'Mobile', link: '/zh-Hans/mobile/intro' },
+  { text: 'Core', link: '/zh-Hans/core/intro' },
 ]);
-assert.deepEqual(Object.keys(jaConfig.themeConfig?.sidebar ?? {}), ['/ja/core/', '/ja/mobile/']);
-assert.equal(jaConfig.themeConfig?.editLink?.text, 'GitHub で編集する');
+assert.deepEqual(Object.keys(unregisteredConfig.themeConfig?.sidebar ?? {}), ['/zh-Hans/core/', '/zh-Hans/mobile/']);
+assert.equal(unregisteredConfig.themeConfig?.editLink?.text, '在 GitHub 上编辑此页');
 
 const koConfig = buildLocaleConfig(localeDefinitions.ko);
 const rootConfig = buildLocaleConfig(localeDefinitions.root);
@@ -182,6 +186,21 @@ assert.deepEqual(rootConfig.themeConfig?.nav, [
 ]);
 assert.equal(rootConfig.lang, 'en');
 assert.equal(rootConfig.themeConfig?.editLink?.text, 'Edit this page on GitHub');
+
+const jaConfig = buildLocaleConfig(localeDefinitions.ja);
+
+assert.equal(jaConfig.lang, 'ja');
+assert.deepEqual(jaConfig.themeConfig?.nav, [
+  { text: 'ホーム', link: '/ja/' },
+  { text: 'Mobile', link: '/ja/mobile/intro' },
+  { text: 'Core', link: '/ja/core/intro' },
+]);
+assert.equal(jaConfig.themeConfig?.editLink?.text, 'GitHub で編集する');
+assert.notEqual(
+  localeDefinitions.ja.themeStrings.search,
+  undefined,
+  'Japanese must ship search translations, or the search UI silently renders in English'
+);
 
 for (const retiredLocaleFile of ['.vitepress/en.mts', '.vitepress/ko.mts']) {
   await assert.rejects(
