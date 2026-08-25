@@ -25,7 +25,7 @@
 ## インストール
 
 ```bash
-# ルートのフックとモバイルサブパスは 1 回のインストールで利用できます
+# 1 回のインストールで、ルート export のフックとモバイルサブパスの両方を利用できます
 npm install react-simplikit
 ```
 
@@ -91,7 +91,7 @@ function BodyScrollLock() {
 
 ```
 packages/
-└── react-simplikit/    # react-simplikit (hooks, components, utils; モバイル Web ユーティリティは src/mobile)
+└── react-simplikit/    # react-simplikit (hooks, components, utils; モバイル Web ユーティリティは src/mobile 配下)
 ```
 
 ## 貢献
