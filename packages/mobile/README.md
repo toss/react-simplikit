@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/react-simplikit/blob/main/LICENSE)
 
-English | [한국어](./README-ko_kr.md)
+English | [한국어](./README-ko_kr.md) | [日本語](./README-ja_jp.md)
 
 Mobile web utilities for React - fixing viewport, keyboard, and layout issues on iOS Safari and Android Chrome.
 

@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/react-simplikit/blob/main/LICENSE)
 
-[English](./README.md) | 한국어
+[English](./README.md) | 한국어 | [日本語](./README-ja_jp.md)
 
 모바일 웹을 위한 React 유틸리티 - iOS Safari와 Android Chrome의 뷰포트, 키보드, 레이아웃 문제를 해결해요.
 
