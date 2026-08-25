@@ -1,10 +1,10 @@
-# @react-simplikit/mobile への貢献
+# react-simplikit/mobile への貢献
 
 このガイドは [core の貢献ガイド](/ja/core/contributing) を拡張したものです。
 
 ## パッケージのスコープ
 
-`@react-simplikit/mobile` は、**モバイル Web 環境で直面する問題を解決する**ための専用パッケージです。
+`react-simplikit/mobile` は、**モバイル Web 環境で直面する問題を解決する**ための専用パッケージです。
 
 以下のような領域を扱います。
 

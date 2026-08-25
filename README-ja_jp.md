@@ -8,12 +8,11 @@
 
 ## パッケージ
 
-| パッケージ                                    | 説明                                                                          | バージョン                                                                                                                |
-| --------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - 純粋な状態/ロジック用フック（プラットフォームに依存しない） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [@react-simplikit/mobile](./packages/mobile)  | モバイル Web ユーティリティ（viewport、keyboard、scroll）                     | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
+| パッケージ                                    | 説明                                                                                                                 | バージョン                                                                                                |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | Universal hooks - 純粋な状態/ロジック用フック、および `react-simplikit/mobile` サブパスのモバイル Web ユーティリティ | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **注記**: `react-simplikit` は現在、Web とモバイル（React Native）の両方で動作する純粋な状態/ロジック用フックのみを提供する Universal Hook Library として維持されています。ブラウザ/プラットフォームに依存するフックは非推奨です。詳しくは [packages/react-simplikit/README-ja_jp.md](./packages/react-simplikit/README-ja_jp.md) を参照してください。
+> **注記**: `react-simplikit` のルート export は、Web とモバイル（React Native）の両方で動作する純粋な状態/ロジック用フックとして維持されます。モバイル Web ユーティリティ（viewport、keyboard、scroll）は `react-simplikit/mobile` サブパスとして提供され、非推奨となった `@react-simplikit/mobile` パッケージを置き換えます。
 
 ## 特長
 
@@ -26,11 +25,8 @@
 ## インストール
 
 ```bash
-# Core utilities
+# ルートのフックとモバイルサブパスは 1 回のインストールで利用できます
 npm install react-simplikit
-
-# Mobile web utilities
-npm install @react-simplikit/mobile
 ```
 
 ## クイックスタート
@@ -64,10 +60,10 @@ function SearchInput() {
 
 デバウンスされた関数は `.cancel()` を提供し、コンポーネントがアンマウントされると保留中の呼び出しは自動的にキャンセルされます。
 
-### @react-simplikit/mobile
+### react-simplikit/mobile
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
+import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit/mobile';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -95,8 +91,7 @@ function BodyScrollLock() {
 
 ```
 packages/
-├── core/    # react-simplikit (hooks, components, utils)
-└── mobile/  # @react-simplikit/mobile (mobile web utilities)
+└── react-simplikit/    # react-simplikit (hooks, components, utils; モバイル Web ユーティリティは src/mobile)
 ```
 
 ## 貢献

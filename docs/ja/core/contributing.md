@@ -8,10 +8,10 @@
 
 貢献する前に、実装がどのパッケージに属するかを確認してください。
 
-| パッケージ                | スコープ                                         | 例                                                           |
-| ------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
-| `react-simplikit`         | プラットフォームに依存しない純粋な状態・ロジック | `useToggle`, `useAsyncEffect`, `useLoading`                  |
-| `@react-simplikit/mobile` | モバイル Web 特有の課題を解決する                | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
+| パッケージ               | スコープ                                         | 例                                                           |
+| ------------------------ | ------------------------------------------------ | ------------------------------------------------------------ |
+| `react-simplikit`        | プラットフォームに依存しない純粋な状態・ロジック | `useToggle`, `useAsyncEffect`, `useLoading`                  |
+| `react-simplikit/mobile` | モバイル Web 特有の課題を解決する                | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
 
 ::: tip
 mobile パッケージは、ブラウザ API に依存するすべてのフックのためのものでは**ありません**。**モバイル Web 環境で直面する問題**（ビューポート管理、キーボード処理、iOS Safari や Android Chrome でのレイアウトの問題）に限定して対象とします。たとえば、キーボードショートカットのフックはブラウザ API を使用しますが、mobile パッケージには属しません。
