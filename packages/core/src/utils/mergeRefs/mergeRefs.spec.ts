@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { act } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -74,5 +74,55 @@ describe('mergeRefs', () => {
 
     expect(result.current.ref1.current).toBe(value);
     expect(ref3Value).toBe(value);
+  });
+
+  it('should call cleanup functions returned by callback refs', () => {
+    const cleanupCalls: string[] = [];
+
+    const callbackRef1 = vi.fn(() => {
+      return () => {
+        cleanupCalls.push('cleanup1');
+      };
+    });
+
+    const callbackRef2 = vi.fn(() => {
+      return () => {
+        cleanupCalls.push('cleanup2');
+      };
+    });
+
+    const mergedRef = mergeRefs<string | null>(callbackRef1, callbackRef2);
+    const value = 'test-value';
+
+    act(() => {
+      mergedRef(value);
+    });
+
+    const cleanupFn = mergedRef(null);
+    if (cleanupFn) {
+      cleanupFn();
+    }
+
+    expect(cleanupCalls).toEqual(['cleanup1', 'cleanup2']);
+    expect(callbackRef1).toHaveBeenCalledWith(value);
+    expect(callbackRef2).toHaveBeenCalledWith(value);
+  });
+
+  it('verifies that object refs initialize correctly without cleanup functions', () => {
+    const refObj = { current: 'initial' };
+    const mergedRef = mergeRefs(refObj);
+
+    act(() => {
+      mergedRef('new-value');
+    });
+    expect(refObj.current).toBe('new-value');
+
+    const cleanupFn = mergedRef(null);
+    expect(cleanupFn).toBeInstanceOf(Function);
+
+    if (cleanupFn) {
+      cleanupFn();
+    }
+    expect(refObj.current).toBeNull();
   });
 });

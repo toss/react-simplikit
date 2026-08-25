@@ -5,9 +5,7 @@ This function takes multiple refs (RefObject or RefCallback) and returns a singl
 ## Interface
 
 ```ts
-function mergeRefs<T>(
-  ...refs: Array<RefObject<T> | RefCallback<T> | null | undefined>
-): RefCallback<T>;
+function mergeRefs<T>(...refs: Array<Ref<T> | undefined>): RefCallback<T>;
 ```
 
 ### Parameters
@@ -15,7 +13,7 @@ function mergeRefs<T>(
 <Interface
   required
   name="refs"
-  type="Array<RefObject<T> | RefCallback<T> | null | undefined>"
+  type="Array<Ref<T> | undefined>"
   description="An array of refs to be merged. Each ref can be either a RefObject or RefCallback."
 />
 

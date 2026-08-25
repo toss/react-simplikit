@@ -1,4 +1,7 @@
-import { RefCallback, RefObject } from 'react';
+import { Ref, RefCallback } from 'react';
+
+type StrictRef<T> = NonNullable<Ref<T>>;
+type RefCleanup<T> = ReturnType<RefCallback<T>>;
 
 /**
  * @description
@@ -7,7 +10,7 @@ import { RefCallback, RefObject } from 'react';
  *
  * @template T - The type of target to be referenced.
  *
- * @param {Array<RefObject<T> | RefCallback<T> | null | undefined>} refs - An array of refs to be merged. Each ref can be either a RefObject or RefCallback.
+ * @param {Array<Ref<T> | undefined>} refs - An array of refs to be merged. Each ref can be either a RefObject or RefCallback.
  *
  * @returns {RefCallback<T>} A single ref callback that updates all provided refs.
  *
@@ -34,19 +37,39 @@ import { RefCallback, RefObject } from 'react';
  *   return <div ref={mergeRefs(measuredRef, ref)} />;
  * }
  */
-export function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T> | null | undefined>): RefCallback<T> {
+
+function assignRef<T>(ref: StrictRef<T>, value: T | null): RefCleanup<T> {
+  if (typeof ref === 'function') {
+    return ref(value);
+  }
+
+  ref.current = value;
+}
+
+export function mergeRefs<T>(...refs: Array<Ref<T> | undefined>): RefCallback<T> {
+  const availableRefs = refs.filter(ref => ref != null);
+  const cleanupMap = new Map<StrictRef<T>, Exclude<RefCleanup<T>, void>>();
+
   return value => {
-    for (const ref of refs) {
-      if (ref == null) {
-        continue;
+    for (const ref of availableRefs) {
+      const cleanup = assignRef(ref, value);
+      if (cleanup) {
+        cleanupMap.set(ref, cleanup);
       }
-
-      if (typeof ref === 'function') {
-        ref(value);
-        continue;
-      }
-
-      (ref as RefObject<T | null>).current = value;
     }
+
+    return () => {
+      for (const ref of availableRefs) {
+        const cleanup = cleanupMap.get(ref);
+        if (cleanup && typeof cleanup === 'function') {
+          cleanup();
+          continue;
+        }
+
+        assignRef(ref, null);
+      }
+
+      cleanupMap.clear();
+    };
   };
 }
