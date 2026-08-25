@@ -1,9 +1,10 @@
 import { DefaultTheme } from 'vitepress';
 
 import { en } from './locales/en.mts';
+import { ja } from './locales/ja.mts';
 import { ko } from './locales/ko.mts';
 
-export type LocaleCode = 'root' | 'ko';
+export type LocaleCode = 'root' | 'ko' | 'ja';
 
 type GuidePageTitles = {
   core: {
@@ -64,6 +65,13 @@ export const localeDefinitions: Record<LocaleCode, LocaleDefinition> = {
     path: 'ko',
     untranslatedNotice: '이 페이지는 번역을 준비하는 동안 영어 원문으로 보여드려요.',
     themeStrings: ko,
+  },
+  ja: {
+    label: '日本語',
+    lang: 'ja',
+    path: 'ja',
+    untranslatedNotice: 'このページは翻訳の準備中のため、英語の原文を表示しています。',
+    themeStrings: ja,
   },
 };
 
