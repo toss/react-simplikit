@@ -29,7 +29,7 @@ components → hooks → utils → _internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
 - \_internal has no internal dependencies
-- Mobile may depend on core; core must NOT depend on mobile
+- `src/mobile` may use core utils and `_internal`; root exports must NOT import from `src/mobile` (test infrastructure like `_internal/test-utils` is exempt)
 
 ## File Structure Convention
 

@@ -10,7 +10,7 @@ const MEMO_CACHE_ACCESS = /\$\[\d+\]/;
 
 // Guards the compiled suite against silently degrading into a duplicate of the uncompiled
 // run (e.g. the plugin filter no longer matching source files). Only the compiled config
-// includes this file — under the base config, neither assertion would hold.
+// includes this file — under the base config, none of these assertions would hold.
 describe('react compiler canary', () => {
   it('runs against compiled source', () => {
     expect(useBooleanState.toString()).toMatch(MEMO_CACHE_ACCESS);

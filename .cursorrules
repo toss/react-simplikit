@@ -9,7 +9,7 @@ React hooks/components library. Monorepo with a single package: `packages/react-
 ## Architecture
 
 Unidirectional layers: `components → hooks → utils → _internal`
-Core and mobile are independent packages. No cross-package dependencies.
+Root exports must NOT import from `src/mobile`; `src/mobile` may use core utils and `_internal` (test infrastructure is exempt).
 
 ## Code Style
 

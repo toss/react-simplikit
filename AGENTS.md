@@ -5,7 +5,7 @@
 
 ## Project Overview
 
-React utility hooks/components library. Monorepo with two packages:
+React utility hooks/components library. Single package monorepo:
 
 - `react-simplikit` (`packages/react-simplikit`) — Platform-independent React hooks & components
 - `react-simplikit/mobile` (`packages/react-simplikit/src/mobile`) — Mobile web utilities (viewport, keyboard, layout) as a subpath export
@@ -21,7 +21,7 @@ components → hooks → utils → _internal
 - Components may use hooks, utils, \_internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
-- Core and mobile are independent packages — no cross-package dependencies
+- Root exports must NOT import from `src/mobile`; `src/mobile` may use core utils and `_internal` (test infrastructure is exempt)
 
 ## File Structure
 

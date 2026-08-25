@@ -4,7 +4,7 @@ description: How to install react-simplikit/mobile
 
 # Installation
 
-You can install `react-simplikit/mobile` from [npm](https://npmjs.com/package/react-simplikit/mobile) using your favorite package manager.
+You can install `react-simplikit` from [npm](https://npmjs.com/package/react-simplikit) using your favorite package manager.
 
 ::: code-group
 

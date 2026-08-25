@@ -125,6 +125,10 @@ jobs:
                 - 'packages/*/src/hooks/**/!(*.spec|*.test).tsx'
                 - 'packages/*/src/utils/**/!(index|*.spec|*.test).ts'
                 - 'packages/*/src/utils/**/!(*.spec|*.test).tsx'
+                - 'packages/*/src/mobile/hooks/**/!(index|*.spec|*.test).ts'
+                - 'packages/*/src/mobile/hooks/**/!(*.spec|*.test).tsx'
+                - 'packages/*/src/mobile/utils/**/!(index|*.spec|*.test).ts'
+                - 'packages/*/src/mobile/utils/**/!(*.spec|*.test).tsx'
 
   verify-test:
     runs-on: ubuntu-latest
@@ -338,15 +342,17 @@ jobs:
           HAS_ERROR=0
           FOUND=0
 
-          for pkg in packages/*/; do
-            ROOT_INDEX="${pkg}src/index.ts"
+          # Each scan root is an export barrel plus the impl dirs beneath it.
+          # src/mobile is a second root: its barrel is the ./mobile subpath entry.
+          for root in packages/*/src packages/*/src/mobile; do
+            ROOT_INDEX="$root/index.ts"
 
             if [ ! -f "$ROOT_INDEX" ]; then
               continue
             fi
 
             for dir in "${IMPL_DIRS[@]}"; do
-              for impl_dir in ${pkg}src/$dir/*/; do
+              for impl_dir in $root/$dir/*/; do
                 if [ ! -d "$impl_dir" ]; then
                   continue
                 fi

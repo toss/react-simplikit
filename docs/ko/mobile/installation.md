@@ -4,7 +4,7 @@ description: 'react-simplikit/mobile 설치 방법'
 
 # 설치하기
 
-좋아하는 패키지 매니저를 사용하여 [npm](https://npmjs.com/package/react-simplikit/mobile)에서 `react-simplikit/mobile`을 설치할 수 있어요.
+좋아하는 패키지 매니저를 사용하여 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요. 모바일 유틸리티는 `react-simplikit/mobile` 서브패스로 가져와요.
 
 ::: code-group
 
