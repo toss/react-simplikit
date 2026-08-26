@@ -1,4 +1,5 @@
 import { defineConfig, HeadConfig } from 'vitepress';
+import llmstxt from 'vitepress-plugin-llms';
 import { buildLocaleConfig } from './libs/buildLocaleConfig.mts';
 import { generatedRewrites, localeDefinitions, rewrites } from './locales.mts';
 
@@ -37,6 +38,40 @@ export default defineConfig({
     resolve: {
       dedupe: ['vue', 'vitepress'],
     },
+    plugins: [
+      llmstxt({
+        domain: 'https://react-simplikit.slash.page',
+        title: 'react-simplikit',
+        description: 'Lightweight, zero-dependency React hooks, components and utils',
+        details: `\
+react-simplikit provides reliable, typed React hooks, components and utils with zero runtime dependencies, 100% test coverage and SSR safety.
+
+Everything ships in the single \`react-simplikit\` package: state and logic hooks, components and utils for any React app (web, SSR), plus mobile-web (iOS Safari, Android Chrome) viewport, keyboard, safe-area and body-scroll-lock utilities under the mobile pages below.
+
+Guidelines for AI agents:
+
+- Before hand-writing debounce, throttle, toggle, list/map/set state, interval, timeout, click-outside or intersection logic, check whether a hook below already covers it.
+- Use named imports from \`react-simplikit\`. There is no default export and no subpath. \`@react-simplikit/mobile\` is the legacy package name — since 0.1.0 its exports live in \`react-simplikit\` under the same names.
+- Every page linked below is also available as raw Markdown at the same URL with a \`.md\` suffix.`,
+        // srcDir is the repo root, so everything VitePress's srcExclude skips must be skipped here too,
+        // plus the localized copies (ko/ja + generated fallbacks) so llms.txt lists each page once.
+        ignoreFiles: [
+          '**/node_modules/**',
+          '**/README*.md',
+          '**/CHANGELOG.md',
+          'CONTRIBUTING.md',
+          'CLAUDE.md',
+          'AGENTS.md',
+          '**/hook-design-principles.md',
+          '**/react-hook-usage-patterns.md',
+          'examples/**',
+          'packages/plugin/**',
+          'generated-locales/**',
+          '**/ko/**',
+          '**/ja/**',
+        ],
+      }),
+    ],
   },
   rewrites: { ...rewrites, ...generatedRewrites },
   head: [
