@@ -67,7 +67,7 @@ jobs:
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./packages/core/coverage/coverage-final.json,./packages/mobile/coverage/coverage-final.json
+          files: ./packages/react-simplikit/coverage/coverage-final.json,./packages/mobile/coverage/coverage-final.json
 
   spec-compiled:
     name: spec (react compiler compiled)
@@ -474,7 +474,7 @@ jobs:
         shell: bash
         run: |
           yarn workspaces foreach -Apt --include 'packages/*' run build
-          CORE_TGZ=$(cd packages/core && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
+          CORE_TGZ=$(cd packages/react-simplikit && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
           MOBILE_TGZ=$(cd packages/mobile && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
           echo "CORE_TGZ=$RUNNER_TEMP/$CORE_TGZ" >> "$GITHUB_ENV"
           echo "MOBILE_TGZ=$RUNNER_TEMP/$MOBILE_TGZ" >> "$GITHUB_ENV"

@@ -8,12 +8,12 @@
 
 ## パッケージ
 
-| パッケージ                                   | 説明                                                                          | バージョン                                                                                                                |
-| -------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/core)           | Universal hooks - 純粋な状態/ロジック用フック（プラットフォームに依存しない） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [@react-simplikit/mobile](./packages/mobile) | モバイル Web ユーティリティ（viewport、keyboard、scroll）                     | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
+| パッケージ                                    | 説明                                                                          | バージョン                                                                                                                |
+| --------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | Universal hooks - 純粋な状態/ロジック用フック（プラットフォームに依存しない） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [@react-simplikit/mobile](./packages/mobile)  | モバイル Web ユーティリティ（viewport、keyboard、scroll）                     | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
 
-> **注記**: `react-simplikit` は現在、Web とモバイル（React Native）の両方で動作する純粋な状態/ロジック用フックのみを提供する Universal Hook Library として維持されています。ブラウザ/プラットフォームに依存するフックは非推奨です。詳しくは [packages/core/README-ja_jp.md](./packages/core/README-ja_jp.md) を参照してください。
+> **注記**: `react-simplikit` は現在、Web とモバイル（React Native）の両方で動作する純粋な状態/ロジック用フックのみを提供する Universal Hook Library として維持されています。ブラウザ/プラットフォームに依存するフックは非推奨です。詳しくは [packages/react-simplikit/README-ja_jp.md](./packages/react-simplikit/README-ja_jp.md) を参照してください。
 
 ## 特長
 

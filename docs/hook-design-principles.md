@@ -319,21 +319,21 @@ packages/plugin/  (planned)
 
 ### Extraction Rules
 
-| Extracted (Philosophy)                     | Left Behind (Implementation)         |
-| ------------------------------------------ | ------------------------------------ |
-| "Always return objects"                    | `packages/core/src/hooks/` paths     |
-| "Named useEffect improves stack traces"    | `yarn test`, `yarn fix` commands     |
-| "SSR-safe: fixed initial + useEffect sync" | `renderHookSSR.serverOnly()` utility |
-| "4 JSDoc tags for AI doc generation"       | `100%` coverage threshold            |
+| Extracted (Philosophy)                     | Left Behind (Implementation)                |
+| ------------------------------------------ | ------------------------------------------- |
+| "Always return objects"                    | `packages/react-simplikit/src/hooks/` paths |
+| "Named useEffect improves stack traces"    | `yarn test`, `yarn fix` commands            |
+| "SSR-safe: fixed initial + useEffect sync" | `renderHookSSR.serverOnly()` utility        |
+| "4 JSDoc tags for AI doc generation"       | `100%` coverage threshold                   |
 
 ### Generalization Transforms
 
-| Before (Project-Specific)    | After (Universal)               |
-| ---------------------------- | ------------------------------- |
-| `renderHookSSR.serverOnly()` | Vitest + `delete global.window` |
-| `yarn test` / `yarn fix`     | "Run your test suite"           |
-| `packages/core/` paths       | "your source directory"         |
-| `react-simplikit` references | Removed                         |
+| Before (Project-Specific)         | After (Universal)               |
+| --------------------------------- | ------------------------------- |
+| `renderHookSSR.serverOnly()`      | Vitest + `delete global.window` |
+| `yarn test` / `yarn fix`          | "Run your test suite"           |
+| `packages/react-simplikit/` paths | "your source directory"         |
+| `react-simplikit` references      | Removed                         |
 
 ---
 

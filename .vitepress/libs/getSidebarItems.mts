@@ -7,7 +7,7 @@ import { projectRoot } from '../shared.mts';
 
 /**
  * Get sidebar items from a package's source directory
- * @param packageRoot - Root directory of the package (e.g., packages/core/src)
+ * @param packageRoot - Root directory of the package (e.g., packages/react-simplikit/src)
  * @param category - Category like 'hooks', 'components', 'utils'
  * @param prefix - URL prefix like '/core' or '/mobile'
  * @param locale - Optional locale like 'ko'

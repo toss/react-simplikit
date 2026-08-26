@@ -101,21 +101,21 @@ const routeDefinitions: RouteDefinition[] = [
     localizedDestination: ':locale/mobile/:doc.md',
   },
   {
-    source: 'packages/core/src/hooks/:hook/:hook.md',
+    source: 'packages/react-simplikit/src/hooks/:hook/:hook.md',
     destination: 'core/hooks/:hook.md',
-    localizedSource: 'packages/core/src/hooks/:hook/:locale/:hook.md',
+    localizedSource: 'packages/react-simplikit/src/hooks/:hook/:locale/:hook.md',
     localizedDestination: ':locale/core/hooks/:hook.md',
   },
   {
-    source: 'packages/core/src/components/:component/:component.md',
+    source: 'packages/react-simplikit/src/components/:component/:component.md',
     destination: 'core/components/:component.md',
-    localizedSource: 'packages/core/src/components/:component/:locale/:component.md',
+    localizedSource: 'packages/react-simplikit/src/components/:component/:locale/:component.md',
     localizedDestination: ':locale/core/components/:component.md',
   },
   {
-    source: 'packages/core/src/utils/:util/:util.md',
+    source: 'packages/react-simplikit/src/utils/:util/:util.md',
     destination: 'core/utils/:util.md',
-    localizedSource: 'packages/core/src/utils/:util/:locale/:util.md',
+    localizedSource: 'packages/react-simplikit/src/utils/:util/:locale/:util.md',
     localizedDestination: ':locale/core/utils/:util.md',
   },
   {

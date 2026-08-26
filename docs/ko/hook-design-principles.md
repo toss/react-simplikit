@@ -309,21 +309,21 @@ packages/plugin/  (planned)
 
 ### 추출 규칙
 
-| 추출됨 (철학)                              | 남겨짐 (구현)                     |
-| ------------------------------------------ | --------------------------------- |
-| "항상 객체 반환"                           | `packages/core/src/hooks/` 경로   |
-| "Named useEffect improves stack traces"    | `yarn test`, `yarn fix` 명령      |
-| "SSR-safe: fixed initial + useEffect sync" | `renderHookSSR.serverOnly()` 유틸 |
-| "4 JSDoc tags for AI doc generation"       | `100%` coverage 기준              |
+| 추출됨 (철학)                              | 남겨짐 (구현)                              |
+| ------------------------------------------ | ------------------------------------------ |
+| "항상 객체 반환"                           | `packages/react-simplikit/src/hooks/` 경로 |
+| "Named useEffect improves stack traces"    | `yarn test`, `yarn fix` 명령               |
+| "SSR-safe: fixed initial + useEffect sync" | `renderHookSSR.serverOnly()` 유틸          |
+| "4 JSDoc tags for AI doc generation"       | `100%` coverage 기준                       |
 
 ### 일반화 변환
 
-| Before (프로젝트 전용)       | After (범용)                    |
-| ---------------------------- | ------------------------------- |
-| `renderHookSSR.serverOnly()` | Vitest + `delete global.window` |
-| `yarn test` / `yarn fix`     | "Run your test suite"           |
-| `packages/core/` 경로        | "your source directory"         |
-| `react-simplikit` 언급       | 제거                            |
+| Before (프로젝트 전용)           | After (범용)                    |
+| -------------------------------- | ------------------------------- |
+| `renderHookSSR.serverOnly()`     | Vitest + `delete global.window` |
+| `yarn test` / `yarn fix`         | "Run your test suite"           |
+| `packages/react-simplikit/` 경로 | "your source directory"         |
+| `react-simplikit` 언급           | 제거                            |
 
 ---
 

@@ -4,7 +4,7 @@
 
 ## Quick Reference
 
-- Monorepo: `packages/core` (react-simplikit) + `packages/mobile` (@react-simplikit/mobile)
+- Monorepo: `packages/react-simplikit` (react-simplikit) + `packages/mobile` (@react-simplikit/mobile)
 - Architecture: `components → hooks → utils → _internal` (unidirectional, no circular imports)
 - Core and mobile are independent packages — no cross-package dependencies
 
