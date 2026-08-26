@@ -16,46 +16,6 @@
 - **SSR 安全** - Next.js などの SSR フレームワークで動作
 - **ツリーシェイキング対応** - 使用するものだけがバンドルされる
 
-## ライブラリの方針
-
-**react-simplikit は現在、純粋な状態/ロジック用フックのみを提供する Universal Hook Library として維持されています。**
-
-react-simplikit は、Web とモバイル（React Native など）の両方でシームレスに動作する**プラットフォームに依存しないフック**に焦点を絞る方向へと再編を進めています。
-
-### 維持されるもの: 純粋な状態/ロジック用フック
-
-特定のプラットフォーム API に依存しないフックは、引き続き積極的にメンテナンスされます。
-
-- `useToggle`、`useBooleanState`、`useCounter` のような状態管理フック
-- `usePrevious` のようなライフサイクルフック
-- `useDebounce`、`useThrottle` のようなユーティリティフック
-- これらの既存の純粋なロジックフックについては、**後方互換性（BC）が維持されます**
-
-### 非推奨となったもの: ブラウザ/プラットフォームに依存するフック
-
-ブラウザ固有の API に強く依存する以下のフックは、非推奨となりました。
-
-- `useGeolocation` - `navigator.geolocation` に依存
-- `useStorageState` - `localStorage`/`sessionStorage` に依存
-- `useIntersectionObserver` - `IntersectionObserver` API に依存
-- `useImpressionRef` - `IntersectionObserver` + Visibility API に依存
-- `useDoubleClick`、`useLongPress` - DOM イベント + `window.setTimeout` に依存
-- `useOutsideClickEffect` - DOM イベント + `document` に依存
-- `useVisibilityEvent` - `document.visibilityState` に依存
-
-これらのフックは:
-
-- 新機能の追加や大きな改善は行われません
-- ドキュメント上で `@deprecated` と明記されます
-- 将来のメジャーバージョンで削除される可能性があります
-
-### パッケージのステータス
-
-- react-simplikit は**アーカイブされません**
-- 純粋な状態/ロジック用フックは引き続きメンテナンスされます
-- 重大なバグ修正と最小限のメンテナンスは継続します
-- 新しいブラウザ/プラットフォーム依存のフックは追加されません
-
 ## インストール
 
 ```bash
