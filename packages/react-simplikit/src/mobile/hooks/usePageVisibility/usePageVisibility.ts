@@ -26,6 +26,8 @@ export type PageVisibility = {
  *
  * **SSR Behavior**: Returns `{ isVisible: true, visibilityState: 'visible' }` during server-side rendering.
  *
+ * @see `useVisibilityEvent` runs a callback on each change instead of returning state.
+ *
  * @returns {PageVisibility} Page visibility information
  * - `isVisible` - True if page is currently visible to the user
  * - `visibilityState` - Current visibility state: 'visible' | 'hidden'
