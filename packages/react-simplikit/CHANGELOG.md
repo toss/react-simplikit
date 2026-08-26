@@ -1,5 +1,17 @@
 # react-simplikit
 
+## 0.1.0
+
+### Minor Changes
+
+- [#437](https://github.com/toss/react-simplikit/pull/437) [`fe2226d`](https://github.com/toss/react-simplikit/commit/fe2226d5fbfcd305ab888cef83450f7f0e1caa77) Thanks [@mnxmnz](https://github.com/mnxmnz)! - Absorb `@react-simplikit/mobile` into the root export of `react-simplikit`. Update imports from `@react-simplikit/mobile` to `react-simplikit`; the exported APIs are unchanged. The `@react-simplikit/mobile` npm package will be deprecated with a pointer to `react-simplikit` after this release.
+
+### Patch Changes
+
+- [#423](https://github.com/toss/react-simplikit/pull/423) [`36e3e4c`](https://github.com/toss/react-simplikit/commit/36e3e4ccbd9c7a45bda18f33dcb514c97f387cbb) Thanks [@Antoliny0919](https://github.com/Antoliny0919)! - The returned handler was typed as `ChangeEventHandler<HTMLInputElement>`, so passing it to a `<textarea>` raised a type error even though the runtime behavior was identical. The handler is now typed as `ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>`, so it can be attached to both `<input>` and `<textarea>` elements.
+
+- [#424](https://github.com/toss/react-simplikit/pull/424) [`1ac0166`](https://github.com/toss/react-simplikit/commit/1ac0166d8f41c1159d004bd9c8192f2e59f6efc8) Thanks [@hyesungoh](https://github.com/hyesungoh)! - fix(core): opt the remaining React Compiler-incompatible hooks out with `'use no memo'`
+
 ## 0.0.53
 
 ### Patch Changes
