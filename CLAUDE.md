@@ -115,9 +115,11 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 ## Documentation
 
-- **Bilingual**: English + Korean (co-located in hook folders as `*.md` / `ko/*.md`)
+- **Locales**: English + Korean + Japanese (co-located in hook folders as `*.md` / `ko/*.md` / `ja/*.md`; guides under `docs/<locale>/`)
 - **JSDoc required**: Every public API must have `@description` + `@example` + `@param` + `@returns`
-- **VitePress**: Used for documentation site; rewrites map source docs to clean URLs
+- **English API docs are generated**: `yarn docs:gen <name>` (JSDoc → Markdown). Do not hand-edit English API `.md` files
+- **Translations**: written with the local AI harness — draft from the English source, review with the `translation-reviewer` agent (`.claude/agents/agent-translation-reviewer.md`, glossary inside). Nothing in CI translates. A PR that changes an English doc updates its `ko/` and `ja/` counterparts
+- **VitePress**: Used for documentation site; rewrites map source docs to clean URLs. Untranslated pages fall back to English with a banner
 - **Co-location**: Docs live inside package source, not in separate docs/ tree
 - **Homepage**: `https://react-simplikit.slash.page`
 
