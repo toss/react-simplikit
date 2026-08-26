@@ -78,7 +78,7 @@ describe('disableBodyScrollLock', () => {
       document.body.setAttribute(SCROLL_POSITION_ATTR, 'invalid');
       disableBodyScrollLock();
 
-      expect(consoleWarnSpy).toHaveBeenCalledWith('[react-simplikit/mobile] Invalid scroll position, defaulting to 0');
+      expect(consoleWarnSpy).toHaveBeenCalledWith('[react-simplikit] Invalid scroll position, defaulting to 0');
       expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
       consoleWarnSpy.mockRestore();

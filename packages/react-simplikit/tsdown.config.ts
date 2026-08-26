@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsdown';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/mobile/index.ts'],
+  entry: ['src/index.ts'],
   format: ['esm', 'cjs'],
   // Per-module output lets a consumer's bundler drop whole files it never imports,
   // instead of relying on it to prove top-level statements in one flat bundle are removable.

@@ -342,17 +342,22 @@ jobs:
           HAS_ERROR=0
           FOUND=0
 
-          # Each scan root is an export barrel plus the impl dirs beneath it.
-          # src/mobile is a second root: its barrel is the ./mobile subpath entry.
-          for root in packages/*/src packages/*/src/mobile; do
-            ROOT_INDEX="$root/index.ts"
+          # Every implementation — including the absorbed src/mobile tree — must be
+          # exported from the package root barrel: it is the only public entry.
+          for pkg in packages/*/; do
+            ROOT_INDEX="${pkg}src/index.ts"
 
             if [ ! -f "$ROOT_INDEX" ]; then
               continue
             fi
 
+            for prefix in "" "mobile/"; do
+              if [ -n "$prefix" ] && [ ! -d "${pkg}src/$prefix" ]; then
+                continue
+              fi
+
             for dir in "${IMPL_DIRS[@]}"; do
-              for impl_dir in $root/$dir/*/; do
+              for impl_dir in ${pkg}src/$prefix$dir/*/; do
                 if [ ! -d "$impl_dir" ]; then
                   continue
                 fi
@@ -386,12 +391,13 @@ jobs:
                   HAS_ERROR=1
                 fi
 
-                relative_path="./$dir/$impl_name/index.ts"
+                relative_path="./$prefix$dir/$impl_name/index.ts"
                 if ! grep -q "from.*['\"]$relative_path['\"]" "$ROOT_INDEX"; then
                   ERROR_LOG+="❌ $impl_name is not exported in $ROOT_INDEX\n"
                   HAS_ERROR=1
                 fi
               done
+            done
             done
           done
 

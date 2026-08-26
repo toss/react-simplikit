@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
-import { isServer } from 'react-simplikit/mobile';
+import { isServer } from 'react-simplikit';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
-const EXAMPLE_CODE = `import { isServer } from 'react-simplikit/mobile';
+const EXAMPLE_CODE = `import { isServer } from 'react-simplikit';
 
 // Check environment
 if (isServer()) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { isServer } from 'react-simplikit/mobile';
+import { isServer } from 'react-simplikit';
 
 import { DemoLayout } from '../../../components/DemoLayout.tsx';
 

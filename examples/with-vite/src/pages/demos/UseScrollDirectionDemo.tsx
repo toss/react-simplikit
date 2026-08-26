@@ -1,9 +1,9 @@
 import { Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
-import { useScrollDirection } from 'react-simplikit/mobile';
+import { useScrollDirection } from 'react-simplikit';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
-const EXAMPLE_CODE = `import { useScrollDirection } from 'react-simplikit/mobile';
+const EXAMPLE_CODE = `import { useScrollDirection } from 'react-simplikit';
 
 function Header() {
   const { direction, position } = useScrollDirection();
