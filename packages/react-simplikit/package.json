@@ -1,6 +1,7 @@
 {
   "name": "react-simplikit",
   "version": "0.0.53",
+  "description": "React hooks, components and utilities — SSR-safe, zero dependencies, mobile web included",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.cts",
@@ -20,7 +21,15 @@
   "type": "module",
   "sideEffects": false,
   "keywords": [
-    "react"
+    "react",
+    "react-hooks",
+    "hooks",
+    "components",
+    "utils",
+    "typescript",
+    "ssr",
+    "zero-dependency",
+    "mobile-web"
   ],
   "homepage": "https://react-simplikit.slash.page",
   "bugs": "https://github.com/toss/react-simplikit/issues",

@@ -21,8 +21,8 @@ export function buildLocaleConfig(
     themeConfig: {
       nav: [
         { text: strings.homeNavLabel, link: `${prefix}/` },
-        { text: 'Mobile', link: `${prefix}/mobile/intro` },
-        { text: 'Core', link: `${prefix}/core/intro` },
+        { text: 'Guide', link: `${prefix}/core/intro` },
+        { text: 'Mobile Utilities', link: `${prefix}/mobile/intro` },
       ],
       sidebar: {
         [`${prefix}/core/`]: [
