@@ -8,10 +8,10 @@
 
 기여하기 전에, 구현체가 어떤 패키지에 속하는지 확인해 주세요:
 
-| 패키지                   | 범위                           | 예시                                                         |
-| ------------------------ | ------------------------------ | ------------------------------------------------------------ |
-| `react-simplikit`        | 플랫폼 독립적인 순수 상태/로직 | `useToggle`, `useAsyncEffect`, `useLoading`                  |
-| `react-simplikit/mobile` | 모바일 웹 환경의 문제 해결     | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
+| 패키지                         | 범위                           | 예시                                                         |
+| ------------------------------ | ------------------------------ | ------------------------------------------------------------ |
+| `react-simplikit`              | 플랫폼 독립적인 순수 상태/로직 | `useToggle`, `useAsyncEffect`, `useLoading`                  |
+| 모바일 유틸리티 (`src/mobile`) | 모바일 웹 환경의 문제 해결     | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
 
 ::: tip
 mobile 패키지는 모든 브라우저 API 의존 훅을 위한 것이 **아니에요**. **모바일 웹 환경에서 겪는 문제**를 해결하는 훅/유틸리티만 해당돼요(뷰포트 관리, 키보드 처리, iOS Safari/Android Chrome의 레이아웃 이슈 등). 예를 들어, 키보드 단축키 훅은 브라우저 API를 사용하지만 mobile 패키지에 속하지 않아요.

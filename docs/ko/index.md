@@ -9,11 +9,11 @@ hero:
     alt: react-simplikit
   actions:
     - theme: brand
-      text: Mobile (권장)
-      link: /ko/mobile/intro
-    - theme: alt
-      text: Core
+      text: 시작하기
       link: /ko/core/intro
+    - theme: alt
+      text: 모바일 유틸리티
+      link: /ko/mobile/intro
 
 features:
   - title: '의존성이 전혀 없어요'

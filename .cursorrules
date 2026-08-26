@@ -4,7 +4,7 @@
 
 ## Project
 
-React hooks/components library. Monorepo with a single package: `packages/react-simplikit` (mobile web utilities under the `react-simplikit/mobile` subpath).
+React hooks/components library. Monorepo with a single package: `packages/react-simplikit` (mobile web utilities in `src/mobile`, exported from the root entry).
 
 ## Architecture
 

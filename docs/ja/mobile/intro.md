@@ -1,8 +1,8 @@
-# react-simplikit/mobile
+# モバイルユーティリティ
 
 モバイル Web 環境でよくある UI の課題を解決する React フック集です。
 
-## なぜ react-simplikit/mobile なのか
+## なぜモバイルユーティリティなのか
 
 モバイル Web 開発には、デスクトップにはない固有の課題があります。
 
@@ -12,7 +12,7 @@
 - **ページ可視性の追跡**: アプリがバックグラウンドに移動したときに動画や計測を一時停止します
 - **ビジュアルビューポートの変化**: モバイルブラウザでのズーム、キーボード、ビューポートのリサイズに対応します
 
-`react-simplikit/mobile` は、これらのシナリオを最小限の設定で扱える実績のあるフックを提供します。
+`react-simplikit` は、これらのシナリオを最小限の設定で扱える実績のあるフックを提供します。
 
 ## クイックスタート
 
@@ -25,7 +25,7 @@ npm install react-simplikit
 もっとも一般的なモバイル UI パターンです。キーボードの上に移動する下部固定ボタンです。
 
 ```tsx
-import { useAvoidKeyboard } from 'react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard();
@@ -52,7 +52,7 @@ function FixedBottomCTA() {
 
 ```tsx
 import { useState } from 'react';
-import { useAvoidKeyboard } from 'react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -89,7 +89,7 @@ function ChatInput() {
 ホームインジケーターを備えた端末（iPhone など）では、セーフエリアのオフセットを追加できます。
 
 ```tsx
-import { useAvoidKeyboard } from 'react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });

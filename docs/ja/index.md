@@ -9,11 +9,11 @@ hero:
     alt: react-simplikit
   actions:
     - theme: brand
-      text: Mobile (推奨)
-      link: /ja/mobile/intro
-    - theme: alt
-      text: Core
+      text: はじめる
       link: /ja/core/intro
+    - theme: alt
+      text: モバイルユーティリティ
+      link: /ja/mobile/intro
 
 features:
   - title: '依存関係ゼロ'

@@ -8,11 +8,11 @@
 
 ## パッケージ
 
-| パッケージ                                    | 説明                                                                                                                 | バージョン                                                                                                |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - 純粋な状態/ロジック用フック、および `react-simplikit/mobile` サブパスのモバイル Web ユーティリティ | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
+| パッケージ                                    | 説明                                                                                       | バージョン                                                                                                |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | Universal hooks - 状態/ロジック用フックとモバイル Web ユーティリティを単一のエントリで提供 | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **注記**: `react-simplikit` のルート export は、Web とモバイル（React Native）の両方で動作する純粋な状態/ロジック用フックとして維持されます。モバイル Web ユーティリティ（viewport、keyboard、scroll）は `react-simplikit/mobile` サブパスとして提供され、非推奨となった `@react-simplikit/mobile` パッケージを置き換えます。
+> **注記**: すべてのフックは単一の `react-simplikit` エントリから提供されます — モバイル Web ユーティリティ（viewport、keyboard、scroll）も含みます。非推奨となった `@react-simplikit/mobile` パッケージを置き換えます。フックがブラウザ API に触れるのはインポート時ではなくフック本体の中だけなので、React Native や SSR でもルートからのインポートは安全です。
 
 ## 特長
 
@@ -60,10 +60,10 @@ function SearchInput() {
 
 デバウンスされた関数は `.cancel()` を提供し、コンポーネントがアンマウントされると保留中の呼び出しは自動的にキャンセルされます。
 
-### react-simplikit/mobile
+### モバイル Web ユーティリティ
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit/mobile';
+import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();

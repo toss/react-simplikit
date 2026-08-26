@@ -8,7 +8,7 @@
 React utility hooks/components library. Single package monorepo:
 
 - `react-simplikit` (`packages/react-simplikit`) — Platform-independent React hooks & components
-- `react-simplikit/mobile` (`packages/react-simplikit/src/mobile`) — Mobile web utilities (viewport, keyboard, layout) as a subpath export
+- Mobile web utilities (viewport, keyboard, layout) live in `packages/react-simplikit/src/mobile` and are exported from the root entry
 
 ## Architecture
 

@@ -14,7 +14,7 @@ These issues are not specific to any single OS or device. Whether it's iOS Safar
 
 ## Our Approach: Focus on the Visual Viewport
 
-`react-simplikit/mobile` takes a focused approach to solving these problems. Rather than trying to work around browser quirks with brittle hacks, we center our design around the **visual viewport** — the area of the screen that the user can actually see at any given moment.
+The mobile utilities in `react-simplikit` take a focused approach to solving these problems. Rather than trying to work around browser quirks with brittle hacks, we center our design around the **visual viewport** — the area of the screen that the user can actually see at any given moment.
 
 By building on the [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API), we provide hooks that let you:
 
@@ -26,7 +26,7 @@ The goal is simple: **within the visual viewport, UI should render reliably and 
 
 ## Cross-Platform, Cross-Device
 
-We don't want to be limited to a specific OS or device model. Mobile web is inherently cross-platform, and `react-simplikit/mobile` embraces that.
+We don't want to be limited to a specific OS or device model. Mobile web is inherently cross-platform, and `react-simplikit` embraces that.
 
 Our hooks are designed to work consistently across:
 
@@ -38,4 +38,4 @@ Where a specific API is unavailable (e.g., `window.visualViewport` in older brow
 
 ## What's Next
 
-We're continuing to expand the set of hooks available in `react-simplikit/mobile`, always guided by the same principle: **make mobile UI development predictable and reliable, regardless of device or OS**. If there's a common mobile UI pain point, chances are we're working on a clean, declarative solution for it.
+We're continuing to expand the set of mobile hooks available in `react-simplikit`, always guided by the same principle: **make mobile UI development predictable and reliable, regardless of device or OS**. If there's a common mobile UI pain point, chances are we're working on a clean, declarative solution for it.

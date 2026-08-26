@@ -4,7 +4,7 @@
 
 React utility hooks/components library. Single package monorepo:
 
-- `react-simplikit` (`packages/react-simplikit`) — Platform-independent React hooks & components at the root export, plus mobile web utilities (viewport, keyboard, layout) under the `react-simplikit/mobile` subpath (`src/mobile`)
+- `react-simplikit` (`packages/react-simplikit`) — React hooks & components plus mobile web utilities (viewport, keyboard, layout), all exported from the single root entry (mobile source lives in `src/mobile`)
 
 ## Development Quick Start
 
@@ -184,7 +184,7 @@ yarn changeset publish --tag canary  # Requires npm login + OTP
 packages/
 └── react-simplikit/   # react-simplikit
     ├── src/           # Source (hooks, components, utils)
-    │   └── mobile/    # Mobile web utilities (react-simplikit/mobile subpath)
+    │   └── mobile/    # Mobile web utilities (exported from the root entry)
     ├── dist/          # Build output (per-module, mirrors src/)
     └── package.json
 ```
