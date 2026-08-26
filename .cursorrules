@@ -4,12 +4,12 @@
 
 ## Project
 
-React hooks/components library. Monorepo: `packages/react-simplikit` + `packages/mobile`.
+React hooks/components library. Monorepo with a single package: `packages/react-simplikit` (mobile web utilities in `src/mobile`, exported from the root entry).
 
 ## Architecture
 
 Unidirectional layers: `components → hooks → utils → _internal`
-Core and mobile are independent packages. No cross-package dependencies.
+Root exports must NOT import from `src/mobile`; `src/mobile` may use core utils and `_internal` (test infrastructure is exempt).
 
 ## Code Style
 

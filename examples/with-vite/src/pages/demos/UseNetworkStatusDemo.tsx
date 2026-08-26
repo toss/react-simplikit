@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
-import { useNetworkStatus } from '@react-simplikit/mobile';
+import { useNetworkStatus } from 'react-simplikit';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
-const EXAMPLE_CODE = `import { useNetworkStatus } from '@react-simplikit/mobile';
+const EXAMPLE_CODE = `import { useNetworkStatus } from 'react-simplikit';
 
 function AdaptiveMedia() {
   const { effectiveType, saveData, downlink } = useNetworkStatus();

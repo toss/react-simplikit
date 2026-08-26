@@ -9,11 +9,11 @@ hero:
     alt: react-simplikit
   actions:
     - theme: brand
-      text: Mobile (Recommended)
-      link: /mobile/intro
-    - theme: alt
-      text: Core
+      text: Get Started
       link: /core/intro
+    - theme: alt
+      text: Mobile Utilities
+      link: /mobile/intro
 
 features:
   - title: 'Zero dependencies'

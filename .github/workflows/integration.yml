@@ -67,7 +67,7 @@ jobs:
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./packages/react-simplikit/coverage/coverage-final.json,./packages/mobile/coverage/coverage-final.json
+          files: ./packages/react-simplikit/coverage/coverage-final.json
 
   spec-compiled:
     name: spec (react compiler compiled)
@@ -125,6 +125,10 @@ jobs:
                 - 'packages/*/src/hooks/**/!(*.spec|*.test).tsx'
                 - 'packages/*/src/utils/**/!(index|*.spec|*.test).ts'
                 - 'packages/*/src/utils/**/!(*.spec|*.test).tsx'
+                - 'packages/*/src/mobile/hooks/**/!(index|*.spec|*.test).ts'
+                - 'packages/*/src/mobile/hooks/**/!(*.spec|*.test).tsx'
+                - 'packages/*/src/mobile/utils/**/!(index|*.spec|*.test).ts'
+                - 'packages/*/src/mobile/utils/**/!(*.spec|*.test).tsx'
 
   verify-test:
     runs-on: ubuntu-latest
@@ -338,6 +342,8 @@ jobs:
           HAS_ERROR=0
           FOUND=0
 
+          # Every implementation — including the absorbed src/mobile tree — must be
+          # exported from the package root barrel: it is the only public entry.
           for pkg in packages/*/; do
             ROOT_INDEX="${pkg}src/index.ts"
 
@@ -345,8 +351,13 @@ jobs:
               continue
             fi
 
+            for prefix in "" "mobile/"; do
+              if [ -n "$prefix" ] && [ ! -d "${pkg}src/$prefix" ]; then
+                continue
+              fi
+
             for dir in "${IMPL_DIRS[@]}"; do
-              for impl_dir in ${pkg}src/$dir/*/; do
+              for impl_dir in ${pkg}src/$prefix$dir/*/; do
                 if [ ! -d "$impl_dir" ]; then
                   continue
                 fi
@@ -380,12 +391,13 @@ jobs:
                   HAS_ERROR=1
                 fi
 
-                relative_path="./$dir/$impl_name/index.ts"
+                relative_path="./$prefix$dir/$impl_name/index.ts"
                 if ! grep -q "from.*['\"]$relative_path['\"]" "$ROOT_INDEX"; then
                   ERROR_LOG+="❌ $impl_name is not exported in $ROOT_INDEX\n"
                   HAS_ERROR=1
                 fi
               done
+            done
             done
           done
 
@@ -475,17 +487,14 @@ jobs:
         run: |
           yarn workspaces foreach -Apt --include 'packages/*' run build
           CORE_TGZ=$(cd packages/react-simplikit && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
-          MOBILE_TGZ=$(cd packages/mobile && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
           echo "CORE_TGZ=$RUNNER_TEMP/$CORE_TGZ" >> "$GITHUB_ENV"
-          echo "MOBILE_TGZ=$RUNNER_TEMP/$MOBILE_TGZ" >> "$GITHUB_ENV"
 
       - name: Point examples at tarballs
         run: |
           for example in examples/with-vite examples/with-nextjs; do
-            jq --arg core "file:$CORE_TGZ" --arg mobile "file:$MOBILE_TGZ" \
+            jq --arg core "file:$CORE_TGZ" \
               '.dependencies |= with_entries(
                  if .key == "react-simplikit" then .value = $core
-                 elif .key == "@react-simplikit/mobile" then .value = $mobile
                  else . end)' \
               "$example/package.json" > "$example/package.json.tmp"
             mv "$example/package.json.tmp" "$example/package.json"

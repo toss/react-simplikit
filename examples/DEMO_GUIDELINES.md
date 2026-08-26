@@ -19,11 +19,11 @@ import {
   StatusCard,
   StatusRow,
 } from '@examples/shared';
-import { useMyHook } from '@react-simplikit/mobile';
+import { useMyHook } from 'react-simplikit';
 import { DemoLayout } from '../../components/DemoLayout';
 
 // 1. Code example constants (separated at top)
-const EXAMPLE_CODE = `import { useMyHook } from '@react-simplikit/mobile';
+const EXAMPLE_CODE = `import { useMyHook } from 'react-simplikit';
 ...`;
 
 export function MyHookDemo() {

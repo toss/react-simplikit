@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, CodeBlock, Dialog, StatusCard, StatusRow } from '@examples/shared';
-import { useBodyScrollLock } from '@react-simplikit/mobile';
+import { useBodyScrollLock } from 'react-simplikit';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
@@ -64,7 +64,7 @@ export function UseBodyScrollLockDemo() {
   );
 }
 
-const EXAMPLE_CODE = `import { useBodyScrollLock } from '@react-simplikit/mobile';
+const EXAMPLE_CODE = `import { useBodyScrollLock } from 'react-simplikit';
 
 function Modal({ onClose }) {
   // Lock body scroll when modal mounts

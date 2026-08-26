@@ -2,10 +2,9 @@
 
 ## Project Overview
 
-React utility hooks/components library. Monorepo with two packages:
+React utility hooks/components library. Single package monorepo:
 
-- `react-simplikit` (`packages/react-simplikit`) — Platform-independent React hooks & components
-- `@react-simplikit/mobile` (`packages/mobile`) — Mobile web utilities (viewport, keyboard, layout)
+- `react-simplikit` (`packages/react-simplikit`) — React hooks & components plus mobile web utilities (viewport, keyboard, layout), all exported from the single root entry (mobile source lives in `src/mobile`)
 
 ## Development Quick Start
 
@@ -30,7 +29,7 @@ components → hooks → utils → _internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
 - \_internal has no internal dependencies
-- Mobile may depend on core; core must NOT depend on mobile
+- `src/mobile` may use core utils and `_internal`; root exports must NOT import from `src/mobile` (test infrastructure like `_internal/test-utils` is exempt)
 
 ## File Structure Convention
 
@@ -183,13 +182,10 @@ yarn changeset publish --tag canary  # Requires npm login + OTP
 
 ```
 packages/
-├── core/          # react-simplikit
-│   ├── src/       # Source (hooks, components, utils)
-│   ├── dist/      # Build output (per-module, mirrors src/)
-│   └── package.json
-└── mobile/        # @react-simplikit/mobile
-    ├── src/
-    ├── dist/      # Build output (per-module, mirrors src/)
+└── react-simplikit/   # react-simplikit
+    ├── src/           # Source (hooks, components, utils)
+    │   └── mobile/    # Mobile web utilities (exported from the root entry)
+    ├── dist/          # Build output (per-module, mirrors src/)
     └── package.json
 ```
 

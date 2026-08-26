@@ -152,8 +152,8 @@ const unregisteredConfig = buildLocaleConfig(unregisteredLocaleFixture);
 assert.equal(unregisteredConfig.lang, 'zh-Hans');
 assert.deepEqual(unregisteredConfig.themeConfig?.nav, [
   { text: '首页', link: '/zh-Hans/' },
-  { text: 'Mobile', link: '/zh-Hans/mobile/intro' },
-  { text: 'Core', link: '/zh-Hans/core/intro' },
+  { text: 'Guide', link: '/zh-Hans/core/intro' },
+  { text: 'Mobile Utilities', link: '/zh-Hans/mobile/intro' },
 ]);
 assert.deepEqual(Object.keys(unregisteredConfig.themeConfig?.sidebar ?? {}), ['/zh-Hans/core/', '/zh-Hans/mobile/']);
 assert.equal(unregisteredConfig.themeConfig?.editLink?.text, '在 GitHub 上编辑此页');
@@ -163,8 +163,8 @@ const rootConfig = buildLocaleConfig(localeDefinitions.root);
 
 assert.deepEqual(koConfig.themeConfig?.nav, [
   { text: '홈', link: '/ko/' },
-  { text: 'Mobile', link: '/ko/mobile/intro' },
-  { text: 'Core', link: '/ko/core/intro' },
+  { text: 'Guide', link: '/ko/core/intro' },
+  { text: 'Mobile Utilities', link: '/ko/mobile/intro' },
 ]);
 assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/ko/core/'][0], {
   text: '가이드',
@@ -181,8 +181,8 @@ assert.equal(koConfig.themeConfig?.footer?.message, 'MIT 라이선스에 따라 
 
 assert.deepEqual(rootConfig.themeConfig?.nav, [
   { text: 'Home', link: '/' },
-  { text: 'Mobile', link: '/mobile/intro' },
-  { text: 'Core', link: '/core/intro' },
+  { text: 'Guide', link: '/core/intro' },
+  { text: 'Mobile Utilities', link: '/mobile/intro' },
 ]);
 assert.equal(rootConfig.lang, 'en');
 assert.equal(rootConfig.themeConfig?.editLink?.text, 'Edit this page on GitHub');
@@ -192,8 +192,8 @@ const jaConfig = buildLocaleConfig(localeDefinitions.ja);
 assert.equal(jaConfig.lang, 'ja');
 assert.deepEqual(jaConfig.themeConfig?.nav, [
   { text: 'ホーム', link: '/ja/' },
-  { text: 'Mobile', link: '/ja/mobile/intro' },
-  { text: 'Core', link: '/ja/core/intro' },
+  { text: 'Guide', link: '/ja/core/intro' },
+  { text: 'Mobile Utilities', link: '/ja/mobile/intro' },
 ]);
 assert.equal(jaConfig.themeConfig?.editLink?.text, 'GitHub で編集する');
 assert.notEqual(

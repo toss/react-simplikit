@@ -8,12 +8,11 @@
 
 ## 패키지
 
-| 패키지                                        | 설명                                                | 버전                                                                                                                      |
-| --------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - 순수 상태/로직 훅 (플랫폼 독립적) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [@react-simplikit/mobile](./packages/mobile)  | 모바일 웹 유틸리티 (viewport, keyboard, scroll)     | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
+| 패키지                                        | 설명                                                                         | 버전                                                                                                      |
+| --------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | Universal hooks - 상태/로직 훅과 모바일 웹 유틸리티를 하나의 진입점에서 제공 | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **참고**: `react-simplikit`은 이제 웹과 모바일(React Native)에서 모두 동작하는 순수 상태/로직 훅만을 제공하는 Universal Hook Library로 유지됩니다. 브라우저/플랫폼 종속 훅들은 Deprecated 처리됩니다. 자세한 내용은 [packages/react-simplikit/README-ko_kr.md](./packages/react-simplikit/README-ko_kr.md)를 참고하세요.
+> **참고**: 모든 훅은 `react-simplikit` 단일 진입점에서 제공됩니다 — 모바일 웹 유틸리티(viewport, keyboard, scroll)도 포함해서요. 기존 `@react-simplikit/mobile` 패키지를 대체합니다. 훅은 브라우저 API를 임포트 시점이 아니라 훅 본문 안에서만 사용하므로, React Native와 SSR에서도 루트 임포트가 안전합니다.
 
 ## 특징
 
@@ -26,11 +25,8 @@
 ## 설치
 
 ```bash
-# Core utilities
+# One install covers both the root hooks and the mobile subpath
 npm install react-simplikit
-
-# Mobile web utilities
-npm install @react-simplikit/mobile
 ```
 
 ## 빠른 시작
@@ -64,10 +60,10 @@ function SearchInput() {
 
 디바운스된 함수는 `.cancel()` 메서드를 제공하고, 컴포넌트가 언마운트되면 대기 중인 호출을 자동으로 취소해요.
 
-### @react-simplikit/mobile
+### 모바일 웹 유틸리티
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
+import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -95,8 +91,7 @@ function BodyScrollLock() {
 
 ```
 packages/
-├── core/    # react-simplikit (hooks, components, utils)
-└── mobile/  # @react-simplikit/mobile (mobile web utilities)
+└── react-simplikit/    # react-simplikit (hooks, components, utils; 모바일 웹 유틸리티는 src/mobile)
 ```
 
 ## 기여하기

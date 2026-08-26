@@ -1,27 +1,27 @@
 ---
-description: '@react-simplikit/mobile のインストール方法'
+description: 'モバイル Web 向け react-simplikit のインストール方法'
 ---
 
 # インストール
 
-お好みのパッケージマネージャーを使って、[npm](https://npmjs.com/package/@react-simplikit/mobile) から `@react-simplikit/mobile` をインストールできます。
+お好みのパッケージマネージャーを使って、[npm](https://npmjs.com/package/react-simplikit) から `react-simplikit` をインストールできます。モバイルユーティリティも同じパッケージに含まれています。
 
 ::: code-group
 
 ```sh [npm]
-npm install @react-simplikit/mobile
+npm install react-simplikit
 ```
 
 ```sh [pnpm]
-pnpm add @react-simplikit/mobile
+pnpm add react-simplikit
 ```
 
 ```sh [yarn]
-yarn add @react-simplikit/mobile
+yarn add react-simplikit
 ```
 
 ```sh [bun]
-bun add @react-simplikit/mobile
+bun add react-simplikit
 ```
 
 :::
@@ -36,7 +36,7 @@ bun add @react-simplikit/mobile
 パッケージから直接フックを import してください。
 
 ```tsx
-import { useKeyboardHeight, useAvoidKeyboard } from '@react-simplikit/mobile';
+import { useKeyboardHeight, useAvoidKeyboard } from 'react-simplikit';
 ```
 
 すべてのフックはツリーシェイキング対応なので、実際に使用するものだけがバンドルに含まれます。

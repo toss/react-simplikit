@@ -1,8 +1,8 @@
-# @react-simplikit/mobile
+# Mobile Utilities
 
 A collection of React hooks that solve common UI challenges in mobile web environments.
 
-## Why @react-simplikit/mobile?
+## Why mobile utilities?
 
 Mobile web development comes with unique challenges that don't exist on desktop:
 
@@ -12,12 +12,12 @@ Mobile web development comes with unique challenges that don't exist on desktop:
 - **Page visibility tracking**: Pausing videos or analytics when the app goes to background
 - **Visual viewport changes**: Handling zoom, keyboard, and viewport resize on mobile browsers
 
-`@react-simplikit/mobile` provides battle-tested hooks to handle these scenarios with minimal configuration.
+`react-simplikit` provides battle-tested mobile hooks to handle these scenarios with minimal configuration.
 
 ## Quick Start
 
 ```bash
-npm install @react-simplikit/mobile
+npm install react-simplikit
 ```
 
 ### Button CTA Example
@@ -25,7 +25,7 @@ npm install @react-simplikit/mobile
 The most common mobile UI pattern - a fixed bottom button that moves above the keyboard:
 
 ```tsx
-import { useAvoidKeyboard } from '@react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard();
@@ -52,7 +52,7 @@ A chat interface with an input field that stays above the keyboard:
 
 ```tsx
 import { useState } from 'react';
-import { useAvoidKeyboard } from '@react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -89,7 +89,7 @@ function ChatInput() {
 For devices with home indicators (like iPhone), you can add a safe area offset:
 
 ```tsx
-import { useAvoidKeyboard } from '@react-simplikit/mobile';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });

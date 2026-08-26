@@ -33,6 +33,32 @@ export { useThrottledCallback } from './hooks/useThrottledCallback/index.ts';
 export { useTimeout } from './hooks/useTimeout/index.ts';
 export { useToggle } from './hooks/useToggle/index.ts';
 export { useVisibilityEvent } from './hooks/useVisibilityEvent/index.ts';
+export { useAvoidKeyboard } from './mobile/hooks/useAvoidKeyboard/index.ts';
+export { useBodyScrollLock } from './mobile/hooks/useBodyScrollLock/index.ts';
+export { useKeyboardHeight } from './mobile/hooks/useKeyboardHeight/index.ts';
+export {
+  type ConnectionType,
+  type EffectiveConnectionType,
+  type NetworkStatus,
+  useNetworkStatus,
+} from './mobile/hooks/useNetworkStatus/index.ts';
+export {
+  type PageVisibility,
+  usePageVisibility,
+  type VisibilityState,
+} from './mobile/hooks/usePageVisibility/index.ts';
+export { useSafeAreaInset } from './mobile/hooks/useSafeAreaInset/index.ts';
+export { useScrollDirection } from './mobile/hooks/useScrollDirection/index.ts';
+export { useVisualViewport } from './mobile/hooks/useVisualViewport/index.ts';
+export { disableBodyScrollLock } from './mobile/utils/disableBodyScrollLock/index.ts';
+export { enableBodyScrollLock } from './mobile/utils/enableBodyScrollLock/index.ts';
+export { getKeyboardHeight } from './mobile/utils/getKeyboardHeight/index.ts';
+export { getSafeAreaInset } from './mobile/utils/getSafeAreaInset/index.ts';
+export { isAndroid } from './mobile/utils/isAndroid/index.ts';
+export { isIOS } from './mobile/utils/isIOS/index.ts';
+export { isKeyboardVisible } from './mobile/utils/isKeyboardVisible/index.ts';
+export { isServer } from './mobile/utils/isServer/index.ts';
+export { subscribeKeyboardHeight } from './mobile/utils/subscribeKeyboardHeight/index.ts';
 export { buildContext } from './utils/buildContext/index.ts';
 export { mergeProps } from './utils/mergeProps/index.ts';
 export { mergeRefs } from './utils/mergeRefs/index.ts';

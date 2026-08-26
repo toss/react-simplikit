@@ -132,7 +132,7 @@ function SearchInput() {
 
 ## 관련 패키지
 
-- [@react-simplikit/mobile](https://www.npmjs.com/package/@react-simplikit/mobile) - 모바일 웹 유틸리티
+- [모바일 웹 유틸리티](https://react-simplikit.slash.page/ko/mobile/intro.html) - `react-simplikit`에 포함
 
 ## 기여하기
 

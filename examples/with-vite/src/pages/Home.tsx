@@ -4,7 +4,7 @@ export function Home() {
   return (
     <div style={{ padding: 24, maxWidth: 800, margin: '0 auto' }}>
       <header style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: 36, marginBottom: 8 }}>@react-simplikit/mobile</h1>
+        <h1 style={{ fontSize: 36, marginBottom: 8 }}>react-simplikit</h1>
         <p style={{ fontSize: 18, color: '#666' }}>Mobile Examples Playground - Test on your mobile device!</p>
       </header>
 

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
-import { usePageVisibility } from '@react-simplikit/mobile';
+import { usePageVisibility } from 'react-simplikit';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
-const EXAMPLE_CODE = `import { usePageVisibility } from '@react-simplikit/mobile';
+const EXAMPLE_CODE = `import { usePageVisibility } from 'react-simplikit';
 
 function VideoPlayer() {
   const { isVisible } = usePageVisibility();

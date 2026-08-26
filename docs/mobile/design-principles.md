@@ -1,26 +1,26 @@
 # Design Principles
 
-`@react-simplikit/mobile` follows the core principles of `react-simplikit`, extended for mobile-specific challenges.
+The mobile utilities follow the core principles of `react-simplikit`, extended for mobile-specific challenges.
 
 ## Core Principles
 
 ### Respect React's Lifecycle Without Interference
 
-`@react-simplikit/mobile` does not include implementations that directly interfere with React's lifecycle.
+`react-simplikit` does not include implementations that directly interfere with React's lifecycle.
 For example, it doesn't provide hooks like `useMount` or `useLifecycles`, instead favoring approaches that respect and utilize React's default behaviors.
 
 ### Lightweight and Fast Through Zero Dependencies
 
-`@react-simplikit/mobile` has absolutely no dependencies. By not relying on additional libraries, it minimizes bundle size when integrated into projects and eliminates concerns about performance degradation.
+`react-simplikit` has absolutely no dependencies. By not relying on additional libraries, it minimizes bundle size when integrated into projects and eliminates concerns about performance degradation.
 
 ### Ensures Reliability Through 100% Test Coverage
 
-`@react-simplikit/mobile` thoroughly tests every function and branch.
+`react-simplikit` thoroughly tests every function and branch.
 We write comprehensive tests that include not only basic functionality but also SSR environment considerations for each implementation, preventing issues caused by unexpected behavior.
 
 ### Comprehensive Documentation for Easy Understanding and Use
 
-`@react-simplikit/mobile` provides detailed documentation to help users quickly understand and utilize each feature. The documentation includes:
+`react-simplikit` provides detailed documentation to help users quickly understand and utilize each feature. The documentation includes:
 
 - **JSDoc Comments**: Detailed explanations of each function's behavior, parameters, and return values.
 - **Usage Guides**: Clear and easy-to-follow instructions to get started immediately.
@@ -28,7 +28,7 @@ We write comprehensive tests that include not only basic functionality but also 
 
 ### Type Safe with Full TypeScript Support
 
-`@react-simplikit/mobile` is built with TypeScript from the ground up. Every hook and utility comes with:
+`react-simplikit` is built with TypeScript from the ground up. Every hook and utility comes with:
 
 - **Strict Type Definitions**: All parameters, return values, and options are fully typed
 - **IntelliSense Support**: Get autocompletion and inline documentation in your IDE

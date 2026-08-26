@@ -1,27 +1,27 @@
 ---
-description: '@react-simplikit/mobile 설치 방법'
+description: '모바일 웹을 위한 react-simplikit 설치 방법'
 ---
 
 # 설치하기
 
-좋아하는 패키지 매니저를 사용하여 [npm](https://npmjs.com/package/@react-simplikit/mobile)에서 `@react-simplikit/mobile`을 설치할 수 있어요.
+좋아하는 패키지 매니저를 사용하여 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요. 모바일 유틸리티도 같은 패키지에 포함돼 있어요.
 
 ::: code-group
 
 ```sh [npm]
-npm install @react-simplikit/mobile
+npm install react-simplikit
 ```
 
 ```sh [pnpm]
-pnpm add @react-simplikit/mobile
+pnpm add react-simplikit
 ```
 
 ```sh [yarn]
-yarn add @react-simplikit/mobile
+yarn add react-simplikit
 ```
 
 ```sh [bun]
-bun add @react-simplikit/mobile
+bun add react-simplikit
 ```
 
 :::
@@ -36,7 +36,7 @@ bun add @react-simplikit/mobile
 패키지에서 직접 훅을 import하세요:
 
 ```tsx
-import { useKeyboardHeight, useAvoidKeyboard } from '@react-simplikit/mobile';
+import { useKeyboardHeight, useAvoidKeyboard } from 'react-simplikit';
 ```
 
 모든 훅은 트리 쉐이킹이 가능하므로, 번들에는 사용하는 것만 포함돼요.

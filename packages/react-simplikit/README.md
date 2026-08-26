@@ -132,7 +132,7 @@ Visit [react-simplikit.slash.page](https://react-simplikit.slash.page) for full 
 
 ## Related Packages
 
-- [@react-simplikit/mobile](https://www.npmjs.com/package/@react-simplikit/mobile) - Mobile web utilities
+- [Mobile web utilities](https://react-simplikit.slash.page/mobile/intro.html) - included in `react-simplikit`
 
 ## Contributing
 

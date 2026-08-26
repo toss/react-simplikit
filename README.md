@@ -8,12 +8,11 @@ A collection of lightweight, zero-dependency React utilities for building robust
 
 ## Packages
 
-| Package                                       | Description                                                     | Version                                                                                                                   |
-| --------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - pure state/logic hooks (platform-independent) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [@react-simplikit/mobile](./packages/mobile)  | Mobile web utilities (viewport, keyboard, scroll)               | [![npm](https://img.shields.io/npm/v/@react-simplikit/mobile.svg)](https://www.npmjs.com/package/@react-simplikit/mobile) |
+| Package                                       | Description                                                                       | Version                                                                                                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | Universal hooks - state/logic hooks plus mobile web utilities, all from one entry | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **Note**: `react-simplikit` is now maintained as a Universal Hook Library providing only pure state/logic hooks that work across web and mobile (React Native). Browser/platform-dependent hooks are deprecated. See [packages/react-simplikit/README.md](./packages/react-simplikit/README.md) for details.
+> **Note**: every hook ships from the single `react-simplikit` entry — mobile web utilities (viewport, keyboard, scroll) included. This replaces the deprecated `@react-simplikit/mobile` package. Hooks touch browser APIs only inside their bodies, so importing the root stays safe on React Native and SSR.
 
 ## Features
 
@@ -26,11 +25,8 @@ A collection of lightweight, zero-dependency React utilities for building robust
 ## Installation
 
 ```bash
-# Core utilities
+# One install covers both the root hooks and the mobile subpath
 npm install react-simplikit
-
-# Mobile web utilities
-npm install @react-simplikit/mobile
 ```
 
 ## Quick Start
@@ -64,10 +60,10 @@ function SearchInput() {
 
 The debounced function exposes `.cancel()`, and pending calls are cancelled automatically when the component unmounts.
 
-### @react-simplikit/mobile
+### Mobile web utilities
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from '@react-simplikit/mobile';
+import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -95,8 +91,7 @@ Visit [react-simplikit.slash.page](https://react-simplikit.slash.page) for full 
 
 ```
 packages/
-├── core/    # react-simplikit (hooks, components, utils)
-└── mobile/  # @react-simplikit/mobile (mobile web utilities)
+└── react-simplikit/    # react-simplikit (hooks, components, utils; mobile web utilities in src/mobile)
 ```
 
 ## Contributing

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
-import { getSafeAreaInset } from '@react-simplikit/mobile';
+import { getSafeAreaInset } from 'react-simplikit';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 
@@ -11,7 +11,7 @@ type SafeAreaValues = {
   right: number;
 };
 
-const USAGE_CODE = `import { getSafeAreaInset } from '@react-simplikit/mobile';
+const USAGE_CODE = `import { getSafeAreaInset } from 'react-simplikit';
 
 // Get all insets at once
 const { top, bottom, left, right } = getSafeAreaInset();

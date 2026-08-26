@@ -83,12 +83,14 @@ async function main() {
     ]);
   } else {
     for (const pkg of TARGET_PACKAGES) {
-      try {
-        const bytes = await measureImportCost(pkg.sizeEntry, consumerDir);
-        console.log(`[${pkg.name}] single-export import cost: ${bytes}B (limit ${pkg.sizeLimitBytes}B)`);
-        report(pkg.name, 'tree-shaking size gate', checkSizeLimit(bytes, pkg.sizeLimitBytes));
-      } catch (error) {
-        report(pkg.name, 'tree-shaking size gate', [describeExecError(error)]);
+      for (const gate of pkg.sizeGates) {
+        try {
+          const bytes = await measureImportCost(gate.entry, consumerDir);
+          console.log(`[${pkg.name}] ${gate.label} single-export import cost: ${bytes}B (limit ${gate.limitBytes}B)`);
+          report(pkg.name, `tree-shaking size gate (${gate.label})`, checkSizeLimit(bytes, gate.limitBytes));
+        } catch (error) {
+          report(pkg.name, `tree-shaking size gate (${gate.label})`, [describeExecError(error)]);
+        }
       }
     }
   }

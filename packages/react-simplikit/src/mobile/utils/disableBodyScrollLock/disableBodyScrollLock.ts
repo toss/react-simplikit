@@ -52,7 +52,7 @@ function restoreScrollPosition(savedScrollY: string): void {
   const scrollY = Number(savedScrollY);
 
   if (Number.isNaN(scrollY)) {
-    console.warn('[@react-simplikit/mobile] Invalid scroll position, defaulting to 0');
+    console.warn('[react-simplikit] Invalid scroll position, defaulting to 0');
     window.scrollTo(0, 0);
     return;
   }

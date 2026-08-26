@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, CodeBlock, InfoBox, StatusCard, StatusRow } from '@examples/shared';
-import { disableBodyScrollLock, enableBodyScrollLock } from '@react-simplikit/mobile';
+import { disableBodyScrollLock, enableBodyScrollLock } from 'react-simplikit';
 
 import { DemoLayout } from '../../components/DemoLayout.tsx';
 

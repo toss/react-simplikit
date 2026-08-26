@@ -119,15 +119,15 @@ const routeDefinitions: RouteDefinition[] = [
     localizedDestination: ':locale/core/utils/:util.md',
   },
   {
-    source: 'packages/mobile/src/hooks/:hook/:hook.md',
+    source: 'packages/react-simplikit/src/mobile/hooks/:hook/:hook.md',
     destination: 'mobile/hooks/:hook.md',
-    localizedSource: 'packages/mobile/src/hooks/:hook/:locale/:hook.md',
+    localizedSource: 'packages/react-simplikit/src/mobile/hooks/:hook/:locale/:hook.md',
     localizedDestination: ':locale/mobile/hooks/:hook.md',
   },
   {
-    source: 'packages/mobile/src/utils/:util/:util.md',
+    source: 'packages/react-simplikit/src/mobile/utils/:util/:util.md',
     destination: 'mobile/utils/:util.md',
-    localizedSource: 'packages/mobile/src/utils/:util/:locale/:util.md',
+    localizedSource: 'packages/react-simplikit/src/mobile/utils/:util/:locale/:util.md',
     localizedDestination: ':locale/mobile/utils/:util.md',
   },
 ];
