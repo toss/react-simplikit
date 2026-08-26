@@ -9,6 +9,7 @@ import { getSidebarItems } from '../.vitepress/libs/getSidebarItems.mts';
 import { generatedLocalesDirectory, generatedRewrites, localeDefinitions, rewrites } from '../.vitepress/locales.mts';
 import { corePackageRoot } from '../.vitepress/shared.mts';
 
+import { assertLlmsOutput } from './utils/assertLlmsOutput.ts';
 import { execWithOutput } from './utils/execWithOutput.ts';
 import { getRootPath } from './utils/getRootPath.ts';
 
@@ -77,6 +78,8 @@ await fs.writeFile(path.join(hookFixtureDirectory, `${hookFixtureName}.md`), `# 
 
 try {
   await execWithOutput('yarn', ['docs:build', '--outDir', buildOutputDirectory], { cwd: root });
+
+  await assertLlmsOutput({ buildOutputDirectory, root });
 
   const fallbackPage = await fs.readFile(
     path.join(buildOutputDirectory, 'ko/core/untranslated-fallback-fixture.html'),
