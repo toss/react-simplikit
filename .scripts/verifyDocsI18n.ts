@@ -29,7 +29,7 @@ for (const requiredText of ['release:', 'changesets/action@', 'changeset:publish
   assert.equal(releaseWorkflow.includes(requiredText), true, `release workflow must contain ${requiredText}`);
 }
 
-assert.deepEqual(Object.keys(localeDefinitions), ['root', 'ko', 'ja', 'zh-Hans']);
+assert.deepEqual(Object.keys(localeDefinitions), ['root', 'ko', 'ja', 'zh-Hans', 'es']);
 assert.equal(rewrites['docs/index.md'], 'index.md');
 assert.equal(rewrites['docs/ko/index.md'], 'ko/index.md');
 assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ko/:hook.md'], 'ko/core/hooks/:hook.md');
@@ -37,9 +37,12 @@ assert.equal(rewrites['docs/ja/index.md'], 'ja/index.md');
 assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ja/:hook.md'], 'ja/core/hooks/:hook.md');
 assert.equal(rewrites['docs/zh-Hans/index.md'], 'zh-Hans/index.md');
 assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/zh-Hans/:hook.md'], 'zh-Hans/core/hooks/:hook.md');
+assert.equal(rewrites['docs/es/index.md'], 'es/index.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/es/:hook.md'], 'es/core/hooks/:hook.md');
 assert.equal(generatedRewrites['generated-locales/docs/ko/index.md'], 'ko/index.md');
 assert.equal(generatedRewrites['generated-locales/docs/ja/index.md'], 'ja/index.md');
 assert.equal(generatedRewrites['generated-locales/docs/zh-Hans/index.md'], 'zh-Hans/index.md');
+assert.equal(generatedRewrites['generated-locales/docs/es/index.md'], 'es/index.md');
 assert.equal(packageJson.scripts['docs:prepare'], 'tsx .scripts/index.ts prepare-localized-fallbacks');
 assert.equal(packageJson.scripts['docs:dev'], 'yarn docs:prepare && vitepress dev');
 assert.equal(packageJson.scripts['docs:build'], 'yarn docs:prepare && vitepress build');
@@ -224,6 +227,21 @@ assert.notEqual(
   localeDefinitions['zh-Hans'].themeStrings.search,
   undefined,
   'Simplified Chinese must ship search translations, or the search UI silently renders in English'
+);
+
+const esConfig = buildLocaleConfig(localeDefinitions.es);
+
+assert.equal(esConfig.lang, 'es');
+assert.deepEqual(esConfig.themeConfig?.nav, [
+  { text: 'Inicio', link: '/es/' },
+  { text: 'Guide', link: '/es/core/intro' },
+  { text: 'Mobile Utilities', link: '/es/mobile/intro' },
+]);
+assert.equal(esConfig.themeConfig?.editLink?.text, 'Editar esta página en GitHub');
+assert.notEqual(
+  localeDefinitions.es.themeStrings.search,
+  undefined,
+  'Spanish must ship search translations, or the search UI silently renders in English'
 );
 
 for (const retiredLocaleFile of ['.vitepress/en.mts', '.vitepress/ko.mts']) {

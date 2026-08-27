@@ -1,0 +1,413 @@
+# Contribuir a react-simplikit
+
+`react-simplikit` está diseñado para que cualquiera pueda contribuir. Si quieres contribuir, sigue la guía que encontrarás a continuación.
+
+## Alcance del paquete
+
+`react-simplikit` se centra en **Hooks, componentes y utilidades independientes de la plataforma** que funcionan en todos los entornos de JavaScript (navegador, servidor, React Native, etc.).
+
+Antes de contribuir, comprueba a qué paquete pertenece tu implementación:
+
+| Paquete                              | Alcance                                                | Ejemplos                                                     |
+| ------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------ |
+| `react-simplikit`                    | Estado y lógica puros, independientes de la plataforma | `useToggle`, `useAsyncEffect`, `useLoading`                  |
+| Utilidades para móvil (`src/mobile`) | Resolver los retos propios de la web móvil             | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
+
+::: tip
+El paquete mobile **no** está pensado para todos los Hooks que dependen de las APIs del navegador. Se dirige específicamente a los **problemas que aparecen en entornos de web móvil** (gestión del viewport, manejo del teclado, problemas de maquetación en iOS Safari y Android Chrome). Por ejemplo, un Hook de atajos de teclado usa APIs del navegador, pero no pertenece al paquete mobile.
+:::
+
+## Contribuciones a la implementación
+
+Cuando contribuyas con una implementación, añádela al directorio adecuado según su tipo (`components`, `hooks` o `utils`). Cada implementación debe incluir los siguientes elementos:
+
+- **Implementación**
+- **Código de pruebas**
+- **JSDoc**
+
+::: tip
+**¿Necesito escribir documentación?**
+
+No, no hace falta que escribas documentación aparte. En su lugar, escribe comentarios JSDoc detallados. Cuando se fusione tu PR, la documentación en inglés y en coreano se generará automáticamente a partir del JSDoc, y se creará también de forma automática un PR para añadirla.
+:::
+
+### Escribir implementaciones
+
+Debes seguir los [principios de diseño](./design-principles.md) de `react-simplikit`. No ofrecemos implementaciones que dependan de bibliotecas concretas ni que estén fuertemente acopladas al ciclo de vida de React. Escribe implementaciones que respeten estos principios de diseño.
+
+### Escribir el JSDoc
+
+Todas las implementaciones deben incluir comentarios [JSDoc](https://jsdoc.app/). Estos comentarios ofrecen pistas al usar la implementación y desempeñan un papel esencial en la generación de la documentación.
+Los comentarios JSDoc deben incluir `@description` y `@example` y, si hay parámetros o valores de retorno, también `@param` y `@returns`.
+
+::: details Hay que seguir las reglas de escritura del JSDoc para generar documentación precisa. Si falla la validación del JSDoc, la CI puede fallar.
+
+- El JSDoc debe escribirse en inglés.
+- `@description`: etiqueta obligatoria que explica con claridad la funcionalidad o el papel de la implementación.
+- `@example`: etiqueta obligatoria que muestra código de ejemplo con el uso de la implementación.
+- `@param`: escribe el nombre y la descripción del parámetro. Es obligatorio si la implementación tiene parámetros.
+
+  - Para parámetros obligatorios: `@param {<tipo>} <nombre del parámetro> - <descripción del parámetro>`
+  - Para parámetros opcionales: `@param {<tipo>} [<nombre del parámetro>] - <descripción del parámetro>`
+  - En los parámetros de tipo objeto, tanto el objeto como sus propiedades necesitan etiquetas `@param`.
+  - Si quieres escribir una lista debajo de una descripción, usa `--` en lugar de `-`.
+
+    ```ts
+    type Props = {
+      name: string;
+      age: number;
+      nickname?: string;
+      company: {
+        name: string;
+        address?: string;
+      };
+      paymentMethod?: {
+        type: 'card' | 'account';
+        number?: string;
+      };
+    };
+
+    /**
+     * @param {string} name - Name of the user.
+     * @param {number} age - Age of the user.
+     * @param {string} [nickname] - Nickname of the user.
+     * @param {Object} company - Company information of the user.
+     * @param {string} company.name - Name of the company.
+     * @param {string} [company.address] - Address of the company.
+     * @param {Object} [paymentMethod] - Payment information of the user.
+     * @param {string} [paymentMethod.type] - Payment method.
+     * @param {string} [paymentMethod.number] - Card or account number.
+     *   -- Card or account number without `-`.
+     *   -- If the number is a card number, it should be 15 or 16 digits.
+     */
+    ```
+
+    Este JSDoc se convertirá en la siguiente documentación.
+
+    <div class='codeblock'>
+      <Interface
+        required
+        name="name"
+        type="string"
+        description="Name of the user."
+      />
+      <Interface
+        required
+        name="age"
+        type="number"
+        description="Age of the user."
+      />
+      <Interface
+        name="nickname"
+        type="string"
+        description="Nickname of the user."
+      />
+      <Interface
+        required
+        name="company"
+        type="Object"
+        description="Company information of the user."
+        :nested="[
+          {
+            name: 'company.name',
+            type: 'string',
+            description: 'Name of the company.',
+            required: true,
+          },
+          {
+            name: 'company.address',
+            type: 'string',
+            description: 'Address of the company.',
+          },  
+        ]"
+      />
+      <Interface
+        name="paymentMethod"
+        type="Object"
+        description="Payment information of the user."
+        :nested="[
+          {
+            name: 'paymentMethod.type',
+            type: 'string',
+            description: 'Payment method.',
+            required: true,
+          },
+          {
+            name: 'paymentMethod.number',
+            type: 'string',
+            description: 'Card or account number.<br/>- Card or account number without `-`.<br/>- If the number is a card number, it should be 15 or 16 digits.',
+          },
+        ]"
+      />
+    </div>
+
+- `@returns`: escribe el nombre y la descripción del valor de retorno. Es obligatorio si la implementación tiene valores de retorno.
+
+  - Formato: `@returns {<tipo>} <descripción del valor de retorno>`
+  - En los valores de retorno de tipo objeto o tupla, incluye la descripción de cada miembro.
+  - Si cada miembro necesita detalles adicionales, usa `:`.
+
+    ```ts
+    type ReturnValue = [Object, () => void];
+
+    /**
+     * @returns {[Object, () => void]} A tuple containing:
+     * - obj `Object` - An object containing:
+     *   : label `string` - The label of the input.
+     *   : value `string` - The value of the input.
+     * - onChange `() => void` - A function to update the value.
+     */
+    ```
+
+    Este JSDoc se convertirá en la siguiente documentación.
+
+    <div class='codeblock'>
+      <Interface
+        name=""
+        type="[value: string, onChange: () => void]"
+        description="A tuple containing:"
+        :nested="[
+          {
+            name: 'obj',
+            type: 'Object',
+            description: 'The value of the input. <br />  : label <code>string</code> - The label of the input. <br />  : value <code>string</code> - The value of the input.',
+          },
+          {
+            name: 'onChange',
+            type: '() => void',
+            description: 'A function to update the value.',
+          },
+        ]"
+      />
+    </div>
+
+    <br />
+
+    Los valores de retorno de tipo objeto se pueden escribir de forma parecida.
+
+    ```ts
+    type ReturnValue = { value: string; onChange: () => void };
+
+    /**
+     * @returns {Object} An object containing:
+     * - value `string` - The value of the input.
+     * - onChange `() => void` - A function to update the value.
+     */
+    ```
+
+    Este JSDoc se convertirá en la siguiente documentación.
+
+    <div class='codeblock'>
+      <Interface
+        name=""
+        type="Object"
+        description="An object containing:"
+        :nested="[
+          {
+            name: 'value',
+            type: 'string',
+            description: 'The value of the input.',
+          },
+          {
+            name: 'onChange',
+            type: '() => void',
+            description: 'A function to update the value.',
+          },
+        ]"
+      />
+    </div>
+
+:::
+
+### Escribir el código de pruebas
+
+Todas las implementaciones deben incluir código de pruebas, con el mismo nombre que la implementación. La cobertura de pruebas debe alcanzar siempre el 100%. Usa el siguiente comando para comprobar la cobertura:
+
+```bash
+yarn test:coverage
+```
+
+::: details Comprueba que todo funciona de forma segura en entornos SSR
+Todas las implementaciones de `react-simplikit` usan funciones de renderizado especiales para comprobar que funcionan de forma segura en entornos SSR.
+
+- Pruebas de componentes
+
+  ```tsx
+  it('is safe on server side rendering', () => {
+    // renderSSR.serverOnly es un método que renderiza el componente en el entorno de servidor.
+    // En ese entorno no se ejecutan Hooks como useEffect ni están disponibles objetos como window o document, así que usarlos provoca errores.
+    renderSSR.serverOnly(() => (
+      <Component>
+        <div>Test Content</div>
+      </Component>
+    ));
+
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+  });
+
+  it('should render children correctly', async () => {
+    // renderSSR es un método que renderiza el componente en el entorno de cliente.
+    // Ahora bien, si el HTML renderizado en el servidor y el renderizado en el cliente son distintos, se producen errores de desajuste de hidratación.
+    await renderSSR(() => (
+      <Component>
+        <div>Test Content</div>
+      </Component>
+    ));
+
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+  });
+
+  it('should hydration mismatch error occurred', async () => {
+    // Este código de pruebas fallará por un error de desajuste de hidratación.
+    await renderSSR(() => (
+      <Component>
+        <div>Test Content</div>
+        <div>{Math.random()}</div>
+      </Component>
+    ));
+
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+  });
+  ```
+
+- Pruebas de Hooks
+
+  ```ts
+  it('is safe on server side rendering', () => {
+    // renderHookSSR.serverOnly es un método que renderiza el Hook en el entorno de servidor.
+    // En ese entorno no se ejecutan Hooks como useEffect ni están disponibles objetos como window o document, así que usarlos provoca errores.
+    const result = renderHookSSR.serverOnly(() => useToggle(true));
+    const [bool] = result.current;
+    expect(bool).toBe(true);
+  });
+
+  it('should initialize with the default value true', async () => {
+    const { result } = await renderHookSSR(() => useToggle(true));
+    const [bool] = result.current;
+    expect(bool).toBe(true);
+  });
+  ```
+
+:::
+
+### Crear un changeset
+
+Cuando tus cambios de código afecten al paquete, tienes que crear un changeset. Changesets es una herramienta que automatiza la gestión de versiones y la generación del changelog.
+
+#### Cómo crear un changeset
+
+1. Cuando hayas implementado tus cambios, ejecuta el siguiente comando:
+
+```bash
+yarn changeset
+```
+
+2. Elige el tipo de cambio:
+
+   - `patch`: correcciones de errores o cambios menores
+   - `minor`: nuevas funcionalidades (se mantiene la compatibilidad con versiones anteriores)
+   - `major`: cambios incompatibles (se rompe la compatibilidad con versiones anteriores)
+
+3. Escribe un breve resumen de tus cambios.
+
+::: tip
+Ambos paquetes están actualmente en la etapa `0.0.x`. Durante esta fase, la mayoría de los cambios deberían usar `patch`.
+Si no tienes claro qué tipo de versión corresponde, coméntalo con los mantenedores del proyecto.
+:::
+
+4. Haz commit del archivo de changeset generado junto con tu PR.
+
+::: tip
+Los archivos de changeset se crean en la carpeta `.changeset` y deben incluirse en el commit de tu PR. Cuando se fusione el PR, la versión se actualizará automáticamente y se generará un changelog.
+:::
+
+### Publicación
+
+Cuando los cambios se fusionan en la rama `main`, el proceso de publicación se ejecuta automáticamente:
+
+1. Cuando se fusiona un PR en la rama `main`, se ejecuta GitHub Actions.
+2. Si hay changesets, se crea automáticamente un PR de actualización de versión.
+3. Cuando se fusiona el PR de actualización de versión, la nueva versión se publica en npm.
+
+Puedes ver el resultado de la publicación en [GitHub Actions](https://github.com/toss/react-simplikit/actions).
+
+## Contribuciones a la documentación
+
+No hay condiciones especiales para contribuir a la documentación. Si encuentras información incorrecta o traducciones de baja calidad, o si tienes contenido que añadir, edita el texto con total libertad. Escribe la documentación de forma clara y concisa, desde el punto de vista de quien la lee.
+
+## Generación de esqueletos
+
+Existe un comando que crea el esqueleto mínimo para una contribución. Usa el siguiente comando para crear una carpeta de implementación con la estructura básica:
+
+```bash
+yarn run scaffold <name> --type <type>
+```
+
+- `type`: tipo de implementación; debe ser `component`, `hook` o `util`.
+- `name`: nombre de la implementación.
+
+### Ejemplo
+
+```bash
+yarn run scaffold Button --type component
+```
+
+Este comando crea tres archivos en la carpeta `src/components/Button`:
+
+::: code-group
+
+```tsx [Button.tsx]
+/**
+ * @description
+ * <description-here>
+ *
+ * @param {<param-type>} <param-name> - <param-description>
+ * @param {<param-type>} [<param-name>] - <optional-param-description>
+ *
+ * @returns {<return-type>} <return-description>
+ * - <member-description> `<member-name>` - <member-description>
+ *
+ * @example
+ * <example-code>
+ */
+export function Button() {
+  // TODO: Implement Button
+}
+```
+
+```tsx [Button.spec.ts]
+import { describe, expect, it } from 'vitest';
+
+import { renderSSR } from '../../_internal/test-utils/renderSSR.tsx';
+
+import { Button } from './Button.tsx';
+
+describe('Button', () => {
+  it('is safe on server side rendering', async () => {
+    const result = renderSSR.serverOnly(() => <Button />);
+    expect(true).toBe(true);
+  });
+
+  it('should work', async () => {
+    const result = renderSSR.serverOnly(() => <Button />);
+    expect(true).toBe(true);
+  });
+});
+```
+
+```ts [index.ts]
+export { Button } from './Button.tsx';
+```
+
+:::
+
+::: tip
+También puedes usar estos atajos:
+
+```bash
+yarn run scaffold Button --t c // Crear un componente
+yarn run scaffold useButton --t h // Crear un Hook
+yarn run scaffold getButton --t u // Crear una utilidad
+```
+
+:::

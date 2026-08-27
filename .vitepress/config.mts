@@ -70,6 +70,7 @@ Guidelines for AI agents:
           '**/ko/**',
           '**/ja/**',
           '**/zh-Hans/**',
+          '**/es/**',
         ],
       }),
     ],
