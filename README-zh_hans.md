@@ -91,7 +91,7 @@ function BodyScrollLock() {
 
 ```
 packages/
-└── react-simplikit/    # react-simplikit（hooks、components、utils；移动端 Web 工具函数位于 src/mobile）
+└── react-simplikit/    # react-simplikit (hooks, components, utils; 移动端 Web 工具函数位于 src/mobile)
 ```
 
 ## 贡献
