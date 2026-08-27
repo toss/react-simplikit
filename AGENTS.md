@@ -141,8 +141,11 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 ## Documentation
 
-- **Bilingual**: English + Korean (co-located in hook folders)
+- **Locales**: English source + `ko/` + `ja/`, co-located with the source (`useX.md`, `ko/useX.md`, `ja/useX.md`; guides under `docs/<locale>/`)
 - **JSDoc required**: Every public API must have `@description` + `@example` + `@param` + `@returns`
+- **English API docs are generated**: `yarn docs:gen <name>` turns the JSDoc into `<name>.md`. Do not hand-edit the English API `.md`
+- **Translations are written with your local AI harness**: draft from the English source, then review with `.claude/agents/agent-translation-reviewer.md` (glossary and rules inside). Nothing in CI translates
+- **Keep translations in sync**: a PR that changes an English doc updates its `ko/` and `ja/` counterparts. Untranslated pages fall back to English with a banner
 
 ## Commit Convention
 

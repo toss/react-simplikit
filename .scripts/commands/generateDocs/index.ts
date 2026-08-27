@@ -8,8 +8,6 @@ import * as prettier from 'prettier';
 import { getRootPath } from '../../utils/getRootPath.ts';
 import { generateSkill } from '../generateSkill/index.ts';
 
-import { translate } from './translate.ts';
-
 type Spec = Pick<OriginSpec, 'type' | 'name' | 'description' | 'optional' | 'default'>;
 
 const prettierConfig: prettier.Options = {
@@ -26,27 +24,17 @@ export async function generateDocs(names: string[]) {
   names
     .map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]])
     .forEach(([name, sourceFilePath]) => {
-      const subCtx: { docSource?: string; previousDocSource?: string | null; translatedDoc?: string | null } = {};
+      const subCtx: { docSource?: string } = {};
       tasks.add([
         {
           title: `Generate documents: ${sourceFilePath}`,
           task: async (_, task) =>
-            task.newListr<{ docSource?: string; previousDocSource?: string | null; translatedDoc?: string | null }>(
+            task.newListr<{ docSource?: string }>(
               [
                 {
                   title: `Convert JSDoc to markdown`,
                   task: async ctx => {
-                    const docSource = await jsdocToMd(name, parseJSDoc(await fs.readFile(sourceFilePath, 'utf-8')));
-
-                    ctx.docSource = docSource;
-
-                    // captured before "Write English" overwrites the file on disk; reading it at
-                    // translate time would always compare equal and skip the translation
-                    try {
-                      ctx.previousDocSource = await fs.readFile(`${path.dirname(sourceFilePath)}/${name}.md`, 'utf-8');
-                    } catch {
-                      ctx.previousDocSource = null;
-                    }
+                    ctx.docSource = await jsdocToMd(name, parseJSDoc(await fs.readFile(sourceFilePath, 'utf-8')));
                   },
                 },
                 {
@@ -57,58 +45,6 @@ export async function generateDocs(names: string[]) {
 
                     if (docSource != null) {
                       await fs.writeFile(`${dirname}/${name}.md`, docSource);
-                    }
-                  },
-                },
-                {
-                  title: `Translate markdown to Korean`,
-                  task: async ctx => {
-                    const { docSource } = ctx;
-                    const dirname = path.dirname(sourceFilePath);
-
-                    let isFileExists = false;
-                    try {
-                      await fs.access(`${dirname}/ko/${name}.md`);
-                      isFileExists = true;
-                    } catch {
-                      isFileExists = false;
-                    }
-
-                    // Skip if Korean file already exists and English file hasn't changed
-                    if (isFileExists && ctx.previousDocSource === docSource) {
-                      return;
-                    }
-
-                    if (docSource == null) {
-                      throw new Error('docSource is not found');
-                    }
-
-                    try {
-                      const translatedDoc = await translate(docSource);
-                      ctx.translatedDoc = translatedDoc;
-                    } catch (error) {
-                      // Log the error but don't fail the task - English doc is already saved
-                      console.warn(`Translation failed for ${name}: ${error instanceof Error ? error.message : error}`);
-                      ctx.translatedDoc = null;
-                    }
-                  },
-                },
-                {
-                  title: `Write Korean document`,
-                  skip: ctx => ctx.translatedDoc == null,
-                  task: async ctx => {
-                    const { translatedDoc } = ctx;
-                    const dirname = path.dirname(sourceFilePath);
-
-                    if (translatedDoc != null) {
-                      await fs.mkdir(`${dirname}/ko`).catch(e => {
-                        if (e.code === 'EEXIST') {
-                          return;
-                        }
-
-                        throw e;
-                      });
-                      await fs.writeFile(`${dirname}/ko/${name}.md`, translatedDoc);
                     }
                   },
                 },
