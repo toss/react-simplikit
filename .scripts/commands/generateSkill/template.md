@@ -10,58 +10,61 @@ metadata:
 
 # react-simplikit
 
-Zero-dependency React hooks, components and utils. Everything ships in one package behind one import path — `react-simplikit`. There is no subpath and no default export. Alongside the state/logic and browser-event hooks, the package includes mobile-web (iOS Safari / Android Chrome) viewport, keyboard, safe-area and scroll-lock utilities; those are listed under **mobile** in the catalog, which describes what they assume, not where they are imported from. Every hook is SSR-safe: hooks that touch browser APIs return a fixed initial value on the server and sync after mount.
+Zero-dependency React hooks, components and utils in one package, `react-simplikit`. Alongside the state/logic and browser-event hooks, it includes mobile-web (iOS Safari / Android Chrome) viewport, keyboard, safe-area and scroll-lock utilities; those are listed under **mobile** in the catalog, which describes what they assume, not where they are imported from.
 
 ## Critical rules
 
 - **Check the catalog before hand-writing debounce, throttle, toggle, counter, list/map/set state, interval, timeout, previous-value, stable-callback, click-outside, long-press, intersection/visibility or storage-persisted-state logic.** If a matching entry exists, use it. Reimplementing these is the most common mistake this skill exists to prevent.
-- **Never guess a signature.** Before using an entry, read `references/<name>.md` — it has the parameter table, return shape and a working example. Return shapes follow one convention: single value (`useDebounce`), `[state, action]` tuple (`useToggle`), or an object when there are 3+ members (`useCounter`).
+- **Never guess a signature.** Before using an entry, read `references/<name>.md` — it has the parameter table, return shape and a working example.
 - **One import path, named imports only**: `import { useDebounce, useKeyboardHeight } from 'react-simplikit'`. Every catalog entry — the **mobile** ones included — comes from this same path. There is no subpath and no default export.
 - **`@react-simplikit/mobile` is the legacy package.** Its exports moved into `react-simplikit` under the same names. Write new code against `react-simplikit`; when asked to migrate, rewrite the import path and drop the `@react-simplikit/mobile` dependency — no API renames, and no shim package was published.
-- **SSR**: never branch server-rendered markup on a value that comes from a browser API hook (it is the fixed initial value on the server). Use `useIsClient` for client-only rendering instead of `typeof window` checks.
+- **SSR**: never branch server-rendered markup on a value that comes from a browser API hook. Use `useIsClient` for client-only rendering instead of `typeof window` checks.
 - **Do not wrap or re-export these hooks** in the consumer project just to rename them; use them directly so upgrades stay mechanical.
 
 ## Common needs → use
 
 Backticks in this table mark catalog entries only.
 
-| Need                                                                | Use                                                                                                                         |
-| ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Debounce a callback (search input, resize)                          | `useDebounce` / `useDebouncedCallback`                                                                                      |
-| Throttle a callback (scroll, pointer move)                          | `useThrottle` / `useThrottledCallback`                                                                                      |
-| Boolean on/off                                                      | `useToggle` (flip) or `useBooleanState` (explicit setTrue / setFalse)                                                       |
-| Numeric state with bounds/step                                      | `useCounter`                                                                                                                |
-| Array / Map / Set state with immutable helpers                      | `useList` / `useMap` / `useSet`                                                                                             |
-| State persisted in localStorage / sessionStorage                    | `useStorageState`                                                                                                           |
-| Declarative setInterval / setTimeout                                | `useInterval` / `useTimeout`                                                                                                |
-| Stable callback identity without stale closures                     | `usePreservedCallback`                                                                                                      |
-| Skip re-renders when an object is deep-equal                        | `usePreservedReference`                                                                                                     |
-| Run an async function in an effect                                  | `useAsyncEffect`                                                                                                            |
-| Effect that runs only when a condition holds                        | `useConditionalEffect`                                                                                                      |
-| Side effect tied to a DOM ref (attach/detach)                       | `useRefEffect`                                                                                                              |
-| Click / tap outside an element (close menu, modal)                  | `useOutsideClickEffect`                                                                                                     |
-| Long press / double click                                           | `useLongPress` / `useDoubleClick`                                                                                           |
-| Element enters or leaves the viewport                               | `useIntersectionObserver` (boolean) / `useImpressionRef` (enter/exit callbacks + dwell time) / `ImpressionArea` (component) |
-| Tab / page visibility change                                        | `useVisibilityEvent` (callback) or `usePageVisibility` (state)                                                              |
-| Device location                                                     | `useGeolocation`                                                                                                            |
-| Combine multiple refs into one                                      | `mergeRefs`                                                                                                                 |
-| Controlled-or-uncontrolled component state                          | `useControlledState`                                                                                                        |
-| Input onChange boilerplate                                          | `useInputState`                                                                                                             |
-| Render one of several components by key                             | `SwitchCase`                                                                                                                |
-| Put a separator between children                                    | `Separated`                                                                                                                 |
-| Create a Context + Provider + hook without boilerplate              | `buildContext`                                                                                                              |
-| Merge props objects (handlers chained, className joined)            | `mergeProps`                                                                                                                |
-| Client-only rendering guard                                         | `useIsClient`                                                                                                               |
-| Fixed-bottom element must avoid the on-screen keyboard (mobile web) | `useAvoidKeyboard`                                                                                                          |
-| Keyboard height / visibility (mobile web)                           | `useKeyboardHeight`, `isKeyboardVisible`                                                                                    |
-| Notch / home-indicator insets (mobile web)                          | `useSafeAreaInset`, `getSafeAreaInset`                                                                                      |
-| Lock body scroll while a sheet/modal is open (mobile web)           | `useBodyScrollLock`                                                                                                         |
+| Need                                                                | Use                                      |
+| ------------------------------------------------------------------- | ---------------------------------------- |
+| Debounce a callback (search input, resize)                          | `useDebounce`                            |
+| Throttle a callback (scroll, pointer move)                          | `useThrottle`                            |
+| Boolean on/off, flip only                                           | `useToggle`                              |
+| Boolean on/off with explicit set-true / set-false                   | `useBooleanState`                        |
+| Numeric state with bounds/step                                      | `useCounter`                             |
+| Array / Map / Set state with immutable helpers                      | `useList` / `useMap` / `useSet`          |
+| State persisted in localStorage / sessionStorage                    | `useStorageState`                        |
+| Declarative setInterval / setTimeout                                | `useInterval` / `useTimeout`             |
+| Stable callback identity without stale closures                     | `usePreservedCallback`                   |
+| Skip re-renders when an object is deep-equal                        | `usePreservedReference`                  |
+| Run an async function in an effect                                  | `useAsyncEffect`                         |
+| Effect that runs only when a condition holds                        | `useConditionalEffect`                   |
+| Side effect tied to a DOM ref (attach/detach)                       | `useRefEffect`                           |
+| Click / tap outside an element (close menu, modal)                  | `useOutsideClickEffect`                  |
+| Long press / double click                                           | `useLongPress` / `useDoubleClick`        |
+| Element enters or leaves the viewport                               | `useIntersectionObserver`                |
+| How long an element stayed visible (impression tracking)            | `useImpressionRef` / `ImpressionArea`    |
+| React to tab / page visibility changes with a callback              | `useVisibilityEvent`                     |
+| Read the current tab / page visibility as state                     | `usePageVisibility`                      |
+| Device location                                                     | `useGeolocation`                         |
+| Combine multiple refs into one                                      | `mergeRefs`                              |
+| Controlled-or-uncontrolled component state                          | `useControlledState`                     |
+| Input onChange boilerplate                                          | `useInputState`                          |
+| Render one of several components by key                             | `SwitchCase`                             |
+| Put a separator between children                                    | `Separated`                              |
+| Create a Context + Provider + hook without boilerplate              | `buildContext`                           |
+| Merge props objects (handlers chained, className joined)            | `mergeProps`                             |
+| Client-only rendering guard                                         | `useIsClient`                            |
+| Fixed-bottom element must avoid the on-screen keyboard (mobile web) | `useAvoidKeyboard`                       |
+| Keyboard height / visibility (mobile web)                           | `useKeyboardHeight`, `isKeyboardVisible` |
+| Notch / home-indicator insets (mobile web)                          | `useSafeAreaInset`, `getSafeAreaInset`   |
+| Lock body scroll while a sheet/modal is open (mobile web)           | `useBodyScrollLock`                      |
 
 ## Workflow
 
 1. Match the need against the table above, then confirm in the full catalog.
 2. Read `references/<name>.md` for the signature and example. Do not rely on memory.
-3. Import from `react-simplikit` — one path for every entry, named import only.
+3. Import from `react-simplikit`.
 4. If nothing matches, write plain React — do not stretch a hook past its documented purpose.
 
 ## Catalog
