@@ -60,7 +60,7 @@ All exported functions must include JSDoc with 4 required tags:
 ::: tip
 **Do I need to write documentation?**
 
-No, you don't need to write documentation separately. Instead, please write detailed JSDoc comments. Once your PR is merged, English and Korean documentation will be automatically generated based on the JSDoc, and a PR for adding the documentation will be automatically created.
+No, you don't need to write documentation separately. Instead, please write detailed JSDoc comments, then run `yarn docs:gen <name>` to generate the English documentation from them and commit the result with your PR. Translations are maintained separately; until one exists, the page is shown in English with a notice.
 :::
 
 ### 4. Testing

@@ -1,10 +1,12 @@
 import { DefaultTheme } from 'vitepress';
 
 import { en } from './locales/en.mts';
+import { es } from './locales/es.mts';
 import { ja } from './locales/ja.mts';
 import { ko } from './locales/ko.mts';
+import { zhHans } from './locales/zh-Hans.mts';
 
-export type LocaleCode = 'root' | 'ko' | 'ja';
+export type LocaleCode = 'root' | 'ko' | 'ja' | 'zh-Hans' | 'es';
 
 type GuidePageTitles = {
   core: {
@@ -73,6 +75,20 @@ export const localeDefinitions: Record<LocaleCode, LocaleDefinition> = {
     path: 'ja',
     untranslatedNotice: 'このページは翻訳の準備中のため、英語の原文を表示しています。',
     themeStrings: ja,
+  },
+  'zh-Hans': {
+    label: '简体中文',
+    lang: 'zh-Hans',
+    path: 'zh-Hans',
+    untranslatedNotice: '此页面的翻译正在准备中，暂时显示英文原文。',
+    themeStrings: zhHans,
+  },
+  es: {
+    label: 'Español',
+    lang: 'es',
+    path: 'es',
+    untranslatedNotice: 'Esta página se muestra en inglés mientras se prepara su traducción.',
+    themeStrings: es,
   },
 };
 

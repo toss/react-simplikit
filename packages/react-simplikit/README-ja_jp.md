@@ -4,7 +4,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/react-simplikit/blob/main/LICENSE)
 [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit)
 
-[English](./README.md) | [한국어](./README-ko_kr.md) | 日本語
+[English](./README.md) | [한국어](./README-ko_kr.md) | 日本語 | [简体中文](./README-zh_hans.md) | [Español](./README-es.md)
 
 フック、コンポーネント、ユーティリティを提供する、軽量で依存関係のない React ユーティリティライブラリです。
 

@@ -29,14 +29,20 @@ for (const requiredText of ['release:', 'changesets/action@', 'changeset:publish
   assert.equal(releaseWorkflow.includes(requiredText), true, `release workflow must contain ${requiredText}`);
 }
 
-assert.deepEqual(Object.keys(localeDefinitions), ['root', 'ko', 'ja']);
+assert.deepEqual(Object.keys(localeDefinitions), ['root', 'ko', 'ja', 'zh-Hans', 'es']);
 assert.equal(rewrites['docs/index.md'], 'index.md');
 assert.equal(rewrites['docs/ko/index.md'], 'ko/index.md');
 assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ko/:hook.md'], 'ko/core/hooks/:hook.md');
 assert.equal(rewrites['docs/ja/index.md'], 'ja/index.md');
 assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ja/:hook.md'], 'ja/core/hooks/:hook.md');
+assert.equal(rewrites['docs/zh-Hans/index.md'], 'zh-Hans/index.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/zh-Hans/:hook.md'], 'zh-Hans/core/hooks/:hook.md');
+assert.equal(rewrites['docs/es/index.md'], 'es/index.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/es/:hook.md'], 'es/core/hooks/:hook.md');
 assert.equal(generatedRewrites['generated-locales/docs/ko/index.md'], 'ko/index.md');
 assert.equal(generatedRewrites['generated-locales/docs/ja/index.md'], 'ja/index.md');
+assert.equal(generatedRewrites['generated-locales/docs/zh-Hans/index.md'], 'zh-Hans/index.md');
+assert.equal(generatedRewrites['generated-locales/docs/es/index.md'], 'es/index.md');
 assert.equal(packageJson.scripts['docs:prepare'], 'tsx .scripts/index.ts prepare-localized-fallbacks');
 assert.equal(packageJson.scripts['docs:dev'], 'yarn docs:prepare && vitepress dev');
 assert.equal(packageJson.scripts['docs:build'], 'yarn docs:prepare && vitepress build');
@@ -117,50 +123,53 @@ try {
   await fs.rm(buildOutputDirectory, { force: true, recursive: true });
 }
 
+// Brazilian Portuguese is not in the registry, so this fixture keeps covering the case
+// buildLocaleConfig has to handle before a locale is registered. Whichever locale is used
+// here must stay unregistered, or the assertions below stop proving anything.
 const unregisteredLocaleFixture = {
-  label: '简体中文',
-  lang: 'zh-Hans',
-  path: 'zh-Hans',
-  untranslatedNotice: '此页面的翻译正在准备中，暂时显示英文原文。',
+  label: 'Português (Brasil)',
+  lang: 'pt-BR',
+  path: 'pt-BR',
+  untranslatedNotice: 'Esta página está sendo exibida em inglês enquanto sua tradução é preparada.',
   themeStrings: {
-    homeNavLabel: '首页',
-    guideLabel: '指南',
-    referenceLabel: '参考',
-    componentsLabel: '组件',
+    homeNavLabel: 'Início',
+    guideLabel: 'Guia',
+    referenceLabel: 'Referência',
+    componentsLabel: 'Componentes',
     hooksLabel: 'Hooks',
-    utilsLabel: '工具函数',
+    utilsLabel: 'Utilitários',
     guidePages: {
       core: {
-        intro: '介绍',
-        whyReactSimplikitMatters: '为什么选择 react-simplikit',
-        installation: '安装',
-        aiIntegration: 'AI 集成',
-        designPrinciples: '设计原则',
-        contributing: '贡献指南',
+        intro: 'Introdução',
+        whyReactSimplikitMatters: 'Por que o react-simplikit importa',
+        installation: 'Instalação',
+        aiIntegration: 'Integração com IA',
+        designPrinciples: 'Princípios de design',
+        contributing: 'Contribuir',
       },
       mobile: {
-        intro: '介绍',
-        roadmap: '路线图',
-        installation: '安装',
-        designPrinciples: '设计原则',
-        contributing: '贡献指南',
+        intro: 'Introdução',
+        roadmap: 'Roteiro',
+        installation: 'Instalação',
+        designPrinciples: 'Princípios de design',
+        contributing: 'Contribuir',
       },
     },
-    editLinkText: '在 GitHub 上编辑此页',
-    footerMessage: '基于 MIT 许可证发布。',
+    editLinkText: 'Editar esta página no GitHub',
+    footerMessage: 'Distribuído sob a licença MIT.',
   },
 } satisfies Parameters<typeof buildLocaleConfig>[0];
 
 const unregisteredConfig = buildLocaleConfig(unregisteredLocaleFixture);
 
-assert.equal(unregisteredConfig.lang, 'zh-Hans');
+assert.equal(unregisteredConfig.lang, 'pt-BR');
 assert.deepEqual(unregisteredConfig.themeConfig?.nav, [
-  { text: '首页', link: '/zh-Hans/' },
-  { text: 'Guide', link: '/zh-Hans/core/intro' },
-  { text: 'Mobile Utilities', link: '/zh-Hans/mobile/intro' },
+  { text: 'Início', link: '/pt-BR/' },
+  { text: 'Guide', link: '/pt-BR/core/intro' },
+  { text: 'Mobile Utilities', link: '/pt-BR/mobile/intro' },
 ]);
-assert.deepEqual(Object.keys(unregisteredConfig.themeConfig?.sidebar ?? {}), ['/zh-Hans/core/', '/zh-Hans/mobile/']);
-assert.equal(unregisteredConfig.themeConfig?.editLink?.text, '在 GitHub 上编辑此页');
+assert.deepEqual(Object.keys(unregisteredConfig.themeConfig?.sidebar ?? {}), ['/pt-BR/core/', '/pt-BR/mobile/']);
+assert.equal(unregisteredConfig.themeConfig?.editLink?.text, 'Editar esta página no GitHub');
 
 const koConfig = buildLocaleConfig(localeDefinitions.ko);
 const rootConfig = buildLocaleConfig(localeDefinitions.root);
@@ -205,6 +214,36 @@ assert.notEqual(
   localeDefinitions.ja.themeStrings.search,
   undefined,
   'Japanese must ship search translations, or the search UI silently renders in English'
+);
+
+const zhHansConfig = buildLocaleConfig(localeDefinitions['zh-Hans']);
+
+assert.equal(zhHansConfig.lang, 'zh-Hans');
+assert.deepEqual(zhHansConfig.themeConfig?.nav, [
+  { text: '首页', link: '/zh-Hans/' },
+  { text: 'Guide', link: '/zh-Hans/core/intro' },
+  { text: 'Mobile Utilities', link: '/zh-Hans/mobile/intro' },
+]);
+assert.equal(zhHansConfig.themeConfig?.editLink?.text, '在 GitHub 上编辑此页');
+assert.notEqual(
+  localeDefinitions['zh-Hans'].themeStrings.search,
+  undefined,
+  'Simplified Chinese must ship search translations, or the search UI silently renders in English'
+);
+
+const esConfig = buildLocaleConfig(localeDefinitions.es);
+
+assert.equal(esConfig.lang, 'es');
+assert.deepEqual(esConfig.themeConfig?.nav, [
+  { text: 'Inicio', link: '/es/' },
+  { text: 'Guide', link: '/es/core/intro' },
+  { text: 'Mobile Utilities', link: '/es/mobile/intro' },
+]);
+assert.equal(esConfig.themeConfig?.editLink?.text, 'Editar esta página en GitHub');
+assert.notEqual(
+  localeDefinitions.es.themeStrings.search,
+  undefined,
+  'Spanish must ship search translations, or the search UI silently renders in English'
 );
 
 for (const retiredLocaleFile of ['.vitepress/en.mts', '.vitepress/ko.mts']) {
