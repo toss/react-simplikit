@@ -122,7 +122,8 @@ return-value descriptions, and table cells.
 您: the English source addresses the reader informally, and 您 reads as marketing copy in
 developer documentation. Chinese prose takes full-width punctuation — `，。：；、（）？！——……《》`
 — with `“”` as the quotation marks and `‘’` reserved for a quote nested inside another quote.
-Half-width punctuation stays inside code blocks, identifiers, and inline code spans. Insert a
+Half-width punctuation stays inside code blocks, identifiers, inline code spans, and component
+attributes (`<SplitView left-title="...">`, which sit in prose outside any fence). Insert a
 half-width space between a Chinese character and an adjacent Latin word, digit, or inline code
 span (使用 `useDebounce` 这个 Hook 来处理 React 中的输入；14 个依赖), but never between a Chinese
 character and full-width punctuation, which already carries its own spacing. Use 库 for
@@ -175,10 +176,11 @@ is kept in English as well, matching React 官方中文文档 — never 钩子.
 - Over-long sentences carried straight over from English — split at a 逗号 or 分号 boundary
   when the result is hard to parse in one pass. Judge by readability, not by clause count; a
   multi-clause sentence can be perfectly natural in Chinese
-- Translating a proper noun or identifier the source deliberately left in English: package
-  names (`@react-simplikit/mobile`), prop and option names, npm script names. The converse
-  also fails review — `deprecated` used as an ordinary adjective in prose is translated
-  (已弃用); only the identifier beside it stays in English
+- Translating a UI label, proper noun, or identifier the source deliberately left in English:
+  package names (`@react-simplikit/mobile`), prop and option names, npm script names, and UI
+  labels such as badge alt text (`MIT License`, `Discord Badge`). The converse also fails
+  review — `deprecated` used as an ordinary adjective in prose is translated (已弃用); only the
+  identifier beside it stays in English
 
 ## Spanish (`es`)
 
@@ -195,8 +197,10 @@ imperative (`Instalación`, `Contribuir`, `Empezar`), while instructions in body
 `tú` imperative (`instala` — not `instale`, and not `instalar`). Headings and titles take
 sentence case (`Principios de diseño`) regardless of the English source's Title Case; only
 proper nouns and terms from the do-not-translate list keep their capitals. Opening `¿` and `¡`
-are required on every question and exclamation, and quotations take `“ ”` (with `‘ ’` nested)
-— never the straight `" "` carried over from the source. Adjectival glossary entries are cited
+are required on every question and exclamation, and prose quotations take `“ ”` (with `‘ ’`
+nested) — never the straight `" "` carried over from the source. That rule is for prose only:
+straight quotes and half-width punctuation stay byte-identical inside code blocks, identifiers,
+inline code spans, and component attributes (`<SplitView left-title="...">`). Adjectival glossary entries are cited
 in masculine singular and must agree with the noun they modify (`obsoleto` → `una API
 obsoleta`).
 
@@ -251,10 +255,11 @@ the first failure mode below.
   `cobertura de las pruebas de los Hooks de React`, unwound right to left with `de`
 - Missing `¿` / `¡` opening marks, and missing accents where the accent carries meaning
   (`más`/`mas`, `sí`/`si`, `qué`/`que`, `tú`/`tu`, `él`/`el`, `está`/`esta`, `aún`/`aun`)
-- Translating a proper noun or identifier the source deliberately left in English: package
-  names (`@react-simplikit/mobile`), prop and option names, npm script names. The converse
-  also fails review — `deprecated` used as an ordinary adjective in prose is translated
-  (`obsoleto`, agreeing with its noun); only the identifier beside it stays in English
+- Translating a UI label, proper noun, or identifier the source deliberately left in English:
+  package names (`@react-simplikit/mobile`), prop and option names, npm script names, and UI
+  labels such as badge alt text (`MIT License`, `Discord Badge`). The converse also fails
+  review — `deprecated` used as an ordinary adjective in prose is translated (`obsoleto`,
+  agreeing with its noun); only the identifier beside it stays in English
 
 ## Adding a language
 
