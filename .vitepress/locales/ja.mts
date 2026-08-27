@@ -12,6 +12,7 @@ export const ja: LocaleThemeStrings = {
       intro: '紹介',
       whyReactSimplikitMatters: 'なぜ react-simplikit なのか',
       installation: 'インストール',
+      aiIntegration: 'AI 連携',
       designPrinciples: '設計原則',
       contributing: '貢献ガイド',
     },

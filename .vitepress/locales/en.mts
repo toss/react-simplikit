@@ -12,6 +12,7 @@ export const en: LocaleThemeStrings = {
       intro: 'Introduction',
       whyReactSimplikitMatters: 'Why react-simplikit matters',
       installation: 'Installation',
+      aiIntegration: 'AI Integration',
       designPrinciples: 'Design Principles',
       contributing: 'Contributing',
     },

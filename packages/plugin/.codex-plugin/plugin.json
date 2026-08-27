@@ -1,25 +1,25 @@
 {
-  "name": "react-design-philosophy",
+  "name": "react-simplikit",
   "version": "0.1.0",
-  "description": "React design philosophy for abstraction design, hook review, and hook writing. Covers declarative APIs, lifecycle safety, SSR, state design, effect patterns, TypeScript, and performance.",
-  "author": { "name": "kimyouknow, zztnrudzz13" },
+  "description": "Catalog of every react-simplikit hook, component and util with import and SSR rules, so an agent uses the library instead of hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic.",
+  "author": { "name": "Toss" },
   "homepage": "https://react-simplikit.slash.page",
   "repository": "https://github.com/toss/react-simplikit",
   "license": "MIT",
-  "keywords": ["react", "hooks", "philosophy", "code-review", "api-design", "ssr", "typescript"],
+  "keywords": ["react", "react-hooks", "react-simplikit", "ssr", "mobile-web", "typescript"],
   "skills": "./skills/",
   "interface": {
-    "displayName": "React Design Philosophy",
-    "shortDescription": "React hook design, review, and API abstraction guidance.",
-    "longDescription": "React design philosophy for abstraction design, hook review, and hook writing. Covers declarative APIs, lifecycle safety, SSR, state design, effect patterns, TypeScript, and performance.",
+    "displayName": "react-simplikit",
+    "shortDescription": "Use react-simplikit hooks, components and utils instead of hand-written equivalents.",
+    "longDescription": "Catalog of every react-simplikit hook, component and util with import and SSR rules, so an agent uses the library instead of hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic.",
     "developerName": "Toss",
     "category": "Development",
-    "capabilities": ["Review", "Write"],
+    "capabilities": ["Write"],
     "websiteURL": "https://react-simplikit.slash.page",
     "defaultPrompt": [
-      "Review this hook against React design principles.",
-      "Design a React hook API for this behavior.",
-      "Check whether this abstraction fits React."
+      "Debounce this search input with react-simplikit.",
+      "Close this dropdown when the user clicks outside it.",
+      "Keep this fixed bottom button above the mobile keyboard."
     ]
   }
 }

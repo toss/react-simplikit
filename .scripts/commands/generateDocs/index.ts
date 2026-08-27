@@ -6,6 +6,7 @@ import path from 'path';
 import * as prettier from 'prettier';
 
 import { getRootPath } from '../../utils/getRootPath.ts';
+import { generateSkill } from '../generateSkill/index.ts';
 
 type Spec = Pick<OriginSpec, 'type' | 'name' | 'description' | 'optional' | 'default'>;
 
@@ -43,7 +44,19 @@ export async function generateDocs(names: string[]) {
                     const dirname = path.dirname(sourceFilePath);
 
                     if (docSource != null) {
-                      await fs.writeFile(`${dirname}/${name}.md`, docSource);
+                      const documentPath = `${dirname}/${name}.md`;
+
+                      // Written already formatted: `.prettierignore`'s `src/hooks/**/*.md` is anchored to the
+                      // repo root and never reaches packages/, so prettier (yarn fix, autofix.ci) reformats
+                      // these pages later. `generateSkill()` below copies them, and an unformatted copy
+                      // would drift from the page the moment prettier runs.
+                      await fs.writeFile(
+                        documentPath,
+                        await prettier.format(docSource, {
+                          ...(await prettier.resolveConfig(documentPath)),
+                          filepath: documentPath,
+                        })
+                      );
                     }
                   },
                 },
@@ -54,7 +67,10 @@ export async function generateDocs(names: string[]) {
       ]);
     });
 
-  tasks.run();
+  await tasks.run();
+
+  // The skill catalog is rendered from the English pages written above, so it is refreshed in the same run.
+  await generateSkill();
 }
 
 function parseJSDoc(source: string) {

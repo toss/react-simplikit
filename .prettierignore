@@ -15,3 +15,5 @@ out
 src/components/**/*.md
 src/hooks/**/*.md
 src/utils/**/*.md
+packages/plugin/skills/react-simplikit/SKILL.md
+packages/plugin/skills/react-simplikit/references

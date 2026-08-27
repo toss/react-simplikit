@@ -1,0 +1,4 @@
+interface:
+  display_name: 'react-simplikit'
+  short_description: 'Use react-simplikit hooks, components and utils instead of hand-written equivalents.'
+  default_prompt: 'Use the react-simplikit skill: pick the matching hook, component or util from its catalog and read the reference page before writing code.'

@@ -9,10 +9,7 @@
 
 ### Background
 
-Hook design philosophy accumulated from operating react-simplikit is defined as **a single set of shared principles**. These principles serve two purposes:
-
-1. **Code review** — `react-hook-review` skill provides feedback based on these principles
-2. **Code writing** — `react-hook-writing` skill provides guidance based on these principles
+Hook design philosophy accumulated from operating react-simplikit is defined as **a single set of shared principles**, applied both when reviewing a hook and when writing one.
 
 ### Two Directions of Principles
 
@@ -275,89 +272,3 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 | Effect Usage | U8-U14           | Effects for sync only, no chains, key reset, async cleanup                       |
 | Memoization  | U15-U16          | useMemo >= 1ms, useCallback + memo() only                                        |
 | Hook Design  | U17              | No lifecycle wrappers, extract reusable stateful logic only                      |
-
----
-
-## 4. Plugin Architecture
-
-### Derivation Flow
-
-```
-This document (principles definition)
-    ↓ compress
-react-hook-review/SKILL.md (checklist)
-react-hook-writing/SKILL.md (guide)
-    ↓ further compress
-AGENTS.md Part 1 (for Codex)
-    ↓ reference
-.cursorrules (for Cursor)
-```
-
-### Directory Structure
-
-```
-packages/plugin/  (planned)
-├── .claude-plugin/plugin.json
-├── .codex-plugin/plugin.json
-├── principles/                      ← Shared principles single source
-├── skills/
-│   ├── react-hook-review/SKILL.md   ← C1-C14 + U1-U17 checklist
-│   └── react-hook-writing/
-│       ├── SKILL.md                 ← Themed guide
-│       └── references/patterns.md   ← 3 hook implementations
-└── README.md
-```
-
-### Cross-Tool Support
-
-| Tool                   | File               | Current      | Planned                                          |
-| ---------------------- | ------------------ | ------------ | ------------------------------------------------ |
-| Claude Code (internal) | `.claude/skills/`  | ✅ 10 skills | Keep                                             |
-| Claude Code (plugin)   | `packages/plugin/` | ❌           | Create via Phase 1-5                             |
-| Codex                  | `AGENTS.md`        | ✅ 162 lines | Split into Part 1 (Universal) + Part 2 (Project) |
-| Cursor                 | `.cursorrules`     | ✅ 28 lines  | Keep AGENTS.md reference                         |
-
-### Extraction Rules
-
-| Extracted (Philosophy)                     | Left Behind (Implementation)                |
-| ------------------------------------------ | ------------------------------------------- |
-| "Always return objects"                    | `packages/react-simplikit/src/hooks/` paths |
-| "Named useEffect improves stack traces"    | `yarn test`, `yarn fix` commands            |
-| "SSR-safe: fixed initial + useEffect sync" | `renderHookSSR.serverOnly()` utility        |
-| "4 JSDoc tags for AI doc generation"       | `100%` coverage threshold                   |
-
-### Generalization Transforms
-
-| Before (Project-Specific)         | After (Universal)               |
-| --------------------------------- | ------------------------------- |
-| `renderHookSSR.serverOnly()`      | Vitest + `delete global.window` |
-| `yarn test` / `yarn fix`          | "Run your test suite"           |
-| `packages/react-simplikit/` paths | "your source directory"         |
-| `react-simplikit` references      | Removed                         |
-
----
-
-## 5. Execution Roadmap
-
-| Phase | Content                                   | Output                         |
-| ----- | ----------------------------------------- | ------------------------------ |
-| 1     | Directory + plugin.json + README          | `packages/plugin/` structure   |
-| 2     | react-hook-review SKILL.md                | C1-C14 + U1-U17 checklist      |
-| 3     | react-hook-writing SKILL.md + patterns.md | Themed guide + 3 hook examples |
-| 4     | Generalization validation (grep)          | 0 project references           |
-| 5     | Plugin validate + local test              | Working confirmation           |
-
-### Validation Criteria
-
-| Item                     | Pass Criteria                                          |
-| ------------------------ | ------------------------------------------------------ |
-| Plugin structure         | `claude plugin validate .` — 0 errors                  |
-| Universality             | 0 project-specific references in another React project |
-| Philosophy depth         | Every rule has narrative "Why"                         |
-| Opinionated transparency | 🟡 items have trade-offs stated                        |
-
-### Future Expansion
-
-- Codex/Gemini support (via AGENTS.md Part 1)
-- Component design philosophy
-- Marketplace migration (when 3+ plugins)

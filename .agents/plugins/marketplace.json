@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "react-design-philosophy",
+      "name": "react-simplikit",
       "source": {
         "source": "local",
         "path": "./packages/plugin"
