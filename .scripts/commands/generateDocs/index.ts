@@ -6,6 +6,7 @@ import path from 'path';
 import * as prettier from 'prettier';
 
 import { getRootPath } from '../../utils/getRootPath.ts';
+import { generateSkill } from '../generateSkill/index.ts';
 
 import { translate } from './translate.ts';
 
@@ -118,7 +119,10 @@ export async function generateDocs(names: string[]) {
       ]);
     });
 
-  tasks.run();
+  await tasks.run();
+
+  // The skill catalog is rendered from the English pages written above, so it is refreshed in the same run.
+  await generateSkill();
 }
 
 function parseJSDoc(source: string) {

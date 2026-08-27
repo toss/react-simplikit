@@ -8,6 +8,7 @@ import { getRootPath } from './utils/getRootPath.ts';
 dotenv.config({ path: path.join(getRootPath(), '.env') });
 
 import { generateDocs } from './commands/generateDocs/index.ts';
+import { generateSkill } from './commands/generateSkill/index.ts';
 import { prepareLocalizedFallbacks } from './commands/prepareLocalizedFallbacks/index.ts';
 import { scaffold } from './commands/scaffold/index.ts';
 
@@ -30,6 +31,13 @@ export function cli(args: string[]) {
     .description('Generate English fallback sources for documents that have no translation yet')
     .action(async () => {
       await prepareLocalizedFallbacks();
+    });
+
+  program
+    .command('generate-skill')
+    .description('Generate the react-simplikit agent skill (SKILL.md + references) from the documentation pages')
+    .action(async () => {
+      await generateSkill();
     });
 
   program
