@@ -8,10 +8,7 @@
 
 ### 배경
 
-react-simplikit을 운영하며 축적한 훅 설계 철학을 **하나의 공통 원칙**으로 정의한다. 이 원칙은 두 가지 용도로 사용된다:
-
-1. **코드 리뷰** — `react-hook-review` 스킬이 이 원칙 기반으로 피드백
-2. **코드 작성** — `react-hook-writing` 스킬이 이 원칙 기반으로 가이드
+react-simplikit을 운영하며 축적한 훅 설계 철학을 **하나의 공통 원칙**으로 정의한다. 훅을 리뷰할 때와 작성할 때 모두 이 원칙을 기준으로 삼는다.
 
 ### 원칙의 두 가지 방향
 
@@ -265,89 +262,3 @@ React 공식 문서(react.dev) 기반 16개 패턴 (U1-U17, U4 제거):
 | Effect Usage | U8-U14             | effect는 외부 동기화 전용, 체인 금지, key 리셋, 비동기 cleanup |
 | Memoization  | U15-U16            | useMemo 1ms+, useCallback + memo() 조합만                      |
 | Hook Design  | U17                | lifecycle wrapper 금지, 구체적 목적 훅만                       |
-
----
-
-## 4. 플러그인 아키텍처
-
-### 파생 흐름
-
-```
-이 문서 (principles, 원칙 정의)
-    ↓ 압축
-react-hook-review/SKILL.md (체크리스트)
-react-hook-writing/SKILL.md (가이드)
-    ↓ 추가 압축
-AGENTS.md Part 1 (Codex용)
-    ↓ 참조
-.cursorrules (Cursor용)
-```
-
-### 디렉토리 구조
-
-```
-packages/plugin/  (planned)
-├── .claude-plugin/plugin.json
-├── .codex-plugin/plugin.json
-├── principles/                      ← 공통 원칙 Single Source
-├── skills/
-│   ├── react-hook-review/SKILL.md   ← C1-C14 + U1-U17 체크리스트
-│   └── react-hook-writing/
-│       ├── SKILL.md                 ← 테마별 가이드
-│       └── references/patterns.md   ← 구현 예시 3개
-└── README.md
-```
-
-### Cross-Tool 지원
-
-| 도구                   | 파일               | 현재     | 변경                                     |
-| ---------------------- | ------------------ | -------- | ---------------------------------------- |
-| Claude Code (내부)     | `.claude/skills/`  | ✅ 10개  | 유지                                     |
-| Claude Code (플러그인) | `packages/plugin/` | ❌       | Phase 1-5로 생성                         |
-| Codex                  | `AGENTS.md`        | ✅ 162줄 | Part 1(Universal) + Part 2(Project) 분리 |
-| Cursor                 | `.cursorrules`     | ✅ 28줄  | AGENTS.md 참조 유지                      |
-
-### 추출 규칙
-
-| 추출됨 (철학)                              | 남겨짐 (구현)                              |
-| ------------------------------------------ | ------------------------------------------ |
-| "항상 객체 반환"                           | `packages/react-simplikit/src/hooks/` 경로 |
-| "Named useEffect improves stack traces"    | `yarn test`, `yarn fix` 명령               |
-| "SSR-safe: fixed initial + useEffect sync" | `renderHookSSR.serverOnly()` 유틸          |
-| "4 JSDoc tags for AI doc generation"       | `100%` coverage 기준                       |
-
-### 일반화 변환
-
-| Before (프로젝트 전용)           | After (범용)                    |
-| -------------------------------- | ------------------------------- |
-| `renderHookSSR.serverOnly()`     | Vitest + `delete global.window` |
-| `yarn test` / `yarn fix`         | "Run your test suite"           |
-| `packages/react-simplikit/` 경로 | "your source directory"         |
-| `react-simplikit` 언급           | 제거                            |
-
----
-
-## 5. 실행 로드맵
-
-| Phase | 내용                                      | 산출물                      |
-| ----- | ----------------------------------------- | --------------------------- |
-| 1     | 디렉토리 + plugin.json + README           | `packages/plugin/` 구조     |
-| 2     | react-hook-review SKILL.md                | C1-C14 + U1-U17 체크리스트  |
-| 3     | react-hook-writing SKILL.md + patterns.md | 테마별 가이드 + 3개 훅 예시 |
-| 4     | 일반화 검증 (grep)                        | 프로젝트 참조 0건           |
-| 5     | 플러그인 validate + 로컬 테스트           | 동작 확인                   |
-
-### 검증 기준
-
-| 항목               | 통과 기준                                 |
-| ------------------ | ----------------------------------------- |
-| 플러그인 구조      | `claude plugin validate .` 에러 0         |
-| 범용성             | 다른 React 프로젝트에서 프로젝트 참조 0건 |
-| 철학 깊이          | 각 규칙의 Why가 narrative                 |
-| Opinionated 투명성 | 🟡 패턴에 trade-off 존재                  |
-
-### 향후 확장
-
-- Codex/Gemini 대응 (AGENTS.md Part 1 활용)
-- Component 설계 철학 추가
-- Marketplace 전환 (Plugin 3개+ 시)
