@@ -69,6 +69,7 @@ Guidelines for AI agents:
           'generated-locales/**',
           '**/ko/**',
           '**/ja/**',
+          '**/zh-Hans/**',
         ],
       }),
     ],

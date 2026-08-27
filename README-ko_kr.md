@@ -2,7 +2,7 @@
 
 # react-simplikit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/react-simplikit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/react-simplikit/graph/badge.svg?token=RHVOZ3J3TU)](https://codecov.io/gh/toss/react-simplikit) [![Discord Badge](https://discord.com/api/guilds/1281071127052943361/widget.png?style=shield)](https://discord.gg/vGXbVjP2nY)
 
-[English](./README.md) | 한국어 | [日本語](./README-ja_jp.md)
+[English](./README.md) | 한국어 | [日本語](./README-ja_jp.md) | [简体中文](./README-zh_hans.md)
 
 견고한 애플리케이션을 만들기 위한 가볍고 의존성 없는 React 유틸리티 모음이에요.
 
