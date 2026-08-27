@@ -43,9 +43,9 @@ assert.equal(packageJson.scripts['docs:build'], 'yarn docs:prepare && vitepress 
 assert.equal(gitignore.includes('generated-locales'), true);
 assert.equal(packageJson.scripts['test:docs'], 'vitest run --dir .scripts && tsx .scripts/verifyDocsI18n.ts');
 assert.equal(
-  integrationWorkflow.includes("command: ['format', 'lint', 'type', 'docs']"),
+  integrationWorkflow.includes("command: ['format', 'lint', 'type', 'docs', 'skill']"),
   true,
-  'the integration workflow must run test:docs'
+  'the integration workflow must run test:docs and test:skill'
 );
 
 const sidebarFixtureDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-sidebar-'));
