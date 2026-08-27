@@ -35,6 +35,7 @@ export function buildLocaleConfig(
                 link: `${prefix}/core/why-react-simplikit-matters`,
               },
               { text: strings.guidePages.core.installation, link: `${prefix}/core/installation` },
+              { text: strings.guidePages.core.aiIntegration, link: `${prefix}/core/ai-integration` },
               { text: strings.guidePages.core.designPrinciples, link: `${prefix}/core/design-principles` },
               { text: strings.guidePages.core.contributing, link: `${prefix}/core/contributing` },
             ],

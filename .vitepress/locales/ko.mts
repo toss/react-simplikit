@@ -12,6 +12,7 @@ export const ko: LocaleThemeStrings = {
       intro: '소개',
       whyReactSimplikitMatters: 'react-simplikit, 선택의 이유',
       installation: '설치하기',
+      aiIntegration: 'AI 연동',
       designPrinciples: '설계 원칙',
       contributing: '기여하기',
     },
