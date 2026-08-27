@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useDebouncedCallback(options: Object): Function;
+function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
 ```
 
 ### Parameters
@@ -18,9 +18,10 @@ function useDebouncedCallback(options: Object): Function;
   :nested="[
     {
       name: 'options.onChange',
-      type: 'Function',
+      type: '(newValue: T) => void',
       required: true,
-      description: 'The callback function to debounce.',
+      description:
+        'The callback to debounce. A call with the same value as the last forwarded one is skipped.',
     },
     {
       name: 'options.timeThreshold',
@@ -52,21 +53,28 @@ function useDebouncedCallback(options: Object): Function;
 
 <Interface
   name=""
-  type="Function"
-  description="debounced function that delays invoking the callback."
+  type="(nextValue: T) => void"
+  description="debounced function that forwards the value to <code>onChange</code>."
 />
 
 ## Example
 
 ```tsx
+import { useDebouncedCallback } from 'react-simplikit';
+import { useState } from 'react';
+
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const debouncedSetQuery = useDebouncedCallback({
+  const setQueryDebounced = useDebouncedCallback({
     onChange: setQuery,
-    timeThreshold: 100,
+    timeThreshold: 300,
   });
+
   return (
-    <input type="text" onChange={e => debouncedSetQuery(e.target.value)} />
+    <>
+      <input onChange={e => setQueryDebounced(e.target.value)} />
+      <p>Searching for: {query}</p>
+    </>
   );
 }
 ```

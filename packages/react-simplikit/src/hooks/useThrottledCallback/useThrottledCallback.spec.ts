@@ -97,6 +97,16 @@ describe('useThrottledCallback', () => {
     expect(onChange).toBeCalledTimes(1);
   });
 
+  it('forwards a number value to onChange', () => {
+    const onChange = vi.fn<(value: number) => void>();
+    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));
+
+    result.current(120);
+
+    expect(onChange).toBeCalledTimes(1);
+    expect(onChange).toBeCalledWith(120);
+  });
+
   it('should invoke the callback when the first value is false', () => {
     const onChange = vi.fn();
     const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));
