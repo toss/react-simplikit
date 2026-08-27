@@ -1,12 +1,12 @@
 {
-  "name": "react-design-philosophy",
+  "name": "react-simplikit",
   "owner": { "name": "toss" },
   "metadata": {
-    "description": "React design philosophy skills for hook review, hook writing, and higher-level API abstraction decisions."
+    "description": "Agent skill for react-simplikit: a catalog of every hook, component and util with usage rules."
   },
   "plugins": [
     {
-      "name": "react-design-philosophy",
+      "name": "react-simplikit",
       "source": "./packages/plugin"
     }
   ]
