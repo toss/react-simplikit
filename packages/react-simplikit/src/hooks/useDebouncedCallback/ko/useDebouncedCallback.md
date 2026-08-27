@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useDebouncedCallback(options: Object): Function;
+function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
 ```
 
 ### 파라미터
@@ -18,9 +18,10 @@ function useDebouncedCallback(options: Object): Function;
   :nested="[
     {
       name: 'options.onChange',
-      type: 'Function',
+      type: '(newValue: T) => void',
       required: true,
-      description: '디바운스할 콜백 함수예요.',
+      description:
+        '디바운스할 콜백이에요. 마지막으로 전달된 값과 같은 값으로 호출하면 건너뛰어요.',
     },
     {
       name: 'options.timeThreshold',
@@ -52,21 +53,28 @@ function useDebouncedCallback(options: Object): Function;
 
 <Interface
   name=""
-  type="Function"
-  description="콜백 호출을 지연시키는 디바운스된 함수예요."
+  type="(nextValue: T) => void"
+  description="값을 <code>onChange</code>에 전달하는 디바운스된 함수예요."
 />
 
 ## 예시
 
 ```tsx
+import { useDebouncedCallback } from 'react-simplikit';
+import { useState } from 'react';
+
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const debouncedSetQuery = useDebouncedCallback({
+  const setQueryDebounced = useDebouncedCallback({
     onChange: setQuery,
-    timeThreshold: 100,
+    timeThreshold: 300,
   });
+
   return (
-    <input type="text" onChange={e => debouncedSetQuery(e.target.value)} />
+    <>
+      <input onChange={e => setQueryDebounced(e.target.value)} />
+      <p>검색어: {query}</p>
+    </>
   );
 }
 ```

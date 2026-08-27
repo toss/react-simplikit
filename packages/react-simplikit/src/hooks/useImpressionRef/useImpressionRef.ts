@@ -52,10 +52,21 @@ export function useImpressionRef<Element extends HTMLElement>({
   const impressionEndHandler = usePreservedCallback(onImpressionEnd);
 
   const isIntersectingRef = useRef(false);
+  // An element that was never impressed can still report `false` (it starts outside the viewport,
+  // or the tab is hidden before it ever intersects); an end without a start must not be emitted.
+  const hasImpressionStartedRef = useRef(false);
   const impressionEventHandler = useDebouncedCallback({
     timeThreshold,
-    onChange: impressed => {
-      (impressed ? impressionStartHandler : impressionEndHandler)();
+    onChange: (impressed: boolean) => {
+      if (impressed) {
+        hasImpressionStartedRef.current = true;
+        impressionStartHandler();
+        return;
+      }
+
+      if (hasImpressionStartedRef.current) {
+        impressionEndHandler();
+      }
     },
     leading: true,
   });

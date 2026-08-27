@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useThrottledCallback(options: Object): Function;
+function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
 ```
 
 ### Parameters
@@ -18,9 +18,10 @@ function useThrottledCallback(options: Object): Function;
   :nested="[
     {
       name: 'options.onChange',
-      type: 'Function',
+      type: '(newValue: T) => void',
       required: true,
-      description: 'The callback function to throttle.',
+      description:
+        'The callback to throttle. A call with the same value as the last forwarded one is skipped.',
     },
     {
       name: 'options.timeThreshold',
@@ -43,18 +44,27 @@ function useThrottledCallback(options: Object): Function;
 
 <Interface
   name=""
-  type="Function"
-  description="throttled function that limits invoking the callback."
+  type="(nextValue: T) => void"
+  description="throttled function that forwards the value to <code>onChange</code> at most once per interval."
 />
 
 ## Example
 
 ```tsx
-function ScrollTracker() {
-  const throttledScroll = useThrottledCallback({
-    onChange: (scrollY: number) => console.log(scrollY),
+import { useThrottledCallback } from 'react-simplikit';
+import { useState } from 'react';
+
+function ScrollPosition() {
+  const [scrollTop, setScrollTop] = useState(0);
+  const setScrollTopThrottled = useThrottledCallback({
+    onChange: setScrollTop,
     timeThreshold: 200,
   });
-  return <div onScroll={e => throttledScroll(e.currentTarget.scrollTop)} />;
+
+  return (
+    <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>
+      <p>Scrolled {scrollTop}px</p>
+    </div>
+  );
 }
 ```

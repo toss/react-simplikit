@@ -1,45 +1,41 @@
 # useThrottledCallback
 
-제공된 콜백 함수의 스로틀링된 버전을 반환하는 React 훅이에요. 스로틀링된 콜백은 지정된 간격당 최대 한 번만 호출돼요.
+`useThrottledCallback`는 제공된 콜백 함수의 스로틀링된 버전을 반환하는 리액트 훅이에요. 스로틀링된 콜백은 지정된 간격당 최대 한 번만 호출돼요.
 
 ## 인터페이스
 
 ```ts
-function useThrottledCallback<F extends (...args: any[]) => any>(
-  callback: F,
-  wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
-): F & { cancel: () => void };
+function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
 ```
 
 ### 파라미터
 
 <Interface
   required
-  name="callback"
-  type="F"
-  description="스로틀링할 함수예요."
-/>
-
-<Interface
-  required
-  name="wait"
-  type="number"
-  description="호출을 스로틀링할 밀리초의 수예요."
-/>
-
-<Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
-  description="스로틀의 동작을 제어하기 위한 옵션이에요."
+  type="Object"
+  description="옵션 객체예요."
   :nested="[
+    {
+      name: 'options.onChange',
+      type: '(newValue: T) => void',
+      required: true,
+      description:
+        '스로틀링할 콜백이에요. 마지막으로 전달된 값과 같은 값으로 호출하면 건너뛰어요.',
+    },
+    {
+      name: 'options.timeThreshold',
+      type: 'number',
+      required: true,
+      description: '호출을 스로틀링할 밀리초(ms)이에요.',
+    },
     {
       name: 'options.edges',
       type: 'Array<\'leading\' | \'trailing\'>',
       required: false,
       defaultValue: '[\'leading\', \'trailing\']',
       description:
-        '함수가 시작점, 끝점 또는 둘 다에서 호출될지 여부를 지정하는 선택적 배열이에요. <br />: 초기값은 <code>[\'leading\', \'trailing\']</code>이에요.',
+        '함수가 시작점, 끝점 또는 둘 다에서 호출될지 여부를 지정하는 선택적 배열이에요.',
     },
   ]"
 />
@@ -48,18 +44,27 @@ function useThrottledCallback<F extends (...args: any[]) => any>(
 
 <Interface
   name=""
-  type="F & { cancel: () => void }"
-  description="보류 중인 호출을 취소하는 <code>cancel</code> 메서드가 있는 스로틀링된 함수가 반환돼요."
+  type="(nextValue: T) => void"
+  description="간격당 최대 한 번 값을 <code>onChange</code>에 전달하는 스로틀링된 함수예요."
 />
 
 ## 예시
 
 ```tsx
-function SearchInput() {
-  const throttledSearch = useThrottledCallback((query: string) => {
-    console.log('검색어:', query);
-  }, 300);
+import { useThrottledCallback } from 'react-simplikit';
+import { useState } from 'react';
 
-  return <input onChange={e => throttledSearch(e.target.value)} />;
+function ScrollPosition() {
+  const [scrollTop, setScrollTop] = useState(0);
+  const setScrollTopThrottled = useThrottledCallback({
+    onChange: setScrollTop,
+    timeThreshold: 200,
+  });
+
+  return (
+    <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>
+      <p>{scrollTop}px 스크롤됨</p>
+    </div>
+  );
 }
 ```

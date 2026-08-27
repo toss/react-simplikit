@@ -22,32 +22,39 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  * `useThrottledCallback` is a React hook that returns a throttled version of the provided callback function.
  * The throttled callback will only be invoked at most once per specified interval.
  *
+ * @template T - The type of the value passed to `onChange`.
  * @param {Object} options - The options object.
- * @param {Function} options.onChange - The callback function to throttle.
+ * @param {(newValue: T) => void} options.onChange - The callback to throttle. A call with the same value as the last forwarded one is skipped.
  * @param {number} options.timeThreshold - The number of milliseconds to throttle invocations to.
  * @param {Array<'leading' | 'trailing'>} [options.edges=['leading', 'trailing']] - An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.
  *
- * @returns {Function} A throttled function that limits invoking the callback.
+ * @returns {(nextValue: T) => void} A throttled function that forwards the value to `onChange` at most once per interval.
  *
  * @example
- * function ScrollTracker() {
- *   const throttledScroll = useThrottledCallback({
- *     onChange: (scrollY: number) => console.log(scrollY),
- *     timeThreshold: 200,
- *   });
- *   return <div onScroll={(e) => throttledScroll(e.currentTarget.scrollTop)} />;
+ * import { useThrottledCallback } from 'react-simplikit';
+ * import { useState } from 'react';
+ *
+ * function ScrollPosition() {
+ *   const [scrollTop, setScrollTop] = useState(0);
+ *   const setScrollTopThrottled = useThrottledCallback({ onChange: setScrollTop, timeThreshold: 200 });
+ *
+ *   return (
+ *     <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>
+ *       <p>Scrolled {scrollTop}px</p>
+ *     </div>
+ *   );
  * }
  */
-export function useThrottledCallback({
+export function useThrottledCallback<T>({
   onChange,
   timeThreshold,
   edges = ['leading', 'trailing'],
 }: ThrottleOptions & {
-  onChange: (newValue: boolean) => void;
+  onChange: (newValue: T) => void;
   timeThreshold: number;
 }) {
   const handleChange = usePreservedCallback(onChange);
-  const ref = useRef<{ value: boolean | typeof NOT_INVOKED; clearPreviousThrottle: () => void }>({
+  const ref = useRef<{ value: T | typeof NOT_INVOKED; clearPreviousThrottle: () => void }>({
     value: NOT_INVOKED,
     clearPreviousThrottle: () => {},
   });
@@ -62,7 +69,7 @@ export function useThrottledCallback({
   const preservedEdges = usePreservedReference(edges);
 
   return useCallback(
-    (nextValue: boolean) => {
+    (nextValue: T) => {
       if (nextValue === ref.current.value) {
         return;
       }

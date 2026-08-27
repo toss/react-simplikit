@@ -27,19 +27,19 @@ describe('useDebouncedCallback', () => {
     vi.advanceTimersByTime(50);
     expect(onChange).not.toBeCalled();
 
+    // a newer value while the first one is still pending replaces it: only the settled value is forwarded
     result.current(false);
     vi.advanceTimersByTime(50);
-    expect(onChange).toBeCalledTimes(1);
-    expect(onChange).toBeCalledWith(true);
-
-    result.current(false);
-    vi.advanceTimersByTime(50);
-    expect(onChange).toBeCalledTimes(1);
-    expect(onChange).toBeCalledWith(true);
+    expect(onChange).not.toBeCalled();
 
     vi.advanceTimersByTime(50);
-    expect(onChange).toBeCalledTimes(2);
+    expect(onChange).toBeCalledTimes(1);
     expect(onChange).toBeCalledWith(false);
+
+    result.current(true);
+    vi.advanceTimersByTime(100);
+    expect(onChange).toBeCalledTimes(2);
+    expect(onChange).toBeCalledWith(true);
   });
 
   it('should handle leading edge', () => {
@@ -70,6 +70,27 @@ describe('useDebouncedCallback', () => {
     result.current(true);
     vi.advanceTimersByTime(100);
     expect(onChange).toBeCalledTimes(1);
+  });
+
+  it('forwards a string value to onChange', () => {
+    const onChange = vi.fn<(value: string) => void>();
+    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+
+    result.current('react');
+    vi.advanceTimersByTime(100);
+
+    expect(onChange).toBeCalledWith('react');
+  });
+
+  it('invokes the callback when the first value is false', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+
+    result.current(false);
+    vi.advanceTimersByTime(100);
+
+    expect(onChange).toBeCalledTimes(1);
+    expect(onChange).toBeCalledWith(false);
   });
 
   it('should cleanup on unmount', async () => {
