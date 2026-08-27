@@ -28,7 +28,7 @@ Cuando contribuyas con una implementación, añádela al directorio adecuado seg
 ::: tip
 **¿Necesito escribir documentación?**
 
-No, no hace falta que escribas documentación aparte. En su lugar, escribe comentarios JSDoc detallados. Cuando se fusione tu PR, la documentación en inglés y en coreano se generará automáticamente a partir del JSDoc, y se creará también de forma automática un PR para añadirla.
+No, no hace falta que escribas documentación aparte. En su lugar, escribe comentarios JSDoc detallados y luego ejecuta `yarn docs:gen <name>` para generar la documentación en inglés a partir de ellos; incluye el resultado en el commit de tu PR. Las traducciones se mantienen por separado; hasta que exista una, la página se muestra en inglés con un aviso.
 :::
 
 ### Escribir implementaciones
