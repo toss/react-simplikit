@@ -33,7 +33,7 @@
 
 ### 编写实现
 
-你必须遵循 `react-simplikit` 的[设计原则](./design-principles.md)。我们不提供依赖特定库、或与 React 生命周期紧密耦合的实现。请按照这些设计原则来编写实现。
+你必须遵循 `react-simplikit` 的[设计原则](./design-principles.md)。我们不提供依赖特定库或与 React 生命周期紧密耦合的实现。请按照这些设计原则来编写实现。
 
 ### 编写 JSDoc
 
