@@ -19,15 +19,18 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  * A React hook that manages an array as state.
  * Provides efficient state management and stable action functions.
  *
- * @param {T[]} initialState - Initial array state
+ * @template T - The type of the values held in the list.
  *
- * @returns {UseListReturn<T>} A tuple containing the array state and actions to manipulate it
- * - `push` - Appends a value to the end of the list
- * - `insertAt` - Inserts a value at the specified index
- * - `updateAt` - Updates the value at the specified index
- * - `removeAt` - Removes the value at the specified index
- * - `setAll` - Replaces the entire list with a new array
- * - `reset` - Resets the list to its initial state
+ * @param {T[]} [initialState=[]] - Initial array state.
+ *
+ * @returns {UseListReturn<T>} A tuple containing the array state and actions to manipulate it.
+ * - list `ReadonlyArray<T>` - The current array state;
+ * - actions.push `(value: T) => void` - Appends a value to the end of the list;
+ * - actions.insertAt `(index: number, value: T) => void` - Inserts a value at the specified index;
+ * - actions.updateAt `(index: number, value: T) => void` - Updates the value at the specified index;
+ * - actions.removeAt `(index: number) => void` - Removes the value at the specified index;
+ * - actions.setAll `(values: T[]) => void` - Replaces the entire list with a new array;
+ * - actions.reset `() => void` - Resets the list to its initial state;
  *
  * @example
  * ```tsx

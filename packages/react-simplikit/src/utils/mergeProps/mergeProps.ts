@@ -18,7 +18,7 @@ type TupleToIntersection<T extends Record<string, unknown>[]> = {
  *
  * @template PropsList - The type of the props objects to merge.
  *
- * @param {PropsList} props - The props objects to merge.
+ * @param {...PropsList} props - The props objects to merge.
  * @returns {TupleToIntersection<PropsList>} The merged props object.
  *
  * @example
