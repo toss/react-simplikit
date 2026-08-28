@@ -186,7 +186,10 @@ async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
   const getParamsCode = () =>
     params
       .filter(param => !param.name.includes('.'))
-      .map(param => `${param.name}: ${param.type}${param.default == null ? '' : ` = ${param.default}`}`);
+      .map(param => {
+        const { rest, type } = splitRestMarker(param.type);
+        return `${rest}${param.name}: ${type}${param.default == null ? '' : ` = ${param.default}`}`;
+      });
 
   return `# ${name}
 
@@ -215,13 +218,18 @@ ${example}
 `;
 }
 
+/** JSDoc marks a rest parameter on the type (`{...T}`), TypeScript on the name (`...name: T`). */
+function splitRestMarker(type: string) {
+  return type.startsWith('...') ? { rest: '...', type: type.slice('...'.length) } : { rest: '', type };
+}
+
 function getParamUl(param: Spec, nestedParams?: Spec[]) {
   return `
   <Interface
     ${Object.entries({
       required: !param.optional,
       name: param.name,
-      type: param.type,
+      type: splitRestMarker(param.type).type,
       description: param.description,
       nested: nestedParams,
     })

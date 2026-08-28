@@ -78,6 +78,27 @@ export function useLayout() {}`
     expect(document).toContain('- Measuring elements\n- Avoiding layout shifts');
   });
 
+  it('puts the spread of a rest parameter on the name, not the type', async () => {
+    const document = await render(
+      'mergeAll',
+      `/**
+ * @description
+ * \`mergeAll\` does something.
+ *
+ * @param {...PropsList} props - The props objects to merge.
+ *
+ * @returns {Merged} The merged object.
+ *
+ * @example
+ * mergeAll({}, {});
+ */
+export function mergeAll(...props: PropsList) {}`
+    );
+
+    expect(document).toContain('...props: PropsList');
+    expect(document).toContain('type="PropsList"');
+  });
+
   it('does not double the period of a nested description that already ends with one', async () => {
     const document = await render(
       'useSubscription',
