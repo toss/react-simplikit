@@ -16,16 +16,25 @@ export function buildLocaleConfig(
   const sidebarLocale = definition.path === '' ? undefined : definition.path;
   const strings = definition.themeStrings;
 
+  // Reference URLs are flat: category segment only, no core/mobile namespace.
+  const hooks = getSidebarItems(corePackageRoot, 'hooks', '', sidebarLocale);
+  const components = getSidebarItems(corePackageRoot, 'components', '', sidebarLocale);
+  const utils = getSidebarItems(corePackageRoot, 'utils', '', sidebarLocale);
+  const mobileWeb = [
+    ...getSidebarItems(mobilePackageRoot, 'hooks', '', sidebarLocale),
+    ...getSidebarItems(mobilePackageRoot, 'utils', '', sidebarLocale),
+  ].sort((a, b) => (a.text ?? '').localeCompare(b.text ?? ''));
+
   return {
     lang: definition.lang,
     themeConfig: {
       nav: [
         { text: strings.homeNavLabel, link: `${prefix}/` },
         { text: 'Guide', link: `${prefix}/core/intro` },
-        { text: 'Mobile Utilities', link: `${prefix}/mobile/intro` },
+        { text: strings.referenceLabel, link: hooks[0]?.link ?? `${prefix}/core/intro` },
       ],
       sidebar: {
-        [`${prefix}/core/`]: [
+        [`${prefix}/`]: [
           {
             text: strings.guideLabel,
             items: [
@@ -37,55 +46,17 @@ export function buildLocaleConfig(
               { text: strings.guidePages.core.installation, link: `${prefix}/core/installation` },
               { text: strings.guidePages.core.aiIntegration, link: `${prefix}/core/ai-integration` },
               { text: strings.guidePages.core.designPrinciples, link: `${prefix}/core/design-principles` },
+              { text: strings.mobileWebLabel, link: `${prefix}/mobile/intro` },
               { text: strings.guidePages.core.contributing, link: `${prefix}/core/contributing` },
             ],
           },
           {
             text: strings.referenceLabel,
             items: sortByText([
-              {
-                text: strings.componentsLabel,
-                collapsed: false,
-                items: getSidebarItems(corePackageRoot, 'components', '/core', sidebarLocale),
-              },
-              {
-                text: strings.hooksLabel,
-                collapsed: false,
-                items: getSidebarItems(corePackageRoot, 'hooks', '/core', sidebarLocale),
-              },
-              {
-                text: strings.utilsLabel,
-                collapsed: false,
-                items: getSidebarItems(corePackageRoot, 'utils', '/core', sidebarLocale),
-              },
-            ]),
-          },
-        ],
-        [`${prefix}/mobile/`]: [
-          {
-            text: strings.guideLabel,
-            items: [
-              { text: strings.guidePages.mobile.intro, link: `${prefix}/mobile/intro` },
-              { text: strings.guidePages.mobile.roadmap, link: `${prefix}/mobile/roadmap` },
-              { text: strings.guidePages.mobile.installation, link: `${prefix}/mobile/installation` },
-              { text: strings.guidePages.mobile.designPrinciples, link: `${prefix}/mobile/design-principles` },
-              { text: strings.guidePages.mobile.contributing, link: `${prefix}/mobile/contributing` },
-            ],
-          },
-          {
-            text: strings.referenceLabel,
-            items: [
-              {
-                text: strings.hooksLabel,
-                collapsed: false,
-                items: getSidebarItems(mobilePackageRoot, 'hooks', '/mobile', sidebarLocale),
-              },
-              {
-                text: strings.utilsLabel,
-                collapsed: false,
-                items: getSidebarItems(mobilePackageRoot, 'utils', '/mobile', sidebarLocale),
-              },
-            ],
+              { text: strings.componentsLabel, collapsed: false, items: components },
+              { text: strings.hooksLabel, collapsed: false, items: hooks },
+              { text: strings.utilsLabel, collapsed: false, items: utils },
+            ]).concat([{ text: strings.mobileWebLabel, collapsed: false, items: mobileWeb }]),
           },
         ],
       },

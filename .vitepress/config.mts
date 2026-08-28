@@ -2,6 +2,7 @@ import { defineConfig, HeadConfig } from 'vitepress';
 import llmstxt from 'vitepress-plugin-llms';
 import { buildLocaleConfig } from './libs/buildLocaleConfig.mts';
 import { generatedRewrites, localeDefinitions, rewrites } from './locales.mts';
+import { writeLegacyRedirectStubs } from './libs/legacyRedirects.mts';
 
 const locales = Object.fromEntries(
   Object.entries(localeDefinitions).map(([code, definition]) => [
@@ -76,6 +77,11 @@ Guidelines for AI agents:
     ],
   },
   rewrites: { ...rewrites, ...generatedRewrites },
+  sitemap: { hostname: 'https://react-simplikit.slash.page' },
+  buildEnd: async siteConfig => {
+    const count = writeLegacyRedirectStubs(siteConfig.outDir);
+    console.log(`legacy redirect stubs: ${count}`);
+  },
   head: [
     ['link', { rel: 'stylesheet', href: 'https://static.toss.im/tps/main.css' }],
     ['link', { rel: 'stylesheet', href: 'https://static.toss.im/tps/others.css' }],

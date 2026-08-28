@@ -112,12 +112,12 @@ function FixedBottomCTA() {
 
 ## Hooks disponibles
 
-| Hook                                                      | Descripción                                                       |
-| --------------------------------------------------------- | ----------------------------------------------------------------- |
-| [useAvoidKeyboard](/es/mobile/hooks/useAvoidKeyboard)     | Mueve los elementos fijos por encima del teclado en pantalla      |
-| [useKeyboardHeight](/es/mobile/hooks/useKeyboardHeight)   | Devuelve la altura actual del teclado                             |
-| [useBodyScrollLock](/es/mobile/hooks/useBodyScrollLock)   | Bloquea el desplazamiento del body para modales y superposiciones |
-| [useScrollDirection](/es/mobile/hooks/useScrollDirection) | Detecta la dirección del desplazamiento (arriba/abajo)            |
-| [useNetworkStatus](/es/mobile/hooks/useNetworkStatus)     | Supervisa el estado de la conexión de red                         |
-| [usePageVisibility](/es/mobile/hooks/usePageVisibility)   | Sigue el estado de visibilidad de la página                       |
-| [useVisualViewport](/es/mobile/hooks/useVisualViewport)   | Proporciona las dimensiones y la posición del viewport visual     |
+| Hook                                               | Descripción                                                       |
+| -------------------------------------------------- | ----------------------------------------------------------------- |
+| [useAvoidKeyboard](/es/hooks/useAvoidKeyboard)     | Mueve los elementos fijos por encima del teclado en pantalla      |
+| [useKeyboardHeight](/es/hooks/useKeyboardHeight)   | Devuelve la altura actual del teclado                             |
+| [useBodyScrollLock](/es/hooks/useBodyScrollLock)   | Bloquea el desplazamiento del body para modales y superposiciones |
+| [useScrollDirection](/es/hooks/useScrollDirection) | Detecta la dirección del desplazamiento (arriba/abajo)            |
+| [useNetworkStatus](/es/hooks/useNetworkStatus)     | Supervisa el estado de la conexión de red                         |
+| [usePageVisibility](/es/hooks/usePageVisibility)   | Sigue el estado de visibilidad de la página                       |
+| [useVisualViewport](/es/hooks/useVisualViewport)   | Proporciona las dimensiones y la posición del viewport visual     |

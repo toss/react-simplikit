@@ -7,6 +7,7 @@ export const en: LocaleThemeStrings = {
   componentsLabel: 'Components',
   hooksLabel: 'Hooks',
   utilsLabel: 'Utils',
+  mobileWebLabel: 'Mobile Web',
   guidePages: {
     core: {
       intro: 'Introduction',

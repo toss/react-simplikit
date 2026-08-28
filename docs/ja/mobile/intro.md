@@ -112,12 +112,12 @@ function FixedBottomCTA() {
 
 ## 利用可能なフック
 
-| フック                                                    | 説明                                                           |
-| --------------------------------------------------------- | -------------------------------------------------------------- |
-| [useAvoidKeyboard](/ja/mobile/hooks/useAvoidKeyboard)     | 固定要素をオンスクリーンキーボードの上に移動させます           |
-| [useKeyboardHeight](/ja/mobile/hooks/useKeyboardHeight)   | 現在のキーボードの高さを返します                               |
-| [useBodyScrollLock](/ja/mobile/hooks/useBodyScrollLock)   | モーダルやオーバーレイのために body のスクロールをロックします |
-| [useScrollDirection](/ja/mobile/hooks/useScrollDirection) | スクロール方向（上/下）を検知します                            |
-| [useNetworkStatus](/ja/mobile/hooks/useNetworkStatus)     | ネットワーク接続状態を監視します                               |
-| [usePageVisibility](/ja/mobile/hooks/usePageVisibility)   | ページの可視性の状態を追跡します                               |
-| [useVisualViewport](/ja/mobile/hooks/useVisualViewport)   | ビジュアルビューポートのサイズとオフセットを提供します         |
+| フック                                             | 説明                                                           |
+| -------------------------------------------------- | -------------------------------------------------------------- |
+| [useAvoidKeyboard](/ja/hooks/useAvoidKeyboard)     | 固定要素をオンスクリーンキーボードの上に移動させます           |
+| [useKeyboardHeight](/ja/hooks/useKeyboardHeight)   | 現在のキーボードの高さを返します                               |
+| [useBodyScrollLock](/ja/hooks/useBodyScrollLock)   | モーダルやオーバーレイのために body のスクロールをロックします |
+| [useScrollDirection](/ja/hooks/useScrollDirection) | スクロール方向（上/下）を検知します                            |
+| [useNetworkStatus](/ja/hooks/useNetworkStatus)     | ネットワーク接続状態を監視します                               |
+| [usePageVisibility](/ja/hooks/usePageVisibility)   | ページの可視性の状態を追跡します                               |
+| [useVisualViewport](/ja/hooks/useVisualViewport)   | ビジュアルビューポートのサイズとオフセットを提供します         |

@@ -7,6 +7,7 @@ export const ja: LocaleThemeStrings = {
   componentsLabel: 'コンポーネント',
   hooksLabel: 'フック',
   utilsLabel: 'ユーティリティ',
+  mobileWebLabel: 'モバイル Web',
   guidePages: {
     core: {
       intro: '紹介',

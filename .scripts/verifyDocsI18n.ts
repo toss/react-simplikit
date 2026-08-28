@@ -32,13 +32,13 @@ for (const requiredText of ['release:', 'changesets/action@', 'changeset:publish
 assert.deepEqual(Object.keys(localeDefinitions), ['root', 'ko', 'ja', 'zh-Hans', 'es']);
 assert.equal(rewrites['docs/index.md'], 'index.md');
 assert.equal(rewrites['docs/ko/index.md'], 'ko/index.md');
-assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ko/:hook.md'], 'ko/core/hooks/:hook.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ko/:hook.md'], 'ko/hooks/:hook.md');
 assert.equal(rewrites['docs/ja/index.md'], 'ja/index.md');
-assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ja/:hook.md'], 'ja/core/hooks/:hook.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/ja/:hook.md'], 'ja/hooks/:hook.md');
 assert.equal(rewrites['docs/zh-Hans/index.md'], 'zh-Hans/index.md');
-assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/zh-Hans/:hook.md'], 'zh-Hans/core/hooks/:hook.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/zh-Hans/:hook.md'], 'zh-Hans/hooks/:hook.md');
 assert.equal(rewrites['docs/es/index.md'], 'es/index.md');
-assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/es/:hook.md'], 'es/core/hooks/:hook.md');
+assert.equal(rewrites['packages/react-simplikit/src/hooks/:hook/es/:hook.md'], 'es/hooks/:hook.md');
 assert.equal(generatedRewrites['generated-locales/docs/ko/index.md'], 'ko/index.md');
 assert.equal(generatedRewrites['generated-locales/docs/ja/index.md'], 'ja/index.md');
 assert.equal(generatedRewrites['generated-locales/docs/zh-Hans/index.md'], 'zh-Hans/index.md');
@@ -65,8 +65,8 @@ try {
   await fs.writeFile(path.join(sidebarFixtureDirectory, 'hooks', 'useJapanese', 'ja', 'useJapanese.md'), '');
   await fs.writeFile(path.join(sidebarFixtureDirectory, 'hooks', 'useKorean', 'ko', 'useKorean.md'), '');
 
-  assert.deepEqual(getSidebarItems(sidebarFixtureDirectory, 'hooks', '/core', 'ja'), [
-    { text: 'useJapanese', link: '/ja/core/hooks/useJapanese' },
+  assert.deepEqual(getSidebarItems(sidebarFixtureDirectory, 'hooks', '', 'ja'), [
+    { text: 'useJapanese', link: '/ja/hooks/useJapanese' },
   ]);
 } finally {
   await fs.rm(sidebarFixtureDirectory, { force: true, recursive: true });
@@ -115,8 +115,8 @@ try {
   );
 
   assert.deepEqual(
-    getSidebarItems(corePackageRoot, 'hooks', '/core', 'ko').find(item => item.text === hookFixtureName),
-    { text: hookFixtureName, link: `/ko/core/hooks/${hookFixtureName}` },
+    getSidebarItems(corePackageRoot, 'hooks', '', 'ko').find(item => item.text === hookFixtureName),
+    { text: hookFixtureName, link: `/ko/hooks/${hookFixtureName}` },
     'the Korean sidebar must link the fallback page so it is not reachable by URL only'
   );
 } finally {
@@ -141,6 +141,7 @@ const unregisteredLocaleFixture = {
     componentsLabel: 'Componentes',
     hooksLabel: 'Hooks',
     utilsLabel: 'Utilitários',
+    mobileWebLabel: 'Web móvel',
     guidePages: {
       core: {
         intro: 'Introdução',
@@ -166,23 +167,33 @@ const unregisteredLocaleFixture = {
 const unregisteredConfig = buildLocaleConfig(unregisteredLocaleFixture);
 
 assert.equal(unregisteredConfig.lang, 'pt-BR');
-assert.deepEqual(unregisteredConfig.themeConfig?.nav, [
-  { text: 'Início', link: '/pt-BR/' },
-  { text: 'Guide', link: '/pt-BR/core/intro' },
-  { text: 'Mobile Utilities', link: '/pt-BR/mobile/intro' },
-]);
-assert.deepEqual(Object.keys(unregisteredConfig.themeConfig?.sidebar ?? {}), ['/pt-BR/core/', '/pt-BR/mobile/']);
+const unregisteredConfigNav = unregisteredConfig.themeConfig?.nav ?? [];
+assert.deepEqual(unregisteredConfigNav[0], { text: 'Início', link: '/pt-BR/' });
+assert.deepEqual(unregisteredConfigNav[1], { text: 'Guide', link: '/pt-BR/core/intro' });
+assert.equal((unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Referência');
+assert.equal(
+  (unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/pt-BR/hooks/') ||
+    (unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/pt-BR/core/intro',
+  true,
+  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
+);
+assert.deepEqual(Object.keys(unregisteredConfig.themeConfig?.sidebar ?? {}), ['/pt-BR/']);
 assert.equal(unregisteredConfig.themeConfig?.editLink?.text, 'Editar esta página no GitHub');
 
 const koConfig = buildLocaleConfig(localeDefinitions.ko);
 const rootConfig = buildLocaleConfig(localeDefinitions.root);
 
-assert.deepEqual(koConfig.themeConfig?.nav, [
-  { text: '홈', link: '/ko/' },
-  { text: 'Guide', link: '/ko/core/intro' },
-  { text: 'Mobile Utilities', link: '/ko/mobile/intro' },
-]);
-assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/ko/core/'][0], {
+const koConfigNav = koConfig.themeConfig?.nav ?? [];
+assert.deepEqual(koConfigNav[0], { text: '홈', link: '/ko/' });
+assert.deepEqual(koConfigNav[1], { text: 'Guide', link: '/ko/core/intro' });
+assert.equal((koConfigNav[2] as DefaultTheme.NavItemWithLink).text, '레퍼런스');
+assert.equal(
+  (koConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/ko/hooks/') ||
+    (koConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/ko/core/intro',
+  true,
+  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
+);
+assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/ko/'][0], {
   text: '가이드',
   items: [
     { text: '소개', link: '/ko/core/intro' },
@@ -190,28 +201,39 @@ assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.S
     { text: '설치하기', link: '/ko/core/installation' },
     { text: 'AI 연동', link: '/ko/core/ai-integration' },
     { text: '설계 원칙', link: '/ko/core/design-principles' },
+    { text: '모바일 웹', link: '/ko/mobile/intro' },
     { text: '기여하기', link: '/ko/core/contributing' },
   ],
 });
 assert.equal(koConfig.themeConfig?.editLink?.text, 'GitHub에서 수정하기');
 assert.equal(koConfig.themeConfig?.footer?.message, 'MIT 라이선스에 따라 배포됩니다.');
 
-assert.deepEqual(rootConfig.themeConfig?.nav, [
-  { text: 'Home', link: '/' },
-  { text: 'Guide', link: '/core/intro' },
-  { text: 'Mobile Utilities', link: '/mobile/intro' },
-]);
+const rootConfigNav = rootConfig.themeConfig?.nav ?? [];
+assert.deepEqual(rootConfigNav[0], { text: 'Home', link: '/' });
+assert.deepEqual(rootConfigNav[1], { text: 'Guide', link: '/core/intro' });
+assert.equal((rootConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Reference');
+assert.equal(
+  (rootConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/hooks/') ||
+    (rootConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/core/intro',
+  true,
+  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
+);
 assert.equal(rootConfig.lang, 'en');
 assert.equal(rootConfig.themeConfig?.editLink?.text, 'Edit this page on GitHub');
 
 const jaConfig = buildLocaleConfig(localeDefinitions.ja);
 
 assert.equal(jaConfig.lang, 'ja');
-assert.deepEqual(jaConfig.themeConfig?.nav, [
-  { text: 'ホーム', link: '/ja/' },
-  { text: 'Guide', link: '/ja/core/intro' },
-  { text: 'Mobile Utilities', link: '/ja/mobile/intro' },
-]);
+const jaConfigNav = jaConfig.themeConfig?.nav ?? [];
+assert.deepEqual(jaConfigNav[0], { text: 'ホーム', link: '/ja/' });
+assert.deepEqual(jaConfigNav[1], { text: 'Guide', link: '/ja/core/intro' });
+assert.equal((jaConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'リファレンス');
+assert.equal(
+  (jaConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/ja/hooks/') ||
+    (jaConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/ja/core/intro',
+  true,
+  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
+);
 assert.equal(jaConfig.themeConfig?.editLink?.text, 'GitHub で編集する');
 assert.notEqual(
   localeDefinitions.ja.themeStrings.search,
@@ -222,11 +244,16 @@ assert.notEqual(
 const zhHansConfig = buildLocaleConfig(localeDefinitions['zh-Hans']);
 
 assert.equal(zhHansConfig.lang, 'zh-Hans');
-assert.deepEqual(zhHansConfig.themeConfig?.nav, [
-  { text: '首页', link: '/zh-Hans/' },
-  { text: 'Guide', link: '/zh-Hans/core/intro' },
-  { text: 'Mobile Utilities', link: '/zh-Hans/mobile/intro' },
-]);
+const zhHansConfigNav = zhHansConfig.themeConfig?.nav ?? [];
+assert.deepEqual(zhHansConfigNav[0], { text: '首页', link: '/zh-Hans/' });
+assert.deepEqual(zhHansConfigNav[1], { text: 'Guide', link: '/zh-Hans/core/intro' });
+assert.equal((zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).text, '参考');
+assert.equal(
+  (zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/zh-Hans/hooks/') ||
+    (zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/zh-Hans/core/intro',
+  true,
+  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
+);
 assert.equal(zhHansConfig.themeConfig?.editLink?.text, '在 GitHub 上编辑此页');
 assert.notEqual(
   localeDefinitions['zh-Hans'].themeStrings.search,
@@ -237,11 +264,16 @@ assert.notEqual(
 const esConfig = buildLocaleConfig(localeDefinitions.es);
 
 assert.equal(esConfig.lang, 'es');
-assert.deepEqual(esConfig.themeConfig?.nav, [
-  { text: 'Inicio', link: '/es/' },
-  { text: 'Guide', link: '/es/core/intro' },
-  { text: 'Mobile Utilities', link: '/es/mobile/intro' },
-]);
+const esConfigNav = esConfig.themeConfig?.nav ?? [];
+assert.deepEqual(esConfigNav[0], { text: 'Inicio', link: '/es/' });
+assert.deepEqual(esConfigNav[1], { text: 'Guide', link: '/es/core/intro' });
+assert.equal((esConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Referencia');
+assert.equal(
+  (esConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/es/hooks/') ||
+    (esConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/es/core/intro',
+  true,
+  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
+);
 assert.equal(esConfig.themeConfig?.editLink?.text, 'Editar esta página en GitHub');
 assert.notEqual(
   localeDefinitions.es.themeStrings.search,

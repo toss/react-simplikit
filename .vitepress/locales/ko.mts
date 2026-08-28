@@ -7,6 +7,7 @@ export const ko: LocaleThemeStrings = {
   componentsLabel: '컴포넌트',
   hooksLabel: '훅',
   utilsLabel: '유틸리티',
+  mobileWebLabel: '모바일 웹',
   guidePages: {
     core: {
       intro: '소개',

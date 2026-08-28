@@ -7,6 +7,7 @@ export const zhHans: LocaleThemeStrings = {
   componentsLabel: '组件',
   hooksLabel: 'Hooks',
   utilsLabel: '工具函数',
+  mobileWebLabel: '移动端 Web',
   guidePages: {
     core: {
       intro: '简介',

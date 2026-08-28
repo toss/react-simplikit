@@ -112,12 +112,12 @@ function FixedBottomCTA() {
 
 ## 可用的 Hook
 
-| Hook                                                           | 说明                         |
-| -------------------------------------------------------------- | ---------------------------- |
-| [useAvoidKeyboard](/zh-Hans/mobile/hooks/useAvoidKeyboard)     | 把固定元素移动到软键盘上方   |
-| [useKeyboardHeight](/zh-Hans/mobile/hooks/useKeyboardHeight)   | 返回当前的键盘高度           |
-| [useBodyScrollLock](/zh-Hans/mobile/hooks/useBodyScrollLock)   | 为模态框和浮层锁定 body 滚动 |
-| [useScrollDirection](/zh-Hans/mobile/hooks/useScrollDirection) | 检测滚动方向（向上/向下）    |
-| [useNetworkStatus](/zh-Hans/mobile/hooks/useNetworkStatus)     | 监控网络连接状态             |
-| [usePageVisibility](/zh-Hans/mobile/hooks/usePageVisibility)   | 跟踪页面可见性状态           |
-| [useVisualViewport](/zh-Hans/mobile/hooks/useVisualViewport)   | 提供视觉视口的尺寸和偏移量   |
+| Hook                                                    | 说明                         |
+| ------------------------------------------------------- | ---------------------------- |
+| [useAvoidKeyboard](/zh-Hans/hooks/useAvoidKeyboard)     | 把固定元素移动到软键盘上方   |
+| [useKeyboardHeight](/zh-Hans/hooks/useKeyboardHeight)   | 返回当前的键盘高度           |
+| [useBodyScrollLock](/zh-Hans/hooks/useBodyScrollLock)   | 为模态框和浮层锁定 body 滚动 |
+| [useScrollDirection](/zh-Hans/hooks/useScrollDirection) | 检测滚动方向（向上/向下）    |
+| [useNetworkStatus](/zh-Hans/hooks/useNetworkStatus)     | 监控网络连接状态             |
+| [usePageVisibility](/zh-Hans/hooks/usePageVisibility)   | 跟踪页面可见性状态           |
+| [useVisualViewport](/zh-Hans/hooks/useVisualViewport)   | 提供视觉视口的尺寸和偏移量   |

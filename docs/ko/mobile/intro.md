@@ -112,12 +112,12 @@ function FixedBottomCTA() {
 
 ## 제공하는 훅
 
-| 훅                                                        | 설명                                        |
-| --------------------------------------------------------- | ------------------------------------------- |
-| [useAvoidKeyboard](/ko/mobile/hooks/useAvoidKeyboard)     | 고정 요소를 온스크린 키보드 위로 이동시켜요 |
-| [useKeyboardHeight](/ko/mobile/hooks/useKeyboardHeight)   | 현재 키보드 높이를 반환해요                 |
-| [useBodyScrollLock](/ko/mobile/hooks/useBodyScrollLock)   | 모달과 오버레이를 위해 body 스크롤을 잠가요 |
-| [useScrollDirection](/ko/mobile/hooks/useScrollDirection) | 스크롤 방향(위/아래)을 감지해요             |
-| [useNetworkStatus](/ko/mobile/hooks/useNetworkStatus)     | 네트워크 연결 상태를 모니터링해요           |
-| [usePageVisibility](/ko/mobile/hooks/usePageVisibility)   | 페이지 가시성 상태를 추적해요               |
-| [useVisualViewport](/ko/mobile/hooks/useVisualViewport)   | Visual Viewport 크기와 오프셋을 제공해요    |
+| 훅                                                 | 설명                                        |
+| -------------------------------------------------- | ------------------------------------------- |
+| [useAvoidKeyboard](/ko/hooks/useAvoidKeyboard)     | 고정 요소를 온스크린 키보드 위로 이동시켜요 |
+| [useKeyboardHeight](/ko/hooks/useKeyboardHeight)   | 현재 키보드 높이를 반환해요                 |
+| [useBodyScrollLock](/ko/hooks/useBodyScrollLock)   | 모달과 오버레이를 위해 body 스크롤을 잠가요 |
+| [useScrollDirection](/ko/hooks/useScrollDirection) | 스크롤 방향(위/아래)을 감지해요             |
+| [useNetworkStatus](/ko/hooks/useNetworkStatus)     | 네트워크 연결 상태를 모니터링해요           |
+| [usePageVisibility](/ko/hooks/usePageVisibility)   | 페이지 가시성 상태를 추적해요               |
+| [useVisualViewport](/ko/hooks/useVisualViewport)   | Visual Viewport 크기와 오프셋을 제공해요    |
