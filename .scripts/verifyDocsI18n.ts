@@ -43,7 +43,10 @@ assert.equal(generatedRewrites['generated-locales/docs/ko/index.md'], 'ko/index.
 assert.equal(generatedRewrites['generated-locales/docs/ja/index.md'], 'ja/index.md');
 assert.equal(generatedRewrites['generated-locales/docs/zh-Hans/index.md'], 'zh-Hans/index.md');
 assert.equal(generatedRewrites['generated-locales/docs/es/index.md'], 'es/index.md');
-assert.equal(packageJson.scripts['docs:prepare'], 'tsx .scripts/index.ts prepare-localized-fallbacks');
+assert.equal(
+  packageJson.scripts['docs:prepare'],
+  'tsx .scripts/index.ts prepare-localized-fallbacks && tsx .scripts/index.ts generate-reference-index'
+);
 assert.equal(packageJson.scripts['docs:dev'], 'yarn docs:prepare && vitepress dev');
 assert.equal(packageJson.scripts['docs:build'], 'yarn docs:prepare && vitepress build');
 assert.equal(gitignore.includes('generated-locales'), true);
@@ -162,12 +165,7 @@ const unregisteredConfigNav = unregisteredConfig.themeConfig?.nav ?? [];
 assert.deepEqual(unregisteredConfigNav[0], { text: 'Início', link: '/pt-BR/' });
 assert.deepEqual(unregisteredConfigNav[1], { text: 'Guide', link: '/pt-BR/intro' });
 assert.equal((unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Referência');
-assert.equal(
-  (unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/pt-BR/hooks/') ||
-    (unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/pt-BR/intro',
-  true,
-  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
-);
+assert.equal((unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/pt-BR/reference');
 assert.deepEqual(Object.keys(unregisteredConfig.themeConfig?.sidebar ?? {}), ['/pt-BR/']);
 assert.equal(unregisteredConfig.themeConfig?.editLink?.text, 'Editar esta página no GitHub');
 
@@ -178,12 +176,7 @@ const koConfigNav = koConfig.themeConfig?.nav ?? [];
 assert.deepEqual(koConfigNav[0], { text: '홈', link: '/ko/' });
 assert.deepEqual(koConfigNav[1], { text: 'Guide', link: '/ko/intro' });
 assert.equal((koConfigNav[2] as DefaultTheme.NavItemWithLink).text, '레퍼런스');
-assert.equal(
-  (koConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/ko/hooks/') ||
-    (koConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/ko/intro',
-  true,
-  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
-);
+assert.equal((koConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/ko/reference');
 assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/ko/'][0], {
   text: '가이드',
   items: [
@@ -203,12 +196,7 @@ const rootConfigNav = rootConfig.themeConfig?.nav ?? [];
 assert.deepEqual(rootConfigNav[0], { text: 'Home', link: '/' });
 assert.deepEqual(rootConfigNav[1], { text: 'Guide', link: '/intro' });
 assert.equal((rootConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Reference');
-assert.equal(
-  (rootConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/hooks/') ||
-    (rootConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/intro',
-  true,
-  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
-);
+assert.equal((rootConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/reference');
 assert.equal(rootConfig.lang, 'en');
 assert.equal(rootConfig.themeConfig?.editLink?.text, 'Edit this page on GitHub');
 
@@ -219,12 +207,7 @@ const jaConfigNav = jaConfig.themeConfig?.nav ?? [];
 assert.deepEqual(jaConfigNav[0], { text: 'ホーム', link: '/ja/' });
 assert.deepEqual(jaConfigNav[1], { text: 'Guide', link: '/ja/intro' });
 assert.equal((jaConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'リファレンス');
-assert.equal(
-  (jaConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/ja/hooks/') ||
-    (jaConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/ja/intro',
-  true,
-  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
-);
+assert.equal((jaConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/ja/reference');
 assert.equal(jaConfig.themeConfig?.editLink?.text, 'GitHub で編集する');
 assert.notEqual(
   localeDefinitions.ja.themeStrings.search,
@@ -239,12 +222,7 @@ const zhHansConfigNav = zhHansConfig.themeConfig?.nav ?? [];
 assert.deepEqual(zhHansConfigNav[0], { text: '首页', link: '/zh-Hans/' });
 assert.deepEqual(zhHansConfigNav[1], { text: 'Guide', link: '/zh-Hans/intro' });
 assert.equal((zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).text, '参考');
-assert.equal(
-  (zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/zh-Hans/hooks/') ||
-    (zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/zh-Hans/intro',
-  true,
-  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
-);
+assert.equal((zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/zh-Hans/reference');
 assert.equal(zhHansConfig.themeConfig?.editLink?.text, '在 GitHub 上编辑此页');
 assert.notEqual(
   localeDefinitions['zh-Hans'].themeStrings.search,
@@ -259,12 +237,7 @@ const esConfigNav = esConfig.themeConfig?.nav ?? [];
 assert.deepEqual(esConfigNav[0], { text: 'Inicio', link: '/es/' });
 assert.deepEqual(esConfigNav[1], { text: 'Guide', link: '/es/intro' });
 assert.equal((esConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Referencia');
-assert.equal(
-  (esConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/es/hooks/') ||
-    (esConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/es/intro',
-  true,
-  'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
-);
+assert.equal((esConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/es/reference');
 assert.equal(esConfig.themeConfig?.editLink?.text, 'Editar esta página en GitHub');
 assert.notEqual(
   localeDefinitions.es.themeStrings.search,

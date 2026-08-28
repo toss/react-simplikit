@@ -31,7 +31,7 @@ export function buildLocaleConfig(
       nav: [
         { text: strings.homeNavLabel, link: `${prefix}/` },
         { text: 'Guide', link: `${prefix}/intro` },
-        { text: strings.referenceLabel, link: hooks[0]?.link ?? `${prefix}/intro` },
+        { text: strings.referenceLabel, link: `${prefix}/reference` },
       ],
       sidebar: {
         [`${prefix}/`]: [
