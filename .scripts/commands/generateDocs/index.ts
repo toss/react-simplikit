@@ -18,45 +18,52 @@ const prettierConfig: prettier.Options = {
   arrowParens: 'avoid',
 };
 
+/**
+ * Renders the English documentation page for one export without touching the filesystem.
+ *
+ * `verifyDocs.ts` compares a committed page against this, so the formatting applied here has to be
+ * the same formatting the page is written with — hence prettier runs inside, not at the call site.
+ */
+export async function renderEnglishDoc(name: string, sourceFilePath: string): Promise<string> {
+  const documentPath = `${path.dirname(sourceFilePath)}/${name}.md`;
+  const docSource = await jsdocToMd(name, parseJSDoc(await fs.readFile(sourceFilePath, 'utf-8')));
+
+  return prettier.format(docSource, {
+    ...(await prettier.resolveConfig(documentPath)),
+    filepath: documentPath,
+  });
+}
+
 export async function generateDocs(names: string[]) {
   const tasks = new Listr([], { concurrent: 10 });
 
   names
     .map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]])
     .forEach(([name, sourceFilePath]) => {
-      const subCtx: { docSource?: string } = {};
+      const subCtx: { document?: string } = {};
       tasks.add([
         {
           title: `Generate documents: ${sourceFilePath}`,
           task: async (_, task) =>
-            task.newListr<{ docSource?: string }>(
+            task.newListr<{ document?: string }>(
               [
                 {
                   title: `Convert JSDoc to markdown`,
                   task: async ctx => {
-                    ctx.docSource = await jsdocToMd(name, parseJSDoc(await fs.readFile(sourceFilePath, 'utf-8')));
+                    ctx.document = await renderEnglishDoc(name, sourceFilePath);
                   },
                 },
                 {
                   title: `Write English document`,
                   task: async ctx => {
-                    const { docSource } = ctx;
-                    const dirname = path.dirname(sourceFilePath);
+                    const { document } = ctx;
 
-                    if (docSource != null) {
-                      const documentPath = `${dirname}/${name}.md`;
-
+                    if (document != null) {
                       // Written already formatted: `.prettierignore`'s `src/hooks/**/*.md` is anchored to the
                       // repo root and never reaches packages/, so prettier (yarn fix, autofix.ci) reformats
                       // these pages later. `generateSkill()` below copies them, and an unformatted copy
                       // would drift from the page the moment prettier runs.
-                      await fs.writeFile(
-                        documentPath,
-                        await prettier.format(docSource, {
-                          ...(await prettier.resolveConfig(documentPath)),
-                          filepath: documentPath,
-                        })
-                      );
+                      await fs.writeFile(`${path.dirname(sourceFilePath)}/${name}.md`, document);
                     }
                   },
                 },
@@ -80,8 +87,14 @@ function parseJSDoc(source: string) {
 
   const template = targetComment.tags.find(tag => tag.tag === 'template');
 
-  const description =
-    targetComment.tags.find(tag => tag.tag === 'description')?.description ?? targetComment.description ?? '';
+  // The default compact spacing joins every line of `@description` into one, which collapses its
+  // bullet lists. Only that tag is re-read with preserved spacing; the rest read better compacted.
+  const preservedComment = parse(source, { spacing: 'preserve' }).at(-1);
+  const description = (
+    preservedComment?.tags.find(tag => tag.tag === 'description')?.description ??
+    preservedComment?.description ??
+    ''
+  ).trim();
 
   const params = targetComment.tags.filter(tag => tag.tag === 'param');
 
@@ -139,7 +152,7 @@ function getNestedValuesFromReturn(returnTag: Spec): Spec[] | undefined {
     .join('-')
     .split(';')
     .filter(description => description.trim().length > 0)
-    .map(description => `${description}.`);
+    .map(description => (description.trimEnd().endsWith('.') ? description : `${description}.`));
 
   return nestedDerscriptions
     .filter(origin => origin.trim().length > 0)
@@ -229,7 +242,7 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
         }
 
         if (key === 'description') {
-          return `description="${replaceDescription(value as string)}"`;
+          return `description="${replaceDescription(value as string, '"')}"`;
         }
 
         if (key === 'nested') {
@@ -248,7 +261,7 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
                        .filter(([_, value]) => value != null)
                        .map(([key, value]) =>
                          typeof value === 'string'
-                           ? `${key}: '${key === 'description' ? replaceDescription(value as string) : value!.replace(/'/g, "\\'")}'`
+                           ? `${key}: '${key === 'description' ? replaceDescription(value as string, "'") : value!.replace(/'/g, "\\'")}'`
                            : `${key}: ${value}`
                        )
                        .join(',\n')}
@@ -265,16 +278,20 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
   `;
 }
 
-function replaceDescription(value: string) {
-  console.log(value);
-  return value
+/**
+ * @param quote - How the caller wraps the result. `'` only needs escaping inside a single-quoted
+ * JavaScript string (the `:nested` array); doing it in a double-quoted attribute leaks a backslash
+ * into the rendered page.
+ */
+function replaceDescription(value: string, quote: '"' | "'") {
+  const replaced = value
     .replace(/^\s*-\s*/, '')
     .replace(/--/g, '\n-')
     .replace(/`([^`]*)`/g, '<code>$1</code>')
     .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]*)\*/g, '<em>$1</em>')
     .replace(/_([^*]*)_/g, '<em>$1</em>')
-    .replace(/\n/g, '<br />')
-    .replace(/'/g, `\\'`)
-    .replace(/"/g, '&quot;');
+    .replace(/\n/g, '<br />');
+
+  return quote === "'" ? replaced.replace(/'/g, `\\'`) : replaced.replace(/"/g, '&quot;');
 }
