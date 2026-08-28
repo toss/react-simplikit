@@ -47,7 +47,10 @@ assert.equal(packageJson.scripts['docs:prepare'], 'tsx .scripts/index.ts prepare
 assert.equal(packageJson.scripts['docs:dev'], 'yarn docs:prepare && vitepress dev');
 assert.equal(packageJson.scripts['docs:build'], 'yarn docs:prepare && vitepress build');
 assert.equal(gitignore.includes('generated-locales'), true);
-assert.equal(packageJson.scripts['test:docs'], 'vitest run --dir .scripts && tsx .scripts/verifyDocsI18n.ts');
+assert.equal(
+  packageJson.scripts['test:docs'],
+  'vitest run --dir .scripts && tsx .scripts/verifyDocsI18n.ts && tsx .scripts/verifyDocs.ts'
+);
 assert.equal(
   integrationWorkflow.includes("command: ['format', 'lint', 'type', 'docs', 'skill']"),
   true,
