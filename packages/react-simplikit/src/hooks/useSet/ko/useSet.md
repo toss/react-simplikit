@@ -65,6 +65,8 @@ function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
 ## 예시
 
 ```tsx
+import { useSet } from 'react-simplikit';
+
 function TagSelector() {
   const [selectedTags, { add, remove, toggle }] = useSet<string>(['react']);
 

@@ -67,24 +67,23 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## 예시
 
 ```tsx
-import { useList } from 'react-simplikit';
+const [list, actions] = useList<string>(['apple', 'banana']);
 
-function TodoList() {
-  const [todos, actions] = useList<string>(['Buy milk', 'Walk the dog']);
+// 항목 추가하기
+actions.push('cherry');
 
-  return (
-    <div>
-      <ul>
-        {todos.map((todo, index) => (
-          <li key={index}>
-            {todo}
-            <button onClick={() => actions.removeAt(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      <button onClick={() => actions.push('New todo')}>Add</button>
-      <button onClick={() => actions.reset()}>Reset</button>
-    </div>
-  );
-}
+// 지정한 인덱스에 삽입하기
+actions.insertAt(1, 'grape');
+
+// 지정한 인덱스의 값 바꾸기
+actions.updateAt(0, 'orange');
+
+// 지정한 인덱스의 값 제거하기
+actions.removeAt(2);
+
+// 전체 교체하기
+actions.setAll(['kiwi', 'mango']);
+
+// 초기 상태로 되돌리기
+actions.reset();
 ```
