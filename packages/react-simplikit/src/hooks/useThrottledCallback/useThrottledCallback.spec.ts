@@ -130,6 +130,22 @@ describe('useThrottledCallback', () => {
     expect(onChange).toBeCalledTimes(1);
   });
 
+  it('discards a pending trailing value when the caller returns to the last forwarded one', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100, edges: ['trailing'] }));
+
+    result.current('seoul');
+    vi.advanceTimersByTime(100);
+    expect(onChange).toHaveBeenLastCalledWith('seoul');
+
+    // 'seo' is scheduled on the trailing edge, then the caller types back to 'seoul' before it fires
+    result.current('seo');
+    result.current('seoul');
+    vi.advanceTimersByTime(100);
+
+    expect(onChange).toBeCalledTimes(1);
+  });
+
   it('should handle value toggling', () => {
     const onChange = vi.fn();
     const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));
