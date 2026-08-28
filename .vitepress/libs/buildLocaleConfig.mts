@@ -30,24 +30,24 @@ export function buildLocaleConfig(
     themeConfig: {
       nav: [
         { text: strings.homeNavLabel, link: `${prefix}/` },
-        { text: 'Guide', link: `${prefix}/core/intro` },
-        { text: strings.referenceLabel, link: hooks[0]?.link ?? `${prefix}/core/intro` },
+        { text: 'Guide', link: `${prefix}/intro` },
+        { text: strings.referenceLabel, link: hooks[0]?.link ?? `${prefix}/intro` },
       ],
       sidebar: {
         [`${prefix}/`]: [
           {
             text: strings.guideLabel,
             items: [
-              { text: strings.guidePages.core.intro, link: `${prefix}/core/intro` },
+              { text: strings.guidePages.intro, link: `${prefix}/intro` },
               {
-                text: strings.guidePages.core.whyReactSimplikitMatters,
-                link: `${prefix}/core/why-react-simplikit-matters`,
+                text: strings.guidePages.whyReactSimplikitMatters,
+                link: `${prefix}/why-react-simplikit-matters`,
               },
-              { text: strings.guidePages.core.installation, link: `${prefix}/core/installation` },
-              { text: strings.guidePages.core.aiIntegration, link: `${prefix}/core/ai-integration` },
-              { text: strings.guidePages.core.designPrinciples, link: `${prefix}/core/design-principles` },
-              { text: strings.mobileWebLabel, link: `${prefix}/mobile/intro` },
-              { text: strings.guidePages.core.contributing, link: `${prefix}/core/contributing` },
+              { text: strings.guidePages.installation, link: `${prefix}/installation` },
+              { text: strings.guidePages.aiIntegration, link: `${prefix}/ai-integration` },
+              { text: strings.guidePages.designPrinciples, link: `${prefix}/design-principles` },
+              { text: strings.mobileWebLabel, link: `${prefix}/mobile-web` },
+              { text: strings.guidePages.contributing, link: `${prefix}/contributing` },
             ],
           },
           {

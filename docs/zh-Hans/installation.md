@@ -1,5 +1,5 @@
 ---
-description: 如何为移动端 Web 安装 react-simplikit
+description: 如何安装 react-simplikit
 ---
 
 # 安装
@@ -25,11 +25,6 @@ bun add react-simplikit
 ```
 
 :::
-
-## 环境要求
-
-- React 18 或更高版本
-- TypeScript 4.7 或更高版本（推荐）
 
 ## 用法
 

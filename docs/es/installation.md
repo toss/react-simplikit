@@ -1,5 +1,5 @@
 ---
-description: Cómo instalar react-simplikit para la web móvil
+description: Cómo instalar react-simplikit
 ---
 
 # Instalación
@@ -25,11 +25,6 @@ bun add react-simplikit
 ```
 
 :::
-
-## Requisitos
-
-- React 18 o superior
-- TypeScript 4.7 o superior (recomendado)
 
 ## Uso
 

@@ -14,7 +14,7 @@ const PACKAGE_INDEX_FILE = 'packages/react-simplikit/src/index.ts';
 // The generated links are absolute (the plugin's `domain` option), and every documentation page
 // lives under core/ or mobile/. A ko/ or ja/ link means the localized copies leaked into the
 // listing, which would make an agent read the same page several times in different languages.
-const ALLOWED_LINK = /^https:\/\/react-simplikit\.slash\.page\/(?:hooks|components|utils|core|mobile)\/[^/]+\.md$/;
+const ALLOWED_LINK = /^https:\/\/react-simplikit\.slash\.page\/(?:(?:hooks|components|utils)\/)?[^/]+\.md$/;
 
 /**
  * Checks the llms outputs vitepress-plugin-llms wrote into a docs build:

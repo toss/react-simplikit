@@ -1,10 +1,10 @@
 ---
-description: '모바일 웹을 위한 react-simplikit 설치 방법'
+description: react-simplikit 설치 방법
 ---
 
 # 설치하기
 
-좋아하는 패키지 매니저를 사용하여 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요. 모바일 유틸리티도 같은 패키지에 포함돼 있어요.
+좋아하는 패키지 매니저를 사용하여 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요.
 
 ::: code-group
 
@@ -25,11 +25,6 @@ bun add react-simplikit
 ```
 
 :::
-
-## 요구사항
-
-- React 18 이상
-- TypeScript 4.7 이상 (권장)
 
 ## 사용법
 

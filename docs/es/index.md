@@ -9,11 +9,8 @@ hero:
     alt: react-simplikit
   actions:
     - theme: brand
-      text: Empezar
-      link: /es/core/intro
-    - theme: alt
-      text: Utilidades para móvil
-      link: /es/mobile/intro
+      text: Comenzar
+      link: /es/intro
 
 features:
   - title: 'Cero dependencias'

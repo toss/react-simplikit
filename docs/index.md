@@ -10,10 +10,7 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /core/intro
-    - theme: alt
-      text: Mobile Utilities
-      link: /mobile/intro
+      link: /intro
 
 features:
   - title: 'Zero dependencies'

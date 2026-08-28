@@ -73,7 +73,7 @@ try {
 }
 
 const guideFixtureTitle = 'Untranslated Fallback Fixture';
-const guideFixturePath = path.join(root, 'docs/core/untranslated-fallback-fixture.md');
+const guideFixturePath = path.join(root, 'docs/untranslated-fallback-fixture.md');
 const hookFixtureName = 'useUntranslatedFallbackFixture';
 const hookFixtureDirectory = path.join(root, 'packages/react-simplikit/src/hooks', hookFixtureName);
 const buildOutputDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-docs-'));
@@ -91,7 +91,7 @@ try {
   await assertLlmsOutput({ buildOutputDirectory, root });
 
   const fallbackPage = await fs.readFile(
-    path.join(buildOutputDirectory, 'ko/core/untranslated-fallback-fixture.html'),
+    path.join(buildOutputDirectory, 'ko/untranslated-fallback-fixture.html'),
     'utf8'
   );
 
@@ -106,7 +106,7 @@ try {
     'the fallback route must show the untranslated banner'
   );
 
-  const translatedPage = await fs.readFile(path.join(buildOutputDirectory, 'ko/core/intro.html'), 'utf8');
+  const translatedPage = await fs.readFile(path.join(buildOutputDirectory, 'ko/intro.html'), 'utf8');
 
   assert.equal(
     translatedPage.includes(localeDefinitions.ko.untranslatedNotice),
@@ -143,21 +143,12 @@ const unregisteredLocaleFixture = {
     utilsLabel: 'Utilitários',
     mobileWebLabel: 'Web móvel',
     guidePages: {
-      core: {
-        intro: 'Introdução',
-        whyReactSimplikitMatters: 'Por que o react-simplikit importa',
-        installation: 'Instalação',
-        aiIntegration: 'Integração com IA',
-        designPrinciples: 'Princípios de design',
-        contributing: 'Contribuir',
-      },
-      mobile: {
-        intro: 'Introdução',
-        roadmap: 'Roteiro',
-        installation: 'Instalação',
-        designPrinciples: 'Princípios de design',
-        contributing: 'Contribuir',
-      },
+      intro: 'Introdução',
+      whyReactSimplikitMatters: 'Por que o react-simplikit importa',
+      installation: 'Instalação',
+      aiIntegration: 'Integração com IA',
+      designPrinciples: 'Princípios de design',
+      contributing: 'Contribuir',
     },
     editLinkText: 'Editar esta página no GitHub',
     footerMessage: 'Distribuído sob a licença MIT.',
@@ -169,11 +160,11 @@ const unregisteredConfig = buildLocaleConfig(unregisteredLocaleFixture);
 assert.equal(unregisteredConfig.lang, 'pt-BR');
 const unregisteredConfigNav = unregisteredConfig.themeConfig?.nav ?? [];
 assert.deepEqual(unregisteredConfigNav[0], { text: 'Início', link: '/pt-BR/' });
-assert.deepEqual(unregisteredConfigNav[1], { text: 'Guide', link: '/pt-BR/core/intro' });
+assert.deepEqual(unregisteredConfigNav[1], { text: 'Guide', link: '/pt-BR/intro' });
 assert.equal((unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Referência');
 assert.equal(
   (unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/pt-BR/hooks/') ||
-    (unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/pt-BR/core/intro',
+    (unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/pt-BR/intro',
   true,
   'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
 );
@@ -185,24 +176,24 @@ const rootConfig = buildLocaleConfig(localeDefinitions.root);
 
 const koConfigNav = koConfig.themeConfig?.nav ?? [];
 assert.deepEqual(koConfigNav[0], { text: '홈', link: '/ko/' });
-assert.deepEqual(koConfigNav[1], { text: 'Guide', link: '/ko/core/intro' });
+assert.deepEqual(koConfigNav[1], { text: 'Guide', link: '/ko/intro' });
 assert.equal((koConfigNav[2] as DefaultTheme.NavItemWithLink).text, '레퍼런스');
 assert.equal(
   (koConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/ko/hooks/') ||
-    (koConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/ko/core/intro',
+    (koConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/ko/intro',
   true,
   'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
 );
 assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/ko/'][0], {
   text: '가이드',
   items: [
-    { text: '소개', link: '/ko/core/intro' },
-    { text: 'react-simplikit, 선택의 이유', link: '/ko/core/why-react-simplikit-matters' },
-    { text: '설치하기', link: '/ko/core/installation' },
-    { text: 'AI 연동', link: '/ko/core/ai-integration' },
-    { text: '설계 원칙', link: '/ko/core/design-principles' },
-    { text: '모바일 웹', link: '/ko/mobile/intro' },
-    { text: '기여하기', link: '/ko/core/contributing' },
+    { text: '소개', link: '/ko/intro' },
+    { text: 'react-simplikit, 선택의 이유', link: '/ko/why-react-simplikit-matters' },
+    { text: '설치하기', link: '/ko/installation' },
+    { text: 'AI 연동', link: '/ko/ai-integration' },
+    { text: '설계 원칙', link: '/ko/design-principles' },
+    { text: '모바일 웹', link: '/ko/mobile-web' },
+    { text: '기여하기', link: '/ko/contributing' },
   ],
 });
 assert.equal(koConfig.themeConfig?.editLink?.text, 'GitHub에서 수정하기');
@@ -210,11 +201,11 @@ assert.equal(koConfig.themeConfig?.footer?.message, 'MIT 라이선스에 따라 
 
 const rootConfigNav = rootConfig.themeConfig?.nav ?? [];
 assert.deepEqual(rootConfigNav[0], { text: 'Home', link: '/' });
-assert.deepEqual(rootConfigNav[1], { text: 'Guide', link: '/core/intro' });
+assert.deepEqual(rootConfigNav[1], { text: 'Guide', link: '/intro' });
 assert.equal((rootConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Reference');
 assert.equal(
   (rootConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/hooks/') ||
-    (rootConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/core/intro',
+    (rootConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/intro',
   true,
   'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
 );
@@ -226,11 +217,11 @@ const jaConfig = buildLocaleConfig(localeDefinitions.ja);
 assert.equal(jaConfig.lang, 'ja');
 const jaConfigNav = jaConfig.themeConfig?.nav ?? [];
 assert.deepEqual(jaConfigNav[0], { text: 'ホーム', link: '/ja/' });
-assert.deepEqual(jaConfigNav[1], { text: 'Guide', link: '/ja/core/intro' });
+assert.deepEqual(jaConfigNav[1], { text: 'Guide', link: '/ja/intro' });
 assert.equal((jaConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'リファレンス');
 assert.equal(
   (jaConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/ja/hooks/') ||
-    (jaConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/ja/core/intro',
+    (jaConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/ja/intro',
   true,
   'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
 );
@@ -246,11 +237,11 @@ const zhHansConfig = buildLocaleConfig(localeDefinitions['zh-Hans']);
 assert.equal(zhHansConfig.lang, 'zh-Hans');
 const zhHansConfigNav = zhHansConfig.themeConfig?.nav ?? [];
 assert.deepEqual(zhHansConfigNav[0], { text: '首页', link: '/zh-Hans/' });
-assert.deepEqual(zhHansConfigNav[1], { text: 'Guide', link: '/zh-Hans/core/intro' });
+assert.deepEqual(zhHansConfigNav[1], { text: 'Guide', link: '/zh-Hans/intro' });
 assert.equal((zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).text, '参考');
 assert.equal(
   (zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/zh-Hans/hooks/') ||
-    (zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/zh-Hans/core/intro',
+    (zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/zh-Hans/intro',
   true,
   'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
 );
@@ -266,11 +257,11 @@ const esConfig = buildLocaleConfig(localeDefinitions.es);
 assert.equal(esConfig.lang, 'es');
 const esConfigNav = esConfig.themeConfig?.nav ?? [];
 assert.deepEqual(esConfigNav[0], { text: 'Inicio', link: '/es/' });
-assert.deepEqual(esConfigNav[1], { text: 'Guide', link: '/es/core/intro' });
+assert.deepEqual(esConfigNav[1], { text: 'Guide', link: '/es/intro' });
 assert.equal((esConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Referencia');
 assert.equal(
   (esConfigNav[2] as DefaultTheme.NavItemWithLink).link.startsWith('/es/hooks/') ||
-    (esConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/es/core/intro',
+    (esConfigNav[2] as DefaultTheme.NavItemWithLink).link === '/es/intro',
   true,
   'the reference nav item must point at the flat hooks namespace, or fall back to the guide when a locale has no items'
 );

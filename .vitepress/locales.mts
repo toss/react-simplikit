@@ -9,21 +9,12 @@ import { zhHans } from './locales/zh-Hans.mts';
 export type LocaleCode = 'root' | 'ko' | 'ja' | 'zh-Hans' | 'es';
 
 type GuidePageTitles = {
-  core: {
-    intro: string;
-    whyReactSimplikitMatters: string;
-    installation: string;
-    aiIntegration: string;
-    designPrinciples: string;
-    contributing: string;
-  };
-  mobile: {
-    intro: string;
-    roadmap: string;
-    installation: string;
-    designPrinciples: string;
-    contributing: string;
-  };
+  intro: string;
+  whyReactSimplikitMatters: string;
+  installation: string;
+  aiIntegration: string;
+  designPrinciples: string;
+  contributing: string;
 };
 
 export type LocaleThemeStrings = {
@@ -110,16 +101,10 @@ const routeDefinitions: RouteDefinition[] = [
     localizedDestination: ':locale/index.md',
   },
   {
-    source: 'docs/core/:doc.md',
-    destination: 'core/:doc.md',
-    localizedSource: 'docs/:locale/core/:doc.md',
-    localizedDestination: ':locale/core/:doc.md',
-  },
-  {
-    source: 'docs/mobile/:doc.md',
-    destination: 'mobile/:doc.md',
-    localizedSource: 'docs/:locale/mobile/:doc.md',
-    localizedDestination: ':locale/mobile/:doc.md',
+    source: 'docs/:doc.md',
+    destination: ':doc.md',
+    localizedSource: 'docs/:locale/:doc.md',
+    localizedDestination: ':locale/:doc.md',
   },
   {
     source: 'packages/react-simplikit/src/hooks/:hook/:hook.md',

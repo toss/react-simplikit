@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { legacyRoutePatterns } from '../locales.mts';
+import { legacyRoutePatterns, localeDirectories } from '../locales.mts';
 import { projectRoot } from '../shared.mts';
 
 const SITE_ORIGIN = 'https://react-simplikit.slash.page';
@@ -9,12 +9,33 @@ const SITE_ORIGIN = 'https://react-simplikit.slash.page';
 type RedirectPair = { from: string; to: string };
 
 /**
+ * Guide pages moved with per-page targets (the merge folded eleven pages into
+ * seven), so they are listed explicitly instead of derived from a pattern.
+ */
+const GUIDE_LEGACY: RedirectPair[] = [
+  { from: 'core/intro.html', to: 'intro.html' },
+  { from: 'core/why-react-simplikit-matters.html', to: 'why-react-simplikit-matters.html' },
+  { from: 'core/installation.html', to: 'installation.html' },
+  { from: 'core/ai-integration.html', to: 'ai-integration.html' },
+  { from: 'core/design-principles.html', to: 'design-principles.html' },
+  { from: 'core/contributing.html', to: 'contributing.html' },
+  { from: 'mobile/intro.html', to: 'mobile-web.html' },
+  { from: 'mobile/roadmap.html', to: 'mobile-web.html' },
+  { from: 'mobile/installation.html', to: 'installation.html' },
+  { from: 'mobile/design-principles.html', to: 'design-principles.html' },
+  { from: 'mobile/contributing.html', to: 'contributing.html' },
+];
+
+/**
  * Expands the parameterized legacy routes against the actual source tree.
  * A pattern like `packages/react-simplikit/src/hooks/:hook/:hook.md` with the
  * legacy destination `core/hooks/:hook.md` yields one pair per hook directory.
  */
 export function collectLegacyRedirects(): RedirectPair[] {
-  const pairs: RedirectPair[] = [];
+  const pairs: RedirectPair[] = GUIDE_LEGACY.flatMap(pair => [
+    pair,
+    ...localeDirectories.map(locale => ({ from: `${locale}/${pair.from}`, to: `${locale}/${pair.to}` })),
+  ]);
 
   for (const route of legacyRoutePatterns) {
     const parameter = route.from.match(/:([A-Za-z]+)\.md$/)?.[1];
