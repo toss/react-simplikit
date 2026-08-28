@@ -90,11 +90,9 @@ function parseJSDoc(source: string) {
   // The default compact spacing joins every line of `@description` into one, which collapses its
   // bullet lists. Only that tag is re-read with preserved spacing; the rest read better compacted.
   const preservedComment = parse(source, { spacing: 'preserve' }).at(-1);
-  const description = (
-    preservedComment?.tags.find(tag => tag.tag === 'description')?.description ??
-    preservedComment?.description ??
-    ''
-  ).trim();
+  const description = reflowDescription(
+    preservedComment?.tags.find(tag => tag.tag === 'description')?.description ?? preservedComment?.description ?? ''
+  );
 
   const params = targetComment.tags.filter(tag => tag.tag === 'param');
 
@@ -216,6 +214,36 @@ ${await prettier.format(getParamUl(returns, nestedValueOfReturns), { ...prettier
 ${example}
 \`\`\`
 `;
+}
+
+const LIST_ITEM = /^[-*]\s/;
+
+/**
+ * Undoes the source's line wrapping while keeping the structure a reader relies on.
+ *
+ * A JSDoc block wraps prose to stay readable in the editor, and those breaks carry no meaning —
+ * but blank lines and list items do. Joining everything (the parser's compact mode) loses the
+ * lists; keeping everything bakes the editor's wrapping into the page.
+ */
+function reflowDescription(description: string) {
+  return description
+    .split('\n')
+    .map(line => line.trim())
+    .reduce<string[]>((lines, line) => {
+      const previous = lines.at(-1);
+      const continuesParagraph =
+        previous != null && previous !== '' && line !== '' && !LIST_ITEM.test(line) && !LIST_ITEM.test(previous);
+
+      if (continuesParagraph) {
+        lines[lines.length - 1] = `${previous} ${line}`;
+        return lines;
+      }
+
+      lines.push(line);
+      return lines;
+    }, [])
+    .join('\n')
+    .trim();
 }
 
 /** JSDoc marks a rest parameter on the type (`{...T}`), TypeScript on the name (`...name: T`). */

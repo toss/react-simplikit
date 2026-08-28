@@ -57,6 +57,25 @@ export function useUser() {}`
     expect(document).toContain(`The user\\'s name.`);
   });
 
+  it('rejoins a paragraph that the source wrapped across lines', async () => {
+    const document = await render(
+      'useWrapped',
+      `/**
+ * @description
+ * \`useWrapped\` does one thing.
+ * It also does another thing.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useWrapped();
+ */
+export function useWrapped() {}`
+    );
+
+    expect(document).toContain('`useWrapped` does one thing. It also does another thing.');
+  });
+
   it('keeps the bullet list of a multi-line description on separate lines', async () => {
     const document = await render(
       'useLayout',
