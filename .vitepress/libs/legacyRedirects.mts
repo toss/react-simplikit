@@ -9,6 +9,19 @@ const SITE_ORIGIN = 'https://react-simplikit.slash.page';
 type RedirectPair = { from: string; to: string };
 
 /**
+ * Rebuilds the URL from its parts so the query and fragment a meta refresh would
+ * drop survive. A target that already carries a fragment keeps it unless the
+ * incoming URL has one of its own, and the query always lands before the hash.
+ */
+function REDIRECT_SCRIPT(target: string): string {
+  const [pathname, fragment] = target.split('#');
+  return (
+    `location.replace(${JSON.stringify(pathname)} + location.search + ` +
+    `(location.hash || ${JSON.stringify(fragment === undefined ? '' : `#${fragment}`)}))`
+  );
+}
+
+/**
  * Guide pages moved with per-page targets (the merge folded eleven pages into
  * seven), so they are listed explicitly instead of derived from a pattern.
  */
@@ -98,11 +111,10 @@ export function writeLegacyRedirectStubs(outDir: string): number {
         '<head>',
         '<meta charset="utf-8">',
         `<meta http-equiv="refresh" content="0; url=${target}">`,
-        `<link rel="canonical" href="${SITE_ORIGIN}${target}">`,
+        `<link rel="canonical" href="${SITE_ORIGIN}${target.split('#')[0]}">`,
         // Carries the fragment and query the meta refresh would drop; the meta
         // tag above stays as the no-JS fallback.
-        `<script>location.replace(${JSON.stringify(target)} + location.search + location.hash)</script>`,
-        '<meta name="robots" content="noindex">',
+        `<script>${REDIRECT_SCRIPT(target)}</script>`,
         `<title>Redirecting to ${target}</title>`,
         '</head>',
         `<body><p>This page moved to <a href="${target}">${target}</a>.</p></body>`,

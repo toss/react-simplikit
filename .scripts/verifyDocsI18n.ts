@@ -6,7 +6,14 @@ import { DefaultTheme } from 'vitepress';
 
 import { buildLocaleConfig } from '../.vitepress/libs/buildLocaleConfig.mts';
 import { getSidebarItems } from '../.vitepress/libs/getSidebarItems.mts';
-import { generatedLocalesDirectory, generatedRewrites, localeDefinitions, rewrites } from '../.vitepress/locales.mts';
+import { collectLegacyRedirects } from '../.vitepress/libs/legacyRedirects.mts';
+import {
+  generatedLocalesDirectory,
+  generatedRewrites,
+  localeDefinitions,
+  localeDirectories,
+  rewrites,
+} from '../.vitepress/locales.mts';
 import { corePackageRoot } from '../.vitepress/shared.mts';
 
 import { assertLlmsOutput } from './utils/assertLlmsOutput.ts';
@@ -92,6 +99,42 @@ try {
   await execWithOutput('yarn', ['docs:build', '--outDir', buildOutputDirectory], { cwd: root });
 
   await assertLlmsOutput({ buildOutputDirectory, root });
+
+  // The redirect stubs are the only thing keeping pre-flattening URLs alive, and a
+  // broken route filter would silently emit none of them.
+  const stubs = collectLegacyRedirects();
+  const localeCount = localeDirectories.length + 1;
+  const referenceItemCount = (
+    await Promise.all(
+      ['hooks', 'components', 'utils', 'mobile/hooks', 'mobile/utils'].map(
+        async directory =>
+          (
+            await fs.readdir(path.join(root, 'packages/react-simplikit/src', directory), { withFileTypes: true })
+          ).filter(entry => entry.isDirectory()).length
+      )
+    )
+  ).reduce((total, count) => total + count, 0);
+  const guidePageCount = 11;
+
+  assert.equal(
+    stubs.length,
+    (guidePageCount + referenceItemCount) * localeCount,
+    'the legacy redirect set must cover every pre-flattening URL across all locales'
+  );
+
+  for (const { from, to } of stubs) {
+    const stub = await fs.readFile(path.join(buildOutputDirectory, from), 'utf8');
+    assert.match(stub, /http-equiv="refresh"/, `${from} must redirect`);
+    assert.equal(stub.includes('noindex'), false, `${from} must stay indexable so canonical can consolidate signals`);
+    await fs.access(path.join(buildOutputDirectory, to.split('#')[0]));
+  }
+
+  // The reference index is generated, so a broken generator would leave the nav
+  // pointing at a page that does not exist.
+  for (const locale of ['', ...localeDirectories]) {
+    const referencePage = await fs.readFile(path.join(buildOutputDirectory, locale, 'reference.html'), 'utf8');
+    assert.match(referencePage, /\/hooks\/useToggle/, `${locale || 'root'} reference index must list the exports`);
+  }
 
   const fallbackPage = await fs.readFile(
     path.join(buildOutputDirectory, 'ko/untranslated-fallback-fixture.html'),

@@ -1,4 +1,4 @@
-# Mobile Utilities
+# Mobile Web
 
 A collection of React hooks that solve common UI challenges in mobile web environments.
 
@@ -164,7 +164,7 @@ Where a specific API is unavailable (e.g., `window.visualViewport` in older brow
 
 We're continuing to expand the set of mobile hooks available in `react-simplikit`, always guided by the same principle: **make mobile UI development predictable and reliable, regardless of device or OS**. If there's a common mobile UI pain point, chances are we're working on a clean, declarative solution for it.
 
-## Mobile-Specific Principles
+## Mobile-Specific Principles {#mobile-specific-principles}
 
 ### Platform-Aware Design
 
@@ -221,4 +221,28 @@ if (!isClient) return defaultValue;
 
 // Now safe to use window/document
 window.visualViewport?.addEventListener('resize', handler);
+```
+
+## API Design Standards
+
+### Hook Return Values
+
+We follow consistent patterns for hook return values:
+
+- **Object**: For state and related values (e.g., `useKeyboardHeight(): { keyboardHeight }`, `useVisualViewport(): { viewport }`)
+- **void**: For side-effect only hooks (e.g., `useBodyScrollLock(): void`)
+
+### Parameters
+
+- Required parameters come first, optional parameters last
+- Use an options object for 3+ optional parameters
+
+### SSR Safety Pattern
+
+All hooks follow the SSR-safe pattern:
+
+```typescript
+// ✅ SSR-safe - All hooks follow this pattern
+const isClient = typeof window !== 'undefined';
+if (!isClient) return defaultValue;
 ```

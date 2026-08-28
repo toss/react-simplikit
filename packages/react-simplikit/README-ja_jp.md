@@ -92,7 +92,7 @@ function SearchInput() {
 
 ## 関連パッケージ
 
-- [モバイル Web ユーティリティ](https://react-simplikit.slash.page/ja/mobile/intro.html) - `react-simplikit` に含まれます
+- [モバイル Web ユーティリティ](https://react-simplikit.slash.page/ja/mobile-web.html) - `react-simplikit` に含まれます
 
 ## 貢献
 

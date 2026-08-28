@@ -1,4 +1,4 @@
-# 모바일 유틸리티
+# 모바일 웹
 
 모바일 웹 환경에서 발생하는 다양한 UI 문제를 해결하는 React 훅 모음이에요.
 
@@ -164,7 +164,7 @@ function FixedBottomCTA() {
 
 `react-simplikit`에서 제공하는 모바일 훅들을 계속 확장해 나갈 예정이에요. 항상 같은 원칙에 따라: **기기나 OS에 관계없이 모바일 UI 개발을 예측 가능하고 안정적으로 만드는 것**이에요. 모바일 UI에서 흔히 겪는 불편함이 있다면, 우리는 그것에 대한 깔끔하고 선언적인 해결책을 만들고 있을 거예요.
 
-## 모바일 특화 원칙
+## 모바일 특화 원칙 {#mobile-specific-principles}
 
 ### 플랫폼 인식 설계
 
@@ -221,4 +221,28 @@ if (!isClient) return defaultValue;
 
 // 이제 window/document를 안전하게 사용할 수 있어요
 window.visualViewport?.addEventListener('resize', handler);
+```
+
+## API 설계 표준
+
+### 훅 반환 값
+
+훅 반환 값에 대해 일관된 패턴을 따르고 있어요:
+
+- **객체**: 상태와 관련 값들에 사용 (예: `useKeyboardHeight(): { keyboardHeight }`, `useVisualViewport(): { viewport }`)
+- **void**: 사이드 이펙트 전용 훅에 사용 (예: `useBodyScrollLock(): void`)
+
+### 파라미터
+
+- 필수 파라미터가 먼저 오고, 선택 파라미터가 뒤에 와요
+- 3개 이상의 선택 파라미터가 있는 경우 옵션 객체를 사용해요
+
+### SSR 안전 패턴
+
+모든 훅은 SSR 안전 패턴을 따라요:
+
+```typescript
+// ✅ SSR 안전 - 모든 훅이 이 패턴을 따라요
+const isClient = typeof window !== 'undefined';
+if (!isClient) return defaultValue;
 ```

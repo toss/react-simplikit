@@ -9,7 +9,7 @@ hero:
     alt: react-simplikit
   actions:
     - theme: brand
-      text: 快速开始
+      text: 开始使用
       link: /zh-Hans/intro
 
 features:

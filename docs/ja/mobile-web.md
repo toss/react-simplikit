@@ -1,4 +1,4 @@
-# モバイルユーティリティ
+# モバイル Web
 
 モバイル Web 環境でよくある UI の課題を解決する React フック集です。
 
@@ -164,7 +164,7 @@ function FixedBottomCTA() {
 
 `react-simplikit` で提供するモバイルフックのラインナップを、常に同じ原則に基づいて拡張し続けています。**端末や OS を問わず、モバイル UI 開発を予測可能で信頼できるものにする**という原則です。よくあるモバイル UI の悩みがあれば、私たちはそのためのクリーンで宣言的な解決策に取り組んでいる可能性が高いです。
 
-## モバイル特有の原則
+## モバイル特有の原則 {#mobile-specific-principles}
 
 ### プラットフォームを意識した設計
 
@@ -221,4 +221,28 @@ if (!isClient) return defaultValue;
 
 // これで window/document を安全に使用できます
 window.visualViewport?.addEventListener('resize', handler);
+```
+
+## API 設計基準
+
+### フックの戻り値
+
+フックの戻り値については、一貫したパターンに従います。
+
+- **オブジェクト**: 状態や関連する値を返す場合（例: `useKeyboardHeight(): { keyboardHeight }`、`useVisualViewport(): { viewport }`）
+- **void**: 副作用のみを持つフックの場合（例: `useBodyScrollLock(): void`）
+
+### パラメータ
+
+- 必須パラメータを先に、任意パラメータを後に配置します
+- 任意パラメータが 3 個以上ある場合はオプションオブジェクトを使用します
+
+### SSR 安全パターン
+
+すべてのフックは SSR 安全パターンに従います。
+
+```typescript
+// ✅ SSR 安全 - すべてのフックがこのパターンに従います
+const isClient = typeof window !== 'undefined';
+if (!isClient) return defaultValue;
 ```

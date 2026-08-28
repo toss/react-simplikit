@@ -92,7 +92,7 @@ function SearchInput() {
 
 ## 相关包
 
-- [移动端 Web 工具函数](https://react-simplikit.slash.page/zh-Hans/mobile/intro.html) - 已包含在 `react-simplikit` 中
+- [移动端 Web 工具函数](https://react-simplikit.slash.page/zh-Hans/mobile-web.html) - 已包含在 `react-simplikit` 中
 
 ## 贡献
 

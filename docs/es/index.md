@@ -9,7 +9,7 @@ hero:
     alt: react-simplikit
   actions:
     - theme: brand
-      text: Comenzar
+      text: Empezar
       link: /es/intro
 
 features:

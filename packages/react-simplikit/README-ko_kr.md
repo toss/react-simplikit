@@ -92,7 +92,7 @@ function SearchInput() {
 
 ## 관련 패키지
 
-- [모바일 웹 유틸리티](https://react-simplikit.slash.page/ko/mobile/intro.html) - `react-simplikit`에 포함
+- [모바일 웹 유틸리티](https://react-simplikit.slash.page/ko/mobile-web.html) - `react-simplikit`에 포함
 
 ## 기여하기
 

@@ -71,7 +71,8 @@ export async function generateReferenceIndex(): Promise<void> {
     const localeSegment = definition.path === '' ? '' : `${definition.path}/`;
     const urlPrefix = definition.path === '' ? '' : `/${definition.path}`;
     const strings = definition.themeStrings;
-    const sections: string[] = [`# ${strings.referenceLabel}`];
+    // The page is generated and gitignored, so an edit link would 404.
+    const sections: string[] = ['---', 'editLink: false', '---', '', `# ${strings.referenceLabel}`];
 
     for (const group of GROUPS) {
       const items: string[] = [];

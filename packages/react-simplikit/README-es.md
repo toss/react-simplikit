@@ -92,7 +92,7 @@ Consulta la documentación completa en [react-simplikit.slash.page](https://reac
 
 ## Paquetes relacionados
 
-- [Utilidades para la web móvil](https://react-simplikit.slash.page/es/mobile/intro.html) - se incluyen en `react-simplikit`
+- [Utilidades para la web móvil](https://react-simplikit.slash.page/es/mobile-web.html) - se incluyen en `react-simplikit`
 
 ## Contribuir
 

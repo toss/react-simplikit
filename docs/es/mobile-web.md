@@ -1,4 +1,4 @@
-# Utilidades para móvil
+# Web móvil
 
 Una colección de Hooks de React que resuelven los retos de interfaz más habituales en entornos de web móvil.
 
@@ -164,7 +164,7 @@ Cuando una API concreta no está disponible (por ejemplo, `window.visualViewport
 
 Seguimos ampliando el conjunto de Hooks para móvil disponibles en `react-simplikit`, siempre guiados por el mismo principio: **hacer que el desarrollo de interfaces móviles sea predecible y fiable, sea cual sea el dispositivo o el sistema operativo**. Si existe un problema habitual de interfaz en móvil, lo más probable es que estemos trabajando en una solución limpia y declarativa para él.
 
-## Principios específicos para móvil
+## Principios específicos para móvil {#mobile-specific-principles}
 
 ### Diseño consciente de la plataforma
 
@@ -221,4 +221,28 @@ if (!isClient) return defaultValue;
 
 // Ahora es seguro usar window/document
 window.visualViewport?.addEventListener('resize', handler);
+```
+
+## Estándares de diseño de la API
+
+### Valores de retorno de los Hooks
+
+Seguimos patrones consistentes para los valores de retorno de los Hooks:
+
+- **Objeto**: para el estado y los valores relacionados (por ejemplo, `useKeyboardHeight(): { keyboardHeight }`, `useVisualViewport(): { viewport }`)
+- **void**: para los Hooks que solo producen efectos secundarios (por ejemplo, `useBodyScrollLock(): void`)
+
+### Parámetros
+
+- Los parámetros obligatorios van primero y los opcionales al final
+- Usa un objeto de opciones cuando haya 3 o más parámetros opcionales
+
+### Patrón de seguridad para SSR
+
+Todos los Hooks siguen el patrón seguro para SSR:
+
+```typescript
+// ✅ Seguro para SSR: todos los Hooks siguen este patrón
+const isClient = typeof window !== 'undefined';
+if (!isClient) return defaultValue;
 ```

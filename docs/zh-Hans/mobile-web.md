@@ -1,4 +1,4 @@
-# 移动端工具函数
+# 移动端 Web
 
 一组用于解决移动端 Web 环境中常见 UI 难题的 React Hook。
 
@@ -164,7 +164,7 @@ function FixedBottomCTA() {
 
 我们会继续扩充 `react-simplikit` 中的移动端 Hook，并始终遵循同一条原则：**让移动端 UI 开发变得可预测、可靠，无论设备和操作系统是什么**。如果存在某个常见的移动端 UI 痛点，我们很可能正在为它准备一套简洁、声明式的解决方案。
 
-## 移动端专属原则
+## 移动端专属原则 {#mobile-specific-principles}
 
 ### 感知平台差异的设计
 
@@ -221,4 +221,28 @@ if (!isClient) return defaultValue;
 
 // 现在可以安全地使用 window/document 了
 window.visualViewport?.addEventListener('resize', handler);
+```
+
+## API 设计规范
+
+### Hook 的返回值
+
+对于 Hook 的返回值，我们遵循一致的模式：
+
+- **对象**：用于状态及相关的值（例如 `useKeyboardHeight(): { keyboardHeight }`、`useVisualViewport(): { viewport }`）
+- **void**：用于只有副作用的 Hook（例如 `useBodyScrollLock(): void`）
+
+### 参数
+
+- 必填参数放在前面，可选参数放在最后
+- 可选参数达到 3 个或更多时，请使用选项对象
+
+### SSR 安全模式
+
+所有 Hook 都遵循 SSR 安全模式：
+
+```typescript
+// ✅ SSR 安全：所有 Hook 都遵循这个模式
+const isClient = typeof window !== 'undefined';
+if (!isClient) return defaultValue;
 ```
