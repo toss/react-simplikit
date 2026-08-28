@@ -70,6 +70,8 @@ export function useThrottledCallback<T>({
 
   return useCallback(
     (nextValue: T) => {
+      ref.current.clearPreviousThrottle();
+
       if (nextValue === ref.current.value) {
         return;
       }
@@ -83,8 +85,6 @@ export function useThrottledCallback<T>({
         timeThreshold,
         { edges: preservedEdges }
       );
-
-      ref.current.clearPreviousThrottle();
 
       throttled();
 

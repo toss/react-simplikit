@@ -93,6 +93,22 @@ describe('useDebouncedCallback', () => {
     expect(onChange).toBeCalledWith(false);
   });
 
+  it('discards a pending value when the caller returns to the last forwarded one', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+
+    result.current('seoul');
+    vi.advanceTimersByTime(100);
+    expect(onChange).toHaveBeenLastCalledWith('seoul');
+
+    // 'seo' is scheduled, then the caller types back to 'seoul' before it fires
+    result.current('seo');
+    result.current('seoul');
+    vi.advanceTimersByTime(100);
+
+    expect(onChange).toBeCalledTimes(1);
+  });
+
   it('should cleanup on unmount', async () => {
     const onChange = vi.fn();
     const { result, unmount } = await renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));

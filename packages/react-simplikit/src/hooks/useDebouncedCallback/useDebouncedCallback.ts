@@ -86,6 +86,8 @@ export function useDebouncedCallback<T>({
 
   return useCallback(
     (nextValue: T) => {
+      ref.current.clearPreviousDebounce();
+
       if (nextValue === ref.current.value) {
         return;
       }
@@ -99,8 +101,6 @@ export function useDebouncedCallback<T>({
         timeThreshold,
         { edges }
       );
-
-      ref.current.clearPreviousDebounce();
 
       debounced();
 
