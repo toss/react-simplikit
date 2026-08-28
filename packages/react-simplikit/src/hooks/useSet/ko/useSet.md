@@ -5,29 +5,27 @@
 ## 인터페이스
 
 ```ts
-function useSet<T>(
-  initialState?: SetOrValues<T>
-): [Omit<Set<T>, 'add' | 'clear' | 'delete'>, SetActions<T>];
+function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
 ```
 
 ### 파라미터
 
 <Interface
   name="initialState"
-  type="Set<T> | T[]"
-  description="초기 Set 상태 (Set 객체 또는 값의 배열). 기본값은 빈 Set이에요."
+  type="SetOrValues<T>"
+  description="초기 Set 상태예요. Set 객체나 값의 배열을 넘길 수 있어요."
 />
 
 ### 반환 값
 
 <Interface
   name=""
-  type="[Set, SetActions]"
-  description="Set 상태와 이를 조작하는 액션을 포함한 튜플이에요."
+  type="UseSetReturn<T>"
+  description="Set 상태와 이를 조작하는 액션을 담은 튜플이에요."
   :nested="[
     {
       name: '[0]',
-      type: 'Omit<Set<T>, add | clear | delete>',
+      type: 'Omit<Set<T>, \'add\' | \'clear\' | \'delete\'>',
       required: false,
       description: '변경 메서드가 숨겨진 현재 Set 상태예요.',
     },
