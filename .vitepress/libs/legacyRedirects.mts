@@ -22,7 +22,7 @@ const GUIDE_LEGACY: RedirectPair[] = [
   { from: 'mobile/intro.html', to: 'mobile-web.html' },
   { from: 'mobile/roadmap.html', to: 'mobile-web.html' },
   { from: 'mobile/installation.html', to: 'installation.html' },
-  { from: 'mobile/design-principles.html', to: 'design-principles.html' },
+  { from: 'mobile/design-principles.html', to: 'mobile-web.html#mobile-specific-principles' },
   { from: 'mobile/contributing.html', to: 'contributing.html' },
 ];
 
@@ -78,6 +78,17 @@ export function writeLegacyRedirectStubs(outDir: string): number {
     const target = `/${to}`;
     const stubPath = path.join(outDir, from);
 
+    // The llms plugin emits a raw Markdown twin of every page. A meta refresh is
+    // useless to whatever fetches those, so the old path gets a copy of the new
+    // file instead of a stub.
+    const markdownSource = path.join(outDir, to.replace(/\.html(#.*)?$/, '.md'));
+    const markdownTarget = path.join(outDir, from.replace(/\.html$/, '.md'));
+
+    if (fs.existsSync(markdownSource)) {
+      fs.mkdirSync(path.dirname(markdownTarget), { recursive: true });
+      fs.copyFileSync(markdownSource, markdownTarget);
+    }
+
     fs.mkdirSync(path.dirname(stubPath), { recursive: true });
     fs.writeFileSync(
       stubPath,
@@ -88,6 +99,9 @@ export function writeLegacyRedirectStubs(outDir: string): number {
         '<meta charset="utf-8">',
         `<meta http-equiv="refresh" content="0; url=${target}">`,
         `<link rel="canonical" href="${SITE_ORIGIN}${target}">`,
+        // Carries the fragment and query the meta refresh would drop; the meta
+        // tag above stays as the no-JS fallback.
+        `<script>location.replace(${JSON.stringify(target)} + location.search + location.hash)</script>`,
         '<meta name="robots" content="noindex">',
         `<title>Redirecting to ${target}</title>`,
         '</head>',

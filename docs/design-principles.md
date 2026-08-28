@@ -35,3 +35,27 @@ While the primary documentation is in English, Korean documentation is also supp
 - **IntelliSense Support**: Get autocompletion and inline documentation in your IDE
 - **Generic Types**: Flexible APIs that preserve your type information
 - **No `any` Types**: We avoid escape hatches that compromise type safety
+
+## API Design Standards
+
+### Hook Return Values
+
+We follow consistent patterns for hook return values:
+
+- **Object**: For state and related values (e.g., `useKeyboardHeight(): { keyboardHeight }`, `useVisualViewport(): { viewport }`)
+- **void**: For side-effect only hooks (e.g., `useBodyScrollLock(): void`)
+
+### Parameters
+
+- Required parameters come first, optional parameters last
+- Use an options object for 3+ optional parameters
+
+### SSR Safety Pattern
+
+All hooks follow the SSR-safe pattern:
+
+```typescript
+// ✅ SSR-safe - All hooks follow this pattern
+const isClient = typeof window !== 'undefined';
+if (!isClient) return defaultValue;
+```

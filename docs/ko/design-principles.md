@@ -35,3 +35,27 @@
 - **IntelliSense 지원**: IDE에서 자동완성과 인라인 문서를 제공받을 수 있어요
 - **제네릭 타입**: 타입 정보를 보존하는 유연한 API를 제공해요
 - **`any` 타입 없음**: 타입 안전성을 손상시키는 escape hatch를 사용하지 않아요
+
+## API 설계 표준
+
+### 훅 반환 값
+
+훅 반환 값에 대해 일관된 패턴을 따르고 있어요:
+
+- **객체**: 상태와 관련 값들에 사용 (예: `useKeyboardHeight(): { keyboardHeight }`, `useVisualViewport(): { viewport }`)
+- **void**: 사이드 이펙트 전용 훅에 사용 (예: `useBodyScrollLock(): void`)
+
+### 파라미터
+
+- 필수 파라미터가 먼저 오고, 선택 파라미터가 뒤에 와요
+- 3개 이상의 선택 파라미터가 있는 경우 옵션 객체를 사용해요
+
+### SSR 안전 패턴
+
+모든 훅은 SSR 안전 패턴을 따라요:
+
+```typescript
+// ✅ SSR 안전 - 모든 훅이 이 패턴을 따라요
+const isClient = typeof window !== 'undefined';
+if (!isClient) return defaultValue;
+```

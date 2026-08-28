@@ -36,7 +36,7 @@ The documentation is also published in the formats agents read directly:
 
 - [`/llms.txt`](https://react-simplikit.slash.page/llms.txt) — an index of every page with a one-line summary
 - [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — the whole documentation in one file
-- Any page with a `.md` suffix returns raw Markdown, for example [`/core/hooks/useDebounce.md`](https://react-simplikit.slash.page/core/hooks/useDebounce.md)
+- Any page with a `.md` suffix returns raw Markdown, for example [`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)
 
 ## Context7
 

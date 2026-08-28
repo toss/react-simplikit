@@ -32,7 +32,7 @@ packages/codemod/test/__fixtures__/
 generated-locales/
 
 # transient fixtures written by `yarn test:docs`, which a killed run cannot clean up
-docs/core/untranslated-fallback-fixture.md
+docs/untranslated-fallback-fixture.md
 packages/react-simplikit/src/hooks/useUntranslatedFallbackFixture/
 
 # next

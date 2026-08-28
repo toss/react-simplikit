@@ -26,6 +26,11 @@ bun add react-simplikit
 
 :::
 
+## 요구사항
+
+- React 18 이상
+- TypeScript 4.7 이상 (권장)
+
 ## 사용법
 
 패키지에서 직접 훅을 import하세요:

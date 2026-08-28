@@ -26,6 +26,11 @@ bun add react-simplikit
 
 :::
 
+## Requirements
+
+- React 18 or higher
+- TypeScript 4.7 or higher (recommended)
+
 ## Usage
 
 Import hooks directly from the package:

@@ -35,3 +35,27 @@
 - **IntelliSense 支持**：在 IDE 中获得自动补全和内联文档
 - **泛型**：灵活的 API，保留你的类型信息
 - **不使用 `any` 类型**：我们避免使用会破坏类型安全的脱围机制
+
+## API 设计规范
+
+### Hook 的返回值
+
+对于 Hook 的返回值，我们遵循一致的模式：
+
+- **对象**：用于状态及相关的值（例如 `useKeyboardHeight(): { keyboardHeight }`、`useVisualViewport(): { viewport }`）
+- **void**：用于只有副作用的 Hook（例如 `useBodyScrollLock(): void`）
+
+### 参数
+
+- 必填参数放在前面，可选参数放在最后
+- 可选参数达到 3 个或更多时，请使用选项对象
+
+### SSR 安全模式
+
+所有 Hook 都遵循 SSR 安全模式：
+
+```typescript
+// ✅ SSR 安全：所有 Hook 都遵循这个模式
+const isClient = typeof window !== 'undefined';
+if (!isClient) return defaultValue;
+```

@@ -26,6 +26,11 @@ bun add react-simplikit
 
 :::
 
+## 要件
+
+- React 18 以上
+- TypeScript 4.7 以上（推奨）
+
 ## 使い方
 
 パッケージから直接フックを import してください。

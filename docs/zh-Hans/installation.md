@@ -26,6 +26,11 @@ bun add react-simplikit
 
 :::
 
+## 环境要求
+
+- React 18 或更高版本
+- TypeScript 4.7 或更高版本（推荐）
+
 ## 用法
 
 直接从这个包中导入 Hook：

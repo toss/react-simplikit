@@ -36,7 +36,7 @@ codex plugin marketplace add https://github.com/toss/react-simplikit
 
 - [`/llms.txt`](https://react-simplikit.slash.page/llms.txt) — 모든 페이지의 목록과 한 줄 요약
 - [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 전체 문서를 하나로 합친 파일
-- 어떤 페이지든 주소 끝에 `.md`를 붙이면 원본 Markdown을 반환해요. 예: [`/core/hooks/useDebounce.md`](https://react-simplikit.slash.page/core/hooks/useDebounce.md)
+- 어떤 페이지든 주소 끝에 `.md`를 붙이면 원본 Markdown을 반환해요. 예: [`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)
 
 ## Context7
 

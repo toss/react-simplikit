@@ -12,8 +12,8 @@ Each contribution requires:
 
 For detailed instructions, see the package-specific guides:
 
-- [Core Package Contributing Guide](../docs/core/contributing.md)
-- [Mobile Package Contributing Guide](../docs/mobile/contributing.md)
+- [Contributing Guide](../docs/contributing.md)
+- [Mobile Web](../docs/mobile-web.md)
 
 ## Useful Links
 
