@@ -6,7 +6,7 @@ This function takes multiple refs (RefObject or RefCallback) and returns a singl
 
 ```ts
 function mergeRefs<T>(
-  ...refs: Array<RefObject<T> | RefCallback<T> | null | undefined>
+  refs: Array<RefObject<T> | RefCallback<T> | null | undefined>
 ): RefCallback<T>;
 ```
 
@@ -35,4 +35,19 @@ forwardRef(function Component(props, parentRef) {
 
   return <div ref={mergeRefs(myRef, parentRef)} />;
 });
+
+function Component(props) {
+  const ref = useRef(null);
+  const [height, setHeight] = useState(0);
+
+  const measuredRef = useCallback(node => {
+    if (node == null) {
+      return;
+    }
+
+    setHeight(node.offsetHeight);
+  }, []);
+
+  return <div ref={mergeRefs(measuredRef, ref)} />;
+}
 ```

@@ -1,6 +1,12 @@
 # useSafeAreaInset
 
-`useSafeAreaInset` is a React hook that tracks safe area inset changes. It returns the safe area insets that automatically update when the screen orientation changes (e.g., portrait to landscape). Safe area insets account for device-specific UI elements: - **top**: Notch, Dynamic Island, or status bar - **bottom**: Home indicator on Face ID devices - **left/right**: Rounded corners in landscape mode
+`useSafeAreaInset` is a React hook that tracks safe area inset changes. It returns the safe area insets that automatically update when the screen orientation changes (e.g., portrait to landscape).
+
+Safe area insets account for device-specific UI elements:
+
+- **top**: Notch, Dynamic Island, or status bar
+- **bottom**: Home indicator on Face ID devices
+- **left/right**: Rounded corners in landscape mode
 
 ## Interface
 

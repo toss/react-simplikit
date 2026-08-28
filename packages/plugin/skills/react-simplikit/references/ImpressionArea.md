@@ -5,14 +5,14 @@
 ## Interface
 
 ```ts
-function ImpressionArea(
-  as: ElementType = 'div',
+function ImpressionArea<T extends ElementType>(
+  as: T = 'div',
   rootMargin: string,
   areaThreshold: number,
   timeThreshold: number,
   onImpressionStart: () => void,
   onImpressionEnd: () => void,
-  ref: Ref<HTMLElement>,
+  ref: Ref<Element<T>>,
   children: React.ReactNode,
   className: string
 ): JSX.Element;
@@ -22,7 +22,7 @@ function ImpressionArea(
 
 <Interface
   name="as"
-  type="ElementType"
+  type="T"
   description="The HTML tag to render. Defaults to <code>div</code>."
 />
 
@@ -58,7 +58,7 @@ function ImpressionArea(
 
 <Interface
   name="ref"
-  type="Ref<HTMLElement>"
+  type="Ref<Element<T>>"
   description="Reference to the element."
 />
 

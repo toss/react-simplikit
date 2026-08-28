@@ -1,6 +1,8 @@
 # disableBodyScrollLock
 
-`disableBodyScrollLock` is a utility function that unlocks the body scroll. It restores the scroll locked by `enableBodyScrollLock` and returns to the saved scroll position. Safe to call in SSR environment (no-op on server). Safe to call even if not locked (no-op).
+`disableBodyScrollLock` is a utility function that unlocks the body scroll. It restores the scroll locked by `enableBodyScrollLock` and returns to the saved scroll position.
+
+Safe to call in SSR environment (no-op on server). Safe to call even if not locked (no-op).
 
 ## Interface
 

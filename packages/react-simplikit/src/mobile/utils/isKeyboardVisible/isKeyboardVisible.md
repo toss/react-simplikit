@@ -1,6 +1,8 @@
 # isKeyboardVisible
 
-`isKeyboardVisible` is a utility function that checks whether the on-screen keyboard is currently visible. This function uses `getKeyboardHeight()` internally and returns `true` if the keyboard height is greater than 0.
+`isKeyboardVisible` is a utility function that checks whether the on-screen keyboard is currently visible.
+
+This function uses `getKeyboardHeight()` internally and returns `true` if the keyboard height is greater than 0.
 
 ## Interface
 
@@ -26,4 +28,7 @@ if (isKeyboardVisible()) {
 } else {
   console.log('Keyboard is closed');
 }
+
+// Conditionally show/hide elements based on keyboard visibility
+const showFloatingButton = !isKeyboardVisible();
 ```

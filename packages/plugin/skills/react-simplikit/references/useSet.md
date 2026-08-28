@@ -5,29 +5,27 @@ A React hook that manages a Set as state. Provides efficient state management an
 ## Interface
 
 ```ts
-function useSet<T>(
-  initialState?: SetOrValues<T>
-): [Omit<Set<T>, 'add' | 'clear' | 'delete'>, SetActions<T>];
+function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
 ```
 
 ### Parameters
 
 <Interface
   name="initialState"
-  type="Set<T> | T[]"
-  description="Initial Set state (Set object or array of values). Defaults to an empty Set."
+  type="SetOrValues<T>"
+  description="Initial Set state (Set object or array of values)."
 />
 
 ### Return Value
 
 <Interface
   name=""
-  type="[Set, SetActions]"
-  description="A tuple containing the Set state and actions to manipulate it."
+  type="UseSetReturn<T>"
+  description="tuple containing the Set state and actions to manipulate it."
   :nested="[
     {
       name: '[0]',
-      type: 'Omit<Set<T>, add | clear | delete>',
+      type: 'Omit<Set<T>, \'add\' | \'clear\' | \'delete\'>',
       required: false,
       description: 'The current Set state with mutation methods hidden.',
     },
@@ -67,6 +65,8 @@ function useSet<T>(
 ## Example
 
 ```tsx
+import { useSet } from 'react-simplikit';
+
 function TagSelector() {
   const [selectedTags, { add, remove, toggle }] = useSet<string>(['react']);
 

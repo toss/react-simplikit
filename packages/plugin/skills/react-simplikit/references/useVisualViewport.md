@@ -1,6 +1,10 @@
 # useVisualViewport
 
-`useVisualViewport` is a React hook that tracks Visual Viewport changes. It returns the actual visible area in mobile WebView, which changes when the keyboard appears or the user zooms/scrolls. **Important:** `viewport` is `null` on SSR or in browsers that don't support Visual Viewport API. Always check for null before accessing viewport properties. **Tip:** If you only need keyboard height, use `useKeyboardHeight()` instead for a simpler API.
+`useVisualViewport` is a React hook that tracks Visual Viewport changes. It returns the actual visible area in mobile WebView, which changes when the keyboard appears or the user zooms/scrolls.
+
+**Important:** `viewport` is `null` on SSR or in browsers that don't support Visual Viewport API. Always check for null before accessing viewport properties.
+
+**Tip:** If you only need keyboard height, use `useKeyboardHeight()` instead for a simpler API.
 
 ## Interface
 
