@@ -24,7 +24,7 @@
     "changeset:publish": "changeset publish",
     "docs:gen": "tsx .scripts/index.ts generate-docs",
     "skill:gen": "tsx .scripts/index.ts generate-skill",
-    "docs:prepare": "tsx .scripts/index.ts prepare-localized-fallbacks && tsx .scripts/index.ts generate-reference-index",
+    "docs:prepare": "tsx .scripts/index.ts generate-reference-index && tsx .scripts/index.ts prepare-localized-fallbacks",
     "docs:dev": "yarn docs:prepare && vitepress dev",
     "docs:build": "yarn docs:prepare && vitepress build",
     "docs:preview": "vitepress preview",

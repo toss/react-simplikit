@@ -36,7 +36,7 @@ bun add react-simplikit
 直接从这个包中导入 Hook：
 
 ```tsx
-import { useKeyboardHeight, useAvoidKeyboard } from 'react-simplikit';
+import { useToggle } from 'react-simplikit';
 ```
 
 所有 Hook 都支持 tree shaking，因此只有你真正用到的部分才会被打进包里。

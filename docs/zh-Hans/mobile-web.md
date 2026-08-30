@@ -122,7 +122,7 @@ function FixedBottomCTA() {
 | [usePageVisibility](/zh-Hans/hooks/usePageVisibility)   | 跟踪页面可见性状态           |
 | [useVisualViewport](/zh-Hans/hooks/useVisualViewport)   | 提供视觉视口的尺寸和偏移量   |
 
-## 路线图
+## 路线图 {#roadmap}
 
 移动端的屏幕很小，而这块小小的空间会带来数量惊人的 UI 难题。元素被软键盘遮住，安全区域因设备而异，用户实际看到的视口也常常和浏览器报告的不一样。这些都不是边缘情况，而是移动端开发每天都要面对的现实。
 
@@ -194,7 +194,7 @@ it('is safe on server side rendering', () => {
 - **被动事件监听器**：在适用的场景中使用 passive 监听器
 - **React transition**：对非紧急的更新使用 `startTransition`
 
-## 移动端专属准则
+## 移动端专属准则 {#mobile-specific-guidelines}
 
 ### 在真机上测试
 

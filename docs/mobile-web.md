@@ -122,7 +122,7 @@ function FixedBottomCTA() {
 | [usePageVisibility](/hooks/usePageVisibility)   | Tracks page visibility state                      |
 | [useVisualViewport](/hooks/useVisualViewport)   | Provides visual viewport dimensions and offset    |
 
-## Roadmap
+## Roadmap {#roadmap}
 
 Mobile screens are small, and that small space creates a surprising number of UI challenges. Elements get hidden behind on-screen keyboards, safe areas vary by device, and the viewport the user actually sees often differs from what the browser reports. These are not edge cases — they are everyday realities of mobile development.
 
@@ -194,7 +194,7 @@ Mobile environments require special attention to performance:
 - **Passive event listeners**: Use passive listeners where applicable
 - **React transitions**: Leverage `startTransition` for non-urgent updates
 
-## Mobile-Specific Guidelines
+## Mobile-Specific Guidelines {#mobile-specific-guidelines}
 
 ### Testing on Real Devices
 

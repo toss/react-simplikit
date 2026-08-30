@@ -402,3 +402,20 @@ yarn run scaffold getButton --t u // 유틸 생성
 ```
 
 :::
+
+## 기여 워크플로우
+
+스캐폴딩 → 구현 → 테스트 → 문서화 → 리뷰 → Changeset → 병합
+
+### 커버리지 체크리스트
+
+- [ ] 모든 if/else 브랜치
+- [ ] 모든 switch case
+- [ ] 모든 early return
+- [ ] cleanup 함수 (useEffect return)
+
+### 구현 규칙
+
+- named export만 사용
+- TypeScript 추론 최대화
+- SSR 안전 패턴 적용

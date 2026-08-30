@@ -122,7 +122,7 @@ function FixedBottomCTA() {
 | [usePageVisibility](/ja/hooks/usePageVisibility)   | ページの可視性の状態を追跡します                               |
 | [useVisualViewport](/ja/hooks/useVisualViewport)   | ビジュアルビューポートのサイズとオフセットを提供します         |
 
-## ロードマップ
+## ロードマップ {#roadmap}
 
 モバイル画面は小さく、その小さな空間が驚くほど多くの UI 課題を生み出します。要素がオンスクリーンキーボードに隠れたり、セーフエリアが端末によって異なったり、ユーザーが実際に見ているビューポートがブラウザの報告する値と食い違ったりします。これらはエッジケースではなく、モバイル開発における日常的な現実です。
 
@@ -194,7 +194,7 @@ it('is safe on server side rendering', () => {
 - **パッシブイベントリスナー**: 適用可能な場合はパッシブリスナーを使用します
 - **React トランジション**: 緊急でない更新には `startTransition` を活用します
 
-## モバイル特有のガイドライン
+## モバイル特有のガイドライン {#mobile-specific-guidelines}
 
 ### 実機でのテスト
 

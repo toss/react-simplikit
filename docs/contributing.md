@@ -411,3 +411,20 @@ yarn run scaffold getButton --t u // Create util
 ```
 
 :::
+
+## Contribution Workflow
+
+Scaffold → Implementation → Testing → Documentation → Review → Changeset → Merge
+
+### Coverage Checklist
+
+- [ ] All if/else branches
+- [ ] All switch cases
+- [ ] All early returns
+- [ ] Cleanup functions (useEffect return)
+
+### Implementation Rules
+
+- Named exports only
+- Maximize TypeScript inference
+- Apply the SSR safety pattern

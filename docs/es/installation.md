@@ -36,7 +36,7 @@ bun add react-simplikit
 Importa los Hooks directamente desde el paquete:
 
 ```tsx
-import { useKeyboardHeight, useAvoidKeyboard } from 'react-simplikit';
+import { useToggle } from 'react-simplikit';
 ```
 
 Todos los Hooks admiten tree shaking, así que en tu bundle solo se incluye lo que realmente usas.

@@ -71,8 +71,8 @@ export async function generateReferenceIndex(): Promise<void> {
     const localeSegment = definition.path === '' ? '' : `${definition.path}/`;
     const urlPrefix = definition.path === '' ? '' : `/${definition.path}`;
     const strings = definition.themeStrings;
-    // The page is generated and gitignored, so an edit link would 404.
-    const sections: string[] = ['---', 'editLink: false', '---', '', `# ${strings.referenceLabel}`];
+    let untranslatedCount = 0;
+    const sections: string[] = [`# ${strings.referenceLabel}`];
 
     for (const group of GROUPS) {
       const items: string[] = [];
@@ -90,8 +90,12 @@ export async function generateReferenceIndex(): Promise<void> {
           const name = entry.name;
           const localized = path.join(base, name, definition.path, `${name}.md`);
           const english = path.join(base, name, `${name}.md`);
-          const description =
-            (definition.path === '' ? undefined : await firstSentence(localized)) ?? (await firstSentence(english));
+          const localizedDescription = definition.path === '' ? undefined : await firstSentence(localized);
+          const description = localizedDescription ?? (await firstSentence(english));
+
+          if (definition.path !== '' && localizedDescription === undefined) {
+            untranslatedCount += 1;
+          }
 
           items.push(
             `- [${name}](${urlPrefix}/${category}/${name})${description === undefined ? '' : ` — ${description}`}`
@@ -103,8 +107,18 @@ export async function generateReferenceIndex(): Promise<void> {
       sections.push(`## ${strings[group.labelKey]}`, items.join('\n'));
     }
 
+    // Descriptions fall back to the English documents whenever a locale has none,
+    // so the page carries the same untranslated banner an individual fallback gets.
+    const frontmatter = ['---', 'editLink: false'];
+
+    if (definition.path !== '' && untranslatedCount > 0) {
+      frontmatter.push('untranslated: true', 'sourceLocale: en');
+    }
+
+    frontmatter.push('---');
+
     const target = path.join(root, 'docs', localeSegment, 'reference.md');
     await fs.mkdir(path.dirname(target), { recursive: true });
-    await fs.writeFile(target, `${sections.join('\n\n')}\n`);
+    await fs.writeFile(target, `${frontmatter.join('\n')}\n\n${sections.join('\n\n')}\n`);
   }
 }

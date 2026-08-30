@@ -36,7 +36,7 @@ bun add react-simplikit
 패키지에서 직접 훅을 import하세요:
 
 ```tsx
-import { useKeyboardHeight, useAvoidKeyboard } from 'react-simplikit';
+import { useToggle } from 'react-simplikit';
 ```
 
 모든 훅은 트리 쉐이킹이 가능하므로, 번들에는 사용하는 것만 포함돼요.

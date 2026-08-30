@@ -122,7 +122,7 @@ function FixedBottomCTA() {
 | [usePageVisibility](/ko/hooks/usePageVisibility)   | 페이지 가시성 상태를 추적해요               |
 | [useVisualViewport](/ko/hooks/useVisualViewport)   | Visual Viewport 크기와 오프셋을 제공해요    |
 
-## 앞으로의 방향
+## 앞으로의 방향 {#roadmap}
 
 모바일 화면은 작고 그 작은 공간 안에서 UI가 의도대로 보이지 않는 경우가 많아요. 키보드에 요소가 가려지고, 기기마다 다른 SafeArea가 다르고, 브라우저가 보여주는 viewport와 사용자가 실제로 보는 영역의 차이가 빈번하게 발생해요.
 
@@ -194,7 +194,7 @@ it('is safe on server side rendering', () => {
 - **패시브 이벤트 리스너**: 해당하는 경우 패시브 리스너 사용
 - **React 트랜지션**: 급하지 않은 업데이트에 `startTransition` 활용
 
-## 모바일 특화 가이드라인
+## 모바일 특화 가이드라인 {#mobile-specific-guidelines}
 
 ### 실제 기기 테스트
 

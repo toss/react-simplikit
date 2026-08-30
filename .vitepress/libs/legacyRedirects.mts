@@ -13,11 +13,21 @@ type RedirectPair = { from: string; to: string };
  * drop survive. A target that already carries a fragment keeps it unless the
  * incoming URL has one of its own, and the query always lands before the hash.
  */
+/**
+ * Headings that moved into a differently named section during the guide merge.
+ * Without this the incoming hash wins and lands on an id that no longer exists.
+ */
+const RETIRED_ANCHORS: Record<string, string> = {
+  '#core-principles': '#mobile-specific-principles',
+};
+
 function REDIRECT_SCRIPT(target: string): string {
   const [pathname, fragment] = target.split('#');
+  const fallback = fragment === undefined ? '' : `#${fragment}`;
   return (
+    `var r=${JSON.stringify(RETIRED_ANCHORS)};` +
     `location.replace(${JSON.stringify(pathname)} + location.search + ` +
-    `(location.hash || ${JSON.stringify(fragment === undefined ? '' : `#${fragment}`)}))`
+    `(r[location.hash] || location.hash || ${JSON.stringify(fallback)}))`
   );
 }
 
@@ -33,10 +43,10 @@ const GUIDE_LEGACY: RedirectPair[] = [
   { from: 'core/design-principles.html', to: 'design-principles.html' },
   { from: 'core/contributing.html', to: 'contributing.html' },
   { from: 'mobile/intro.html', to: 'mobile-web.html' },
-  { from: 'mobile/roadmap.html', to: 'mobile-web.html' },
+  { from: 'mobile/roadmap.html', to: 'mobile-web.html#roadmap' },
   { from: 'mobile/installation.html', to: 'installation.html' },
   { from: 'mobile/design-principles.html', to: 'mobile-web.html#mobile-specific-principles' },
-  { from: 'mobile/contributing.html', to: 'contributing.html' },
+  { from: 'mobile/contributing.html', to: 'mobile-web.html#mobile-specific-guidelines' },
 ];
 
 /**

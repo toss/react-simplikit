@@ -411,3 +411,20 @@ yarn run scaffold getButton --t u // 创建工具函数
 ```
 
 :::
+
+## 贡献流程
+
+脚手架 → 实现 → 测试 → 文档 → 评审 → Changeset → 合并
+
+### 覆盖率检查清单
+
+- [ ] 所有 if/else 分支
+- [ ] 所有 switch case
+- [ ] 所有提前 return
+- [ ] 清理函数（useEffect 返回的函数）
+
+### 实现规范
+
+- 只使用具名导出
+- 最大限度地利用 TypeScript 的类型推断
+- 应用 SSR 安全模式

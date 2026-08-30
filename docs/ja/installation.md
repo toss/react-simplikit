@@ -36,7 +36,7 @@ bun add react-simplikit
 パッケージから直接フックを import してください。
 
 ```tsx
-import { useKeyboardHeight, useAvoidKeyboard } from 'react-simplikit';
+import { useToggle } from 'react-simplikit';
 ```
 
 すべてのフックはツリーシェイキング対応なので、実際に使用するものだけがバンドルに含まれます。

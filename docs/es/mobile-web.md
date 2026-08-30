@@ -122,7 +122,7 @@ function FixedBottomCTA() {
 | [usePageVisibility](/es/hooks/usePageVisibility)   | Sigue el estado de visibilidad de la página                       |
 | [useVisualViewport](/es/hooks/useVisualViewport)   | Proporciona las dimensiones y la posición del viewport visual     |
 
-## Hoja de ruta
+## Hoja de ruta {#roadmap}
 
 Las pantallas de los móviles son pequeñas, y ese espacio reducido genera una cantidad sorprendente de retos de interfaz. Los elementos quedan ocultos tras el teclado en pantalla, las áreas seguras varían según el dispositivo y el viewport que el usuario ve de verdad suele diferir del que informa el navegador. No son casos límite: son la realidad diaria del desarrollo para móvil.
 
@@ -194,7 +194,7 @@ Los entornos móviles exigen una atención especial al rendimiento:
 - **Detectores de eventos pasivos**: usa detectores pasivos cuando sea aplicable
 - **Transiciones de React**: aprovecha `startTransition` para las actualizaciones no urgentes
 
-## Directrices específicas para móvil
+## Directrices específicas para móvil {#mobile-specific-guidelines}
 
 ### Probar en dispositivos reales
 

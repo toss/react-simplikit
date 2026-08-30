@@ -411,3 +411,20 @@ yarn run scaffold getButton --t u // Crear una utilidad
 ```
 
 :::
+
+## Flujo de contribución
+
+Generación de esqueletos → Implementación → Pruebas → Documentación → Revisión → Changeset → Fusión
+
+### Lista de comprobación de la cobertura
+
+- [ ] Todas las ramas if/else
+- [ ] Todos los casos de switch
+- [ ] Todos los returns anticipados
+- [ ] Las funciones de limpieza (el return de useEffect)
+
+### Reglas de implementación
+
+- Solo exportaciones con nombre
+- Aprovecha al máximo la inferencia de TypeScript
+- Aplica el patrón de seguridad para SSR

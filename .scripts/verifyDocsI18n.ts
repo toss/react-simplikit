@@ -52,7 +52,7 @@ assert.equal(generatedRewrites['generated-locales/docs/zh-Hans/index.md'], 'zh-H
 assert.equal(generatedRewrites['generated-locales/docs/es/index.md'], 'es/index.md');
 assert.equal(
   packageJson.scripts['docs:prepare'],
-  'tsx .scripts/index.ts prepare-localized-fallbacks && tsx .scripts/index.ts generate-reference-index'
+  'tsx .scripts/index.ts generate-reference-index && tsx .scripts/index.ts prepare-localized-fallbacks'
 );
 assert.equal(packageJson.scripts['docs:dev'], 'yarn docs:prepare && vitepress dev');
 assert.equal(packageJson.scripts['docs:build'], 'yarn docs:prepare && vitepress build');
@@ -122,6 +122,19 @@ try {
     'the legacy redirect set must cover every pre-flattening URL across all locales'
   );
 
+  // Spot-check the shape itself: a renamed `from` would keep the count intact and
+  // still write a file, so the count alone cannot catch it.
+  const stubPaths = new Set(stubs.map(stub => stub.from));
+  for (const expected of [
+    'core/hooks/useToggle.html',
+    'mobile/hooks/useKeyboardHeight.html',
+    'mobile/roadmap.html',
+    'ko/core/utils/mergeRefs.html',
+    'ja/mobile/utils/isServer.html',
+  ]) {
+    assert.equal(stubPaths.has(expected), true, `the legacy URL ${expected} must keep a redirect`);
+  }
+
   for (const { from, to } of stubs) {
     const stub = await fs.readFile(path.join(buildOutputDirectory, from), 'utf8');
     assert.match(stub, /http-equiv="refresh"/, `${from} must redirect`);
@@ -133,7 +146,12 @@ try {
   // pointing at a page that does not exist.
   for (const locale of ['', ...localeDirectories]) {
     const referencePage = await fs.readFile(path.join(buildOutputDirectory, locale, 'reference.html'), 'utf8');
-    assert.match(referencePage, /\/hooks\/useToggle/, `${locale || 'root'} reference index must list the exports`);
+    const renderedLinks = [...referencePage.matchAll(/<li><a href="[^"]*\/(?:hooks|components|utils)\/[^"]+"/g)];
+    assert.equal(
+      renderedLinks.length,
+      referenceItemCount,
+      `${locale || 'root'} reference index must render one link per export, not just carry them in the sidebar payload`
+    );
   }
 
   const fallbackPage = await fs.readFile(
