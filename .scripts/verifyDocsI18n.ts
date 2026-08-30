@@ -6,7 +6,7 @@ import { DefaultTheme } from 'vitepress';
 
 import { buildLocaleConfig } from '../.vitepress/libs/buildLocaleConfig.mts';
 import { getSidebarItems } from '../.vitepress/libs/getSidebarItems.mts';
-import { collectLegacyRedirects } from '../.vitepress/libs/legacyRedirects.mts';
+import { collectLegacyRedirects, RETIRED_ANCHORS } from '../.vitepress/libs/legacyRedirects.mts';
 import {
   generatedLocalesDirectory,
   generatedRewrites,
@@ -122,6 +122,19 @@ try {
     'the legacy redirect set must cover every pre-flattening URL across all locales'
   );
 
+  // Sections that moved to a different page than their stub's target are redirected
+  // by the stub script instead, so their destinations need the same anchor check.
+  for (const [anchor, destination] of Object.entries(RETIRED_ANCHORS)) {
+    const [file, id] = destination.replace(/^\//, '').split('#');
+    // VitePress emits NFD ids for some locales, so both sides are normalized.
+    const page = (await fs.readFile(path.join(buildOutputDirectory, file), 'utf8')).normalize('NFC');
+    assert.equal(
+      page.includes(`id="${id.normalize('NFC')}"`),
+      true,
+      `${anchor} must land on an existing anchor in ${file}`
+    );
+  }
+
   // Spot-check the shape itself: a renamed `from` would keep the count intact and
   // still write a file, so the count alone cannot catch it.
   const stubPaths = new Set(stubs.map(stub => stub.from));
@@ -139,7 +152,19 @@ try {
     const stub = await fs.readFile(path.join(buildOutputDirectory, from), 'utf8');
     assert.match(stub, /http-equiv="refresh"/, `${from} must redirect`);
     assert.equal(stub.includes('noindex'), false, `${from} must stay indexable so canonical can consolidate signals`);
-    await fs.access(path.join(buildOutputDirectory, to.split('#')[0]));
+    const [targetFile, targetAnchor] = to.split('#');
+    await fs.access(path.join(buildOutputDirectory, targetFile));
+
+    // The merge strategy hangs on explicit {#...} pins in the merged pages: drop one
+    // and the id silently becomes the translated heading slug, with no other signal.
+    if (targetAnchor !== undefined) {
+      const targetPage = (await fs.readFile(path.join(buildOutputDirectory, targetFile), 'utf8')).normalize('NFC');
+      assert.equal(
+        targetPage.includes(`id="${targetAnchor.normalize('NFC')}"`),
+        true,
+        `${from} points at a missing anchor`
+      );
+    }
   }
 
   // The reference index is generated, so a broken generator would leave the nav

@@ -9,25 +9,34 @@ const SITE_ORIGIN = 'https://react-simplikit.slash.page';
 type RedirectPair = { from: string; to: string };
 
 /**
- * Rebuilds the URL from its parts so the query and fragment a meta refresh would
- * drop survive. A target that already carries a fragment keeps it unless the
- * incoming URL has one of its own, and the query always lands before the hash.
+ * Sections that the guide merge moved to a *different page* than their stub's
+ * target. The stub only knows one destination, so these incoming fragments carry
+ * their own path. Keys are the ids the old pages published, which are localized.
  */
-/**
- * Headings that moved into a differently named section during the guide merge.
- * Without this the incoming hash wins and lands on an id that no longer exists.
- */
-const RETIRED_ANCHORS: Record<string, string> = {
-  '#core-principles': '#mobile-specific-principles',
+export const RETIRED_ANCHORS: Record<string, string> = {
+  // The old mobile design-principles page opened with a verbatim copy of the core
+  // principles; those live on the merged design-principles page, not mobile-web.
+  '#core-principles': '/design-principles.html#design-principles',
+  '#핵심-원칙': '/ko/design-principles.html#설계-원칙',
+  '#コア原則': '/ja/design-principles.html#設計原則',
+  '#核心原则': '/zh-Hans/design-principles.html#设计原则',
+  '#principios-fundamentales': '/es/design-principles.html#principios-de-diseno',
 };
 
+/**
+ * Rebuilds the URL from its parts so the query and fragment a meta refresh would
+ * drop survive. A retired anchor overrides the whole destination, since the
+ * section it names now lives on another page; otherwise the incoming fragment
+ * wins over the stub's own default.
+ */
 function REDIRECT_SCRIPT(target: string): string {
   const [pathname, fragment] = target.split('#');
   const fallback = fragment === undefined ? '' : `#${fragment}`;
   return (
-    `var r=${JSON.stringify(RETIRED_ANCHORS)};` +
-    `location.replace(${JSON.stringify(pathname)} + location.search + ` +
-    `(r[location.hash] || location.hash || ${JSON.stringify(fallback)}))`
+    `var r=${JSON.stringify(RETIRED_ANCHORS)},h=decodeURIComponent(location.hash).normalize('NFC'),` +
+    `t=r[h],p=t?t.split('#')[0]:${JSON.stringify(pathname)},` +
+    `f=t?'#'+t.split('#')[1]:(h||${JSON.stringify(fallback)});` +
+    `location.replace(p + location.search + f)`
   );
 }
 
