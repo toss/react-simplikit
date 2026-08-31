@@ -24,7 +24,28 @@ function useIntersectionObserver(
   required
   name="options"
   type="IntersectionObserverInit"
-  description="<code>IntersectionObserver</code>에 대한 옵션이에요. <code>root</code>, <code>rootMargin</code>, <code>threshold</code>와 같은 값을 지정할 수 있어요."
+  description="<code>IntersectionObserver</code>에 대한 옵션이에요."
+  :nested="[
+    {
+      name: 'options.root',
+      type: 'Element | Document | null',
+      required: false,
+      description: '대상의 가시성을 판단할 때 뷰포트로 사용할 요소예요.',
+    },
+    {
+      name: 'options.rootMargin',
+      type: 'string',
+      required: false,
+      description: 'root 주위의 마진이에요.',
+    },
+    {
+      name: 'options.threshold',
+      type: 'number | number[]',
+      required: false,
+      description:
+        '대상이 몇 퍼센트 보일 때 콜백을 실행할지 나타내는 숫자 하나 또는 숫자 배열이에요.',
+    },
+  ]"
 />
 
 ### 반환 값

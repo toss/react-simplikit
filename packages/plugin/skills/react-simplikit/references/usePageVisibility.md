@@ -1,6 +1,8 @@
 # usePageVisibility
 
-`usePageVisibility` is a React hook that detects page visibility changes. It monitors when the user switches tabs or minimizes the browser using the Page Visibility API. Useful for pausing/resuming animations, videos, or background tasks. **SSR Behavior**: Returns `{ isVisible: true, visibilityState: 'visible' }` during server-side rendering.
+`usePageVisibility` is a React hook that detects page visibility changes. It monitors when the user switches tabs or minimizes the browser using the Page Visibility API. Useful for pausing/resuming animations, videos, or background tasks.
+
+**SSR Behavior**: Returns `{ isVisible: true, visibilityState: 'visible' }` during server-side rendering.
 
 ## Interface
 
@@ -44,5 +46,18 @@ function VideoPlayer() {
   }, [isVisible]);
 
   return <video ref={videoRef} src="video.mp4" />;
+}
+
+function Analytics() {
+  const { isVisible, visibilityState } = usePageVisibility();
+
+  useEffect(() => {
+    if (visibilityState === 'hidden') {
+      // Track when user leaves the page
+      analytics.track('page_hidden');
+    }
+  }, [visibilityState]);
+
+  return null;
 }
 ```

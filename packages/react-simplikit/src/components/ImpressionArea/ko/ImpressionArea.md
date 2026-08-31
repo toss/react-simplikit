@@ -5,14 +5,14 @@
 ## 인터페이스
 
 ```ts
-function ImpressionArea(
-  as: ElementType = 'div',
+function ImpressionArea<T extends ElementType>(
+  as: T = 'div',
   rootMargin: string,
   areaThreshold: number,
   timeThreshold: number,
   onImpressionStart: () => void,
   onImpressionEnd: () => void,
-  ref: Ref<HTMLElement>,
+  ref: Ref<Element<T>>,
   children: React.ReactNode,
   className: string
 ): JSX.Element;
@@ -22,7 +22,7 @@ function ImpressionArea(
 
 <Interface
   name="as"
-  type="ElementType"
+  type="T"
   description="렌더링할 HTML 태그예요. 기본값은 <code>div</code>이에요."
 />
 
@@ -58,7 +58,7 @@ function ImpressionArea(
 
 <Interface
   name="ref"
-  type="Ref<HTMLElement>"
+  type="Ref<Element<T>>"
   description="요소에 대한 참조예요."
 />
 

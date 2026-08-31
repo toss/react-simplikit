@@ -39,4 +39,9 @@ if (isIOS()) {
   // iOS에만 해당되는 코드
   enableIOSOptimizations();
 }
+
+// 사용자 에이전트를 직접 넘기는 경우
+const isIOSDevice = isIOS(
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)'
+);
 ```

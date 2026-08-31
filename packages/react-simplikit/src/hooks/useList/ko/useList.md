@@ -5,51 +5,85 @@
 ## 인터페이스
 
 ```ts
-function useList<T>(initialState?: T[]): UseListReturn<T>;
+function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ```
 
 ### 파라미터
 
-<Interface
-  name="initialState"
-  type="T[]"
-  description="초기 배열 상태예요. 기본값은 빈 배열이에요."
-/>
+<Interface name="initialState" type="T[]" description="초기 배열 상태예요." />
 
 ### 반환 값
 
-튜플 `[list, actions]`를 반환해요.
-
-<Interface name="list" type="ReadonlyArray<T>" description="현재 배열 상태예요." />
-
-<Interface name="actions.push" type="(value: T) => void" description="리스트의 끝에 값을 추가해요." />
-<Interface name="actions.insertAt" type="(index: number, value: T) => void" description="지정된 인덱스에 값을 삽입해요." />
-<Interface name="actions.updateAt" type="(index: number, value: T) => void" description="지정된 인덱스의 값을 업데이트해요." />
-<Interface name="actions.removeAt" type="(index: number) => void" description="지정된 인덱스의 값을 제거해요." />
-<Interface name="actions.setAll" type="(values: T[]) => void" description="전체 리스트를 새 배열로 교체해요." />
-<Interface name="actions.reset" type="() => void" description="리스트를 초기 상태로 되돌려요." />
+<Interface
+  name=""
+  type="UseListReturn<T>"
+  description="배열 상태와 이를 조작하는 액션을 담은 튜플이에요."
+  :nested="[
+    {
+      name: 'list',
+      type: 'ReadonlyArray<T>',
+      required: false,
+      description: '현재 배열 상태예요.',
+    },
+    {
+      name: 'actions.push',
+      type: '(value: T) => void',
+      required: false,
+      description: '리스트의 끝에 값을 추가해요.',
+    },
+    {
+      name: 'actions.insertAt',
+      type: '(index: number, value: T) => void',
+      required: false,
+      description: '지정된 인덱스에 값을 삽입해요.',
+    },
+    {
+      name: 'actions.updateAt',
+      type: '(index: number, value: T) => void',
+      required: false,
+      description: '지정된 인덱스의 값을 업데이트해요.',
+    },
+    {
+      name: 'actions.removeAt',
+      type: '(index: number) => void',
+      required: false,
+      description: '지정된 인덱스의 값을 제거해요.',
+    },
+    {
+      name: 'actions.setAll',
+      type: '(values: T[]) => void',
+      required: false,
+      description: '전체 리스트를 새 배열로 교체해요.',
+    },
+    {
+      name: 'actions.reset',
+      type: '() => void',
+      required: false,
+      description: '리스트를 초기 상태로 되돌려요.',
+    },
+  ]"
+/>
 
 ## 예시
 
 ```tsx
-import { useList } from 'react-simplikit';
+const [list, actions] = useList<string>(['apple', 'banana']);
 
-function TodoList() {
-  const [todos, actions] = useList<string>(['Buy milk', 'Walk the dog']);
+// 항목 추가하기
+actions.push('cherry');
 
-  return (
-    <div>
-      <ul>
-        {todos.map((todo, index) => (
-          <li key={index}>
-            {todo}
-            <button onClick={() => actions.removeAt(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      <button onClick={() => actions.push('New todo')}>Add</button>
-      <button onClick={() => actions.reset()}>Reset</button>
-    </div>
-  );
-}
+// 지정한 인덱스에 삽입하기
+actions.insertAt(1, 'grape');
+
+// 지정한 인덱스의 값 바꾸기
+actions.updateAt(0, 'orange');
+
+// 지정한 인덱스의 값 제거하기
+actions.removeAt(2);
+
+// 전체 교체하기
+actions.setAll(['kiwi', 'mango']);
+
+// 초기 상태로 되돌리기
+actions.reset();
 ```

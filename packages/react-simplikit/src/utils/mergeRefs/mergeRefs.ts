@@ -7,7 +7,7 @@ import { RefCallback, RefObject } from 'react';
  *
  * @template T - The type of target to be referenced.
  *
- * @param {Array<RefObject<T> | RefCallback<T> | null | undefined>} refs - An array of refs to be merged. Each ref can be either a RefObject or RefCallback.
+ * @param {...Array<RefObject<T> | RefCallback<T> | null | undefined>} refs - An array of refs to be merged. Each ref can be either a RefObject or RefCallback.
  *
  * @returns {RefCallback<T>} A single ref callback that updates all provided refs.
  *

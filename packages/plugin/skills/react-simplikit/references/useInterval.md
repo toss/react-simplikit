@@ -29,12 +29,14 @@ function useInterval(
     {
       name: 'options.delay',
       type: 'number',
+      required: true,
       description:
         'The interval duration in milliseconds. If <code>null</code>, the interval will not run.',
     },
     {
       name: 'options.immediate',
       type: 'boolean',
+      required: false,
       defaultValue: 'false',
       description:
         'If <code>true</code>, executes immediately before starting the interval.',
@@ -42,6 +44,7 @@ function useInterval(
     {
       name: 'options.enabled',
       type: 'boolean',
+      required: false,
       defaultValue: 'true',
       description: 'If <code>false</code>, the interval will not run.',
     },

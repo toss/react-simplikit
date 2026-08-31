@@ -1,6 +1,13 @@
 # useNetworkStatus
 
-`useNetworkStatus` is a React hook that provides access to the Network Information API. It provides raw network connection data. Returns undefined for all properties if the API is not supported (e.g., Safari, Firefox). **Browser Support**: - Chrome/Edge (Android): Full support - Chrome/Edge (Desktop): Partial support (effectiveType, downlink, rtt, saveData) - Firefox: Not supported - Safari: Not supported
+`useNetworkStatus` is a React hook that provides access to the Network Information API. It provides raw network connection data. Returns undefined for all properties if the API is not supported (e.g., Safari, Firefox).
+
+**Browser Support**:
+
+- Chrome/Edge (Android): Full support
+- Chrome/Edge (Desktop): Partial support (effectiveType, downlink, rtt, saveData)
+- Firefox: Not supported
+- Safari: Not supported
 
 ## Interface
 
@@ -39,5 +46,14 @@ function AdaptiveImage() {
   return (
     <img src={useHighQuality ? 'high-res.jpg' : 'low-res.jpg'} alt="Content" />
   );
+}
+
+function VideoPlayer() {
+  const { type, downlink } = useNetworkStatus();
+
+  // Custom logic: only autoplay on wifi with good bandwidth
+  const shouldAutoplay = type === 'wifi' && (downlink ?? 0) > 5;
+
+  return <video src="video.mp4" autoPlay={shouldAutoplay} />;
 }
 ```

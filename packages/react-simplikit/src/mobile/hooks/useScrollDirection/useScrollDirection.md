@@ -32,7 +32,7 @@ function useScrollDirection(
 <Interface
   name=""
   type="ScrollDirectionState"
-  description="direction state: <code>direction</code> (<code>\'up\' | \'down\' | null</code>) and <code>position</code> (px)."
+  description="direction state: <code>direction</code> (<code>'up' | 'down' | null</code>) and <code>position</code> (px)."
 />
 
 ## Example

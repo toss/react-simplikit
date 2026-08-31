@@ -28,11 +28,13 @@ function useToggle(
     {
       name: 'state',
       type: 'boolean',
+      required: false,
       description: 'The current state value.',
     },
     {
       name: 'toggle',
       type: '() => void',
+      required: false,
       description: 'A function to toggle the state.',
     },
   ]"

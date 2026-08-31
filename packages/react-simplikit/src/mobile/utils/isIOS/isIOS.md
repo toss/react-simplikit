@@ -41,4 +41,9 @@ if (isIOS()) {
   // iOS-specific code
   enableIOSOptimizations();
 }
+
+// With custom user agent
+const isIOSDevice = isIOS(
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)'
+);
 ```
