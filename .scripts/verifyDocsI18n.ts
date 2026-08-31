@@ -52,7 +52,7 @@ assert.equal(
   'vitest run --dir .scripts && tsx .scripts/verifyDocsI18n.ts && tsx .scripts/verifyDocs.ts'
 );
 assert.equal(
-  integrationWorkflow.includes("command: ['format', 'lint', 'type', 'docs', 'skill']"),
+  integrationWorkflow.includes("command: ['format', 'lint', 'type', 'docs', 'skill', 'codemod']"),
   true,
   'the integration workflow must run test:docs and test:skill'
 );

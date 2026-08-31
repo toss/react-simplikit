@@ -23,6 +23,7 @@ export default defineConfig({
   srcExclude: [
     '**/node_modules/**',
     '**/README*.md',
+    '**/SKILL.md',
     '**/CHANGELOG.md',
     'CONTRIBUTING.md',
     'CLAUDE.md',
@@ -58,6 +59,7 @@ Guidelines for AI agents:
         ignoreFiles: [
           '**/node_modules/**',
           '**/README*.md',
+          '**/SKILL.md',
           '**/CHANGELOG.md',
           'CONTRIBUTING.md',
           'CLAUDE.md',

@@ -39,6 +39,7 @@
     "test:type": "yarn workspaces foreach -Ap run typecheck",
     "test:docs": "vitest run --dir .scripts && tsx .scripts/verifyDocsI18n.ts && tsx .scripts/verifyDocs.ts",
     "test:skill": "tsx .scripts/verifySkill.ts",
+    "test:codemod": "yarn workspace react-simplikit-codemod run test:e2e",
     "test:spec": "yarn workspaces foreach -Ap run test",
     "test:compiled": "yarn workspaces foreach -Ap run test:compiled",
     "test:coverage": "yarn workspaces foreach -Ap run test:coverage",
