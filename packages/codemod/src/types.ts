@@ -15,3 +15,11 @@ export type Splice = {
   end: number;
   text: string;
 };
+
+export type PackageJsonChange = {
+  field: string;
+  removed: string;
+  // `undefined` when the manifest already depended on the root package, so the
+  // codemod only removed the old entry.
+  added: string | undefined;
+};
