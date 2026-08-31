@@ -23,3 +23,22 @@ export type PackageJsonChange = {
   // codemod only removed the old entry.
   added: string | undefined;
 };
+
+export type FileResult = {
+  file: string;
+  // Source specifier edits. Empty for package.json files.
+  changes: SourceChange[];
+  // Dependency field edits. Empty for source files.
+  dependencies: PackageJsonChange[];
+};
+
+export type ManualNote = {
+  file: string;
+  reason: string;
+};
+
+export type RunResult = {
+  scanned: number;
+  changed: FileResult[];
+  manual: ManualNote[];
+};
