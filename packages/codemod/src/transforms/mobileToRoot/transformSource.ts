@@ -4,6 +4,7 @@ import { MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../../constants.ts';
 import type { SourceChange, Splice, TransformSourceResult } from '../../types.ts';
 
 import { collectSpecifiers, lineOf, parseSource } from './collectSpecifiers.ts';
+import { buildMergeSplices } from './mergeImports.ts';
 
 function rewriteSpecifier(sourceFile: ts.SourceFile, literal: ts.StringLiteralLike): Splice {
   const start = literal.getStart(sourceFile);
@@ -35,10 +36,18 @@ export function transformSource(code: string, fileName: string): TransformSource
     return { code, changes: [] };
   }
 
-  const splices: Splice[] = [];
-  const changes: SourceChange[] = [];
+  const merge = buildMergeSplices(sourceFile, hits);
+
+  const splices: Splice[] = [...merge.splices];
+  const changes: SourceChange[] = [...merge.changes];
 
   for (const hit of hits) {
+    // A merged declaration is deleted wholesale — rewriting its specifier too would
+    // produce two splices overlapping the same range.
+    if (hit.declaration !== undefined && merge.mergedDeclarations.has(hit.declaration)) {
+      continue;
+    }
+
     splices.push(rewriteSpecifier(sourceFile, hit.literal));
     changes.push({ line: lineOf(sourceFile, hit.literal.getStart(sourceFile)), kind: hit.kind });
   }

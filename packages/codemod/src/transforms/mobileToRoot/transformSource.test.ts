@@ -76,3 +76,154 @@ describe('transformSource', () => {
     expect(result.changes).toEqual([]);
   });
 });
+
+describe('transformSource — merging with an existing react-simplikit import', () => {
+  it('folds the mobile bindings into the existing import and drops the line', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `import { isIOS, useKeyboardHeight } from '@react-simplikit/mobile';`,
+      ``,
+      `export const value = 1;`,
+      ``,
+    ].join('\n');
+
+    const result = transformSource(input, 'a.ts');
+
+    expect(result.code).toBe(
+      [
+        `import { useToggle, isIOS, useKeyboardHeight } from 'react-simplikit';`,
+        ``,
+        `export const value = 1;`,
+        ``,
+      ].join('\n')
+    );
+    expect(result.changes).toEqual([{ line: 2, kind: 'merge' }]);
+  });
+
+  it('preserves aliases and inline type modifiers when merging', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `import { isIOS as isApple, type SafeAreaInset } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import { useToggle, isIOS as isApple, type SafeAreaInset } from 'react-simplikit';`, ``].join('\n')
+    );
+  });
+
+  it('drops a binding the target already imports', () => {
+    const input = [
+      `import { isServer, useToggle } from 'react-simplikit';`,
+      `import { isIOS, isServer } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import { isServer, useToggle, isIOS } from 'react-simplikit';`, ``].join('\n')
+    );
+  });
+
+  it('merges several mobile imports into one target', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      `import { isAndroid } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import { useToggle, isIOS, isAndroid } from 'react-simplikit';`, ``].join('\n')
+    );
+  });
+
+  it('keeps a type-only import separate from a value import', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `import type { SafeAreaInset } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [
+        `import { useToggle } from 'react-simplikit';`,
+        `import type { SafeAreaInset } from 'react-simplikit';`,
+        ``,
+      ].join('\n')
+    );
+  });
+
+  it('merges a type-only import into a type-only target', () => {
+    const input = [
+      `import type { UseToggleReturn } from 'react-simplikit';`,
+      `import type { SafeAreaInset } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import type { UseToggleReturn, SafeAreaInset } from 'react-simplikit';`, ``].join('\n')
+    );
+  });
+
+  it('keeps a statement that shares its line with another statement', () => {
+    const input = `import { useToggle } from 'react-simplikit';\nimport { isIOS } from '@react-simplikit/mobile'; const x = 1;\n`;
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      `import { useToggle, isIOS } from 'react-simplikit';\n const x = 1;\n`
+    );
+  });
+
+  it('handles a merged import on the last line without a trailing newline', () => {
+    const input = `import { useToggle } from 'react-simplikit';\nimport { isIOS } from '@react-simplikit/mobile';`;
+
+    expect(transformSource(input, 'a.ts').code).toBe(`import { useToggle, isIOS } from 'react-simplikit';\n`);
+  });
+
+  it('handles a merged import on the very first line', () => {
+    const input = [
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      `import { useToggle } from 'react-simplikit';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import { useToggle, isIOS } from 'react-simplikit';`, ``].join('\n')
+    );
+  });
+
+  it('fills an empty named list on the target', () => {
+    const input = [`import {} from 'react-simplikit';`, `import { isIOS } from '@react-simplikit/mobile';`, ``].join(
+      '\n'
+    );
+
+    expect(transformSource(input, 'a.ts').code).toBe([`import {isIOS} from 'react-simplikit';`, ``].join('\n'));
+  });
+
+  it('leaves an import carrying a comment as its own statement rather than losing it', () => {
+    // Merging copies specifier text only, so folding this in would drop the note.
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `import {`,
+      `  useKeyboardHeight, // needed for the sheet offset`,
+      `} from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    const result = transformSource(input, 'a.ts');
+
+    expect(result.code).toBe(input.replace('@react-simplikit/mobile', 'react-simplikit'));
+    // Line 4 is where `} from '...'` sits — changes point at the edited specifier,
+    // not at the line the statement starts on.
+    expect(result.changes).toEqual([{ line: 4, kind: 'import' }]);
+  });
+
+  it('deletes the mobile import when every binding is already present', () => {
+    const input = [
+      `import { isIOS } from 'react-simplikit';`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe([`import { isIOS } from 'react-simplikit';`, ``].join('\n'));
+  });
+});
