@@ -1,5 +1,13 @@
-import { Command } from 'commander';
+import { Command, CommanderError } from 'commander';
 import { readFileSync } from 'node:fs';
+import process from 'node:process';
+
+import { formatHuman } from './report/formatHuman.ts';
+import { formatJson } from './report/formatJson.ts';
+import { collectFiles } from './runner/collectFiles.ts';
+import { runTransform } from './runner/runTransform.ts';
+import { MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME, TRANSFORM_NAME } from './constants.ts';
+import { describeError, UsageError } from './errors.ts';
 
 // Resolved against this file, never `process.cwd()`: the CLI runs from the user's
 // project directory. Read rather than imported, so no JSON module assertion is needed.
@@ -7,11 +15,95 @@ const { version } = JSON.parse(readFileSync(new URL('../package.json', import.me
   version: string;
 };
 
-const program = new Command();
+type TransformOptions = {
+  dryRun: boolean;
+  json: boolean;
+  packageJson: boolean;
+  ignore: string[];
+};
 
-program
-  .name('react-simplikit-codemod')
-  .description('Codemods for migrating react-simplikit entry points')
-  .version(version);
+function collectIgnore(value: string, previous: string[]): string[] {
+  return [...previous, value];
+}
 
-program.parse();
+async function runCommand(paths: string[], options: TransformOptions): Promise<void> {
+  const cwd = process.cwd();
+
+  const files = await collectFiles({
+    paths,
+    ignore: options.ignore,
+    includePackageJson: options.packageJson,
+    cwd,
+  });
+
+  const result = await runTransform({ files, cwd, dryRun: options.dryRun });
+  const report = options.json ? formatJson(result, options.dryRun) : formatHuman(result, options.dryRun);
+
+  process.stdout.write(`${report}\n`);
+}
+
+function buildProgram(): Command {
+  const program = new Command();
+
+  program
+    .name('react-simplikit-codemod')
+    .description('Codemods for migrating react-simplikit entry points')
+    .version(version)
+    .showHelpAfterError()
+    .exitOverride();
+
+  program
+    .command(TRANSFORM_NAME)
+    .description(`Rewrite ${MOBILE_PACKAGE_NAME} imports to ${ROOT_PACKAGE_NAME}`)
+    .argument('[paths...]', 'files or directories to transform', ['.'])
+    .option('--dry-run', 'report what would change without writing files', false)
+    .option('--json', 'print a machine-readable report to stdout', false)
+    .option('--debug', 'print the stack trace when the run fails', false)
+    .option('--no-package-json', 'leave package.json dependency fields alone')
+    .option('--ignore <glob>', 'extra glob to skip; repeat for more than one', collectIgnore, [])
+    .addHelpText(
+      'after',
+      [
+        '',
+        'Examples:',
+        '  $ npx react-simplikit-codemod mobile-to-root',
+        '  $ npx react-simplikit-codemod mobile-to-root src --dry-run',
+        '  $ npx react-simplikit-codemod mobile-to-root . --json',
+        '',
+        'Rewrites files in place and never prompts. Commit or stash first.',
+        '',
+        'Docs: https://react-simplikit.slash.page',
+        'Issues: https://github.com/toss/react-simplikit/issues',
+      ].join('\n')
+    )
+    // Subcommands do not inherit the program's exit callback.
+    .exitOverride()
+    .action(runCommand);
+
+  return program;
+}
+
+function reportFailure(error: unknown): number {
+  if (error instanceof CommanderError) {
+    // Commander already wrote help, the version, or a usage error. Explicit help and
+    // --version carry exit code 0; anything else is invalid usage.
+    return error.exitCode === 0 ? 0 : 2;
+  }
+
+  process.stderr.write(`${describeError(error)}\n`);
+
+  // Read argv directly: --debug lives on the subcommand, and by the time the error
+  // surfaces here there is no parsed option object left to read it from.
+  if (process.argv.includes('--debug') && error instanceof Error && error.stack !== undefined) {
+    process.stderr.write(`${error.stack}\n`);
+  }
+
+  return error instanceof UsageError ? 2 : 1;
+}
+
+try {
+  await buildProgram().parseAsync();
+} catch (error) {
+  // Assigning exitCode rather than calling process.exit() lets stdout flush first.
+  process.exitCode = reportFailure(error);
+}

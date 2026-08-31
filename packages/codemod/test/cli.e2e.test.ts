@@ -1,0 +1,206 @@
+import { execFile } from 'node:child_process';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
+
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+
+const execFileAsync = promisify(execFile);
+
+const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const binPath = path.join(packageRoot, 'dist', 'cli.mjs');
+const fixturesRoot = path.join(packageRoot, 'test', '__fixtures__');
+
+// `yarn node` walks up from cwd to find the Yarn project, and this repository has no
+// node_modules for a bare `node` to resolve `commander` from. So the fake consumer
+// projects have to live inside the repo, not in os.tmpdir().
+//
+// The same walk-up means a `package.json` sitting directly in cwd makes Yarn refuse to
+// run ("doesn't seem to be part of the project"), and it writes that refusal to stdout.
+// Manifest cases therefore nest their package.json one directory down, which Yarn never
+// looks at and the codemod finds by glob either way.
+const YARN = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
+
+type CliResult = { stdout: string; stderr: string; exitCode: number };
+
+async function runCli(args: readonly string[], cwd: string): Promise<CliResult> {
+  try {
+    const { stdout, stderr } = await execFileAsync(YARN, ['node', binPath, ...args], { cwd });
+
+    return { stdout, stderr, exitCode: 0 };
+  } catch (error) {
+    // execFile rejects on a non-zero exit; the payload still carries both streams.
+    const failure = error as { stdout?: string; stderr?: string; code?: number };
+
+    return { stdout: failure.stdout ?? '', stderr: failure.stderr ?? '', exitCode: failure.code ?? 1 };
+  }
+}
+
+let cwd = '';
+
+async function write(relative: string, contents: string): Promise<void> {
+  const absolute = path.join(cwd, relative);
+
+  await mkdir(path.dirname(absolute), { recursive: true });
+  await writeFile(absolute, contents, 'utf8');
+}
+
+beforeAll(async () => {
+  await mkdir(fixturesRoot, { recursive: true });
+});
+
+afterAll(async () => {
+  await rm(fixturesRoot, { force: true, recursive: true });
+});
+
+beforeEach(async () => {
+  cwd = await mkdtemp(path.join(fixturesRoot, 'case-'));
+});
+
+describe('react-simplikit-codemod', () => {
+  it('ships a shebang in the built entrypoint', async () => {
+    expect((await readFile(binPath, 'utf8')).startsWith('#!/usr/bin/env node')).toBe(true);
+  });
+
+  it('prints its version to stdout and exits 0', async () => {
+    const result = await runCli(['--version'], cwd);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout.trim()).toMatch(/^\d+\.\d+\.\d+/);
+    expect(result.stderr).toBe('');
+  });
+
+  it('prints help for the transform and exits 0', async () => {
+    const result = await runCli(['mobile-to-root', '--help'], cwd);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('--dry-run');
+    expect(result.stdout).toContain('--json');
+    expect(result.stdout).toContain('Examples:');
+  });
+
+  it('exits 2 for an unknown command, with the message on stderr', async () => {
+    const result = await runCli(['nope'], cwd);
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).not.toBe('');
+    expect(result.stdout).toBe('');
+  });
+
+  it('exits 2 when no command is given', async () => {
+    expect((await runCli([], cwd)).exitCode).toBe(2);
+  });
+
+  it('exits 2 for a path that does not exist and names it', async () => {
+    const result = await runCli(['mobile-to-root', 'missing-dir'], cwd);
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('Path not found: missing-dir');
+  });
+
+  it('rewrites imports and names the changed file on stdout', async () => {
+    await write('src/a.tsx', `import { useKeyboardHeight } from '@react-simplikit/mobile';\n`);
+
+    const result = await runCli(['mobile-to-root'], cwd);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain(path.join('src', 'a.tsx'));
+    expect(await readFile(path.join(cwd, 'src', 'a.tsx'), 'utf8')).toBe(
+      `import { useKeyboardHeight } from 'react-simplikit';\n`
+    );
+  });
+
+  it('leaves files alone with --dry-run', async () => {
+    const original = `import { isIOS } from '@react-simplikit/mobile';\n`;
+    await write('src/a.ts', original);
+
+    const result = await runCli(['mobile-to-root', '--dry-run'], cwd);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('Would change');
+    expect(await readFile(path.join(cwd, 'src', 'a.ts'), 'utf8')).toBe(original);
+  });
+
+  it('prints JSON and nothing else on stdout with --json', async () => {
+    await write('src/a.ts', `import { isIOS } from '@react-simplikit/mobile';\n`);
+
+    const result = await runCli(['mobile-to-root', '--json'], cwd);
+    const parsed = JSON.parse(result.stdout) as { transform: string; changed: unknown[] };
+
+    expect(result.exitCode).toBe(0);
+    expect(parsed.transform).toBe('mobile-to-root');
+    expect(parsed.changed).toHaveLength(1);
+  });
+
+  it('rewrites the package.json dependency and skips it with --no-package-json', async () => {
+    const manifest = `{\n  "dependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    await write('app/package.json', manifest);
+    expect((await runCli(['mobile-to-root'], cwd)).exitCode).toBe(0);
+    expect(await readFile(path.join(cwd, 'app', 'package.json'), 'utf8')).toContain('"react-simplikit"');
+
+    await write('app/package.json', manifest);
+    expect((await runCli(['mobile-to-root', '--no-package-json'], cwd)).exitCode).toBe(0);
+    expect(await readFile(path.join(cwd, 'app', 'package.json'), 'utf8')).toBe(manifest);
+  });
+
+  it('honours a repeatable --ignore glob', async () => {
+    const original = `import { isIOS } from '@react-simplikit/mobile';\n`;
+
+    await write('src/a.ts', original);
+    await write('legacy/b.ts', original);
+    await write('vendor/c.ts', original);
+
+    const result = await runCli(
+      ['mobile-to-root', '--ignore', '**/legacy/**', '--ignore', '**/vendor/**', '--json'],
+      cwd
+    );
+    const parsed = JSON.parse(result.stdout) as { changed: { file: string }[] };
+
+    expect(parsed.changed.map(entry => entry.file)).toEqual([path.join('src', 'a.ts')]);
+  });
+
+  it('accepts an explicit target directory', async () => {
+    const original = `import { isIOS } from '@react-simplikit/mobile';\n`;
+
+    await write('src/a.ts', original);
+    await write('other/b.ts', original);
+
+    const result = await runCli(['mobile-to-root', 'src', '--json'], cwd);
+    const parsed = JSON.parse(result.stdout) as { changed: { file: string }[] };
+
+    expect(parsed.changed.map(entry => entry.file)).toEqual([path.join('src', 'a.ts')]);
+    expect(await readFile(path.join(cwd, 'other', 'b.ts'), 'utf8')).toBe(original);
+  });
+
+  it('exits 0 and says nothing changed on a clean tree', async () => {
+    await write('src/a.ts', `import { useToggle } from 'react-simplikit';\n`);
+
+    const result = await runCli(['mobile-to-root'], cwd);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('Nothing to change');
+  });
+
+  it('exits 1 with the offending file when a manifest cannot be parsed', async () => {
+    await write('app/package.json', `{ "dependencies": { "@react-simplikit/mobile" `);
+
+    const result = await runCli(['mobile-to-root'], cwd);
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain(`Failed on ${path.join('app', 'package.json')}`);
+    expect(result.stdout).toBe('');
+  });
+
+  it('never hangs or prompts under CI=true', async () => {
+    await write('src/a.ts', `import { isIOS } from '@react-simplikit/mobile';\n`);
+
+    const { stdout } = await execFileAsync(YARN, ['node', binPath, 'mobile-to-root'], {
+      cwd,
+      env: { ...process.env, CI: 'true' },
+    });
+
+    expect(stdout).toContain('Changed 1 of');
+  });
+});
