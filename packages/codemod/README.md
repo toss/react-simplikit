@@ -57,7 +57,7 @@ Source files are parsed with the TypeScript compiler and edited by offset, so fo
 | `1`  | The invocation was valid but a file could not be read, parsed, or written |
 | `2`  | Invalid usage: unknown command, bad flag, or a path that does not exist   |
 
-A run is not atomic. On exit `1` the message names the file it stopped on; files before it are already rewritten.
+A run is not atomic and does not stop at the first failure. On exit `1` the report lists every file it could not process under **Could not be processed**; everything else was migrated.
 
 ### After running
 

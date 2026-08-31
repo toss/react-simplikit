@@ -23,6 +23,7 @@ const result: RunResult = {
     },
   ],
   manual: [{ file: 'package.json', reason: 'overrides still pins it' }],
+  failed: [],
 };
 
 describe('formatHuman', () => {
@@ -60,7 +61,7 @@ describe('formatHuman', () => {
   });
 
   it('reports a clean run without a version reminder or a file list', () => {
-    const output = formatHuman({ scanned: 5, changed: [], manual: [] }, false);
+    const output = formatHuman({ scanned: 5, changed: [], manual: [], failed: [] }, false);
 
     expect(output).toContain('Scanned 5 files');
     expect(output).toContain('No file imports @react-simplikit/mobile');
@@ -79,6 +80,7 @@ describe('formatHuman', () => {
           },
         ],
         manual: [],
+        failed: [],
       },
       false
     );
@@ -99,6 +101,7 @@ describe('formatHuman — manual notes without file changes', () => {
     scanned: 1,
     changed: [],
     manual: [{ file: 'package.json', reason: '"overrides" still pins it' }],
+    failed: [],
   };
 
   it('shows the follow-up instead of claiming nothing was found', () => {
@@ -106,5 +109,23 @@ describe('formatHuman — manual notes without file changes', () => {
 
     expect(output).toContain('package.json: "overrides" still pins it');
     expect(output).not.toContain('Nothing to change');
+  });
+});
+
+describe('formatHuman — failures', () => {
+  it('names the files it could not process alongside the ones it changed', () => {
+    const output = formatHuman(
+      {
+        scanned: 2,
+        changed: [{ file: 'src/a.ts', changes: [{ line: 1, kind: 'import' }], dependencies: [] }],
+        manual: [],
+        failed: [{ file: 'package.json', reason: 'Unexpected end of JSON input' }],
+      },
+      false
+    );
+
+    expect(output).toContain('src/a.ts');
+    expect(output).toContain('Could not be processed:');
+    expect(output).toContain('package.json: Unexpected end of JSON input');
   });
 });

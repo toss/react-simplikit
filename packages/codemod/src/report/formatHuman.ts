@@ -16,7 +16,7 @@ function describeFile(file: FileResult): string {
 }
 
 export function formatHuman(result: RunResult, dryRun: boolean): string {
-  const { changed, manual, scanned } = result;
+  const { changed, failed, manual, scanned } = result;
 
   const lines =
     changed.length === 0
@@ -25,6 +25,10 @@ export function formatHuman(result: RunResult, dryRun: boolean): string {
           `${dryRun ? 'Would change' : 'Changed'} ${changed.length} of ${scanned} files:`,
           ...changed.map(file => `  ${file.file} (${describeFile(file)})`),
         ];
+
+  if (failed.length > 0) {
+    lines.push('', 'Could not be processed:', ...failed.map(failure => `  ${failure.file}: ${failure.reason}`));
+  }
 
   if (manual.length > 0) {
     lines.push('', 'Needs a manual follow-up:', ...manual.map(note => `  ${note.file}: ${note.reason}`));

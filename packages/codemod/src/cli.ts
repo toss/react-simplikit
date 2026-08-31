@@ -38,6 +38,11 @@ async function runCommand(paths: string[], options: TransformOptions): Promise<v
   const report = options.json ? formatJson(result, options.dryRun) : formatHuman(result, options.dryRun);
 
   process.stdout.write(`${report}\n`);
+
+  if (result.failed.length > 0) {
+    process.stderr.write(`${result.failed.length} file(s) could not be processed.\n`);
+    process.exitCode = 1;
+  }
 }
 
 function buildProgram(): Command {

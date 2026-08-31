@@ -33,8 +33,14 @@ export type ManualNote = {
   reason: string;
 };
 
+export type FileFailure = {
+  file: string;
+  reason: string;
+};
+
 export type RunResult = {
   scanned: number;
   changed: FileResult[];
   manual: ManualNote[];
+  failed: FileFailure[];
 };

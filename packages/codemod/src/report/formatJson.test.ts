@@ -15,13 +15,14 @@ const result: RunResult = {
     },
   ],
   manual: [{ file: 'package.json', reason: 'overrides still pins it' }],
+  failed: [],
 };
 
 describe('formatJson', () => {
   it('emits the documented field contract', () => {
     const parsed = JSON.parse(formatJson(result, false)) as Record<string, unknown>;
 
-    expect(Object.keys(parsed).toSorted()).toEqual(['changed', 'dryRun', 'manual', 'scanned', 'transform']);
+    expect(Object.keys(parsed).toSorted()).toEqual(['changed', 'dryRun', 'failed', 'manual', 'scanned', 'transform']);
     expect(parsed.transform).toBe('mobile-to-root');
     expect(parsed.dryRun).toBe(false);
     expect(parsed.scanned).toBe(3);
@@ -34,7 +35,7 @@ describe('formatJson', () => {
   });
 
   it('emits valid JSON for a run with no changes', () => {
-    expect(() => JSON.parse(formatJson({ scanned: 0, changed: [], manual: [] }, false))).not.toThrow();
+    expect(() => JSON.parse(formatJson({ scanned: 0, changed: [], manual: [], failed: [] }, false))).not.toThrow();
   });
 
   it('omits `added` when nothing was added', () => {
@@ -49,6 +50,7 @@ describe('formatJson', () => {
           },
         ],
         manual: [],
+        failed: [],
       },
       false
     );

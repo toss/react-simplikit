@@ -99,5 +99,5 @@ npx react-simplikit-codemod mobile-to-root --no-package-json
 | Exit code | What to do                                                                                                                                               |
 | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `2`       | The invocation was wrong. stderr names the bad path or flag. Fix it and rerun                                                                            |
-| `1`       | A file could not be read, parsed, or written. stderr names it. The run is not atomic, so files before it are already rewritten — fix that file and rerun |
+| `1`       | Some files could not be processed. They are listed in `failed` (or under **Could not be processed**); every other file was migrated. Fix those and rerun |
 | `0`       | Done. Review the diff                                                                                                                                    |

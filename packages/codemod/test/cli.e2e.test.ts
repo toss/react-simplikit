@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -174,14 +174,27 @@ describe('react-simplikit-codemod', () => {
     expect(result.stdout).toContain('No file imports');
   });
 
-  it('exits 1 with the offending file when a manifest cannot be parsed', async () => {
+  it('reports a file it cannot parse, migrates the rest, and exits 1', async () => {
     await write('app/package.json', `{ "dependencies": { "@react-simplikit/mobile" `);
+    await write('src/a.ts', `import { isIOS } from '@react-simplikit/mobile';\n`);
 
     const result = await runCli(['mobile-to-root'], cwd);
 
     expect(result.exitCode).toBe(1);
-    expect(result.stderr).toContain(`Failed on ${path.join('app', 'package.json')}`);
-    expect(result.stdout).toBe('');
+    expect(result.stdout).toContain('Could not be processed:');
+    expect(result.stdout).toContain(path.join('app', 'package.json'));
+    expect(result.stderr).toContain('could not be processed');
+    expect(await readFile(path.join(cwd, 'src', 'a.ts'), 'utf8')).toBe(`import { isIOS } from 'react-simplikit';\n`);
+  });
+
+  it('keeps --json parseable when a file fails', async () => {
+    await write('app/package.json', `{ "dependencies": { "@react-simplikit/mobile" `);
+
+    const result = await runCli(['mobile-to-root', '--json'], cwd);
+    const parsed = JSON.parse(result.stdout) as { failed: { file: string }[] };
+
+    expect(result.exitCode).toBe(1);
+    expect(parsed.failed.map(entry => entry.file)).toEqual([path.join('app', 'package.json')]);
   });
 
   it('never hangs or prompts under CI=true', async () => {
@@ -193,5 +206,30 @@ describe('react-simplikit-codemod', () => {
     });
 
     expect(stdout).toContain('Changed 1 of');
+  });
+});
+
+describe('the published tarball', () => {
+  it('carries the bin entry it declares, executable and runnable', async () => {
+    const workDir = await mkdtemp(path.join(fixturesRoot, 'pack-'));
+    const packed = await execFileAsync('npm', ['pack', '--pack-destination', workDir], { cwd: packageRoot });
+    const tarball = path.join(workDir, packed.stdout.trim().split('\n').at(-1) ?? '');
+
+    await execFileAsync('tar', ['-xzf', tarball, '-C', workDir]);
+
+    const extracted = path.join(workDir, 'package');
+    const manifest = JSON.parse(await readFile(path.join(extracted, 'package.json'), 'utf8')) as {
+      bin: string | Record<string, string>;
+      version: string;
+    };
+    const declared = typeof manifest.bin === 'string' ? manifest.bin : Object.values(manifest.bin)[0];
+    const packedBin = path.join(extracted, declared);
+
+    expect((await stat(packedBin)).mode & 0o111).toBeGreaterThan(0);
+    expect((await readFile(packedBin, 'utf8')).startsWith('#!/usr/bin/env node')).toBe(true);
+
+    const run = await execFileAsync(YARN, ['node', packedBin, '--version'], { cwd: packageRoot });
+
+    expect(run.stdout.trim()).toBe(manifest.version);
   });
 });

@@ -69,16 +69,30 @@ describe('runTransform', () => {
     expect(result.changed).toEqual([]);
   });
 
-  it('names the offending file when a manifest cannot be parsed', async () => {
-    await write('package.json', `{ "dependencies": { "@react-simplikit/mobile" `);
-    const file = path.join(cwd, 'package.json');
+  it('records a file it cannot parse and keeps going', async () => {
+    const broken = await write('package.json', `{ "dependencies": { "@react-simplikit/mobile" `);
+    const good = await write('src/a.ts', `import { isIOS } from '@react-simplikit/mobile';\n`);
+    const result = await runTransform({ files: [broken, good], cwd, dryRun: false });
 
-    await expect(runTransform({ files: [file], cwd, dryRun: false })).rejects.toThrow(/Failed on package\.json/);
+    expect(result.failed).toEqual([{ file: 'package.json', reason: expect.any(String) }]);
+    expect(result.changed.map(entry => entry.file)).toEqual([path.join('src', 'a.ts')]);
+    expect(await readFile(good, 'utf8')).toBe(`import { isIOS } from 'react-simplikit';\n`);
   });
 
-  it('names the offending file when it cannot be read', async () => {
+  it('records a file it cannot read', async () => {
     const missing = path.join(cwd, 'gone.ts');
+    const result = await runTransform({ files: [missing], cwd, dryRun: false });
 
-    await expect(runTransform({ files: [missing], cwd, dryRun: false })).rejects.toThrow(/Failed on gone\.ts/);
+    expect(result.failed.map(failure => failure.file)).toEqual(['gone.ts']);
+    expect(result.changed).toEqual([]);
+  });
+
+  it('does not let one bad manifest sink a dry run', async () => {
+    const broken = await write('package.json', `{ "dependencies": { "@react-simplikit/mobile" `);
+    const good = await write('src/a.ts', `import { isIOS } from '@react-simplikit/mobile';\n`);
+    const result = await runTransform({ files: [broken, good], cwd, dryRun: true });
+
+    expect(result.failed).toHaveLength(1);
+    expect(result.changed).toHaveLength(1);
   });
 });
