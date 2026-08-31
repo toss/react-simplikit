@@ -29,7 +29,6 @@ describe('buildMergeSplices', () => {
   });
 
   it('skips mobile imports that are not a plain named list', () => {
-    // Each shape binds something a named list cannot carry.
     const namespaceImport = merge([ROOT_IMPORT, `import * as mobile from '@react-simplikit/mobile';`]);
     const sideEffectImport = merge([ROOT_IMPORT, `import '@react-simplikit/mobile';`]);
     const defaultImport = merge([ROOT_IMPORT, `import mobile from '@react-simplikit/mobile';`]);
@@ -50,7 +49,6 @@ describe('buildMergeSplices', () => {
       `import * as root from 'react-simplikit';`,
       `import { isIOS } from '@react-simplikit/mobile';`,
     ]);
-    // A parser-recovered import whose specifier is an identifier, not a string.
     const brokenTarget = merge([
       `import { useToggle } from someIdentifier;`,
       `import { isIOS } from '@react-simplikit/mobile';`,
@@ -87,7 +85,6 @@ describe('buildMergeSplices', () => {
       `import { isAndroid } from '@react-simplikit/mobile';`,
     ]);
 
-    // Two deletes, one insert.
     expect(result.splices).toHaveLength(3);
     expect(result.mergedDeclarations.size).toBe(2);
   });
@@ -98,7 +95,6 @@ describe('buildMergeSplices', () => {
       `import { isIOS } from '@react-simplikit/mobile';`,
     ]);
 
-    // Delete only: nothing new to add.
     expect(result.splices).toHaveLength(1);
     expect(result.mergedDeclarations.size).toBe(1);
   });

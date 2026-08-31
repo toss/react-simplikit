@@ -16,23 +16,19 @@ type PlainNamedImport = {
   isTypeOnly: boolean;
 };
 
-/**
- * The named list of an import that can move into, or receive, another named list.
- * Returns `undefined` for every shape that binds something a named list cannot carry.
- */
+function importedNameOf(element: ts.ImportSpecifier): string {
+  return (element.propertyName ?? element.name).text;
+}
+
 function plainNamedImportOf(declaration: ts.ImportDeclaration): PlainNamedImport | undefined {
   const clause = declaration.importClause;
 
-  // `import '...'` binds nothing at all.
   if (clause === undefined) {
     return undefined;
   }
 
   const { name, namedBindings, isTypeOnly } = clause;
 
-  // Order matters: `namedBindings` is checked first because a default-only import
-  // (`import D from '...'`) reaches it, while a default+named import is caught by the
-  // `name` check and a namespace import by the last one.
   if (namedBindings === undefined || name !== undefined || !ts.isNamedImports(namedBindings)) {
     return undefined;
   }
@@ -48,9 +44,6 @@ function collectTargets(sourceFile: ts.SourceFile): PlainNamedImport[] {
       continue;
     }
 
-    // A well-formed import always has a string literal here, but the parser also
-    // recovers from `import { a } from someIdentifier` — guard so a broken file
-    // degrades to a no-op instead of merging into nothing.
     if (!ts.isStringLiteralLike(statement.moduleSpecifier) || statement.moduleSpecifier.text !== ROOT_PACKAGE_NAME) {
       continue;
     }
@@ -65,12 +58,8 @@ function collectTargets(sourceFile: ts.SourceFile): PlainNamedImport[] {
   return targets;
 }
 
-/**
- * Whether the braces hold a comment. Nothing else inside a named import can contain
- * `//` or `/*` — a module specifier lives outside them — so scanning the text is exact.
- */
-function containsComment(sourceFile: ts.SourceFile, named: ts.NamedImports): boolean {
-  const text = sourceFile.text.slice(named.getStart(sourceFile), named.getEnd());
+function hasComment(sourceFile: ts.SourceFile, statement: ts.Statement): boolean {
+  const text = sourceFile.text.slice(statement.getFullStart(), statement.getEnd());
 
   return text.includes('//') || text.includes('/*');
 }
@@ -86,8 +75,6 @@ function deleteStatement(sourceFile: ts.SourceFile, statement: ts.Statement): Sp
 
   const ownsLine = text.slice(lineStart, start).trim() === '' && text.slice(end, lineEnd).trim() === '';
 
-  // Swallow the whole line only when the statement owns it; otherwise a second
-  // statement sharing the line would disappear with it.
   return ownsLine ? { start: lineStart, end: lineEnd, text: '' } : { start, end, text: '' };
 }
 
@@ -97,17 +84,10 @@ function insertIntoNamedImports(
   appended: readonly string[]
 ): Splice {
   const last = named.elements.at(-1);
+  const position = last === undefined ? named.getStart(sourceFile) + 1 : last.getEnd();
+  const text = last === undefined ? appended.join(', ') : `, ${appended.join(', ')}`;
 
-  if (last === undefined) {
-    // `import {} from 'react-simplikit'` — between the braces is the only place to write.
-    const position = named.getStart(sourceFile) + 1;
-
-    return { start: position, end: position, text: appended.join(', ') };
-  }
-
-  const position = last.getEnd();
-
-  return { start: position, end: position, text: `, ${appended.join(', ')}` };
+  return { start: position, end: position, text };
 }
 
 export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly SpecifierHit[]): MergeResult {
@@ -115,14 +95,13 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
   const changes: SourceChange[] = [];
   const mergedDeclarations = new Set<ts.ImportDeclaration>();
   const targets = collectTargets(sourceFile);
-
+  const boundByTarget = new Map<ts.NamedImports, Map<string, string>>();
   const appendedByTarget = new Map<ts.NamedImports, string[]>();
-  const takenByTarget = new Map<ts.NamedImports, Set<string>>();
 
   for (const hit of hits) {
     const { declaration } = hit;
 
-    if (declaration === undefined) {
+    if (declaration === undefined || declaration.parent !== sourceFile || hasComment(sourceFile, declaration)) {
       continue;
     }
 
@@ -132,35 +111,40 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
       continue;
     }
 
-    // Merging copies specifier text only, so a comment between the braces would be
-    // dropped. Leave the statement alone and let the specifier rewrite handle it.
-    if (containsComment(sourceFile, source.named)) {
-      continue;
-    }
-
-    // Same type-onlyness only: folding `import type` into a value import would need
-    // inline `type` modifiers, and the consumer's TypeScript version is unknown.
     const target = targets.find(candidate => candidate.isTypeOnly === source.isTypeOnly);
 
     if (target === undefined) {
       continue;
     }
 
-    const taken = takenByTarget.get(target.named) ?? new Set(target.named.elements.map(element => element.name.text));
-    const appended = appendedByTarget.get(target.named) ?? [];
+    const bound =
+      boundByTarget.get(target.named) ??
+      new Map(target.named.elements.map(element => [element.name.text, importedNameOf(element)]));
+
+    const additions: string[] = [];
+    let collides = false;
 
     for (const element of source.named.elements) {
-      if (taken.has(element.name.text)) {
-        continue;
-      }
+      const existing = bound.get(element.name.text);
 
-      taken.add(element.name.text);
-      // Copy the element's own source text so aliases and inline `type` survive.
-      appended.push(sourceFile.text.slice(element.getStart(sourceFile), element.getEnd()));
+      if (existing === undefined) {
+        additions.push(sourceFile.text.slice(element.getStart(sourceFile), element.getEnd()));
+      } else if (existing !== importedNameOf(element)) {
+        collides = true;
+        break;
+      }
     }
 
-    takenByTarget.set(target.named, taken);
-    appendedByTarget.set(target.named, appended);
+    if (collides) {
+      continue;
+    }
+
+    for (const element of source.named.elements) {
+      bound.set(element.name.text, importedNameOf(element));
+    }
+
+    boundByTarget.set(target.named, bound);
+    appendedByTarget.set(target.named, [...(appendedByTarget.get(target.named) ?? []), ...additions]);
 
     splices.push(deleteStatement(sourceFile, declaration));
     changes.push({ line: lineOf(sourceFile, declaration.getStart(sourceFile)), kind: 'merge' });

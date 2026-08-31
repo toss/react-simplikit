@@ -19,16 +19,12 @@ export type Splice = {
 export type PackageJsonChange = {
   field: string;
   removed: string;
-  // `undefined` when the manifest already depended on the root package, so the
-  // codemod only removed the old entry.
   added: string | undefined;
 };
 
 export type FileResult = {
   file: string;
-  // Source specifier edits. Empty for package.json files.
   changes: SourceChange[];
-  // Dependency field edits. Empty for source files.
   dependencies: PackageJsonChange[];
 };
 

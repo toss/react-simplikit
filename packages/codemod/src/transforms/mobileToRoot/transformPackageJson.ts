@@ -9,8 +9,6 @@ export type TransformPackageJsonResult = {
 
 const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'] as const;
 
-// Package managers disagree on what these mean, and a pin here is usually deliberate,
-// so the codemod reports them instead of guessing.
 const MANUAL_FIELDS = ['resolutions', 'overrides'] as const;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -42,11 +40,6 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
   const manual: string[] = [];
 
   let next = parsed;
-  let hasRoot = DEPENDENCY_FIELDS.some(field => {
-    const value = parsed[field];
-
-    return isRecord(value) && ROOT_PACKAGE_NAME in value;
-  });
 
   for (const field of DEPENDENCY_FIELDS) {
     const value = next[field];
@@ -55,14 +48,10 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
       continue;
     }
 
-    const added = hasRoot ? undefined : `^${MIN_RUNTIME_VERSION}`;
+    const added = ROOT_PACKAGE_NAME in value ? undefined : `^${MIN_RUNTIME_VERSION}`;
     const rest = withoutMobile(value);
 
-    // Appended, not inserted alphabetically: re-sorting a manifest that was never
-    // sorted would widen the diff for no gain, and the package manager rewrites the
-    // field on the next install anyway.
     next = { ...next, [field]: added === undefined ? rest : { ...rest, [ROOT_PACKAGE_NAME]: added } };
-    hasRoot = true;
     changes.push({ field, removed: MOBILE_PACKAGE_NAME, added });
   }
 

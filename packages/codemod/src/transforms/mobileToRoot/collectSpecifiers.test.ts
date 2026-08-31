@@ -71,19 +71,15 @@ describe('collectSpecifiers', () => {
   });
 
   it('ignores anything that is not a specifier for the old package', () => {
-    // Another package, or a longer specifier that merely starts with the name.
     expect(kindsOf(`import { useToggle } from 'react-simplikit';`)).toEqual([]);
     expect(kindsOf(`import { x } from '@react-simplikit/mobile/extra';`)).toEqual([]);
     expect(kindsOf(`type X = import('react').FC;`, 'input.ts')).toEqual([]);
 
-    // The name in a position that is not a module specifier at all.
     expect(kindsOf(`const label = '@react-simplikit/mobile';`)).toEqual([]);
     expect(kindsOf(`describe('@react-simplikit/mobile', () => {});`)).toEqual([]);
 
-    // A local re-export carries no module specifier.
     expect(kindsOf(`const foo = 1;\nexport { foo };`)).toEqual([]);
 
-    // Call shapes that resemble a mock but are not one.
     expect(kindsOf(`other.mock('@react-simplikit/mobile');`)).toEqual([]);
     expect(kindsOf(`vi.spyOn('@react-simplikit/mobile');`)).toEqual([]);
     expect(kindsOf(`a.b.mock('@react-simplikit/mobile');`)).toEqual([]);
@@ -91,9 +87,7 @@ describe('collectSpecifiers', () => {
   });
 
   it('degrades to no-op on malformed syntax the parser recovers from', () => {
-    // Recovered import: the module specifier is an identifier, not a string.
     expect(kindsOf(`import broken from someIdentifier;`, 'input.ts')).toEqual([]);
-    // Recovered import type: the argument is a type reference, not a literal type.
     expect(kindsOf(`type Bad = import(Foo).Bar;`, 'input.ts')).toEqual([]);
   });
 });

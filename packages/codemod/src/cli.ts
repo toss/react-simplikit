@@ -9,8 +9,6 @@ import { runTransform } from './runner/runTransform.ts';
 import { MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME, TRANSFORM_NAME } from './constants.ts';
 import { describeError, UsageError } from './errors.ts';
 
-// Resolved against this file, never `process.cwd()`: the CLI runs from the user's
-// project directory. Read rather than imported, so no JSON module assertion is needed.
 const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
   version: string;
 };
@@ -76,7 +74,6 @@ function buildProgram(): Command {
         'Issues: https://github.com/toss/react-simplikit/issues',
       ].join('\n')
     )
-    // Subcommands do not inherit the program's exit callback.
     .exitOverride()
     .action(runCommand);
 
@@ -85,15 +82,11 @@ function buildProgram(): Command {
 
 function reportFailure(error: unknown): number {
   if (error instanceof CommanderError) {
-    // Commander already wrote help, the version, or a usage error. Explicit help and
-    // --version carry exit code 0; anything else is invalid usage.
     return error.exitCode === 0 ? 0 : 2;
   }
 
   process.stderr.write(`${describeError(error)}\n`);
 
-  // Read argv directly: --debug lives on the subcommand, and by the time the error
-  // surfaces here there is no parsed option object left to read it from.
   if (process.argv.includes('--debug') && error instanceof Error && error.stack !== undefined) {
     process.stderr.write(`${error.stack}\n`);
   }
@@ -104,6 +97,5 @@ function reportFailure(error: unknown): number {
 try {
   await buildProgram().parseAsync();
 } catch (error) {
-  // Assigning exitCode rather than calling process.exit() lets stdout flush first.
   process.exitCode = reportFailure(error);
 }

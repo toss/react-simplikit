@@ -59,8 +59,6 @@ export async function runTransform({ files, cwd, dryRun }: RunTransformOptions):
 
       changed.push({ file: relative, changes: outcome.changes, dependencies: outcome.dependencies });
     } catch (error) {
-      // Name the file: a bare "Unexpected end of JSON input" is unactionable, and the
-      // run is not atomic, so the user needs to know where it stopped.
       throw new Error(`Failed on ${relative}: ${describeError(error)}`);
     }
   }

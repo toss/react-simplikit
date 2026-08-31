@@ -12,14 +12,6 @@ const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 const binPath = path.join(packageRoot, 'dist', 'cli.mjs');
 const fixturesRoot = path.join(packageRoot, 'test', '__fixtures__');
 
-// `yarn node` walks up from cwd to find the Yarn project, and this repository has no
-// node_modules for a bare `node` to resolve `commander` from. So the fake consumer
-// projects have to live inside the repo, not in os.tmpdir().
-//
-// The same walk-up means a `package.json` sitting directly in cwd makes Yarn refuse to
-// run ("doesn't seem to be part of the project"), and it writes that refusal to stdout.
-// Manifest cases therefore nest their package.json one directory down, which Yarn never
-// looks at and the codemod finds by glob either way.
 const YARN = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
 
 type CliResult = { stdout: string; stderr: string; exitCode: number };
@@ -30,7 +22,6 @@ async function runCli(args: readonly string[], cwd: string): Promise<CliResult> 
 
     return { stdout, stderr, exitCode: 0 };
   } catch (error) {
-    // execFile rejects on a non-zero exit; the payload still carries both streams.
     const failure = error as { stdout?: string; stderr?: string; code?: number };
 
     return { stdout: failure.stdout ?? '', stderr: failure.stderr ?? '', exitCode: failure.code ?? 1 };
@@ -180,7 +171,7 @@ describe('react-simplikit-codemod', () => {
     const result = await runCli(['mobile-to-root'], cwd);
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toContain('Nothing to change');
+    expect(result.stdout).toContain('No file imports');
   });
 
   it('exits 1 with the offending file when a manifest cannot be parsed', async () => {

@@ -55,8 +55,6 @@ describe('formatJson', () => {
     const [dependency] = (JSON.parse(output) as { changed: { dependencies: Record<string, unknown>[] }[] }).changed[0]
       .dependencies;
 
-    // JSON has no `undefined`, so the key disappears. Consumers read a missing key
-    // as "the manifest already depended on the root package".
     expect('added' in dependency).toBe(false);
   });
 });

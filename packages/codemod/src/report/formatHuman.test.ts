@@ -63,7 +63,7 @@ describe('formatHuman', () => {
     const output = formatHuman({ scanned: 5, changed: [], manual: [] }, false);
 
     expect(output).toContain('Scanned 5 files');
-    expect(output).toContain('Nothing to change');
+    expect(output).toContain('No file imports @react-simplikit/mobile');
     expect(output).not.toContain(MIN_RUNTIME_VERSION);
   });
 
@@ -91,5 +91,20 @@ describe('formatHuman', () => {
     const output = formatHuman({ ...result, manual: [] }, false);
 
     expect(output).not.toContain('manual follow-up');
+  });
+});
+
+describe('formatHuman — manual notes without file changes', () => {
+  const manualOnly = {
+    scanned: 1,
+    changed: [],
+    manual: [{ file: 'package.json', reason: '"overrides" still pins it' }],
+  };
+
+  it('shows the follow-up instead of claiming nothing was found', () => {
+    const output = formatHuman(manualOnly, false);
+
+    expect(output).toContain('package.json: "overrides" still pins it');
+    expect(output).not.toContain('Nothing to change');
   });
 });

@@ -16,32 +16,28 @@ function describeFile(file: FileResult): string {
 }
 
 export function formatHuman(result: RunResult, dryRun: boolean): string {
-  if (result.changed.length === 0) {
-    return `Scanned ${result.scanned} files. No file imports ${MOBILE_PACKAGE_NAME}. Nothing to change.`;
+  const { changed, manual, scanned } = result;
+
+  const lines =
+    changed.length === 0
+      ? [`Scanned ${scanned} files. No file imports ${MOBILE_PACKAGE_NAME}.`]
+      : [
+          `${dryRun ? 'Would change' : 'Changed'} ${changed.length} of ${scanned} files:`,
+          ...changed.map(file => `  ${file.file} (${describeFile(file)})`),
+        ];
+
+  if (manual.length > 0) {
+    lines.push('', 'Needs a manual follow-up:', ...manual.map(note => `  ${note.file}: ${note.reason}`));
   }
 
-  // Naming each file is the point: the user's next step is reading the diff.
-  const lines = [`${dryRun ? 'Would change' : 'Changed'} ${result.changed.length} of ${result.scanned} files:`];
-
-  for (const file of result.changed) {
-    lines.push(`  ${file.file} (${describeFile(file)})`);
+  if (changed.length > 0) {
+    lines.push(
+      '',
+      dryRun
+        ? `Nothing was written. Run without --dry-run to apply, then install at least ${ROOT_PACKAGE_NAME}@${MIN_RUNTIME_VERSION}.`
+        : `Imports now resolve from ${ROOT_PACKAGE_NAME}. Install at least ${ROOT_PACKAGE_NAME}@${MIN_RUNTIME_VERSION} and reinstall so the lockfile catches up.`
+    );
   }
-
-  if (result.manual.length > 0) {
-    lines.push('', 'Needs a manual follow-up:');
-
-    for (const note of result.manual) {
-      lines.push(`  ${note.file}: ${note.reason}`);
-    }
-  }
-
-  // A dry run wrote nothing, so it must not describe the tree as already migrated.
-  lines.push(
-    '',
-    dryRun
-      ? `Nothing was written. Run without --dry-run to apply, then install at least ${ROOT_PACKAGE_NAME}@${MIN_RUNTIME_VERSION}.`
-      : `Imports now resolve from ${ROOT_PACKAGE_NAME}. Install at least ${ROOT_PACKAGE_NAME}@${MIN_RUNTIME_VERSION} and reinstall so the lockfile catches up.`
-  );
 
   return lines.join('\n');
 }

@@ -1,13 +1,11 @@
 import fastGlob from 'fast-glob';
-import { stat } from 'node:fs/promises';
+import { lstat } from 'node:fs/promises';
 import path from 'node:path';
 
 import { UsageError } from '../errors.ts';
 
-const SOURCE_EXTENSIONS = ['ts', 'tsx', 'mts', 'cts', 'js', 'jsx', 'mjs', 'cjs'];
+const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs']);
 
-// Directories whose contents are generated or vendored: rewriting them is either
-// useless (regenerated on the next build) or actively wrong (someone else's code).
 const DEFAULT_IGNORE = [
   '**/node_modules/**',
   '**/dist/**',
@@ -28,40 +26,29 @@ export type CollectFilesOptions = {
 
 export async function collectFiles({ paths, ignore, includePackageJson, cwd }: CollectFilesOptions): Promise<string[]> {
   const patterns: string[] = [];
-  const direct: string[] = [];
 
   for (const target of paths) {
     const absolute = path.resolve(cwd, target);
-    const stats = await stat(absolute).catch(() => undefined);
+    const stats = await lstat(absolute).catch(() => undefined);
 
     if (stats === undefined) {
       throw new UsageError(`Path not found: ${target}. Pass a file or directory that exists.`);
     }
 
-    if (!stats.isDirectory()) {
-      direct.push(absolute);
-      continue;
-    }
-
-    // convertPathToPattern escapes glob metacharacters that are legal in a real
-    // directory name, so a path containing `(` or `[` still matches itself.
     const base = fastGlob.convertPathToPattern(absolute);
 
-    patterns.push(`${base}/**/*.{${SOURCE_EXTENSIONS.join(',')}}`);
-
-    if (includePackageJson) {
-      patterns.push(`${base}/**/package.json`);
-    }
+    patterns.push(stats.isDirectory() ? `${base}/**/*` : base);
   }
 
-  const globbed =
-    patterns.length === 0
-      ? []
-      : await fastGlob(patterns, {
-          ignore: [...DEFAULT_IGNORE, ...ignore],
-          absolute: true,
-          followSymbolicLinks: false,
-        });
+  const files = await fastGlob(patterns, {
+    ignore: [...DEFAULT_IGNORE, ...ignore],
+    absolute: true,
+    followSymbolicLinks: false,
+  });
 
-  return [...new Set([...direct, ...globbed])].toSorted();
+  return files
+    .filter(file =>
+      path.basename(file) === 'package.json' ? includePackageJson : SOURCE_EXTENSIONS.has(path.extname(file))
+    )
+    .toSorted();
 }

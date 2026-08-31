@@ -23,18 +23,18 @@ npx react-simplikit-codemod mobile-to-root --dry-run
 
 - `import`, `import type`, `import * as ns`, and side-effect imports
 - `export ... from` and `export * from`
-- `require('@react-simplikit/mobile')` and `await import('@react-simplikit/mobile')`
+- `require('@react-simplikit/mobile')`, `require.resolve`, `import m = require(...)`, and `await import('@react-simplikit/mobile')`
 - `import('@react-simplikit/mobile').SafeAreaInset` in type position
-- `vi.mock` / `jest.mock` / `jest.requireActual` module arguments
+- `vi.mock` / `vi.importActual` / `jest.mock` / `jest.requireActual` module arguments
 - `dependencies`, `devDependencies`, `peerDependencies` and `optionalDependencies` in every `package.json` it finds
 
-It parses with the TypeScript compiler and edits the original text by offset, so formatting, comments and quote style survive untouched.
+Source files are parsed with the TypeScript compiler and edited by offset, so formatting, comments and quote style survive untouched. `package.json` is the exception: it is reparsed and reserialized, which normalizes line endings and collapses any hand formatting.
 
 ### What it leaves alone
 
 - Markdown, MDX, comments, and any other prose naming the package
 - `resolutions` and `overrides` in `package.json` — reported, not edited, because their meaning differs per package manager
-- Imports whose braces contain a comment: merging would drop the comment, so the specifier is rewritten in place instead
+- Imports carrying a comment, sitting inside a `declare module` block, or whose local name is already bound to a different symbol: merging would lose something, so the specifier is rewritten in place instead
 - Your lockfile. Reinstall after the run
 
 `node_modules`, `dist`, `build`, `out`, `coverage`, `.next`, `.yarn` and `.git` are always skipped.

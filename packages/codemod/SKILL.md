@@ -39,7 +39,14 @@ Limit it to one directory:
 npx react-simplikit-codemod mobile-to-root src
 ```
 
-The command never prompts, so it is safe to run non-interactively and in CI.
+Skip paths, or leave manifests alone:
+
+```bash
+npx react-simplikit-codemod mobile-to-root --ignore '**/legacy/**' --ignore '**/e2e/**'
+npx react-simplikit-codemod mobile-to-root --no-package-json
+```
+
+`--debug` adds a stack trace on failure. The command never prompts, so it is safe to run non-interactively and in CI.
 
 ## JSON output
 

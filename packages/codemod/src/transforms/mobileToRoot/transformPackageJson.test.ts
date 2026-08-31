@@ -40,12 +40,27 @@ describe('transformPackageJson', () => {
     }
   });
 
-  it('adds the root package once when the old one appears in two fields', () => {
+  it('replaces the dependency in every field that declared it', () => {
     const input = `{\n  "dependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  },\n  "devDependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
     const result = transformPackageJson(input);
 
-    expect(result.changes.map(change => change.added)).toEqual([ROOT_RANGE, undefined]);
-    expect(depsOf(result.text, 'devDependencies')['react-simplikit']).toBeUndefined();
+    expect(result.changes.map(change => change.added)).toEqual([ROOT_RANGE, ROOT_RANGE]);
+    expect(depsOf(result.text)['react-simplikit']).toBe(ROOT_RANGE);
+    expect(depsOf(result.text, 'devDependencies')['react-simplikit']).toBe(ROOT_RANGE);
+  });
+
+  it('does not leave a field empty because another field already had the root package', () => {
+    const input = `{\n  "devDependencies": {\n    "react-simplikit": "^0.2.0"\n  },\n  "dependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+    const result = transformPackageJson(input);
+
+    expect(depsOf(result.text)['react-simplikit']).toBe(ROOT_RANGE);
+    expect(result.changes).toEqual([{ field: 'dependencies', removed: '@react-simplikit/mobile', added: ROOT_RANGE }]);
+  });
+
+  it('keeps a peer contract that declared the old package', () => {
+    const input = `{\n  "dependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  },\n  "peerDependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    expect(depsOf(transformPackageJson(input).text, 'peerDependencies')['react-simplikit']).toBe(ROOT_RANGE);
   });
 
   it('preserves four-space indentation and the trailing newline', () => {
@@ -89,7 +104,6 @@ describe('transformPackageJson', () => {
   });
 
   it('ignores dependency fields that are not objects', () => {
-    // A string, and `null` — both are values a hand-edited manifest can end up with.
     const asString = transformPackageJson(`{\n  "dependencies": "@react-simplikit/mobile"\n}\n`);
     const asNull = transformPackageJson(
       `{\n  "dependencies": null,\n  "devDependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`

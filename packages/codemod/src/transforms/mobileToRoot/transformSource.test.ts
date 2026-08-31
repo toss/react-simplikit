@@ -200,7 +200,6 @@ describe('transformSource — merging with an existing react-simplikit import', 
   });
 
   it('leaves an import carrying a comment as its own statement rather than losing it', () => {
-    // Merging copies specifier text only, so folding this in would drop the note.
     const input = [
       `import { useToggle } from 'react-simplikit';`,
       `import {`,
@@ -212,8 +211,6 @@ describe('transformSource — merging with an existing react-simplikit import', 
     const result = transformSource(input, 'a.ts');
 
     expect(result.code).toBe(input.replace('@react-simplikit/mobile', 'react-simplikit'));
-    // Line 4 is where `} from '...'` sits — changes point at the edited specifier,
-    // not at the line the statement starts on.
     expect(result.changes).toEqual([{ line: 4, kind: 'import' }]);
   });
 
@@ -225,5 +222,91 @@ describe('transformSource — merging with an existing react-simplikit import', 
     ].join('\n');
 
     expect(transformSource(input, 'a.ts').code).toBe([`import { isIOS } from 'react-simplikit';`, ``].join('\n'));
+  });
+});
+
+describe('transformSource — shapes that must not be merged or must not be missed', () => {
+  it('refuses to merge when a local name collides with a different symbol', () => {
+    const input = [
+      `import { useToggle as isIOS } from 'react-simplikit';`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import { useToggle as isIOS } from 'react-simplikit';`, `import { isIOS } from 'react-simplikit';`, ``].join(
+        '\n'
+      )
+    );
+  });
+
+  it('refuses to merge when the alias points the other way', () => {
+    const input = [
+      `import { isIOS } from 'react-simplikit';`,
+      `import { useToggle as isIOS } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import { isIOS } from 'react-simplikit';`, `import { useToggle as isIOS } from 'react-simplikit';`, ``].join(
+        '\n'
+      )
+    );
+  });
+
+  it('merges a binding the target already imports under the same original name', () => {
+    const input = [
+      `import { isIOS as isApple } from 'react-simplikit';`,
+      `import { isIOS as isApple } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import { isIOS as isApple } from 'react-simplikit';`, ``].join('\n')
+    );
+  });
+
+  it('never lifts an import out of an ambient module block', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `declare module 'other' {`,
+      `  import { isIOS } from '@react-simplikit/mobile';`,
+      `  export const c: typeof isIOS;`,
+      `}`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(input.replace('@react-simplikit/mobile', 'react-simplikit'));
+  });
+
+  it('leaves an import carrying a leading comment as its own statement', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `// eslint-disable-next-line no-restricted-imports`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      `console.log(1);`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(input.replace('@react-simplikit/mobile', 'react-simplikit'));
+  });
+
+  it('rewrites an import-equals require', () => {
+    const result = transformSource(`import m = require('@react-simplikit/mobile');\n`, 'a.ts');
+
+    expect(result.code).toBe(`import m = require('react-simplikit');\n`);
+    expect(result.changes).toEqual([{ line: 1, kind: 'require' }]);
+  });
+
+  it('rewrites require.resolve and the vitest import helpers', () => {
+    expect(transformSource(`require.resolve('@react-simplikit/mobile');\n`, 'a.ts').code).toBe(
+      `require.resolve('react-simplikit');\n`
+    );
+    expect(transformSource(`await vi.importActual('@react-simplikit/mobile');\n`, 'a.ts').code).toBe(
+      `await vi.importActual('react-simplikit');\n`
+    );
+    expect(transformSource(`await vi.importMock('@react-simplikit/mobile');\n`, 'a.ts').code).toBe(
+      `await vi.importMock('react-simplikit');\n`
+    );
   });
 });
