@@ -5,8 +5,7 @@
 Notes on platform inconsistencies:
 
 - Prior to iPadOS 13, iPads reported their platform as "iPad" (or matched /iPad/ in UA).
-- Starting from iPadOS 13, Apple changed the platform string to "MacIntel"
-  to make websites treat iPadOS as desktop-class Safari. However, these devices still expose multi-touch capabilities.
+- Starting from iPadOS 13, Apple changed the platform string to "MacIntel" to make websites treat iPadOS as desktop-class Safari. However, these devices still expose multi-touch capabilities.
 
 ## Interface
 

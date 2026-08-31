@@ -29,6 +29,7 @@ function useInterval(
     {
       name: 'options.delay',
       type: 'number',
+      required: true,
       description:
         '밀리초 단위의 간격 지속 시간이에요. <code>null</code>인 경우 간격이 실행되지 않아요.',
     },

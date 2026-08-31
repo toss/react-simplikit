@@ -76,6 +76,50 @@ export function useWrapped() {}`
     expect(document).toContain('`useWrapped` does one thing. It also does another thing.');
   });
 
+  it('escapes a double quote in a nested description, which sits inside a double-quoted attribute', async () => {
+    const document = await render(
+      'useMode',
+      `/**
+ * @description
+ * \`useMode\` does something.
+ *
+ * @returns {UseModeReturn} An object.
+ * - mode \`string\` - Either "wide" or "narrow";
+ *
+ * @example
+ * useMode();
+ */
+export function useMode() {}`
+    );
+
+    expect(document).toContain('Either &quot;wide&quot; or &quot;narrow&quot;.');
+  });
+
+  it('rejoins the wrapped continuation lines of a bullet item', async () => {
+    const document = await render(
+      'useWrappedBullet',
+      `/**
+ * @description
+ * Intro line.
+ *
+ * - The first bullet wraps
+ *   onto a second line
+ *   and a third line.
+ * - The second bullet stays.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useWrappedBullet();
+ */
+export function useWrappedBullet() {}`
+    );
+
+    expect(document).toContain(
+      '- The first bullet wraps onto a second line and a third line.\n- The second bullet stays.'
+    );
+  });
+
   it('keeps the bullet list of a multi-line description on separate lines', async () => {
     const document = await render(
       'useLayout',

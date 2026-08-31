@@ -7,8 +7,7 @@ The provided callback is invoked whenever the keyboard height may change, includ
 Internally, this function listens to both `resize` and `scroll` events on the Visual Viewport:
 
 - `resize`: triggered when the visual viewport height changes
-- `scroll`: triggered when the visual viewport offset changes
-  (important for iOS where the viewport can shift without resizing)
+- `scroll`: triggered when the visual viewport offset changes (important for iOS where the viewport can shift without resizing)
 
 Performance optimizations:
 

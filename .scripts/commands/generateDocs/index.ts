@@ -231,8 +231,7 @@ function reflowDescription(description: string) {
     .map(line => line.trim())
     .reduce<string[]>((lines, line) => {
       const previous = lines.at(-1);
-      const continuesParagraph =
-        previous != null && previous !== '' && line !== '' && !LIST_ITEM.test(line) && !LIST_ITEM.test(previous);
+      const continuesParagraph = previous != null && previous !== '' && line !== '' && !LIST_ITEM.test(line);
 
       if (continuesParagraph) {
         lines[lines.length - 1] = `${previous} ${line}`;
@@ -320,6 +319,7 @@ function getParamUl(param: Spec, nestedParams?: Spec[]) {
  * into the rendered page.
  */
 function replaceDescription(value: string, quote: '"' | "'") {
+  // `"` must go in both contexts: the attribute it would terminate is double-quoted either way.
   const replaced = value
     .replace(/^\s*-\s*/, '')
     .replace(/--/g, '\n-')
@@ -327,7 +327,8 @@ function replaceDescription(value: string, quote: '"' | "'") {
     .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]*)\*/g, '<em>$1</em>')
     .replace(/_([^*]*)_/g, '<em>$1</em>')
-    .replace(/\n/g, '<br />');
+    .replace(/\n/g, '<br />')
+    .replace(/"/g, '&quot;');
 
-  return quote === "'" ? replaced.replace(/'/g, `\\'`) : replaced.replace(/"/g, '&quot;');
+  return quote === "'" ? replaced.replace(/'/g, `\\'`) : replaced;
 }
