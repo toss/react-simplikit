@@ -8,7 +8,7 @@ const SOURCE_EXTENSIONS = ['ts', 'tsx', 'mts', 'cts', 'js', 'jsx', 'mjs', 'cjs']
 
 // Directories whose contents are generated or vendored: rewriting them is either
 // useless (regenerated on the next build) or actively wrong (someone else's code).
-export const DEFAULT_IGNORE = [
+const DEFAULT_IGNORE = [
   '**/node_modules/**',
   '**/dist/**',
   '**/build/**',

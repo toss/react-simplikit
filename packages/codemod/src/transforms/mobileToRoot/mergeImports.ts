@@ -40,10 +40,8 @@ function plainNamedImportOf(declaration: ts.ImportDeclaration): PlainNamedImport
   return { named: namedBindings, isTypeOnly };
 }
 
-type MergeTarget = PlainNamedImport;
-
-function collectTargets(sourceFile: ts.SourceFile): MergeTarget[] {
-  const targets: MergeTarget[] = [];
+function collectTargets(sourceFile: ts.SourceFile): PlainNamedImport[] {
+  const targets: PlainNamedImport[] = [];
 
   for (const statement of sourceFile.statements) {
     if (!ts.isImportDeclaration(statement)) {

@@ -75,7 +75,7 @@ describe('transformPackageJson', () => {
     const result = transformPackageJson(input);
 
     expect(result.changes).toEqual([]);
-    expect(result.manual.map(note => note.reason)).toHaveLength(2);
+    expect(result.manual).toHaveLength(2);
     expect(result.text).toBe(input);
   });
 

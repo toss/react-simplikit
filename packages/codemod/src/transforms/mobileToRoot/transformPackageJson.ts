@@ -1,14 +1,10 @@
 import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../../constants.ts';
 import type { PackageJsonChange } from '../../types.ts';
 
-export type PackageJsonManual = {
-  reason: string;
-};
-
 export type TransformPackageJsonResult = {
   text: string;
   changes: PackageJsonChange[];
-  manual: PackageJsonManual[];
+  manual: string[];
 };
 
 const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'] as const;
@@ -43,7 +39,7 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
   }
 
   const changes: PackageJsonChange[] = [];
-  const manual: PackageJsonManual[] = [];
+  const manual: string[] = [];
 
   let next = parsed;
   let hasRoot = DEPENDENCY_FIELDS.some(field => {
@@ -74,9 +70,9 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
     const value = next[field];
 
     if (isRecord(value) && MOBILE_PACKAGE_NAME in value) {
-      manual.push({
-        reason: `"${field}" still pins ${MOBILE_PACKAGE_NAME}. Remove it by hand — its meaning differs per package manager.`,
-      });
+      manual.push(
+        `"${field}" still pins ${MOBILE_PACKAGE_NAME}. Remove it by hand — its meaning differs per package manager.`
+      );
     }
   }
 

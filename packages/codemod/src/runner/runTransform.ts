@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import { describeError, ExecutionError } from '../errors.ts';
+import { describeError } from '../errors.ts';
 import { transformPackageJson } from '../transforms/mobileToRoot/transformPackageJson.ts';
 import { transformSource } from '../transforms/mobileToRoot/transformSource.ts';
 import type { FileResult, ManualNote, PackageJsonChange, RunResult, SourceChange } from '../types.ts';
@@ -16,24 +16,19 @@ type FileOutcome = {
   text: string;
   changes: SourceChange[];
   dependencies: PackageJsonChange[];
-  reasons: string[];
+  manual: string[];
 };
 
 function transformFile(file: string, original: string): FileOutcome {
   if (path.basename(file) === 'package.json') {
     const result = transformPackageJson(original);
 
-    return {
-      text: result.text,
-      changes: [],
-      dependencies: result.changes,
-      reasons: result.manual.map(note => note.reason),
-    };
+    return { text: result.text, changes: [], dependencies: result.changes, manual: result.manual };
   }
 
   const result = transformSource(original, file);
 
-  return { text: result.code, changes: result.changes, dependencies: [], reasons: [] };
+  return { text: result.code, changes: result.changes, dependencies: [], manual: [] };
 }
 
 export async function runTransform({ files, cwd, dryRun }: RunTransformOptions): Promise<RunResult> {
@@ -50,7 +45,7 @@ export async function runTransform({ files, cwd, dryRun }: RunTransformOptions):
       const original = await readFile(file, 'utf8');
       const outcome = transformFile(file, original);
 
-      for (const reason of outcome.reasons) {
+      for (const reason of outcome.manual) {
         manual.push({ file: relative, reason });
       }
 
@@ -66,7 +61,7 @@ export async function runTransform({ files, cwd, dryRun }: RunTransformOptions):
     } catch (error) {
       // Name the file: a bare "Unexpected end of JSON input" is unactionable, and the
       // run is not atomic, so the user needs to know where it stopped.
-      throw new ExecutionError(`Failed on ${relative}: ${describeError(error)}`);
+      throw new Error(`Failed on ${relative}: ${describeError(error)}`);
     }
   }
 
