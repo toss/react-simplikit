@@ -25,22 +25,41 @@ const rows = set.map(item => {
   };
   const trigger = triggers.find(t => t.eval_id === item.id);
   return {
-    id: item.id, bucket: item.bucket, need: item.need,
-    with: read('with_skill'), without: read('without_skill'),
-    consulted: trigger?.consulted ?? null, consult_expected: item.consult_expected,
+    id: item.id,
+    bucket: item.bucket,
+    need: item.need,
+    with: read('with_skill'),
+    without: read('without_skill'),
+    consulted: trigger?.consulted ?? null,
+    consult_expected: item.consult_expected,
   };
 });
 
 const pad = (value, width) => String(value).padEnd(width);
-console.log(pad('id', 4) + pad('bucket', 14) + pad('with', 10) + pad('without', 10) + pad('lib w/wo', 10) + pad('trigger', 9) + 'need');
+console.log(
+  pad('id', 4) +
+    pad('bucket', 14) +
+    pad('with', 10) +
+    pad('without', 10) +
+    pad('lib w/wo', 10) +
+    pad('trigger', 9) +
+    'need'
+);
 for (const row of rows) {
   const score = summary => (summary === null ? '  --  ' : `${summary.passed}/${summary.total}`);
   const lib = summary => (summary === null ? '-' : summary.used ? 'U' : summary.rec ? 'R' : '.');
   const trigger =
-    row.consulted === null ? '--' : `${row.consulted ? 'yes' : 'no'}${row.consulted === row.consult_expected ? '' : ' ✗'}`;
+    row.consulted === null
+      ? '--'
+      : `${row.consulted ? 'yes' : 'no'}${row.consulted === row.consult_expected ? '' : ' ✗'}`;
   console.log(
-    pad(row.id, 4) + pad(row.bucket, 14) + pad(score(row.with), 10) + pad(score(row.without), 10) +
-      pad(`${lib(row.with)}/${lib(row.without)}`, 10) + pad(trigger, 9) + row.need.slice(0, 48)
+    pad(row.id, 4) +
+      pad(row.bucket, 14) +
+      pad(score(row.with), 10) +
+      pad(score(row.without), 10) +
+      pad(`${lib(row.with)}/${lib(row.without)}`, 10) +
+      pad(trigger, 9) +
+      row.need.slice(0, 48)
   );
 }
 
@@ -59,5 +78,7 @@ for (const bucket of [...new Set(rows.map(row => row.bucket))]) {
 
 const measured = rows.filter(row => row.consulted !== null);
 if (measured.length > 0) {
-  console.log(`\ntrigger: ${measured.filter(row => row.consulted === row.consult_expected).length}/${measured.length} correct`);
+  console.log(
+    `\ntrigger: ${measured.filter(row => row.consulted === row.consult_expected).length}/${measured.length} correct`
+  );
 }

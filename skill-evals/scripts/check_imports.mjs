@@ -36,14 +36,21 @@ for (const file of files) {
   for (const [, clause, specifier] of source.matchAll(IMPORT)) {
     if (specifier !== 'react-simplikit') badSpecifiers.push({ file, specifier });
     const named = clause.match(/\{([^}]*)\}/);
-    const beforeBrace = clause.split('{')[0].replace(/type\s*/, '').trim();
+    const beforeBrace = clause
+      .split('{')[0]
+      .replace(/type\s*/, '')
+      .trim();
     if (beforeBrace !== '' && beforeBrace !== ',') usesDefaultImport = true;
     if (named) {
       for (const raw of named[1].split(',')) {
-        const name = raw.trim().replace(/^type\s+/, '').split(/\s+as\s+/)[0].trim();
+        const name = raw
+          .trim()
+          .replace(/^type\s+/, '')
+          .split(/\s+as\s+/)[0]
+          .trim();
         if (name === '') continue;
         importedSymbols.add(name);
-        if (!publicExports.has(name)) unknownSymbols.add(name);
+        if (!publicExports.has(name) && !publicExports.has(`type ${name}`)) unknownSymbols.add(name);
       }
     }
   }

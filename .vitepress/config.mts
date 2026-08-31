@@ -22,6 +22,7 @@ export default defineConfig({
   srcDir: '.',
   srcExclude: [
     '**/node_modules/**',
+    'skill-evals/**',
     '**/README*.md',
     '**/CHANGELOG.md',
     'CONTRIBUTING.md',
@@ -57,6 +58,7 @@ Guidelines for AI agents:
         // plus the localized copies (ko/ja + generated fallbacks) so llms.txt lists each page once.
         ignoreFiles: [
           '**/node_modules/**',
+          'skill-evals/**',
           '**/README*.md',
           '**/CHANGELOG.md',
           'CONTRIBUTING.md',
