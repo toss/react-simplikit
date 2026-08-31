@@ -53,7 +53,7 @@ export { useVisualViewport } from './mobile/hooks/useVisualViewport/index.ts';
 export { disableBodyScrollLock } from './mobile/utils/disableBodyScrollLock/index.ts';
 export { enableBodyScrollLock } from './mobile/utils/enableBodyScrollLock/index.ts';
 export { getKeyboardHeight } from './mobile/utils/getKeyboardHeight/index.ts';
-export { getSafeAreaInset } from './mobile/utils/getSafeAreaInset/index.ts';
+export { getSafeAreaInset, type SafeAreaInset } from './mobile/utils/getSafeAreaInset/index.ts';
 export { isAndroid } from './mobile/utils/isAndroid/index.ts';
 export { isIOS } from './mobile/utils/isIOS/index.ts';
 export { isKeyboardVisible } from './mobile/utils/isKeyboardVisible/index.ts';
