@@ -1,0 +1,163 @@
+{
+  "skill_name": "react-simplikit",
+  "iteration": 2,
+  "skill_commit": "fd312f5",
+  "evals": [
+    {
+      "id": 1,
+      "bucket": "discovery",
+      "need": "stop firing a request on every keystroke",
+      "prompt": "the shipment search on our ops dashboard fires a request on literally every keystroke and the platform team pinged us about it in #api-alerts. its in src/features/shipments/ShipmentSearchPanel.tsx, the input is controlled by `q` state and there's a lookup call right under it. can you make it wait until the person stops typing for a bit, and make sure an old in-flight response can't overwrite a newer one — we had a bug last month where typing \"seoul\" then deleting back to \"seo\" showed the wrong results",
+      "expected_output": "Delays the request until typing pauses while keeping the input itself instantly responsive, and guards against an earlier slower response clobbering the latest one (abort or ignore stale results). Cleans up any pending timer/request when the component unmounts or the query changes, and doesn't leave the input laggy or the results desynced from what's typed.",
+      "expectations": [
+        "The input itself stays instantly responsive — the controlled value shown to the user is never the debounced one",
+        "The lookup request fires only after the user pauses typing, not on every keystroke",
+        "A stale in-flight response cannot overwrite a newer one (abort, or an ignore-stale guard covering out-of-order completion)",
+        "Pending timer AND in-flight request are cleaned up on unmount and when the query changes",
+        "The sequence type-settle-edit-revert (e.g. 'seoul' settles, edit to 'seo', revert to 'seoul' before the pause elapses) cannot end with a lookup for a value different from what the input shows",
+        "Every import from react-simplikit (if any) uses the bare specifier 'react-simplikit' with named imports, every imported symbol is a real public export, and every call matches the real API's signature — no invented export, no subpath, no default import"
+      ],
+      "consult_expected": true
+    },
+    {
+      "id": 2,
+      "bucket": "discovery",
+      "need": "close a popup when the user clicks outside it",
+      "prompt": "AccountMenu in src/components/TopBar/AccountMenu.tsx doesn't close when you click somewhere else on the page — you have to click the avatar again. should close on any click outside it and on escape too. note the \"switch workspace\" submenu renders into a portal at the body level so watch out that clicking inside that doesn't count as outside, that's what broke it the last time someone tried this.",
+      "expected_output": "The menu closes on an outside click and on Escape, but stays open for clicks inside it including the portalled submenu (handled by checking the actual composed target/ref containment rather than DOM ancestry alone). Listeners are attached only while open and removed on close/unmount, and the toggle button itself doesn't immediately reopen or double-fire.",
+      "expectations": [
+        "The menu closes on an outside click and on Escape",
+        "A click inside the portalled submenu does NOT count as outside (containment beyond plain DOM ancestry of the one menu element)",
+        "Document-level listeners do not leak: one handler is registered rather than re-registered on every render, and it is removed on unmount; a handler left registered while the menu is closed passes only if it cannot fire the close callback in that state",
+        "Clicking the avatar toggle while the menu is open closes it without immediately reopening (no open-close-open double fire)",
+        "Every import from react-simplikit (if any) uses the bare specifier 'react-simplikit' with named imports, every imported symbol is a real public export, and every call matches the real API's signature — no invented export, no subpath, no default import",
+        "user_notes.md truthfully records anything not done or not verifiable, and no claim in SOLUTION.md is contradicted by the code actually written"
+      ],
+      "consult_expected": true
+    },
+    {
+      "id": 3,
+      "bucket": "discovery",
+      "need": "keep a fixed bottom button visible when the on-screen keyboard opens",
+      "prompt": "pay now button on mobile checkout is fixed to the bottom and on ios safari the keyboard slides right over it when you tap the card number field, cant see the button at all. file is src/features/checkout/mobile/PayBar.tsx, it already has safe area padding. make it ride above the keyboard while thats open and drop back down when it closes",
+      "expected_output": "The bar tracks the actual visible viewport so it rests above the keyboard while it is open, then returns to its normal bottom position with the existing safe-area inset preserved once it closes. Updates are throttled rather than run on every resize event, listeners are cleaned up, and it must not break server rendering or crash where the newer viewport APIs are unavailable.",
+      "expectations": [
+        "The bar rides above the keyboard while it is open and returns to its normal bottom position when it closes",
+        "The existing safe-area padding is preserved in both states — neither lost while the keyboard is open nor double-counted",
+        "Viewport/keyboard updates are throttled or deduplicated rather than applied on every raw resize event",
+        "All listeners are cleaned up on unmount",
+        "Server rendering is safe: the server-rendered markup does not depend on a browser-only value (no hydration mismatch and no crash when window/visualViewport is absent), and the code no-ops where visualViewport is unavailable",
+        "Every import from react-simplikit (if any) uses the bare specifier 'react-simplikit' with named imports, every imported symbol is a real public export, and every call matches the real API's signature — no invented export, no subpath, no default import"
+      ],
+      "consult_expected": true
+    },
+    {
+      "id": 4,
+      "bucket": "discovery",
+      "need": "stop the page behind an overlay from scrolling",
+      "prompt": "our filter sheet slides up from the bottom on mobile (src/components/BottomSheet/BottomSheet.tsx) and while its open you can still scroll the page behind it — on ios you can even rubber band the whole page and the sheet drifts with it, looks broken. QA filed it as HARB-2214. lock the page behind while its open, and when it closes the user should end up at the exact scroll position they were at, not jumped to the top. we can have two sheets stacked (filter opens a date picker sheet) so closing the inner one shouldn't unlock everything.",
+      "expected_output": "Background scrolling is blocked while the sheet is open on iOS Safari and Android Chrome, scroll position is restored exactly on close, and content inside the sheet still scrolls. Nested sheets are ref-counted so unlocking only happens when the last one closes, and the lock is released on unmount even if the sheet is torn down while open.",
+      "expectations": [
+        "Background page scroll is blocked while the sheet is open with a technique that actually holds on iOS Safari (plain overflow:hidden alone does not stop rubber-banding)",
+        "The scroll position is restored exactly when the sheet closes",
+        "Content inside the sheet still scrolls",
+        "With two stacked sheets, closing the inner one does NOT unlock the page while the outer one is still open (ref-count, or a single lock owned above both)",
+        "The lock is released on unmount even if the sheet is torn down abruptly while open",
+        "Every import from react-simplikit (if any) uses the bare specifier 'react-simplikit' with named imports, every imported symbol is a real public export, and every call matches the real API's signature — no invented export, no subpath, no default import"
+      ],
+      "consult_expected": true
+    },
+    {
+      "id": 5,
+      "bucket": "discovery",
+      "need": "Let one input element serve both the parent components that need its DOM node and the component's own internal use of that node.",
+      "prompt": "src/components/fields/SearchField.tsx is the shared search input we use all over the storefront. two parents — the shipment filter bar and the recent-searches popover — need the real input DOM node so they can position their dropdown against it, so a couple weeks ago we started handing the ref up to them. ever since that landed the field's own logic has quietly stopped working: it's supposed to focus itself when it mounts on the search page, and it measures its own width to decide whether the clear button fits. neither happens now. no error, no console warning, it just does nothing. my read is only one of the two ends up with the node and the internal one stays null. i need both to work — parents keep getting the node exactly like they do now, and the component gets its own working handle on it.",
+      "expected_output": "Both consumers end up with the same live DOM node: the parent-facing ref is populated exactly as it is today, and the component's focus-on-mount and width measurement start working again, with only one ref actually attached to the input element. A careful fix handles both kinds of ref a parent can pass (a callback and a ref object) and clears them to null on unmount so a parent never positions a dropdown against a detached node. SearchField's public props should not change, so both existing parents keep working untouched. Whether the merged ref callback keeps a stable identity across renders is deliberately NOT scored in this eval — see audit_note — so do not penalise a solution for it. Sloppy versions stash the node in state and trigger a re-render loop, assign the internal ref inside an effect where the read races the parent's write, or support only object refs and silently break whichever parent passes a callback — the same silent, error-free failure the developer is already describing.",
+      "expectations": [
+        "Both consumers get the node: the parent-facing ref AND the internal focus/measure logic work on the same element",
+        "Works whether the parent passes a ref object or a callback ref",
+        "Exactly one ref is attached to the input element and it fans out to both consumers — the parent-facing ref is not attached separately or overwritten — and unmount propagates null to a parent callback ref",
+        "The internal focus and measurement behaviour described as broken is actually restored",
+        "Every import from react-simplikit (if any) uses the bare specifier 'react-simplikit' with named imports, every imported symbol is a real public export, and every call matches the real API's signature — no invented export, no subpath, no default import",
+        "user_notes.md truthfully records anything not done or not verifiable, and no claim in SOLUTION.md is contradicted by the code actually written"
+      ],
+      "consult_expected": true
+    },
+    {
+      "id": 6,
+      "bucket": "knowledge",
+      "need": "Move the app off a package that is being discontinued and onto the consolidated one, without changing how the checkout CTA and the filter sheet behave.",
+      "prompt": "heads up from the release notes — @react-simplikit/mobile is getting folded into react-simplikit and the separate mobile package stops getting updates. we pull from it in exactly two places: src/components/CheckoutCta.tsx (keyboard avoidance so the cta doesn't end up buried under the ios keyboard) and src/features/sheet/FilterSheet.tsx (the scroll lock on the body while the sheet is open). can you move us onto the main package? i only skimmed the release note, so i honestly don't know whether the export names are the same, whether there's some compat shim, or what the imports are supposed to look like now — figure out what the migration actually requires before you start editing. once it's done the keyboard behavior on checkout and the scroll lock on the sheet need to behave exactly like they do today, and drop the old dep from package.json if nothing else is pulling it in. i'd rather not discover this the hard way on the next mobile release.",
+      "expected_output": "Both call sites end up importing from the consolidated package using the names and call signatures that package actually provides today, established by working out what the migration requires rather than by guessing from a release-note headline, and the keyboard-avoidance behavior on CheckoutCta and the scroll lock on FilterSheet are observably unchanged. The deprecated package is removed from the package.json dependencies, so the app stops shipping two copies of the same utilities, which is exactly where duplicated listeners and split module state come from; this fixture has no lockfile, so package.json is the whole of the dependency record and nothing further should be demanded on that front. A sloppy fix find-and-replaces the import specifier and assumes the exported names, options objects, and return shapes carried over untouched, or invents a shim or codemod that does not exist; it leaves the old dependency installed; it silently changes a default so the sheet no longer restores scroll position on close. Verification by execution is impossible in this sandbox and the target package is not installed in this fixture, so a typecheck or build proving the new imports resolve cannot be produced and must not be claimed as if it had been: what is required instead is that the solution scope its confidence to what it actually checked on disk and record the residual uncertainty in user_notes.",
+      "expectations": [
+        "Every @react-simplikit/mobile import site (both named files) is rewritten to a bare 'react-simplikit' named import",
+        "No invented subpath appears anywhere (no 'react-simplikit/mobile' or similar)",
+        "package.json drops @react-simplikit/mobile and declares react-simplikit",
+        "Each migrated symbol really exists in the react-simplikit root export with the same name, and its call shape in the migrated code matches the real API",
+        "The behaviour of the two components is unchanged by the migration (keyboard offset and scroll-lock semantics preserved)",
+        "The solution does not assert unverifiable migration facts (e.g. a compatibility shim) as true; uncertainty is recorded honestly"
+      ],
+      "consult_expected": true
+    },
+    {
+      "id": 7,
+      "bucket": "knowledge",
+      "need": "Get the failing import resolving correctly so CI passes and the pay bar still ships on today's release train.",
+      "prompt": "CI is red on jaehyun's PR and #build-failures has been pinging all morning: `Module not found` on the import specifier `react-simplikit/mobile` in src/features/checkout/PayBar.tsx. react-simplikit itself is right there in our package.json so it isn't a missing install. jaehyun is on a flight today and unreachable, and the release train cuts at 4, so i can't ask him what he meant by that path. i don't know why it doesn't resolve. can you work out the correct way to import whatever PayBar is pulling from that package and fix the build properly? please don't fix it by ripping out the pay bar or stubbing the import — that feature has to go out in this release.",
+      "expected_output": "The build goes green because the import in PayBar.tsx points at an entry point the package genuinely exposes, with the specific names PayBar uses verified to exist there, and the pay bar keeps doing what it was written to do. The reason the specifier fails should be explained from the package's actual resolution rules rather than the error merely being made to disappear, and the fix should be grounded in the installed package's own resolution metadata and type declarations on disk, since nothing can be executed in this sandbox — a claim that the build is now green must not be presented as an observed result, and user_notes must record that the build was not actually run. Sloppy fixes to catch: a tsconfig `paths` entry or bundler alias that forces the subpath to resolve, a deep relative import into node_modules or a dist file, a `@ts-ignore` or `as any` papering over the error, installing an extra package to satisfy the resolver, or guessing an export name that compiles but is `undefined` at runtime so the pay bar breaks in production instead of in CI. It should also check whether any other file imports the same bad specifier, so the next PR doesn't fail the same way.",
+      "expectations": [
+        "The build error is fixed by importing from the bare 'react-simplikit' specifier, and the imported symbol exists there",
+        "The PayBar feature is preserved — the keyboard-height behaviour still works as before",
+        "No workaround hacks: no node_modules patching, no bundler alias for the bad path, no copying the hook source into the repo, no dependency downgrade",
+        "The explanation correctly identifies why the subpath fails (the package exposes a single root entry; there is no 'mobile' subpath export)",
+        "Every import from react-simplikit (if any) uses the bare specifier 'react-simplikit' with named imports, every imported symbol is a real public export, and every call matches the real API's signature — no invented export, no subpath, no default import"
+      ],
+      "consult_expected": true
+    },
+    {
+      "id": 8,
+      "bucket": "out-of-scope",
+      "need": "make lists refresh after a mutation instead of showing stale data",
+      "prompt": "when you rename a warehouse in the edit dialog the save succeeds but the table behind it still shows the old name until you hard refresh. same thing on the detail page header. our fetching setup lives in src/lib/data (there's a key factory in keys.ts) and the dialog is src/features/warehouses/EditWarehouseDialog.tsx. can you make the affected views update after a successful save — and ideally the row should show the new name immediately with a rollback if the request fails, since the endpoint takes about a second.",
+      "expected_output": "Reads the existing data layer and key conventions, then invalidates or updates exactly the affected queries after a successful save, plus an optimistic update with rollback on failure. A good answer does this real plumbing work in the app's own patterns and doesn't try to substitute a small generic UI helper for it.",
+      "expectations": [
+        "After a successful save, the affected views (table AND detail header) update through the app's own data-layer conventions (the key factory), not a hand-rolled side channel",
+        "An optimistic update is applied with rollback on failure",
+        "No UI-primitive library (react-simplikit included) is introduced as the mechanism for cache invalidation",
+        "The part of the request the chosen approach does not cover is stated rather than silently dropped",
+        "user_notes.md truthfully records anything not done or not verifiable, and no claim in SOLUTION.md is contradicted by the code actually written"
+      ],
+      "consult_expected": false
+    },
+    {
+      "id": 9,
+      "bucket": "out-of-scope",
+      "need": "one typed source of truth for form validation rules",
+      "prompt": "our carrier onboarding form is a mess. the rules for the same fields are written in three places — inline checks in src/features/onboarding/steps/CompanyStep.tsx, a big validate() in src/features/onboarding/utils.ts, and then again on the server, and they disagree. business number is the worst one: the client accepts 10 digits with dashes, the server wants 10 digits no dashes and returns a 400 that we render as \"unknown error\". i want one place that defines what a valid CompanyStep payload is, typed, used by the step to show inline field errors as the user leaves each field, and used again right before submit. the other three steps can stay as they are for now, just do CompanyStep so i can review the shape before we roll it out.",
+      "expected_output": "Defines the CompanyStep field rules once, in a typed form that both blur-time field errors and the submit path consume, with the business-number rule reconciled to what the server actually accepts and the 400 surfaced as a real field message. Scope stays on CompanyStep as asked; the agent writes actual validation logic rather than reaching for an unrelated UI utility.",
+      "expectations": [
+        "The CompanyStep field rules are defined once, in a typed form, and both blur-time field errors and the submit path consume that single definition",
+        "The business-number rule is reconciled: the client accepts the dashed form users type but the value sent matches what the server accepts, and the server 400 surfaces as a field-level message",
+        "No unrelated UI utility is presented as the source-of-truth fix",
+        "user_notes.md truthfully records anything not done or not verifiable, and no claim in SOLUTION.md is contradicted by the code actually written"
+      ],
+      "consult_expected": false
+    },
+    {
+      "id": 10,
+      "bucket": "out-of-scope",
+      "need": "make a custom dropdown usable by keyboard and screen readers",
+      "prompt": "accessibility audit came back and the region picker on the booking form failed hard. its a custom thing built out of divs in src/components/RegionPicker/RegionPicker.tsx because design wanted flags in the options. keyboard users cant open it at all (tab just skips it), and with voiceover it reads out nothing useful — just \"seoul\" with no indication its a picker or that 12 options exist. we cant switch to a native select, the flags + two-line labels are a hard requirement from design. please make it actually operable: keyboard open/close, arrow keys through options, type-ahead would be nice, and announce properly.",
+      "expected_output": "Adds correct semantics (listbox/option roles, expanded state, active-option linkage, accessible name) and full keyboard operation — open/close, arrow navigation with focus management, Escape, Enter/Space selection, optional type-ahead — while keeping the custom flag markup. This is real ARIA and focus-management work; a good answer implements it rather than claiming a generic helper covers it.",
+      "expectations": [
+        "The picker gets correct semantics: listbox/option roles (or equivalent), expanded state, selected/active option linkage, and an accessible name",
+        "Full keyboard operation: reachable by Tab, opens, arrow-key navigation, Enter/Space selects, Escape closes",
+        "The custom flag markup in options is kept",
+        "A screen reader can tell it is a picker, how many options exist, and which is selected",
+        "The solution does not claim generic open/close or outside-click helpers satisfy the accessibility ask",
+        "user_notes.md truthfully records anything not done or not verifiable, and no claim in SOLUTION.md is contradicted by the code actually written"
+      ],
+      "consult_expected": false
+    }
+  ]
+}
