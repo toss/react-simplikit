@@ -14,6 +14,8 @@ const MAX_DESCRIPTION_LENGTH = 1024;
 
 const root = getRootPath();
 const skillDirectory = path.join(root, SKILL_DIRECTORY);
+// Hand-written, so it gets the frontmatter checks below but no regeneration diff.
+const codemodSkillDirectory = path.join(root, path.dirname(SKILL_DIRECTORY), 'react-simplikit-codemod');
 
 // The committed skill must be exactly what a fresh generation produces.
 const regeneratedDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-skill-'));
@@ -40,18 +42,28 @@ try {
   await fs.rm(regeneratedDirectory, { force: true, recursive: true });
 }
 
-const skill = await fs.readFile(path.join(skillDirectory, 'SKILL.md'), 'utf8');
-const frontmatter = /^---\n([\s\S]*?)\n---\n/.exec(skill)?.[1] ?? '';
-const description = /^description: (.*)$/m.exec(frontmatter)?.[1] ?? '';
+const skill = await readVerifiedSkill(skillDirectory, 'react-simplikit');
+const codemodSkill = await readVerifiedSkill(codemodSkillDirectory, 'react-simplikit-codemod');
 
-assert.equal(skill.split('\n').length <= MAX_SKILL_LINES, true, `SKILL.md must stay under ${MAX_SKILL_LINES} lines`);
-assert.equal(/^name: (.*)$/m.exec(frontmatter)?.[1], 'react-simplikit', 'the skill name must match its directory');
-assert.equal(description.length > 0, true, 'the skill must have a description');
-assert.equal(
-  description.length <= MAX_DESCRIPTION_LENGTH,
-  true,
-  `the skill description must stay under ${MAX_DESCRIPTION_LENGTH} characters`
-);
+// The version floor lives in one constant and is repeated in prose. A bump that misses the prose
+// ships docs promising a range the CLI no longer writes -- it was already wrong once, at 0.1.1.
+const constants = await fs.readFile(path.join(root, 'packages/codemod/src/constants.ts'), 'utf8');
+const floor = /MIN_RUNTIME_VERSION = '(.*)'/.exec(constants)?.[1];
+
+if (floor === undefined) {
+  throw new Error('MIN_RUNTIME_VERSION is missing from packages/codemod/src/constants.ts');
+}
+
+for (const [label, contents] of [
+  ['the react-simplikit-codemod skill', codemodSkill],
+  ['packages/codemod/README.md', await fs.readFile(path.join(root, 'packages/codemod/README.md'), 'utf8')],
+] as const) {
+  assert.equal(
+    contents.includes(floor),
+    true,
+    `${label} never mentions ${floor} — MIN_RUNTIME_VERSION changed without the prose following`
+  );
+}
 
 const publicExports = await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE));
 const catalogNames = [...skill.matchAll(/^\| \[`([^`]+)`\]\(references\/\1\.md\) \| .+ \|$/gm)].map(match => match[1]);
@@ -93,6 +105,27 @@ const commonNeeds = skill.slice(skill.indexOf('## Common needs'), skill.indexOf(
 
 for (const [, token] of commonNeeds.matchAll(/`([^`]+)`/g)) {
   assert.equal(publicExports.includes(token), true, `"${token}" in the Common needs table is not a public export`);
+}
+
+async function readVerifiedSkill(directory: string, name: string): Promise<string> {
+  const contents = await fs.readFile(path.join(directory, 'SKILL.md'), 'utf8');
+  const frontmatter = /^---\n([\s\S]*?)\n---\n/.exec(contents)?.[1] ?? '';
+  const description = /^description: (.*)$/m.exec(frontmatter)?.[1] ?? '';
+
+  assert.equal(
+    contents.split('\n').length <= MAX_SKILL_LINES,
+    true,
+    `${name}/SKILL.md must stay under ${MAX_SKILL_LINES} lines`
+  );
+  assert.equal(/^name: (.*)$/m.exec(frontmatter)?.[1], name, `the ${name} skill name must match its directory`);
+  assert.equal(description.length > 0, true, `the ${name} skill must have a description`);
+  assert.equal(
+    description.length <= MAX_DESCRIPTION_LENGTH,
+    true,
+    `the ${name} skill description must stay under ${MAX_DESCRIPTION_LENGTH} characters`
+  );
+
+  return contents;
 }
 
 async function listGeneratedFiles(directory: string): Promise<string[]> {

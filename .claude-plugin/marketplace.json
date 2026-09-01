@@ -2,7 +2,7 @@
   "name": "react-simplikit",
   "owner": { "name": "toss" },
   "metadata": {
-    "description": "Agent skill for react-simplikit: a catalog of every hook, component and util with usage rules."
+    "description": "Agent skills for react-simplikit: a catalog of every hook, component and util with usage rules, and the migration off @react-simplikit/mobile."
   },
   "plugins": [
     {
