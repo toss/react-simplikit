@@ -1,13 +1,14 @@
 import ts from 'typescript';
 
 import { ROOT_PACKAGE_NAME } from '../../constants.ts';
-import type { SourceChange, Splice } from '../../types.ts';
+import type { SourceChange, SourceNote, Splice } from '../../types.ts';
 
 import { lineOf, type SpecifierHit } from './collectSpecifiers.ts';
 
 export type MergeResult = {
   splices: Splice[];
   changes: SourceChange[];
+  notes: SourceNote[];
   mergedDeclarations: Set<ts.ImportDeclaration>;
 };
 
@@ -93,6 +94,7 @@ function insertIntoNamedImports(
 export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly SpecifierHit[]): MergeResult {
   const splices: Splice[] = [];
   const changes: SourceChange[] = [];
+  const notes: SourceNote[] = [];
   const mergedDeclarations = new Set<ts.ImportDeclaration>();
   const targets = collectTargets(sourceFile);
   const boundByTarget = new Map<ts.NamedImports, Map<string, string>>();
@@ -101,7 +103,7 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
   for (const hit of hits) {
     const { declaration } = hit;
 
-    if (declaration === undefined || declaration.parent !== sourceFile || hasComment(sourceFile, declaration)) {
+    if (declaration === undefined || declaration.parent !== sourceFile) {
       continue;
     }
 
@@ -117,12 +119,22 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
       continue;
     }
 
+    const line = lineOf(sourceFile, declaration.getStart(sourceFile));
+
+    if (hasComment(sourceFile, declaration)) {
+      notes.push({
+        line,
+        reason: 'Left on its own line: a comment is attached to it, and merging would drop the comment.',
+      });
+      continue;
+    }
+
     const bound =
       boundByTarget.get(target.named) ??
       new Map(target.named.elements.map(element => [element.name.text, importedNameOf(element)]));
 
     const additions: string[] = [];
-    let collides = false;
+    let collision: string | undefined;
 
     for (const element of source.named.elements) {
       const existing = bound.get(element.name.text);
@@ -130,12 +142,16 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
       if (existing === undefined) {
         additions.push(sourceFile.text.slice(element.getStart(sourceFile), element.getEnd()));
       } else if (existing !== importedNameOf(element)) {
-        collides = true;
+        collision = element.name.text;
         break;
       }
     }
 
-    if (collides) {
+    if (collision !== undefined) {
+      notes.push({
+        line,
+        reason: `Left on its own line: \`${collision}\` already refers to a different import here. Merging it by hand would change what the name binds.`,
+      });
       continue;
     }
 
@@ -147,7 +163,7 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
     appendedByTarget.set(target.named, [...(appendedByTarget.get(target.named) ?? []), ...additions]);
 
     splices.push(deleteStatement(sourceFile, declaration));
-    changes.push({ line: lineOf(sourceFile, declaration.getStart(sourceFile)), kind: 'merge' });
+    changes.push({ line, kind: 'merge' });
     mergedDeclarations.add(declaration);
   }
 
@@ -157,5 +173,5 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
     }
   }
 
-  return { splices, changes, mergedDeclarations };
+  return { splices, changes, notes, mergedDeclarations };
 }

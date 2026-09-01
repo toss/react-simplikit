@@ -209,6 +209,41 @@ describe('react-simplikit-codemod', () => {
   });
 });
 
+describe('running it twice', () => {
+  it('changes nothing on the second run', async () => {
+    await write(
+      'src/a.tsx',
+      `import { useToggle } from 'react-simplikit';\nimport { isIOS } from '@react-simplikit/mobile';\n`
+    );
+    await write('app/package.json', `{\n  "dependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`);
+
+    expect((await runCli(['mobile-to-root'], cwd)).exitCode).toBe(0);
+    const afterFirst = await readFile(path.join(cwd, 'src', 'a.tsx'), 'utf8');
+
+    const second = await runCli(['mobile-to-root', '--json'], cwd);
+    const parsed = JSON.parse(second.stdout) as { changed: unknown[] };
+
+    expect(parsed.changed).toEqual([]);
+    expect(await readFile(path.join(cwd, 'src', 'a.tsx'), 'utf8')).toBe(afterFirst);
+  });
+});
+
+describe('declined merges', () => {
+  it('tells the user why a line was left on its own', async () => {
+    await write(
+      'src/a.ts',
+      `import { useToggle as isIOS } from 'react-simplikit';\nimport { isIOS } from '@react-simplikit/mobile';\n`
+    );
+
+    const result = await runCli(['mobile-to-root'], cwd);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('Needs a manual follow-up:');
+    expect(result.stdout).toContain('src/a.ts:2');
+    expect(result.stdout).toContain('Merging it by hand would change what the name binds');
+  });
+});
+
 describe('the published tarball', () => {
   it('carries the bin entry it declares, executable and runnable', async () => {
     const workDir = await mkdtemp(path.join(fixturesRoot, 'pack-'));

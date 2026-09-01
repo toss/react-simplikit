@@ -5,9 +5,15 @@ export type SourceChange = {
   kind: ChangeKind;
 };
 
+export type SourceNote = {
+  line: number;
+  reason: string;
+};
+
 export type TransformSourceResult = {
   code: string;
   changes: SourceChange[];
+  notes: SourceNote[];
 };
 
 export type Splice = {
@@ -30,6 +36,7 @@ export type FileResult = {
 
 export type ManualNote = {
   file: string;
+  line: number | undefined;
   reason: string;
 };
 

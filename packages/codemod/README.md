@@ -34,7 +34,7 @@ Source files are parsed with the TypeScript compiler and edited by offset, so fo
 
 - Markdown, MDX, comments, and any other prose naming the package
 - `resolutions` and `overrides` in `package.json` — reported, not edited, because their meaning differs per package manager
-- Imports carrying a comment, sitting inside a `declare module` block, or whose local name is already bound to a different symbol: merging would lose something, so the specifier is rewritten in place instead
+- Imports carrying a comment, sitting inside a `declare module` block, or whose local name is already bound to a different symbol: merging would lose something, so the specifier is rewritten in place instead. The first two are reported so you do not merge them by hand and reintroduce what the codemod avoided
 - Your lockfile. Reinstall after the run
 
 `node_modules`, `dist`, `build`, `out`, `coverage`, `.next`, `.yarn` and `.git` are always skipped.
@@ -58,6 +58,8 @@ Source files are parsed with the TypeScript compiler and edited by offset, so fo
 | `2`  | Invalid usage: unknown command, bad flag, or a path that does not exist   |
 
 A run is not atomic and does not stop at the first failure. On exit `1` the report lists every file it could not process under **Could not be processed**; everything else was migrated.
+
+Running it twice is safe: the second run finds nothing to change.
 
 ### After running
 

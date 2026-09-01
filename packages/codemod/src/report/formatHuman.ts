@@ -31,7 +31,11 @@ export function formatHuman(result: RunResult, dryRun: boolean): string {
   }
 
   if (manual.length > 0) {
-    lines.push('', 'Needs a manual follow-up:', ...manual.map(note => `  ${note.file}: ${note.reason}`));
+    lines.push(
+      '',
+      'Needs a manual follow-up:',
+      ...manual.map(note => `  ${note.file}${note.line === undefined ? '' : `:${note.line}`} — ${note.reason}`)
+    );
   }
 
   if (changed.length > 0) {

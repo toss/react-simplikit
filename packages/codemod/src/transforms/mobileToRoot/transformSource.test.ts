@@ -310,3 +310,71 @@ describe('transformSource — shapes that must not be merged or must not be miss
     );
   });
 });
+
+describe('transformSource — telling the user what it declined to merge', () => {
+  it('explains a refusal caused by a name that already binds something else', () => {
+    const result = transformSource(
+      [
+        `import { useToggle as isIOS } from 'react-simplikit';`,
+        `import { isIOS } from '@react-simplikit/mobile';`,
+        ``,
+      ].join('\n'),
+      'a.ts'
+    );
+
+    expect(result.notes).toEqual([{ line: 2, reason: expect.stringContaining('isIOS') }]);
+    expect(result.notes[0]?.reason).toContain('by hand');
+  });
+
+  it('explains a refusal caused by an attached comment', () => {
+    const result = transformSource(
+      [
+        `import { useToggle } from 'react-simplikit';`,
+        `// keep this`,
+        `import { isIOS } from '@react-simplikit/mobile';`,
+        ``,
+      ].join('\n'),
+      'a.ts'
+    );
+
+    expect(result.notes).toEqual([{ line: 3, reason: expect.stringContaining('comment') }]);
+  });
+
+  it('stays quiet when there was nothing to merge into', () => {
+    expect(transformSource(`import { isIOS } from '@react-simplikit/mobile';\n`, 'a.ts').notes).toEqual([]);
+  });
+
+  it('stays quiet about shapes a named list could never hold', () => {
+    const namespaceImport = transformSource(
+      [`import { useToggle } from 'react-simplikit';`, `import * as m from '@react-simplikit/mobile';`].join('\n'),
+      'a.ts'
+    );
+    const insideAmbientBlock = transformSource(
+      [
+        `import { useToggle } from 'react-simplikit';`,
+        `declare module 'other' {`,
+        `  import { isIOS } from '@react-simplikit/mobile';`,
+        `}`,
+      ].join('\n'),
+      'a.ts'
+    );
+
+    expect(namespaceImport.notes).toEqual([]);
+    expect(insideAmbientBlock.notes).toEqual([]);
+  });
+
+  it('leaves nothing to do on a second run', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      `export { isAndroid } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    const once = transformSource(input, 'a.ts');
+    const twice = transformSource(once.code, 'a.ts');
+
+    expect(twice.code).toBe(once.code);
+    expect(twice.changes).toEqual([]);
+  });
+});

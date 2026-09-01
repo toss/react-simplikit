@@ -22,7 +22,7 @@ const result: RunResult = {
       dependencies: [{ field: 'dependencies', removed: '@react-simplikit/mobile', added: '^0.2.0' }],
     },
   ],
-  manual: [{ file: 'package.json', reason: 'overrides still pins it' }],
+  manual: [{ file: 'package.json', line: undefined, reason: 'overrides still pins it' }],
   failed: [],
 };
 
@@ -42,7 +42,7 @@ describe('formatHuman', () => {
   });
 
   it('lists manual follow-ups', () => {
-    expect(formatHuman(result, false)).toContain('package.json: overrides still pins it');
+    expect(formatHuman(result, false)).toContain('package.json — overrides still pins it');
   });
 
   it('closes an applied run by pointing at the install step', () => {
@@ -100,14 +100,14 @@ describe('formatHuman — manual notes without file changes', () => {
   const manualOnly = {
     scanned: 1,
     changed: [],
-    manual: [{ file: 'package.json', reason: '"overrides" still pins it' }],
+    manual: [{ file: 'package.json', line: undefined, reason: '"overrides" still pins it' }],
     failed: [],
   };
 
   it('shows the follow-up instead of claiming nothing was found', () => {
     const output = formatHuman(manualOnly, false);
 
-    expect(output).toContain('package.json: "overrides" still pins it');
+    expect(output).toContain('package.json — "overrides" still pins it');
     expect(output).not.toContain('Nothing to change');
   });
 });
@@ -127,5 +127,23 @@ describe('formatHuman — failures', () => {
     expect(output).toContain('src/a.ts');
     expect(output).toContain('Could not be processed:');
     expect(output).toContain('package.json: Unexpected end of JSON input');
+  });
+});
+
+describe('formatHuman — notes that point at a line', () => {
+  it('shows the line so the reader can find the import', () => {
+    const output = formatHuman(
+      {
+        scanned: 1,
+        changed: [{ file: 'src/a.ts', changes: [{ line: 1, kind: 'import' }], dependencies: [] }],
+        manual: [
+          { file: 'src/a.ts', line: 3, reason: 'Left on its own line: `isIOS` already refers to something else.' },
+        ],
+        failed: [],
+      },
+      false
+    );
+
+    expect(output).toContain('src/a.ts:3 — Left on its own line');
   });
 });

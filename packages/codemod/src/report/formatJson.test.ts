@@ -14,7 +14,7 @@ const result: RunResult = {
       dependencies: [{ field: 'dependencies', removed: '@react-simplikit/mobile', added: '^0.2.0' }],
     },
   ],
-  manual: [{ file: 'package.json', reason: 'overrides still pins it' }],
+  manual: [{ file: 'package.json', line: undefined, reason: 'overrides still pins it' }],
   failed: [],
 };
 

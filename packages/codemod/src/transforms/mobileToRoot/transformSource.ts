@@ -21,14 +21,14 @@ function applySplices(code: string, splices: readonly Splice[]): string {
 
 export function transformSource(code: string, fileName: string): TransformSourceResult {
   if (!code.includes(MOBILE_PACKAGE_NAME)) {
-    return { code, changes: [] };
+    return { code, changes: [], notes: [] };
   }
 
   const sourceFile = parseSource(code, fileName);
   const hits = collectSpecifiers(sourceFile);
 
   if (hits.length === 0) {
-    return { code, changes: [] };
+    return { code, changes: [], notes: [] };
   }
 
   const merge = buildMergeSplices(sourceFile, hits);
@@ -48,5 +48,6 @@ export function transformSource(code: string, fileName: string): TransformSource
   return {
     code: applySplices(code, splices),
     changes: [...changes].sort((a, b) => a.line - b.line),
+    notes: merge.notes,
   };
 }

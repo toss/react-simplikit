@@ -4,7 +4,15 @@ import path from 'node:path';
 import { describeError } from '../errors.ts';
 import { transformPackageJson } from '../transforms/mobileToRoot/transformPackageJson.ts';
 import { transformSource } from '../transforms/mobileToRoot/transformSource.ts';
-import type { FileFailure, FileResult, ManualNote, PackageJsonChange, RunResult, SourceChange } from '../types.ts';
+import type {
+  FileFailure,
+  FileResult,
+  ManualNote,
+  PackageJsonChange,
+  RunResult,
+  SourceChange,
+  SourceNote,
+} from '../types.ts';
 
 export type RunTransformOptions = {
   files: readonly string[];
@@ -16,19 +24,24 @@ type FileOutcome = {
   text: string;
   changes: SourceChange[];
   dependencies: PackageJsonChange[];
-  manual: string[];
+  notes: (SourceNote | { line: undefined; reason: string })[];
 };
 
 function transformFile(file: string, original: string): FileOutcome {
   if (path.basename(file) === 'package.json') {
     const result = transformPackageJson(original);
 
-    return { text: result.text, changes: [], dependencies: result.changes, manual: result.manual };
+    return {
+      text: result.text,
+      changes: [],
+      dependencies: result.changes,
+      notes: result.manual.map(reason => ({ line: undefined, reason })),
+    };
   }
 
   const result = transformSource(original, file);
 
-  return { text: result.code, changes: result.changes, dependencies: [], manual: [] };
+  return { text: result.code, changes: result.changes, dependencies: [], notes: result.notes };
 }
 
 export async function runTransform({ files, cwd, dryRun }: RunTransformOptions): Promise<RunResult> {
@@ -43,8 +56,8 @@ export async function runTransform({ files, cwd, dryRun }: RunTransformOptions):
       const original = await readFile(file, 'utf8');
       const outcome = transformFile(file, original);
 
-      for (const reason of outcome.manual) {
-        manual.push({ file: relative, reason });
+      for (const note of outcome.notes) {
+        manual.push({ file: relative, line: note.line, reason: note.reason });
       }
 
       if (outcome.text === original) {

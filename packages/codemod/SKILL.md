@@ -46,7 +46,7 @@ npx react-simplikit-codemod mobile-to-root --ignore '**/legacy/**' --ignore '**/
 npx react-simplikit-codemod mobile-to-root --no-package-json
 ```
 
-`--debug` adds a stack trace on failure. The command never prompts, so it is safe to run non-interactively and in CI.
+`--debug` adds a stack trace on failure. The command never prompts and is safe to run twice, so it fits non-interactive and CI use.
 
 ## JSON output
 
@@ -90,7 +90,7 @@ npx react-simplikit-codemod mobile-to-root --no-package-json
 
 ## After the run
 
-1. Act on every entry in `manual` by hand.
+1. Act on every entry in `manual` by hand. Entries with a `line` mark an import the codemod deliberately left on its own — read the reason before merging it yourself, because merging it by hand can change what a name binds.
 2. Reinstall so the lockfile drops the old package.
 3. Require `react-simplikit@0.2.0` or newer — the first release re-exporting the `SafeAreaInset` type from the root entry.
 
