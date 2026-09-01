@@ -28,7 +28,7 @@ describe('runTransform', () => {
     expect(await readFile(file, 'utf8')).toBe(`import { isIOS } from 'react-simplikit';\n`);
     expect(result.scanned).toBe(1);
     expect(result.changed).toEqual([
-      { file: path.join('src', 'a.ts'), changes: [{ line: 1, kind: 'import' }], dependencies: [] },
+      { kind: 'source', file: path.join('src', 'a.ts'), changes: [{ line: 1, kind: 'import' }] },
     ]);
   });
 
@@ -56,8 +56,10 @@ describe('runTransform', () => {
     );
     const result = await runTransform({ files: [file], cwd, dryRun: false, debug: false });
 
-    expect(result.changed[0]?.dependencies).toHaveLength(1);
-    expect(result.changed[0]?.changes).toEqual([]);
+    const [entry] = result.changed;
+
+    expect(entry?.kind).toBe('manifest');
+    expect(entry?.kind === 'manifest' && entry.dependencies).toHaveLength(1);
     expect(await readFile(file, 'utf8')).toContain('"react-simplikit"');
   });
 

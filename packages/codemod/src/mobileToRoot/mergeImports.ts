@@ -1,9 +1,9 @@
 import ts from 'typescript';
 
-import { ROOT_PACKAGE_NAME } from '../../constants.ts';
-import type { SourceChange, SourceNote, Splice } from '../../types.ts';
+import { ROOT_PACKAGE_NAME } from '../constants.ts';
 
 import { lineOf, type SpecifierHit } from './collectSpecifiers.ts';
+import type { SourceChange, SourceNote, Splice } from './types.ts';
 
 export type MergeResult = {
   splices: Splice[];

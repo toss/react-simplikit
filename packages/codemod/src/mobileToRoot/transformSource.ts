@@ -1,10 +1,10 @@
 import ts from 'typescript';
 
-import { MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../../constants.ts';
-import type { SourceChange, Splice, TransformSourceResult } from '../../types.ts';
+import { MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../constants.ts';
 
 import { collectSpecifiers, lineOf, parseSource } from './collectSpecifiers.ts';
 import { buildMergeSplices } from './mergeImports.ts';
+import type { SourceChange, Splice, TransformSourceResult } from './types.ts';
 
 function rewriteSpecifier(sourceFile: ts.SourceFile, literal: ts.StringLiteralLike): Splice {
   const start = literal.getStart(sourceFile);

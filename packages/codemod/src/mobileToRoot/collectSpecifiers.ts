@@ -1,8 +1,9 @@
 import path from 'node:path';
 import ts from 'typescript';
 
-import { MOBILE_PACKAGE_NAME } from '../../constants.ts';
-import type { ChangeKind } from '../../types.ts';
+import { MOBILE_PACKAGE_NAME } from '../constants.ts';
+
+import type { ChangeKind } from './types.ts';
 
 export type SpecifierHit = {
   literal: ts.StringLiteralLike;

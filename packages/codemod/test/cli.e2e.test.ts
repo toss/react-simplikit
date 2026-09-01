@@ -1,4 +1,5 @@
 import { execFile } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,7 +10,10 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 const execFileAsync = promisify(execFile);
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const binPath = path.join(packageRoot, 'dist', 'cli.mjs');
+// Resolved from the manifest, not hard-coded: the e2e has to exercise the entry point
+// consumers actually get, so a `bin` left behind by a build-output rename fails here.
+const { bin } = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
+const binPath = path.join(packageRoot, bin);
 const fixturesRoot = path.join(packageRoot, 'test', '__fixtures__');
 
 const YARN = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
@@ -184,7 +188,7 @@ describe('react-simplikit-codemod', () => {
     expect(result.exitCode).toBe(1);
     expect(result.stdout).toContain('Could not be processed:');
     expect(result.stdout).toContain(path.join('app', 'package.json'));
-    expect(result.stderr).toContain('could not be processed');
+    expect(result.stderr).toContain('Could not process 1 file:');
     expect(await readFile(path.join(cwd, 'src', 'a.ts'), 'utf8')).toBe(`import { isIOS } from 'react-simplikit';\n`);
   });
 
@@ -295,5 +299,22 @@ describe('--debug', () => {
     const result = await runCli(['mobile-to-root', 'missing-dir', '--ignore', '--debug'], cwd);
 
     expect(result.stderr).not.toContain('\n    at ');
+  });
+});
+
+describe('what the operator sees on stderr', () => {
+  it('names the files it could not process, not just a count', async () => {
+    await write('app/package.json', `{ "dependencies": { "@react-simplikit/mobile" `);
+
+    const result = await runCli(['mobile-to-root'], cwd);
+
+    expect(result.stderr).toContain(path.join('app', 'package.json'));
+  });
+
+  it('says a command is required when given none', async () => {
+    const result = await runCli([], cwd);
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('mobile-to-root');
   });
 });

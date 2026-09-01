@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { MIN_RUNTIME_VERSION } from '../../constants.ts';
+import { MIN_RUNTIME_VERSION } from '../constants.ts';
 
 import { transformPackageJson } from './transformPackageJson.ts';
 
@@ -27,7 +27,7 @@ describe('transformPackageJson', () => {
     const result = transformPackageJson(input);
 
     expect(depsOf(result.text)['react-simplikit']).toBe('^0.2.0');
-    expect(result.changes).toEqual([{ field: 'dependencies', removed: '@react-simplikit/mobile', added: undefined }]);
+    expect(result.changes).toEqual([{ field: 'dependencies', removed: '@react-simplikit/mobile', added: null }]);
   });
 
   it('handles devDependencies and optionalDependencies with a caret range', () => {

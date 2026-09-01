@@ -6,5 +6,6 @@ export default defineConfig({
   platform: 'node',
   dts: false,
   clean: true,
+  publint: 'ci-only',
   banner: { js: '#!/usr/bin/env node' },
 });

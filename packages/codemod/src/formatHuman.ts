@@ -1,15 +1,17 @@
-import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from './constants.ts';
-import type { FileResult, RunResult } from './types.ts';
+import type { FileResult, RunResult } from './runner/runTransform.ts';
+import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME, TRANSFORM_NAME } from './constants.ts';
 
 function describeFile(file: FileResult): string {
-  if (file.dependencies.length > 0) {
-    return file.dependencies
-      .map(change => {
-        const added = change.added === undefined ? '' : ` +${ROOT_PACKAGE_NAME}@${change.added}`;
+  if (file.kind === 'manifest') {
+    return file.dependencies.length === 0
+      ? 'rewritten'
+      : file.dependencies
+          .map(change => {
+            const added = change.added === null ? '' : ` +${ROOT_PACKAGE_NAME}@${change.added}`;
 
-        return `${change.field}: -${change.removed}${added}`;
-      })
-      .join(', ');
+            return `${change.field}: -${change.removed}${added}`;
+          })
+          .join(', ');
   }
 
   return file.changes.map(change => `${change.kind}:${change.line}`).join(', ');
@@ -54,4 +56,8 @@ export function formatHuman(result: RunResult, dryRun: boolean): string {
   }
 
   return lines.join('\n');
+}
+
+export function formatJson(result: RunResult, dryRun: boolean): string {
+  return JSON.stringify({ transform: TRANSFORM_NAME, dryRun, ...result }, null, 2);
 }

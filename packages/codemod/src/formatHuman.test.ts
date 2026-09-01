@@ -1,23 +1,23 @@
 import { describe, expect, it } from 'vitest';
 
+import type { RunResult } from './runner/runTransform.ts';
 import { MIN_RUNTIME_VERSION } from './constants.ts';
-import { formatHuman } from './formatHuman.ts';
-import type { RunResult } from './types.ts';
+import { formatHuman, formatJson } from './formatHuman.ts';
 
 const result: RunResult = {
   scanned: 3,
   changed: [
     {
+      kind: 'source',
       file: 'src/a.ts',
       changes: [
         { line: 1, kind: 'import' },
         { line: 4, kind: 'merge' },
       ],
-      dependencies: [],
     },
     {
+      kind: 'manifest',
       file: 'package.json',
-      changes: [],
       dependencies: [{ field: 'dependencies', removed: '@react-simplikit/mobile', added: '^0.2.0' }],
     },
   ],
@@ -73,9 +73,9 @@ describe('formatHuman', () => {
         scanned: 1,
         changed: [
           {
+            kind: 'manifest',
             file: 'package.json',
-            changes: [],
-            dependencies: [{ field: 'dependencies', removed: '@react-simplikit/mobile', added: undefined }],
+            dependencies: [{ field: 'dependencies', removed: '@react-simplikit/mobile', added: null }],
           },
         ],
         manual: [],
@@ -116,7 +116,7 @@ describe('formatHuman — failures', () => {
     const output = formatHuman(
       {
         scanned: 2,
-        changed: [{ file: 'src/a.ts', changes: [{ line: 1, kind: 'import' }], dependencies: [] }],
+        changed: [{ kind: 'source', file: 'src/a.ts', changes: [{ line: 1, kind: 'import' }] }],
         manual: [],
         failed: [{ file: 'package.json', reason: 'Unexpected end of JSON input' }],
       },
@@ -134,7 +134,7 @@ describe('formatHuman — notes that point at a line', () => {
     const output = formatHuman(
       {
         scanned: 1,
-        changed: [{ file: 'src/a.ts', changes: [{ line: 1, kind: 'import' }], dependencies: [] }],
+        changed: [{ kind: 'source', file: 'src/a.ts', changes: [{ line: 1, kind: 'import' }] }],
         manual: [
           { file: 'src/a.ts', line: 3, reason: 'Left on its own line: `isIOS` already refers to something else.' },
         ],
@@ -165,5 +165,55 @@ describe('formatHuman — claims it is entitled to make', () => {
 
   it('only claims a clean scan when nothing at all came back', () => {
     expect(formatHuman({ scanned: 5, changed: [], manual: [], failed: [] }, false)).toContain('No file imports');
+  });
+});
+
+describe('formatHuman — a dependency entry that added nothing', () => {
+  it('renders a removal without inventing an added range', () => {
+    const output = formatHuman(
+      {
+        scanned: 1,
+        changed: [
+          {
+            kind: 'manifest',
+            file: 'package.json',
+            dependencies: [{ field: 'dependencies', removed: '@react-simplikit/mobile', added: null }],
+          },
+        ],
+        manual: [],
+        failed: [],
+      },
+      false
+    );
+
+    expect(output).toContain('dependencies: -@react-simplikit/mobile');
+    expect(output).not.toContain('+react-simplikit@');
+  });
+});
+
+describe('formatHuman — a manifest whose text changed with no dependency edit', () => {
+  it('does not fall through to the source-file rendering', () => {
+    const output = formatHuman(
+      { scanned: 1, changed: [{ kind: 'manifest', file: 'package.json', dependencies: [] }], manual: [], failed: [] },
+      false
+    );
+
+    expect(output).toContain('package.json');
+    expect(output).not.toContain('package.json ()');
+  });
+});
+
+describe('formatJson', () => {
+  it('names the transform and the dry-run flag alongside the run result', () => {
+    const parsed = JSON.parse(formatJson({ scanned: 0, changed: [], manual: [], failed: [] }, true));
+
+    expect(parsed).toEqual({
+      transform: 'mobile-to-root',
+      dryRun: true,
+      scanned: 0,
+      changed: [],
+      manual: [],
+      failed: [],
+    });
   });
 });

@@ -1,7 +1,12 @@
-import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../../constants.ts';
-import type { PackageJsonChange } from '../../types.ts';
+import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../constants.ts';
 
-export type TransformPackageJsonResult = {
+export type PackageJsonChange = {
+  field: string;
+  removed: string;
+  added: string | null;
+};
+
+type TransformPackageJsonResult = {
   text: string;
   changes: PackageJsonChange[];
   manual: string[];
@@ -43,9 +48,9 @@ function isBelowFloor(range: string): boolean {
   return FLOOR.some((part, index) => version[index] !== part && version[index] < part);
 }
 
-function rangeFor(field: string, previous: unknown): string | undefined {
+function rangeFor(field: string, previous: unknown): string | null {
   if (typeof previous === 'string' && versionIn(previous) === undefined) {
-    return undefined;
+    return null;
   }
 
   return field === 'peerDependencies' ? `>=${MIN_RUNTIME_VERSION}` : `^${MIN_RUNTIME_VERSION}`;
@@ -76,10 +81,10 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
 
     const existing = value[ROOT_PACKAGE_NAME];
     const keepExisting = typeof existing === 'string' && !isBelowFloor(existing);
-    const added = keepExisting ? undefined : rangeFor(field, value[MOBILE_PACKAGE_NAME]);
+    const added = keepExisting ? null : rangeFor(field, value[MOBILE_PACKAGE_NAME]);
     const rest = withoutMobile(value);
 
-    if (added === undefined && !keepExisting) {
+    if (added === null && !keepExisting) {
       manual.push(
         `"${field}" pinned ${MOBILE_PACKAGE_NAME} as \`${String(value[MOBILE_PACKAGE_NAME])}\`, which is not a version range. Point ${ROOT_PACKAGE_NAME} at the same source by hand.`
       );
@@ -88,7 +93,7 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
     next = {
       ...next,
       [field]:
-        added === undefined
+        added === null
           ? { ...rest, ...(keepExisting ? {} : { [ROOT_PACKAGE_NAME]: value[MOBILE_PACKAGE_NAME] }) }
           : { ...rest, [ROOT_PACKAGE_NAME]: added },
     };

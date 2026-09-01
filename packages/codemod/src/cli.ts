@@ -6,7 +6,7 @@ import { collectFiles } from './runner/collectFiles.ts';
 import { runTransform } from './runner/runTransform.ts';
 import { MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME, TRANSFORM_NAME } from './constants.ts';
 import { describeError, UsageError } from './errors.ts';
-import { formatHuman } from './formatHuman.ts';
+import { formatHuman, formatJson } from './formatHuman.ts';
 
 const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
   version: string;
@@ -39,14 +39,16 @@ async function runCommand(paths: string[], options: TransformOptions): Promise<v
   });
 
   const result = await runTransform({ files, cwd, dryRun: options.dryRun, debug: options.debug });
-  const report = options.json
-    ? JSON.stringify({ transform: TRANSFORM_NAME, dryRun: options.dryRun, ...result }, null, 2)
-    : formatHuman(result, options.dryRun);
+  const report = options.json ? formatJson(result, options.dryRun) : formatHuman(result, options.dryRun);
 
   process.stdout.write(`${report}\n`);
 
   if (result.failed.length > 0) {
-    process.stderr.write(`${result.failed.length} file(s) could not be processed.\n`);
+    process.stderr.write(
+      `Could not process ${result.failed.length === 1 ? '1 file' : `${result.failed.length} files`}: ${result.failed
+        .map(failure => failure.file)
+        .join(', ')}\n`
+    );
     process.exitCode = 1;
   }
 }
@@ -58,7 +60,7 @@ function buildProgram(): Command {
     .name('react-simplikit-codemod')
     .description('Codemods for migrating react-simplikit entry points')
     .version(version)
-    .showHelpAfterError()
+    .showHelpAfterError(`Run \`react-simplikit-codemod ${TRANSFORM_NAME}\` to migrate a project.`)
     .exitOverride();
 
   program
