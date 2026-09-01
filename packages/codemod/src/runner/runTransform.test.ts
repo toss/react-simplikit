@@ -86,8 +86,6 @@ describe('runTransform', () => {
     const debugged = await runTransform({ files: [missing], cwd, dryRun: false, debug: true });
     const plain = await runTransform({ files: [missing], cwd, dryRun: false, debug: false });
 
-    // fs errors for a missing file carry a frameless stack, so the only thing to assert here is
-    // that --debug adds to the actionable reason rather than replacing it.
     expect(debugged.failed[0]?.reason).toContain(plain.failed[0]?.reason ?? '');
     expect((debugged.failed[0]?.reason.length ?? 0) > (plain.failed[0]?.reason.length ?? 0)).toBe(true);
   });

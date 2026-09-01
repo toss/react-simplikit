@@ -4,7 +4,6 @@ export const ROOT_PACKAGE_NAME = 'react-simplikit';
 
 export const TRANSFORM_NAME = 'mobile-to-root';
 
-// ponytail: hand-pinned floor. Verify with `npm view react-simplikit version` before
-// publishing this CLI — a range no published version satisfies breaks every migrated
-// install with ETARGET. A runnable gate only exists once react-simplikit has shipped.
+// Must name a version that is actually published: a range nothing satisfies breaks every
+// migrated install with ETARGET. Check `npm view react-simplikit version` before releasing.
 export const MIN_RUNTIME_VERSION = '0.2.0';

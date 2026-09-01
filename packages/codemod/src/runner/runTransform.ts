@@ -66,8 +66,6 @@ export async function runTransform({ files, cwd, dryRun, debug }: RunTransformOp
   const failed: FileFailure[] = [];
 
   for (const file of files) {
-    // A target outside the current directory relativizes to a chain of `..` segments
-    // that is longer and harder to read than the path itself, so keep the absolute one.
     const fromCwd = path.relative(cwd, file);
     const relative = fromCwd.startsWith('..') ? file : fromCwd;
 

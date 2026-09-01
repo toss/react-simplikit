@@ -14,7 +14,6 @@ const MAX_DESCRIPTION_LENGTH = 1024;
 
 const root = getRootPath();
 const skillDirectory = path.join(root, SKILL_DIRECTORY);
-// Hand-written, so it gets the frontmatter checks below but no regeneration diff.
 const codemodSkillDirectory = path.join(root, path.dirname(SKILL_DIRECTORY), 'react-simplikit-codemod');
 
 // The committed skill must be exactly what a fresh generation produces.
@@ -45,8 +44,6 @@ try {
 const skill = await readVerifiedSkill(skillDirectory, 'react-simplikit');
 const codemodSkill = await readVerifiedSkill(codemodSkillDirectory, 'react-simplikit-codemod');
 
-// The version floor lives in one constant and is repeated in prose. A bump that misses the prose
-// ships docs promising a range the CLI no longer writes -- it was already wrong once, at 0.1.1.
 const constants = await fs.readFile(path.join(root, 'packages/codemod/src/constants.ts'), 'utf8');
 const floor = /MIN_RUNTIME_VERSION = '(.*)'/.exec(constants)?.[1];
 
@@ -58,8 +55,7 @@ for (const [label, contents] of [
   ['the react-simplikit-codemod skill', codemodSkill],
   ['packages/codemod/README.md', await fs.readFile(path.join(root, 'packages/codemod/README.md'), 'utf8')],
 ] as const) {
-  // Matched against the prose form, not a bare `0.2.0`: the illustrative JSON sample carries the
-  // version too, and would keep the assertion green after the sentences around it went stale.
+  // The prose form, not a bare version: the JSON sample carries that and would stay green.
   assert.equal(
     contents.includes(`react-simplikit@${floor}`),
     true,

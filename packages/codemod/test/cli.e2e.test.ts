@@ -10,8 +10,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 const execFileAsync = promisify(execFile);
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-// Resolved from the manifest, not hard-coded: the e2e has to exercise the entry point
-// consumers actually get, so a `bin` left behind by a build-output rename fails here.
+// From the manifest, so a `bin` left behind by a build-output rename fails here.
 const { bin } = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
 const binPath = path.join(packageRoot, bin);
 const fixturesRoot = path.join(packageRoot, 'test', '__fixtures__');

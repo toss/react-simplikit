@@ -32,9 +32,7 @@ function withoutMobile(field: Record<string, unknown>): Record<string, unknown> 
 
 const FLOOR = MIN_RUNTIME_VERSION.split('.').map(Number);
 
-// `workspace:`, `catalog:`, `file:`, `link:`, `portal:`, `npm:` — anything the package manager
-// resolves itself. A registry range never carries a scheme, and matching on digits instead would
-// read `file:../pkg-0.1.1.tgz` as the version 0.1.1.
+// Matching on digits instead would read `file:../pkg-0.1.1.tgz` as the version 0.1.1.
 function isProtocolSpec(range: string): boolean {
   return /^[a-z][a-z\d+.-]*:/i.test(range);
 }
@@ -56,8 +54,7 @@ function isBelowFloor(range: string): boolean {
     return false;
   }
 
-  // The first component that differs decides. Testing each component against its own floor
-  // component independently would rank 1.0.0 below a 0.2.0 floor, because its minor is lower.
+  // Not a per-component test: that ranks 1.0.0 below a 0.2.0 floor, because its minor is lower.
   for (const [index, part] of FLOOR.entries()) {
     if (version[index] !== part) {
       return version[index] < part;

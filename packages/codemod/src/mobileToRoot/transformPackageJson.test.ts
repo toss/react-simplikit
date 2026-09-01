@@ -6,7 +6,6 @@ import { transformPackageJson } from './transformPackageJson.ts';
 
 const ROOT_RANGE = `^${MIN_RUNTIME_VERSION}`;
 
-// Above the floor, but with a lower minor -- the shape a component-wise comparison gets wrong.
 const [FLOOR_MAJOR] = MIN_RUNTIME_VERSION.split('.').map(Number);
 const NEXT_MAJOR = `^${FLOOR_MAJOR + 1}.0.0`;
 
