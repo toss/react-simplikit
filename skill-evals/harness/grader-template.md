@@ -1,7 +1,6 @@
 Grade one evaluation case. Two agents were given the same task; one had a skill for the `react-simplikit` library, one did not. Your job is to apply an identical standard to both.
 
 EVAL={{EVAL}}
-WS=/private/tmp/claude-502/-Users-hyesungoh-Documents-react-simplikit/140706fa-b108-464f-b326-a1280ff3bee9/scratchpad/react-simplikit-workspace
 
 Read first:
 
@@ -14,7 +13,7 @@ Read first:
 
 Do NOT grade API correctness against the skill's own reference pages. Use the real source:
 
-- `/Users/hyesungoh/Documents/react-simplikit/packages/react-simplikit/src/` — implementations and JSDoc
+- `packages/react-simplikit/src/` (repository-relative) — implementations and JSDoc
 - where the eval's app has a package installed under `node_modules/`, its `dist/*.d.mts` type signatures are also ground truth
 
 If a solution calls a react-simplikit API, open the implementation and check the call matches: option names, argument order, return shape, and whether the hook's actual behaviour satisfies what the prompt asked. A hook that exists and is imported correctly but does not do what the prompt requires is a FAIL on the relevant assertion, not a pass.
@@ -23,10 +22,10 @@ In this iteration most apps do NOT have react-simplikit installed. Using the lib
 
 ## Mechanical check
 
-Run this on each arm and paste the JSON into your evidence:
+Run this from the repository root on each arm and paste the JSON into your evidence:
 
 ```
-node $WS/check_imports.mjs $EVAL/<arm>/app/src $WS/v2/public-exports.json
+node skill-evals/scripts/check_imports.mjs $EVAL/<arm>/app/src skill-evals/public-exports.json
 ```
 
 ## Standard

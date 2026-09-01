@@ -88,8 +88,9 @@ which is plain agent-spawning around these prompts.
    Give the with-skill arm a copy of the CURRENT skill at `<arm>/skill/`.
 2. Run both arms with `harness/run-template.md` (`{{RUN}}` → the arm directory;
    `{{SKILL_SECTION}}` → `harness/skill-section.md` for the with-skill arm, empty for the
-   baseline). Then grade both with `harness/grader-template.md`, which writes one `grading.json`
-   per arm:
+   baseline). Write `eval-<id>/eval_metadata.json` — the eval's `prompt`, `expectations`, and
+   `audit_note` copied from `evals.json`; the grader reads it. Then grade both with
+   `harness/grader-template.md`, which writes one `grading.json` per arm:
    `{ "expectations": [{ "text", "passed", "evidence" }], "summary": { "passed", "total" },
 "library_used", "library_recommended", "notes" }`
 3. `node scripts/collect_public_exports.mjs > public-exports.json` (refresh before grading),
