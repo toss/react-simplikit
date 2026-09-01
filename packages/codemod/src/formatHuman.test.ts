@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { MIN_RUNTIME_VERSION } from '../constants.ts';
-import type { RunResult } from '../types.ts';
-
+import { MIN_RUNTIME_VERSION } from './constants.ts';
 import { formatHuman } from './formatHuman.ts';
+import type { RunResult } from './types.ts';
 
 const result: RunResult = {
   scanned: 3,

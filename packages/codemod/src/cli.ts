@@ -2,12 +2,11 @@ import { Command, CommanderError } from 'commander';
 import { readFileSync } from 'node:fs';
 import process from 'node:process';
 
-import { formatHuman } from './report/formatHuman.ts';
-import { formatJson } from './report/formatJson.ts';
 import { collectFiles } from './runner/collectFiles.ts';
 import { runTransform } from './runner/runTransform.ts';
 import { MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME, TRANSFORM_NAME } from './constants.ts';
 import { describeError, UsageError } from './errors.ts';
+import { formatHuman } from './formatHuman.ts';
 
 const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
   version: string;
@@ -35,7 +34,9 @@ async function runCommand(paths: string[], options: TransformOptions): Promise<v
   });
 
   const result = await runTransform({ files, cwd, dryRun: options.dryRun });
-  const report = options.json ? formatJson(result, options.dryRun) : formatHuman(result, options.dryRun);
+  const report = options.json
+    ? JSON.stringify({ transform: TRANSFORM_NAME, dryRun: options.dryRun, ...result }, null, 2)
+    : formatHuman(result, options.dryRun);
 
   process.stdout.write(`${report}\n`);
 

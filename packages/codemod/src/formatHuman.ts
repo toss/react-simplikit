@@ -1,5 +1,5 @@
-import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../constants.ts';
-import type { FileResult, RunResult } from '../types.ts';
+import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from './constants.ts';
+import type { FileResult, RunResult } from './types.ts';
 
 function describeFile(file: FileResult): string {
   if (file.dependencies.length > 0) {

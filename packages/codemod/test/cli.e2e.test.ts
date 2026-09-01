@@ -117,9 +117,10 @@ describe('react-simplikit-codemod', () => {
     await write('src/a.ts', `import { isIOS } from '@react-simplikit/mobile';\n`);
 
     const result = await runCli(['mobile-to-root', '--json'], cwd);
-    const parsed = JSON.parse(result.stdout) as { transform: string; changed: unknown[] };
+    const parsed = JSON.parse(result.stdout) as Record<string, unknown> & { transform: string; changed: unknown[] };
 
     expect(result.exitCode).toBe(0);
+    expect(Object.keys(parsed).toSorted()).toEqual(['changed', 'dryRun', 'failed', 'manual', 'scanned', 'transform']);
     expect(parsed.transform).toBe('mobile-to-root');
     expect(parsed.changed).toHaveLength(1);
   });
