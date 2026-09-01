@@ -32,7 +32,18 @@ function withoutMobile(field: Record<string, unknown>): Record<string, unknown> 
 
 const FLOOR = MIN_RUNTIME_VERSION.split('.').map(Number);
 
+// `workspace:`, `catalog:`, `file:`, `link:`, `portal:`, `npm:` — anything the package manager
+// resolves itself. A registry range never carries a scheme, and matching on digits instead would
+// read `file:../pkg-0.1.1.tgz` as the version 0.1.1.
+function isProtocolSpec(range: string): boolean {
+  return /^[a-z][a-z\d+.-]*:/i.test(range);
+}
+
 function versionIn(range: string): number[] | undefined {
+  if (isProtocolSpec(range)) {
+    return undefined;
+  }
+
   const match = /(\d+)\.(\d+)\.(\d+)/.exec(range);
 
   return match === null ? undefined : [Number(match[1]), Number(match[2]), Number(match[3])];
@@ -45,7 +56,15 @@ function isBelowFloor(range: string): boolean {
     return false;
   }
 
-  return FLOOR.some((part, index) => version[index] !== part && version[index] < part);
+  // The first component that differs decides. Testing each component against its own floor
+  // component independently would rank 1.0.0 below a 0.2.0 floor, because its minor is lower.
+  for (const [index, part] of FLOOR.entries()) {
+    if (version[index] !== part) {
+      return version[index] < part;
+    }
+  }
+
+  return false;
 }
 
 function rangeFor(field: string, previous: unknown): string | null {
@@ -81,6 +100,12 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
 
     const existing = value[ROOT_PACKAGE_NAME];
     const keepExisting = typeof existing === 'string' && !isBelowFloor(existing);
+
+    if (typeof existing === 'string' && isProtocolSpec(existing)) {
+      manual.push(
+        `"${field}" points ${ROOT_PACKAGE_NAME} at \`${existing}\`, so its version cannot be checked against the ${MIN_RUNTIME_VERSION} floor. Confirm that source ships ${MIN_RUNTIME_VERSION} or newer.`
+      );
+    }
     const added = keepExisting ? null : rangeFor(field, value[MOBILE_PACKAGE_NAME]);
     const rest = withoutMobile(value);
 

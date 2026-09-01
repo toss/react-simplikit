@@ -6,6 +6,10 @@ import { transformPackageJson } from './transformPackageJson.ts';
 
 const ROOT_RANGE = `^${MIN_RUNTIME_VERSION}`;
 
+// Above the floor, but with a lower minor -- the shape a component-wise comparison gets wrong.
+const [FLOOR_MAJOR] = MIN_RUNTIME_VERSION.split('.').map(Number);
+const NEXT_MAJOR = `^${FLOOR_MAJOR + 1}.0.0`;
+
 function depsOf(text: string, field = 'dependencies'): Record<string, string> {
   return (JSON.parse(text) as Record<string, Record<string, string>>)[field] ?? {};
 }
@@ -147,6 +151,46 @@ describe('transformPackageJson — ranges it must not get wrong', () => {
     const input = `{\n  "dependencies": {\n    "react-simplikit": "workspace:*",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
 
     expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe('workspace:*');
+  });
+
+  it('keeps a range whose major is above the floor even when its minor is lower', () => {
+    const input = `{\n  "dependencies": {\n    "react-simplikit": "${NEXT_MAJOR}",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe(NEXT_MAJOR);
+  });
+
+  it('keeps an existing protocol spec that carries a version instead of flattening it to a range', () => {
+    const input = `{\n  "dependencies": {\n    "react-simplikit": "workspace:^0.1.1",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+    const result = transformPackageJson(input);
+
+    expect(depsOf(result.text)['react-simplikit']).toBe('workspace:^0.1.1');
+    expect(result.manual.join(' ')).toContain('workspace:^0.1.1');
+  });
+
+  it('reports an existing protocol spec rather than silently leaving the floor unchecked', () => {
+    const input = `{\n  "dependencies": {\n    "react-simplikit": "workspace:*",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    expect(transformPackageJson(input).manual.join(' ')).toContain('workspace:*');
+  });
+
+  it('does not read a version out of a file: path that happens to contain digits', () => {
+    const input = `{\n  "dependencies": {\n    "@react-simplikit/mobile": "file:../mobile-0.1.1.tgz"\n  }\n}\n`;
+    const result = transformPackageJson(input);
+
+    expect(depsOf(result.text)['react-simplikit']).toBe('file:../mobile-0.1.1.tgz');
+    expect(result.manual.join(' ')).toContain('file:../mobile-0.1.1.tgz');
+  });
+
+  it('keeps a range sitting exactly on the floor', () => {
+    const input = `{\n  "dependencies": {\n    "react-simplikit": "${ROOT_RANGE}",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe(ROOT_RANGE);
+  });
+
+  it('keeps a wildcard range, which names no version to compare against the floor', () => {
+    const input = `{\n  "dependencies": {\n    "react-simplikit": "*",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe('*');
   });
 
   it('widens rather than narrows a peer range', () => {
