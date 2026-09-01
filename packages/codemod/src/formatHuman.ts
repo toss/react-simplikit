@@ -18,9 +18,15 @@ function describeFile(file: FileResult): string {
 export function formatHuman(result: RunResult, dryRun: boolean): string {
   const { changed, failed, manual, scanned } = result;
 
+  const quiet = changed.length === 0 && manual.length === 0 && failed.length === 0;
+
   const lines =
     changed.length === 0
-      ? [`Scanned ${scanned} files. No file imports ${MOBILE_PACKAGE_NAME}.`]
+      ? [
+          quiet
+            ? `Scanned ${scanned} files. No file imports ${MOBILE_PACKAGE_NAME}.`
+            : `Scanned ${scanned} files. No file was rewritten.`,
+        ]
       : [
           `${dryRun ? 'Would change' : 'Changed'} ${changed.length} of ${scanned} files:`,
           ...changed.map(file => `  ${file.file} (${describeFile(file)})`),

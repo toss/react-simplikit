@@ -25,6 +25,32 @@ function withoutMobile(field: Record<string, unknown>): Record<string, unknown> 
   return Object.fromEntries(Object.entries(field).filter(([name]) => name !== MOBILE_PACKAGE_NAME));
 }
 
+const FLOOR = MIN_RUNTIME_VERSION.split('.').map(Number);
+
+function versionIn(range: string): number[] | undefined {
+  const match = /(\d+)\.(\d+)\.(\d+)/.exec(range);
+
+  return match === null ? undefined : [Number(match[1]), Number(match[2]), Number(match[3])];
+}
+
+function isBelowFloor(range: string): boolean {
+  const version = versionIn(range);
+
+  if (version === undefined) {
+    return false;
+  }
+
+  return FLOOR.some((part, index) => version[index] !== part && version[index] < part);
+}
+
+function rangeFor(field: string, previous: unknown): string | undefined {
+  if (typeof previous === 'string' && versionIn(previous) === undefined) {
+    return undefined;
+  }
+
+  return field === 'peerDependencies' ? `>=${MIN_RUNTIME_VERSION}` : `^${MIN_RUNTIME_VERSION}`;
+}
+
 export function transformPackageJson(text: string): TransformPackageJsonResult {
   if (!text.includes(MOBILE_PACKAGE_NAME)) {
     return { text, changes: [], manual: [] };
@@ -48,10 +74,24 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
       continue;
     }
 
-    const added = ROOT_PACKAGE_NAME in value ? undefined : `^${MIN_RUNTIME_VERSION}`;
+    const existing = value[ROOT_PACKAGE_NAME];
+    const keepExisting = typeof existing === 'string' && !isBelowFloor(existing);
+    const added = keepExisting ? undefined : rangeFor(field, value[MOBILE_PACKAGE_NAME]);
     const rest = withoutMobile(value);
 
-    next = { ...next, [field]: added === undefined ? rest : { ...rest, [ROOT_PACKAGE_NAME]: added } };
+    if (added === undefined && !keepExisting) {
+      manual.push(
+        `"${field}" pinned ${MOBILE_PACKAGE_NAME} as \`${String(value[MOBILE_PACKAGE_NAME])}\`, which is not a version range. Point ${ROOT_PACKAGE_NAME} at the same source by hand.`
+      );
+    }
+
+    next = {
+      ...next,
+      [field]:
+        added === undefined
+          ? { ...rest, ...(keepExisting ? {} : { [ROOT_PACKAGE_NAME]: value[MOBILE_PACKAGE_NAME] }) }
+          : { ...rest, [ROOT_PACKAGE_NAME]: added },
+    };
     changes.push({ field, removed: MOBILE_PACKAGE_NAME, added });
   }
 

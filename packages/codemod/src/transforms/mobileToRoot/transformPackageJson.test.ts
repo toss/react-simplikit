@@ -22,16 +22,16 @@ describe('transformPackageJson', () => {
     expect(result.changes).toEqual([{ field: 'dependencies', removed: '@react-simplikit/mobile', added: ROOT_RANGE }]);
   });
 
-  it('only removes the old entry when the root package is already a dependency', () => {
-    const input = `{\n  "dependencies": {\n    "@react-simplikit/mobile": "^0.1.1",\n    "react-simplikit": "^0.1.0"\n  }\n}\n`;
+  it('only removes the old entry when the root package already satisfies the floor', () => {
+    const input = `{\n  "dependencies": {\n    "@react-simplikit/mobile": "^0.1.1",\n    "react-simplikit": "^0.2.0"\n  }\n}\n`;
     const result = transformPackageJson(input);
 
-    expect(depsOf(result.text)['react-simplikit']).toBe('^0.1.0');
+    expect(depsOf(result.text)['react-simplikit']).toBe('^0.2.0');
     expect(result.changes).toEqual([{ field: 'dependencies', removed: '@react-simplikit/mobile', added: undefined }]);
   });
 
-  it('handles devDependencies, peerDependencies and optionalDependencies', () => {
-    for (const field of ['devDependencies', 'peerDependencies', 'optionalDependencies']) {
+  it('handles devDependencies and optionalDependencies with a caret range', () => {
+    for (const field of ['devDependencies', 'optionalDependencies']) {
       const input = `{\n  "${field}": {\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
 
       expect(transformPackageJson(input).changes).toEqual([
@@ -60,7 +60,9 @@ describe('transformPackageJson', () => {
   it('keeps a peer contract that declared the old package', () => {
     const input = `{\n  "dependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  },\n  "peerDependencies": {\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
 
-    expect(depsOf(transformPackageJson(input).text, 'peerDependencies')['react-simplikit']).toBe(ROOT_RANGE);
+    expect(depsOf(transformPackageJson(input).text, 'peerDependencies')['react-simplikit']).toBe(
+      `>=${MIN_RUNTIME_VERSION}`
+    );
   });
 
   it('preserves four-space indentation and the trailing newline', () => {
@@ -117,5 +119,41 @@ describe('transformPackageJson', () => {
 
   it('throws when the manifest root is not an object', () => {
     expect(() => transformPackageJson(`["@react-simplikit/mobile"]`)).toThrow(/JSON object/);
+  });
+});
+
+describe('transformPackageJson — ranges it must not get wrong', () => {
+  it('raises an existing range that sits below the floor', () => {
+    const input = `{\n  "dependencies": {\n    "react-simplikit": "^0.1.0",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe(ROOT_RANGE);
+  });
+
+  it('leaves an existing range that already satisfies the floor', () => {
+    const input = `{\n  "dependencies": {\n    "react-simplikit": "^0.9.0",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe('^0.9.0');
+  });
+
+  it('keeps a non-registry protocol instead of inventing a version range', () => {
+    const input = `{\n  "dependencies": {\n    "@react-simplikit/mobile": "workspace:*"\n  }\n}\n`;
+    const result = transformPackageJson(input);
+
+    expect(depsOf(result.text)['react-simplikit']).toBe('workspace:*');
+    expect(result.manual.join(' ')).toContain('workspace:*');
+  });
+
+  it('leaves an existing non-registry root range alone', () => {
+    const input = `{\n  "dependencies": {\n    "react-simplikit": "workspace:*",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
+
+    expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe('workspace:*');
+  });
+
+  it('widens rather than narrows a peer range', () => {
+    const input = `{\n  "peerDependencies": {\n    "@react-simplikit/mobile": ">=0.1.0"\n  }\n}\n`;
+
+    expect(depsOf(transformPackageJson(input).text, 'peerDependencies')['react-simplikit']).toBe(
+      `>=${MIN_RUNTIME_VERSION}`
+    );
   });
 });

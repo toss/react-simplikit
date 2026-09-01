@@ -279,18 +279,6 @@ describe('transformSource — shapes that must not be merged or must not be miss
     expect(transformSource(input, 'a.ts').code).toBe(input.replace('@react-simplikit/mobile', 'react-simplikit'));
   });
 
-  it('leaves an import carrying a leading comment as its own statement', () => {
-    const input = [
-      `import { useToggle } from 'react-simplikit';`,
-      `// eslint-disable-next-line no-restricted-imports`,
-      `import { isIOS } from '@react-simplikit/mobile';`,
-      `console.log(1);`,
-      ``,
-    ].join('\n');
-
-    expect(transformSource(input, 'a.ts').code).toBe(input.replace('@react-simplikit/mobile', 'react-simplikit'));
-  });
-
   it('rewrites an import-equals require', () => {
     const result = transformSource(`import m = require('@react-simplikit/mobile');\n`, 'a.ts');
 
@@ -326,18 +314,17 @@ describe('transformSource — telling the user what it declined to merge', () =>
     expect(result.notes[0]?.reason).toContain('by hand');
   });
 
-  it('explains a refusal caused by an attached comment', () => {
+  it('explains a refusal caused by a comment on the import s own line', () => {
     const result = transformSource(
       [
         `import { useToggle } from 'react-simplikit';`,
-        `// keep this`,
-        `import { isIOS } from '@react-simplikit/mobile';`,
+        `import { isIOS } from '@react-simplikit/mobile'; // keep this`,
         ``,
       ].join('\n'),
       'a.ts'
     );
 
-    expect(result.notes).toEqual([{ line: 3, reason: expect.stringContaining('comment') }]);
+    expect(result.notes).toEqual([{ line: 2, reason: expect.stringContaining('comment') }]);
   });
 
   it('stays quiet when there was nothing to merge into', () => {
@@ -376,5 +363,62 @@ describe('transformSource — telling the user what it declined to merge', () =>
 
     expect(twice.code).toBe(once.code);
     expect(twice.changes).toEqual([]);
+  });
+});
+
+describe('transformSource — comments that merging would actually lose', () => {
+  it('merges when the only comment belongs to the line above', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit'; // the root package`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    const result = transformSource(input, 'a.ts');
+
+    expect(result.code).toBe(
+      [`import { useToggle, isIOS } from 'react-simplikit'; // the root package`, ``].join('\n')
+    );
+    expect(result.notes).toEqual([]);
+  });
+
+  it('merges under a file banner', () => {
+    const input = [
+      `/** @vitest-environment jsdom */`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      `import { useToggle } from 'react-simplikit';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').notes).toEqual([]);
+  });
+
+  it('refuses when the import carries its own trailing comment', () => {
+    const input = [
+      `import { useToggle } from 'react-simplikit';`,
+      `import { isIOS } from '@react-simplikit/mobile'; // only on mobile`,
+      ``,
+    ].join('\n');
+
+    const result = transformSource(input, 'a.ts');
+
+    expect(result.code).toBe(input.replace('@react-simplikit/mobile', 'react-simplikit'));
+    expect(result.notes).toEqual([{ line: 2, reason: expect.stringContaining('comment') }]);
+  });
+});
+
+describe('transformSource — a mention it cannot classify', () => {
+  it('reports a file that names the package outside any import position', () => {
+    const result = transformSource(
+      `module.exports = { moduleNameMapper: { '^@react-simplikit/mobile$': '<rootDir>/stub.js' } };\n`,
+      'jest.config.js'
+    );
+
+    expect(result.code).toContain('@react-simplikit/mobile');
+    expect(result.notes).toEqual([{ line: 1, reason: expect.stringContaining('could not be rewritten') }]);
+  });
+
+  it('stays quiet when the mention is inside a rewritten import', () => {
+    expect(transformSource(`import { isIOS } from '@react-simplikit/mobile';\n`, 'a.ts').notes).toEqual([]);
   });
 });

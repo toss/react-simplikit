@@ -15,15 +15,20 @@ const { version } = JSON.parse(readFileSync(new URL('../package.json', import.me
 type TransformOptions = {
   dryRun: boolean;
   json: boolean;
+  debug: boolean;
   packageJson: boolean;
   ignore: string[];
 };
+
+let debugEnabled = false;
 
 function collectIgnore(value: string, previous: string[]): string[] {
   return [...previous, value];
 }
 
 async function runCommand(paths: string[], options: TransformOptions): Promise<void> {
+  debugEnabled = options.debug;
+
   const cwd = process.cwd();
 
   const files = await collectFiles({
@@ -33,7 +38,7 @@ async function runCommand(paths: string[], options: TransformOptions): Promise<v
     cwd,
   });
 
-  const result = await runTransform({ files, cwd, dryRun: options.dryRun });
+  const result = await runTransform({ files, cwd, dryRun: options.dryRun, debug: options.debug });
   const report = options.json
     ? JSON.stringify({ transform: TRANSFORM_NAME, dryRun: options.dryRun, ...result }, null, 2)
     : formatHuman(result, options.dryRun);
@@ -93,7 +98,7 @@ function reportFailure(error: unknown): number {
 
   process.stderr.write(`${describeError(error)}\n`);
 
-  if (process.argv.includes('--debug') && error instanceof Error && error.stack !== undefined) {
+  if (debugEnabled && error instanceof Error && error.stack !== undefined) {
     process.stderr.write(`${error.stack}\n`);
   }
 

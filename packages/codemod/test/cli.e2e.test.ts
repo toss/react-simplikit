@@ -269,3 +269,31 @@ describe('the published tarball', () => {
     expect(run.stdout.trim()).toBe(manifest.version);
   });
 });
+
+describe('--debug', () => {
+  it('prints a stack for a usage error only when asked', async () => {
+    const plain = await runCli(['mobile-to-root', 'missing-dir'], cwd);
+    const debugged = await runCli(['mobile-to-root', 'missing-dir', '--debug'], cwd);
+
+    expect(plain.stderr).not.toContain('\n    at ');
+    expect(debugged.stderr).toContain('\n    at ');
+    expect(debugged.exitCode).toBe(2);
+  });
+
+  it('prints a stack for a file that could not be processed', async () => {
+    await write('app/package.json', `{ "dependencies": { "@react-simplikit/mobile" `);
+
+    const plain = await runCli(['mobile-to-root'], cwd);
+    const debugged = await runCli(['mobile-to-root', '--debug'], cwd);
+
+    expect(plain.stdout).not.toContain('\n    at ');
+    expect(debugged.stdout).toContain('\n    at ');
+    expect(debugged.exitCode).toBe(1);
+  });
+
+  it('is not tripped by the string appearing as a flag value', async () => {
+    const result = await runCli(['mobile-to-root', 'missing-dir', '--ignore', '--debug'], cwd);
+
+    expect(result.stderr).not.toContain('\n    at ');
+  });
+});

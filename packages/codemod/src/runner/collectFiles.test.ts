@@ -111,3 +111,36 @@ describe('collectFiles — explicit paths obey the same policy as globbed ones',
     expect(await collect({ paths: ['linked.ts'] })).toEqual([]);
   });
 });
+
+describe('collectFiles — places it must not silently miss', () => {
+  it('descends into dot directories', async () => {
+    await write('src/a.ts');
+    await write('.storybook/preview.ts');
+    await write('.config/b.ts');
+
+    expect(await collect()).toEqual(['.config/b.ts', '.storybook/preview.ts', 'src/a.ts']);
+  });
+
+  it('still skips the generated dot directories it lists by default', async () => {
+    await write('src/a.ts');
+    await write('.next/x.ts');
+    await write('.yarn/y.ts');
+    await write('.git/z.ts');
+
+    expect(await collect()).toEqual(['src/a.ts']);
+  });
+
+  it('honours an ignore glob written relative to cwd', async () => {
+    await write('src/a.ts');
+    await write('legacy/b.ts');
+
+    expect(await collect({ ignore: ['legacy/**'] })).toEqual(['src/a.ts']);
+  });
+
+  it('still honours an ignore glob anchored with a double star', async () => {
+    await write('src/a.ts');
+    await write('nested/legacy/b.ts');
+
+    expect(await collect({ ignore: ['**/legacy/**'] })).toEqual(['src/a.ts']);
+  });
+});

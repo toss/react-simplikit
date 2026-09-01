@@ -15,6 +15,7 @@ const DEFAULT_IGNORE = [
   '**/.next/**',
   '**/.yarn/**',
   '**/.git/**',
+  '**/.pnp.*',
 ];
 
 export type CollectFilesOptions = {
@@ -40,9 +41,13 @@ export async function collectFiles({ paths, ignore, includePackageJson, cwd }: C
     patterns.push(stats.isDirectory() ? `${base}/**/*` : base);
   }
 
+  const base = fastGlob.convertPathToPattern(cwd);
+  const scoped = ignore.map(pattern => (pattern.startsWith('**/') ? pattern : `${base}/${pattern}`));
+
   const files = await fastGlob(patterns, {
-    ignore: [...DEFAULT_IGNORE, ...ignore],
+    ignore: [...DEFAULT_IGNORE, ...scoped],
     absolute: true,
+    dot: true,
     followSymbolicLinks: false,
   });
 

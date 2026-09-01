@@ -28,7 +28,16 @@ export function transformSource(code: string, fileName: string): TransformSource
   const hits = collectSpecifiers(sourceFile);
 
   if (hits.length === 0) {
-    return { code, changes: [], notes: [] };
+    return {
+      code,
+      changes: [],
+      notes: [
+        {
+          line: lineOf(sourceFile, code.indexOf(MOBILE_PACKAGE_NAME)),
+          reason: `This file names ${MOBILE_PACKAGE_NAME} somewhere the codemod could not be rewritten as an import. Check it by hand.`,
+        },
+      ],
+    };
   }
 
   const merge = buildMergeSplices(sourceFile, hits);

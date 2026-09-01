@@ -14,10 +14,11 @@ import type {
   SourceNote,
 } from '../types.ts';
 
-export type RunTransformOptions = {
+type RunTransformOptions = {
   files: readonly string[];
   cwd: string;
   dryRun: boolean;
+  debug: boolean;
 };
 
 type FileOutcome = {
@@ -44,7 +45,7 @@ function transformFile(file: string, original: string): FileOutcome {
   return { text: result.code, changes: result.changes, dependencies: [], notes: result.notes };
 }
 
-export async function runTransform({ files, cwd, dryRun }: RunTransformOptions): Promise<RunResult> {
+export async function runTransform({ files, cwd, dryRun, debug }: RunTransformOptions): Promise<RunResult> {
   const changed: FileResult[] = [];
   const manual: ManualNote[] = [];
   const failed: FileFailure[] = [];
@@ -70,7 +71,9 @@ export async function runTransform({ files, cwd, dryRun }: RunTransformOptions):
 
       changed.push({ file: relative, changes: outcome.changes, dependencies: outcome.dependencies });
     } catch (error) {
-      failed.push({ file: relative, reason: describeError(error) });
+      const stack = debug && error instanceof Error ? error.stack : undefined;
+
+      failed.push({ file: relative, reason: stack ?? describeError(error) });
     }
   }
 

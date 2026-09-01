@@ -59,13 +59,7 @@ function collectTargets(sourceFile: ts.SourceFile): PlainNamedImport[] {
   return targets;
 }
 
-function hasComment(sourceFile: ts.SourceFile, statement: ts.Statement): boolean {
-  const text = sourceFile.text.slice(statement.getFullStart(), statement.getEnd());
-
-  return text.includes('//') || text.includes('/*');
-}
-
-function deleteStatement(sourceFile: ts.SourceFile, statement: ts.Statement): Splice {
+function deletionRange(sourceFile: ts.SourceFile, statement: ts.Statement): Splice {
   const { text } = sourceFile;
   const start = statement.getStart(sourceFile);
   const end = statement.getEnd();
@@ -77,6 +71,30 @@ function deleteStatement(sourceFile: ts.SourceFile, statement: ts.Statement): Sp
   const ownsLine = text.slice(lineStart, start).trim() === '' && text.slice(end, lineEnd).trim() === '';
 
   return ownsLine ? { start: lineStart, end: lineEnd, text: '' } : { start, end, text: '' };
+}
+
+function losesComment(sourceFile: ts.SourceFile, statement: ts.Statement): boolean {
+  const { text } = sourceFile;
+  const start = statement.getStart(sourceFile);
+  const newlineIndex = text.indexOf('\n', statement.getEnd());
+  const end = newlineIndex === -1 ? text.length : newlineIndex;
+  const scanner = ts.createScanner(
+    ts.ScriptTarget.Latest,
+    false,
+    sourceFile.languageVariant,
+    text,
+    undefined,
+    start,
+    end - start
+  );
+
+  for (let token = scanner.scan(); token !== ts.SyntaxKind.EndOfFileToken; token = scanner.scan()) {
+    if (token === ts.SyntaxKind.SingleLineCommentTrivia || token === ts.SyntaxKind.MultiLineCommentTrivia) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function insertIntoNamedImports(
@@ -121,7 +139,7 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
 
     const line = lineOf(sourceFile, declaration.getStart(sourceFile));
 
-    if (hasComment(sourceFile, declaration)) {
+    if (losesComment(sourceFile, declaration)) {
       notes.push({
         line,
         reason: 'Left on its own line: a comment is attached to it, and merging would drop the comment.',
@@ -162,7 +180,7 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
     boundByTarget.set(target.named, bound);
     appendedByTarget.set(target.named, [...(appendedByTarget.get(target.named) ?? []), ...additions]);
 
-    splices.push(deleteStatement(sourceFile, declaration));
+    splices.push(deletionRange(sourceFile, declaration));
     changes.push({ line, kind: 'merge' });
     mergedDeclarations.add(declaration);
   }

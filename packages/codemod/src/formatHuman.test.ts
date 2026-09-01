@@ -107,7 +107,7 @@ describe('formatHuman — manual notes without file changes', () => {
     const output = formatHuman(manualOnly, false);
 
     expect(output).toContain('package.json — "overrides" still pins it');
-    expect(output).not.toContain('Nothing to change');
+    expect(output).not.toContain('No file imports');
   });
 });
 
@@ -144,5 +144,26 @@ describe('formatHuman — notes that point at a line', () => {
     );
 
     expect(output).toContain('src/a.ts:3 — Left on its own line');
+  });
+});
+
+describe('formatHuman — claims it is entitled to make', () => {
+  it('does not claim a clean scan when a file could not be read', () => {
+    const output = formatHuman(
+      {
+        scanned: 1,
+        changed: [],
+        manual: [],
+        failed: [{ file: 'app/package.json', reason: 'Unexpected end of JSON input' }],
+      },
+      false
+    );
+
+    expect(output).not.toContain('No file imports');
+    expect(output).toContain('app/package.json: Unexpected end of JSON input');
+  });
+
+  it('only claims a clean scan when nothing at all came back', () => {
+    expect(formatHuman({ scanned: 5, changed: [], manual: [], failed: [] }, false)).toContain('No file imports');
   });
 });
