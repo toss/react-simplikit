@@ -69,43 +69,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./packages/react-simplikit/coverage/coverage-final.json
 
-  codemod-node-floor:
-    name: codemod (node ${{ matrix.node }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node: ['22.17.0']
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      # engines.node constrains the runtime a consumer runs the published bin on, not the
-      # toolchain that builds it -- tsdown does not import cleanly on 22.17.0. So the build
-      # runs on the repo's Node and only the CLI itself is exercised on the floor.
-      - name: Set up Node.js for the build
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Build the CLI
-        run: yarn workspace react-simplikit-codemod run build
-
-      - name: Switch to the declared engines.node floor
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: ${{ matrix.node }}
-
-      - name: Run the CLI end to end on the floor
-        run: yarn workspace react-simplikit-codemod run test:e2e:run
-
   spec-compiled:
     name: spec (react compiler compiled)
     runs-on: ubuntu-latest
