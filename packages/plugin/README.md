@@ -56,6 +56,8 @@ claude plugin marketplace remove react-design-philosophy
 - `SKILL.md` — when to use the library, import and SSR rules, a "common needs → use" table, and the full catalog grouped by category (hooks, components, utils, mobile hooks, mobile utils). Everything is imported from `react-simplikit`; the mobile categories only say what an entry assumes.
 - `references/<name>.md` — the documentation page of each entry: signature, parameters, return value, example.
 
+The skill's evaluation set is deliberately NOT part of this bundle — it lives at the repository root in `skill-evals/`, so installing the skill never ships the benchmark's answer key.
+
 ## Contributing
 
 `SKILL.md` and `references/` are generated. Do not edit them by hand:
