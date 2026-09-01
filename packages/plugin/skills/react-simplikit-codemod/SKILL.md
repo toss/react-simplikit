@@ -16,7 +16,6 @@ Do **not** run this when the project has no `@react-simplikit/mobile` dependency
 
 ## Preconditions
 
-- Node.js 22.17.0 or newer.
 - The working tree is committed or stashed. This command rewrites files in place and has no undo of its own.
 
 ## Commands
