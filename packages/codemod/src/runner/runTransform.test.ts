@@ -81,14 +81,15 @@ describe('runTransform', () => {
     expect(await readFile(good, 'utf8')).toBe(`import { isIOS } from 'react-simplikit';\n`);
   });
 
-  it('keeps the stack in the reason when debug is on', async () => {
+  it('adds the stack to the reason when debug is on, and keeps it out otherwise', async () => {
     const missing = path.join(cwd, 'gone.ts');
-    const result = await runTransform({ files: [missing], cwd, dryRun: false, debug: true });
-
+    const debugged = await runTransform({ files: [missing], cwd, dryRun: false, debug: true });
     const plain = await runTransform({ files: [missing], cwd, dryRun: false, debug: false });
 
-    expect(result.failed[0]?.reason.startsWith('Error: ')).toBe(true);
-    expect(plain.failed[0]?.reason.startsWith('Error: ')).toBe(false);
+    // fs errors for a missing file carry a frameless stack, so the only thing to assert here is
+    // that --debug adds to the actionable reason rather than replacing it.
+    expect(debugged.failed[0]?.reason).toContain(plain.failed[0]?.reason ?? '');
+    expect((debugged.failed[0]?.reason.length ?? 0) > (plain.failed[0]?.reason.length ?? 0)).toBe(true);
   });
 
   it('records a file it cannot read', async () => {
@@ -119,5 +120,15 @@ describe('runTransform — a target outside the current directory', () => {
 
     expect(result.changed[0]?.file).toBe(file);
     await rm(outside, { recursive: true, force: true });
+  });
+});
+
+describe('runTransform — --debug on a file the transform rejects', () => {
+  it('keeps the actionable reason ahead of the stack', async () => {
+    const file = await write('package.json', '{ "dependencies": { "@react-simplikit/mobile"');
+    const result = await runTransform({ files: [file], cwd, dryRun: true, debug: true });
+
+    expect(result.failed[0]?.reason).toContain('not valid JSON');
+    expect(result.failed[0]?.reason).toContain('at ');
   });
 });

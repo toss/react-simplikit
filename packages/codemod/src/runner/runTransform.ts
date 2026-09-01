@@ -94,8 +94,9 @@ export async function runTransform({ files, cwd, dryRun, debug }: RunTransformOp
       );
     } catch (error) {
       const stack = debug && error instanceof Error ? error.stack : undefined;
+      const reason = describeFailure(error);
 
-      failed.push({ file: relative, reason: stack ?? describeFailure(error) });
+      failed.push({ file: relative, reason: stack === undefined ? reason : `${reason}\n${stack}` });
     }
   }
 

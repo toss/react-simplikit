@@ -42,7 +42,13 @@ export async function collectFiles({ paths, ignore, includePackageJson, cwd }: C
   }
 
   const base = fastGlob.convertPathToPattern(cwd);
-  const scoped = ignore.map(pattern => (pattern.startsWith('**/') ? pattern : `${base}/${pattern}`));
+  const scoped = ignore.map(pattern => {
+    // A leading `./` survives into the joined pattern as `/./`, which micromatch never matches,
+    // so the glob would silently filter nothing.
+    const relative = pattern.startsWith('./') ? pattern.slice(2) : pattern;
+
+    return relative.startsWith('**/') ? relative : `${base}/${relative}`;
+  });
 
   const files = await fastGlob(patterns, {
     ignore: [...DEFAULT_IGNORE, ...scoped],

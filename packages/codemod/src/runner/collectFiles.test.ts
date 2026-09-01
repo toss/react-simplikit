@@ -144,3 +144,12 @@ describe('collectFiles — places it must not silently miss', () => {
     expect(await collect({ ignore: ['**/legacy/**'] })).toEqual(['src/a.ts']);
   });
 });
+
+describe('collectFiles — an ignore glob a user is likely to type', () => {
+  it('honours a glob written with a leading ./', async () => {
+    await write('legacy/a.ts', '');
+    await write('src/a.ts', '');
+
+    expect(await collect({ ignore: ['./legacy/**'] })).toEqual(['src/a.ts']);
+  });
+});
