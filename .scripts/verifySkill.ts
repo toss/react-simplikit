@@ -58,10 +58,12 @@ for (const [label, contents] of [
   ['the react-simplikit-codemod skill', codemodSkill],
   ['packages/codemod/README.md', await fs.readFile(path.join(root, 'packages/codemod/README.md'), 'utf8')],
 ] as const) {
+  // Matched against the prose form, not a bare `0.2.0`: the illustrative JSON sample carries the
+  // version too, and would keep the assertion green after the sentences around it went stale.
   assert.equal(
-    contents.includes(floor),
+    contents.includes(`react-simplikit@${floor}`),
     true,
-    `${label} never mentions ${floor} — MIN_RUNTIME_VERSION changed without the prose following`
+    `${label} never says react-simplikit@${floor} — MIN_RUNTIME_VERSION changed without the prose following`
   );
 }
 

@@ -34,7 +34,7 @@ export function transformSource(code: string, fileName: string): TransformSource
       notes: [
         {
           line: lineOf(sourceFile, code.indexOf(MOBILE_PACKAGE_NAME)),
-          reason: `This file names ${MOBILE_PACKAGE_NAME} somewhere the codemod could not be rewritten as an import. Check it by hand.`,
+          reason: `This file names ${MOBILE_PACKAGE_NAME} somewhere it could not be rewritten as an import. Check it by hand.`,
         },
       ],
     };

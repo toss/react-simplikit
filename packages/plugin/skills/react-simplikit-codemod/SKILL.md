@@ -96,7 +96,7 @@ The object always carries these six keys.
 
 `changes[].kind` is one of `import`, `export`, `require`, `dynamic-import`, `import-type`, `mock`, `merge`.
 
-`dependencies[].added` is `null` when the existing `react-simplikit` range already satisfies the floor and was left as it was.
+`dependencies[].added` is `null` in two cases: the existing `react-simplikit` range already satisfies the floor and was left as it was, or no registry range could be written at all because the old dependency was pinned by a `workspace:`/`catalog:`/`file:` protocol. The second case always carries a `manual` note naming the field.
 
 `manual[].line` is present only for a note about a specific import; manifest notes have no line.
 
