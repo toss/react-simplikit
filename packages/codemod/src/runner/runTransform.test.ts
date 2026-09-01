@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readFile, realpath, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -106,5 +106,18 @@ describe('runTransform', () => {
 
     expect(result.failed).toHaveLength(1);
     expect(result.changed).toHaveLength(1);
+  });
+});
+
+describe('runTransform — a target outside the current directory', () => {
+  it('reports the absolute path instead of a chain of parent segments', async () => {
+    const outside = await mkdtemp(path.join(tmpdir(), 'codemod-outside-'));
+    const file = path.join(outside, 'a.ts');
+    await writeFile(file, `import { isIOS } from '@react-simplikit/mobile';\nexport const a = isIOS;\n`, 'utf8');
+
+    const result = await runTransform({ files: [file], cwd, dryRun: true, debug: false });
+
+    expect(result.changed[0]?.file).toBe(file);
+    await rm(outside, { recursive: true, force: true });
   });
 });

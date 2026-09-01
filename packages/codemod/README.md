@@ -7,7 +7,7 @@ Codemods for migrating between `react-simplikit` entry points.
 
 ## `mobile-to-root`
 
-`@react-simplikit/mobile` was absorbed into the `react-simplikit` root entry. This transform rewrites every import of the old package to the root package and, where it can, folds the bindings into an import you already have.
+`@react-simplikit/mobile` was absorbed into the `react-simplikit` root entry. This transform rewrites every import of the old package to the root entry, and folds the bindings into an existing `react-simplikit` import when the file already has one and merging cannot change what a name binds.
 
 ```bash
 npx react-simplikit-codemod mobile-to-root

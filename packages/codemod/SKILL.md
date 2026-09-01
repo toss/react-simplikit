@@ -59,13 +59,13 @@ npx react-simplikit-codemod mobile-to-root --no-package-json
   "scanned": 128,
   "changed": [
     {
+      "kind": "source",
       "file": "src/a.tsx",
-      "changes": [{ "line": 3, "kind": "import" }],
-      "dependencies": []
+      "changes": [{ "line": 3, "kind": "import" }]
     },
     {
+      "kind": "manifest",
       "file": "package.json",
-      "changes": [],
       "dependencies": [
         {
           "field": "dependencies",
@@ -92,9 +92,11 @@ npx react-simplikit-codemod mobile-to-root --no-package-json
 
 The object always carries these six keys.
 
+`changed[].kind` is `source` or `manifest`, and it decides the rest of the entry: a `source` entry carries `changes`, a `manifest` entry carries `dependencies`. Neither key appears on the other kind, so branch on `kind` rather than testing an array for emptiness.
+
 `changes[].kind` is one of `import`, `export`, `require`, `dynamic-import`, `import-type`, `mock`, `merge`.
 
-`dependencies[].added` is **omitted entirely** when the existing `react-simplikit` range was left as it was. Read a missing key as "nothing was added".
+`dependencies[].added` is `null` when the existing `react-simplikit` range already satisfies the floor and was left as it was.
 
 `manual[].line` is present only for a note about a specific import; manifest notes have no line.
 
