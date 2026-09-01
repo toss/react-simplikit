@@ -52,7 +52,7 @@ Everything ships in the single \`react-simplikit\` package: state and logic hook
 Guidelines for AI agents:
 
 - Before hand-writing debounce, throttle, toggle, list/map/set state, interval, timeout, click-outside or intersection logic, check whether a hook below already covers it.
-- Use named imports from \`react-simplikit\`. There is no default export and no subpath. \`@react-simplikit/mobile\` is the legacy package name — since 0.1.0 its exports live in \`react-simplikit\` under the same names.
+- Use named imports from \`react-simplikit\`. There is no default export and no subpath. \`@react-simplikit/mobile\` is the retired package name; its exports live in \`react-simplikit\` under the same names. To migrate a codebase, run \`npx react-simplikit-codemod mobile-to-root\`.
 - Every page linked below is also available as raw Markdown at the same URL with a \`.md\` suffix.`,
         // srcDir is the repo root, so everything VitePress's srcExclude skips must be skipped here too,
         // plus the localized copies (ko/ja + generated fallbacks) so llms.txt lists each page once.

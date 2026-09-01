@@ -54,7 +54,7 @@ assert.equal(
 assert.equal(
   integrationWorkflow.includes("command: ['format', 'lint', 'type', 'docs', 'skill', 'codemod']"),
   true,
-  'the integration workflow must run test:docs and test:skill'
+  'the integration workflow quality matrix must match this literal — update both when adding a command'
 );
 
 const sidebarFixtureDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-sidebar-'));

@@ -101,7 +101,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 ## Testing
 
-- **100% coverage mandatory** — Enforced by Vitest coverage threshold. The codemod excludes `src/cli.ts` from coverage because its e2e suite runs the built bin in a child process, where v8 cannot attribute the lines back
+- **100% coverage mandatory** — Enforced by Vitest coverage threshold. The codemod excludes three files: `src/cli.ts`, because its e2e suite runs the built bin in a child process where v8 cannot attribute the lines back, plus `src/constants.ts` and `src/types.ts`, which hold no executable statements. An excluded file still needs its behaviour covered somewhere — `cli.ts`'s exit codes and `--debug` output are asserted by the e2e suite
 - **SSR tests required** — All hooks accessing browser APIs must have `.ssr.test.ts`
 - **Core tests**: `.spec.ts` (legacy, will migrate to `.test.ts`)
 - **Mobile tests**: `.test.ts`
@@ -186,11 +186,15 @@ yarn changeset publish --tag canary  # Requires npm login + OTP
 
 ```
 packages/
-└── react-simplikit/   # react-simplikit
-    ├── src/           # Source (hooks, components, utils)
-    │   └── mobile/    # Mobile web utilities (exported from the root entry)
-    ├── dist/          # Build output (per-module, mirrors src/)
-    └── package.json
+├── react-simplikit/   # react-simplikit — the library
+│   ├── src/           # Source (hooks, components, utils)
+│   │   └── mobile/    # Mobile web utilities (exported from the root entry)
+│   ├── dist/          # Build output (per-module, mirrors src/)
+│   └── package.json
+└── codemod/           # react-simplikit-codemod — bin-only CLI
+    ├── src/           # cli.ts plus runner/ and transforms/
+    ├── test/          # e2e suite that spawns the built bin
+    └── package.json   # declares `bin`, no main/types/module/exports
 ```
 
 ## package.json Convention

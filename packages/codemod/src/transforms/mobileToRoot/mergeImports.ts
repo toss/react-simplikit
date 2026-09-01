@@ -142,7 +142,7 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
     if (losesComment(sourceFile, declaration)) {
       notes.push({
         line,
-        reason: 'Left on its own line: a comment is attached to it, and merging would drop the comment.',
+        reason: 'Left on its own line: a comment sits on it, and merging would strand that comment.',
       });
       continue;
     }

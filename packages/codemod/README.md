@@ -33,21 +33,25 @@ Source files are parsed with the TypeScript compiler and edited by offset, so fo
 ### What it leaves alone
 
 - Markdown, MDX, comments, and any other prose naming the package
+- A source file that names the package where no import could be rewritten — a `moduleNameMapper` entry, say. It is reported so you can check it by hand
 - `resolutions` and `overrides` in `package.json` — reported, not edited, because their meaning differs per package manager
-- Imports carrying a comment, sitting inside a `declare module` block, or whose local name is already bound to a different symbol: merging would lose something, so the specifier is rewritten in place instead. The first two are reported so you do not merge them by hand and reintroduce what the codemod avoided
+- Imports it will not fold into an existing `react-simplikit` import — the specifier is rewritten in place instead:
+  - a comment sits on the import's own line, where merging would strand it — **reported**
+  - the local name already refers to a different symbol, where merging would change what the name binds — **reported**
+  - the import sits inside a `declare module` block, or binds a default or namespace — not reported, because merging it by hand fails to compile rather than passing quietly
 - Your lockfile. Reinstall after the run
 
-`node_modules`, `dist`, `build`, `out`, `coverage`, `.next`, `.yarn` and `.git` are always skipped.
+`node_modules`, `dist`, `build`, `out`, `coverage`, `.next`, `.yarn`, `.git` and `.pnp.*` are always skipped. Every other dot directory — `.storybook`, `.config` — is scanned.
 
 ### Options
 
-| Flag                | Meaning                                                    |
-| ------------------- | ---------------------------------------------------------- |
-| `--dry-run`         | Report what would change without writing anything          |
-| `--json`            | Print a machine-readable report to stdout and nothing else |
-| `--no-package-json` | Leave `package.json` dependency fields alone               |
-| `--ignore <glob>`   | Skip an extra glob. Repeat for more than one               |
-| `--debug`           | Print the stack trace when the run fails                   |
+| Flag                | Meaning                                                                         |
+| ------------------- | ------------------------------------------------------------------------------- |
+| `--dry-run`         | Report what would change without writing anything                               |
+| `--json`            | Print a machine-readable report to stdout and nothing else                      |
+| `--no-package-json` | Leave `package.json` dependency fields alone                                    |
+| `--ignore <glob>`   | Skip an extra glob, relative to the current directory. Repeat for more than one |
+| `--debug`           | Include stack traces in the report and on stderr                                |
 
 ### Exit codes
 
@@ -64,7 +68,9 @@ Running it twice is safe: the second run finds nothing to change.
 ### After running
 
 ```bash
-npm install react-simplikit && npm install
+npm install
 ```
 
-One import needs a version floor: `SafeAreaInset` is only re-exported from the root entry in `react-simplikit@0.2.0` and later.
+The codemod already wrote the dependency and its version range, so a bare reinstall is enough — `npm install react-simplikit` would overwrite that range with whatever is newest.
+
+One import needs a version floor: `SafeAreaInset` is only re-exported from the root entry in `react-simplikit@0.2.0` and later. An existing range below that floor is raised; a `workspace:`, `catalog:` or `file:` protocol is kept as-is and reported instead, since only you know what it should point at.

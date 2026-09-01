@@ -42,11 +42,11 @@ npx react-simplikit-codemod mobile-to-root src
 Skip paths, or leave manifests alone:
 
 ```bash
-npx react-simplikit-codemod mobile-to-root --ignore '**/legacy/**' --ignore '**/e2e/**'
+npx react-simplikit-codemod mobile-to-root --ignore 'legacy/**' --ignore '**/e2e/**'
 npx react-simplikit-codemod mobile-to-root --no-package-json
 ```
 
-`--debug` adds a stack trace on failure. The command never prompts and is safe to run twice, so it fits non-interactive and CI use.
+`--debug` puts stack traces in the report and on stderr, including for files that could not be processed. The command never prompts and is safe to run twice, so it fits non-interactive and CI use.
 
 ## JSON output
 
@@ -77,22 +77,34 @@ npx react-simplikit-codemod mobile-to-root --no-package-json
   ],
   "manual": [
     {
+      "file": "src/a.tsx",
+      "line": 4,
+      "reason": "Left on its own line: `isIOS` already refers to a different import here..."
+    },
+    {
       "file": "package.json",
       "reason": "\"overrides\" still pins @react-simplikit/mobile..."
     }
-  ]
+  ],
+  "failed": []
 }
 ```
 
+The object always carries these six keys.
+
 `changes[].kind` is one of `import`, `export`, `require`, `dynamic-import`, `import-type`, `mock`, `merge`.
 
-`dependencies[].added` is **omitted entirely** when the manifest already depended on `react-simplikit` — the codemod only removed the old entry. Read a missing key as "nothing was added".
+`dependencies[].added` is **omitted entirely** when the existing `react-simplikit` range was left as it was. Read a missing key as "nothing was added".
+
+`manual[].line` is present only for a note about a specific import; manifest notes have no line.
+
+`failed[]` holds the files that could not be read, parsed, or written. It is always present and usually empty.
 
 ## After the run
 
 1. Act on every entry in `manual` by hand. Entries with a `line` mark an import the codemod deliberately left on its own — read the reason before merging it yourself, because merging it by hand can change what a name binds.
-2. Reinstall so the lockfile drops the old package.
-3. Require `react-simplikit@0.2.0` or newer — the first release re-exporting the `SafeAreaInset` type from the root entry.
+2. Run a bare `npm install` (or the equivalent) so the lockfile drops the old package. Do not run `npm install react-simplikit` — it would overwrite the range the codemod just wrote.
+3. Require `react-simplikit@0.2.0` or newer — the first release re-exporting the `SafeAreaInset` type from the root entry. An existing range below that floor is raised automatically; a `workspace:`/`catalog:`/`file:` protocol is kept and reported instead.
 
 ## Failure handling
 
