@@ -97,16 +97,31 @@ function losesComment(sourceFile: ts.SourceFile, statement: ts.Statement): boole
   return false;
 }
 
+function elementSeparator(sourceFile: ts.SourceFile, last: ts.ImportSpecifier): string {
+  const { text } = sourceFile;
+  const lastStart = last.getStart(sourceFile);
+  const lead = text.slice(text.lastIndexOf('\n', lastStart - 1) + 1, lastStart);
+
+  return lead.trim() === '' ? `,\n${lead}` : ', ';
+}
+
 function insertIntoNamedImports(
   sourceFile: ts.SourceFile,
   named: ts.NamedImports,
   appended: readonly string[]
 ): Splice {
   const last = named.elements.at(-1);
-  const position = last === undefined ? named.getStart(sourceFile) + 1 : last.getEnd();
-  const text = last === undefined ? appended.join(', ') : `, ${appended.join(', ')}`;
 
-  return { start: position, end: position, text };
+  if (last === undefined) {
+    const position = named.getStart(sourceFile) + 1;
+
+    return { start: position, end: position, text: appended.join(', ') };
+  }
+
+  const separator = elementSeparator(sourceFile, last);
+  const position = last.getEnd();
+
+  return { start: position, end: position, text: `${separator}${appended.join(separator)}` };
 }
 
 export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly SpecifierHit[]): MergeResult {

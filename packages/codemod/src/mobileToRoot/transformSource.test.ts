@@ -191,6 +191,55 @@ describe('transformSource — merging with an existing react-simplikit import', 
     );
   });
 
+  it('keeps one binding per line when the target list is written that way', () => {
+    const withTrailingComma = [
+      `import {`,
+      `  useDebounce,`,
+      `  useLoading,`,
+      `} from 'react-simplikit';`,
+      `import { isIOS, useKeyboardHeight } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(withTrailingComma, 'a.ts').code).toBe(
+      [
+        `import {`,
+        `  useDebounce,`,
+        `  useLoading,`,
+        `  isIOS,`,
+        `  useKeyboardHeight,`,
+        `} from 'react-simplikit';`,
+        ``,
+      ].join('\n')
+    );
+
+    const withoutTrailingComma = [
+      `import {`,
+      `\tuseLoading`,
+      `} from 'react-simplikit';`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(withoutTrailingComma, 'a.ts').code).toBe(
+      [`import {`, `\tuseLoading,`, `\tisIOS`, `} from 'react-simplikit';`, ``].join('\n')
+    );
+  });
+
+  it('stays inline when the bindings share a line under a broken-out brace', () => {
+    const input = [
+      `import {`,
+      `  useDebounce, useLoading`,
+      `} from 'react-simplikit';`,
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      ``,
+    ].join('\n');
+
+    expect(transformSource(input, 'a.ts').code).toBe(
+      [`import {`, `  useDebounce, useLoading, isIOS`, `} from 'react-simplikit';`, ``].join('\n')
+    );
+  });
+
   it('fills an empty named list on the target', () => {
     const input = [`import {} from 'react-simplikit';`, `import { isIOS } from '@react-simplikit/mobile';`, ``].join(
       '\n'

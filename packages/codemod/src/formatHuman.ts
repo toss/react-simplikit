@@ -55,6 +55,12 @@ export function formatHuman(result: RunResult, dryRun: boolean): string {
     );
   }
 
+  if (!dryRun && changed.some(file => file.kind === 'source')) {
+    lines.push(
+      `Then run your formatter or linter fix on the changed files: import-order rules place ${ROOT_PACKAGE_NAME} differently from ${MOBILE_PACKAGE_NAME}.`
+    );
+  }
+
   return lines.join('\n');
 }
 
