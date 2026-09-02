@@ -1,6 +1,6 @@
 {
   "name": "react-simplikit-codemod",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Codemods for migrating between react-simplikit entry points",
   "type": "module",
   "bin": "./dist/cli.mjs",
