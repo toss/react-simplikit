@@ -40,3 +40,13 @@ import { useKeyboardHeight, useAvoidKeyboard } from 'react-simplikit';
 ```
 
 All hooks are tree-shakeable, so you only include what you use in your bundle.
+
+## Migrating from `@react-simplikit/mobile`
+
+Everything `@react-simplikit/mobile` exported now ships from `react-simplikit`. The codemod rewrites the imports and the `package.json` dependency in place:
+
+```sh
+npx react-simplikit-codemod mobile-to-root
+```
+
+Then run your formatter or linter fix on the changed files: import-order rules place `react-simplikit` differently from `@react-simplikit/mobile`.
