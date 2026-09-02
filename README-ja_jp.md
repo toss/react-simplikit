@@ -12,7 +12,7 @@
 | --------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
 | [react-simplikit](./packages/react-simplikit) | Universal hooks - 状態/ロジック用フックとモバイル Web ユーティリティを単一のエントリで提供 | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **注記**: すべてのフックは単一の `react-simplikit` エントリから提供されます — モバイル Web ユーティリティ（viewport、keyboard、scroll）も含みます。非推奨となった `@react-simplikit/mobile` パッケージを置き換えます。フックがブラウザ API に触れるのはインポート時ではなくフック本体の中だけなので、React Native や SSR でもルートからのインポートは安全です。
+> **注記**: すべてのフックは単一の `react-simplikit` エントリから提供されます — モバイル Web ユーティリティ（viewport、keyboard、scroll）も含みます。非推奨となった `@react-simplikit/mobile` パッケージを置き換えます。既存のコードベースを移行するには `npx react-simplikit-codemod mobile-to-root` を実行してください。フックがブラウザ API に触れるのはインポート時ではなくフック本体の中だけなので、React Native や SSR でもルートからのインポートは安全です。
 
 ## 特長
 
@@ -25,7 +25,6 @@
 ## インストール
 
 ```bash
-# 1 回のインストールで、ルート export のフックとモバイルサブパスの両方を利用できます
 npm install react-simplikit
 ```
 

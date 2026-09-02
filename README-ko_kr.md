@@ -12,7 +12,7 @@
 | --------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | [react-simplikit](./packages/react-simplikit) | Universal hooks - 상태/로직 훅과 모바일 웹 유틸리티를 하나의 진입점에서 제공 | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **참고**: 모든 훅은 `react-simplikit` 단일 진입점에서 제공됩니다 — 모바일 웹 유틸리티(viewport, keyboard, scroll)도 포함해서요. 기존 `@react-simplikit/mobile` 패키지를 대체합니다. 훅은 브라우저 API를 임포트 시점이 아니라 훅 본문 안에서만 사용하므로, React Native와 SSR에서도 루트 임포트가 안전합니다.
+> **참고**: 모든 훅은 `react-simplikit` 단일 진입점에서 제공됩니다 — 모바일 웹 유틸리티(viewport, keyboard, scroll)도 포함해서요. 기존 `@react-simplikit/mobile` 패키지를 대체합니다. 기존 코드베이스는 `npx react-simplikit-codemod mobile-to-root`로 마이그레이션하세요. 훅은 브라우저 API를 임포트 시점이 아니라 훅 본문 안에서만 사용하므로, React Native와 SSR에서도 루트 임포트가 안전합니다.
 
 ## 특징
 
@@ -25,7 +25,6 @@
 ## 설치
 
 ```bash
-# One install covers both the root hooks and the mobile subpath
 npm install react-simplikit
 ```
 
