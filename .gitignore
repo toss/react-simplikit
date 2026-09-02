@@ -23,6 +23,9 @@ node_modules
 # output of 'vitest run --coverage'
 coverage
 
+# fake consumer projects the codemod e2e suite writes and rewrites in place
+packages/codemod/test/__fixtures__/
+
 # vitepress
 .vitepress/cache
 .vitepress/dist

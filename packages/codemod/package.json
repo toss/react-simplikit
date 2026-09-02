@@ -1,0 +1,50 @@
+{
+  "name": "react-simplikit-codemod",
+  "version": "0.0.0",
+  "description": "Codemods for migrating between react-simplikit entry points",
+  "type": "module",
+  "bin": "./dist/cli.mjs",
+  "keywords": [
+    "react-simplikit",
+    "codemod",
+    "migration",
+    "cli"
+  ],
+  "homepage": "https://react-simplikit.slash.page",
+  "bugs": "https://github.com/toss/react-simplikit/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toss/react-simplikit.git",
+    "directory": "packages/codemod"
+  },
+  "license": "MIT",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "clean": "rimraf ./dist",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "yarn build && vitest run -c vitest.e2e.config.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "fast-glob": "^3.3.3",
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.39.3",
+    "rimraf": "^6.0.1",
+    "tsdown": "^0.22.14",
+    "vitest": "^2.1.8"
+  }
+}

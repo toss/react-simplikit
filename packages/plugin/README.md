@@ -1,8 +1,9 @@
 # react-simplikit plugin
 
-Agent skill for [react-simplikit](https://react-simplikit.slash.page): a catalog of every hook, component and util with a one-line description, import and SSR rules, and a reference page per entry. With it installed, an agent checks the library before hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic.
+Agent skills for [react-simplikit](https://react-simplikit.slash.page). Two ship in this plugin:
 
-The skill is generated from the documentation pages in `packages/react-simplikit/src` — see [Contributing](#contributing).
+- **`react-simplikit`** — a catalog of every hook, component and util with a one-line description, import and SSR rules, and a reference page per entry. With it installed, an agent checks the library before hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic.
+- **`react-simplikit-codemod`** — how to migrate a codebase off the `@react-simplikit/mobile` package with `npx react-simplikit-codemod mobile-to-root`, including the JSON report the CLI emits and what to do with each exit code.
 
 ## Install
 
@@ -10,6 +11,7 @@ The skill is generated from the documentation pages in `packages/react-simplikit
 
 ```bash
 npx skills add toss/react-simplikit --skill react-simplikit
+npx skills add toss/react-simplikit --skill react-simplikit-codemod
 ```
 
 ### Claude Code
@@ -51,18 +53,28 @@ claude plugin uninstall react-design-philosophy@react-design-philosophy
 claude plugin marketplace remove react-design-philosophy
 ```
 
-## What the skill contains
+## What each skill contains
+
+`skills/react-simplikit/`
 
 - `SKILL.md` — when to use the library, import and SSR rules, a "common needs → use" table, and the full catalog grouped by category (hooks, components, utils, mobile hooks, mobile utils). Everything is imported from `react-simplikit`; the mobile categories only say what an entry assumes.
 - `references/<name>.md` — the documentation page of each entry: signature, parameters, return value, example.
 
+`skills/react-simplikit-codemod/`
+
+- `SKILL.md` — preconditions, the commands and their flags, the shape of the `--json` report, the manual follow-ups to act on afterwards, and what each exit code means. It has no `references/`.
+
 ## Contributing
 
-`SKILL.md` and `references/` are generated. Do not edit them by hand:
+The two skills are maintained differently.
+
+**`skills/react-simplikit/` is generated. Do not edit it by hand:**
 
 - Wording of the rules and the "common needs" table lives in `.scripts/commands/generateSkill/template.md`.
 - Catalog descriptions come from each entry's documentation page (`<name>.md` next to its source), which `yarn docs:gen <name>` writes from the JSDoc.
 - Run `yarn skill:gen` to regenerate (it also runs at the end of `yarn docs:gen`), then `yarn test:skill` to check the result. CI fails if the committed skill differs from a fresh generation.
+
+**`skills/react-simplikit-codemod/` is hand-written.** It documents the CLI in `packages/codemod`, so a change to the CLI's flags, JSON report or exit codes has to be carried into it by hand. `yarn test:skill` checks its frontmatter and length but cannot tell whether it still matches the CLI.
 
 ## License
 

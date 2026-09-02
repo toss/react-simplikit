@@ -10568,6 +10568,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-simplikit-codemod@workspace:packages/codemod":
+  version: 0.0.0-use.local
+  resolution: "react-simplikit-codemod@workspace:packages/codemod"
+  dependencies:
+    "@types/node": "npm:^24.13.3"
+    "@vitest/coverage-v8": "npm:^2.1.8"
+    commander: "npm:^13.1.0"
+    eslint: "npm:^9.39.3"
+    fast-glob: "npm:^3.3.3"
+    rimraf: "npm:^6.0.1"
+    tsdown: "npm:^0.22.14"
+    typescript: "npm:^5.7.2"
+    vitest: "npm:^2.1.8"
+  bin:
+    react-simplikit-codemod: ./dist/cli.mjs
+  languageName: unknown
+  linkType: soft
+
 "react-simplikit@workspace:*, react-simplikit@workspace:^, react-simplikit@workspace:packages/react-simplikit":
   version: 0.0.0-use.local
   resolution: "react-simplikit@workspace:packages/react-simplikit"

@@ -2,9 +2,10 @@
 
 ## Project Overview
 
-React utility hooks/components library. Single package monorepo:
+React utility hooks/components library. Two published packages:
 
 - `react-simplikit` (`packages/react-simplikit`) — React hooks & components plus mobile web utilities (viewport, keyboard, layout), all exported from the single root entry (mobile source lives in `src/mobile`)
+- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that migrates consumers off the retired `@react-simplikit/mobile`. The rules below describe the library; the exceptions that apply to the CLI are called out where they differ
 
 ## Development Quick Start
 
@@ -29,7 +30,7 @@ components → hooks → utils → _internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
 - \_internal has no internal dependencies
-- `src/mobile` may use core utils and `_internal`; root exports must NOT import from `src/mobile` (test infrastructure like `_internal/test-utils` is exempt)
+- `src/mobile` may use core utils and `_internal`. The root barrel re-exports every `src/mobile` public API — that is the single entry point the package promises — but no core hook, component or util may import from `src/mobile` in its own implementation
 
 ## File Structure Convention
 
@@ -69,7 +70,7 @@ src/
 - **`"use client"` banner** — tsdown adds this to every emitted file for RSC compatibility
 - **Named exports only** — No default exports
 - **No `any` types** — Full TypeScript strict mode, no escape hatches
-- **Zero dependencies** — No runtime dependencies in production code
+- **Zero dependencies** — No runtime dependencies in `react-simplikit`. `react-simplikit-codemod` is a dev-time CLI and declares `commander`, `fast-glob` and `typescript` in `dependencies`
 
 ### SSR-Safe Coding Pattern
 
@@ -100,7 +101,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 ## Testing
 
-- **100% coverage mandatory** — Enforced by Vitest coverage threshold, no exceptions
+- **100% coverage mandatory** — Enforced by Vitest coverage threshold. The codemod excludes two files: `src/cli.ts`, because its e2e suite runs the built bin in a child process where v8 cannot attribute the lines back, and `src/constants.ts`, which holds no executable statements. An excluded file still needs its behaviour covered somewhere — `cli.ts`'s exit codes and `--debug` output are asserted by the e2e suite
 - **SSR tests required** — All hooks accessing browser APIs must have `.ssr.test.ts`
 - **Core tests**: `.spec.ts` (legacy, will migrate to `.test.ts`)
 - **Mobile tests**: `.test.ts`
@@ -128,7 +129,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 Format: `<type>(<scope>): <description>`
 
 - **Types**: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`
-- **Scope**: Package name (`core`, `mobile`) or area
+- **Scope**: Package name (`core`, `mobile`, `codemod`) or area
 - Examples: `feat(mobile): add useKeyboardHeight hook`, `fix: correct SSR rendering logic`
 
 ## PR Checklist
@@ -163,6 +164,7 @@ PR with changeset merged → release.yml triggers
 - `changeset publish` v3 calls `yarn npm publish` for Yarn Berry, but manifests must stay valid for plain `npm pack` (`verify-pack`)
 - Therefore: **always declare `main`/`types`/`module`/`exports` at the top level** of package.json
 - `publishConfig` should only contain `access: "public"`
+- A bin-only package declares `bin` instead and has no `main`/`types`/`module`/`exports`. `packages/codemod` is one; `bin` must point at the built `dist/cli.mjs`, and changing it requires re-running `yarn install` because `yarn.lock` records the value
 
 ### OIDC Trusted Publishing
 
@@ -184,11 +186,15 @@ yarn changeset publish --tag canary  # Requires npm login + OTP
 
 ```
 packages/
-└── react-simplikit/   # react-simplikit
-    ├── src/           # Source (hooks, components, utils)
-    │   └── mobile/    # Mobile web utilities (exported from the root entry)
-    ├── dist/          # Build output (per-module, mirrors src/)
-    └── package.json
+├── react-simplikit/   # react-simplikit — the library
+│   ├── src/           # Source (hooks, components, utils)
+│   │   └── mobile/    # Mobile web utilities (exported from the root entry)
+│   ├── dist/          # Build output (per-module, mirrors src/)
+│   └── package.json
+└── codemod/           # react-simplikit-codemod — bin-only CLI
+    ├── src/           # cli.ts plus runner/ and mobileToRoot/
+    ├── test/          # e2e suite that spawns the built bin
+    └── package.json   # declares `bin`, no main/types/module/exports
 ```
 
 ## package.json Convention
