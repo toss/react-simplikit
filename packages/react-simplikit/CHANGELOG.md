@@ -1,5 +1,25 @@
 # react-simplikit
 
+## 0.2.0
+
+### Minor Changes
+
+- [#446](https://github.com/toss/react-simplikit/pull/446) [`0b66d40`](https://github.com/toss/react-simplikit/commit/0b66d40e56b4a183fd1fc5dce8a685e2a0da2839) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `useDebouncedCallback` and `useThrottledCallback` now accept any value type: `onChange` is typed `(newValue: T) => void` instead of `(newValue: boolean) => void`, so a debounced search query or a throttled scroll position no longer needs a cast. Existing boolean callers are unaffected.
+
+  `useDebouncedCallback` no longer drops a first call of `false`. It compared incoming values against a seed of `false`, so the very first `false` looked redundant and was never forwarded; the comparison now starts from a sentinel, as `useThrottledCallback` already did. A `false` that arrives while an initial `true` is still pending now replaces it instead of being ignored.
+
+  `useImpressionRef` no longer emits `onImpressionEnd` for an element that was never impressed.
+
+### Patch Changes
+
+- [#450](https://github.com/toss/react-simplikit/pull/450) [`a4251a3`](https://github.com/toss/react-simplikit/commit/a4251a30aafbfabc61e6cc9a80de1af86936bb2a) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `useDebouncedCallback` and `useThrottledCallback` no longer forward a stale value when the caller returns to the last forwarded one. Calling with `'seo'` and then `'seoul'` right after `'seoul'` had already been forwarded used to skip the second call as a duplicate without cancelling the pending `'seo'`, so `onChange('seo')` fired anyway. The pending call is now cancelled first. For `useThrottledCallback` this only showed with `edges: ['trailing']`; the default leading edge forwards the intermediate value immediately and masked it.
+
+- [#452](https://github.com/toss/react-simplikit/pull/452) [`fd312f5`](https://github.com/toss/react-simplikit/commit/fd312f589430154d38b7d5d5998f1f20ceb0be54) Thanks [@hyesungoh](https://github.com/hyesungoh)! - JSDoc corrections that show up in editor hover. `useIntersectionObserver`'s `options.root` is typed `Element | Document | null` instead of `boolean`. `useList` and `useSet` now declare their generic parameter, their optional initial state and every member they return. `mergeProps` and `mergeRefs` mark their rest parameter as one, so the documented signature matches the implementation.
+
+- [#456](https://github.com/toss/react-simplikit/pull/456) [`65ce435`](https://github.com/toss/react-simplikit/commit/65ce435abfca276f2a22c01b6ff50dc5530831fc) Thanks [@mnxmnz](https://github.com/mnxmnz)! - Re-export the `SafeAreaInset` type from the package root. `@react-simplikit/mobile` exported it, but it was dropped when that package was absorbed into the root entry, leaving `import type { SafeAreaInset }` with no replacement.
+
+- [#435](https://github.com/toss/react-simplikit/pull/435) [`9e05182`](https://github.com/toss/react-simplikit/commit/9e051826418a852996ae851a7f8c8e53c1408852) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `useDoubleClick`, `useGeolocation`, `useImpressionRef`, `useIntersectionObserver`, `useLongPress`, `useOutsideClickEffect`, `useStorageState` and `useVisibilityEvent` are no longer marked `@deprecated`. They are maintained hooks again: editors stop rendering them struck-through, and no removal is planned.
+
 ## 0.1.0
 
 ### Minor Changes
