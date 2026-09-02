@@ -1,5 +1,11 @@
 # react-simplikit-codemod
 
+## 0.1.1
+
+### Patch Changes
+
+- [#459](https://github.com/toss/react-simplikit/pull/459) [`61feb24`](https://github.com/toss/react-simplikit/commit/61feb246a452d208bc51ddf0a7e514d25e9a7215) Thanks [@mnxmnz](https://github.com/mnxmnz)! - `mobile-to-root` keeps one binding per line when it folds imports into a `react-simplikit` import that is already written that way, instead of appending them all to the last line. The closing message and the README now say to run your formatter or linter fix on the changed files: import-order rules place `react-simplikit` differently from `@react-simplikit/mobile`, so a sorted import block is usually out of order after the run.
+
 ## 0.1.0
 
 ### Minor Changes
