@@ -5,10 +5,11 @@
 
 ## Project Overview
 
-React utility hooks/components library. Single package monorepo:
+React utility hooks/components library. Two published packages and an agent plugin:
 
-- `react-simplikit` (`packages/react-simplikit`) — Platform-independent React hooks & components
-- Mobile web utilities (viewport, keyboard, layout) live in `packages/react-simplikit/src/mobile` and are exported from the root entry
+- `react-simplikit` (`packages/react-simplikit`) — React hooks & components. Mobile web utilities (viewport, keyboard, layout) live in `src/mobile` and are exported from the root entry
+- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that migrates consumers off the retired `@react-simplikit/mobile`
+- `packages/plugin` — agent skills for Claude Code, Codex and skills.sh. No `package.json`, so it is neither a workspace nor on npm. `yarn skill:gen` regenerates `skills/react-simplikit` from the public exports and `yarn test:skill` fails CI when the committed copy drifts; `skills/react-simplikit-codemod` is hand-written
 
 ## Architecture
 
