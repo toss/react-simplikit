@@ -12,7 +12,7 @@ Una colección de utilidades de React ligeras y sin dependencias para crear apli
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | [react-simplikit](./packages/react-simplikit) | Universal hooks - Hooks de estado y lógica más utilidades para la web móvil, todo desde una sola entrada | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **Nota**: todos los Hooks se distribuyen desde la única entrada `react-simplikit`, incluidas las utilidades para la web móvil (viewport, keyboard, scroll). Esto sustituye al paquete obsoleto `@react-simplikit/mobile`. Los Hooks solo tocan las APIs del navegador dentro de su cuerpo, así que importar desde la raíz sigue siendo seguro en React Native y en SSR.
+> **Nota**: todos los Hooks se distribuyen desde la única entrada `react-simplikit`, incluidas las utilidades para la web móvil (viewport, keyboard, scroll). Esto sustituye al paquete obsoleto `@react-simplikit/mobile`. Para migrar una base de código existente, ejecuta `npx react-simplikit-codemod mobile-to-root`. Los Hooks solo tocan las APIs del navegador dentro de su cuerpo, así que importar desde la raíz sigue siendo seguro en React Native y en SSR.
 
 ## Características
 
@@ -25,7 +25,6 @@ Una colección de utilidades de React ligeras y sin dependencias para crear apli
 ## Instalación
 
 ```bash
-# Una sola instalación cubre tanto los Hooks de la raíz como la subruta de móvil
 npm install react-simplikit
 ```
 

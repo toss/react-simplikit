@@ -12,7 +12,7 @@ A collection of lightweight, zero-dependency React utilities for building robust
 | --------------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | [react-simplikit](./packages/react-simplikit) | Universal hooks - state/logic hooks plus mobile web utilities, all from one entry | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **Note**: every hook ships from the single `react-simplikit` entry — mobile web utilities (viewport, keyboard, scroll) included. This replaces the deprecated `@react-simplikit/mobile` package. Hooks touch browser APIs only inside their bodies, so importing the root stays safe on React Native and SSR.
+> **Note**: every hook ships from the single `react-simplikit` entry — mobile web utilities (viewport, keyboard, scroll) included. This replaces the deprecated `@react-simplikit/mobile` package. To migrate an existing codebase, run `npx react-simplikit-codemod mobile-to-root`. Hooks touch browser APIs only inside their bodies, so importing the root stays safe on React Native and SSR.
 
 ## Features
 
@@ -25,7 +25,6 @@ A collection of lightweight, zero-dependency React utilities for building robust
 ## Installation
 
 ```bash
-# One install covers both the root hooks and the mobile subpath
 npm install react-simplikit
 ```
 

@@ -49,6 +49,17 @@ describe('formatHuman', () => {
 
     expect(output).toContain('Imports now resolve from react-simplikit');
     expect(output).toContain(MIN_RUNTIME_VERSION);
+    expect(output).toContain('import-order rules place react-simplikit differently');
+  });
+
+  it('skips the lint hint when only package.json changed', () => {
+    const output = formatHuman(
+      { scanned: 1, changed: [{ kind: 'manifest', file: 'package.json', dependencies: [] }], manual: [], failed: [] },
+      false
+    );
+
+    expect(output).toContain('Imports now resolve');
+    expect(output).not.toContain('import-order');
   });
 
   it('does not claim a dry run changed anything', () => {
@@ -57,6 +68,7 @@ describe('formatHuman', () => {
     expect(output).toContain('Nothing was written');
     expect(output).toContain('Run without --dry-run to apply');
     expect(output).not.toContain('Imports now resolve');
+    expect(output).not.toContain('import-order');
   });
 
   it('reports a clean run without a version reminder or a file list', () => {

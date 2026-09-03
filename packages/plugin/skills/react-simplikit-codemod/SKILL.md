@@ -105,7 +105,8 @@ The object always carries these six keys.
 
 1. Act on every entry in `manual` by hand. Entries with a `line` mark an import the codemod deliberately left on its own — read the reason before merging it yourself, because merging it by hand can change what a name binds.
 2. Run a bare `npm install` (or the equivalent) so the lockfile drops the old package. Do not run `npm install react-simplikit` — it would overwrite the range the codemod just wrote.
-3. Require `react-simplikit@0.2.0` or newer — the first release re-exporting the `SafeAreaInset` type from the root entry. An existing range below that floor is raised automatically; a `workspace:`/`catalog:`/`file:` protocol is kept and reported instead.
+3. Run the project's formatter or linter fix (`eslint --fix`, say) on the changed files. Import-order rules place `react-simplikit` differently from `@react-simplikit/mobile`, so a sorted import block is usually out of order after the run.
+4. Require `react-simplikit@0.2.0` or newer — the first release re-exporting the `SafeAreaInset` type from the root entry. An existing range below that floor is raised automatically; a `workspace:`/`catalog:`/`file:` protocol is kept and reported instead.
 
 ## Failure handling
 

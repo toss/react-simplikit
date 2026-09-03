@@ -12,7 +12,7 @@
 | --------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
 | [react-simplikit](./packages/react-simplikit) | Universal hooks - 状态/逻辑 Hook 与移动端 Web 工具函数，都从单一入口提供 | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
 
-> **注意**：所有 Hook 都从单一的 `react-simplikit` 入口提供，其中也包括移动端 Web 工具函数（viewport、keyboard、scroll）。它取代了已弃用的 `@react-simplikit/mobile` 包。Hook 只在函数体内部才会触碰浏览器 API，因此从根入口导入在 React Native 和 SSR 中同样安全。
+> **注意**：所有 Hook 都从单一的 `react-simplikit` 入口提供，其中也包括移动端 Web 工具函数（viewport、keyboard、scroll）。它取代了已弃用的 `@react-simplikit/mobile` 包。要迁移现有代码库，请运行 `npx react-simplikit-codemod mobile-to-root`。Hook 只在函数体内部才会触碰浏览器 API，因此从根入口导入在 React Native 和 SSR 中同样安全。
 
 ## 特性
 
@@ -25,7 +25,6 @@
 ## 安装
 
 ```bash
-# 一次安装即可同时使用根入口的 Hook 和移动端子路径
 npm install react-simplikit
 ```
 
