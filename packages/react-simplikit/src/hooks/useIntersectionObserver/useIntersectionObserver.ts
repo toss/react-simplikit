@@ -65,6 +65,10 @@ export function useIntersectionObserver<Element extends HTMLElement>(
   );
 }
 
+// `root` is a DOM node: `JSON.stringify` would collapse any node to `"{}"`, so it must be compared by reference.
+// `threshold` can be an inline array (e.g. `threshold: [0, 0.5]`) that gets a new reference every render even
+// though the values are unchanged, so it needs `JSON.stringify` instead of `===`. `rootMargin` is a plain
+// string, so `===` already compares it by value.
 function areIntersectionOptionsEqual(a: IntersectionObserverInit, b: IntersectionObserverInit): boolean {
   return (
     a.root === b.root && a.rootMargin === b.rootMargin && JSON.stringify(a.threshold) === JSON.stringify(b.threshold)
