@@ -99,4 +99,49 @@ describe('useIntersectionObserver', () => {
 
     expect(mockObserve).not.toHaveBeenCalled();
   });
+
+  it('should recreate the observer when threshold, rootMargin, or root changes', async () => {
+    const root = document.createElement('div');
+    const { result, rerender } = await renderHookSSR(
+      (props: IntersectionObserverInit) => useIntersectionObserver(vi.fn(), props),
+      { initialProps: { root: null, rootMargin: '0px', threshold: 0.5 } as IntersectionObserverInit }
+    );
+    const mockElement = document.createElement('div');
+
+    await act(async () => {
+      result.current(mockElement);
+    });
+    expect(IntersectionObserverSpy).toHaveBeenCalledTimes(1);
+
+    rerender({ root: null, rootMargin: '0px', threshold: [0, 0.5] });
+    expect(IntersectionObserverSpy).toHaveBeenCalledTimes(2);
+
+    rerender({ root: null, rootMargin: '10px', threshold: [0, 0.5] });
+    expect(IntersectionObserverSpy).toHaveBeenCalledTimes(3);
+
+    rerender({ root, rootMargin: '10px', threshold: [0, 0.5] });
+    expect(IntersectionObserverSpy).toHaveBeenCalledTimes(4);
+  });
+
+  it('should not recreate the observer when a new threshold array has the same values in the same order', async () => {
+    const { result, rerender } = await renderHookSSR(
+      (props: IntersectionObserverInit) => useIntersectionObserver(vi.fn(), props),
+      { initialProps: { threshold: [0, 0.25, 0.5] } as IntersectionObserverInit }
+    );
+    const mockElement = document.createElement('div');
+
+    await act(async () => {
+      result.current(mockElement);
+    });
+    expect(IntersectionObserverSpy).toHaveBeenCalledTimes(1);
+
+    // A brand-new array instance with identical values must not be treated as a change.
+    rerender({ threshold: [0, 0.25, 0.5] });
+    expect(IntersectionObserverSpy).toHaveBeenCalledTimes(1);
+    expect(mockUnobserve).not.toHaveBeenCalled();
+
+    // Same values, different order: a real change, so it should recreate.
+    rerender({ threshold: [0.5, 0.25, 0] });
+    expect(IntersectionObserverSpy).toHaveBeenCalledTimes(2);
+  });
 });
