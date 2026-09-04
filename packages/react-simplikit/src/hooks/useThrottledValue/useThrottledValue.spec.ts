@@ -82,12 +82,7 @@ describe('useThrottledValue', () => {
     expect(result.current).toBe('b');
   });
 
-  // `throttle.ts` reschedules its timer on every call instead of firing at the window
-  // boundary, so a trailing-only throttle never fires while the value keeps changing.
-  // es-toolkit fixed the same defect in commit 13bf520 (2025-12-07); this hook inherits the pre-fix
-  // behaviour. Marked `fails` deliberately: it will start failing, and so announce the
-  // fix, once `throttle.ts` is corrected.
-  it.fails('keeps updating once per window when leading is false and the value keeps changing', () => {
+  it('keeps updating once per window when leading is false and the value keeps changing', () => {
     const { result, rerender } = renderHookSSR(({ value }) => useThrottledValue(value, 100, { leading: false }), {
       initialProps: { value: 0 },
     });
