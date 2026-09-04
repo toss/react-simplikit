@@ -188,4 +188,23 @@ describe('useThrottledCallback', () => {
     vi.advanceTimersByTime(100);
     expect(onChange.mock.calls.map(call => call[0])).toEqual([5, 9, 10]);
   });
+
+  it('lets a value repeated after the window still occupy the next one', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));
+
+    result.current(true);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual([true]);
+
+    vi.advanceTimersByTime(200);
+
+    // repeated value: skipped as a duplicate, but the call still opens a throttle window
+    result.current(true);
+    vi.advanceTimersByTime(20);
+    result.current(false);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual([true]);
+
+    vi.advanceTimersByTime(100);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual([true, false]);
+  });
 });
