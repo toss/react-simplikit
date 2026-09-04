@@ -198,4 +198,23 @@ describe('useImpressionRef', () => {
 
     expect(mockOnImpressionEnd).not.toHaveBeenCalled();
   });
+
+  it('should emit onImpressionEnd on unmount when the tab hides before the exit event fires', async () => {
+    const { observerCallback, unmount } = await setup();
+
+    await act(async () => {
+      observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
+    });
+
+    Object.defineProperty(document, 'visibilityState', { value: 'hidden', writable: true });
+    await act(async () => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(mockOnImpressionEnd).not.toHaveBeenCalled();
+
+    unmount();
+
+    expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
+  });
 });

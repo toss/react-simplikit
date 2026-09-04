@@ -52,6 +52,9 @@ export function useImpressionRef<Element extends HTMLElement>({
   const impressionEndHandler = usePreservedCallback(onImpressionEnd);
 
   const isIntersectingRef = useRef(false);
+  // The last value handed to the debounced handler, which is not the same as the last one delivered.
+  // The unmount effect below needs to know an end was requested even while it is still on the timer.
+  const requestedImpressionRef = useRef(false);
   // An element that was never impressed can still report `false` (it starts outside the viewport,
   // or the tab is hidden before it ever intersects); an end without a start must not be emitted.
   const hasImpressionStartedRef = useRef(false);
@@ -72,13 +75,18 @@ export function useImpressionRef<Element extends HTMLElement>({
     leading: true,
   });
 
+  const requestImpressionChange = (impressed: boolean) => {
+    requestedImpressionRef.current = impressed;
+    impressionEventHandler(impressed);
+  };
+
   // The end event goes through a debounce, so a short impression can still be waiting on the timer when
   // the element unmounts (a row scrolling out of a virtualised list). `useDebounce` cancels pending calls
   // on unmount, which would drop the event, so emit it here instead.
   useEffect(
     function emitPendingImpressionEndOnUnmount() {
       return () => {
-        if (hasImpressionStartedRef.current && !isIntersectingRef.current) {
+        if (hasImpressionStartedRef.current && !requestedImpressionRef.current) {
           hasImpressionStartedRef.current = false;
           impressionEndHandler();
         }
@@ -92,7 +100,7 @@ export function useImpressionRef<Element extends HTMLElement>({
       return;
     }
 
-    impressionEventHandler(documentVisible === 'visible');
+    requestImpressionChange(documentVisible === 'visible');
   });
 
   return useIntersectionObserver<Element>(
@@ -105,7 +113,7 @@ export function useImpressionRef<Element extends HTMLElement>({
       const isIntersecting = areaThreshold === 0 ? entry.isIntersecting : currentRatio >= areaThreshold;
 
       isIntersectingRef.current = isIntersecting;
-      impressionEventHandler(isIntersecting);
+      requestImpressionChange(isIntersecting);
     },
     { rootMargin, threshold: areaThreshold }
   );
