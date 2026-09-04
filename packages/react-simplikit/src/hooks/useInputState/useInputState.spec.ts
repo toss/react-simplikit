@@ -44,36 +44,36 @@ describe('useInputState', () => {
     const { result: result2 } = await renderHookSSR(() => useInputState('other-value'));
     expect(result2.current[0]).toBe('other-value');
   });
-});
 
-it('should update value when change event occurs', async () => {
-  const { getByRole } = render(createElement(createTestInput()));
-  const input = getByRole('textbox');
+  it('should update value when change event occurs', async () => {
+    const { getByRole } = render(createElement(createTestInput()));
+    const input = getByRole('textbox');
 
-  expect(input).toHaveValue('');
+    expect(input).toHaveValue('');
 
-  fireEvent.change(input, { target: { value: 'changed' } });
-  expect(input).toHaveValue('changed');
+    fireEvent.change(input, { target: { value: 'changed' } });
+    expect(input).toHaveValue('changed');
 
-  fireEvent.change(input, { target: { value: 'one more changed' } });
-  expect(input).toHaveValue('one more changed');
-});
+    fireEvent.change(input, { target: { value: 'one more changed' } });
+    expect(input).toHaveValue('one more changed');
+  });
 
-it('should transform value according to the provided function', async () => {
-  const { getByRole } = render(createElement(createTestInput('', v => v.toUpperCase())));
+  it('should transform value according to the provided function', async () => {
+    const { getByRole } = render(createElement(createTestInput('', v => v.toUpperCase())));
 
-  const input = getByRole('textbox');
-  fireEvent.change(input, { target: { value: 'must be uppercase' } });
+    const input = getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'must be uppercase' } });
 
-  expect(input).toHaveValue('MUST BE UPPERCASE');
-});
+    expect(input).toHaveValue('MUST BE UPPERCASE');
+  });
 
-it('should update value when change event occurs on a textarea', async () => {
-  const { getByRole } = render(createElement(createTestTextarea()));
-  const textarea = getByRole('textbox');
+  it('should update value when change event occurs on a textarea', async () => {
+    const { getByRole } = render(createElement(createTestTextarea()));
+    const textarea = getByRole('textbox');
 
-  expect(textarea).toHaveValue('');
+    expect(textarea).toHaveValue('');
 
-  fireEvent.change(textarea, { target: { value: 'changed' } });
-  expect(textarea).toHaveValue('changed');
+    fireEvent.change(textarea, { target: { value: 'changed' } });
+    expect(textarea).toHaveValue('changed');
+  });
 });
