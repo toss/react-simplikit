@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useDebounce } from '../useDebounce/index.ts';
 
@@ -14,12 +14,20 @@ export function useDebouncedValue<T>(
 ): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
   const debounced = useDebounce((next: T) => setDebouncedValue(() => next), wait, { leading, trailing });
+  const lastForwardedRef = useRef(value);
 
   useEffect(
-    function forwardValue() {
+    function forwardChangedValue() {
+      const unchanged = Object.is(lastForwardedRef.current, value);
+      const settled = Object.is(value, debouncedValue);
+      if (unchanged && settled) {
+        return;
+      }
+
+      lastForwardedRef.current = value;
       debounced(value);
     },
-    [value, debounced]
+    [value, debouncedValue, debounced]
   );
 
   return debouncedValue;
