@@ -1,6 +1,6 @@
 import { createElement } from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -75,5 +75,21 @@ describe('useInputState', () => {
 
     fireEvent.change(textarea, { target: { value: 'changed' } });
     expect(textarea).toHaveValue('changed');
+  });
+
+  it('should initialize value using a lazy initializer', () => {
+    const { result } = renderHookSSR(() => useInputState(() => 'initial-value'));
+    const [value] = result.current;
+
+    expect(value).toBe('initial-value');
+  });
+
+  it('should call the lazy initializer only on initial render', () => {
+    const initializer = vi.fn(() => 'initial-value');
+    const { rerender } = renderHookSSR(() => useInputState(initializer));
+
+    rerender();
+
+    expect(initializer).toHaveBeenCalledTimes(1);
   });
 });
