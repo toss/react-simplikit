@@ -76,6 +76,8 @@ export function useThrottledValue<T>(
   return throttledValue;
 }
 
+// Adapts this hook's `leading` / `trailing` booleans to the `edges` array `useThrottle` still takes.
+// Delete once `useThrottle` accepts the booleans, and pass the options straight through.
 function toEdges(leading: boolean, trailing: boolean): Edge[] {
   const edges: Edge[] = [];
   if (leading) {
