@@ -9,6 +9,40 @@ type ThrottleOptions = {
 
 type Edge = 'leading' | 'trailing';
 
+/**
+ * @description
+ * `useThrottledValue` is a React hook that returns a throttled copy of the given value.
+ * The caller keeps owning the state; the returned value follows it at most once per `wait` milliseconds,
+ * which is useful for driving expensive renders from scroll position, pointer position, or resize size.
+ *
+ * On the first render and on the server the value is returned as is. A change is never scheduled
+ * on mount, so the first change after mount is applied immediately when `leading` is `true`.
+ * If both `leading` and `trailing` are `false`, the returned value never updates.
+ *
+ * @template T - The type of the value.
+ * @param {T} value - The value to throttle.
+ * @param {number} wait - The length of the throttle window in milliseconds.
+ * @param {ThrottleOptions} [options] - Configuration options for throttle behavior.
+ * @param {boolean} [options.leading=true] - If `true`, the first change in a window is applied immediately.
+ * @param {boolean} [options.trailing=true] - If `true`, the last change in a window is applied when the window ends.
+ *
+ * @returns {T} The throttled value.
+ *
+ * @example
+ * import { useThrottledValue } from 'react-simplikit';
+ * import { useState } from 'react';
+ *
+ * function ScrollProgress() {
+ *   const [scrollY, setScrollY] = useState(0);
+ *   const throttledScrollY = useThrottledValue(scrollY, 100);
+ *
+ *   return (
+ *     <div onScroll={e => setScrollY(e.currentTarget.scrollTop)}>
+ *       <ProgressBar position={throttledScrollY} />
+ *     </div>
+ *   );
+ * }
+ */
 export function useThrottledValue<T>(
   value: T,
   wait: number,
