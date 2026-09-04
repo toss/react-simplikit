@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
-import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-import { usePreservedReference } from '../usePreservedReference/index.ts';
-import { throttle } from '../useThrottle/throttle.ts';
+import { useThrottle } from '../useThrottle/index.ts';
 
 type ThrottleOptions = {
   edges?: Array<'leading' | 'trailing'>;
@@ -52,44 +50,20 @@ export function useThrottledCallback<T>({
 }: ThrottleOptions & {
   onChange: (newValue: T) => void;
   timeThreshold: number;
-}) {
-  const handleChange = usePreservedCallback(onChange);
-  const ref = useRef<{ value: T | typeof NOT_INVOKED; clearPreviousThrottle: () => void }>({
-    value: NOT_INVOKED,
-    clearPreviousThrottle: () => {},
-  });
+}): (nextValue: T) => void {
+  const lastForwardedRef = useRef<T | typeof NOT_INVOKED>(NOT_INVOKED);
 
-  useEffect(function cleanupThrottleOnUnmount() {
-    const current = ref.current;
-    return () => {
-      current.clearPreviousThrottle();
-    };
-  }, []);
-
-  const preservedEdges = usePreservedReference(edges);
-
-  return useCallback(
+  return useThrottle(
     (nextValue: T) => {
-      ref.current.clearPreviousThrottle();
-
-      if (nextValue === ref.current.value) {
+      if (nextValue === lastForwardedRef.current) {
         return;
       }
 
-      const throttled = throttle(
-        () => {
-          handleChange(nextValue);
+      onChange(nextValue);
 
-          ref.current.value = nextValue;
-        },
-        timeThreshold,
-        { edges: preservedEdges }
-      );
-
-      throttled();
-
-      ref.current.clearPreviousThrottle = throttled.cancel;
+      lastForwardedRef.current = nextValue;
     },
-    [handleChange, timeThreshold, preservedEdges]
+    timeThreshold,
+    { edges }
   );
 }
