@@ -22,7 +22,7 @@ export function debounce<F extends (...args: any[]) => void>(
   func: F,
   debounceMs: number,
   { edges = ['leading', 'trailing'] }: DebounceOptions = {}
-): DebouncedFunction<F> {
+): DebouncedFunction<F> & { schedule: () => void } {
   let pendingThis: ThisParameterType<F> | undefined = undefined;
   let pendingArgs: Parameters<F> | null = null;
 
@@ -86,6 +86,7 @@ export function debounce<F extends (...args: any[]) => void>(
     }
   };
 
+  debounced.schedule = schedule;
   debounced.cancel = cancel;
 
   return debounced;

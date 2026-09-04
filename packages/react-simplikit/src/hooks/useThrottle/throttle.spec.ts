@@ -88,4 +88,98 @@ describe('throttle', () => {
     await vi.advanceTimersByTimeAsync(throttleMs + 1);
     expect(func).toBeCalledTimes(1);
   });
+
+  it('should invoke once per window while calls keep coming with trailing edge only', () => {
+    vi.useFakeTimers();
+
+    const func = vi.fn();
+    const throttled = throttle(func, 100, { edges: ['trailing'] });
+
+    for (let i = 1; i <= 10; i++) {
+      throttled(i);
+      vi.advanceTimersByTime(30);
+    }
+    expect(func.mock.calls.map(call => call[0])).toEqual([5, 9]);
+
+    vi.advanceTimersByTime(100);
+    expect(func.mock.calls.map(call => call[0])).toEqual([5, 9, 10]);
+
+    vi.useRealTimers();
+  });
+
+  it('should defer a call after an idle period with trailing edge only', () => {
+    vi.useFakeTimers();
+
+    const func = vi.fn();
+    const throttled = throttle(func, 100, { edges: ['trailing'] });
+
+    throttled('a');
+    expect(func).toHaveBeenCalledTimes(0);
+
+    vi.advanceTimersByTime(100);
+    expect(func).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(400);
+    throttled('b');
+    expect(func).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(100);
+    expect(func).toHaveBeenCalledTimes(2);
+    expect(func).toHaveBeenLastCalledWith('b');
+
+    vi.useRealTimers();
+  });
+
+  it('should invoke once per window while calls keep coming with leading edge only', () => {
+    vi.useFakeTimers();
+
+    const func = vi.fn();
+    const throttled = throttle(func, 100, { edges: ['leading'] });
+
+    for (let i = 1; i <= 10; i++) {
+      throttled(i);
+      vi.advanceTimersByTime(30);
+    }
+    vi.advanceTimersByTime(200);
+
+    expect(func.mock.calls.map(call => call[0])).toEqual([1, 5, 9]);
+
+    vi.useRealTimers();
+  });
+
+  it('should forget the pending call on cancel', () => {
+    vi.useFakeTimers();
+
+    const func = vi.fn();
+    const throttled = throttle(func, 100, { edges: ['trailing'] });
+
+    throttled('a');
+    throttled.cancel();
+    vi.advanceTimersByTime(500);
+
+    throttled('b');
+    expect(func).toHaveBeenCalledTimes(0);
+
+    vi.advanceTimersByTime(100);
+    expect(func).toHaveBeenCalledTimes(1);
+    expect(func).toHaveBeenLastCalledWith('b');
+
+    vi.useRealTimers();
+  });
+
+  it('should never invoke when edges is empty', () => {
+    vi.useFakeTimers();
+
+    const func = vi.fn();
+    const throttled = throttle(func, 100, { edges: [] });
+
+    throttled('a');
+    vi.advanceTimersByTime(100);
+    throttled('b');
+    vi.advanceTimersByTime(300);
+
+    expect(func).not.toHaveBeenCalled();
+
+    vi.useRealTimers();
+  });
 });
