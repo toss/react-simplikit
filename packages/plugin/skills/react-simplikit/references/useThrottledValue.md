@@ -6,8 +6,6 @@ On the first render and on the server the value is returned as is. A change is n
 
 The value is compared by reference. Passing a new object or array on every render keeps the returned value updating every `wait` milliseconds; stabilize the reference first, for example with `usePreservedReference`.
 
-With `leading: false` the returned value does not update while the input keeps changing faster than `wait`; it updates once, `wait` milliseconds after the last change. This follows the current throttle utility, which reschedules its timer on every call rather than firing at the window boundary. Keep the default `leading: true` when you need an update during a continuous stream of changes.
-
 ## Interface
 
 ```ts

@@ -24,12 +24,6 @@ type Edge = 'leading' | 'trailing';
  * the returned value updating every `wait` milliseconds; stabilize the reference first, for
  * example with `usePreservedReference`.
  *
- * With `leading: false` the returned value does not update while the input keeps changing
- * faster than `wait`; it updates once, `wait` milliseconds after the last change. This
- * follows the current throttle utility, which reschedules its timer on every call rather
- * than firing at the window boundary. Keep the default `leading: true` when you need an
- * update during a continuous stream of changes.
- *
  * @template T - The type of the value.
  * @param {T} value - The value to throttle.
  * @param {number} wait - The length of the throttle window in milliseconds.
