@@ -49,10 +49,10 @@ describe('useImpressionRef', () => {
   });
 
   const setup = async (options = defaultOptions) => {
-    const { result } = renderHookSSR(() => useImpressionRef(options));
+    const { result, unmount } = renderHookSSR(() => useImpressionRef(options));
     const mockElement = document.createElement('div');
     await act(async () => result.current(mockElement));
-    return { result, observerCallback: mockInstances[0].callback };
+    return { result, unmount, observerCallback: mockInstances[0].callback };
   };
 
   it('is safe on server side rendering', () => {
@@ -142,6 +142,60 @@ describe('useImpressionRef', () => {
     await act(async () => document.dispatchEvent(new Event('visibilitychange')));
 
     expect(mockOnImpressionStart).not.toHaveBeenCalled();
+    expect(mockOnImpressionEnd).not.toHaveBeenCalled();
+  });
+
+  it('should emit onImpressionEnd on unmount when the exit event is still pending', async () => {
+    const { observerCallback, unmount } = await setup();
+    await act(async () => {
+      observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
+      observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
+    });
+
+    expect(mockOnImpressionEnd).not.toHaveBeenCalled();
+
+    unmount();
+
+    expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not call onImpressionEnd twice when unmounting after it has already fired', async () => {
+    const { observerCallback, unmount } = await setup();
+    await act(async () => {
+      observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
+      observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
+      vi.runAllTimers();
+    });
+
+    expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
+
+    unmount();
+
+    expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not call onImpressionEnd on unmount while still intersecting', async () => {
+    const { observerCallback, unmount } = await setup();
+    await act(async () => {
+      observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
+      vi.runAllTimers();
+    });
+
+    unmount();
+
+    expect(mockOnImpressionStart).toHaveBeenCalledTimes(1);
+    expect(mockOnImpressionEnd).not.toHaveBeenCalled();
+  });
+
+  it('should not call onImpressionEnd on unmount if the element was never impressed', async () => {
+    const { observerCallback, unmount } = await setup();
+    await act(async () => {
+      observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
+      vi.runAllTimers();
+    });
+
+    unmount();
+
     expect(mockOnImpressionEnd).not.toHaveBeenCalled();
   });
 });
