@@ -4,6 +4,8 @@
 
 On the first render and on the server the value is returned as is. A change is never scheduled on mount, so with `leading: true` the first change after mount is applied immediately. If both `leading` and `trailing` are `false`, the returned value never updates.
 
+The value is compared by reference. Passing a new object or array on every render keeps the returned value updating every `wait` milliseconds; stabilize the reference first, for example with `usePreservedReference`.
+
 ## Interface
 
 ```ts
