@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useRef } from 'react';
 
-import { debounce } from '../useDebounce/debounce.ts';
-import { usePreservedCallback } from '../usePreservedCallback/index.ts';
+import { useDebounce } from '../useDebounce/index.ts';
 
 type DebounceOptions = {
   leading?: boolean;
@@ -57,55 +56,20 @@ export function useDebouncedCallback<T>({
 }: DebounceOptions & {
   onChange: (newValue: T) => void;
   timeThreshold: number;
-}) {
-  const handleChange = usePreservedCallback(onChange);
-  const ref = useRef<{ value: T | typeof NOT_INVOKED; clearPreviousDebounce: () => void }>({
-    value: NOT_INVOKED,
-    clearPreviousDebounce: () => {},
-  });
+}): (nextValue: T) => void {
+  const lastForwardedRef = useRef<T | typeof NOT_INVOKED>(NOT_INVOKED);
 
-  useEffect(function clearDebouncedOnUnmount() {
-    const current = ref.current;
-    return () => {
-      current.clearPreviousDebounce();
-    };
-  }, []);
-
-  const edges = useMemo(() => {
-    const _edges: Array<'leading' | 'trailing'> = [];
-    if (leading) {
-      _edges.push('leading');
-    }
-
-    if (trailing) {
-      _edges.push('trailing');
-    }
-
-    return _edges;
-  }, [leading, trailing]);
-
-  return useCallback(
+  return useDebounce(
     (nextValue: T) => {
-      ref.current.clearPreviousDebounce();
-
-      if (nextValue === ref.current.value) {
+      if (nextValue === lastForwardedRef.current) {
         return;
       }
 
-      const debounced = debounce(
-        () => {
-          handleChange(nextValue);
+      onChange(nextValue);
 
-          ref.current.value = nextValue;
-        },
-        timeThreshold,
-        { edges }
-      );
-
-      debounced();
-
-      ref.current.clearPreviousDebounce = debounced.cancel;
+      lastForwardedRef.current = nextValue;
     },
-    [handleChange, timeThreshold, edges]
+    timeThreshold,
+    { leading, trailing }
   );
 }

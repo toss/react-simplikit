@@ -55,6 +55,9 @@ describe('useDebouncedCallback', () => {
 
     result.current(false);
     vi.advanceTimersByTime(50);
+    expect(onChange).toBeCalledTimes(1);
+
+    vi.advanceTimersByTime(50);
     expect(onChange).toBeCalledTimes(2);
     expect(onChange).toBeCalledWith(false);
   });
@@ -118,5 +121,34 @@ describe('useDebouncedCallback', () => {
     vi.advanceTimersByTime(100);
 
     expect(onChange).not.toBeCalled();
+  });
+
+  it('debounces a stream of distinct values when leading is true', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100, leading: true }));
+
+    for (const value of ['a', 'b', 'c']) {
+      result.current(value);
+      vi.advanceTimersByTime(20);
+    }
+    expect(onChange.mock.calls.map(call => call[0])).toEqual(['a']);
+
+    vi.advanceTimersByTime(100);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual(['a', 'c']);
+  });
+
+  it('forwards only the first value of a burst when trailing is false', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() =>
+      useDebouncedCallback({ onChange, timeThreshold: 100, leading: true, trailing: false })
+    );
+
+    for (const value of ['a', 'b', 'c']) {
+      result.current(value);
+      vi.advanceTimersByTime(20);
+    }
+    vi.advanceTimersByTime(200);
+
+    expect(onChange.mock.calls.map(call => call[0])).toEqual(['a']);
   });
 });
