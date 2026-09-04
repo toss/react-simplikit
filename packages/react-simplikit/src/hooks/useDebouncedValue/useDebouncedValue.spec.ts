@@ -186,6 +186,13 @@ describe('useDebouncedValue', () => {
     expect(result.current).toBe('a');
   });
 
+  it('returns a function value as-is instead of calling it', () => {
+    const fn = () => 'result';
+    const { result } = renderHookSSR(() => useDebouncedValue(fn, 100));
+
+    expect(result.current).toBe(fn);
+  });
+
   it('treats a change right after mount as leading under StrictMode double effects', () => {
     const { result, rerender } = renderHook(({ value }) => useDebouncedValue(value, 100, { leading: true }), {
       initialProps: { value: 'a' },

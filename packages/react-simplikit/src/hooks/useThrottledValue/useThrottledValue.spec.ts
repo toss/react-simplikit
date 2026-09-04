@@ -1,4 +1,5 @@
-import { act } from '@testing-library/react';
+import { StrictMode } from 'react';
+import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
@@ -22,7 +23,7 @@ describe('useThrottledValue', () => {
     expect(result.current).toBe('a');
   });
 
-  it('applies the first change immediately and the last change at the end of the window', () => {
+  it('applies the first change immediately and the last change after the trailing delay', () => {
     const { result, rerender } = renderHookSSR(({ value }) => useThrottledValue(value, 100), {
       initialProps: { value: 'a' },
     });
@@ -79,6 +80,26 @@ describe('useThrottledValue', () => {
       vi.advanceTimersByTime(200);
     });
     expect(result.current).toBe('b');
+  });
+
+  // `throttle.ts` reschedules its timer on every call instead of firing at the window
+  // boundary, so a trailing-only throttle never fires while the value keeps changing.
+  // es-toolkit fixed the same defect in its PR #1532; this hook inherits the pre-fix
+  // behaviour. Marked `fails` deliberately: it will start failing, and so announce the
+  // fix, once `throttle.ts` is corrected.
+  it.fails('keeps updating once per window when leading is false and the value keeps changing', () => {
+    const { result, rerender } = renderHookSSR(({ value }) => useThrottledValue(value, 100, { leading: false }), {
+      initialProps: { value: 0 },
+    });
+
+    for (let i = 1; i <= 10; i++) {
+      rerender({ value: i });
+      act(() => {
+        vi.advanceTimersByTime(30);
+      });
+    }
+
+    expect(result.current).not.toBe(0);
   });
 
   it('defers the first change to the end of the window when leading is false', () => {
@@ -153,5 +174,26 @@ describe('useThrottledValue', () => {
     });
 
     expect(result.current).toBe('a');
+  });
+
+  it('returns a function value as-is instead of calling it', () => {
+    // `leading: false` keeps the mount effect from firing synchronously and masking the
+    // buggy initial state with a corrected one before this assertion runs.
+    const fn = () => 'result';
+    const { result } = renderHookSSR(() => useThrottledValue(fn, 100, { leading: false }));
+
+    expect(result.current).toBe(fn);
+  });
+
+  it('treats a change right after mount as leading under StrictMode double effects', () => {
+    const { result, rerender } = renderHook(({ value }) => useThrottledValue(value, 100), {
+      initialProps: { value: 'a' },
+      wrapper: StrictMode,
+    });
+
+    expect(result.current).toBe('a');
+
+    rerender({ value: 'b' });
+    expect(result.current).toBe('b');
   });
 });
