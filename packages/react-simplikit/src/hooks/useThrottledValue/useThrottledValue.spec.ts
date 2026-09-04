@@ -87,14 +87,16 @@ describe('useThrottledValue', () => {
       initialProps: { value: 0 },
     });
 
+    const seen: number[] = [];
     for (let i = 1; i <= 10; i++) {
       rerender({ value: i });
       act(() => {
         vi.advanceTimersByTime(30);
       });
+      seen.push(result.current);
     }
 
-    expect(result.current).not.toBe(0);
+    expect(seen).toEqual([0, 0, 0, 0, 5, 5, 5, 5, 9, 9]);
   });
 
   it('defers the first change to the end of the window when leading is false', () => {
