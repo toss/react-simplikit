@@ -182,4 +182,67 @@ describe('throttle', () => {
 
     vi.useRealTimers();
   });
+
+  it('should keep deferring calls after an idle period until the reopened window elapses', () => {
+    vi.useFakeTimers();
+
+    const func = vi.fn();
+    const throttled = throttle(func, 100, { edges: ['trailing'] });
+
+    throttled('a');
+    vi.advanceTimersByTime(100);
+    expect(func).toHaveBeenCalledTimes(1);
+    expect(func).toHaveBeenLastCalledWith('a');
+
+    vi.advanceTimersByTime(200);
+    throttled('b');
+    vi.advanceTimersByTime(10);
+    throttled('c');
+    expect(func).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(100);
+    expect(func).toHaveBeenCalledTimes(2);
+    expect(func).toHaveBeenLastCalledWith('c');
+
+    vi.useRealTimers();
+  });
+
+  it('should use the actual invocation time, not the call time, as the start of the next window', () => {
+    vi.useFakeTimers();
+
+    const func = vi.fn();
+    const throttled = throttle(func, 100, { edges: ['trailing'] });
+
+    throttled('a');
+    vi.advanceTimersByTime(100); // the debounce timer fires here, invoking with 'a'
+    expect(func).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(50); // 50ms after the invocation above
+    throttled('b');
+
+    vi.advanceTimersByTime(60); // 110ms after the invocation, so the window has elapsed
+    throttled('c');
+    expect(func).toHaveBeenCalledTimes(2);
+    expect(func).toHaveBeenLastCalledWith('c');
+
+    vi.useRealTimers();
+  });
+
+  it('should treat a call exactly throttleMs after the window start as elapsed', () => {
+    vi.useFakeTimers();
+
+    const func = vi.fn();
+    const throttled = throttle(func, 100, { edges: ['trailing'] });
+
+    throttled('a');
+    vi.advanceTimersByTime(50);
+    throttled('b');
+    vi.advanceTimersByTime(50);
+    throttled('c');
+
+    expect(func).toHaveBeenCalledTimes(1);
+    expect(func).toHaveBeenLastCalledWith('c');
+
+    vi.useRealTimers();
+  });
 });
