@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
-import { debounce } from './debounce.ts';
+import { debounce, DebouncedFunction } from './debounce.ts';
 
 type DebounceOptions = {
   leading?: boolean;
@@ -51,7 +51,7 @@ export function useDebounce<F extends (...args: any[]) => unknown>(
   callback: F,
   wait: number,
   options: DebounceOptions = {}
-) {
+): DebouncedFunction<F> {
   const preservedCallback = usePreservedCallback(callback) as F;
 
   const { leading = false, trailing = true } = options;

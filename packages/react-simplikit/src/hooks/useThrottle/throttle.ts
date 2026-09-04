@@ -24,24 +24,57 @@ export function throttle<F extends (...args: any[]) => void>(
   throttleMs: number,
   { edges = ['leading', 'trailing'] }: ThrottleOptions = {}
 ): ThrottledFunction<F> {
+  const leading = edges.includes('leading');
+  const trailing = edges.includes('trailing');
+
   let pendingAt: number | null = null;
+  // `true` while a call is waiting on the debounce timer. A trailing-only throttle uses it to tell a
+  // continuous stream of calls (invoke at the window boundary) from a call after an idle period
+  // (open a fresh window and invoke at its end). es-toolkit invokes at the boundary in both cases,
+  // which makes a trailing-only throttle fire on the leading edge after it has been idle.
+  let isPending = false;
 
-  const debounced = debounce(func, throttleMs, { edges });
-
-  const throttled = function (...args: Parameters<F>) {
-    if (pendingAt == null) {
+  const debounced = debounce(
+    function (this: ThisParameterType<F>, ...args: Parameters<F>) {
       pendingAt = Date.now();
-    } else {
-      if (Date.now() - pendingAt >= throttleMs) {
-        pendingAt = Date.now();
-        debounced.cancel();
-      }
+      isPending = false;
+      func.apply(this, args);
+    },
+    throttleMs,
+    { edges }
+  );
+
+  const throttled = function (this: ThisParameterType<F>, ...args: Parameters<F>) {
+    if (pendingAt === null) {
+      pendingAt = Date.now();
     }
 
-    debounced(...args);
+    const windowElapsed = Date.now() - pendingAt >= throttleMs;
+
+    if (windowElapsed && (leading || (trailing && isPending))) {
+      pendingAt = Date.now();
+      isPending = false;
+      func.apply(this, args);
+
+      // Re-arm the timer without arguments so the next call in this window does not count as a
+      // leading call for the debounce.
+      debounced.cancel();
+      debounced.schedule();
+      return;
+    }
+
+    if (windowElapsed) {
+      pendingAt = Date.now();
+    }
+
+    isPending = true;
+    debounced.apply(this, args);
   };
 
-  throttled.cancel = debounced.cancel;
+  throttled.cancel = () => {
+    isPending = false;
+    debounced.cancel();
+  };
 
   return throttled;
 }
