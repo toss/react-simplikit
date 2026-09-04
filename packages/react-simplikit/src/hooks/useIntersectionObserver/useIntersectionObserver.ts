@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
+import { usePreservedReference } from '../usePreservedReference/index.ts';
 import { useRefEffect } from '../useRefEffect/index.ts';
 
 /**
@@ -40,6 +41,7 @@ export function useIntersectionObserver<Element extends HTMLElement>(
   options: IntersectionObserverInit
 ): (element: Element | null) => void {
   const preservedCallback = usePreservedCallback(callback);
+  const preservedOptions = usePreservedReference(options, areIntersectionOptionsEqual);
 
   const observer = useMemo(() => {
     if (typeof IntersectionObserver === 'undefined') {
@@ -48,8 +50,8 @@ export function useIntersectionObserver<Element extends HTMLElement>(
 
     return new IntersectionObserver(([entry]) => {
       preservedCallback(entry);
-    }, options);
-  }, [preservedCallback, options]);
+    }, preservedOptions);
+  }, [preservedCallback, preservedOptions]);
 
   return useRefEffect<Element>(
     element => {
@@ -59,6 +61,16 @@ export function useIntersectionObserver<Element extends HTMLElement>(
         observer?.unobserve(element);
       };
     },
-    [preservedCallback, options]
+    [preservedCallback, preservedOptions]
+  );
+}
+
+// `root` is a DOM node: `JSON.stringify` would collapse any node to `"{}"`, so it must be compared by reference.
+// `threshold` can be an inline array (e.g. `threshold: [0, 0.5]`) that gets a new reference every render even
+// though the values are unchanged, so it needs `JSON.stringify` instead of `===`. `rootMargin` is a plain
+// string, so `===` already compares it by value.
+function areIntersectionOptionsEqual(a: IntersectionObserverInit, b: IntersectionObserverInit): boolean {
+  return (
+    a.root === b.root && a.rootMargin === b.rootMargin && JSON.stringify(a.threshold) === JSON.stringify(b.threshold)
   );
 }
