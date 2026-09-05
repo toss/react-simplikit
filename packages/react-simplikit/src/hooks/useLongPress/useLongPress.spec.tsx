@@ -1,9 +1,30 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { StrictMode } from 'react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useLongPress } from './useLongPress.ts';
+
+type PressTargetProps = {
+  onLongPress: () => void;
+  onClick: () => void;
+  onLongPressEnd: () => void;
+};
+
+function PressTarget({ onLongPress, onClick, onLongPressEnd }: PressTargetProps) {
+  const handlers = useLongPress(onLongPress, { delay: 500, onClick, onLongPressEnd });
+
+  return <button {...handlers}>Press me</button>;
+}
+
+function createCallbacks() {
+  return {
+    onLongPress: vi.fn(),
+    onClick: vi.fn(),
+    onLongPressEnd: vi.fn(),
+  };
+}
 
 describe('useLongPress', () => {
   beforeEach(() => {
@@ -11,6 +32,8 @@ describe('useLongPress', () => {
   });
 
   afterEach(() => {
+    cleanup();
+    vi.clearAllTimers();
     vi.useRealTimers();
   });
 
@@ -367,5 +390,85 @@ describe('useLongPress', () => {
     });
 
     expect(onLongPress).toHaveBeenCalledTimes(1);
+  });
+
+  describe.each([false, true])('StrictMode: %s', strictMode => {
+    it.each(['mouse', 'touch'] as const)('cancels a pending %s press on unmount', async input => {
+      const callbacks = createCallbacks();
+      const target = <PressTarget {...callbacks} />;
+      const { getByRole, unmount } = render(strictMode === true ? <StrictMode>{target}</StrictMode> : target);
+      const button = getByRole('button');
+
+      if (input === 'mouse') {
+        fireEvent.mouseDown(button, { clientX: 0, clientY: 0 });
+      } else {
+        fireEvent.touchStart(button, { touches: [{ clientX: 0, clientY: 0 }] });
+      }
+
+      await act(async () => {
+        vi.advanceTimersByTime(250);
+      });
+      expect(callbacks.onLongPress).not.toHaveBeenCalled();
+
+      unmount();
+
+      await act(async () => {
+        vi.advanceTimersByTime(500);
+      });
+
+      expect(callbacks.onLongPress).not.toHaveBeenCalled();
+      expect(callbacks.onClick).not.toHaveBeenCalled();
+      expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
+    });
+  });
+
+  it('preserves the pending timer across a rerender', async () => {
+    const callbacks = createCallbacks();
+    const { getByRole, rerender, unmount } = render(<PressTarget {...callbacks} />);
+
+    fireEvent.mouseDown(getByRole('button'));
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+    });
+
+    rerender(<PressTarget {...callbacks} />);
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+    });
+
+    expect(callbacks.onLongPress).toHaveBeenCalledTimes(1);
+    expect(callbacks.onClick).not.toHaveBeenCalled();
+    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
+    unmount();
+  });
+
+  it('does not emit an end or click callback when unmounted after a completed long press', async () => {
+    const callbacks = createCallbacks();
+    const { getByRole, unmount } = render(<PressTarget {...callbacks} />);
+
+    fireEvent.mouseDown(getByRole('button'));
+    await act(async () => {
+      vi.advanceTimersByTime(500);
+    });
+    expect(callbacks.onLongPress).toHaveBeenCalledTimes(1);
+
+    unmount();
+    await act(async () => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(callbacks.onLongPress).toHaveBeenCalledTimes(1);
+    expect(callbacks.onClick).not.toHaveBeenCalled();
+    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
+  });
+
+  it('unmounts safely without a pending timer', () => {
+    const callbacks = createCallbacks();
+    const { unmount } = render(<PressTarget {...callbacks} />);
+
+    expect(() => unmount()).not.toThrow();
+    expect(callbacks.onLongPress).not.toHaveBeenCalled();
+    expect(callbacks.onClick).not.toHaveBeenCalled();
+    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
   });
 });
