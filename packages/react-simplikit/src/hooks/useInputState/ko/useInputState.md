@@ -6,7 +6,7 @@
 
 ```ts
 function useInputState(
-  initialValue: string = '',
+  initialValue: string | (() => string) = '',
   transformValue: (value: string) => string = (v: string) => v
 ): [
   value: string,
@@ -18,7 +18,7 @@ function useInputState(
 
 <Interface
   name="initialValue"
-  type="string"
+  type="string | (() => string)"
   description='입력의 초기 값이에요. 기본값은 빈 문자열(<code>""</code>)이에요.'
 />
 
