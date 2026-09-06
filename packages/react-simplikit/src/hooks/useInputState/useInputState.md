@@ -6,7 +6,7 @@
 
 ```ts
 function useInputState(
-  initialValue: string = '',
+  initialValue: string | (() => string) = '',
   transformValue: (value: string) => string = (v: string) => v
 ): [
   value: string,
@@ -18,7 +18,7 @@ function useInputState(
 
 <Interface
   name="initialValue"
-  type="string"
+  type="string | (() => string)"
   description='The initial value of the input. Defaults to an empty string (<code>""</code>).'
 />
 
