@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "prepack": "yarn build",
+    "prepublish": "yarn build",
     "clean": "rimraf ./dist",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
