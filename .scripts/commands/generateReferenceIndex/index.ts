@@ -8,16 +8,14 @@ import { extractDescription } from '../generateSkill/catalog.ts';
 
 const PACKAGE_SRC = 'packages/react-simplikit/src';
 
-type Group = { labelKey: 'hooksLabel' | 'componentsLabel' | 'utilsLabel'; directories: string[] };
+type Group = { labelKey: 'hooksLabel' | 'componentsLabel' | 'utilsLabel'; directory: string };
 type IndexEntry = { name: string; url: string; description?: string; translated: boolean };
 type IndexSection = { label: string; entries: IndexEntry[] };
 
-// Mirrors the sidebar: the src/mobile trees share the flat hooks/utils URLs and the
-// same three lists, sorted together.
 const GROUPS: Group[] = [
-  { labelKey: 'hooksLabel', directories: ['hooks', 'mobile/hooks'] },
-  { labelKey: 'componentsLabel', directories: ['components'] },
-  { labelKey: 'utilsLabel', directories: ['utils', 'mobile/utils'] },
+  { labelKey: 'hooksLabel', directory: 'hooks' },
+  { labelKey: 'componentsLabel', directory: 'components' },
+  { labelKey: 'utilsLabel', directory: 'utils' },
 ];
 
 /**
@@ -43,22 +41,18 @@ export function generateReferenceIndex(): void {
 function collectEntries(root: string, locale: LocaleDefinition, group: Group): IndexEntry[] {
   const isRoot = locale.path === '';
   const urlPrefix = isRoot ? '' : `/${locale.path}`;
+  const base = path.join(root, PACKAGE_SRC, group.directory);
 
-  return group.directories
-    .flatMap(directory => {
-      const base = path.join(root, PACKAGE_SRC, directory);
-      const category = path.basename(directory);
+  return listDirectories(base)
+    .map(name => {
+      const localized = isRoot ? undefined : readDescription(path.join(base, name, locale.path, `${name}.md`), name);
 
-      return listDirectories(base).map(name => {
-        const localized = isRoot ? undefined : readDescription(path.join(base, name, locale.path, `${name}.md`), name);
-
-        return {
-          name,
-          url: `${urlPrefix}/${category}/${name}`,
-          description: localized ?? readDescription(path.join(base, name, `${name}.md`), name),
-          translated: isRoot || localized != null,
-        };
-      });
+      return {
+        name,
+        url: `${urlPrefix}/${group.directory}/${name}`,
+        description: localized ?? readDescription(path.join(base, name, `${name}.md`), name),
+        translated: isRoot || localized != null,
+      };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 }

@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { legacyRoutePatterns, localeDirectories } from '../locales.mts';
-import { listDirectories, projectRoot, SITE_ORIGIN } from '../shared.mts';
+import { localeDirectories } from '../locales.mts';
+import { listDirectories, packageSourceRoot, SITE_ORIGIN } from '../shared.mts';
 
 type RedirectPair = { from: string; to: string };
 
@@ -21,34 +21,42 @@ const GUIDE_REDIRECTS: RedirectPair[] = [
   { from: 'mobile/contributing.html', to: 'contributing.html' },
 ];
 
-export function collectLegacyRedirects(): RedirectPair[] {
-  return [...collectGuideRedirects(), ...collectReferenceRedirects()];
-}
+// Reference pages sat under core/ or mobile/ before the flattening. Their sources now share
+// src/hooks and src/utils, so the mobile set is listed rather than read off the tree.
+const RETIRED_MOBILE_PAGES = new Set([
+  'useAvoidKeyboard',
+  'useBodyScrollLock',
+  'useKeyboardHeight',
+  'useNetworkStatus',
+  'usePageVisibility',
+  'useSafeAreaInset',
+  'useScrollDirection',
+  'useVisualViewport',
+  'disableBodyScrollLock',
+  'enableBodyScrollLock',
+  'getKeyboardHeight',
+  'getSafeAreaInset',
+  'isAndroid',
+  'isIOS',
+  'isKeyboardVisible',
+  'isServer',
+  'subscribeKeyboardHeight',
+]);
 
-function collectGuideRedirects(): RedirectPair[] {
-  return GUIDE_REDIRECTS.flatMap(pair => [
+export function collectLegacyRedirects(): RedirectPair[] {
+  return [...GUIDE_REDIRECTS, ...collectReferenceRedirects()].flatMap(pair => [
     pair,
     ...localeDirectories.map(locale => ({ from: `${locale}/${pair.from}`, to: `${locale}/${pair.to}` })),
   ]);
 }
 
-/**
- * A pattern like `packages/react-simplikit/src/hooks/:hook/:hook.md` with the
- * legacy destination `core/hooks/:hook.md` yields one pair per hook directory.
- */
 function collectReferenceRedirects(): RedirectPair[] {
-  return legacyRoutePatterns.flatMap(route => {
-    const itemsRoot = path.join(projectRoot, route.source.split(/\/:\w+\//)[0]);
-
-    return listDirectories(itemsRoot).map(name => ({
-      from: toHtmlPath(route.from, name),
-      to: toHtmlPath(route.to, name),
-    }));
-  });
-}
-
-function toHtmlPath(pattern: string, name: string): string {
-  return pattern.replace(/:\w+/, name).replace(/\.md$/, '.html');
+  return ['hooks', 'components', 'utils'].flatMap(category =>
+    listDirectories(path.join(packageSourceRoot, category)).map(name => ({
+      from: `${RETIRED_MOBILE_PAGES.has(name) ? 'mobile' : 'core'}/${category}/${name}.html`,
+      to: `${category}/${name}.html`,
+    }))
+  );
 }
 
 /** Writes one redirect stub per legacy URL into the build output. */

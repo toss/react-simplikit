@@ -15,14 +15,9 @@ type RenderSkillOptions = {
 
 const CATALOG_PLACEHOLDER = '<!-- CATALOG -->';
 
-/**
- * Catalog heading for an export, from where it lives: `./hooks/x/index.ts` and
- * `./mobile/hooks/x/index.ts` both land under `hooks` — the directory split is a source
- * layout detail, not something a consumer sees.
- */
+/** Catalog heading for an export: the first segment of its source path, `./hooks/x/index.ts` → `hooks`. */
 export function getCategory(sourcePath: string): Category {
-  const segments = sourcePath.replace(/^\.\//, '').split('/');
-  const category = segments[0] === 'mobile' ? segments[1] : segments[0];
+  const category = sourcePath.replace(/^\.\//, '').split('/')[0];
   const known = CATEGORIES.find(candidate => candidate === category);
 
   if (known === undefined) {

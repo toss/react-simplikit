@@ -7,7 +7,7 @@
 
 React utility hooks/components library. Two published packages and an agent plugin:
 
-- `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils. Mobile web hooks and utils (viewport, keyboard, safe area) live under `src/mobile` and are part of the same public API
+- `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils
 - `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today)
 - `packages/plugin` — agent skills for Claude Code, Codex and skills.sh. No `package.json`, so it is neither a workspace nor on npm. `yarn skill:gen` regenerates `skills/react-simplikit` from the public exports and `yarn test:skill` fails CI when the committed copy drifts; `skills/react-simplikit-codemod` is hand-written
 
@@ -22,7 +22,6 @@ components → hooks → utils → _internal
 - Components may use hooks, utils, \_internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
-- Nothing outside `src/mobile` imports from it; `src/mobile` may use `src/utils` and `_internal` (test infrastructure is exempt)
 
 ## File Structure
 

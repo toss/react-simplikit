@@ -4,9 +4,8 @@
 
 ## Quick Reference
 
-- Monorepo: the library is `packages/react-simplikit`; mobile web hooks live under `src/mobile` and share the same public API
+- Monorepo: the library is `packages/react-simplikit`
 - Architecture: `components → hooks → utils → _internal` (unidirectional, no circular imports)
-- Nothing outside `src/mobile` imports from it; `src/mobile` may use `src/utils` and `_internal` (test infrastructure is exempt)
 
 ## Code Style Rules
 

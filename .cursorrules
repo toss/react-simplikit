@@ -4,12 +4,11 @@
 
 ## Project
 
-React hooks/components library. Monorepo with the library in `packages/react-simplikit`; mobile web hooks live under `src/mobile` and share the same public API.
+React hooks/components library. Monorepo with the library in `packages/react-simplikit`.
 
 ## Architecture
 
 Unidirectional layers: `components → hooks → utils → _internal`
-Nothing outside `src/mobile` imports from it; `src/mobile` may use `src/utils` and `_internal` (test infrastructure is exempt).
 
 ## Code Style
 
