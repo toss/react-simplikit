@@ -1,6 +1,6 @@
 ---
 name: react-simplikit
-description: Selects and applies react-simplikit hooks, components and utils (useDebounce, useThrottle, useToggle, useBooleanState, useCounter, useList, useMap, useSet, useInterval, useTimeout, usePrevious, usePreservedCallback, useOutsideClickEffect, useIntersectionObserver, useStorageState, useLongPress, SwitchCase, Separated, mergeRefs, buildContext, ...) instead of hand-written equivalents, including the mobile-web keyboard, safe-area, visual viewport and body-scroll-lock utilities that ship in the same package. Use when writing React state or effect logic, debouncing or throttling, boolean/counter/list/map/set state, intervals and timeouts, click-outside, long-press or double-click handling, viewport visibility or impression tracking, persisted state in localStorage/sessionStorage, conditional rendering, merging refs, React Context boilerplate, or SSR-safe browser access, and whenever the project depends on react-simplikit or the legacy @react-simplikit/mobile package.
+description: Selects and applies react-simplikit hooks, components and utils (useDebounce, useThrottle, useToggle, useBooleanState, useCounter, useList, useMap, useSet, useInterval, useTimeout, usePrevious, usePreservedCallback, useOutsideClickEffect, useIntersectionObserver, useStorageState, useLongPress, SwitchCase, Separated, mergeRefs, buildContext, ...) instead of hand-written equivalents, including the mobile-web keyboard, safe-area, visual viewport and body-scroll-lock hooks. Use when writing React state or effect logic, debouncing or throttling, boolean/counter/list/map/set state, intervals and timeouts, click-outside, long-press or double-click handling, viewport visibility or impression tracking, persisted state in localStorage/sessionStorage, conditional rendering, merging refs, React Context boilerplate, or SSR-safe browser access, and whenever the project depends on react-simplikit.
 license: MIT
 metadata:
   author: toss
@@ -10,14 +10,14 @@ metadata:
 
 # react-simplikit
 
-Zero-dependency React hooks, components and utils in one package, `react-simplikit`. Alongside the state/logic and browser-event hooks, it includes mobile-web (iOS Safari / Android Chrome) viewport, keyboard, safe-area and scroll-lock utilities; those are listed under **mobile** in the catalog, which describes what they assume, not where they are imported from.
+Zero-dependency React hooks, components and utils in one package, `react-simplikit`. Alongside state/logic and browser-event hooks it covers the mobile-web problems — on-screen keyboard, safe-area insets, visual viewport, body scroll lock — that usually get hand-written.
 
 ## Critical rules
 
 - **Check the catalog before hand-writing debounce, throttle, toggle, counter, list/map/set state, interval, timeout, previous-value, stable-callback, click-outside, long-press, intersection/visibility or storage-persisted-state logic.** If a matching entry exists, use it. Reimplementing these is the most common mistake this skill exists to prevent.
 - **Never guess a signature.** Before using an entry, read `references/<name>.md` — it has the parameter table, return shape and a working example.
-- **One import path, named imports only**: `import { useDebounce, useKeyboardHeight } from 'react-simplikit'`. Every catalog entry — the **mobile** ones included — comes from this same path. There is no subpath and no default export.
-- **`@react-simplikit/mobile` is the legacy package.** Its exports moved into `react-simplikit` under the same names. Write new code against `react-simplikit`; when asked to migrate, rewrite the import path and drop the `@react-simplikit/mobile` dependency — no API renames, and no shim package was published.
+- **One import path, named imports only**: `import { useDebounce, useKeyboardHeight } from 'react-simplikit'`. There is no subpath and no default export.
+- **A project that still imports `@react-simplikit/mobile`** is on the retired package name; migrate it with the steps at https://react-simplikit.slash.page/installation.html#migrating-from-react-simplikit-mobile before adding new usages.
 - **SSR**: never branch server-rendered markup on a value that comes from a browser API hook. Use `useIsClient` for client-only rendering instead of `typeof window` checks.
 - **Do not wrap or re-export these hooks** in the consumer project just to rename them; use them directly so upgrades stay mechanical.
 
@@ -74,6 +74,8 @@ Backticks in this table mark catalog entries only.
 | Name | Description |
 | --- | --- |
 | [`useAsyncEffect`](references/useAsyncEffect.md) | `useAsyncEffect` is a React hook for handling asynchronous side effects in React components. |
+| [`useAvoidKeyboard`](references/useAvoidKeyboard.md) | `useAvoidKeyboard` is a React hook that helps fixed-bottom elements avoid the on-screen keyboard. |
+| [`useBodyScrollLock`](references/useBodyScrollLock.md) | `useBodyScrollLock` is a React hook that locks body scroll while the component is mounted. |
 | [`useBooleanState`](references/useBooleanState.md) | `useBooleanState` is a React hook that simplifies managing a boolean state. |
 | [`useCallbackOncePerRender`](references/useCallbackOncePerRender.md) | `useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once, regardless of how many times it's called. |
 | [`useConditionalEffect`](references/useConditionalEffect.md) | `useConditionalEffect` is a React hook that conditionally executes effects based on a predicate function. |
@@ -89,15 +91,20 @@ Backticks in this table mark catalog entries only.
 | [`useInterval`](references/useInterval.md) | `useInterval` is a React hook that executes a function at a specified interval. |
 | [`useIsClient`](references/useIsClient.md) | `useIsClient` is a React hook that returns `true` only in the client-side environment. |
 | [`useIsomorphicLayoutEffect`](references/useIsomorphicLayoutEffect.md) | `useIsomorphicLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering. |
+| [`useKeyboardHeight`](references/useKeyboardHeight.md) | `useKeyboardHeight` is a React hook that tracks the on-screen keyboard height. |
 | [`useList`](references/useList.md) | A React hook that manages an array as state. |
 | [`useLoading`](references/useLoading.md) | `useLoading` is a React hook that simplifies managing the loading state of a `Promise`. |
 | [`useLongPress`](references/useLongPress.md) | `useLongPress` is a React hook that detects when an element is pressed and held for a specified duration. |
 | [`useMap`](references/useMap.md) | A React hook that manages a key-value Map as state. |
+| [`useNetworkStatus`](references/useNetworkStatus.md) | `useNetworkStatus` is a React hook that provides access to the Network Information API. |
 | [`useOutsideClickEffect`](references/useOutsideClickEffect.md) | `useOutsideClickEffect` is a React hook that triggers a callback when a click event occurs outside the specified container(s). |
+| [`usePageVisibility`](references/usePageVisibility.md) | `usePageVisibility` is a React hook that detects page visibility changes. |
 | [`usePreservedCallback`](references/usePreservedCallback.md) | `usePreservedCallback` is a React hook that maintains a stable reference to a callback function while ensuring it always has access to the latest state or props. |
 | [`usePreservedReference`](references/usePreservedReference.md) | `usePreservedReference` is a React hook that helps maintain the reference of a value when it hasn't changed, while ensuring you can safely use the latest state. |
 | [`usePrevious`](references/usePrevious.md) | `usePrevious` is a React hook that returns the previous value of the input state. |
 | [`useRefEffect`](references/useRefEffect.md) | `useRefEffect` is a React hook that helps you set a reference to a specific DOM element and execute a callback whenever the element changes. |
+| [`useSafeAreaInset`](references/useSafeAreaInset.md) | `useSafeAreaInset` is a React hook that tracks safe area inset changes. |
+| [`useScrollDirection`](references/useScrollDirection.md) | `useScrollDirection` is a React hook that detects scroll direction. |
 | [`useSet`](references/useSet.md) | A React hook that manages a Set as state. |
 | [`useStorageState`](references/useStorageState.md) | `useStorageState` is a React that functions like `useState` but persists the state value in browser storage. |
 | [`useThrottle`](references/useThrottle.md) | `useThrottle` is a React hook that creates a throttled version of a callback function. |
@@ -105,6 +112,7 @@ Backticks in this table mark catalog entries only.
 | [`useTimeout`](references/useTimeout.md) | `useTimeout` is a React hook that executes a callback function after a specified delay. |
 | [`useToggle`](references/useToggle.md) | `useToggle` is a React hook that simplifies managing a boolean state. |
 | [`useVisibilityEvent`](references/useVisibilityEvent.md) | `useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback. |
+| [`useVisualViewport`](references/useVisualViewport.md) | `useVisualViewport` is a React hook that tracks Visual Viewport changes. |
 
 ### components
 
@@ -119,26 +127,6 @@ Backticks in this table mark catalog entries only.
 | Name | Description |
 | --- | --- |
 | [`buildContext`](references/buildContext.md) | `buildContext` is a helper function that reduces repetitive code when defining React Context. |
-| [`mergeProps`](references/mergeProps.md) | `mergeProps` is a utility function that merges multiple props objects into a single object. |
-| [`mergeRefs`](references/mergeRefs.md) | This function takes multiple refs (RefObject or RefCallback) and returns a single ref that updates all provided refs. |
-
-### mobile hooks
-
-| Name | Description |
-| --- | --- |
-| [`useAvoidKeyboard`](references/useAvoidKeyboard.md) | `useAvoidKeyboard` is a React hook that helps fixed-bottom elements avoid the on-screen keyboard. |
-| [`useBodyScrollLock`](references/useBodyScrollLock.md) | `useBodyScrollLock` is a React hook that locks body scroll while the component is mounted. |
-| [`useKeyboardHeight`](references/useKeyboardHeight.md) | `useKeyboardHeight` is a React hook that tracks the on-screen keyboard height. |
-| [`useNetworkStatus`](references/useNetworkStatus.md) | `useNetworkStatus` is a React hook that provides access to the Network Information API. |
-| [`usePageVisibility`](references/usePageVisibility.md) | `usePageVisibility` is a React hook that detects page visibility changes. |
-| [`useSafeAreaInset`](references/useSafeAreaInset.md) | `useSafeAreaInset` is a React hook that tracks safe area inset changes. |
-| [`useScrollDirection`](references/useScrollDirection.md) | `useScrollDirection` is a React hook that detects scroll direction. |
-| [`useVisualViewport`](references/useVisualViewport.md) | `useVisualViewport` is a React hook that tracks Visual Viewport changes. |
-
-### mobile utils
-
-| Name | Description |
-| --- | --- |
 | [`disableBodyScrollLock`](references/disableBodyScrollLock.md) | `disableBodyScrollLock` is a utility function that unlocks the body scroll. |
 | [`enableBodyScrollLock`](references/enableBodyScrollLock.md) | `enableBodyScrollLock` is a utility function that locks the body scroll. |
 | [`getKeyboardHeight`](references/getKeyboardHeight.md) | `getKeyboardHeight` is a utility function that returns the current on-screen keyboard height in pixels. |
@@ -147,6 +135,8 @@ Backticks in this table mark catalog entries only.
 | [`isIOS`](references/isIOS.md) | `isIOS` is a utility function that detects whether the current device is running iOS or iPadOS. |
 | [`isKeyboardVisible`](references/isKeyboardVisible.md) | `isKeyboardVisible` is a utility function that checks whether the on-screen keyboard is currently visible. |
 | [`isServer`](references/isServer.md) | `isServer` is a utility function that checks if the code is running on the server. |
+| [`mergeProps`](references/mergeProps.md) | `mergeProps` is a utility function that merges multiple props objects into a single object. |
+| [`mergeRefs`](references/mergeRefs.md) | This function takes multiple refs (RefObject or RefCallback) and returns a single ref that updates all provided refs. |
 | [`subscribeKeyboardHeight`](references/subscribeKeyboardHeight.md) | `subscribeKeyboardHeight` is a utility function that subscribes to changes in the on-screen keyboard height. |
 
 ## Learn more

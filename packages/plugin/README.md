@@ -57,7 +57,7 @@ claude plugin marketplace remove react-design-philosophy
 
 `skills/react-simplikit/`
 
-- `SKILL.md` — when to use the library, import and SSR rules, a "common needs → use" table, and the full catalog grouped by category (hooks, components, utils, mobile hooks, mobile utils). Everything is imported from `react-simplikit`; the mobile categories only say what an entry assumes.
+- `SKILL.md` — when to use the library, import and SSR rules, a "common needs → use" table, and the full catalog grouped by category (hooks, components, utils).
 - `references/<name>.md` — the documentation page of each entry: signature, parameters, return value, example.
 
 `skills/react-simplikit-codemod/`
