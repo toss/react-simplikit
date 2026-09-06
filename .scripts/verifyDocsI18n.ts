@@ -106,7 +106,7 @@ try {
   const localeCount = localeDirectories.length + 1;
   const referenceItemCount = (
     await Promise.all(
-      ['hooks', 'components', 'utils', 'mobile/hooks', 'mobile/utils'].map(
+      ['hooks', 'components', 'utils'].map(
         async directory =>
           (
             await fs.readdir(path.join(root, 'packages/react-simplikit/src', directory), { withFileTypes: true })

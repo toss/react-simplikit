@@ -1,5 +1,4 @@
 export type SizeGate = {
-  // Names the gate in output: one package can carry several entry points now.
   label: string;
   entry: string;
   // Per-module output means adding hooks never moves this number — only the
@@ -21,12 +20,12 @@ export const TARGET_PACKAGES: TargetPackage[] = [
     dir: 'packages/react-simplikit',
     sizeGates: [
       {
-        label: 'root',
+        label: 'useToggle',
         entry: `export { useToggle } from 'react-simplikit';`,
         limitBytes: 256,
       },
       {
-        label: 'hook from src/mobile',
+        label: 'useNetworkStatus',
         entry: `export { useNetworkStatus } from 'react-simplikit';`,
         limitBytes: 768,
       },

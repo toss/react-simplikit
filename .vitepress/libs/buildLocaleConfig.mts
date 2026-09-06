@@ -1,7 +1,7 @@
 import { DefaultTheme, LocaleSpecificConfig } from 'vitepress';
 
 import { LocaleDefinition } from '../locales.mts';
-import { mobileSourceRoot, packageSourceRoot } from '../shared.mts';
+import { packageSourceRoot } from '../shared.mts';
 import { getSidebarItems } from './getSidebarItems.mts';
 import { sortByText } from './sortByText.mts';
 
@@ -16,17 +16,9 @@ export function buildLocaleConfig(
   const sidebarLocale = definition.path === '' ? undefined : definition.path;
   const strings = definition.themeStrings;
 
-  // Reference URLs are flat: category segment only. The src/mobile trees are folded into
-  // the same three lists (sortByText orders each list), so a hook is a hook wherever its source lives.
-  const hooks = [
-    ...getSidebarItems(packageSourceRoot, 'hooks', '', sidebarLocale),
-    ...getSidebarItems(mobileSourceRoot, 'hooks', '', sidebarLocale),
-  ];
+  const hooks = getSidebarItems(packageSourceRoot, 'hooks', '', sidebarLocale);
   const components = getSidebarItems(packageSourceRoot, 'components', '', sidebarLocale);
-  const utils = [
-    ...getSidebarItems(packageSourceRoot, 'utils', '', sidebarLocale),
-    ...getSidebarItems(mobileSourceRoot, 'utils', '', sidebarLocale),
-  ];
+  const utils = getSidebarItems(packageSourceRoot, 'utils', '', sidebarLocale);
 
   return {
     lang: definition.lang,
