@@ -14,6 +14,7 @@ type GuidePageTitles = {
   installation: string;
   aiIntegration: string;
   designPrinciples: string;
+  mobileWeb: string;
   contributing: string;
 };
 
@@ -24,7 +25,6 @@ export type LocaleThemeStrings = {
   componentsLabel: string;
   hooksLabel: string;
   utilsLabel: string;
-  mobileWebLabel: string;
   guidePages: GuidePageTitles;
   editLinkText: string;
   footerMessage: string;

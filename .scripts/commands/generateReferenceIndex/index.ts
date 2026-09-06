@@ -6,15 +6,14 @@ import { getRootPath } from '../../utils/getRootPath.ts';
 
 const PACKAGE_SRC = 'packages/react-simplikit/src';
 
-type Group = { labelKey: 'hooksLabel' | 'componentsLabel' | 'utilsLabel' | 'mobileWebLabel'; directories: string[] };
+type Group = { labelKey: 'hooksLabel' | 'componentsLabel' | 'utilsLabel'; directories: string[] };
 
-// Mirrors the sidebar grouping: the mobile trees share the flat hooks/utils URLs
-// but stay a separate group so mobile web stays discoverable as a category.
+// Mirrors the sidebar: the src/mobile trees share the flat hooks/utils URLs and the
+// same three lists, sorted together.
 const GROUPS: Group[] = [
-  { labelKey: 'hooksLabel', directories: ['hooks'] },
+  { labelKey: 'hooksLabel', directories: ['hooks', 'mobile/hooks'] },
   { labelKey: 'componentsLabel', directories: ['components'] },
-  { labelKey: 'utilsLabel', directories: ['utils'] },
-  { labelKey: 'mobileWebLabel', directories: ['mobile/hooks', 'mobile/utils'] },
+  { labelKey: 'utilsLabel', directories: ['utils', 'mobile/utils'] },
 ];
 
 /**

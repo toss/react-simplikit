@@ -14,7 +14,7 @@ import {
   localeDirectories,
   rewrites,
 } from '../.vitepress/locales.mts';
-import { corePackageRoot } from '../.vitepress/shared.mts';
+import { packageSourceRoot } from '../.vitepress/shared.mts';
 
 import { assertLlmsOutput } from './utils/assertLlmsOutput.ts';
 import { execWithOutput } from './utils/execWithOutput.ts';
@@ -177,6 +177,13 @@ try {
       referenceItemCount,
       `${locale || 'root'} reference index must render one link per export, not just carry them in the sidebar payload`
     );
+
+    const referenceHeadings = [...referencePage.matchAll(/<h2 id="([^"]+)"/g)].map(match => match[1]);
+    assert.equal(
+      referenceHeadings.length,
+      3,
+      `${locale || 'root'} reference index must have exactly three groups, got ${referenceHeadings.join(', ')}`
+    );
   }
 
   const fallbackPage = await fs.readFile(
@@ -204,7 +211,7 @@ try {
   );
 
   assert.deepEqual(
-    getSidebarItems(corePackageRoot, 'hooks', '', 'ko').find(item => item.text === hookFixtureName),
+    getSidebarItems(packageSourceRoot, 'hooks', '', 'ko').find(item => item.text === hookFixtureName),
     { text: hookFixtureName, link: `/ko/hooks/${hookFixtureName}` },
     'the Korean sidebar must link the fallback page so it is not reachable by URL only'
   );
@@ -230,13 +237,13 @@ const unregisteredLocaleFixture = {
     componentsLabel: 'Componentes',
     hooksLabel: 'Hooks',
     utilsLabel: 'Utilitários',
-    mobileWebLabel: 'Web móvel',
     guidePages: {
       intro: 'Introdução',
       whyReactSimplikitMatters: 'Por que o react-simplikit importa',
       installation: 'Instalação',
       aiIntegration: 'Integração com IA',
       designPrinciples: 'Princípios de design',
+      mobileWeb: 'Web móvel',
       contributing: 'Contribuir',
     },
     editLinkText: 'Editar esta página no GitHub',
@@ -285,6 +292,33 @@ assert.equal((rootConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Reference
 assert.equal((rootConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/reference');
 assert.equal(rootConfig.lang, 'en');
 assert.equal(rootConfig.themeConfig?.editLink?.text, 'Edit this page on GitHub');
+
+// The reference sidebar is three flat, alphabetical lists. A separate "Mobile Web"
+// group would resurrect the retired namespace as a category.
+const rootSidebar = (rootConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/'];
+const referenceGroups = rootSidebar[1].items ?? [];
+
+assert.deepEqual(
+  referenceGroups.map(group => group.text),
+  ['Components', 'Hooks', 'Utils'],
+  'the reference sidebar must have exactly the three category groups'
+);
+
+const hookTexts = (referenceGroups[1].items ?? []).map(item => item.text ?? '');
+const utilTexts = (referenceGroups[2].items ?? []).map(item => item.text ?? '');
+
+assert.equal(hookTexts.includes('useKeyboardHeight') && hookTexts.includes('useToggle'), true);
+assert.equal(utilTexts.includes('isIOS') && utilTexts.includes('mergeRefs'), true);
+assert.deepEqual(
+  hookTexts,
+  [...hookTexts].sort((a, b) => a.localeCompare(b)),
+  'hooks must be one sorted list'
+);
+assert.deepEqual(
+  utilTexts,
+  [...utilTexts].sort((a, b) => a.localeCompare(b)),
+  'utils must be one sorted list'
+);
 
 const jaConfig = buildLocaleConfig(localeDefinitions.ja);
 
