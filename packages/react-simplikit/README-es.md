@@ -6,7 +6,7 @@
 
 [English](./README.md) | [한국어](./README-ko_kr.md) | [日本語](./README-ja_jp.md) | [简体中文](./README-zh_hans.md) | Español
 
-Una biblioteca de utilidades de React ligera y sin dependencias que ofrece Hooks, componentes y utilidades.
+Una biblioteca ligera de utilidades de React, sin dependencias, que ofrece Hooks, componentes y utilidades.
 
 ## Características
 
@@ -57,46 +57,19 @@ La función con debounce expone `.cancel()`, y las llamadas pendientes se cancel
 
 ## Lo que incluye
 
-### Hooks
+- **Hooks** — estado y lógica (`useToggle`, `useDebounce`, `useList`, …), eventos del navegador (`useIntersectionObserver`, `useOutsideClickEffect`, …) y web móvil (`useAvoidKeyboard`, `useSafeAreaInset`, `useVisualViewport`, …)
+- **Componentes** — `SwitchCase`, `Separated`, `ImpressionArea`
+- **Utilidades** — `buildContext`, `mergeProps`, `mergeRefs` y funciones auxiliares para la web móvil como `isIOS` y `getKeyboardHeight`
 
-| Hook                      | Descripción                                                             |
-| ------------------------- | ----------------------------------------------------------------------- |
-| `useBooleanState`         | Gestiona un estado booleano con sus manejadores                         |
-| `useDebounce`             | Aplica debounce a una función de callback                               |
-| `useDebouncedCallback`    | Aplica debounce a un callback `onChange` mediante un objeto de opciones |
-| `useInterval`             | Configura intervalos de forma declarativa                               |
-| `useIntersectionObserver` | Observa la visibilidad de un elemento                                   |
-| `usePreservedCallback`    | Referencia estable a un callback                                        |
-| `usePreservedReference`   | Referencia estable a un objeto                                          |
-| ...                       | [Ver todos los Hooks](https://react-simplikit.slash.page/es)            |
-
-### Componentes
-
-| Componente       | Descripción                                 |
-| ---------------- | ------------------------------------------- |
-| `SwitchCase`     | Renderizado declarativo de tipo switch-case |
-| `Separated`      | Renderiza elementos con separadores         |
-| `ImpressionArea` | Registra las impresiones de un elemento     |
-
-### Utilidades
-
-| Utilidad       | Descripción                                                      |
-| -------------- | ---------------------------------------------------------------- |
-| `buildContext` | Define un React Context con menos código repetitivo              |
-| `mergeProps`   | Combina las props componiendo `className`, `style` y los eventos |
-| `mergeRefs`    | Combina varias refs en una sola ref                              |
+La lista completa, con una descripción de una línea por entrada, está en la [página de referencia](https://react-simplikit.slash.page/es/reference.html).
 
 ## Documentación
 
 Consulta la documentación completa en [react-simplikit.slash.page](https://react-simplikit.slash.page/es).
 
-## Paquetes relacionados
-
-- [Utilidades para la web móvil](https://react-simplikit.slash.page/es/mobile/intro.html) - se incluyen en `react-simplikit`
-
 ## Contribuir
 
-¡Damos la bienvenida a las contribuciones! Consulta nuestra [guía de contribución](https://github.com/toss/react-simplikit/blob/main/CONTRIBUTING.md).
+¡Damos la bienvenida a las contribuciones! Consulta nuestra [guía de contribución](https://github.com/toss/react-simplikit/blob/main/.github/CONTRIBUTING.md).
 
 ## Licencia
 

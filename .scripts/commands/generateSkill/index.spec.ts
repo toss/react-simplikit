@@ -38,7 +38,7 @@ export { useToggle } from './hooks/useToggle/index.ts';
     );
     assert.equal(
       skill.includes(
-        '### mobile utils\n\n| Name | Description |\n| --- | --- |\n| [`isIOS`](references/isIOS.md) | `isIOS` detects iOS. |'
+        '### utils\n\n| Name | Description |\n| --- | --- |\n| [`isIOS`](references/isIOS.md) | `isIOS` detects iOS. |'
       ),
       true
     );

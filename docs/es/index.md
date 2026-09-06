@@ -10,10 +10,7 @@ hero:
   actions:
     - theme: brand
       text: Empezar
-      link: /es/core/intro
-    - theme: alt
-      text: Utilidades para móvil
-      link: /es/mobile/intro
+      link: /es/intro
 
 features:
   - title: 'Cero dependencias'

@@ -2,6 +2,8 @@ import { defineConfig, HeadConfig } from 'vitepress';
 import llmstxt from 'vitepress-plugin-llms';
 import { buildLocaleConfig } from './libs/buildLocaleConfig.mts';
 import { generatedRewrites, localeDefinitions, rewrites } from './locales.mts';
+import { writeLegacyRedirectStubs } from './libs/legacyRedirects.mts';
+import { SITE_ORIGIN } from './shared.mts';
 
 const locales = Object.fromEntries(
   Object.entries(localeDefinitions).map(([code, definition]) => [
@@ -40,21 +42,21 @@ export default defineConfig({
     },
     plugins: [
       llmstxt({
-        domain: 'https://react-simplikit.slash.page',
+        domain: SITE_ORIGIN,
         title: 'react-simplikit',
         description: 'Lightweight, zero-dependency React hooks, components and utils',
         details: `\
 react-simplikit provides reliable, typed React hooks, components and utils with zero runtime dependencies, 100% test coverage and SSR safety.
 
-Everything ships in the single \`react-simplikit\` package: state and logic hooks, components and utils for any React app (web, SSR), plus mobile-web (iOS Safari, Android Chrome) viewport, keyboard, safe-area and body-scroll-lock utilities under the mobile pages below.
+Everything ships in one package, \`react-simplikit\`: state and logic hooks, components and utils for any React app (web, SSR), plus hooks for mobile web problems — viewport, keyboard, safe area and body scroll lock.
 
 Guidelines for AI agents:
 
 - Before hand-writing debounce, throttle, toggle, list/map/set state, interval, timeout, click-outside or intersection logic, check whether a hook below already covers it.
-- Use named imports from \`react-simplikit\`. There is no default export and no subpath. \`@react-simplikit/mobile\` is the retired package name; its exports live in \`react-simplikit\` under the same names. To migrate a codebase, run \`npx react-simplikit-codemod mobile-to-root\`.
+- Use named imports from \`react-simplikit\`. There is no default export and no subpath.
 - Every page linked below is also available as raw Markdown at the same URL with a \`.md\` suffix.`,
         // srcDir is the repo root, so everything VitePress's srcExclude skips must be skipped here too,
-        // plus the localized copies (ko/ja + generated fallbacks) so llms.txt lists each page once.
+        // plus the localized copies (every registered locale + generated fallbacks) so llms.txt lists each page once.
         ignoreFiles: [
           '**/node_modules/**',
           '**/README*.md',
@@ -76,6 +78,11 @@ Guidelines for AI agents:
     ],
   },
   rewrites: { ...rewrites, ...generatedRewrites },
+  sitemap: { hostname: SITE_ORIGIN },
+  buildEnd: async siteConfig => {
+    const count = writeLegacyRedirectStubs(siteConfig.outDir);
+    console.log(`legacy redirect stubs: ${count}`);
+  },
   head: [
     ['link', { rel: 'stylesheet', href: 'https://static.toss.im/tps/main.css' }],
     ['link', { rel: 'stylesheet', href: 'https://static.toss.im/tps/others.css' }],
@@ -91,8 +98,8 @@ Guidelines for AI agents:
     ['meta', { property: 'og:title', content: 'react-simplikit' }],
     ['meta', { property: 'og:description', content: 'Lightweight and powerful React utility library' }],
     ['meta', { property: 'og:site_name', content: 'react-simplikit' }],
-    ['meta', { property: 'og:image', content: 'https://react-simplikit.slash.page/images/og.png' }],
-    ['meta', { name: 'twitter:image', content: 'https://react-simplikit.slash.page/images/og.png' }],
+    ['meta', { property: 'og:image', content: `${SITE_ORIGIN}/images/og.png` }],
+    ['meta', { name: 'twitter:image', content: `${SITE_ORIGIN}/images/og.png` }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
   transformHead: ({ pageData }) => {
