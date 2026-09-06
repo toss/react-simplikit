@@ -7,8 +7,8 @@
 
 React utility hooks/components library. Two published packages and an agent plugin:
 
-- `react-simplikit` (`packages/react-simplikit`) — React hooks & components. Mobile web utilities (viewport, keyboard, layout) live in `src/mobile` and are exported from the root entry
-- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that migrates consumers off the retired `@react-simplikit/mobile`
+- `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils. Mobile web hooks and utils (viewport, keyboard, safe area) live under `src/mobile` and are part of the same public API
+- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today)
 - `packages/plugin` — agent skills for Claude Code, Codex and skills.sh. No `package.json`, so it is neither a workspace nor on npm. `yarn skill:gen` regenerates `skills/react-simplikit` from the public exports and `yarn test:skill` fails CI when the committed copy drifts; `skills/react-simplikit-codemod` is hand-written
 
 ## Architecture
@@ -22,7 +22,7 @@ components → hooks → utils → _internal
 - Components may use hooks, utils, \_internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
-- Root exports must NOT import from `src/mobile`; `src/mobile` may use core utils and `_internal` (test infrastructure is exempt)
+- Nothing outside `src/mobile` imports from it; `src/mobile` may use `src/utils` and `_internal` (test infrastructure is exempt)
 
 ## File Structure
 
@@ -32,7 +32,7 @@ Each hook/component/util lives in its own folder with co-located docs:
 src/hooks/useHookName/
 ├── index.ts               # Re-export
 ├── useHookName.ts         # Implementation
-├── useHookName.spec.ts    # Tests (core) / useHookName.test.ts (mobile)
+├── useHookName.test.ts    # Tests (`.spec.ts` in older folders)
 ├── useHookName.ssr.test.ts # SSR safety tests
 ├── useHookName.md         # English docs
 └── ko/
@@ -119,6 +119,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 - **Single value**: `useDebounce<T>(value, delay): T`
 - **Tuple** (2 items): `useToggle(init): [boolean, () => void]`
 - **Object** (3+ items): `usePagination(): { page, nextPage, prevPage }`
+- **Object** also when the shape is expected to grow: `useKeyboardHeight(): { keyboardHeight }`
 
 ## Testing
 
@@ -142,18 +143,18 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 ## Documentation
 
-- **Locales**: English source + `ko/` + `ja/`, co-located with the source (`useX.md`, `ko/useX.md`, `ja/useX.md`; guides under `docs/<locale>/`)
+- **Locales**: English source plus the locales registered in `.vitepress/locales.mts` (currently ko, ja, zh-Hans, es), co-located with the source (`useX.md`, `<locale>/useX.md`; guides under `docs/<locale>/`)
 - **JSDoc required**: Every public API must have `@description` + `@example` + `@param` + `@returns`
 - **English API docs are generated**: `yarn docs:gen <name>` turns the JSDoc into `<name>.md`. Do not hand-edit the English API `.md`
 - **Translations are written with your local AI harness**: draft from the English source, then review with `.claude/agents/agent-translation-reviewer.md` (glossary and rules inside). Nothing in CI translates
-- **Keep translations in sync**: a PR that changes an English doc updates its `ko/` and `ja/` counterparts. Untranslated pages fall back to English with a banner
+- **Keep translations in sync**: a PR that changes an English doc updates every translated counterpart. Untranslated pages fall back to English with a banner
 
 ## Commit Convention
 
 Format: `<type>(<scope>): <description>`
 
 Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`
-Scope: `core`, `mobile`, or area name
+Scope: the hook, component, util or area the change touches (`useToggle`, `docs`, `codemod`, `ci`); omit when it spans the package
 
 ## Commands
 

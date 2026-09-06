@@ -47,15 +47,15 @@ export default defineConfig({
         details: `\
 react-simplikit provides reliable, typed React hooks, components and utils with zero runtime dependencies, 100% test coverage and SSR safety.
 
-Everything ships in the single \`react-simplikit\` package: state and logic hooks, components and utils for any React app (web, SSR), plus mobile-web (iOS Safari, Android Chrome) viewport, keyboard, safe-area and body-scroll-lock utilities under the mobile pages below.
+Everything ships in one package, \`react-simplikit\`: state and logic hooks, components and utils for any React app (web, SSR), plus hooks for mobile web problems — viewport, keyboard, safe area and body scroll lock.
 
 Guidelines for AI agents:
 
 - Before hand-writing debounce, throttle, toggle, list/map/set state, interval, timeout, click-outside or intersection logic, check whether a hook below already covers it.
-- Use named imports from \`react-simplikit\`. There is no default export and no subpath. \`@react-simplikit/mobile\` is the retired package name; its exports live in \`react-simplikit\` under the same names. To migrate a codebase, run \`npx react-simplikit-codemod mobile-to-root\`.
+- Use named imports from \`react-simplikit\`. There is no default export and no subpath. A codebase that still imports \`@react-simplikit/mobile\` should follow https://react-simplikit.slash.page/installation.html#migrating-from-react-simplikit-mobile.
 - Every page linked below is also available as raw Markdown at the same URL with a \`.md\` suffix.`,
         // srcDir is the repo root, so everything VitePress's srcExclude skips must be skipped here too,
-        // plus the localized copies (ko/ja + generated fallbacks) so llms.txt lists each page once.
+        // plus the localized copies (every registered locale + generated fallbacks) so llms.txt lists each page once.
         ignoreFiles: [
           '**/node_modules/**',
           '**/README*.md',

@@ -344,7 +344,7 @@ jobs:
           HAS_ERROR=0
           FOUND=0
 
-          # Every implementation — including the absorbed src/mobile tree — must be
+          # Every implementation — the src/mobile tree included — must be
           # exported from the package root barrel: it is the only public entry.
           for pkg in packages/*/; do
             ROOT_INDEX="${pkg}src/index.ts"

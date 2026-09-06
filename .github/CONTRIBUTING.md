@@ -1,22 +1,33 @@
 # Contributing to react-simplikit
 
-Welcome! We appreciate your interest in contributing to react-simplikit. This document provides an overview of how to contribute. For detailed guidelines, please refer to the package-specific contributing guides linked below.
+Welcome! We appreciate your interest in contributing to react-simplikit. This page is the short version; the full guide, including the JSDoc rules, SSR tests and the changeset flow, is the [Contributing Guide](https://react-simplikit.slash.page/contributing.html) on the documentation site.
 
-## Contributing Guide
+## Every contribution needs
 
-Each contribution requires:
+- **Implementation** — following the [Design Principles](https://react-simplikit.slash.page/design-principles.html)
+- **Test code** — 100% coverage, including an SSR test
+- **JSDoc** — the English documentation is generated from it (`yarn docs:gen <name>`)
 
-- **Implementation** — following our [Design Principles](https://react-simplikit.slash.page/design-principles.html)
-- **Test Code** — 100% coverage required
-- **JSDoc** — documentation is auto-generated from JSDoc, so no separate docs needed
+## Scaffolding
 
-For detailed instructions, see the package-specific guides:
+```bash
+yarn run scaffold <name> --type <type>
+```
 
-- [Contributing Guide](../docs/contributing.md)
-- [Mobile Web](../docs/mobile-web.md)
+- `type`: `component`, `hook`, or `util` (shortcuts: `c`, `h`, `u`)
+- `name`: name of the implementation
+
+## Changesets
+
+When your change affects the published package, add a changeset and commit it with your PR:
+
+```bash
+yarn changeset
+```
+
+The package is in the `0.x` stage, so most changes are `patch`. Ask a maintainer when unsure.
 
 ## Useful Links
 
 - [Documentation Site](https://react-simplikit.slash.page)
-- [Design Principles](https://react-simplikit.slash.page/design-principles.html)
-- [Discord](https://discord.gg/vGXbVjP2nY) — Community chat for questions and discussions
+- [Discord](https://discord.gg/vGXbVjP2nY) — community chat for questions and discussions
