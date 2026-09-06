@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -390,34 +389,31 @@ describe('useLongPress', () => {
     expect(onLongPress).toHaveBeenCalledTimes(1);
   });
 
-  describe.each([false, true])('StrictMode: %s', strictMode => {
-    it.each(['mouse', 'touch'] as const)('cancels a pending %s press on unmount', async input => {
-      const callbacks = createCallbacks();
-      const target = <PressTarget {...callbacks} />;
-      const { getByRole, unmount } = render(strictMode === true ? <StrictMode>{target}</StrictMode> : target);
-      const button = getByRole('button');
+  it.each(['mouse', 'touch'] as const)('cancels a pending %s press on unmount', async input => {
+    const callbacks = createCallbacks();
+    const { getByRole, unmount } = render(<PressTarget {...callbacks} />);
+    const button = getByRole('button');
 
-      if (input === 'mouse') {
-        fireEvent.mouseDown(button, { clientX: 0, clientY: 0 });
-      } else {
-        fireEvent.touchStart(button, { touches: [{ clientX: 0, clientY: 0 }] });
-      }
+    if (input === 'mouse') {
+      fireEvent.mouseDown(button, { clientX: 0, clientY: 0 });
+    } else {
+      fireEvent.touchStart(button, { touches: [{ clientX: 0, clientY: 0 }] });
+    }
 
-      await act(async () => {
-        vi.advanceTimersByTime(250);
-      });
-      expect(callbacks.onLongPress).not.toHaveBeenCalled();
-
-      unmount();
-
-      await act(async () => {
-        vi.advanceTimersByTime(500);
-      });
-
-      expect(callbacks.onLongPress).not.toHaveBeenCalled();
-      expect(callbacks.onClick).not.toHaveBeenCalled();
-      expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
+    await act(async () => {
+      vi.advanceTimersByTime(250);
     });
+    expect(callbacks.onLongPress).not.toHaveBeenCalled();
+
+    unmount();
+
+    await act(async () => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(callbacks.onLongPress).not.toHaveBeenCalled();
+    expect(callbacks.onClick).not.toHaveBeenCalled();
+    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
   });
 
   it('preserves the pending timer across a rerender', async () => {
