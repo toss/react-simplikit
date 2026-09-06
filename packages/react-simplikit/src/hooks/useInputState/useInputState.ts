@@ -2,12 +2,14 @@ import { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'react';
 
 type InputLikeElement = HTMLInputElement | HTMLTextAreaElement;
 
+type InitialValue = string | (() => string);
+
 /**
  * @description
  * `useInputState` is a React hook that manages an input state with optional value transformation.
  * The returned `onChange` handler works with both `<input>` and `<textarea>` elements.
  *
- * @param {string} [initialValue=""] - The initial value of the input. Defaults to an empty string (`""`).
+ * @param {string | (() => string)} [initialValue=""] - The initial value of the input. Defaults to an empty string (`""`).
  * @param {(value: string) => string} [transformValue=(v: string) => v] - A function to transform the input value.
  *   Defaults to an identity function that returns the input unchanged.
  *
@@ -26,7 +28,7 @@ type InputLikeElement = HTMLInputElement | HTMLTextAreaElement;
  *   );
  * }
  */
-export function useInputState(initialValue = '', transformValue: (value: string) => string = echo) {
+export function useInputState(initialValue: InitialValue = '', transformValue: (value: string) => string = echo) {
   const [value, setValue] = useState(initialValue);
 
   const handleValueChange: ChangeEventHandler<InputLikeElement> = useCallback(
