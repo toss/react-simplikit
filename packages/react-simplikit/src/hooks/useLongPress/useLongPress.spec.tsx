@@ -1,5 +1,5 @@
 import { StrictMode } from 'react';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
@@ -32,8 +32,6 @@ describe('useLongPress', () => {
   });
 
   afterEach(() => {
-    cleanup();
-    vi.clearAllTimers();
     vi.useRealTimers();
   });
 
