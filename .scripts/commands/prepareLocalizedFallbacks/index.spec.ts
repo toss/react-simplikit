@@ -15,13 +15,13 @@ afterEach(async () => {
 describe('prepareLocalizedFallbacks', () => {
   it('creates a marked English fallback when a localized document is missing', async () => {
     const root = await createFixtureDirectory();
-    await writeFile(root, 'docs/core/intro.md', '# Introduction\n');
+    await writeFile(root, 'docs/intro.md', '# Introduction\n');
 
     await prepareLocalizedFallbacks({ localeDirectories: ['ja'], root });
 
     await expectFile(
       root,
-      'generated-locales/docs/ja/core/intro.md',
+      'generated-locales/docs/ja/intro.md',
       `---\nuntranslated: true\nsourceLocale: en\n---\n# Introduction\n`
     );
   });

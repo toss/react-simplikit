@@ -1,7 +1,7 @@
 import { DefaultTheme, LocaleSpecificConfig } from 'vitepress';
 
 import { LocaleDefinition } from '../locales.mts';
-import { corePackageRoot, mobilePackageRoot } from '../shared.mts';
+import { packageSourceRoot } from '../shared.mts';
 import { getSidebarItems } from './getSidebarItems.mts';
 import { sortByText } from './sortByText.mts';
 
@@ -16,76 +16,42 @@ export function buildLocaleConfig(
   const sidebarLocale = definition.path === '' ? undefined : definition.path;
   const strings = definition.themeStrings;
 
+  const hooks = getSidebarItems(packageSourceRoot, 'hooks', '', sidebarLocale);
+  const components = getSidebarItems(packageSourceRoot, 'components', '', sidebarLocale);
+  const utils = getSidebarItems(packageSourceRoot, 'utils', '', sidebarLocale);
+
   return {
     lang: definition.lang,
     themeConfig: {
       nav: [
         { text: strings.homeNavLabel, link: `${prefix}/` },
-        { text: 'Guide', link: `${prefix}/core/intro` },
-        { text: 'Mobile Utilities', link: `${prefix}/mobile/intro` },
+        { text: 'Guide', link: `${prefix}/intro` },
+        { text: strings.referenceLabel, link: `${prefix}/reference` },
       ],
       sidebar: {
-        [`${prefix}/core/`]: [
+        [`${prefix}/`]: [
           {
             text: strings.guideLabel,
             items: [
-              { text: strings.guidePages.core.intro, link: `${prefix}/core/intro` },
+              { text: strings.guidePages.intro, link: `${prefix}/intro` },
               {
-                text: strings.guidePages.core.whyReactSimplikitMatters,
-                link: `${prefix}/core/why-react-simplikit-matters`,
+                text: strings.guidePages.whyReactSimplikitMatters,
+                link: `${prefix}/why-react-simplikit-matters`,
               },
-              { text: strings.guidePages.core.installation, link: `${prefix}/core/installation` },
-              { text: strings.guidePages.core.aiIntegration, link: `${prefix}/core/ai-integration` },
-              { text: strings.guidePages.core.designPrinciples, link: `${prefix}/core/design-principles` },
-              { text: strings.guidePages.core.contributing, link: `${prefix}/core/contributing` },
+              { text: strings.guidePages.installation, link: `${prefix}/installation` },
+              { text: strings.guidePages.aiIntegration, link: `${prefix}/ai-integration` },
+              { text: strings.guidePages.designPrinciples, link: `${prefix}/design-principles` },
+              { text: strings.guidePages.mobileWeb, link: `${prefix}/mobile-web` },
+              { text: strings.guidePages.contributing, link: `${prefix}/contributing` },
             ],
           },
           {
             text: strings.referenceLabel,
             items: sortByText([
-              {
-                text: strings.componentsLabel,
-                collapsed: false,
-                items: getSidebarItems(corePackageRoot, 'components', '/core', sidebarLocale),
-              },
-              {
-                text: strings.hooksLabel,
-                collapsed: false,
-                items: getSidebarItems(corePackageRoot, 'hooks', '/core', sidebarLocale),
-              },
-              {
-                text: strings.utilsLabel,
-                collapsed: false,
-                items: getSidebarItems(corePackageRoot, 'utils', '/core', sidebarLocale),
-              },
+              { text: strings.componentsLabel, collapsed: false, items: components },
+              { text: strings.hooksLabel, collapsed: false, items: hooks },
+              { text: strings.utilsLabel, collapsed: false, items: utils },
             ]),
-          },
-        ],
-        [`${prefix}/mobile/`]: [
-          {
-            text: strings.guideLabel,
-            items: [
-              { text: strings.guidePages.mobile.intro, link: `${prefix}/mobile/intro` },
-              { text: strings.guidePages.mobile.roadmap, link: `${prefix}/mobile/roadmap` },
-              { text: strings.guidePages.mobile.installation, link: `${prefix}/mobile/installation` },
-              { text: strings.guidePages.mobile.designPrinciples, link: `${prefix}/mobile/design-principles` },
-              { text: strings.guidePages.mobile.contributing, link: `${prefix}/mobile/contributing` },
-            ],
-          },
-          {
-            text: strings.referenceLabel,
-            items: [
-              {
-                text: strings.hooksLabel,
-                collapsed: false,
-                items: getSidebarItems(mobilePackageRoot, 'hooks', '/mobile', sidebarLocale),
-              },
-              {
-                text: strings.utilsLabel,
-                collapsed: false,
-                items: getSidebarItems(mobilePackageRoot, 'utils', '/mobile', sidebarLocale),
-              },
-            ],
           },
         ],
       },

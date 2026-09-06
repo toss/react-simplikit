@@ -17,7 +17,7 @@ export function Home() {
             paddingBottom: 8,
           }}
         >
-          Mobile Hooks
+          Hooks
         </h2>
         <nav>
           <DemoLink
@@ -75,21 +75,6 @@ export function Home() {
             title="getSafeAreaInset"
             description="Get device safe area insets (notch, home indicator)"
           />
-        </nav>
-      </section>
-
-      <section>
-        <h2
-          style={{
-            fontSize: 24,
-            marginBottom: 16,
-            borderBottom: '2px solid #0070f3',
-            paddingBottom: 8,
-          }}
-        >
-          Other
-        </h2>
-        <nav>
           <DemoLink to="/demos/is-server" title="isServer" description="Check if code is running on server" />
         </nav>
       </section>

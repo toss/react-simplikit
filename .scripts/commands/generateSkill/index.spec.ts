@@ -16,12 +16,12 @@ describe('generateSkill', () => {
   it('writes SKILL.md with a catalog row and a reference page per public export', async () => {
     const root = await writeFixtureRoot({
       index: `
-export { isIOS } from './mobile/utils/isIOS/index.ts';
+export { isIOS } from './utils/isIOS/index.ts';
 export { useToggle } from './hooks/useToggle/index.ts';
 `,
       pages: {
         'hooks/useToggle/useToggle.md': '# useToggle\n\n`useToggle` flips a boolean. More text.\n\n## Interface\n',
-        'mobile/utils/isIOS/isIOS.md': '# isIOS\n\n`isIOS` detects iOS.\n',
+        'utils/isIOS/isIOS.md': '# isIOS\n\n`isIOS` detects iOS.\n',
       },
     });
     const outputDirectory = path.join(root, 'out');
@@ -38,7 +38,7 @@ export { useToggle } from './hooks/useToggle/index.ts';
     );
     assert.equal(
       skill.includes(
-        '### mobile utils\n\n| Name | Description |\n| --- | --- |\n| [`isIOS`](references/isIOS.md) | `isIOS` detects iOS. |'
+        '### utils\n\n| Name | Description |\n| --- | --- |\n| [`isIOS`](references/isIOS.md) | `isIOS` detects iOS. |'
       ),
       true
     );
@@ -52,12 +52,12 @@ export { useToggle } from './hooks/useToggle/index.ts';
   it('produces identical output on a second run and drops pages of removed exports', async () => {
     const root = await writeFixtureRoot({
       index: `
-export { isIOS } from './mobile/utils/isIOS/index.ts';
+export { isIOS } from './utils/isIOS/index.ts';
 export { useToggle } from './hooks/useToggle/index.ts';
 `,
       pages: {
         'hooks/useToggle/useToggle.md': '# useToggle\n\n`useToggle` flips a boolean.\n',
-        'mobile/utils/isIOS/isIOS.md': '# isIOS\n\n`isIOS` detects iOS.\n',
+        'utils/isIOS/isIOS.md': '# isIOS\n\n`isIOS` detects iOS.\n',
       },
     });
     const outputDirectory = path.join(root, 'out');

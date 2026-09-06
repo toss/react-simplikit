@@ -9,21 +9,13 @@ import { zhHans } from './locales/zh-Hans.mts';
 export type LocaleCode = 'root' | 'ko' | 'ja' | 'zh-Hans' | 'es';
 
 type GuidePageTitles = {
-  core: {
-    intro: string;
-    whyReactSimplikitMatters: string;
-    installation: string;
-    aiIntegration: string;
-    designPrinciples: string;
-    contributing: string;
-  };
-  mobile: {
-    intro: string;
-    roadmap: string;
-    installation: string;
-    designPrinciples: string;
-    contributing: string;
-  };
+  intro: string;
+  whyReactSimplikitMatters: string;
+  installation: string;
+  aiIntegration: string;
+  designPrinciples: string;
+  mobileWeb: string;
+  contributing: string;
 };
 
 export type LocaleThemeStrings = {
@@ -106,46 +98,28 @@ const routeDefinitions: RouteDefinition[] = [
     localizedDestination: ':locale/index.md',
   },
   {
-    source: 'docs/core/:doc.md',
-    destination: 'core/:doc.md',
-    localizedSource: 'docs/:locale/core/:doc.md',
-    localizedDestination: ':locale/core/:doc.md',
-  },
-  {
-    source: 'docs/mobile/:doc.md',
-    destination: 'mobile/:doc.md',
-    localizedSource: 'docs/:locale/mobile/:doc.md',
-    localizedDestination: ':locale/mobile/:doc.md',
+    source: 'docs/:doc.md',
+    destination: ':doc.md',
+    localizedSource: 'docs/:locale/:doc.md',
+    localizedDestination: ':locale/:doc.md',
   },
   {
     source: 'packages/react-simplikit/src/hooks/:hook/:hook.md',
-    destination: 'core/hooks/:hook.md',
+    destination: 'hooks/:hook.md',
     localizedSource: 'packages/react-simplikit/src/hooks/:hook/:locale/:hook.md',
-    localizedDestination: ':locale/core/hooks/:hook.md',
+    localizedDestination: ':locale/hooks/:hook.md',
   },
   {
     source: 'packages/react-simplikit/src/components/:component/:component.md',
-    destination: 'core/components/:component.md',
+    destination: 'components/:component.md',
     localizedSource: 'packages/react-simplikit/src/components/:component/:locale/:component.md',
-    localizedDestination: ':locale/core/components/:component.md',
+    localizedDestination: ':locale/components/:component.md',
   },
   {
     source: 'packages/react-simplikit/src/utils/:util/:util.md',
-    destination: 'core/utils/:util.md',
+    destination: 'utils/:util.md',
     localizedSource: 'packages/react-simplikit/src/utils/:util/:locale/:util.md',
-    localizedDestination: ':locale/core/utils/:util.md',
-  },
-  {
-    source: 'packages/react-simplikit/src/mobile/hooks/:hook/:hook.md',
-    destination: 'mobile/hooks/:hook.md',
-    localizedSource: 'packages/react-simplikit/src/mobile/hooks/:hook/:locale/:hook.md',
-    localizedDestination: ':locale/mobile/hooks/:hook.md',
-  },
-  {
-    source: 'packages/react-simplikit/src/mobile/utils/:util/:util.md',
-    destination: 'mobile/utils/:util.md',
-    localizedSource: 'packages/react-simplikit/src/mobile/utils/:util/:locale/:util.md',
-    localizedDestination: ':locale/mobile/utils/:util.md',
+    localizedDestination: ':locale/utils/:util.md',
   },
 ];
 

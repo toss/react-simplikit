@@ -13,9 +13,9 @@ function rewriteSpecifier(sourceFile: ts.SourceFile, literal: ts.StringLiteralLi
   return { start, end: literal.getEnd(), text: `${quote}${ROOT_PACKAGE_NAME}${quote}` };
 }
 
-function applySplices(code: string, splices: readonly Splice[]): string {
-  return [...splices]
-    .sort((a, b) => b.start - a.start)
+function applySplices(code: string, splices: readonly Splice[]) {
+  return splices
+    .toSorted((a, b) => b.start - a.start)
     .reduce((text, splice) => text.slice(0, splice.start) + splice.text + text.slice(splice.end), code);
 }
 
@@ -41,22 +41,17 @@ export function transformSource(code: string, fileName: string): TransformSource
   }
 
   const merge = buildMergeSplices(sourceFile, hits);
+  const rewrites = hits.filter(hit => hit.declaration === undefined || !merge.mergedDeclarations.has(hit.declaration));
 
-  const splices: Splice[] = [...merge.splices];
-  const changes: SourceChange[] = [...merge.changes];
-
-  for (const hit of hits) {
-    if (hit.declaration !== undefined && merge.mergedDeclarations.has(hit.declaration)) {
-      continue;
-    }
-
-    splices.push(rewriteSpecifier(sourceFile, hit.literal));
-    changes.push({ line: lineOf(sourceFile, hit.literal.getStart(sourceFile)), kind: hit.kind });
-  }
+  const splices = [...merge.splices, ...rewrites.map(hit => rewriteSpecifier(sourceFile, hit.literal))];
+  const changes: SourceChange[] = [
+    ...merge.changes,
+    ...rewrites.map(hit => ({ line: lineOf(sourceFile, hit.literal.getStart(sourceFile)), kind: hit.kind })),
+  ];
 
   return {
     code: applySplices(code, splices),
-    changes: [...changes].sort((a, b) => a.line - b.line),
+    changes: changes.toSorted((a, b) => a.line - b.line),
     notes: merge.notes,
   };
 }
