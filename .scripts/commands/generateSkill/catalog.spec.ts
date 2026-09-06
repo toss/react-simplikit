@@ -4,12 +4,10 @@ import { describe, it } from 'vitest';
 import { extractDescription, getCategory, renderSkill } from './catalog.ts';
 
 describe('getCategory', () => {
-  it('derives the category from the export source path, ignoring the mobile directory', () => {
+  it('derives the category from the export source path', () => {
     assert.equal(getCategory('./hooks/useToggle/index.ts'), 'hooks');
     assert.equal(getCategory('./components/Separated/index.ts'), 'components');
     assert.equal(getCategory('./utils/mergeRefs/index.ts'), 'utils');
-    assert.equal(getCategory('./mobile/hooks/useKeyboardHeight/index.ts'), 'hooks');
-    assert.equal(getCategory('./mobile/utils/isIOS/index.ts'), 'utils');
   });
 
   it('rejects a path outside the known categories', () => {

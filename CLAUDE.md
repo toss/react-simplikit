@@ -4,7 +4,7 @@
 
 React utility hooks/components library. Two published packages and an agent plugin:
 
-- `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils. Mobile web hooks (viewport, keyboard, safe area) live under `src/mobile` and are part of the same public API
+- `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils
 - `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today). The rules below describe the library; the exceptions that apply to the CLI are called out where they differ
 - `packages/plugin` — agent skills for Claude Code (the root `.claude-plugin/marketplace.json` points here), Codex and skills.sh. No `package.json`, so it is neither a workspace nor on npm. `yarn skill:gen` regenerates `skills/react-simplikit` from the public exports and `yarn test:skill` fails CI when the committed copy drifts; `skills/react-simplikit-codemod` is hand-written
 
@@ -31,7 +31,6 @@ components → hooks → utils → _internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
 - \_internal has no internal dependencies
-- `src/mobile` may use `src/utils` and `_internal`. The root barrel re-exports every `src/mobile` public API, but nothing outside `src/mobile` imports from it in its own implementation
 
 ## File Structure Convention
 
@@ -188,7 +187,6 @@ yarn changeset publish --tag canary  # Requires npm login + OTP
 packages/
 ├── react-simplikit/   # react-simplikit — the library
 │   ├── src/           # Source (hooks, components, utils)
-│   │   └── mobile/    # Mobile web hooks and utils (same public API)
 │   ├── dist/          # Build output (per-module, mirrors src/)
 │   └── package.json
 ├── codemod/           # react-simplikit-codemod — bin-only CLI
