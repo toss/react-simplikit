@@ -36,6 +36,7 @@ function isMobileSpecifier(node: ts.Node): node is ts.StringLiteralLike {
   return ts.isStringLiteralLike(node) && node.text === MOBILE_PACKAGE_NAME;
 }
 
+// The return annotation stays: without it the string literals below widen to `string`.
 function callKind(expression: ts.LeftHandSideExpression): ChangeKind | undefined {
   if (expression.kind === ts.SyntaxKind.ImportKeyword) {
     return 'dynamic-import';
@@ -59,7 +60,7 @@ function callKind(expression: ts.LeftHandSideExpression): ChangeKind | undefined
   return MOCK_OBJECTS.has(object) && MOCK_METHODS.has(method) ? 'mock' : undefined;
 }
 
-function visitCall(node: ts.CallExpression, hits: SpecifierHit[]): void {
+function visitCall(node: ts.CallExpression, hits: SpecifierHit[]) {
   const [first] = node.arguments;
 
   if (first === undefined || !isMobileSpecifier(first)) {
@@ -76,7 +77,7 @@ function visitCall(node: ts.CallExpression, hits: SpecifierHit[]): void {
 export function collectSpecifiers(sourceFile: ts.SourceFile): SpecifierHit[] {
   const hits: SpecifierHit[] = [];
 
-  function visit(node: ts.Node): void {
+  function visit(node: ts.Node) {
     if (ts.isImportDeclaration(node) && isMobileSpecifier(node.moduleSpecifier)) {
       hits.push({ literal: node.moduleSpecifier, kind: 'import', declaration: node });
     } else if (

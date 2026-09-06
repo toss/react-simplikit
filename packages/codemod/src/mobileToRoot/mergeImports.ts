@@ -17,8 +17,15 @@ type PlainNamedImport = {
   isTypeOnly: boolean;
 };
 
-function importedNameOf(element: ts.ImportSpecifier): string {
+// Local name → the name it imports, e.g. `isApple` → `isIOS` for `import { isIOS as isApple }`.
+type Bindings = ReadonlyMap<string, string>;
+
+function importedNameOf(element: ts.ImportSpecifier) {
   return (element.propertyName ?? element.name).text;
+}
+
+function bindingsOf(named: ts.NamedImports): Bindings {
+  return new Map(named.elements.map(element => [element.name.text, importedNameOf(element)]));
 }
 
 function plainNamedImportOf(declaration: ts.ImportDeclaration): PlainNamedImport | undefined {
@@ -37,26 +44,19 @@ function plainNamedImportOf(declaration: ts.ImportDeclaration): PlainNamedImport
   return { named: namedBindings, isTypeOnly };
 }
 
-function collectTargets(sourceFile: ts.SourceFile): PlainNamedImport[] {
-  const targets: PlainNamedImport[] = [];
+function isRootImport(statement: ts.Statement): statement is ts.ImportDeclaration {
+  return (
+    ts.isImportDeclaration(statement) &&
+    ts.isStringLiteralLike(statement.moduleSpecifier) &&
+    statement.moduleSpecifier.text === ROOT_PACKAGE_NAME
+  );
+}
 
-  for (const statement of sourceFile.statements) {
-    if (!ts.isImportDeclaration(statement)) {
-      continue;
-    }
-
-    if (!ts.isStringLiteralLike(statement.moduleSpecifier) || statement.moduleSpecifier.text !== ROOT_PACKAGE_NAME) {
-      continue;
-    }
-
-    const target = plainNamedImportOf(statement);
-
-    if (target !== undefined) {
-      targets.push(target);
-    }
-  }
-
-  return targets;
+function collectTargets(sourceFile: ts.SourceFile) {
+  return sourceFile.statements
+    .filter(isRootImport)
+    .map(plainNamedImportOf)
+    .filter(target => target !== undefined);
 }
 
 function deletionRange(sourceFile: ts.SourceFile, statement: ts.Statement): Splice {
@@ -73,7 +73,7 @@ function deletionRange(sourceFile: ts.SourceFile, statement: ts.Statement): Spli
   return ownsLine ? { start: lineStart, end: lineEnd, text: '' } : { start, end, text: '' };
 }
 
-function losesComment(sourceFile: ts.SourceFile, statement: ts.Statement): boolean {
+function losesComment(sourceFile: ts.SourceFile, statement: ts.Statement) {
   const { text } = sourceFile;
   const start = statement.getStart(sourceFile);
   const newlineIndex = text.indexOf('\n', statement.getEnd());
@@ -97,7 +97,37 @@ function losesComment(sourceFile: ts.SourceFile, statement: ts.Statement): boole
   return false;
 }
 
-function elementSeparator(sourceFile: ts.SourceFile, last: ts.ImportSpecifier): string {
+// The local name that already means something else on the target, if there is one.
+function collisionBetween(bound: Bindings, source: ts.NamedImports) {
+  const clash = source.elements.find(element => {
+    const existing = bound.get(element.name.text);
+
+    return existing !== undefined && existing !== importedNameOf(element);
+  });
+
+  return clash?.name.text;
+}
+
+function refusalFor(
+  sourceFile: ts.SourceFile,
+  declaration: ts.ImportDeclaration,
+  bound: Bindings,
+  source: ts.NamedImports
+) {
+  if (losesComment(sourceFile, declaration)) {
+    return 'Left on its own line: a comment sits on it, and merging would strand that comment.';
+  }
+
+  const collision = collisionBetween(bound, source);
+
+  if (collision !== undefined) {
+    return `Left on its own line: \`${collision}\` already refers to a different import here. Merging it by hand would change what the name binds.`;
+  }
+
+  return undefined;
+}
+
+function elementSeparator(sourceFile: ts.SourceFile, last: ts.ImportSpecifier) {
   const { text } = sourceFile;
   const lastStart = last.getStart(sourceFile);
   const lead = text.slice(text.lastIndexOf('\n', lastStart - 1) + 1, lastStart);
@@ -125,17 +155,15 @@ function insertIntoNamedImports(
 }
 
 export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly SpecifierHit[]): MergeResult {
+  const targets = collectTargets(sourceFile);
   const splices: Splice[] = [];
   const changes: SourceChange[] = [];
   const notes: SourceNote[] = [];
   const mergedDeclarations = new Set<ts.ImportDeclaration>();
-  const targets = collectTargets(sourceFile);
-  const boundByTarget = new Map<ts.NamedImports, Map<string, string>>();
+  const boundByTarget = new Map<ts.NamedImports, Bindings>();
   const appendedByTarget = new Map<ts.NamedImports, string[]>();
 
-  for (const hit of hits) {
-    const { declaration } = hit;
-
+  for (const { declaration } of hits) {
     if (declaration === undefined || declaration.parent !== sourceFile) {
       continue;
     }
@@ -153,48 +181,20 @@ export function buildMergeSplices(sourceFile: ts.SourceFile, hits: readonly Spec
     }
 
     const line = lineOf(sourceFile, declaration.getStart(sourceFile));
+    const bound = boundByTarget.get(target.named) ?? bindingsOf(target.named);
+    const refusal = refusalFor(sourceFile, declaration, bound, source.named);
 
-    if (losesComment(sourceFile, declaration)) {
-      notes.push({
-        line,
-        reason: 'Left on its own line: a comment sits on it, and merging would strand that comment.',
-      });
+    if (refusal !== undefined) {
+      notes.push({ line, reason: refusal });
       continue;
     }
 
-    const bound =
-      boundByTarget.get(target.named) ??
-      new Map(target.named.elements.map(element => [element.name.text, importedNameOf(element)]));
+    const additions = source.named.elements
+      .filter(element => !bound.has(element.name.text))
+      .map(element => sourceFile.text.slice(element.getStart(sourceFile), element.getEnd()));
 
-    const additions: string[] = [];
-    let collision: string | undefined;
-
-    for (const element of source.named.elements) {
-      const existing = bound.get(element.name.text);
-
-      if (existing === undefined) {
-        additions.push(sourceFile.text.slice(element.getStart(sourceFile), element.getEnd()));
-      } else if (existing !== importedNameOf(element)) {
-        collision = element.name.text;
-        break;
-      }
-    }
-
-    if (collision !== undefined) {
-      notes.push({
-        line,
-        reason: `Left on its own line: \`${collision}\` already refers to a different import here. Merging it by hand would change what the name binds.`,
-      });
-      continue;
-    }
-
-    for (const element of source.named.elements) {
-      bound.set(element.name.text, importedNameOf(element));
-    }
-
-    boundByTarget.set(target.named, bound);
+    boundByTarget.set(target.named, new Map([...bound, ...bindingsOf(source.named)]));
     appendedByTarget.set(target.named, [...(appendedByTarget.get(target.named) ?? []), ...additions]);
-
     splices.push(deletionRange(sourceFile, declaration));
     changes.push({ line, kind: 'merge' });
     mergedDeclarations.add(declaration);

@@ -15,9 +15,15 @@ type TransformPackageJsonResult = {
   manual: string[];
 };
 
-const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'] as const;
+type RootDependency = {
+  spec: unknown;
+  added: string | null;
+  manual: string[];
+};
 
-const MANUAL_FIELDS = ['resolutions', 'overrides'] as const;
+const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+
+const MANUAL_FIELDS = ['resolutions', 'overrides'];
 
 const FLOOR_RANGE = `>=${MIN_RUNTIME_VERSION}`;
 
@@ -25,21 +31,37 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function withoutMobile(field: Record<string, unknown>): Record<string, unknown> {
-  return Object.fromEntries(Object.entries(field).filter(([name]) => name !== MOBILE_PACKAGE_NAME));
-}
-
-// `workspace:*`, `file:../x.tgz`, `npm:other@1`, a git URL, a dist-tag: nothing semver can read as a range.
-function isRegistryRange(spec: string): boolean {
-  return semver.validRange(spec) !== null;
-}
-
-function rangeFor(field: string, previous: unknown): string | null {
-  if (typeof previous === 'string' && !isRegistryRange(previous)) {
-    return null;
+// What the field should point react-simplikit at once @react-simplikit/mobile leaves it.
+function rootDependencyFor(field: string, existing: unknown, previous: unknown): RootDependency {
+  // `workspace:*`, `file:../x.tgz`, `npm:other@1`, a git URL, a dist-tag: semver cannot read these as a range.
+  if (typeof existing === 'string' && semver.validRange(existing) === null) {
+    return {
+      spec: existing,
+      added: null,
+      manual: [
+        `"${field}" points ${ROOT_PACKAGE_NAME} at \`${existing}\`, so its version cannot be checked against the ${MIN_RUNTIME_VERSION} floor. Confirm that source ships ${MIN_RUNTIME_VERSION} or newer.`,
+      ],
+    };
   }
 
-  return field === 'peerDependencies' ? FLOOR_RANGE : `^${MIN_RUNTIME_VERSION}`;
+  // `*` and `>=0.1.0` still admit a version below the floor, and a lockfile would keep one there.
+  if (typeof existing === 'string' && semver.subset(existing, FLOOR_RANGE)) {
+    return { spec: existing, added: null, manual: [] };
+  }
+
+  if (typeof previous === 'string' && semver.validRange(previous) === null) {
+    return {
+      spec: previous,
+      added: null,
+      manual: [
+        `"${field}" pinned ${MOBILE_PACKAGE_NAME} as \`${previous}\`, which is not a version range. Point ${ROOT_PACKAGE_NAME} at the same source by hand.`,
+      ],
+    };
+  }
+
+  const added = field === 'peerDependencies' ? FLOOR_RANGE : `^${MIN_RUNTIME_VERSION}`;
+
+  return { spec: added, added, manual: [] };
 }
 
 export function transformPackageJson(text: string): TransformPackageJsonResult {
@@ -65,33 +87,12 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
       continue;
     }
 
-    const existing = value[ROOT_PACKAGE_NAME];
-    const unreadable = typeof existing === 'string' && !isRegistryRange(existing);
-    // `*` and `>=0.1.0` still admit a version below the floor, and a lockfile would keep one there.
-    const keepExisting = typeof existing === 'string' && (unreadable || semver.subset(existing, FLOOR_RANGE));
+    const { [MOBILE_PACKAGE_NAME]: previous, ...rest } = value;
+    const root = rootDependencyFor(field, value[ROOT_PACKAGE_NAME], previous);
 
-    if (unreadable) {
-      manual.push(
-        `"${field}" points ${ROOT_PACKAGE_NAME} at \`${existing}\`, so its version cannot be checked against the ${MIN_RUNTIME_VERSION} floor. Confirm that source ships ${MIN_RUNTIME_VERSION} or newer.`
-      );
-    }
-    const added = keepExisting ? null : rangeFor(field, value[MOBILE_PACKAGE_NAME]);
-    const rest = withoutMobile(value);
-
-    if (added === null && !keepExisting) {
-      manual.push(
-        `"${field}" pinned ${MOBILE_PACKAGE_NAME} as \`${String(value[MOBILE_PACKAGE_NAME])}\`, which is not a version range. Point ${ROOT_PACKAGE_NAME} at the same source by hand.`
-      );
-    }
-
-    next = {
-      ...next,
-      [field]:
-        added === null
-          ? { ...rest, ...(keepExisting ? {} : { [ROOT_PACKAGE_NAME]: value[MOBILE_PACKAGE_NAME] }) }
-          : { ...rest, [ROOT_PACKAGE_NAME]: added },
-    };
-    changes.push({ field, removed: MOBILE_PACKAGE_NAME, added });
+    next = { ...next, [field]: { ...rest, [ROOT_PACKAGE_NAME]: root.spec } };
+    changes.push({ field, removed: MOBILE_PACKAGE_NAME, added: root.added });
+    manual.push(...root.manual);
   }
 
   for (const field of MANUAL_FIELDS) {
