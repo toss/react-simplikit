@@ -57,46 +57,19 @@ The debounced function exposes `.cancel()`, and pending calls are cancelled auto
 
 ## What's Included
 
-### Hooks
+- **Hooks** — state and logic (`useToggle`, `useDebounce`, `useList`, …), browser events (`useIntersectionObserver`, `useOutsideClickEffect`, …) and mobile web (`useAvoidKeyboard`, `useSafeAreaInset`, `useVisualViewport`, …)
+- **Components** — `SwitchCase`, `Separated`, `ImpressionArea`
+- **Utils** — `buildContext`, `mergeProps`, `mergeRefs`, and mobile web helpers such as `isIOS` and `getKeyboardHeight`
 
-| Hook                      | Description                                           |
-| ------------------------- | ----------------------------------------------------- |
-| `useBooleanState`         | Manage boolean state with handlers                    |
-| `useDebounce`             | Debounce a callback function                          |
-| `useDebouncedCallback`    | Debounce an `onChange` callback via an options object |
-| `useInterval`             | Set up intervals declaratively                        |
-| `useIntersectionObserver` | Observe element visibility                            |
-| `usePreservedCallback`    | Stable callback reference                             |
-| `usePreservedReference`   | Stable object reference                               |
-| ...                       | [See all hooks](https://react-simplikit.slash.page)   |
-
-### Components
-
-| Component        | Description                       |
-| ---------------- | --------------------------------- |
-| `SwitchCase`     | Declarative switch-case rendering |
-| `Separated`      | Render items with separators      |
-| `ImpressionArea` | Track element impressions         |
-
-### Utilities
-
-| Utility        | Description                                         |
-| -------------- | --------------------------------------------------- |
-| `buildContext` | Define React Context with less boilerplate          |
-| `mergeProps`   | Merge props, composing `className`, `style`, events |
-| `mergeRefs`    | Combine multiple refs into a single ref             |
+The full list with a one-line description each is on the [reference page](https://react-simplikit.slash.page/reference.html).
 
 ## Documentation
 
 Visit [react-simplikit.slash.page](https://react-simplikit.slash.page) for full documentation.
 
-## Related Packages
-
-- [Mobile web utilities](https://react-simplikit.slash.page/mobile-web.html) - included in `react-simplikit`
-
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](https://github.com/toss/react-simplikit/blob/main/CONTRIBUTING.md).
+We welcome contributions! Please see our [Contributing Guide](https://github.com/toss/react-simplikit/blob/main/.github/CONTRIBUTING.md).
 
 ## License
 
