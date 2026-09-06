@@ -1,4 +1,3 @@
-import path from 'node:path';
 import ts from 'typescript';
 
 import { MOBILE_PACKAGE_NAME } from '../constants.ts';
@@ -24,21 +23,9 @@ const MOCK_METHODS = new Set([
   'importMock',
 ]);
 
-const SCRIPT_KIND_BY_EXTENSION = new Map<string, ts.ScriptKind>([
-  ['.ts', ts.ScriptKind.TS],
-  ['.mts', ts.ScriptKind.TS],
-  ['.cts', ts.ScriptKind.TS],
-  ['.tsx', ts.ScriptKind.TSX],
-  ['.js', ts.ScriptKind.JS],
-  ['.mjs', ts.ScriptKind.JS],
-  ['.cjs', ts.ScriptKind.JS],
-  ['.jsx', ts.ScriptKind.JSX],
-]);
-
+// TypeScript reads the script kind off the extension itself: `.js` and `.mjs` parse JSX, `.ts` and `.cts` do not.
 export function parseSource(code: string, fileName: string): ts.SourceFile {
-  const scriptKind = SCRIPT_KIND_BY_EXTENSION.get(path.extname(fileName)) ?? ts.ScriptKind.TSX;
-
-  return ts.createSourceFile(fileName, code, ts.ScriptTarget.Latest, true, scriptKind);
+  return ts.createSourceFile(fileName, code, ts.ScriptTarget.Latest, true);
 }
 
 export function lineOf(sourceFile: ts.SourceFile, position: number): number {
