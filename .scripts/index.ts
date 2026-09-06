@@ -30,8 +30,8 @@ export function cli(args: string[]) {
   program
     .command('generate-reference-index')
     .description('Generate the per-locale reference index page from the source tree')
-    .action(async () => {
-      await generateReferenceIndex();
+    .action(() => {
+      generateReferenceIndex();
     });
 
   program

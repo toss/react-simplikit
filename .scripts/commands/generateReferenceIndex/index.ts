@@ -1,13 +1,14 @@
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
 import path from 'node:path';
 
 import { LocaleDefinition, localeDefinitions } from '../../../.vitepress/locales.mts';
+import { listDirectories } from '../../../.vitepress/shared.mts';
 import { getRootPath } from '../../utils/getRootPath.ts';
+import { extractDescription } from '../generateSkill/catalog.ts';
 
 const PACKAGE_SRC = 'packages/react-simplikit/src';
 
-type GroupLabelKey = 'hooksLabel' | 'componentsLabel' | 'utilsLabel';
-type Group = { labelKey: GroupLabelKey; directories: string[] };
+type Group = { labelKey: 'hooksLabel' | 'componentsLabel' | 'utilsLabel'; directories: string[] };
 type IndexEntry = { name: string; url: string; description?: string; translated: boolean };
 type IndexSection = { label: string; entries: IndexEntry[] };
 
@@ -19,105 +20,59 @@ const GROUPS: Group[] = [
   { labelKey: 'utilsLabel', directories: ['utils', 'mobile/utils'] },
 ];
 
-// Lines that cannot open a description: headings, HTML, and VitePress containers.
-const NON_PARAGRAPH_LINE = /^(#|<|:::)/;
-const SENTENCE_END = /(?<=[.!?。])\s|(?<=[.!?。])$/;
-
 /**
  * Generates one reference index page per locale: every export as
  * "name — first sentence of its document", grouped the same way as the sidebar.
  * The output is untracked; `docs:prepare` recreates it before every build.
  */
-export async function generateReferenceIndex(): Promise<void> {
+export function generateReferenceIndex(): void {
   const root = getRootPath();
 
   for (const locale of Object.values(localeDefinitions)) {
-    await writeReferencePage(root, locale);
-  }
-}
-
-async function writeReferencePage(root: string, locale: LocaleDefinition): Promise<void> {
-  const sections = await Promise.all(
-    GROUPS.map(async group => ({
+    const sections = GROUPS.map(group => ({
       label: locale.themeStrings[group.labelKey],
-      entries: await collectEntries(root, locale, group),
-    }))
-  );
-  const target = path.join(root, 'docs', locale.path, 'reference.md');
+      entries: collectEntries(root, locale, group),
+    }));
+    const target = path.join(root, 'docs', locale.path, 'reference.md');
 
-  await fs.mkdir(path.dirname(target), { recursive: true });
-  await fs.writeFile(target, renderPage(locale, sections));
-}
-
-async function collectEntries(root: string, locale: LocaleDefinition, group: Group): Promise<IndexEntry[]> {
-  const entries = await Promise.all(
-    group.directories.map(directory => collectDirectoryEntries(root, locale, directory))
-  );
-
-  return entries.flat().sort((a, b) => a.name.localeCompare(b.name));
-}
-
-async function collectDirectoryEntries(
-  root: string,
-  locale: LocaleDefinition,
-  directory: string
-): Promise<IndexEntry[]> {
-  const base = path.join(root, PACKAGE_SRC, directory);
-  const category = path.basename(directory);
-  const names = await listDirectories(base);
-
-  return Promise.all(
-    names.map(async name => {
-      const localized =
-        locale.path === '' ? undefined : await readFirstSentence(path.join(base, name, locale.path, `${name}.md`));
-      const description = localized ?? (await readFirstSentence(path.join(base, name, `${name}.md`)));
-      const urlPrefix = locale.path === '' ? '' : `/${locale.path}`;
-
-      return {
-        name,
-        url: `${urlPrefix}/${category}/${name}`,
-        description,
-        translated: locale.path === '' || localized != null,
-      };
-    })
-  );
-}
-
-async function listDirectories(directory: string): Promise<string[]> {
-  const entries = await fs.readdir(directory, { withFileTypes: true });
-
-  return entries.filter(entry => entry.isDirectory()).map(entry => entry.name);
-}
-
-async function readFirstSentence(markdownPath: string): Promise<string | undefined> {
-  try {
-    return firstSentence(await fs.readFile(markdownPath, 'utf8'));
-  } catch {
-    return undefined;
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, renderPage(locale, sections));
   }
+}
+
+function collectEntries(root: string, locale: LocaleDefinition, group: Group): IndexEntry[] {
+  const isRoot = locale.path === '';
+  const urlPrefix = isRoot ? '' : `/${locale.path}`;
+
+  return group.directories
+    .flatMap(directory => {
+      const base = path.join(root, PACKAGE_SRC, directory);
+      const category = path.basename(directory);
+
+      return listDirectories(base).map(name => {
+        const localized = isRoot ? undefined : readDescription(path.join(base, name, locale.path, `${name}.md`), name);
+
+        return {
+          name,
+          url: `${urlPrefix}/${category}/${name}`,
+          description: localized ?? readDescription(path.join(base, name, `${name}.md`), name),
+          translated: isRoot || localized != null,
+        };
+      });
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 /**
- * The first paragraph line after the frontmatter and title, cut at the end of its
- * first sentence.
+ * The first sentence of a documentation page, by the same rule the skill catalog
+ * uses; undefined when the page is missing or does not open with a paragraph.
  */
-function firstSentence(markdown: string): string | undefined {
-  const line = stripFrontmatter(markdown)
-    .split('\n')
-    .map(candidate => candidate.trim())
-    .find(candidate => candidate !== '' && !NON_PARAGRAPH_LINE.test(candidate));
-
-  if (line == null) {
+function readDescription(markdownPath: string, name: string): string | undefined {
+  try {
+    return extractDescription(fs.readFileSync(markdownPath, 'utf8'), name);
+  } catch {
     return undefined;
   }
-
-  const sentenceEnd = line.search(SENTENCE_END);
-
-  return sentenceEnd === -1 ? line : line.slice(0, sentenceEnd);
-}
-
-function stripFrontmatter(markdown: string): string {
-  return markdown.replace(/^---\s*\n[\s\S]*?\n---\s*(\n|$)/, '');
 }
 
 /**

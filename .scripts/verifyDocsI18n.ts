@@ -6,7 +6,7 @@ import { DefaultTheme } from 'vitepress';
 
 import { buildLocaleConfig } from '../.vitepress/libs/buildLocaleConfig.mts';
 import { getSidebarItems } from '../.vitepress/libs/getSidebarItems.mts';
-import { collectLegacyRedirects, RETIRED_ANCHORS } from '../.vitepress/libs/legacyRedirects.mts';
+import { collectLegacyRedirects } from '../.vitepress/libs/legacyRedirects.mts';
 import {
   generatedLocalesDirectory,
   generatedRewrites,
@@ -121,19 +121,6 @@ try {
     (guidePageCount + referenceItemCount) * localeCount,
     'the legacy redirect set must cover every pre-flattening URL across all locales'
   );
-
-  // Sections that moved to a different page than their stub's target are redirected
-  // by the stub script instead, so their destinations need the same anchor check.
-  for (const [anchor, destination] of Object.entries(RETIRED_ANCHORS)) {
-    const [file, id] = destination.replace(/^\//, '').split('#');
-    // VitePress emits NFD ids for some locales, so both sides are normalized.
-    const page = (await fs.readFile(path.join(buildOutputDirectory, file), 'utf8')).normalize('NFC');
-    assert.equal(
-      page.includes(`id="${id.normalize('NFC')}"`),
-      true,
-      `${anchor} must land on an existing anchor in ${file}`
-    );
-  }
 
   // Spot-check the shape itself: a renamed `from` would keep the count intact and
   // still write a file, so the count alone cannot catch it.

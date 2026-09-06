@@ -3,6 +3,7 @@ import llmstxt from 'vitepress-plugin-llms';
 import { buildLocaleConfig } from './libs/buildLocaleConfig.mts';
 import { generatedRewrites, localeDefinitions, rewrites } from './locales.mts';
 import { writeLegacyRedirectStubs } from './libs/legacyRedirects.mts';
+import { SITE_ORIGIN } from './shared.mts';
 
 const locales = Object.fromEntries(
   Object.entries(localeDefinitions).map(([code, definition]) => [
@@ -41,7 +42,7 @@ export default defineConfig({
     },
     plugins: [
       llmstxt({
-        domain: 'https://react-simplikit.slash.page',
+        domain: SITE_ORIGIN,
         title: 'react-simplikit',
         description: 'Lightweight, zero-dependency React hooks, components and utils',
         details: `\
@@ -77,7 +78,7 @@ Guidelines for AI agents:
     ],
   },
   rewrites: { ...rewrites, ...generatedRewrites },
-  sitemap: { hostname: 'https://react-simplikit.slash.page' },
+  sitemap: { hostname: SITE_ORIGIN },
   buildEnd: async siteConfig => {
     const count = writeLegacyRedirectStubs(siteConfig.outDir);
     console.log(`legacy redirect stubs: ${count}`);
@@ -97,8 +98,8 @@ Guidelines for AI agents:
     ['meta', { property: 'og:title', content: 'react-simplikit' }],
     ['meta', { property: 'og:description', content: 'Lightweight and powerful React utility library' }],
     ['meta', { property: 'og:site_name', content: 'react-simplikit' }],
-    ['meta', { property: 'og:image', content: 'https://react-simplikit.slash.page/images/og.png' }],
-    ['meta', { name: 'twitter:image', content: 'https://react-simplikit.slash.page/images/og.png' }],
+    ['meta', { property: 'og:image', content: `${SITE_ORIGIN}/images/og.png` }],
+    ['meta', { name: 'twitter:image', content: `${SITE_ORIGIN}/images/og.png` }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
   transformHead: ({ pageData }) => {
