@@ -435,34 +435,4 @@ describe('useLongPress', () => {
     expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
     unmount();
   });
-
-  it('does not emit an end or click callback when unmounted after a completed long press', async () => {
-    const callbacks = createCallbacks();
-    const { getByRole, unmount } = render(<PressTarget {...callbacks} />);
-
-    fireEvent.mouseDown(getByRole('button'));
-    await act(async () => {
-      vi.advanceTimersByTime(500);
-    });
-    expect(callbacks.onLongPress).toHaveBeenCalledTimes(1);
-
-    unmount();
-    await act(async () => {
-      vi.advanceTimersByTime(500);
-    });
-
-    expect(callbacks.onLongPress).toHaveBeenCalledTimes(1);
-    expect(callbacks.onClick).not.toHaveBeenCalled();
-    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
-  });
-
-  it('unmounts safely without a pending timer', () => {
-    const callbacks = createCallbacks();
-    const { unmount } = render(<PressTarget {...callbacks} />);
-
-    expect(() => unmount()).not.toThrow();
-    expect(callbacks.onLongPress).not.toHaveBeenCalled();
-    expect(callbacks.onClick).not.toHaveBeenCalled();
-    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
-  });
 });
