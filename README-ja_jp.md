@@ -8,11 +8,10 @@
 
 ## パッケージ
 
-| パッケージ                                    | 説明                                                                                       | バージョン                                                                                                |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - 状態/ロジック用フックとモバイル Web ユーティリティを単一のエントリで提供 | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
-
-> **注記**: すべてのフックは単一の `react-simplikit` エントリから提供されます — モバイル Web ユーティリティ（viewport、keyboard、scroll）も含みます。非推奨となった `@react-simplikit/mobile` パッケージを置き換えます。既存のコードベースを移行するには `npx react-simplikit-codemod mobile-to-root` を実行してください。フックがブラウザ API に触れるのはインポート時ではなくフック本体の中だけなので、React Native や SSR でもルートからのインポートは安全です。
+| パッケージ                                    | 説明                                                                                                                                     | バージョン                                                                                                                |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | React のフック、コンポーネント、ユーティリティ: 状態とロジック、ブラウザイベント、モバイル Web（キーボード、セーフエリア、ビューポート） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [react-simplikit-codemod](./packages/codemod) | `react-simplikit` のアップグレードに合わせてコードベースを書き換える codemod                                                             | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
 
 ## 特長
 
@@ -29,8 +28,6 @@ npm install react-simplikit
 ```
 
 ## クイックスタート
-
-### react-simplikit
 
 ```tsx
 import { useState } from 'react';
@@ -59,10 +56,10 @@ function SearchInput() {
 
 デバウンスされた関数は `.cancel()` を提供し、コンポーネントがアンマウントされると保留中の呼び出しは自動的にキャンセルされます。
 
-### モバイル Web ユーティリティ
+### 固定要素をオンスクリーンキーボードの上に保つ
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -72,13 +69,6 @@ function ChatInput() {
       <input type="text" placeholder="メッセージを入力..." />
     </div>
   );
-}
-
-// `useBodyScrollLock` はコンポーネントがマウントされている間 body のスクロールをロックし、
-// アンマウント時に自動的に解除します。モーダルが開いている間だけレンダリングしてください。
-function BodyScrollLock() {
-  useBodyScrollLock();
-  return null;
 }
 ```
 
@@ -90,10 +80,12 @@ function BodyScrollLock() {
 
 ```
 packages/
-└── react-simplikit/    # react-simplikit (hooks, components, utils; モバイル Web ユーティリティは src/mobile 配下)
+├── react-simplikit/    # ライブラリ本体
+├── codemod/            # react-simplikit-codemod
+└── plugin/             # AI コーディングアシスタント向けのエージェントスキル
 ```
 
-## 貢献
+## 貢献ガイド
 
 どなたからの貢献も歓迎します！貢献ガイドをご確認ください。
 

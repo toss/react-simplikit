@@ -4,9 +4,9 @@
 
 ## Quick Reference
 
-- Monorepo: `packages/react-simplikit` (react-simplikit), with mobile web utilities in `src/mobile` exported from the root entry
+- Monorepo: the library is `packages/react-simplikit`; mobile web hooks live under `src/mobile` and share the same public API
 - Architecture: `components → hooks → utils → _internal` (unidirectional, no circular imports)
-- Root exports must NOT import from `src/mobile`; `src/mobile` may use core utils and `_internal` (test infrastructure is exempt)
+- Nothing outside `src/mobile` imports from it; `src/mobile` may use `src/utils` and `_internal` (test infrastructure is exempt)
 
 ## Code Style Rules
 

@@ -344,7 +344,7 @@ jobs:
           HAS_ERROR=0
           FOUND=0
 
-          # Every implementation — including the absorbed src/mobile tree — must be
+          # Every implementation — the src/mobile tree included — must be
           # exported from the package root barrel: it is the only public entry.
           for pkg in packages/*/; do
             ROOT_INDEX="${pkg}src/index.ts"
@@ -488,15 +488,15 @@ jobs:
         shell: bash
         run: |
           yarn workspaces foreach -Apt --include 'packages/*' run build
-          CORE_TGZ=$(cd packages/react-simplikit && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
-          echo "CORE_TGZ=$RUNNER_TEMP/$CORE_TGZ" >> "$GITHUB_ENV"
+          LIB_TGZ=$(cd packages/react-simplikit && npm pack --pack-destination "$RUNNER_TEMP" | tail -1)
+          echo "LIB_TGZ=$RUNNER_TEMP/$LIB_TGZ" >> "$GITHUB_ENV"
 
       - name: Point examples at tarballs
         run: |
           for example in examples/with-vite examples/with-nextjs; do
-            jq --arg core "file:$CORE_TGZ" \
+            jq --arg lib "file:$LIB_TGZ" \
               '.dependencies |= with_entries(
-                 if .key == "react-simplikit" then .value = $core
+                 if .key == "react-simplikit" then .value = $lib
                  else . end)' \
               "$example/package.json" > "$example/package.json.tmp"
             mv "$example/package.json.tmp" "$example/package.json"

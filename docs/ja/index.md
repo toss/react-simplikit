@@ -10,10 +10,7 @@ hero:
   actions:
     - theme: brand
       text: はじめる
-      link: /ja/core/intro
-    - theme: alt
-      text: モバイルユーティリティ
-      link: /ja/mobile/intro
+      link: /ja/intro
 
 features:
   - title: '依存関係ゼロ'

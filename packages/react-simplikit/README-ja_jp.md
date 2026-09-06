@@ -57,46 +57,19 @@ function SearchInput() {
 
 ## 提供している機能
 
-### Hooks
+- **フック** — 状態とロジック（`useToggle`、`useDebounce`、`useList` など）、ブラウザイベント（`useIntersectionObserver`、`useOutsideClickEffect` など）、モバイル Web（`useAvoidKeyboard`、`useSafeAreaInset`、`useVisualViewport` など）
+- **コンポーネント** — `SwitchCase`、`Separated`、`ImpressionArea`
+- **ユーティリティ** — `buildContext`、`mergeProps`、`mergeRefs`、および `isIOS` や `getKeyboardHeight` のようなモバイル Web 向けヘルパー
 
-| Hook                      | 説明                                                          |
-| ------------------------- | ------------------------------------------------------------- |
-| `useBooleanState`         | ハンドラー付きで boolean の状態を管理                         |
-| `useDebounce`             | コールバック関数をデバウンス                                  |
-| `useDebouncedCallback`    | オプションオブジェクトで `onChange` コールバックをデバウンス  |
-| `useInterval`             | 宣言的にインターバルを設定                                    |
-| `useIntersectionObserver` | 要素の可視性を監視                                            |
-| `usePreservedCallback`    | 安定したコールバック参照                                      |
-| `usePreservedReference`   | 安定したオブジェクト参照                                      |
-| ...                       | [すべてのフックを見る](https://react-simplikit.slash.page/ja) |
-
-### Components
-
-| Component        | 説明                                   |
-| ---------------- | -------------------------------------- |
-| `SwitchCase`     | 宣言的な switch-case レンダリング      |
-| `Separated`      | 区切り要素付きでアイテムをレンダリング |
-| `ImpressionArea` | 要素の表示（インプレッション）を追跡   |
-
-### Utilities
-
-| Utility        | 説明                                                    |
-| -------------- | ------------------------------------------------------- |
-| `buildContext` | 定型コードを減らして React Context を定義               |
-| `mergeProps`   | `className`、`style`、イベントを合成して props をマージ |
-| `mergeRefs`    | 複数の ref を 1 つの ref にまとめる                     |
+1 行の説明付きの全リストは[リファレンスページ](https://react-simplikit.slash.page/ja/reference.html)にあります。
 
 ## ドキュメント
 
 詳しいドキュメントは [react-simplikit.slash.page](https://react-simplikit.slash.page/ja) をご覧ください。
 
-## 関連パッケージ
+## 貢献ガイド
 
-- [モバイル Web ユーティリティ](https://react-simplikit.slash.page/ja/mobile/intro.html) - `react-simplikit` に含まれます
-
-## 貢献
-
-貢献を歓迎します！[貢献ガイド](https://github.com/toss/react-simplikit/blob/main/CONTRIBUTING.md) をご確認ください。
+貢献を歓迎します！[貢献ガイド](https://github.com/toss/react-simplikit/blob/main/.github/CONTRIBUTING.md) をご確認ください。
 
 ## ライセンス
 

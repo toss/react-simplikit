@@ -4,8 +4,8 @@
 
 React utility hooks/components library. Two published packages and an agent plugin:
 
-- `react-simplikit` (`packages/react-simplikit`) — React hooks & components plus mobile web utilities (viewport, keyboard, layout), all exported from the single root entry (mobile source lives in `src/mobile`)
-- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that migrates consumers off the retired `@react-simplikit/mobile`. The rules below describe the library; the exceptions that apply to the CLI are called out where they differ
+- `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils. Mobile web hooks (viewport, keyboard, safe area) live under `src/mobile` and are part of the same public API
+- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today). The rules below describe the library; the exceptions that apply to the CLI are called out where they differ
 - `packages/plugin` — agent skills for Claude Code (the root `.claude-plugin/marketplace.json` points here), Codex and skills.sh. No `package.json`, so it is neither a workspace nor on npm. `yarn skill:gen` regenerates `skills/react-simplikit` from the public exports and `yarn test:skill` fails CI when the committed copy drifts; `skills/react-simplikit-codemod` is hand-written
 
 ## Development Quick Start
@@ -31,7 +31,7 @@ components → hooks → utils → _internal
 - Hooks may use utils, \_internal
 - Utils may use \_internal only
 - \_internal has no internal dependencies
-- `src/mobile` may use core utils and `_internal`. The root barrel re-exports every `src/mobile` public API — that is the single entry point the package promises — but no core hook, component or util may import from `src/mobile` in its own implementation
+- `src/mobile` may use `src/utils` and `_internal`. The root barrel re-exports every `src/mobile` public API, but nothing outside `src/mobile` imports from it in its own implementation
 
 ## File Structure Convention
 
@@ -43,8 +43,7 @@ src/
 │   └── useHookName/
 │       ├── index.ts               # Re-export
 │       ├── useHookName.ts         # Implementation
-│       ├── useHookName.spec.ts    # Tests (core)
-│       ├── useHookName.test.ts    # Tests (mobile)
+│       ├── useHookName.test.ts    # Tests (`.spec.ts` in older folders)
 │       ├── useHookName.ssr.test.ts # SSR safety tests
 │       ├── useHookName.md         # English docs
 │       └── ko/
@@ -93,6 +92,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 - **Single value**: `useDebounce<T>(value, delay): T`
 - **Tuple** (state + action, 2 items): `useToggle(init): [boolean, () => void]`
 - **Object** (3+ items): `usePagination(): { page, nextPage, prevPage }`
+- **Object** also when the shape is expected to grow: browser measurements such as `useKeyboardHeight(): { keyboardHeight }`
 
 ### Performance Patterns
 
@@ -104,8 +104,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 - **100% coverage mandatory** — Enforced by Vitest coverage threshold. The codemod excludes two files: `src/cli.ts`, because its e2e suite runs the built bin in a child process where v8 cannot attribute the lines back, and `src/constants.ts`, which holds no executable statements. An excluded file still needs its behaviour covered somewhere — `cli.ts`'s exit codes and `--debug` output are asserted by the e2e suite
 - **SSR tests required** — All hooks accessing browser APIs must have `.ssr.test.ts`
-- **Core tests**: `.spec.ts` (legacy, will migrate to `.test.ts`)
-- **Mobile tests**: `.test.ts`
+- **Test file name**: `<name>.test.ts`; older folders still use `<name>.spec.ts` — keep whichever the folder has
 - **SSR pattern**:
   ```ts
   import { renderHookSSR } from '../utils/renderHookSSR';
@@ -117,10 +116,10 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 ## Documentation
 
-- **Locales**: English + Korean + Japanese (co-located in hook folders as `*.md` / `ko/*.md` / `ja/*.md`; guides under `docs/<locale>/`)
+- **Locales**: English source plus the locales registered in `.vitepress/locales.mts` (currently ko, ja, zh-Hans, es), co-located in hook folders as `<locale>/<name>.md`; guides under `docs/<locale>/`
 - **JSDoc required**: Every public API must have `@description` + `@example` + `@param` + `@returns`
 - **English API docs are generated**: `yarn docs:gen <name>` (JSDoc → Markdown). Do not hand-edit English API `.md` files
-- **Translations**: written with the local AI harness — draft from the English source, review with the `translation-reviewer` agent (`.claude/agents/agent-translation-reviewer.md`, glossary inside). Nothing in CI translates. A PR that changes an English doc updates its `ko/` and `ja/` counterparts
+- **Translations**: written with the local AI harness — draft from the English source, review with the `translation-reviewer` agent (`.claude/agents/agent-translation-reviewer.md`, glossary inside). Nothing in CI translates. A PR that changes an English doc updates every translated counterpart
 - **VitePress**: Used for documentation site; rewrites map source docs to clean URLs. Untranslated pages fall back to English with a banner
 - **Co-location**: Docs live inside package source, not in separate docs/ tree
 - **Homepage**: `https://react-simplikit.slash.page`
@@ -130,8 +129,8 @@ Never initialize state with browser API calls (causes hydration mismatch).
 Format: `<type>(<scope>): <description>`
 
 - **Types**: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`
-- **Scope**: Package name (`core`, `mobile`, `codemod`) or area
-- Examples: `feat(mobile): add useKeyboardHeight hook`, `fix: correct SSR rendering logic`
+- **Scope**: the hook, component, util or area the change touches (`useToggle`, `docs`, `codemod`, `ci`); omit when it spans the package
+- Examples: `feat(useKeyboardHeight): add a threshold option`, `fix(docs): restore the anchor pins`, `chore: bump vitepress`
 
 ## PR Checklist
 
@@ -189,7 +188,7 @@ yarn changeset publish --tag canary  # Requires npm login + OTP
 packages/
 ├── react-simplikit/   # react-simplikit — the library
 │   ├── src/           # Source (hooks, components, utils)
-│   │   └── mobile/    # Mobile web utilities (exported from the root entry)
+│   │   └── mobile/    # Mobile web hooks and utils (same public API)
 │   ├── dist/          # Build output (per-module, mirrors src/)
 │   └── package.json
 ├── codemod/           # react-simplikit-codemod — bin-only CLI

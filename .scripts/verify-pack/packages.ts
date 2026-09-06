@@ -26,7 +26,7 @@ export const TARGET_PACKAGES: TargetPackage[] = [
         limitBytes: 256,
       },
       {
-        label: 'mobile hook via root',
+        label: 'hook from src/mobile',
         entry: `export { useNetworkStatus } from 'react-simplikit';`,
         limitBytes: 768,
       },

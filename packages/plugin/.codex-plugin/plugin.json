@@ -1,7 +1,7 @@
 {
   "name": "react-simplikit",
   "version": "0.2.0",
-  "description": "Catalog of every react-simplikit hook, component and util with import and SSR rules, so an agent uses the library instead of hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic, plus the migration off the @react-simplikit/mobile package.",
+  "description": "Catalog of every react-simplikit hook, component and util with import and SSR rules, so an agent uses the library instead of hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic, plus the upgrade codemods for react-simplikit.",
   "author": { "name": "Toss" },
   "homepage": "https://react-simplikit.slash.page",
   "repository": "https://github.com/toss/react-simplikit",
@@ -11,7 +11,7 @@
   "interface": {
     "displayName": "react-simplikit",
     "shortDescription": "Use react-simplikit hooks, components and utils instead of hand-written equivalents.",
-    "longDescription": "Catalog of every react-simplikit hook, component and util with import and SSR rules, so an agent uses the library instead of hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic, plus the migration off the @react-simplikit/mobile package.",
+    "longDescription": "Catalog of every react-simplikit hook, component and util with import and SSR rules, so an agent uses the library instead of hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic, plus the upgrade codemods for react-simplikit.",
     "developerName": "Toss",
     "category": "Development",
     "capabilities": ["Write"],
@@ -20,7 +20,7 @@
       "Debounce this search input with react-simplikit.",
       "Close this dropdown when the user clicks outside it.",
       "Keep this fixed bottom button above the mobile keyboard.",
-      "Migrate this project off @react-simplikit/mobile."
+      "Run the react-simplikit upgrade codemod on this project."
     ]
   }
 }
