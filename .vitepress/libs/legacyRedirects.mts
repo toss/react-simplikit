@@ -24,27 +24,10 @@ export const RETIRED_ANCHORS: Record<string, string> = {
 };
 
 /**
- * Rebuilds the URL from its parts so the query and fragment a meta refresh would
- * drop survive. A retired anchor overrides the whole destination, since the
- * section it names now lives on another page; otherwise the incoming fragment
- * wins over the stub's own default.
- */
-function REDIRECT_SCRIPT(target: string): string {
-  const [pathname, fragment] = target.split('#');
-  const fallback = fragment === undefined ? '' : `#${fragment}`;
-  return (
-    `var r=${JSON.stringify(RETIRED_ANCHORS)},h=decodeURIComponent(location.hash).normalize('NFC'),` +
-    `t=r[h],p=t?t.split('#')[0]:${JSON.stringify(pathname)},` +
-    `f=t?'#'+t.split('#')[1]:(h||${JSON.stringify(fallback)});` +
-    `location.replace(p + location.search + f)`
-  );
-}
-
-/**
  * Guide pages moved with per-page targets (the merge folded eleven pages into
  * seven), so they are listed explicitly instead of derived from a pattern.
  */
-const GUIDE_LEGACY: RedirectPair[] = [
+const GUIDE_REDIRECTS: RedirectPair[] = [
   { from: 'core/intro.html', to: 'intro.html' },
   { from: 'core/why-react-simplikit-matters.html', to: 'why-react-simplikit-matters.html' },
   { from: 'core/installation.html', to: 'installation.html' },
@@ -59,88 +42,131 @@ const GUIDE_LEGACY: RedirectPair[] = [
 ];
 
 /**
- * Expands the parameterized legacy routes against the actual source tree.
- * A pattern like `packages/react-simplikit/src/hooks/:hook/:hook.md` with the
- * legacy destination `core/hooks/:hook.md` yields one pair per hook directory.
+ * Every legacy URL and the page it now lives at: the guide list above, once per
+ * locale, plus the reference routes expanded against the source tree.
  */
 export function collectLegacyRedirects(): RedirectPair[] {
-  const pairs: RedirectPair[] = GUIDE_LEGACY.flatMap(pair => [
+  return [...collectGuideRedirects(), ...collectReferenceRedirects()];
+}
+
+function collectGuideRedirects(): RedirectPair[] {
+  return GUIDE_REDIRECTS.flatMap(pair => [
     pair,
     ...localeDirectories.map(locale => ({ from: `${locale}/${pair.from}`, to: `${locale}/${pair.to}` })),
   ]);
+}
 
-  for (const route of legacyRoutePatterns) {
+/**
+ * A pattern like `packages/react-simplikit/src/hooks/:hook/:hook.md` with the
+ * legacy destination `core/hooks/:hook.md` yields one pair per hook directory.
+ */
+function collectReferenceRedirects(): RedirectPair[] {
+  return legacyRoutePatterns.flatMap(route => {
     const parameter = route.from.match(/:([A-Za-z]+)\.md$/)?.[1];
 
-    if (parameter === undefined) {
-      continue;
+    if (parameter == null) {
+      return [];
     }
 
     const itemsRoot = path.join(projectRoot, route.source.split(`/:${parameter}/`)[0]);
 
-    if (!fs.existsSync(itemsRoot)) {
-      continue;
-    }
+    return listDirectories(itemsRoot).map(name => ({
+      from: toHtmlPath(route.from, parameter, name),
+      to: toHtmlPath(route.to, parameter, name),
+    }));
+  });
+}
 
-    for (const entry of fs.readdirSync(itemsRoot, { withFileTypes: true })) {
-      if (!entry.isDirectory()) {
-        continue;
-      }
-
-      pairs.push({
-        from: route.from.replace(`:${parameter}`, entry.name).replace(/\.md$/, '.html'),
-        to: route.to.replace(`:${parameter}`, entry.name).replace(/\.md$/, '.html'),
-      });
-    }
+function listDirectories(directory: string): string[] {
+  if (!fs.existsSync(directory)) {
+    return [];
   }
 
-  return pairs;
+  return fs
+    .readdirSync(directory, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name);
+}
+
+function toHtmlPath(pattern: string, parameter: string, name: string): string {
+  return pattern.replace(`:${parameter}`, name).replace(/\.md$/, '.html');
 }
 
 /**
- * Writes one redirect stub per legacy URL into the build output. An instant
- * meta refresh is treated as a permanent redirect by search engines, and the
- * canonical link points them at the new URL, so the stubs work on any static
- * host with no server configuration.
+ * Writes one redirect stub per legacy URL into the build output and returns how
+ * many were written.
  */
 export function writeLegacyRedirectStubs(outDir: string): number {
   const pairs = collectLegacyRedirects();
 
-  for (const { from, to } of pairs) {
-    const target = `/${to}`;
-    const stubPath = path.join(outDir, from);
-
-    // The llms plugin emits a raw Markdown twin of every page. A meta refresh is
-    // useless to whatever fetches those, so the old path gets a copy of the new
-    // file instead of a stub.
-    const markdownSource = path.join(outDir, to.replace(/\.html(#.*)?$/, '.md'));
-    const markdownTarget = path.join(outDir, from.replace(/\.html$/, '.md'));
-
-    if (fs.existsSync(markdownSource)) {
-      fs.mkdirSync(path.dirname(markdownTarget), { recursive: true });
-      fs.copyFileSync(markdownSource, markdownTarget);
-    }
-
-    fs.mkdirSync(path.dirname(stubPath), { recursive: true });
-    fs.writeFileSync(
-      stubPath,
-      [
-        '<!DOCTYPE html>',
-        '<html lang="en">',
-        '<head>',
-        '<meta charset="utf-8">',
-        `<meta http-equiv="refresh" content="0; url=${target}">`,
-        `<link rel="canonical" href="${SITE_ORIGIN}${target.split('#')[0]}">`,
-        // Carries the fragment and query the meta refresh would drop; the meta
-        // tag above stays as the no-JS fallback.
-        `<script>${REDIRECT_SCRIPT(target)}</script>`,
-        `<title>Redirecting to ${target}</title>`,
-        '</head>',
-        `<body><p>This page moved to <a href="${target}">${target}</a>.</p></body>`,
-        '</html>',
-      ].join('\n')
-    );
+  for (const pair of pairs) {
+    copyMarkdownTwin(outDir, pair);
+    writeFile(path.join(outDir, pair.from), renderStub(`/${pair.to}`));
   }
 
   return pairs.length;
+}
+
+/**
+ * The llms plugin emits a raw Markdown twin of every page. A meta refresh is
+ * useless to whatever fetches those, so the old path gets a copy of the new file
+ * instead of a stub.
+ */
+function copyMarkdownTwin(outDir: string, { from, to }: RedirectPair): void {
+  const source = path.join(outDir, to.replace(/\.html(#.*)?$/, '.md'));
+
+  if (!fs.existsSync(source)) {
+    return;
+  }
+
+  const target = path.join(outDir, from.replace(/\.html$/, '.md'));
+
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.copyFileSync(source, target);
+}
+
+function writeFile(filePath: string, content: string): void {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, content);
+}
+
+/**
+ * An instant meta refresh is treated as a permanent redirect by search engines,
+ * and the canonical link points them at the new URL, so the stub works on any
+ * static host with no server configuration. The script carries the fragment and
+ * query the meta refresh would drop; the meta tag stays as the no-JS fallback.
+ */
+function renderStub(target: string): string {
+  const canonical = `${SITE_ORIGIN}${target.split('#')[0]}`;
+
+  return [
+    '<!DOCTYPE html>',
+    '<html lang="en">',
+    '<head>',
+    '<meta charset="utf-8">',
+    `<meta http-equiv="refresh" content="0; url=${target}">`,
+    `<link rel="canonical" href="${canonical}">`,
+    `<script>${renderRedirectScript(target)}</script>`,
+    `<title>Redirecting to ${target}</title>`,
+    '</head>',
+    `<body><p>This page moved to <a href="${target}">${target}</a>.</p></body>`,
+    '</html>',
+  ].join('\n');
+}
+
+/**
+ * Rebuilds the URL from its parts in the browser. A retired anchor overrides the
+ * whole destination, since the section it names now lives on another page;
+ * otherwise the incoming fragment wins over the stub's own default.
+ */
+function renderRedirectScript(target: string): string {
+  const [pathname, fragment] = target.split('#');
+  const fallback = fragment == null ? '' : `#${fragment}`;
+
+  return (
+    `var r=${JSON.stringify(RETIRED_ANCHORS)},h=decodeURIComponent(location.hash).normalize('NFC'),` +
+    `t=r[h],p=t?t.split('#')[0]:${JSON.stringify(pathname)},` +
+    `f=t?'#'+t.split('#')[1]:(h||${JSON.stringify(fallback)});` +
+    `location.replace(p + location.search + f)`
+  );
 }
