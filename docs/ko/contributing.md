@@ -41,6 +41,7 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
   - 필수 파라미터의 경우 `@param {<타입>} <파라미터 이름> - <파라미터 설명>` 형태로 작성해요.
   - 선택 파라미터의 경우 `@param {<타입>} [<파라미터 이름>] - <파라미터 설명>` 형태로 작성해요.
   - 객체 형태의 값을 받는 파라미터의 경우 객체 자체와 하위 요소들에 대한 `@param` 태그가 모두 필요해요.
+  - 설명 아래에 목록을 쓰려면 `-` 대신 `--`를 사용해요.
 
     ```ts
     type Props = {
@@ -67,6 +68,8 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
      * @param {Object} [paymentMethod] - Payment information of the user.
      * @param {string} [paymentMethod.type] - Payment method.
      * @param {string} [paymentMethod.number] - Card or account number.
+     *   -- Card or account number without `-`.
+     *   -- If the number is a card number, it should be 15 or 16 digits.
      */
     ```
 
@@ -123,7 +126,7 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
           {
             name: 'paymentMethod.number',
             type: 'string',
-            description: 'Card or account number.',
+            description: 'Card or account number.<br/>- Card or account number without `-`.<br/>- If the number is a card number, it should be 15 or 16 digits.',
           },
         ]"
       />
@@ -133,13 +136,16 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
 
   - `@returns {<타입>} <반환 값 설명>` 형태로 작성해요.
   - 만약 객체나 튜플 형태의 반환 값이 있다면 하위 요소들에 대한 설명이 한 줄씩 포함되어야 해요.
+  - 각 하위 요소에 부연 설명이 필요하면 `:`를 사용해요.
 
     ```ts
-    type ReturnValue = [string, () => void];
+    type ReturnValue = [Object, () => void];
 
     /**
-     * @returns {[value: string, onChange: () => void]} A tuple containing:
-     * - value `string` - The value of the input.
+     * @returns {[Object, () => void]} A tuple containing:
+     * - obj `Object` - An object containing:
+     *   : label `string` - The label of the input.
+     *   : value `string` - The value of the input.
      * - onChange `() => void` - A function to update the value.
      */
     ```
@@ -149,13 +155,13 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
     <div class='codeblock'>
       <Interface
         name=""
-        type="[value: string, onChange: () => void]"
+        type="[obj: Object, onChange: () => void]"
         description="A tuple containing:"
         :nested="[
           {
-            name: 'value',
-            type: 'string',
-            description: 'The value of the input.',
+            name: 'obj',
+            type: 'Object',
+            description: 'An object containing: <br />  : label <code>string</code> - The label of the input. <br />  : value <code>string</code> - The value of the input.',
           },
           {
             name: 'onChange',

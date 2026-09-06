@@ -155,13 +155,13 @@ Los comentarios JSDoc deben incluir `@description` y `@example` y, si hay parám
     <div class='codeblock'>
       <Interface
         name=""
-        type="[value: string, onChange: () => void]"
+        type="[obj: Object, onChange: () => void]"
         description="A tuple containing:"
         :nested="[
           {
             name: 'obj',
             type: 'Object',
-            description: 'The value of the input. <br />  : label <code>string</code> - The label of the input. <br />  : value <code>string</code> - The value of the input.',
+            description: 'An object containing: <br />  : label <code>string</code> - The label of the input. <br />  : value <code>string</code> - The value of the input.',
           },
           {
             name: 'onChange',
