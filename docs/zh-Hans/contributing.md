@@ -2,20 +2,11 @@
 
 `react-simplikit` 的设计鼓励任何人参与贡献。如果你想参与贡献，请遵循下面的指南。
 
-## 包的范围
+## 范围
 
-`react-simplikit` 专注于**与平台无关的 Hook、组件和工具函数**，它们可以在所有 JavaScript 环境（浏览器、服务端、React Native 等）中运行。
+`react-simplikit` 提供能在所有 React 环境（浏览器、服务端渲染和 React Native）中运行的 Hook、组件和工具函数，以及解决浏览器和移动端 Web 浏览器特有问题的 Hook，例如软键盘、安全区域内边距和视觉视口。任何干涉 React 生命周期或依赖其他库的实现都不在范围内，详见[设计原则](./design-principles.md)。
 
-在贡献之前，请先确认你的实现属于哪个包：
-
-| 包                             | 范围                      | 示例                                                         |
-| ------------------------------ | ------------------------- | ------------------------------------------------------------ |
-| `react-simplikit`              | 与平台无关的纯状态/逻辑   | `useToggle`、`useAsyncEffect`、`useLoading`                  |
-| 移动端工具函数（`src/mobile`） | 解决移动端 Web 特有的问题 | `useAvoidKeyboard`、`useBodyScrollLock`、`useVisualViewport` |
-
-::: tip
-移动端包**并不**收录所有依赖浏览器 API 的 Hook。它专门针对**移动端 Web 环境中遇到的问题**（视口管理、键盘处理、iOS Safari 和 Android Chrome 上的布局问题）。举例来说，快捷键 Hook 虽然用到了浏览器 API，但并不属于移动端包。
-:::
+源码位于 `packages/react-simplikit/src`：与平台无关的代码放在 `hooks/`、`components/` 和 `utils/`，只在移动端 Web 浏览器中才有意义的代码放在 `mobile/hooks/` 和 `mobile/utils/`。用到浏览器 API 并不意味着就是“移动端 Web”：快捷键 Hook 属于 `hooks/`，键盘高度 Hook 属于 `mobile/hooks/`。两者都从包的根入口导出，这个划分只影响文件放在哪里。
 
 ## 贡献实现
 
@@ -28,7 +19,7 @@
 ::: tip
 **我需要自己写文档吗？**
 
-不需要，你不用另外写文档。请改为写详细的 JSDoc 注释，然后运行 `yarn docs:gen <name>`，它会根据 JSDoc 生成英文文档；请把生成结果和你的 PR 一起提交。翻译由单独维护；在翻译完成之前，该页面会以英文显示并附带提示。
+不需要，你不用另外写文档。请改为写详细的 JSDoc 注释，然后运行 `yarn docs:gen <name>`，它会根据 JSDoc 生成英文文档；请把生成结果和你的 PR 一起提交。翻译单独维护；在翻译完成之前，该页面会以英文显示并附带提示。
 :::
 
 ### 编写实现
@@ -311,7 +302,7 @@ yarn changeset
 3. 简要写下这次改动的内容。
 
 ::: tip
-两个包目前都处于 `0.0.x` 阶段。在这个阶段，大多数改动都应该使用 `patch`。
+这个包目前处于 `0.x` 阶段。在这个阶段，大多数改动都应该使用 `patch`。
 如果你不确定该用哪种版本类型，请与维护者讨论。
 :::
 
@@ -427,4 +418,35 @@ yarn run scaffold getButton --t u // 创建工具函数
 
 - 只使用具名导出
 - 最大限度地利用 TypeScript 的类型推断
-- 应用 SSR 安全模式
+- 必填参数放在前面，可选参数放在最后；可选参数达到三个或更多时使用选项对象
+- 只有一个值时直接返回该值，状态和操作成对时返回 `[state, action]` 元组，成员更多或形态将来会扩展时（例如键盘高度、安全区域内边距这类浏览器测量值）返回对象
+- 应用下面的 SSR 安全模式
+
+### SSR 安全模式
+
+不要在渲染期间读取浏览器 API：服务端没有 `window`，而客户端的值一旦和服务端不一致就会导致 hydration 不匹配。从一个固定的初始值开始，在 effect 中同步：
+
+```ts
+const [state, setState] = useState(FIXED_INITIAL_VALUE);
+
+useEffect(function syncBrowserState() {
+  if (isServer()) {
+    return;
+  }
+
+  setState(readBrowserApi());
+}, []);
+```
+
+### 浏览器和移动端 Web Hook
+
+- 对高频事件（`scroll`、`resize`、`visualViewport` 变化）按约 16ms 节流，值没有变化时跳过更新，非紧急的更新使用 `startTransition`
+- 处理函数从不调用 `preventDefault` 时，使用被动事件监听器
+- 处理平台差异，而不是只照顾某一个平台：
+
+  | 特性                       | iOS                  | Android        |
+  | -------------------------- | -------------------- | -------------- |
+  | `visualViewport.offsetTop` | 键盘出现时会变成负数 | 通常保持为 0   |
+  | 键盘行为                   | 视口被整体向上顶起   | 布局被重新调整 |
+
+- jsdom 无法重现视觉视口和软键盘，所以除了测试之外，还要在真实的 iOS Safari 和 Android Chrome 设备上验证这些 Hook

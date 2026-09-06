@@ -2,17 +2,23 @@
 
 Una colección de Hooks de React que resuelven los retos de interfaz más habituales en entornos de web móvil.
 
-## ¿Por qué utilidades para móvil?
+## ¿Por qué estos Hooks?
 
-El desarrollo web para móvil trae consigo retos propios que no existen en escritorio:
+El desarrollo web para móvil trae consigo retos que no existen en escritorio. Cada uno de ellos tiene un Hook en `react-simplikit`:
 
-- **Evitar el teclado**: los elementos fijados abajo quedan ocultos cuando aparece el teclado en pantalla
-- **Detección de la dirección del desplazamiento**: cabeceras y barras de navegación que se muestran u ocultan según el desplazamiento
-- **Supervisión del estado de la red**: adaptar la calidad del contenido a la velocidad de la conexión
-- **Seguimiento de la visibilidad de la página**: pausar los videos o la analítica cuando la aplicación pasa a segundo plano
-- **Cambios en el viewport visual**: gestionar el zoom, el teclado y el redimensionado del viewport en los navegadores móviles
+| Problema                                                                            | Qué usar                                                                                           |
+| ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Un elemento fijado abajo queda oculto tras el teclado en pantalla                   | [useAvoidKeyboard](/es/hooks/useAvoidKeyboard)                                                     |
+| Leer la altura del teclado o si está visible                                        | [useKeyboardHeight](/es/hooks/useKeyboardHeight), [isKeyboardVisible](/es/utils/isKeyboardVisible) |
+| Bloquear el desplazamiento del body mientras hay un bottom sheet o un modal abierto | [useBodyScrollLock](/es/hooks/useBodyScrollLock)                                                   |
+| Respetar la muesca y el indicador de inicio                                         | [useSafeAreaInset](/es/hooks/useSafeAreaInset), [getSafeAreaInset](/es/utils/getSafeAreaInset)     |
+| Seguir el área que el usuario ve realmente                                          | [useVisualViewport](/es/hooks/useVisualViewport)                                                   |
+| Mostrar u ocultar una cabecera según la dirección del desplazamiento                | [useScrollDirection](/es/hooks/useScrollDirection)                                                 |
+| Adaptar el contenido a la conexión de red                                           | [useNetworkStatus](/es/hooks/useNetworkStatus)                                                     |
+| Pausar el trabajo cuando la página pasa a segundo plano                             | [usePageVisibility](/es/hooks/usePageVisibility)                                                   |
+| Distinguir la plataforma                                                            | [isIOS](/es/utils/isIOS), [isAndroid](/es/utils/isAndroid)                                         |
 
-`react-simplikit` ofrece Hooks para móvil probados en producción que resuelven estos escenarios con una configuración mínima.
+Cada entrada es una importación con nombre desde `react-simplikit`, y la [referencia](/es/reference) las lista junto con todo lo demás.
 
 ## Inicio rápido
 
@@ -110,18 +116,6 @@ function FixedBottomCTA() {
 }
 ```
 
-## Hooks disponibles
-
-| Hook                                               | Descripción                                                       |
-| -------------------------------------------------- | ----------------------------------------------------------------- |
-| [useAvoidKeyboard](/es/hooks/useAvoidKeyboard)     | Mueve los elementos fijos por encima del teclado en pantalla      |
-| [useKeyboardHeight](/es/hooks/useKeyboardHeight)   | Devuelve la altura actual del teclado                             |
-| [useBodyScrollLock](/es/hooks/useBodyScrollLock)   | Bloquea el desplazamiento del body para modales y superposiciones |
-| [useScrollDirection](/es/hooks/useScrollDirection) | Detecta la dirección del desplazamiento (arriba/abajo)            |
-| [useNetworkStatus](/es/hooks/useNetworkStatus)     | Supervisa el estado de la conexión de red                         |
-| [usePageVisibility](/es/hooks/usePageVisibility)   | Sigue el estado de visibilidad de la página                       |
-| [useVisualViewport](/es/hooks/useVisualViewport)   | Proporciona las dimensiones y la posición del viewport visual     |
-
 ## Hoja de ruta {#roadmap}
 
 Las pantallas de los móviles son pequeñas, y ese espacio reducido genera una cantidad sorprendente de retos de interfaz. Los elementos quedan ocultos tras el teclado en pantalla, las áreas seguras varían según el dispositivo y el viewport que el usuario ve de verdad suele diferir del que informa el navegador. No son casos límite: son la realidad diaria del desarrollo para móvil.
@@ -138,9 +132,9 @@ Estos problemas no son exclusivos de un sistema operativo ni de un dispositivo c
 
 ### Nuestro enfoque: centrarnos en el viewport visual
 
-Las utilidades para móvil de `react-simplikit` abordan estos problemas con un enfoque muy concreto. En lugar de sortear las rarezas de cada navegador con trucos frágiles, centramos el diseño en el **viewport visual**: el área de la pantalla que el usuario puede ver realmente en cada momento.
+En lugar de sortear las rarezas de cada navegador con trucos frágiles, estos Hooks se centran en el **viewport visual**: el área de la pantalla que el usuario puede ver realmente en cada momento.
 
-Al apoyarnos en la [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API), ofrecemos Hooks que te permiten:
+Construidos sobre la [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API), te permiten:
 
 - **Detectar la aparición del teclado y reaccionar a ella** para que los elementos fijados abajo se aparten con naturalidad.
 - **Leer los márgenes del área segura** para tener en cuenta correctamente las muescas, los indicadores de inicio y otras zonas reservadas propias de cada dispositivo.
@@ -150,11 +144,9 @@ El objetivo es sencillo: **dentro del viewport visual, la interfaz debe renderiz
 
 ### Multiplataforma y multidispositivo
 
-No queremos limitarnos a un sistema operativo ni a un modelo de dispositivo concreto. La web móvil es multiplataforma por naturaleza, y `react-simplikit` lo asume como punto de partida.
+La web móvil es multiplataforma por naturaleza, y estos Hooks también lo son. Están diseñados para funcionar de forma consistente en:
 
-Nuestros Hooks están diseñados para funcionar de forma consistente en:
-
-- **iOS y Android**: las dos plataformas móviles dominantes.
+- **iOS y Android**: las dos plataformas móviles dominantes. Donde difieren (iOS informa de un `visualViewport.offsetTop` negativo mientras el teclado está abierto; Android lo mantiene en 0 y redimensiona la maquetación), los Hooks absorben la diferencia para que no tengas que hacerlo tú.
 - **Distintos navegadores**: Safari, Chrome, Samsung Internet y más.
 - **Distintos formatos de dispositivo**: desde teléfonos compactos hasta dispositivos de pantalla grande, con o sin muescas e indicadores de inicio.
 
@@ -162,87 +154,4 @@ Cuando una API concreta no está disponible (por ejemplo, `window.visualViewport
 
 ### Próximos pasos
 
-Seguimos ampliando el conjunto de Hooks para móvil disponibles en `react-simplikit`, siempre guiados por el mismo principio: **hacer que el desarrollo de interfaces móviles sea predecible y fiable, sea cual sea el dispositivo o el sistema operativo**. Si existe un problema habitual de interfaz en móvil, lo más probable es que estemos trabajando en una solución limpia y declarativa para él.
-
-## Principios específicos para móvil {#mobile-specific-principles}
-
-### Diseño consciente de la plataforma
-
-En nuestras implementaciones tenemos en cuenta las diferencias de comportamiento entre iOS y Android:
-
-- **Diferencias en la Visual Viewport API**:
-  - iOS: `offsetTop` se vuelve negativo cuando aparece el teclado
-  - Android: `offsetTop` suele mantenerse en 0
-- **Cálculo de la altura del teclado**: tratamiento específico por plataforma para obtener medidas precisas
-
-### La seguridad en SSR es lo primero
-
-Cada Hook incluye pruebas de SSR para garantizar un renderizado en el servidor seguro:
-
-```typescript
-it('is safe on server side rendering', () => {
-  const result = renderHookSSR.serverOnly(() => useHook());
-  expect(result.current).toBeDefined();
-});
-```
-
-### Optimización del rendimiento
-
-Los entornos móviles exigen una atención especial al rendimiento:
-
-- **Throttling y debouncing de eventos**: optimiza los eventos frecuentes como el desplazamiento y el redimensionado
-- **Detectores de eventos pasivos**: usa detectores pasivos cuando sea aplicable
-- **Transiciones de React**: aprovecha `startTransition` para las actualizaciones no urgentes
-
-## Directrices específicas para móvil {#mobile-specific-guidelines}
-
-### Probar en dispositivos reales
-
-- Se recomienda probar en iOS Safari y Android Chrome
-- El comportamiento de la Visual Viewport API debe verificarse en dispositivos reales
-
-### Diferencias entre plataformas
-
-Ten en cuenta estas diferencias entre plataformas al implementar:
-
-| Característica             | iOS                                          | Android                     |
-| -------------------------- | -------------------------------------------- | --------------------------- |
-| `visualViewport.offsetTop` | Se vuelve negativo cuando aparece el teclado | Suele mantenerse en 0       |
-| Comportamiento del teclado | El viewport se desplaza hacia arriba         | Redimensiona la maquetación |
-
-### Patrón de acceso a window/document
-
-Usa siempre el patrón seguro para SSR cuando accedas a las APIs del navegador:
-
-```typescript
-// ✅ Patrón seguro para SSR
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-
-// Ahora es seguro usar window/document
-window.visualViewport?.addEventListener('resize', handler);
-```
-
-## Estándares de diseño de la API
-
-### Valores de retorno de los Hooks
-
-Seguimos patrones consistentes para los valores de retorno de los Hooks:
-
-- **Objeto**: para el estado y los valores relacionados (por ejemplo, `useKeyboardHeight(): { keyboardHeight }`, `useVisualViewport(): { viewport }`)
-- **void**: para los Hooks que solo producen efectos secundarios (por ejemplo, `useBodyScrollLock(): void`)
-
-### Parámetros
-
-- Los parámetros obligatorios van primero y los opcionales al final
-- Usa un objeto de opciones cuando haya 3 o más parámetros opcionales
-
-### Patrón de seguridad para SSR
-
-Todos los Hooks siguen el patrón seguro para SSR:
-
-```typescript
-// ✅ Seguro para SSR: todos los Hooks siguen este patrón
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-```
+Seguimos añadiendo Hooks para los problemas de interfaz de la web móvil, siempre guiados por el mismo principio: **hacer que el desarrollo de interfaces móviles sea predecible y fiable, sea cual sea el dispositivo o el sistema operativo**. Si existe un problema habitual de interfaz en móvil, lo más probable es que estemos trabajando en una solución limpia y declarativa para él.

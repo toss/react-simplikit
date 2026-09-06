@@ -17,6 +17,10 @@ Por ejemplo, no ofrece Hooks como `useMount` o `useLifecycles`; en su lugar, pre
 Escribimos pruebas completas que cubren no solo la funcionalidad básica, sino también las consideraciones de los entornos SSR de cada implementación, y así evitamos los problemas causados por comportamientos inesperados.
 Si buscas una biblioteca fiable, `react-simplikit` será una excelente opción.
 
+## Fiable en cualquier navegador y dispositivo
+
+Los Hooks que leen el estado del navegador se escriben contando con las diferencias entre plataformas, no esquivándolas. iOS Safari y Android Chrome informan del viewport visual y del teclado en pantalla de forma distinta, una API como `window.visualViewport` puede faltar por completo y la página puede renderizarse primero en el servidor. Cada uno de estos Hooks tiene en cuenta las diferencias de plataforma de las que depende, degrada su comportamiento con elegancia cuando una API no está disponible y se verifica en dispositivos reales además de en las pruebas.
+
 ## Documentación completa para entenderla y usarla con facilidad
 
 `react-simplikit` ofrece documentación detallada para que puedas entender y aprovechar rápidamente cada funcionalidad. La documentación incluye:
@@ -25,7 +29,7 @@ Si buscas una biblioteca fiable, `react-simplikit` será una excelente opción.
 - **Guías de uso**: instrucciones claras y fáciles de seguir para empezar de inmediato.
 - **Ejemplos prácticos**: ejemplos que muestran cómo aprovechar las implementaciones en situaciones reales.
 
-Aunque la documentación principal está en inglés, también ofrecemos documentación en coreano, japonés y español, para que resulte accesible a los lectores de cada idioma.
+La documentación se escribe en inglés y se traduce a varios idiomas; una página que aún no tiene traducción se muestra en inglés con un aviso.
 
 ## Seguridad de tipos con compatibilidad total con TypeScript
 

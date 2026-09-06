@@ -2,17 +2,23 @@
 
 A collection of React hooks that solve common UI challenges in mobile web environments.
 
-## Why mobile utilities?
+## Why these hooks?
 
-Mobile web development comes with unique challenges that don't exist on desktop:
+Mobile web development comes with challenges that don't exist on desktop. Each of them has a hook in `react-simplikit`:
 
-- **Keyboard avoidance**: Fixed bottom elements get hidden when the on-screen keyboard appears
-- **Scroll direction detection**: Headers and navigation bars that show/hide based on scroll
-- **Network status monitoring**: Adapting content quality based on connection speed
-- **Page visibility tracking**: Pausing videos or analytics when the app goes to background
-- **Visual viewport changes**: Handling zoom, keyboard, and viewport resize on mobile browsers
+| Problem                                                    | Use                                                                                          |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| A fixed-bottom element hides behind the on-screen keyboard | [useAvoidKeyboard](/hooks/useAvoidKeyboard)                                                  |
+| Read the keyboard height or whether it is visible          | [useKeyboardHeight](/hooks/useKeyboardHeight), [isKeyboardVisible](/utils/isKeyboardVisible) |
+| Lock body scroll while a sheet or modal is open            | [useBodyScrollLock](/hooks/useBodyScrollLock)                                                |
+| Respect the notch and the home indicator                   | [useSafeAreaInset](/hooks/useSafeAreaInset), [getSafeAreaInset](/utils/getSafeAreaInset)     |
+| Track the area the user can actually see                   | [useVisualViewport](/hooks/useVisualViewport)                                                |
+| Show or hide a header based on scroll direction            | [useScrollDirection](/hooks/useScrollDirection)                                              |
+| Adapt content to the network connection                    | [useNetworkStatus](/hooks/useNetworkStatus)                                                  |
+| Pause work when the page goes to the background            | [usePageVisibility](/hooks/usePageVisibility)                                                |
+| Branch on the platform                                     | [isIOS](/utils/isIOS), [isAndroid](/utils/isAndroid)                                         |
 
-`react-simplikit` provides battle-tested mobile hooks to handle these scenarios with minimal configuration.
+Every entry is a named import from `react-simplikit`, and the [reference](/reference) lists them alongside everything else.
 
 ## Quick Start
 
@@ -110,18 +116,6 @@ function FixedBottomCTA() {
 }
 ```
 
-## Available Hooks
-
-| Hook                                            | Description                                       |
-| ----------------------------------------------- | ------------------------------------------------- |
-| [useAvoidKeyboard](/hooks/useAvoidKeyboard)     | Moves fixed elements above the on-screen keyboard |
-| [useKeyboardHeight](/hooks/useKeyboardHeight)   | Returns the current keyboard height               |
-| [useBodyScrollLock](/hooks/useBodyScrollLock)   | Locks body scroll for modals and overlays         |
-| [useScrollDirection](/hooks/useScrollDirection) | Detects scroll direction (up/down)                |
-| [useNetworkStatus](/hooks/useNetworkStatus)     | Monitors network connection status                |
-| [usePageVisibility](/hooks/usePageVisibility)   | Tracks page visibility state                      |
-| [useVisualViewport](/hooks/useVisualViewport)   | Provides visual viewport dimensions and offset    |
-
 ## Roadmap {#roadmap}
 
 Mobile screens are small, and that small space creates a surprising number of UI challenges. Elements get hidden behind on-screen keyboards, safe areas vary by device, and the viewport the user actually sees often differs from what the browser reports. These are not edge cases — they are everyday realities of mobile development.
@@ -138,9 +132,9 @@ These issues are not specific to any single OS or device. Whether it's iOS Safar
 
 ### Our Approach: Focus on the Visual Viewport
 
-The mobile utilities in `react-simplikit` take a focused approach to solving these problems. Rather than trying to work around browser quirks with brittle hacks, we center our design around the **visual viewport** — the area of the screen that the user can actually see at any given moment.
+Rather than working around browser quirks with brittle hacks, these hooks center on the **visual viewport** — the area of the screen that the user can actually see at any given moment.
 
-By building on the [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API), we provide hooks that let you:
+Built on the [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API), they let you:
 
 - **Detect and respond to keyboard appearance** so that fixed-bottom elements move out of the way naturally.
 - **Read safe area insets** to properly account for notches, home indicators, and other device-specific reserved areas.
@@ -150,11 +144,9 @@ The goal is simple: **within the visual viewport, UI should render reliably and 
 
 ### Cross-Platform, Cross-Device
 
-We don't want to be limited to a specific OS or device model. Mobile web is inherently cross-platform, and `react-simplikit` embraces that.
+Mobile web is inherently cross-platform, and so are these hooks. They are designed to work consistently across:
 
-Our hooks are designed to work consistently across:
-
-- **iOS and Android** — the two dominant mobile platforms.
+- **iOS and Android** — the two dominant mobile platforms. Where they differ (iOS reports a negative `visualViewport.offsetTop` while the keyboard is open; Android keeps it at 0 and resizes the layout instead), the hooks account for the difference so you don't have to.
 - **Various browsers** — Safari, Chrome, Samsung Internet, and more.
 - **Different device form factors** — from compact phones to large-screen devices, with or without notches and home indicators.
 
@@ -162,87 +154,4 @@ Where a specific API is unavailable (e.g., `window.visualViewport` in older brow
 
 ### What's Next
 
-We're continuing to expand the set of mobile hooks available in `react-simplikit`, always guided by the same principle: **make mobile UI development predictable and reliable, regardless of device or OS**. If there's a common mobile UI pain point, chances are we're working on a clean, declarative solution for it.
-
-## Mobile-Specific Principles {#mobile-specific-principles}
-
-### Platform-Aware Design
-
-We consider the behavioral differences between iOS and Android in our implementations:
-
-- **Visual Viewport API differences**:
-  - iOS: `offsetTop` becomes negative when the keyboard appears
-  - Android: `offsetTop` typically remains 0
-- **Keyboard height calculation**: Platform-specific handling for accurate measurements
-
-### SSR Safety First
-
-Every hook includes SSR testing to ensure safe server-side rendering:
-
-```typescript
-it('is safe on server side rendering', () => {
-  const result = renderHookSSR.serverOnly(() => useHook());
-  expect(result.current).toBeDefined();
-});
-```
-
-### Performance Optimization
-
-Mobile environments require special attention to performance:
-
-- **Event throttling/debouncing**: Optimize frequent events like scroll and resize
-- **Passive event listeners**: Use passive listeners where applicable
-- **React transitions**: Leverage `startTransition` for non-urgent updates
-
-## Mobile-Specific Guidelines {#mobile-specific-guidelines}
-
-### Testing on Real Devices
-
-- Testing on iOS Safari and Android Chrome is recommended
-- Visual Viewport API behavior should be verified on real devices
-
-### Platform Differences
-
-Consider these platform differences when implementing:
-
-| Feature                    | iOS                                    | Android             |
-| -------------------------- | -------------------------------------- | ------------------- |
-| `visualViewport.offsetTop` | Becomes negative when keyboard appears | Typically remains 0 |
-| Keyboard behavior          | Viewport is pushed up                  | Resizes the layout  |
-
-### window/document Access Pattern
-
-Always use the SSR-safe pattern when accessing browser APIs:
-
-```typescript
-// ✅ SSR-safe pattern
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-
-// Now safe to use window/document
-window.visualViewport?.addEventListener('resize', handler);
-```
-
-## API Design Standards
-
-### Hook Return Values
-
-We follow consistent patterns for hook return values:
-
-- **Object**: For state and related values (e.g., `useKeyboardHeight(): { keyboardHeight }`, `useVisualViewport(): { viewport }`)
-- **void**: For side-effect only hooks (e.g., `useBodyScrollLock(): void`)
-
-### Parameters
-
-- Required parameters come first, optional parameters last
-- Use an options object for 3+ optional parameters
-
-### SSR Safety Pattern
-
-All hooks follow the SSR-safe pattern:
-
-```typescript
-// ✅ SSR-safe - All hooks follow this pattern
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-```
+We keep adding hooks for mobile web pain points, always guided by the same principle: **make mobile UI development predictable and reliable, regardless of device or OS**. If there's a common mobile UI pain point, chances are we're working on a clean, declarative solution for it.

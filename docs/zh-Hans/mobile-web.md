@@ -2,17 +2,23 @@
 
 一组用于解决移动端 Web 环境中常见 UI 难题的 React Hook。
 
-## 为什么需要移动端工具函数？
+## 为什么是这些 Hook？
 
-移动端 Web 开发有一些桌面端不存在的独特挑战：
+移动端 Web 开发有一些桌面端不存在的挑战。每一个都能在 `react-simplikit` 中找到对应的 Hook：
 
-- **避让键盘**：软键盘出现时，固定在底部的元素会被遮住
-- **滚动方向检测**：让页头和导航栏随滚动显示或隐藏
-- **网络状态监控**：根据连接速度调整内容质量
-- **页面可见性跟踪**：应用切到后台时暂停视频或数据统计
-- **视觉视口变化**：处理移动端浏览器上的缩放、键盘和视口尺寸变化
+| 问题                                     | 使用                                                                                                         |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| 固定在底部的元素被软键盘遮住             | [useAvoidKeyboard](/zh-Hans/hooks/useAvoidKeyboard)                                                          |
+| 读取键盘高度或键盘是否可见               | [useKeyboardHeight](/zh-Hans/hooks/useKeyboardHeight)、[isKeyboardVisible](/zh-Hans/utils/isKeyboardVisible) |
+| 在底部面板或模态框打开期间锁定 body 滚动 | [useBodyScrollLock](/zh-Hans/hooks/useBodyScrollLock)                                                        |
+| 避开刘海和主屏幕指示条                   | [useSafeAreaInset](/zh-Hans/hooks/useSafeAreaInset)、[getSafeAreaInset](/zh-Hans/utils/getSafeAreaInset)     |
+| 跟踪用户实际能看到的区域                 | [useVisualViewport](/zh-Hans/hooks/useVisualViewport)                                                        |
+| 根据滚动方向显示或隐藏页头               | [useScrollDirection](/zh-Hans/hooks/useScrollDirection)                                                      |
+| 根据网络连接调整内容                     | [useNetworkStatus](/zh-Hans/hooks/useNetworkStatus)                                                          |
+| 页面切到后台时暂停工作                   | [usePageVisibility](/zh-Hans/hooks/usePageVisibility)                                                        |
+| 按平台分支处理                           | [isIOS](/zh-Hans/utils/isIOS)、[isAndroid](/zh-Hans/utils/isAndroid)                                         |
 
-`react-simplikit` 提供经过实战检验的移动端 Hook，只需极少的配置就能应对这些场景。
+每一项都是从 `react-simplikit` 具名导入的，[参考](/zh-Hans/reference)页面把它们和其余所有 API 列在一起。
 
 ## 快速开始
 
@@ -110,18 +116,6 @@ function FixedBottomCTA() {
 }
 ```
 
-## 可用的 Hook
-
-| Hook                                                    | 说明                         |
-| ------------------------------------------------------- | ---------------------------- |
-| [useAvoidKeyboard](/zh-Hans/hooks/useAvoidKeyboard)     | 把固定元素移动到软键盘上方   |
-| [useKeyboardHeight](/zh-Hans/hooks/useKeyboardHeight)   | 返回当前的键盘高度           |
-| [useBodyScrollLock](/zh-Hans/hooks/useBodyScrollLock)   | 为模态框和浮层锁定 body 滚动 |
-| [useScrollDirection](/zh-Hans/hooks/useScrollDirection) | 检测滚动方向（向上/向下）    |
-| [useNetworkStatus](/zh-Hans/hooks/useNetworkStatus)     | 监控网络连接状态             |
-| [usePageVisibility](/zh-Hans/hooks/usePageVisibility)   | 跟踪页面可见性状态           |
-| [useVisualViewport](/zh-Hans/hooks/useVisualViewport)   | 提供视觉视口的尺寸和偏移量   |
-
 ## 路线图 {#roadmap}
 
 移动端的屏幕很小，而这块小小的空间会带来数量惊人的 UI 难题。元素被软键盘遮住，安全区域因设备而异，用户实际看到的视口也常常和浏览器报告的不一样。这些都不是边缘情况，而是移动端开发每天都要面对的现实。
@@ -138,9 +132,9 @@ function FixedBottomCTA() {
 
 ### 我们的思路：聚焦视觉视口
 
-`react-simplikit` 中的移动端工具函数用一种聚焦的方式来解决这些问题。我们不去用脆弱的 hack 绕开浏览器的各种怪癖，而是把设计围绕**视觉视口**展开，也就是用户在任一时刻真正能看到的那部分屏幕区域。
+这些 Hook 不用脆弱的 hack 绕开浏览器的各种怪癖，而是围绕**视觉视口**来设计，也就是用户在任一时刻真正能看到的那部分屏幕区域。
 
-我们基于 [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API) 构建，提供的 Hook 可以让你：
+它们基于 [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API) 构建，可以让你：
 
 - **检测并响应键盘的出现**，让固定在底部的元素自然地让开位置。
 - **读取安全区域内边距**，从而正确处理刘海、主屏幕指示条以及其他设备特有的预留区域。
@@ -150,11 +144,9 @@ function FixedBottomCTA() {
 
 ### 跨平台、跨设备
 
-我们不希望被某个特定的操作系统或设备型号限制住。移动端 Web 本身就是跨平台的，`react-simplikit` 也拥抱这一点。
+移动端 Web 本身就是跨平台的，这些 Hook 也是。它们在设计上要在以下环境中表现一致：
 
-我们的 Hook 在设计上要在以下环境中表现一致：
-
-- **iOS 和 Android**，两大主流移动平台。
+- **iOS 和 Android**，两大主流移动平台。两者行为不同的地方（iOS 在键盘弹出期间把 `visualViewport.offsetTop` 报告为负数，Android 则保持为 0 并重新调整布局），由 Hook 来处理，你不必操心。
 - **各种浏览器**，包括 Safari、Chrome、Samsung Internet 等。
 - **不同的设备形态**，从小尺寸手机到大屏设备，无论有没有刘海和主屏幕指示条。
 
@@ -162,87 +154,4 @@ function FixedBottomCTA() {
 
 ### 接下来的计划
 
-我们会继续扩充 `react-simplikit` 中的移动端 Hook，并始终遵循同一条原则：**让移动端 UI 开发变得可预测、可靠，无论设备和操作系统是什么**。如果存在某个常见的移动端 UI 痛点，我们很可能正在为它准备一套简洁、声明式的解决方案。
-
-## 移动端专属原则 {#mobile-specific-principles}
-
-### 感知平台差异的设计
-
-在实现中，我们会考虑 iOS 和 Android 之间的行为差异：
-
-- **Visual Viewport API 的差异**：
-  - iOS：键盘出现时 `offsetTop` 会变成负数
-  - Android：`offsetTop` 通常保持为 0
-- **键盘高度计算**：针对各平台分别处理，以获得准确的测量结果
-
-### SSR 安全优先
-
-每个 Hook 都包含 SSR 测试，以确保服务端渲染时的安全性：
-
-```typescript
-it('is safe on server side rendering', () => {
-  const result = renderHookSSR.serverOnly(() => useHook());
-  expect(result.current).toBeDefined();
-});
-```
-
-### 性能优化
-
-移动端环境需要特别关注性能：
-
-- **事件节流/防抖**：优化 scroll、resize 这类高频事件
-- **被动事件监听器**：在适用的场景中使用 passive 监听器
-- **React transition**：对非紧急的更新使用 `startTransition`
-
-## 移动端专属准则 {#mobile-specific-guidelines}
-
-### 在真机上测试
-
-- 建议在 iOS Safari 和 Android Chrome 上测试
-- Visual Viewport API 的行为应该在真机上验证
-
-### 平台差异
-
-实现时请考虑以下平台差异：
-
-| 特性                       | iOS                  | Android        |
-| -------------------------- | -------------------- | -------------- |
-| `visualViewport.offsetTop` | 键盘出现时会变成负数 | 通常保持为 0   |
-| 键盘行为                   | 视口被整体向上顶起   | 布局被重新调整 |
-
-### window/document 的访问模式
-
-访问浏览器 API 时，请始终使用 SSR 安全模式：
-
-```typescript
-// ✅ SSR 安全模式
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-
-// 现在可以安全地使用 window/document 了
-window.visualViewport?.addEventListener('resize', handler);
-```
-
-## API 设计规范
-
-### Hook 的返回值
-
-对于 Hook 的返回值，我们遵循一致的模式：
-
-- **对象**：用于状态及相关的值（例如 `useKeyboardHeight(): { keyboardHeight }`、`useVisualViewport(): { viewport }`）
-- **void**：用于只有副作用的 Hook（例如 `useBodyScrollLock(): void`）
-
-### 参数
-
-- 必填参数放在前面，可选参数放在最后
-- 可选参数达到 3 个或更多时，请使用选项对象
-
-### SSR 安全模式
-
-所有 Hook 都遵循 SSR 安全模式：
-
-```typescript
-// ✅ SSR 安全：所有 Hook 都遵循这个模式
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-```
+我们会继续为移动端 Web 的 UI 痛点添加 Hook，并始终遵循同一条原则：**让移动端 UI 开发变得可预测、可靠，无论设备和操作系统是什么**。如果存在某个常见的移动端 UI 痛点，我们很可能正在为它准备一套简洁、声明式的解决方案。

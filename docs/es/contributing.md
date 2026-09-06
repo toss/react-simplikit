@@ -2,20 +2,11 @@
 
 `react-simplikit` está diseñado para que cualquiera pueda contribuir. Si quieres contribuir, sigue la guía que encontrarás a continuación.
 
-## Alcance del paquete
+## Alcance
 
-`react-simplikit` se centra en **Hooks, componentes y utilidades independientes de la plataforma** que funcionan en todos los entornos de JavaScript (navegador, servidor, React Native, etc.).
+`react-simplikit` ofrece Hooks, componentes y utilidades que funcionan en cualquier entorno de React (navegador, renderizado en el servidor y React Native), además de Hooks que resuelven problemas propios de los navegadores y, en particular, de los navegadores de la web móvil, como el teclado en pantalla, los márgenes del área segura y el viewport visual. Todo lo que interfiera en el ciclo de vida de React o dependa de otra biblioteca queda fuera del alcance; consulta los [Principios de diseño](./design-principles.md).
 
-Antes de contribuir, comprueba a qué paquete pertenece tu implementación:
-
-| Paquete                              | Alcance                                                | Ejemplos                                                     |
-| ------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------ |
-| `react-simplikit`                    | Estado y lógica puros, independientes de la plataforma | `useToggle`, `useAsyncEffect`, `useLoading`                  |
-| Utilidades para móvil (`src/mobile`) | Resolver los retos propios de la web móvil             | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
-
-::: tip
-El paquete mobile **no** está pensado para todos los Hooks que dependen de las APIs del navegador. Se dirige específicamente a los **problemas que aparecen en entornos de web móvil** (gestión del viewport, manejo del teclado, problemas de maquetación en iOS Safari y Android Chrome). Por ejemplo, un Hook de atajos de teclado usa APIs del navegador, pero no pertenece al paquete mobile.
-:::
+El código fuente vive en `packages/react-simplikit/src`: `hooks/`, `components/` y `utils/` para el código independiente de la plataforma, y `mobile/hooks/` y `mobile/utils/` para el código que solo tiene sentido en un navegador de web móvil. Un Hook no es de “web móvil” solo porque use una API del navegador: un Hook de atajos de teclado va en `hooks/`, y uno que mide la altura del teclado, en `mobile/hooks/`. Ambos se exportan desde la raíz del paquete; la división solo afecta a dónde vive el archivo.
 
 ## Contribuciones a la implementación
 
@@ -311,7 +302,7 @@ yarn changeset
 3. Escribe un breve resumen de tus cambios.
 
 ::: tip
-Ambos paquetes están actualmente en la etapa `0.0.x`. Durante esta fase, la mayoría de los cambios deberían usar `patch`.
+El paquete está en la etapa `0.x`. Durante esta fase, la mayoría de los cambios deberían usar `patch`.
 Si no tienes claro qué tipo de versión corresponde, coméntalo con los mantenedores del proyecto.
 :::
 
@@ -427,4 +418,35 @@ Generación de esqueletos → Implementación → Pruebas → Documentación →
 
 - Solo exportaciones con nombre
 - Aprovecha al máximo la inferencia de TypeScript
-- Aplica el patrón de seguridad para SSR
+- Los parámetros obligatorios van primero y los opcionales al final; usa un objeto de opciones a partir de tres parámetros opcionales
+- Devuelve un único valor cuando solo hay uno, una tupla `[state, action]` cuando son un par, y un objeto cuando hay más miembros o cuando la forma va a crecer (mediciones del navegador como la altura del teclado o los márgenes del área segura)
+- Aplica el patrón de seguridad para SSR que se describe a continuación
+
+### Patrón de seguridad para SSR
+
+Nunca leas una API del navegador durante el renderizado: el servidor no tiene `window`, y un valor del cliente distinto del que produjo el servidor provoca un desajuste de hidratación. Parte de un valor fijo y sincronízalo en un efecto:
+
+```ts
+const [state, setState] = useState(FIXED_INITIAL_VALUE);
+
+useEffect(function syncBrowserState() {
+  if (isServer()) {
+    return;
+  }
+
+  setState(readBrowserApi());
+}, []);
+```
+
+### Hooks para el navegador y la web móvil
+
+- Aplica throttling de unos 16 ms a los eventos frecuentes (`scroll`, `resize`, cambios de `visualViewport`), omite las actualizaciones cuando el valor no ha cambiado y usa `startTransition` para las actualizaciones no urgentes
+- Usa detectores de eventos pasivos cuando el manejador nunca llama a `preventDefault`
+- Ten en cuenta las diferencias entre plataformas en lugar de elegir una:
+
+  | Característica             | iOS                                          | Android                     |
+  | -------------------------- | -------------------------------------------- | --------------------------- |
+  | `visualViewport.offsetTop` | Se vuelve negativo cuando aparece el teclado | Suele mantenerse en 0       |
+  | Comportamiento del teclado | El viewport se desplaza hacia arriba         | Redimensiona la maquetación |
+
+- jsdom no puede reproducir el viewport visual ni el teclado en pantalla, así que verifica estos Hooks en un dispositivo real con iOS Safari y Android Chrome, además de en las pruebas

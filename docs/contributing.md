@@ -2,20 +2,11 @@
 
 `react-simplikit` is designed to encourage contributions from anyone. If you'd like to contribute, please follow the guide below.
 
-## Package Scope
+## Scope
 
-`react-simplikit` focuses on **platform-independent hooks, components, and utilities** that work across all JavaScript environments (browser, server, React Native, etc.).
+`react-simplikit` provides hooks, components and utilities that work in every React environment — browser, server rendering and React Native — plus hooks that solve problems specific to browsers and mobile web browsers, such as the on-screen keyboard, safe-area insets and the visual viewport. Anything that interferes with React's lifecycle or depends on another library is out of scope; see the [Design Principles](./design-principles.md).
 
-Before contributing, check which package your implementation belongs to:
-
-| Package                         | Scope                                  | Examples                                                     |
-| ------------------------------- | -------------------------------------- | ------------------------------------------------------------ |
-| `react-simplikit`               | Platform-independent pure state/logic  | `useToggle`, `useAsyncEffect`, `useLoading`                  |
-| Mobile utilities (`src/mobile`) | Solving mobile web-specific challenges | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
-
-::: tip
-The mobile package is **not** for all browser API-dependent hooks. It specifically targets **problems encountered in mobile web environments** (viewport management, keyboard handling, layout issues on iOS Safari and Android Chrome). For example, a keyboard shortcut hook uses browser APIs but doesn't belong in the mobile package.
-:::
+Source lives under `packages/react-simplikit/src`: `hooks/`, `components/` and `utils/` for platform-independent code, and `mobile/hooks/` and `mobile/utils/` for code that only makes sense in a mobile web browser. A hook is not "mobile web" just because it touches a browser API — a keyboard-shortcut hook belongs in `hooks/`, a keyboard-height hook in `mobile/hooks/`. Both are exported from the package root; the split only affects where the file lives.
 
 ## Implementation Contribution
 
@@ -311,7 +302,7 @@ yarn changeset
 3. Write a brief summary of your changes.
 
 ::: tip
-Both packages are currently in the `0.0.x` stage. During this phase, most changes should use `patch`.
+The package is in the `0.x` stage. During this phase, most changes should use `patch`.
 If you're unsure about the version type, please discuss with the maintainers.
 :::
 
@@ -427,4 +418,35 @@ Scaffold → Implementation → Testing → Documentation → Review → Changes
 
 - Named exports only
 - Maximize TypeScript inference
-- Apply the SSR safety pattern
+- Required parameters first, optional ones last; use an options object once there are three or more optional parameters
+- Return a single value when there is one, a `[state, action]` tuple for a pair, and an object when there are more members or when the shape is expected to grow (browser measurements such as keyboard height or safe-area insets)
+- Apply the SSR safety pattern below
+
+### SSR Safety Pattern
+
+Never read a browser API while rendering — the server has no `window`, and a client value that differs from the server's causes a hydration mismatch. Start from a fixed value and synchronize in an effect:
+
+```ts
+const [state, setState] = useState(FIXED_INITIAL_VALUE);
+
+useEffect(function syncBrowserState() {
+  if (isServer()) {
+    return;
+  }
+
+  setState(readBrowserApi());
+}, []);
+```
+
+### Browser and Mobile Web Hooks
+
+- Throttle high-frequency events (`scroll`, `resize`, `visualViewport` changes) at about 16ms, skip updates when the value has not changed, and use `startTransition` for non-urgent updates
+- Use passive event listeners where the handler never calls `preventDefault`
+- Account for platform differences instead of picking one platform:
+
+  | Feature                    | iOS                                    | Android             |
+  | -------------------------- | -------------------------------------- | ------------------- |
+  | `visualViewport.offsetTop` | Becomes negative when keyboard appears | Typically remains 0 |
+  | Keyboard behavior          | Viewport is pushed up                  | Resizes the layout  |
+
+- jsdom cannot reproduce the visual viewport or the on-screen keyboard, so verify these hooks on a real iOS Safari and Android Chrome device as well as in tests

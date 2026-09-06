@@ -54,8 +54,8 @@ const GUIDE_LEGACY: RedirectPair[] = [
   { from: 'mobile/intro.html', to: 'mobile-web.html' },
   { from: 'mobile/roadmap.html', to: 'mobile-web.html#roadmap' },
   { from: 'mobile/installation.html', to: 'installation.html' },
-  { from: 'mobile/design-principles.html', to: 'mobile-web.html#mobile-specific-principles' },
-  { from: 'mobile/contributing.html', to: 'mobile-web.html#mobile-specific-guidelines' },
+  { from: 'mobile/design-principles.html', to: 'design-principles.html' },
+  { from: 'mobile/contributing.html', to: 'contributing.html' },
 ];
 
 /**

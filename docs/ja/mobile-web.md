@@ -2,17 +2,23 @@
 
 モバイル Web 環境でよくある UI の課題を解決する React フック集です。
 
-## なぜモバイルユーティリティなのか
+## なぜこれらのフックなのか
 
-モバイル Web 開発には、デスクトップにはない固有の課題があります。
+モバイル Web 開発には、デスクトップにはない課題があります。それぞれの課題に対応するフックが `react-simplikit` にあります。
 
-- **キーボード回避**: オンスクリーンキーボードが表示されると、下部に固定した要素が隠れてしまいます
-- **スクロール方向の検知**: スクロールに応じてヘッダーやナビゲーションバーを表示・非表示にします
-- **ネットワーク状態の監視**: 接続速度に応じてコンテンツの品質を調整します
-- **ページ可視性の追跡**: アプリがバックグラウンドに移動したときに動画や計測を一時停止します
-- **ビジュアルビューポートの変化**: モバイルブラウザでのズーム、キーボード、ビューポートのリサイズに対応します
+| 課題                                                         | 使うもの                                                                                           |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| 下部に固定した要素がオンスクリーンキーボードに隠れる         | [useAvoidKeyboard](/ja/hooks/useAvoidKeyboard)                                                     |
+| キーボードの高さや表示状態を読み取る                         | [useKeyboardHeight](/ja/hooks/useKeyboardHeight)、[isKeyboardVisible](/ja/utils/isKeyboardVisible) |
+| シートやモーダルが開いている間 body のスクロールをロックする | [useBodyScrollLock](/ja/hooks/useBodyScrollLock)                                                   |
+| ノッチとホームインジケーターを避ける                         | [useSafeAreaInset](/ja/hooks/useSafeAreaInset)、[getSafeAreaInset](/ja/utils/getSafeAreaInset)     |
+| ユーザーが実際に見ている領域を追跡する                       | [useVisualViewport](/ja/hooks/useVisualViewport)                                                   |
+| スクロール方向に応じてヘッダーを表示・非表示にする           | [useScrollDirection](/ja/hooks/useScrollDirection)                                                 |
+| ネットワーク接続に合わせてコンテンツを調整する               | [useNetworkStatus](/ja/hooks/useNetworkStatus)                                                     |
+| ページがバックグラウンドに移ったら処理を止める               | [usePageVisibility](/ja/hooks/usePageVisibility)                                                   |
+| プラットフォームで分岐する                                   | [isIOS](/ja/utils/isIOS)、[isAndroid](/ja/utils/isAndroid)                                         |
 
-`react-simplikit` は、これらのシナリオを最小限の設定で扱える実績のあるフックを提供します。
+どの項目も `react-simplikit` からの名前付きインポートで、[リファレンス](/ja/reference)には他の項目と並んで掲載されています。
 
 ## クイックスタート
 
@@ -110,18 +116,6 @@ function FixedBottomCTA() {
 }
 ```
 
-## 利用可能なフック
-
-| フック                                             | 説明                                                           |
-| -------------------------------------------------- | -------------------------------------------------------------- |
-| [useAvoidKeyboard](/ja/hooks/useAvoidKeyboard)     | 固定要素をオンスクリーンキーボードの上に移動させます           |
-| [useKeyboardHeight](/ja/hooks/useKeyboardHeight)   | 現在のキーボードの高さを返します                               |
-| [useBodyScrollLock](/ja/hooks/useBodyScrollLock)   | モーダルやオーバーレイのために body のスクロールをロックします |
-| [useScrollDirection](/ja/hooks/useScrollDirection) | スクロール方向（上/下）を検知します                            |
-| [useNetworkStatus](/ja/hooks/useNetworkStatus)     | ネットワーク接続状態を監視します                               |
-| [usePageVisibility](/ja/hooks/usePageVisibility)   | ページの可視性の状態を追跡します                               |
-| [useVisualViewport](/ja/hooks/useVisualViewport)   | ビジュアルビューポートのサイズとオフセットを提供します         |
-
 ## ロードマップ {#roadmap}
 
 モバイル画面は小さく、その小さな空間が驚くほど多くの UI 課題を生み出します。要素がオンスクリーンキーボードに隠れたり、セーフエリアが端末によって異なったり、ユーザーが実際に見ているビューポートがブラウザの報告する値と食い違ったりします。これらはエッジケースではなく、モバイル開発における日常的な現実です。
@@ -138,9 +132,9 @@ function FixedBottomCTA() {
 
 ### 私たちのアプローチ: ビジュアルビューポートに焦点を当てる
 
-`react-simplikit` のモバイルユーティリティは、これらの問題を解決するために焦点を絞ったアプローチを取ります。もろいハックでブラウザの癖を回避しようとするのではなく、**ビジュアルビューポート** — ユーザーがある瞬間に実際に見ている画面領域 — を中心に設計しています。
+もろいハックでブラウザの癖を回避しようとするのではなく、これらのフックは**ビジュアルビューポート**（ユーザーがある瞬間に実際に見ている画面領域）を中心に設計されています。
 
-[Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API) をベースに構築することで、以下のようなことができるフックを提供します。
+[Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API) をベースに構築されており、以下のことができます。
 
 - **キーボードの表示を検知して対応する**ことで、下部固定要素が自然にキーボードを避けるようにします。
 - **セーフエリアインセットを読み取る**ことで、ノッチやホームインジケーターなど、端末固有の予約領域を正しく考慮します。
@@ -150,11 +144,9 @@ function FixedBottomCTA() {
 
 ### クロスプラットフォーム、クロスデバイス
 
-特定の OS や端末モデルに限定されないことを目指しています。モバイル Web は本質的にクロスプラットフォームであり、`react-simplikit` はそれを受け入れています。
+モバイル Web は本質的にクロスプラットフォームであり、これらのフックも同様です。以下の環境で一貫して動作するように設計されています。
 
-私たちのフックは、以下の環境で一貫して動作するように設計されています。
-
-- **iOS と Android** — 2 大モバイルプラットフォーム。
+- **iOS と Android** — 2 大モバイルプラットフォーム。両者で挙動が異なる部分（iOS はキーボード表示中に `visualViewport.offsetTop` を負の値で報告し、Android は 0 のままレイアウトをリサイズします）はフックが吸収するので、意識する必要はありません。
 - **さまざまなブラウザ** — Safari、Chrome、Samsung Internet など。
 - **さまざまな端末フォームファクター** — コンパクトな端末から大画面端末まで、ノッチやホームインジケーターの有無を問いません。
 
@@ -162,87 +154,4 @@ function FixedBottomCTA() {
 
 ### 今後の展開
 
-`react-simplikit` で提供するモバイルフックのラインナップを、常に同じ原則に基づいて拡張し続けています。**端末や OS を問わず、モバイル UI 開発を予測可能で信頼できるものにする**という原則です。よくあるモバイル UI の悩みがあれば、私たちはそのためのクリーンで宣言的な解決策に取り組んでいる可能性が高いです。
-
-## モバイル特有の原則 {#mobile-specific-principles}
-
-### プラットフォームを意識した設計
-
-実装においては、iOS と Android の挙動の違いを考慮します。
-
-- **Visual Viewport API の違い**:
-  - iOS: キーボードが表示されると `offsetTop` が負の値になります
-  - Android: `offsetTop` は基本的に 0 のままです
-- **キーボードの高さの計算**: 正確な計測のためのプラットフォーム別の処理
-
-### SSR 安全性を最優先に
-
-すべてのフックには、安全なサーバーサイドレンダリングを保証するための SSR テストが含まれます。
-
-```typescript
-it('is safe on server side rendering', () => {
-  const result = renderHookSSR.serverOnly(() => useHook());
-  expect(result.current).toBeDefined();
-});
-```
-
-### パフォーマンス最適化
-
-モバイル環境ではパフォーマンスに特別な配慮が必要です。
-
-- **イベントのスロットリング／デバウンス**: スクロールやリサイズのような頻発するイベントを最適化します
-- **パッシブイベントリスナー**: 適用可能な場合はパッシブリスナーを使用します
-- **React トランジション**: 緊急でない更新には `startTransition` を活用します
-
-## モバイル特有のガイドライン {#mobile-specific-guidelines}
-
-### 実機でのテスト
-
-- iOS Safari と Android Chrome でのテストを推奨します
-- Visual Viewport API の挙動は実機で確認する必要があります
-
-### プラットフォームの違い
-
-実装時には、以下のプラットフォームの違いを考慮してください。
-
-| 機能                       | iOS                                  | Android                    |
-| -------------------------- | ------------------------------------ | -------------------------- |
-| `visualViewport.offsetTop` | キーボードが表示されると負の値になる | 基本的に 0 のまま          |
-| キーボードの挙動           | ビューポートが押し上げられる         | レイアウトがリサイズされる |
-
-### window/document へのアクセスパターン
-
-ブラウザ API にアクセスする際は、常に SSR 安全パターンを使用してください。
-
-```typescript
-// ✅ SSR 安全パターン
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-
-// これで window/document を安全に使用できます
-window.visualViewport?.addEventListener('resize', handler);
-```
-
-## API 設計基準
-
-### フックの戻り値
-
-フックの戻り値については、一貫したパターンに従います。
-
-- **オブジェクト**: 状態や関連する値を返す場合（例: `useKeyboardHeight(): { keyboardHeight }`、`useVisualViewport(): { viewport }`）
-- **void**: 副作用のみを持つフックの場合（例: `useBodyScrollLock(): void`）
-
-### パラメータ
-
-- 必須パラメータを先に、任意パラメータを後に配置します
-- 任意パラメータが 3 個以上ある場合はオプションオブジェクトを使用します
-
-### SSR 安全パターン
-
-すべてのフックは SSR 安全パターンに従います。
-
-```typescript
-// ✅ SSR 安全 - すべてのフックがこのパターンに従います
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-```
+モバイル Web の UI の悩みを解決するフックを、常に同じ原則に基づいて追加し続けています。**端末や OS を問わず、モバイル UI 開発を予測可能で信頼できるものにする**という原則です。よくあるモバイル UI の悩みがあれば、私たちはそのためのクリーンで宣言的な解決策に取り組んでいる可能性が高いです。

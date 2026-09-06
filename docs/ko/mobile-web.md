@@ -2,17 +2,23 @@
 
 모바일 웹 환경에서 발생하는 다양한 UI 문제를 해결하는 React 훅 모음이에요.
 
-## 왜 모바일 유틸리티인가요?
+## 왜 이 훅들인가요?
 
-모바일 웹 개발에는 데스크톱에서는 없는 고유한 문제들이 있어요:
+모바일 웹 개발에는 데스크톱에서는 없는 문제들이 있어요. 각 문제마다 `react-simplikit`에 훅이 있어요:
 
-- **키보드 회피**: 온스크린 키보드가 올라오면 하단 고정 요소가 가려지는 문제
-- **스크롤 방향 감지**: 스크롤에 따라 헤더나 네비게이션 바를 숨기거나 보여주기
-- **네트워크 상태 모니터링**: 연결 속도에 따라 콘텐츠 품질 조절하기
-- **페이지 가시성 추적**: 앱이 백그라운드로 갈 때 비디오나 분석 일시정지하기
-- **Visual Viewport 변화**: 모바일 브라우저에서 줌, 키보드, 뷰포트 리사이즈 처리하기
+| 문제                                                | 사용                                                                                               |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| 하단 고정 요소가 온스크린 키보드에 가려져요         | [useAvoidKeyboard](/ko/hooks/useAvoidKeyboard)                                                     |
+| 키보드 높이나 표시 여부를 읽고 싶어요               | [useKeyboardHeight](/ko/hooks/useKeyboardHeight), [isKeyboardVisible](/ko/utils/isKeyboardVisible) |
+| 시트나 모달이 열린 동안 body 스크롤을 잠그고 싶어요 | [useBodyScrollLock](/ko/hooks/useBodyScrollLock)                                                   |
+| 노치와 홈 인디케이터 영역을 피하고 싶어요           | [useSafeAreaInset](/ko/hooks/useSafeAreaInset), [getSafeAreaInset](/ko/utils/getSafeAreaInset)     |
+| 사용자가 실제로 보는 영역을 추적하고 싶어요         | [useVisualViewport](/ko/hooks/useVisualViewport)                                                   |
+| 스크롤 방향에 따라 헤더를 숨기거나 보여주고 싶어요  | [useScrollDirection](/ko/hooks/useScrollDirection)                                                 |
+| 네트워크 연결 상태에 맞춰 콘텐츠를 조절하고 싶어요  | [useNetworkStatus](/ko/hooks/useNetworkStatus)                                                     |
+| 페이지가 백그라운드로 가면 작업을 멈추고 싶어요     | [usePageVisibility](/ko/hooks/usePageVisibility)                                                   |
+| 플랫폼에 따라 분기하고 싶어요                       | [isIOS](/ko/utils/isIOS), [isAndroid](/ko/utils/isAndroid)                                         |
 
-`react-simplikit`은 이러한 시나리오를 최소한의 설정으로 처리할 수 있는 검증된 훅들을 제공해요.
+모든 항목은 `react-simplikit`에서 named import로 가져오고, [레퍼런스](/ko/reference)에 다른 항목들과 함께 실려 있어요.
 
 ## Quick Start
 
@@ -110,21 +116,9 @@ function FixedBottomCTA() {
 }
 ```
 
-## 제공하는 훅
-
-| 훅                                                 | 설명                                        |
-| -------------------------------------------------- | ------------------------------------------- |
-| [useAvoidKeyboard](/ko/hooks/useAvoidKeyboard)     | 고정 요소를 온스크린 키보드 위로 이동시켜요 |
-| [useKeyboardHeight](/ko/hooks/useKeyboardHeight)   | 현재 키보드 높이를 반환해요                 |
-| [useBodyScrollLock](/ko/hooks/useBodyScrollLock)   | 모달과 오버레이를 위해 body 스크롤을 잠가요 |
-| [useScrollDirection](/ko/hooks/useScrollDirection) | 스크롤 방향(위/아래)을 감지해요             |
-| [useNetworkStatus](/ko/hooks/useNetworkStatus)     | 네트워크 연결 상태를 모니터링해요           |
-| [usePageVisibility](/ko/hooks/usePageVisibility)   | 페이지 가시성 상태를 추적해요               |
-| [useVisualViewport](/ko/hooks/useVisualViewport)   | Visual Viewport 크기와 오프셋을 제공해요    |
-
 ## 앞으로의 방향 {#roadmap}
 
-모바일 화면은 작고 그 작은 공간 안에서 UI가 의도대로 보이지 않는 경우가 많아요. 키보드에 요소가 가려지고, 기기마다 다른 SafeArea가 다르고, 브라우저가 보여주는 viewport와 사용자가 실제로 보는 영역의 차이가 빈번하게 발생해요.
+모바일 화면은 작고 그 작은 공간 안에서 UI가 의도대로 보이지 않는 경우가 많아요. 키보드에 요소가 가려지고, 기기마다 안전 영역이 다르고, 브라우저가 보고하는 뷰포트와 사용자가 실제로 보는 영역이 다른 경우도 잦아요. 예외적인 상황이 아니라 모바일 개발에서 늘 마주치는 현실이에요.
 
 ### 문제: 모바일 화면에서 불안정한 UI
 
@@ -138,9 +132,9 @@ function FixedBottomCTA() {
 
 ### 우리의 접근: 비주얼 뷰포트에 집중
 
-`react-simplikit`의 모바일 유틸리티는 이러한 문제들을 해결하기 위해 명확한 접근 방식을 취해요. 브라우저의 특이한 동작을 불안정한 우회 방법으로 처리하는 대신, **비주얼 뷰포트(Visual Viewport)** — 사용자가 특정 순간에 실제로 볼 수 있는 화면 영역 — 를 중심으로 설계해요.
+브라우저의 특이한 동작을 불안정한 우회 방법으로 처리하는 대신, 이 훅들은 사용자가 특정 순간에 실제로 볼 수 있는 화면 영역, 즉 **비주얼 뷰포트(Visual Viewport)**를 중심으로 설계됐어요.
 
-[Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API)를 기반으로, 다음과 같은 훅들을 제공해요:
+[Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API)를 기반으로 다음을 할 수 있어요:
 
 - **키보드 출현을 감지하고 대응**하여 하단 고정 요소가 자연스럽게 비켜나도록 해요.
 - **안전 영역 인셋을 읽어** 노치, 홈 인디케이터 등 기기별 예약 영역을 올바르게 처리해요.
@@ -150,99 +144,14 @@ function FixedBottomCTA() {
 
 ### 크로스 플랫폼, 크로스 디바이스
 
-특정 OS나 기기 모델에 국한되고 싶지 않아요. 모바일 웹은 본질적으로 크로스 플랫폼이고, `react-simplikit`은 이를 지향해요.
+모바일 웹은 본질적으로 크로스 플랫폼이고, 이 훅들도 그래요. 다음 환경에서 일관되게 동작하도록 설계되었어요:
 
-우리의 훅들은 다음 환경에서 일관되게 동작하도록 설계되었어요:
-
-- **iOS와 Android** — 두 가지 주요 모바일 플랫폼.
+- **iOS와 Android** — 두 가지 주요 모바일 플랫폼. 둘이 다르게 동작하는 부분(iOS는 키보드가 열려 있는 동안 `visualViewport.offsetTop`을 음수로 보고하고, Android는 0을 유지한 채 레이아웃을 리사이즈해요)은 훅이 처리하니 직접 신경 쓰지 않아도 돼요.
 - **다양한 브라우저** — Safari, Chrome, Samsung Internet 등.
 - **다양한 기기 폼 팩터** — 소형 폰부터 대형 화면 기기까지, 노치나 홈 인디케이터의 유무에 관계없이.
 
 특정 API를 사용할 수 없는 환경(예: 구형 브라우저의 `window.visualViewport`)에서는 UI가 깨지지 않도록 안전한 폴백을 제공해요.
 
-### 앞으로의 방향
+### 다음 계획
 
-`react-simplikit`에서 제공하는 모바일 훅들을 계속 확장해 나갈 예정이에요. 항상 같은 원칙에 따라: **기기나 OS에 관계없이 모바일 UI 개발을 예측 가능하고 안정적으로 만드는 것**이에요. 모바일 UI에서 흔히 겪는 불편함이 있다면, 우리는 그것에 대한 깔끔하고 선언적인 해결책을 만들고 있을 거예요.
-
-## 모바일 특화 원칙 {#mobile-specific-principles}
-
-### 플랫폼 인식 설계
-
-구현에서 iOS와 Android의 동작 차이를 고려해요:
-
-- **Visual Viewport API 차이**:
-  - iOS: 키보드가 나타나면 `offsetTop`이 음수가 돼요
-  - Android: `offsetTop`은 일반적으로 0을 유지해요
-- **키보드 높이 계산**: 정확한 측정을 위한 플랫폼별 처리
-
-### SSR 안전성 우선
-
-모든 훅은 안전한 서버 사이드 렌더링을 보장하기 위해 SSR 테스트를 포함해요:
-
-```typescript
-it('is safe on server side rendering', () => {
-  const result = renderHookSSR.serverOnly(() => useHook());
-  expect(result.current).toBeDefined();
-});
-```
-
-### 성능 최적화
-
-모바일 환경은 성능에 대한 특별한 주의가 필요해요:
-
-- **이벤트 쓰로틀링/디바운싱**: 스크롤, 리사이즈 같은 빈번한 이벤트 최적화
-- **패시브 이벤트 리스너**: 해당하는 경우 패시브 리스너 사용
-- **React 트랜지션**: 급하지 않은 업데이트에 `startTransition` 활용
-
-## 모바일 특화 가이드라인 {#mobile-specific-guidelines}
-
-### 실제 기기 테스트
-
-- iOS Safari와 Android Chrome에서 테스트하는 것을 권장해요
-- Visual Viewport API 동작은 실제 기기에서 확인해야 해요
-
-### 플랫폼 차이
-
-구현 시 다음 플랫폼 차이를 고려해주세요:
-
-| 기능                       | iOS                         | Android               |
-| -------------------------- | --------------------------- | --------------------- |
-| `visualViewport.offsetTop` | 키보드가 나타나면 음수가 됨 | 일반적으로 0 유지     |
-| 키보드 동작                | 뷰포트가 밀려 올라감        | 레이아웃을 리사이즈함 |
-
-### window/document 접근 패턴
-
-브라우저 API에 접근할 때는 항상 SSR 안전 패턴을 사용해주세요:
-
-```typescript
-// ✅ SSR 안전 패턴
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-
-// 이제 window/document를 안전하게 사용할 수 있어요
-window.visualViewport?.addEventListener('resize', handler);
-```
-
-## API 설계 표준
-
-### 훅 반환 값
-
-훅 반환 값에 대해 일관된 패턴을 따르고 있어요:
-
-- **객체**: 상태와 관련 값들에 사용 (예: `useKeyboardHeight(): { keyboardHeight }`, `useVisualViewport(): { viewport }`)
-- **void**: 사이드 이펙트 전용 훅에 사용 (예: `useBodyScrollLock(): void`)
-
-### 파라미터
-
-- 필수 파라미터가 먼저 오고, 선택 파라미터가 뒤에 와요
-- 3개 이상의 선택 파라미터가 있는 경우 옵션 객체를 사용해요
-
-### SSR 안전 패턴
-
-모든 훅은 SSR 안전 패턴을 따라요:
-
-```typescript
-// ✅ SSR 안전 - 모든 훅이 이 패턴을 따라요
-const isClient = typeof window !== 'undefined';
-if (!isClient) return defaultValue;
-```
+모바일 웹의 UI 문제를 해결하는 훅을 계속 추가하고 있어요. 기준은 언제나 같아요: **기기나 OS에 관계없이 모바일 UI 개발을 예측 가능하고 안정적으로 만드는 것**이에요. 모바일 UI에서 흔히 겪는 불편함이 있다면, 아마 이미 그 문제를 위한 깔끔하고 선언적인 해결책을 만들고 있을 거예요.

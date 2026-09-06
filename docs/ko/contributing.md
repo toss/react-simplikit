@@ -2,20 +2,11 @@
 
 `react-simplikit`에는 누구나 쉽게 기여할 수 있어요. 기여하고 싶다면 아래 가이드를 참고해 주세요.
 
-## 패키지 범위
+## 범위
 
-`react-simplikit`은 모든 JavaScript 환경(브라우저, 서버, React Native 등)에서 동작하는 **플랫폼 독립적인 훅, 컴포넌트, 유틸리티**에 집중해요.
+`react-simplikit`은 브라우저, 서버 렌더링, React Native 등 모든 React 환경에서 동작하는 훅, 컴포넌트, 유틸리티를 제공해요. 여기에 온스크린 키보드, 안전 영역 인셋, 비주얼 뷰포트처럼 브라우저와 모바일 웹 브라우저에서만 생기는 문제를 해결하는 훅도 포함돼요. React의 생명주기에 간섭하거나 다른 라이브러리에 의존하는 구현은 범위 밖이에요. [설계 원칙](./design-principles.md)을 참고해 주세요.
 
-기여하기 전에, 구현체가 어떤 패키지에 속하는지 확인해 주세요:
-
-| 패키지                         | 범위                           | 예시                                                         |
-| ------------------------------ | ------------------------------ | ------------------------------------------------------------ |
-| `react-simplikit`              | 플랫폼 독립적인 순수 상태/로직 | `useToggle`, `useAsyncEffect`, `useLoading`                  |
-| 모바일 유틸리티 (`src/mobile`) | 모바일 웹 환경의 문제 해결     | `useAvoidKeyboard`, `useBodyScrollLock`, `useVisualViewport` |
-
-::: tip
-mobile 패키지는 모든 브라우저 API 의존 훅을 위한 것이 **아니에요**. **모바일 웹 환경에서 겪는 문제**를 해결하는 훅/유틸리티만 해당돼요(뷰포트 관리, 키보드 처리, iOS Safari/Android Chrome의 레이아웃 이슈 등). 예를 들어, 키보드 단축키 훅은 브라우저 API를 사용하지만 mobile 패키지에 속하지 않아요.
-:::
+소스는 `packages/react-simplikit/src` 아래에 있어요. 플랫폼 독립적인 코드는 `hooks/`, `components/`, `utils/`에, 모바일 웹 브라우저에서만 의미 있는 코드는 `mobile/hooks/`와 `mobile/utils/`에 둬요. 브라우저 API를 쓴다고 해서 "모바일 웹"인 건 아니에요. 키보드 단축키 훅은 `hooks/`에, 키보드 높이 훅은 `mobile/hooks/`에 속해요. 둘 다 패키지 루트에서 export되고, 이 구분은 파일 위치에만 영향을 줘요.
 
 ## 구현체 기여
 
@@ -304,6 +295,11 @@ yarn changeset
 
 3. 변경 사항에 대한 간단한 설명을 작성하세요.
 
+::: tip
+이 패키지는 `0.x` 단계예요. 이 단계에서는 대부분의 변경에 `patch`를 사용해요.
+버전 유형이 헷갈리면 메인테이너와 상의해 주세요.
+:::
+
 4. 생성된 changeset 파일을 PR에 포함하여 커밋하세요.
 
 ::: tip
@@ -416,6 +412,37 @@ yarn run scaffold getButton --t u // 유틸 생성
 
 ### 구현 규칙
 
-- named export만 사용
-- TypeScript 추론 최대화
-- SSR 안전 패턴 적용
+- named export만 써요
+- TypeScript 추론을 최대한 활용해요
+- 필수 파라미터를 먼저, 선택 파라미터를 뒤에 둬요. 선택 파라미터가 3개 이상이면 옵션 객체를 써요
+- 값이 하나면 그 값을, 상태와 액션 한 쌍이면 `[state, action]` 튜플을, 멤버가 더 많거나 앞으로 늘어날 형태(키보드 높이, 안전 영역 인셋 같은 브라우저 측정값)면 객체를 반환해요
+- 아래 SSR 안전 패턴을 적용해요
+
+### SSR 안전 패턴
+
+렌더링 중에 브라우저 API를 읽지 마세요. 서버에는 `window`가 없고, 클라이언트 값이 서버 값과 다르면 hydration mismatch가 생겨요. 고정된 초기값에서 시작해서 effect에서 동기화하세요:
+
+```ts
+const [state, setState] = useState(FIXED_INITIAL_VALUE);
+
+useEffect(function syncBrowserState() {
+  if (isServer()) {
+    return;
+  }
+
+  setState(readBrowserApi());
+}, []);
+```
+
+### 브라우저·모바일 웹 훅
+
+- 고빈도 이벤트(`scroll`, `resize`, `visualViewport` 변화)는 약 16ms로 쓰로틀링하고, 값이 바뀌지 않았으면 업데이트를 건너뛰고, 급하지 않은 업데이트에는 `startTransition`을 써요
+- 핸들러가 `preventDefault`를 호출하지 않는다면 패시브 이벤트 리스너를 써요
+- 한 플랫폼만 고르지 말고 플랫폼 차이를 처리해요:
+
+  | 기능                       | iOS                         | Android               |
+  | -------------------------- | --------------------------- | --------------------- |
+  | `visualViewport.offsetTop` | 키보드가 나타나면 음수가 됨 | 일반적으로 0 유지     |
+  | 키보드 동작                | 뷰포트가 밀려 올라감        | 레이아웃을 리사이즈함 |
+
+- jsdom은 비주얼 뷰포트나 온스크린 키보드를 재현하지 못하니, 이런 훅은 테스트뿐 아니라 실제 iOS Safari와 Android Chrome 기기에서도 확인해요
