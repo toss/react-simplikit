@@ -6,7 +6,7 @@
 
 `react-simplikit` 提供能在所有 React 环境（浏览器、服务端渲染和 React Native）中运行的 Hook、组件和工具函数，以及解决浏览器和移动端 Web 浏览器特有问题的 Hook，例如软键盘、安全区域内边距和视觉视口。任何干涉 React 生命周期或依赖其他库的实现都不在范围内，详见[设计原则](./design-principles.md)。
 
-源码位于 `packages/react-simplikit/src`：与平台无关的代码放在 `hooks/`、`components/` 和 `utils/`，只在移动端 Web 浏览器中才有意义的代码放在 `mobile/hooks/` 和 `mobile/utils/`。用到浏览器 API 并不意味着就是“移动端 Web”：快捷键 Hook 属于 `hooks/`，键盘高度 Hook 属于 `mobile/hooks/`。两者都从包的根入口导出，这个划分只影响文件放在哪里。
+源码位于 `packages/react-simplikit/src` 下的 `hooks/`、`components/` 和 `utils/`。
 
 ## 贡献实现
 

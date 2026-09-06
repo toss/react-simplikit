@@ -6,7 +6,7 @@
 
 `react-simplikit` ofrece Hooks, componentes y utilidades que funcionan en cualquier entorno de React (navegador, renderizado en el servidor y React Native), además de Hooks que resuelven problemas propios de los navegadores y, en particular, de los navegadores de la web móvil, como el teclado en pantalla, los márgenes del área segura y el viewport visual. Todo lo que interfiera en el ciclo de vida de React o dependa de otra biblioteca queda fuera del alcance; consulta los [Principios de diseño](./design-principles.md).
 
-El código fuente vive en `packages/react-simplikit/src`: `hooks/`, `components/` y `utils/` para el código independiente de la plataforma, y `mobile/hooks/` y `mobile/utils/` para el código que solo tiene sentido en un navegador de web móvil. Un Hook no es de “web móvil” solo porque use una API del navegador: un Hook de atajos de teclado va en `hooks/`, y uno que mide la altura del teclado, en `mobile/hooks/`. Ambos se exportan desde la raíz del paquete; la división solo afecta a dónde vive el archivo.
+El código fuente se encuentra en `packages/react-simplikit/src`, dentro de `hooks/`, `components/` y `utils/`.
 
 ## Contribuciones a la implementación
 

@@ -6,7 +6,7 @@
 
 `react-simplikit`은 브라우저, 서버 렌더링, React Native 등 모든 React 환경에서 동작하는 훅, 컴포넌트, 유틸리티를 제공해요. 여기에 온스크린 키보드, 안전 영역 인셋, 비주얼 뷰포트처럼 브라우저와 모바일 웹 브라우저에서만 생기는 문제를 해결하는 훅도 포함돼요. React의 생명주기에 간섭하거나 다른 라이브러리에 의존하는 구현은 범위 밖이에요. [설계 원칙](./design-principles.md)을 참고해 주세요.
 
-소스는 `packages/react-simplikit/src` 아래에 있어요. 플랫폼 독립적인 코드는 `hooks/`, `components/`, `utils/`에, 모바일 웹 브라우저에서만 의미 있는 코드는 `mobile/hooks/`와 `mobile/utils/`에 둬요. 브라우저 API를 쓴다고 해서 "모바일 웹"인 건 아니에요. 키보드 단축키 훅은 `hooks/`에, 키보드 높이 훅은 `mobile/hooks/`에 속해요. 둘 다 패키지 루트에서 export되고, 이 구분은 파일 위치에만 영향을 줘요.
+소스는 `packages/react-simplikit/src` 아래 `hooks/`, `components/`, `utils/`에 있어요.
 
 ## 구현체 기여
 
