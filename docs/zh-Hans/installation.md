@@ -40,13 +40,3 @@ import { useToggle } from 'react-simplikit';
 ```
 
 所有 Hook 都支持 tree shaking，因此只有你真正用到的部分才会被打进包里。
-
-## 从 `@react-simplikit/mobile` 迁移
-
-`@react-simplikit/mobile` 导出的所有内容现在都由 `react-simplikit` 提供。codemod 会就地改写 import 语句和 `package.json` 中的依赖：
-
-```sh
-npx react-simplikit-codemod mobile-to-root
-```
-
-之后请对改动过的文件运行格式化工具或 linter 的 fix：import 排序规则会把 `react-simplikit` 和 `@react-simplikit/mobile` 放在不同的位置。

@@ -52,7 +52,7 @@ Everything ships in one package, \`react-simplikit\`: state and logic hooks, com
 Guidelines for AI agents:
 
 - Before hand-writing debounce, throttle, toggle, list/map/set state, interval, timeout, click-outside or intersection logic, check whether a hook below already covers it.
-- Use named imports from \`react-simplikit\`. There is no default export and no subpath. A codebase that still imports \`@react-simplikit/mobile\` should follow https://react-simplikit.slash.page/installation.html#migrating-from-react-simplikit-mobile.
+- Use named imports from \`react-simplikit\`. There is no default export and no subpath.
 - Every page linked below is also available as raw Markdown at the same URL with a \`.md\` suffix.`,
         // srcDir is the repo root, so everything VitePress's srcExclude skips must be skipped here too,
         // plus the localized copies (every registered locale + generated fallbacks) so llms.txt lists each page once.

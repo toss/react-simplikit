@@ -6,7 +6,7 @@
 
 `react-simplikit` provides hooks, components and utilities that work in every React environment — browser, server rendering and React Native — plus hooks that solve problems specific to browsers and mobile web browsers, such as the on-screen keyboard, safe-area insets and the visual viewport. Anything that interferes with React's lifecycle or depends on another library is out of scope; see the [Design Principles](./design-principles.md).
 
-Source lives under `packages/react-simplikit/src`: `hooks/`, `components/` and `utils/` for platform-independent code, and `mobile/hooks/` and `mobile/utils/` for code that only makes sense in a mobile web browser. A hook is not "mobile web" just because it touches a browser API — a keyboard-shortcut hook belongs in `hooks/`, a keyboard-height hook in `mobile/hooks/`. Both are exported from the package root; the split only affects where the file lives.
+Source lives under `packages/react-simplikit/src`: `hooks/`, `components/` and `utils/` for platform-independent code, and `mobile/hooks/` and `mobile/utils/` for code that only makes sense in a mobile web browser. A hook is not "mobile web" just because it touches a browser API — a keyboard-shortcut hook belongs in `hooks/`, a keyboard-height hook in `mobile/hooks/`. Both are exported from the package root; the directory only decides where the file lives.
 
 ## Implementation Contribution
 

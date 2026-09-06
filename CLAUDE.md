@@ -5,7 +5,7 @@
 React utility hooks/components library. Two published packages and an agent plugin:
 
 - `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils. Mobile web hooks (viewport, keyboard, safe area) live under `src/mobile` and are part of the same public API
-- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that migrates consumers off the retired `@react-simplikit/mobile`. The rules below describe the library; the exceptions that apply to the CLI are called out where they differ
+- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today). The rules below describe the library; the exceptions that apply to the CLI are called out where they differ
 - `packages/plugin` — agent skills for Claude Code (the root `.claude-plugin/marketplace.json` points here), Codex and skills.sh. No `package.json`, so it is neither a workspace nor on npm. `yarn skill:gen` regenerates `skills/react-simplikit` from the public exports and `yarn test:skill` fails CI when the committed copy drifts; `skills/react-simplikit-codemod` is hand-written
 
 ## Development Quick Start

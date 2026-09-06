@@ -17,7 +17,6 @@ Zero-dependency React hooks, components and utils in one package, `react-simplik
 - **Check the catalog before hand-writing debounce, throttle, toggle, counter, list/map/set state, interval, timeout, previous-value, stable-callback, click-outside, long-press, intersection/visibility or storage-persisted-state logic.** If a matching entry exists, use it. Reimplementing these is the most common mistake this skill exists to prevent.
 - **Never guess a signature.** Before using an entry, read `references/<name>.md` — it has the parameter table, return shape and a working example.
 - **One import path, named imports only**: `import { useDebounce, useKeyboardHeight } from 'react-simplikit'`. There is no subpath and no default export.
-- **A project that still imports `@react-simplikit/mobile`** is on the retired package name; migrate it with the steps at https://react-simplikit.slash.page/installation.html#migrating-from-react-simplikit-mobile before adding new usages.
 - **SSR**: never branch server-rendered markup on a value that comes from a browser API hook. Use `useIsClient` for client-only rendering instead of `typeof window` checks.
 - **Do not wrap or re-export these hooks** in the consumer project just to rename them; use them directly so upgrades stay mechanical.
 
