@@ -1,3 +1,6 @@
+import detectIndent from 'detect-indent';
+import semver from 'semver';
+
 import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../constants.ts';
 
 export type PackageJsonChange = {
@@ -12,64 +15,53 @@ type TransformPackageJsonResult = {
   manual: string[];
 };
 
-const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'] as const;
+type RootDependency = {
+  spec: unknown;
+  added: string | null;
+  manual: string[];
+};
 
-const MANUAL_FIELDS = ['resolutions', 'overrides'] as const;
+const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+
+const MANUAL_FIELDS = ['resolutions', 'overrides'];
+
+const FLOOR_RANGE = `>=${MIN_RUNTIME_VERSION}`;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function detectIndent(text: string): string {
-  const match = /\n([ \t]+)"/.exec(text);
-
-  return match?.[1] ?? '  ';
-}
-
-function withoutMobile(field: Record<string, unknown>): Record<string, unknown> {
-  return Object.fromEntries(Object.entries(field).filter(([name]) => name !== MOBILE_PACKAGE_NAME));
-}
-
-const FLOOR = MIN_RUNTIME_VERSION.split('.').map(Number);
-
-// Matching on digits instead would read `file:../pkg-0.1.1.tgz` as the version 0.1.1.
-function isProtocolSpec(range: string): boolean {
-  return /^[a-z][a-z\d+.-]*:/i.test(range);
-}
-
-function versionIn(range: string): number[] | undefined {
-  if (isProtocolSpec(range)) {
-    return undefined;
+// What the field should point react-simplikit at once @react-simplikit/mobile leaves it.
+function rootDependencyFor(field: string, existing: unknown, previous: unknown): RootDependency {
+  // `workspace:*`, `file:../x.tgz`, `npm:other@1`, a git URL, a dist-tag: semver cannot read these as a range.
+  if (typeof existing === 'string' && semver.validRange(existing) === null) {
+    return {
+      spec: existing,
+      added: null,
+      manual: [
+        `"${field}" points ${ROOT_PACKAGE_NAME} at \`${existing}\`, so its version cannot be checked against the ${MIN_RUNTIME_VERSION} floor. Confirm that source ships ${MIN_RUNTIME_VERSION} or newer.`,
+      ],
+    };
   }
 
-  const match = /(\d+)\.(\d+)\.(\d+)/.exec(range);
-
-  return match === null ? undefined : [Number(match[1]), Number(match[2]), Number(match[3])];
-}
-
-function isBelowFloor(range: string): boolean {
-  const version = versionIn(range);
-
-  if (version === undefined) {
-    return false;
+  // `*` and `>=0.1.0` still admit a version below the floor, and a lockfile would keep one there.
+  if (typeof existing === 'string' && semver.subset(existing, FLOOR_RANGE)) {
+    return { spec: existing, added: null, manual: [] };
   }
 
-  // Not a per-component test: that ranks 1.0.0 below a 0.2.0 floor, because its minor is lower.
-  for (const [index, part] of FLOOR.entries()) {
-    if (version[index] !== part) {
-      return version[index] < part;
-    }
+  if (typeof previous === 'string' && semver.validRange(previous) === null) {
+    return {
+      spec: previous,
+      added: null,
+      manual: [
+        `"${field}" pinned ${MOBILE_PACKAGE_NAME} as \`${previous}\`, which is not a version range. Point ${ROOT_PACKAGE_NAME} at the same source by hand.`,
+      ],
+    };
   }
 
-  return false;
-}
+  const added = field === 'peerDependencies' ? FLOOR_RANGE : `^${MIN_RUNTIME_VERSION}`;
 
-function rangeFor(field: string, previous: unknown): string | null {
-  if (typeof previous === 'string' && versionIn(previous) === undefined) {
-    return null;
-  }
-
-  return field === 'peerDependencies' ? `>=${MIN_RUNTIME_VERSION}` : `^${MIN_RUNTIME_VERSION}`;
+  return { spec: added, added, manual: [] };
 }
 
 export function transformPackageJson(text: string): TransformPackageJsonResult {
@@ -95,31 +87,12 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
       continue;
     }
 
-    const existing = value[ROOT_PACKAGE_NAME];
-    const keepExisting = typeof existing === 'string' && !isBelowFloor(existing);
+    const { [MOBILE_PACKAGE_NAME]: previous, ...rest } = value;
+    const root = rootDependencyFor(field, value[ROOT_PACKAGE_NAME], previous);
 
-    if (typeof existing === 'string' && isProtocolSpec(existing)) {
-      manual.push(
-        `"${field}" points ${ROOT_PACKAGE_NAME} at \`${existing}\`, so its version cannot be checked against the ${MIN_RUNTIME_VERSION} floor. Confirm that source ships ${MIN_RUNTIME_VERSION} or newer.`
-      );
-    }
-    const added = keepExisting ? null : rangeFor(field, value[MOBILE_PACKAGE_NAME]);
-    const rest = withoutMobile(value);
-
-    if (added === null && !keepExisting) {
-      manual.push(
-        `"${field}" pinned ${MOBILE_PACKAGE_NAME} as \`${String(value[MOBILE_PACKAGE_NAME])}\`, which is not a version range. Point ${ROOT_PACKAGE_NAME} at the same source by hand.`
-      );
-    }
-
-    next = {
-      ...next,
-      [field]:
-        added === null
-          ? { ...rest, ...(keepExisting ? {} : { [ROOT_PACKAGE_NAME]: value[MOBILE_PACKAGE_NAME] }) }
-          : { ...rest, [ROOT_PACKAGE_NAME]: added },
-    };
-    changes.push({ field, removed: MOBILE_PACKAGE_NAME, added });
+    next = { ...next, [field]: { ...rest, [ROOT_PACKAGE_NAME]: root.spec } };
+    changes.push({ field, removed: MOBILE_PACKAGE_NAME, added: root.added });
+    manual.push(...root.manual);
   }
 
   for (const field of MANUAL_FIELDS) {
@@ -136,7 +109,8 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
     return { text, changes, manual };
   }
 
-  const serialized = JSON.stringify(next, null, detectIndent(text));
+  const { indent } = detectIndent(text);
+  const serialized = JSON.stringify(next, null, indent === '' ? '  ' : indent);
 
   return { text: text.endsWith('\n') ? `${serialized}\n` : serialized, changes, manual };
 }

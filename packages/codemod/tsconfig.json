@@ -6,6 +6,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

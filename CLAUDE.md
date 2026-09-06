@@ -71,7 +71,7 @@ src/
 - **`"use client"` banner** — tsdown adds this to every emitted file for RSC compatibility
 - **Named exports only** — No default exports
 - **No `any` types** — Full TypeScript strict mode, no escape hatches
-- **Zero dependencies** — No runtime dependencies in `react-simplikit`. `react-simplikit-codemod` is a dev-time CLI and declares `commander`, `fast-glob` and `typescript` in `dependencies`
+- **Zero dependencies** — No runtime dependencies in `react-simplikit`. `react-simplikit-codemod` is a dev-time CLI and declares `commander`, `detect-indent`, `fast-glob`, `semver` and `typescript` in `dependencies`
 
 ### SSR-Safe Coding Pattern
 

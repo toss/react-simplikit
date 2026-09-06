@@ -8,13 +8,11 @@ function kindsOf(code: string, fileName = 'input.tsx'): string[] {
 }
 
 describe('parseSource', () => {
-  it('picks the script kind from the extension', () => {
+  it('lets TypeScript pick the script kind from the extension', () => {
     expect(parseSource('const a = 1;', 'a.ts').languageVariant).toBe(ts.LanguageVariant.Standard);
+    expect(parseSource('const a = 1;', 'a.cts').languageVariant).toBe(ts.LanguageVariant.Standard);
     expect(parseSource('const a = 1;', 'a.tsx').languageVariant).toBe(ts.LanguageVariant.JSX);
-  });
-
-  it('falls back to TSX for an unknown extension', () => {
-    expect(parseSource('const a = 1;', 'a.unknown').languageVariant).toBe(ts.LanguageVariant.JSX);
+    expect(parseSource('const a = 1;', 'a.js').languageVariant).toBe(ts.LanguageVariant.JSX);
   });
 });
 

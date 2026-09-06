@@ -43,6 +43,8 @@ type FileOutcome = { text: string; notes: FileNote[] } & (
   | { kind: 'manifest'; dependencies: PackageJsonChange[] }
 );
 
+type FileReport = Pick<RunResult, 'changed' | 'manual' | 'failed'>;
+
 function transformFile(file: string, original: string): FileOutcome {
   if (path.basename(file) === 'package.json') {
     const result = transformPackageJson(original);
@@ -60,43 +62,59 @@ function transformFile(file: string, original: string): FileOutcome {
   return { kind: 'source', text: result.code, changes: result.changes, notes: result.notes };
 }
 
-export async function runTransform({ files, cwd, dryRun, debug }: RunTransformOptions): Promise<RunResult> {
-  const changed: FileResult[] = [];
-  const manual: ManualNote[] = [];
-  const failed: FileFailure[] = [];
+function displayNameOf(file: string, cwd: string) {
+  const fromCwd = path.relative(cwd, file);
 
-  for (const file of files) {
-    const fromCwd = path.relative(cwd, file);
-    const relative = fromCwd.startsWith('..') ? file : fromCwd;
+  return fromCwd.startsWith('..') ? file : fromCwd;
+}
 
-    try {
-      const original = await readFile(file, 'utf8');
-      const outcome = transformFile(file, original);
+async function processFile(file: string, { cwd, dryRun, debug }: RunTransformOptions): Promise<FileReport> {
+  const name = displayNameOf(file, cwd);
+  let manual: ManualNote[] = [];
 
-      for (const note of outcome.notes) {
-        manual.push({ file: relative, line: note.line, reason: note.reason });
-      }
+  try {
+    const original = await readFile(file, 'utf8');
+    const outcome = transformFile(file, original);
 
-      if (outcome.text === original) {
-        continue;
-      }
+    manual = outcome.notes.map(note => ({ file: name, line: note.line, reason: note.reason }));
 
-      if (!dryRun) {
-        await writeFile(file, outcome.text, 'utf8');
-      }
-
-      changed.push(
-        outcome.kind === 'manifest'
-          ? { kind: 'manifest', file: relative, dependencies: outcome.dependencies }
-          : { kind: 'source', file: relative, changes: outcome.changes }
-      );
-    } catch (error) {
-      const stack = debug && error instanceof Error ? error.stack : undefined;
-      const reason = describeFailure(error);
-
-      failed.push({ file: relative, reason: stack === undefined ? reason : `${reason}\n${stack}` });
+    if (outcome.text === original) {
+      return { changed: [], manual, failed: [] };
     }
+
+    if (!dryRun) {
+      await writeFile(file, outcome.text, 'utf8');
+    }
+
+    const changed: FileResult =
+      outcome.kind === 'manifest'
+        ? { kind: 'manifest', file: name, dependencies: outcome.dependencies }
+        : { kind: 'source', file: name, changes: outcome.changes };
+
+    return { changed: [changed], manual, failed: [] };
+  } catch (error) {
+    const reason = describeFailure(error);
+    const stack = debug && error instanceof Error ? error.stack : undefined;
+
+    return {
+      changed: [],
+      manual,
+      failed: [{ file: name, reason: stack === undefined ? reason : `${reason}\n${stack}` }],
+    };
+  }
+}
+
+export async function runTransform(options: RunTransformOptions): Promise<RunResult> {
+  const reports: FileReport[] = [];
+
+  for (const file of options.files) {
+    reports.push(await processFile(file, options));
   }
 
-  return { scanned: files.length, changed, manual, failed };
+  return {
+    scanned: options.files.length,
+    changed: reports.flatMap(report => report.changed),
+    manual: reports.flatMap(report => report.manual),
+    failed: reports.flatMap(report => report.failed),
+  };
 }

@@ -6498,6 +6498,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/semver", [\
+      ["npm:7.8.0", {\
+        "packageLocation": "./.yarn/cache/@types-semver-npm-7.8.0-9c468999fb-46a1f38e36.zip/node_modules/@types/semver/",\
+        "packageDependencies": [\
+          ["@types/semver", "npm:7.8.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/unist", [\
       ["npm:3.0.3", {\
         "packageLocation": "./.yarn/cache/@types-unist-npm-3.0.3-1c20461f2e-2b1e4adcab.zip/node_modules/@types/unist/",\
@@ -8669,6 +8678,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["detect-indent", [\
+      ["npm:7.0.2", {\
+        "packageLocation": "./.yarn/cache/detect-indent-npm-7.0.2-3feaa5d927-adb1334ca3.zip/node_modules/detect-indent/",\
+        "packageDependencies": [\
+          ["detect-indent", "npm:7.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["detect-libc", [\
       ["npm:2.1.2", {\
         "packageLocation": "./.yarn/cache/detect-libc-npm-2.1.2-d0c382b1e2-acc675c29a.zip/node_modules/detect-libc/",\
@@ -9902,6 +9920,16 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["extend-shallow", "npm:2.0.1"],\
           ["is-extendable", "npm:0.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["fast-check", [\
+      ["npm:4.9.0", {\
+        "packageLocation": "./.yarn/cache/fast-check-npm-4.9.0-5e722e008c-d31e6cf7b4.zip/node_modules/fast-check/",\
+        "packageDependencies": [\
+          ["fast-check", "npm:4.9.0"],\
+          ["pure-rand", "npm:8.4.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13010,6 +13038,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["pure-rand", [\
+      ["npm:8.4.2", {\
+        "packageLocation": "./.yarn/cache/pure-rand-npm-8.4.2-de27bfa776-4b2ef2a2e6.zip/node_modules/pure-rand/",\
+        "packageDependencies": [\
+          ["pure-rand", "npm:8.4.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["quansync", [\
       ["npm:1.0.0", {\
         "packageLocation": "./.yarn/cache/quansync-npm-1.0.0-0707dd9045-0765426343.zip/node_modules/quansync/",\
@@ -13384,12 +13421,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./packages/codemod/",\
         "packageDependencies": [\
           ["@types/node", "npm:24.13.3"],\
+          ["@types/semver", "npm:7.8.0"],\
           ["@vitest/coverage-v8", "virtual:153e8f447525e06c796c624afc450ca80110e691444c20ef3fd083f9f36ec27493159562bfd3886ca8f0cd515e71b00ae6ae6da1d8e5015decd4eb6706180574#npm:2.1.9"],\
           ["commander", "npm:13.1.0"],\
+          ["detect-indent", "npm:7.0.2"],\
           ["eslint", "virtual:539b451571f0988c0af51257f55a5a782178df937d372062375b750931875a6facac716a154eb2b4aa1e0ffc809cf9d1dd6a0b387bd1b99854bdf0c986f9a560#npm:9.39.3"],\
+          ["fast-check", "npm:4.9.0"],\
           ["fast-glob", "npm:3.3.3"],\
           ["react-simplikit-codemod", "workspace:packages/codemod"],\
           ["rimraf", "npm:6.0.1"],\
+          ["semver", "npm:7.8.5"],\
           ["tsdown", "virtual:153e8f447525e06c796c624afc450ca80110e691444c20ef3fd083f9f36ec27493159562bfd3886ca8f0cd515e71b00ae6ae6da1d8e5015decd4eb6706180574#npm:0.22.14"],\
           ["typescript", "patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"],\
           ["vitest", "virtual:153e8f447525e06c796c624afc450ca80110e691444c20ef3fd083f9f36ec27493159562bfd3886ca8f0cd515e71b00ae6ae6da1d8e5015decd4eb6706180574#npm:2.1.9"]\

@@ -23,6 +23,7 @@
   ],
   "scripts": {
     "build": "tsdown",
+    "prepublish": "yarn build",
     "clean": "rimraf ./dist",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
@@ -36,13 +37,17 @@
   },
   "dependencies": {
     "commander": "^13.1.0",
+    "detect-indent": "^7.0.2",
     "fast-glob": "^3.3.3",
+    "semver": "^7.8.5",
     "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
+    "@types/semver": "^7.8.0",
     "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9.39.3",
+    "fast-check": "^4.9.0",
     "rimraf": "^6.0.1",
     "tsdown": "^0.22.14",
     "vitest": "^2.1.8"
