@@ -1,3 +1,6 @@
+import detectIndent from 'detect-indent';
+import semver from 'semver';
+
 import { MIN_RUNTIME_VERSION, MOBILE_PACKAGE_NAME, ROOT_PACKAGE_NAME } from '../constants.ts';
 
 export type PackageJsonChange = {
@@ -16,60 +19,27 @@ const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies'
 
 const MANUAL_FIELDS = ['resolutions', 'overrides'] as const;
 
+const FLOOR_RANGE = `>=${MIN_RUNTIME_VERSION}`;
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-function detectIndent(text: string): string {
-  const match = /\n([ \t]+)"/.exec(text);
-
-  return match?.[1] ?? '  ';
 }
 
 function withoutMobile(field: Record<string, unknown>): Record<string, unknown> {
   return Object.fromEntries(Object.entries(field).filter(([name]) => name !== MOBILE_PACKAGE_NAME));
 }
 
-const FLOOR = MIN_RUNTIME_VERSION.split('.').map(Number);
-
-// Matching on digits instead would read `file:../pkg-0.1.1.tgz` as the version 0.1.1.
-function isProtocolSpec(range: string): boolean {
-  return /^[a-z][a-z\d+.-]*:/i.test(range);
-}
-
-function versionIn(range: string): number[] | undefined {
-  if (isProtocolSpec(range)) {
-    return undefined;
-  }
-
-  const match = /(\d+)\.(\d+)\.(\d+)/.exec(range);
-
-  return match === null ? undefined : [Number(match[1]), Number(match[2]), Number(match[3])];
-}
-
-function isBelowFloor(range: string): boolean {
-  const version = versionIn(range);
-
-  if (version === undefined) {
-    return false;
-  }
-
-  // Not a per-component test: that ranks 1.0.0 below a 0.2.0 floor, because its minor is lower.
-  for (const [index, part] of FLOOR.entries()) {
-    if (version[index] !== part) {
-      return version[index] < part;
-    }
-  }
-
-  return false;
+// `workspace:*`, `file:../x.tgz`, `npm:other@1`, a git URL, a dist-tag: nothing semver can read as a range.
+function isRegistryRange(spec: string): boolean {
+  return semver.validRange(spec) !== null;
 }
 
 function rangeFor(field: string, previous: unknown): string | null {
-  if (typeof previous === 'string' && versionIn(previous) === undefined) {
+  if (typeof previous === 'string' && !isRegistryRange(previous)) {
     return null;
   }
 
-  return field === 'peerDependencies' ? `>=${MIN_RUNTIME_VERSION}` : `^${MIN_RUNTIME_VERSION}`;
+  return field === 'peerDependencies' ? FLOOR_RANGE : `^${MIN_RUNTIME_VERSION}`;
 }
 
 export function transformPackageJson(text: string): TransformPackageJsonResult {
@@ -96,9 +66,11 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
     }
 
     const existing = value[ROOT_PACKAGE_NAME];
-    const keepExisting = typeof existing === 'string' && !isBelowFloor(existing);
+    const unreadable = typeof existing === 'string' && !isRegistryRange(existing);
+    // `*` and `>=0.1.0` still admit a version below the floor, and a lockfile would keep one there.
+    const keepExisting = typeof existing === 'string' && (unreadable || semver.subset(existing, FLOOR_RANGE));
 
-    if (typeof existing === 'string' && isProtocolSpec(existing)) {
+    if (unreadable) {
       manual.push(
         `"${field}" points ${ROOT_PACKAGE_NAME} at \`${existing}\`, so its version cannot be checked against the ${MIN_RUNTIME_VERSION} floor. Confirm that source ships ${MIN_RUNTIME_VERSION} or newer.`
       );
@@ -136,7 +108,8 @@ export function transformPackageJson(text: string): TransformPackageJsonResult {
     return { text, changes, manual };
   }
 
-  const serialized = JSON.stringify(next, null, detectIndent(text));
+  const { indent } = detectIndent(text);
+  const serialized = JSON.stringify(next, null, indent === '' ? '  ' : indent);
 
   return { text: text.endsWith('\n') ? `${serialized}\n` : serialized, changes, manual };
 }

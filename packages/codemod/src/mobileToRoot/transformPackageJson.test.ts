@@ -1,3 +1,5 @@
+import fc from 'fast-check';
+import semver from 'semver';
 import { describe, expect, it } from 'vitest';
 
 import { MIN_RUNTIME_VERSION } from '../constants.ts';
@@ -5,6 +7,7 @@ import { MIN_RUNTIME_VERSION } from '../constants.ts';
 import { transformPackageJson } from './transformPackageJson.ts';
 
 const ROOT_RANGE = `^${MIN_RUNTIME_VERSION}`;
+const FLOOR_RANGE = `>=${MIN_RUNTIME_VERSION}`;
 
 const [FLOOR_MAJOR] = MIN_RUNTIME_VERSION.split('.').map(Number);
 const NEXT_MAJOR = `^${FLOOR_MAJOR + 1}.0.0`;
@@ -186,10 +189,10 @@ describe('transformPackageJson — ranges it must not get wrong', () => {
     expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe(ROOT_RANGE);
   });
 
-  it('keeps a wildcard range, which names no version to compare against the floor', () => {
+  it('raises a wildcard range: it admits every version, so a lockfile could keep one below the floor', () => {
     const input = `{\n  "dependencies": {\n    "react-simplikit": "*",\n    "@react-simplikit/mobile": "^0.1.1"\n  }\n}\n`;
 
-    expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe('*');
+    expect(depsOf(transformPackageJson(input).text)['react-simplikit']).toBe(ROOT_RANGE);
   });
 
   it('widens rather than narrows a peer range', () => {
@@ -197,6 +200,33 @@ describe('transformPackageJson — ranges it must not get wrong', () => {
 
     expect(depsOf(transformPackageJson(input).text, 'peerDependencies')['react-simplikit']).toBe(
       `>=${MIN_RUNTIME_VERSION}`
+    );
+  });
+});
+
+describe('transformPackageJson — the floor holds for any registry range', () => {
+  const version = fc.tuple(fc.nat({ max: 3 }), fc.nat({ max: 12 }), fc.nat({ max: 12 })).map(parts => parts.join('.'));
+  const range = fc.oneof(
+    version,
+    version.map(v => `^${v}`),
+    version.map(v => `~${v}`),
+    version.map(v => `>=${v}`),
+    version.map(v => `<${v}`),
+    version.map(v => `${v}-beta.1`),
+    fc.constantFrom('*', '', 'x', '0.x', '1.x')
+  );
+
+  it('leaves a range alone exactly when every version it admits is on or above the floor', () => {
+    fc.assert(
+      fc.property(range, existing => {
+        const input = JSON.stringify({
+          dependencies: { 'react-simplikit': existing, '@react-simplikit/mobile': '^0.1.1' },
+        });
+        const output = depsOf(transformPackageJson(input).text)['react-simplikit'];
+
+        expect(semver.subset(output, FLOOR_RANGE)).toBe(true);
+        expect(output).toBe(semver.subset(existing, FLOOR_RANGE) ? existing : ROOT_RANGE);
+      })
     );
   });
 });
