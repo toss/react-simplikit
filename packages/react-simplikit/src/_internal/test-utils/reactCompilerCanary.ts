@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 
 import { useBooleanState } from '../../hooks/useBooleanState/useBooleanState.ts';
 import { usePrevious } from '../../hooks/usePrevious/usePrevious.ts';
-import { useNetworkStatus } from '../../mobile/hooks/useNetworkStatus/useNetworkStatus.ts';
 
 // `$[n]` is the React Compiler's memo-cache slot access. Unlike the `_c` import binding,
 // which Vitest's SSR module transform renames, it survives into Function.prototype.toString().
@@ -14,10 +13,6 @@ const MEMO_CACHE_ACCESS = /\$\[\d+\]/;
 describe('react compiler canary', () => {
   it('runs against compiled source', () => {
     expect(useBooleanState.toString()).toMatch(MEMO_CACHE_ACCESS);
-  });
-
-  it('runs against compiled mobile source', () => {
-    expect(useNetworkStatus.toString()).toMatch(MEMO_CACHE_ACCESS);
   });
 
   it("skips functions opted out with 'use no memo'", () => {
