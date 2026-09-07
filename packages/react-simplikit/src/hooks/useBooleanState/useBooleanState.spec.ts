@@ -1,5 +1,5 @@
 import { act } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -69,5 +69,21 @@ describe('useBooleanState', () => {
     const [bool] = result.current;
 
     expect(bool).toBe(true);
+  });
+
+  it('should initialize value using a lazy initializer', () => {
+    const { result } = renderHookSSR(() => useBooleanState(() => true));
+    const [value] = result.current;
+
+    expect(value).toBe(true);
+  });
+
+  it('should call the lazy initializer only on initial render', () => {
+    const initializer = vi.fn(() => false);
+    const { rerender } = renderHookSSR(() => useBooleanState(initializer));
+
+    rerender();
+
+    expect(initializer).toHaveBeenCalledTimes(1);
   });
 });
