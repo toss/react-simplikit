@@ -1,6 +1,6 @@
 {
   "name": "react-simplikit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "React hooks, components and utilities for every React app, mobile web included — SSR-safe, zero dependencies",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
