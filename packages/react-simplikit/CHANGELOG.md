@@ -1,5 +1,15 @@
 # react-simplikit
 
+## 0.3.0
+
+### Minor Changes
+
+- [#469](https://github.com/toss/react-simplikit/pull/469) [`cc8b69e`](https://github.com/toss/react-simplikit/commit/cc8b69e466b1ad11089bc5aca32c898c5c7204ea) Thanks [@DongEun02](https://github.com/DongEun02)! - Add lazy initializer support to useInputState.
+
+### Patch Changes
+
+- [#467](https://github.com/toss/react-simplikit/pull/467) [`92cbb34`](https://github.com/toss/react-simplikit/commit/92cbb349454a1b54f60db3edd1037240677984e4) Thanks [@constantly-dev](https://github.com/constantly-dev)! - `useIntersectionObserver` no longer recreates the underlying `IntersectionObserver` on every render when an inline `options` object is passed. It now recreates it only when `root`, `rootMargin`, or `threshold` actually change.
+
 ## 0.2.0
 
 ### Minor Changes

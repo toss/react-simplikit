@@ -1,5 +1,11 @@
 # react-simplikit-codemod
 
+## 0.1.2
+
+### Patch Changes
+
+- [#474](https://github.com/toss/react-simplikit/pull/474) [`f131867`](https://github.com/toss/react-simplikit/commit/f131867a020706c2975222dfac5c9c86e8877f49) Thanks [@mnxmnz](https://github.com/mnxmnz)! - `mobile-to-root` now asks semver whether an existing `react-simplikit` range already guarantees the `0.2.0` floor, instead of comparing digits it pulled out of the string. A wildcard such as `*` still admits an older version, so it is raised to `^0.2.0` rather than left in place; a `workspace:`, `file:` or dist-tag spec that semver cannot read is kept and reported. An `--ignore` glob is joined onto the current directory with `path.posix.join`, so `./legacy/**` and `legacy/**` read the same way.
+
 ## 0.1.1
 
 ### Patch Changes
