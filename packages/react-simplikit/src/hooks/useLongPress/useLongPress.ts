@@ -1,4 +1,4 @@
-import { type MouseEvent, type TouchEvent, useCallback, useRef } from 'react';
+import { type MouseEvent, type TouchEvent, useCallback, useEffect, useRef } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 type Handler<E extends HTMLElement> = (event: MouseEvent<E> | TouchEvent<E>) => void;
@@ -105,6 +105,13 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
       timeoutRef.current = null;
     }
   }, []);
+
+  useEffect(
+    function cleanupLongPressOnUnmount() {
+      return cancelLongPress;
+    },
+    [cancelLongPress]
+  );
 
   const handlePressStart = useCallback(
     (event: MouseEvent<E> | TouchEvent<E>) => {

@@ -5,6 +5,26 @@ import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useLongPress } from './useLongPress.ts';
 
+type PressTargetProps = {
+  onLongPress: () => void;
+  onClick: () => void;
+  onLongPressEnd: () => void;
+};
+
+function PressTarget({ onLongPress, onClick, onLongPressEnd }: PressTargetProps) {
+  const handlers = useLongPress(onLongPress, { delay: 500, onClick, onLongPressEnd });
+
+  return <button {...handlers}>Press me</button>;
+}
+
+function createCallbacks() {
+  return {
+    onLongPress: vi.fn(),
+    onClick: vi.fn(),
+    onLongPressEnd: vi.fn(),
+  };
+}
+
 describe('useLongPress', () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -367,5 +387,52 @@ describe('useLongPress', () => {
     });
 
     expect(onLongPress).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['mouse', 'touch'] as const)('cancels a pending %s press on unmount', async input => {
+    const callbacks = createCallbacks();
+    const { getByRole, unmount } = render(<PressTarget {...callbacks} />);
+    const button = getByRole('button');
+
+    if (input === 'mouse') {
+      fireEvent.mouseDown(button, { clientX: 0, clientY: 0 });
+    } else {
+      fireEvent.touchStart(button, { touches: [{ clientX: 0, clientY: 0 }] });
+    }
+
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+    });
+    expect(callbacks.onLongPress).not.toHaveBeenCalled();
+
+    unmount();
+
+    await act(async () => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(callbacks.onLongPress).not.toHaveBeenCalled();
+    expect(callbacks.onClick).not.toHaveBeenCalled();
+    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
+  });
+
+  it('preserves the pending timer across a rerender', async () => {
+    const callbacks = createCallbacks();
+    const { getByRole, rerender, unmount } = render(<PressTarget {...callbacks} />);
+
+    fireEvent.mouseDown(getByRole('button'));
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+    });
+
+    rerender(<PressTarget {...callbacks} />);
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+    });
+
+    expect(callbacks.onLongPress).toHaveBeenCalledTimes(1);
+    expect(callbacks.onClick).not.toHaveBeenCalled();
+    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
+    unmount();
   });
 });
