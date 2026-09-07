@@ -6,7 +6,7 @@
 
 ```ts
 function useBooleanState(
-  defaultValue: boolean = false
+  initialValue: boolean | (() => boolean) = false
 ): readonly [
   state: boolean,
   setTrue: () => void,
@@ -18,8 +18,8 @@ function useBooleanState(
 ### Parameters
 
 <Interface
-  name="defaultValue"
-  type="boolean"
+  name="initialValue"
+  type="boolean | (() => boolean)"
   description="The initial value of the state. Defaults to <code>false</code>."
 />
 
