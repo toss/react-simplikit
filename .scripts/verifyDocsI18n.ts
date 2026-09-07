@@ -285,6 +285,12 @@ assert.equal(rootConfig.themeConfig?.editLink?.text, 'Edit this page on GitHub')
 const rootSidebar = (rootConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/'];
 const referenceGroups = rootSidebar[1].items ?? [];
 
+assert.equal(
+  rootSidebar[1].link,
+  '/reference',
+  'the reference group must link its index page, otherwise VitePress computes its prev/next from the first sidebar entry'
+);
+
 assert.deepEqual(
   referenceGroups.map(group => group.text),
   ['Components', 'Hooks', 'Utils'],
