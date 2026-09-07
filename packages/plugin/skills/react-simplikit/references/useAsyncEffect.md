@@ -14,6 +14,7 @@ function useAsyncEffect(
 ### Parameters
 
 <Interface
+  required
   name="effect"
   type="() => Promise<void | (() => void)>"
   description="An asynchronous function executed in the <code>useEffect</code> pattern. This function can optionally return a cleanup function."
@@ -22,7 +23,7 @@ function useAsyncEffect(
 <Interface
   name="deps"
   type="DependencyList"
-  description="A dependency array. The effect will re-run whenever any value in this array changes. If omitted, it runs only once when the component mounts."
+  description="A dependency array. The effect will re-run whenever any value in this array changes. If omitted, it runs after every render of the component."
 />
 
 ### Return Value
