@@ -160,4 +160,51 @@ describe('useThrottledCallback', () => {
     expect(onChange).toBeCalledTimes(2);
     expect(onChange).toBeCalledWith(false);
   });
+
+  it('forwards a stream of distinct values at most once per interval', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));
+
+    for (const value of ['a', 'b', 'c', 'd', 'e']) {
+      result.current(value);
+      vi.advanceTimersByTime(20);
+    }
+    expect(onChange.mock.calls.map(call => call[0])).toEqual(['a']);
+
+    vi.advanceTimersByTime(100);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual(['a', 'e']);
+  });
+
+  it('keeps forwarding once per interval while values keep changing with trailing edge only', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100, edges: ['trailing'] }));
+
+    for (let i = 1; i <= 10; i++) {
+      result.current(i);
+      vi.advanceTimersByTime(30);
+    }
+    expect(onChange.mock.calls.map(call => call[0])).toEqual([5, 9]);
+
+    vi.advanceTimersByTime(100);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual([5, 9, 10]);
+  });
+
+  it('lets a value repeated after the window still occupy the next one', () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100 }));
+
+    result.current(true);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual([true]);
+
+    vi.advanceTimersByTime(200);
+
+    // repeated value: skipped as a duplicate, but the call still opens a throttle window
+    result.current(true);
+    vi.advanceTimersByTime(20);
+    result.current(false);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual([true]);
+
+    vi.advanceTimersByTime(100);
+    expect(onChange.mock.calls.map(call => call[0])).toEqual([true, false]);
+  });
 });

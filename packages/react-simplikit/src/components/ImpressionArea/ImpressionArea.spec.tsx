@@ -79,10 +79,10 @@ describe('ImpressionArea', () => {
 
     const observerCallback = mockInstances[0].callback;
     observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
-    // vi.runAllTimers();
+    vi.runAllTimers();
 
     observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
-    // vi.runAllTimers();
+    vi.runAllTimers();
 
     expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
   });
