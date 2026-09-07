@@ -42,12 +42,8 @@ export async function collectFiles({ paths, ignore, includePackageJson, cwd }: C
   }
 
   const base = fastGlob.convertPathToPattern(cwd);
-  const scoped = ignore.map(pattern => {
-    // A leading `./` joins into `/./`, which micromatch never matches.
-    const relative = pattern.startsWith('./') ? pattern.slice(2) : pattern;
-
-    return relative.startsWith('**/') ? relative : `${base}/${relative}`;
-  });
+  // Joined, not concatenated: a typed `./legacy/**` must not become `/./legacy/**`, which never matches.
+  const scoped = ignore.map(pattern => path.posix.join(base, pattern));
 
   const files = await fastGlob(patterns, {
     ignore: [...DEFAULT_IGNORE, ...scoped],

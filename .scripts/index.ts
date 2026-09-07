@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 
 import { generateDocs } from './commands/generateDocs/index.ts';
+import { generateReferenceIndex } from './commands/generateReferenceIndex/index.ts';
 import { generateSkill } from './commands/generateSkill/index.ts';
 import { prepareLocalizedFallbacks } from './commands/prepareLocalizedFallbacks/index.ts';
 import { scaffold } from './commands/scaffold/index.ts';
@@ -24,6 +25,13 @@ export function cli(args: string[]) {
     .description('Generate English fallback sources for documents that have no translation yet')
     .action(async () => {
       await prepareLocalizedFallbacks();
+    });
+
+  program
+    .command('generate-reference-index')
+    .description('Generate the per-locale reference index page from the source tree')
+    .action(() => {
+      generateReferenceIndex();
     });
 
   program

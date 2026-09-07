@@ -6,7 +6,7 @@
 
 [English](./README.md) | 한국어 | [日本語](./README-ja_jp.md) | [简体中文](./README-zh_hans.md) | [Español](./README-es.md)
 
-React 환경에서 유용하게 사용할 수 있는 다양한 훅, 컴포넌트, 유틸리티를 제공하는 가볍고 강력한 라이브러리예요.
+훅, 컴포넌트, 유틸리티를 제공하는 가볍고 의존성 없는 React 유틸리티 라이브러리예요.
 
 ## 특징
 
@@ -57,46 +57,19 @@ function SearchInput() {
 
 ## 포함된 기능
 
-### Hooks
+- **훅** — 상태와 로직(`useToggle`, `useDebounce`, `useList` 등), 브라우저 이벤트(`useIntersectionObserver`, `useOutsideClickEffect` 등), 모바일 웹(`useAvoidKeyboard`, `useSafeAreaInset`, `useVisualViewport` 등)
+- **컴포넌트** — `SwitchCase`, `Separated`, `ImpressionArea`
+- **유틸리티** — `buildContext`, `mergeProps`, `mergeRefs`, 그리고 `isIOS`, `getKeyboardHeight` 같은 모바일 웹 헬퍼
 
-| Hook                      | 설명                                                  |
-| ------------------------- | ----------------------------------------------------- |
-| `useBooleanState`         | boolean 상태를 핸들러와 함께 관리                     |
-| `useDebounce`             | 콜백 함수를 디바운스                                  |
-| `useDebouncedCallback`    | 옵션 객체로 `onChange` 콜백을 디바운스                |
-| `useInterval`             | 선언적으로 인터벌 설정                                |
-| `useIntersectionObserver` | 요소 가시성 관찰                                      |
-| `usePreservedCallback`    | 안정적인 콜백 참조                                    |
-| `usePreservedReference`   | 안정적인 객체 참조                                    |
-| ...                       | [모든 훅 보기](https://react-simplikit.slash.page/ko) |
-
-### Components
-
-| Component        | 설명                        |
-| ---------------- | --------------------------- |
-| `SwitchCase`     | 선언적 switch-case 렌더링   |
-| `Separated`      | 구분자와 함께 아이템 렌더링 |
-| `ImpressionArea` | 요소 노출 추적              |
-
-### Utilities
-
-| Utility        | 설명                                           |
-| -------------- | ---------------------------------------------- |
-| `buildContext` | 반복 코드 없이 React Context 정의              |
-| `mergeProps`   | `className`·`style`·이벤트를 합성해 props 병합 |
-| `mergeRefs`    | 여러 ref를 하나의 ref로 결합                   |
+한 줄 설명이 붙은 전체 목록은 [레퍼런스 페이지](https://react-simplikit.slash.page/ko/reference.html)에 있어요.
 
 ## 문서
 
 자세한 문서는 [react-simplikit.slash.page](https://react-simplikit.slash.page/ko)를 참고하세요.
 
-## 관련 패키지
-
-- [모바일 웹 유틸리티](https://react-simplikit.slash.page/ko/mobile/intro.html) - `react-simplikit`에 포함
-
 ## 기여하기
 
-기여를 환영해요! [기여 가이드](https://github.com/toss/react-simplikit/blob/main/CONTRIBUTING.md)를 확인하세요.
+기여를 환영해요! [기여 가이드](https://github.com/toss/react-simplikit/blob/main/.github/CONTRIBUTING.md)를 확인하세요.
 
 ## 라이선스
 

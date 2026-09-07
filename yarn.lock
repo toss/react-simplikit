@@ -4948,6 +4948,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/semver@npm:^7.8.0":
+  version: 7.8.0
+  resolution: "@types/semver@npm:7.8.0"
+  checksum: 10c0/46a1f38e36013448b279798e8b134e7e8de3b3630b1f40683903b9d57d36dd1d70838515570ed9a149fa09e9c381b9e39319b58d7b9f3b929b42ae2becff7aa3
+  languageName: node
+  linkType: hard
+
 "@types/unist@npm:*, @types/unist@npm:^3.0.0":
   version: 3.0.3
   resolution: "@types/unist@npm:3.0.3"
@@ -6573,6 +6580,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"detect-indent@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "detect-indent@npm:7.0.2"
+  checksum: 10c0/adb1334ca3fe516dc6817aff0a777540b88643ab92fe13a72d0f5d12721ca796ffdd0e5fedb7b45e6e82657156c6ad44f5d5758157f0439532ae7d07b595146b
+  languageName: node
+  linkType: hard
+
 "detect-libc@npm:^2.1.2":
   version: 2.1.2
   resolution: "detect-libc@npm:2.1.2"
@@ -7637,6 +7651,15 @@ __metadata:
   version: 3.0.2
   resolution: "extend@npm:3.0.2"
   checksum: 10c0/73bf6e27406e80aa3e85b0d1c4fd987261e628064e170ca781125c0b635a3dabad5e05adbf07595ea0cf1e6c5396cacb214af933da7cbaf24fe75ff14818e8f9
+  languageName: node
+  linkType: hard
+
+"fast-check@npm:^4.9.0":
+  version: 4.9.0
+  resolution: "fast-check@npm:4.9.0"
+  dependencies:
+    pure-rand: "npm:^8.0.0"
+  checksum: 10c0/d31e6cf7b4ef01dc654193ea7c34a894c51b1553b6781f22a50808d5535d825c2ff2adff23a7c2f14d0452c90917bd20a84c1e807d1f8064aa4d984a21e72788
   languageName: node
   linkType: hard
 
@@ -10386,6 +10409,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pure-rand@npm:^8.0.0":
+  version: 8.4.2
+  resolution: "pure-rand@npm:8.4.2"
+  checksum: 10c0/4b2ef2a2e68a258fb311efd26b65305b4865856e28d6b40ff61f7d65bb6a39b4f8ebbcf7dfc843193b3cfe54e7501dbc2c7aba0ecdb97d13cd634db709df83fd
+  languageName: node
+  linkType: hard
+
 "quansync@npm:^1.0.0":
   version: 1.0.0
   resolution: "quansync@npm:1.0.0"
@@ -10573,11 +10603,15 @@ __metadata:
   resolution: "react-simplikit-codemod@workspace:packages/codemod"
   dependencies:
     "@types/node": "npm:^24.13.3"
+    "@types/semver": "npm:^7.8.0"
     "@vitest/coverage-v8": "npm:^2.1.8"
     commander: "npm:^13.1.0"
+    detect-indent: "npm:^7.0.2"
     eslint: "npm:^9.39.3"
+    fast-check: "npm:^4.9.0"
     fast-glob: "npm:^3.3.3"
     rimraf: "npm:^6.0.1"
+    semver: "npm:^7.8.5"
     tsdown: "npm:^0.22.14"
     typescript: "npm:^5.7.2"
     vitest: "npm:^2.1.8"
@@ -11263,7 +11297,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.5.4, semver@npm:^7.8.1":
+"semver@npm:^7.5.4, semver@npm:^7.8.1, semver@npm:^7.8.5":
   version: 7.8.5
   resolution: "semver@npm:7.8.5"
   bin:

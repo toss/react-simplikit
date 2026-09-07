@@ -57,46 +57,19 @@ function SearchInput() {
 
 ## 包含的内容
 
-### Hooks
+- **Hook** — 状态与逻辑（`useToggle`、`useDebounce`、`useList` 等）、浏览器事件（`useIntersectionObserver`、`useOutsideClickEffect` 等）以及移动端 Web（`useAvoidKeyboard`、`useSafeAreaInset`、`useVisualViewport` 等）
+- **组件** — `SwitchCase`、`Separated`、`ImpressionArea`
+- **工具函数** — `buildContext`、`mergeProps`、`mergeRefs`，以及 `isIOS`、`getKeyboardHeight` 这类移动端 Web 辅助函数
 
-| Hook                      | 说明                                                        |
-| ------------------------- | ----------------------------------------------------------- |
-| `useBooleanState`         | 用处理函数管理布尔状态                                      |
-| `useDebounce`             | 对回调函数做防抖                                            |
-| `useDebouncedCallback`    | 通过选项对象对 `onChange` 回调做防抖                        |
-| `useInterval`             | 声明式地设置定时器                                          |
-| `useIntersectionObserver` | 观察元素的可见性                                            |
-| `usePreservedCallback`    | 稳定的回调引用                                              |
-| `usePreservedReference`   | 稳定的对象引用                                              |
-| ...                       | [查看全部 Hook](https://react-simplikit.slash.page/zh-Hans) |
-
-### Components
-
-| Component        | 说明                      |
-| ---------------- | ------------------------- |
-| `SwitchCase`     | 声明式的 switch-case 渲染 |
-| `Separated`      | 带分隔元素渲染多个项      |
-| `ImpressionArea` | 追踪元素的曝光            |
-
-### Utilities
-
-| Utility        | 说明                                           |
-| -------------- | ---------------------------------------------- |
-| `buildContext` | 用更少的样板代码定义 React Context             |
-| `mergeProps`   | 合并 props，并组合 `className`、`style` 和事件 |
-| `mergeRefs`    | 把多个 ref 合并成一个 ref                      |
+带一句话说明的完整列表见[参考页面](https://react-simplikit.slash.page/zh-Hans/reference.html)。
 
 ## 文档
 
 完整文档请访问 [react-simplikit.slash.page](https://react-simplikit.slash.page/zh-Hans)。
 
-## 相关包
-
-- [移动端 Web 工具函数](https://react-simplikit.slash.page/zh-Hans/mobile/intro.html) - 已包含在 `react-simplikit` 中
-
 ## 贡献
 
-我们欢迎贡献！请查看我们的[贡献指南](https://github.com/toss/react-simplikit/blob/main/CONTRIBUTING.md)。
+我们欢迎贡献！请查看我们的[贡献指南](https://github.com/toss/react-simplikit/blob/main/.github/CONTRIBUTING.md)。
 
 ## 许可证
 

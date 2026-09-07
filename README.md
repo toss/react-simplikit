@@ -8,11 +8,10 @@ A collection of lightweight, zero-dependency React utilities for building robust
 
 ## Packages
 
-| Package                                       | Description                                                                       | Version                                                                                                   |
-| --------------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - state/logic hooks plus mobile web utilities, all from one entry | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
-
-> **Note**: every hook ships from the single `react-simplikit` entry — mobile web utilities (viewport, keyboard, scroll) included. This replaces the deprecated `@react-simplikit/mobile` package. To migrate an existing codebase, run `npx react-simplikit-codemod mobile-to-root`. Hooks touch browser APIs only inside their bodies, so importing the root stays safe on React Native and SSR.
+| Package                                       | Description                                                                                                        | Version                                                                                                                   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | React hooks, components and utils: state and logic, browser events, and mobile web (keyboard, safe area, viewport) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [react-simplikit-codemod](./packages/codemod) | Codemods that rewrite a codebase for a `react-simplikit` upgrade                                                   | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
 
 ## Features
 
@@ -29,8 +28,6 @@ npm install react-simplikit
 ```
 
 ## Quick Start
-
-### react-simplikit
 
 ```tsx
 import { useState } from 'react';
@@ -59,10 +56,10 @@ function SearchInput() {
 
 The debounced function exposes `.cancel()`, and pending calls are cancelled automatically when the component unmounts.
 
-### Mobile web utilities
+### Keep a fixed element above the on-screen keyboard
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -72,13 +69,6 @@ function ChatInput() {
       <input type="text" placeholder="Type a message..." />
     </div>
   );
-}
-
-// `useBodyScrollLock` locks body scroll while the component is mounted,
-// and unlocks it automatically on unmount. Render this only while the modal is open.
-function BodyScrollLock() {
-  useBodyScrollLock();
-  return null;
 }
 ```
 
@@ -90,7 +80,9 @@ Visit [react-simplikit.slash.page](https://react-simplikit.slash.page) for full 
 
 ```
 packages/
-└── react-simplikit/    # react-simplikit (hooks, components, utils; mobile web utilities in src/mobile)
+├── react-simplikit/    # the library
+├── codemod/            # react-simplikit-codemod
+└── plugin/             # agent skill for AI coding assistants
 ```
 
 ## Contributing

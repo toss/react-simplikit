@@ -10,10 +10,7 @@ hero:
   actions:
     - theme: brand
       text: 开始使用
-      link: /zh-Hans/core/intro
-    - theme: alt
-      text: 移动端工具函数
-      link: /zh-Hans/mobile/intro
+      link: /zh-Hans/intro
 
 features:
   - title: '零依赖'

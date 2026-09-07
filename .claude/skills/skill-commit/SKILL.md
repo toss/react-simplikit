@@ -33,18 +33,19 @@ allowed-tools: Bash, Read, Glob, Grep
 
 ### Scope
 
-| Category | Example          |
-| -------- | ---------------- |
-| Package  | `core`, `mobile` |
-| None     | Omit scope       |
+| Category | Example                                      |
+| -------- | -------------------------------------------- |
+| Item     | `useToggle`, `SwitchCase`, `mergeRefs`       |
+| Area     | `docs`, `codemod`, `ci`, `plugin`            |
+| None     | Omit scope when the change spans the package |
 
 ### Examples
 
 ```bash
-feat(core): add useDebounce hook
-feat(mobile): add useKeyboardHeight hook
+feat(useDebounce): add a maxWait option
+fix(useKeyboardHeight): ignore transient zero heights on Android
 fix: correct SSR rendering logic
-docs: update useToggle documentation
+docs(useToggle): update the example
 chore: add claude skills
 ```
 

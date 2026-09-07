@@ -85,6 +85,7 @@ export default defineConfig(
           '': 'always',
           ts: 'ignorePackages',
           tsx: 'ignorePackages',
+          json: 'always',
         },
       ],
       'simple-import-sort/imports': [

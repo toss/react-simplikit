@@ -1,45 +1,33 @@
 # Contributing to react-simplikit
 
-Welcome! We appreciate your interest in contributing to react-simplikit. This document provides an overview of how to contribute. For detailed guidelines, please refer to the package-specific contributing guides linked below.
+Welcome! We appreciate your interest in contributing to react-simplikit. This page is the short version; the full guide, including the JSDoc rules, SSR tests and the changeset flow, is the [Contributing Guide](https://react-simplikit.slash.page/contributing.html) on the documentation site.
 
-## Contributing Guide
+## Every contribution needs
 
-Each contribution requires:
-
-- **Implementation** — following our [Design Principles](https://react-simplikit.slash.page/core/design-principles.html)
-- **Test Code** — 100% coverage required
-- **JSDoc** — documentation is auto-generated from JSDoc, so no separate docs needed
-
-For detailed instructions, see the package-specific guides:
-
-- [Core Package Contributing Guide](../docs/core/contributing.md)
-- [Mobile Package Contributing Guide](../docs/mobile/contributing.md)
+- **Implementation** — following the [Design Principles](https://react-simplikit.slash.page/design-principles.html)
+- **Test code** — 100% coverage, including an SSR test
+- **JSDoc** — the English documentation is generated from it (`yarn docs:gen <name>`)
 
 ## Scaffolding
-
-Use the scaffold command to create a basic structure for new implementations:
 
 ```bash
 yarn run scaffold <name> --type <type>
 ```
 
 - `type`: `component`, `hook`, or `util` (shortcuts: `c`, `h`, `u`)
-- `name`: Name of the implementation
+- `name`: name of the implementation
 
-## Creating a Changeset
+## Changesets
 
-When your changes affect a package, create a changeset:
+When your change affects the published package, add a changeset and commit it with your PR:
 
 ```bash
 yarn changeset
 ```
 
-Select the version bump type (`patch`, `minor`, or `major`).
-
-> **Note:** Both packages are currently in the `0.0.x` stage. During this phase, most changes should use `patch`. If you're unsure about the version type, please discuss with the maintainers.
+The package is in the `0.x` stage, so most changes are `patch`. Ask a maintainer when unsure.
 
 ## Useful Links
 
 - [Documentation Site](https://react-simplikit.slash.page)
-- [Design Principles](https://react-simplikit.slash.page/core/design-principles.html)
-- [Discord](https://discord.gg/vGXbVjP2nY) — Community chat for questions and discussions
+- [Discord](https://discord.gg/vGXbVjP2nY) — community chat for questions and discussions

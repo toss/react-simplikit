@@ -3,7 +3,7 @@
 Agent skills for [react-simplikit](https://react-simplikit.slash.page). Two ship in this plugin:
 
 - **`react-simplikit`** — a catalog of every hook, component and util with a one-line description, import and SSR rules, and a reference page per entry. With it installed, an agent checks the library before hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic.
-- **`react-simplikit-codemod`** — how to migrate a codebase off the `@react-simplikit/mobile` package with `npx react-simplikit-codemod mobile-to-root`, including the JSON report the CLI emits and what to do with each exit code.
+- **`react-simplikit-codemod`** — how to run the upgrade codemods (`npx react-simplikit-codemod <transform>`) on a codebase, including the JSON report the CLI emits and what to do with each exit code.
 
 ## Install
 
@@ -57,7 +57,7 @@ claude plugin marketplace remove react-design-philosophy
 
 `skills/react-simplikit/`
 
-- `SKILL.md` — when to use the library, import and SSR rules, a "common needs → use" table, and the full catalog grouped by category (hooks, components, utils, mobile hooks, mobile utils). Everything is imported from `react-simplikit`; the mobile categories only say what an entry assumes.
+- `SKILL.md` — when to use the library, import and SSR rules, a "common needs → use" table, and the full catalog grouped by category (hooks, components, utils).
 - `references/<name>.md` — the documentation page of each entry: signature, parameters, return value, example.
 
 `skills/react-simplikit-codemod/`

@@ -177,7 +177,7 @@ is kept in English as well, matching React 官方中文文档 — never 钩子.
   when the result is hard to parse in one pass. Judge by readability, not by clause count; a
   multi-clause sentence can be perfectly natural in Chinese
 - Translating a UI label, proper noun, or identifier the source deliberately left in English:
-  package names (`@react-simplikit/mobile`), prop and option names, npm script names, and UI
+  package names (`react-simplikit-codemod`), prop and option names, npm script names, and UI
   labels such as badge alt text (`MIT License`, `Discord Badge`). The converse also fails
   review — `deprecated` used as an ordinary adjective in prose is translated (已弃用); only the
   identifier beside it stays in English
@@ -256,7 +256,7 @@ the first failure mode below.
 - Missing `¿` / `¡` opening marks, and missing accents where the accent carries meaning
   (`más`/`mas`, `sí`/`si`, `qué`/`que`, `tú`/`tu`, `él`/`el`, `está`/`esta`, `aún`/`aun`)
 - Translating a UI label, proper noun, or identifier the source deliberately left in English:
-  package names (`@react-simplikit/mobile`), prop and option names, npm script names, and UI
+  package names (`react-simplikit-codemod`), prop and option names, npm script names, and UI
   labels such as badge alt text (`MIT License`, `Discord Badge`). The converse also fails
   review — `deprecated` used as an ordinary adjective in prose is translated (`obsoleto`,
   agreeing with its noun); only the identifier beside it stays in English

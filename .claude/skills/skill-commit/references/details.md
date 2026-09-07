@@ -2,16 +2,16 @@
 
 ## Scope Details
 
-| Category | Format     | Example              |
-| -------- | ---------- | -------------------- |
-| Package  | `{name}`   | `core`, `mobile`     |
-| None     | Omit scope | `chore: description` |
+| Category | Format     | Example                                |
+| -------- | ---------- | -------------------------------------- |
+| Item     | `{name}`   | `useToggle`, `SwitchCase`, `mergeRefs` |
+| Area     | `{area}`   | `docs`, `codemod`, `ci`, `plugin`      |
+| None     | Omit scope | `chore: description`                   |
 
-### When Multiple Packages Are Modified
+### When Several Items Are Modified
 
-Group under an appropriate higher-level concept:
-
-- Or specify only the primary target of the change
+- List them comma-separated (`feat(useDebounce,useThrottle): ...`) when there are two or three
+- Otherwise name the area, or omit the scope when the change spans the package
 
 ## Description Writing Rules
 
@@ -32,16 +32,16 @@ Group under an appropriate higher-level concept:
 
 ```bash
 # Basic
-feat(core): add useDebounce hook
+feat(useDebounce): add a maxWait option
 
-# Package scope
-feat(mobile): add useKeyboardHeight hook
+# Area scope
+docs(contributing): describe the scaffold command
 
 # No scope
 chore: add claude agent and skills
 
 # Multi-line description
-feat(core): add useThrottle hook
+feat(useThrottle): add a leading option
 
 - Implement basic throttle
 - Ensure SSR safety

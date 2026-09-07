@@ -8,11 +8,10 @@ Una colección de utilidades de React ligeras y sin dependencias para crear apli
 
 ## Paquetes
 
-| Paquete                                       | Descripción                                                                                              | Versión                                                                                                   |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - Hooks de estado y lógica más utilidades para la web móvil, todo desde una sola entrada | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
-
-> **Nota**: todos los Hooks se distribuyen desde la única entrada `react-simplikit`, incluidas las utilidades para la web móvil (viewport, keyboard, scroll). Esto sustituye al paquete obsoleto `@react-simplikit/mobile`. Para migrar una base de código existente, ejecuta `npx react-simplikit-codemod mobile-to-root`. Los Hooks solo tocan las APIs del navegador dentro de su cuerpo, así que importar desde la raíz sigue siendo seguro en React Native y en SSR.
+| Paquete                                       | Descripción                                                                                                                   | Versión                                                                                                                   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | Hooks, componentes y utilidades de React: estado y lógica, eventos del navegador y web móvil (teclado, área segura, viewport) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [react-simplikit-codemod](./packages/codemod) | Codemods que reescriben una base de código para actualizar `react-simplikit`                                                  | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
 
 ## Características
 
@@ -29,8 +28,6 @@ npm install react-simplikit
 ```
 
 ## Inicio rápido
-
-### react-simplikit
 
 ```tsx
 import { useState } from 'react';
@@ -59,10 +56,10 @@ function SearchInput() {
 
 La función con debounce expone `.cancel()`, y las llamadas pendientes se cancelan automáticamente cuando el componente se desmonta.
 
-### Utilidades para la web móvil
+### Mantener un elemento fijo por encima del teclado en pantalla
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -72,13 +69,6 @@ function ChatInput() {
       <input type="text" placeholder="Escribe un mensaje..." />
     </div>
   );
-}
-
-// `useBodyScrollLock` bloquea el desplazamiento del body mientras el componente está montado
-// y lo desbloquea automáticamente al desmontarse. Renderízalo solo mientras el modal está abierto.
-function BodyScrollLock() {
-  useBodyScrollLock();
-  return null;
 }
 ```
 
@@ -90,7 +80,9 @@ Consulta la documentación completa en [react-simplikit.slash.page](https://reac
 
 ```
 packages/
-└── react-simplikit/    # react-simplikit (hooks, components, utils; las utilidades para la web móvil están en src/mobile)
+├── react-simplikit/    # la biblioteca
+├── codemod/            # react-simplikit-codemod
+└── plugin/             # skill de agente para asistentes de programación con IA
 ```
 
 ## Contribuir

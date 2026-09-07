@@ -8,8 +8,6 @@ describe('getCategory', () => {
     assert.equal(getCategory('./hooks/useToggle/index.ts'), 'hooks');
     assert.equal(getCategory('./components/Separated/index.ts'), 'components');
     assert.equal(getCategory('./utils/mergeRefs/index.ts'), 'utils');
-    assert.equal(getCategory('./mobile/hooks/useKeyboardHeight/index.ts'), 'mobile hooks');
-    assert.equal(getCategory('./mobile/utils/isIOS/index.ts'), 'mobile utils');
   });
 
   it('rejects a path outside the known categories', () => {
@@ -59,7 +57,7 @@ describe('renderSkill', () => {
     const rendered = renderSkill({
       template: '# Skill\n\n## Catalog\n\n<!-- CATALOG -->\n\n## Learn more\n',
       entries: [
-        { name: 'isIOS', category: 'mobile utils', description: 'Detects iOS.' },
+        { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
         { name: 'useToggle', category: 'hooks', description: 'Toggles a | boolean.' },
       ],
     });
@@ -76,7 +74,7 @@ describe('renderSkill', () => {
 | --- | --- |
 | [\`useToggle\`](references/useToggle.md) | Toggles a \\| boolean. |
 
-### mobile utils
+### utils
 
 | Name | Description |
 | --- | --- |

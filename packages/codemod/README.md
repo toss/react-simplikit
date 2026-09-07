@@ -75,4 +75,4 @@ The codemod already wrote the dependency and its version range, so a bare reinst
 
 Then run your formatter or linter fix on the changed files. The specifier moved from `@react-simplikit/mobile` to `react-simplikit`, and import-order rules such as `import/order` or `simple-import-sort` place the two differently, so an import that was sorted before the run is usually out of order after it.
 
-One import needs a version floor: `SafeAreaInset` is only re-exported from the root entry in `react-simplikit@0.2.0` and later. An existing range below that floor is raised; a `workspace:`, `catalog:` or `file:` protocol is kept as-is and reported instead, since only you know what it should point at.
+One import needs a version floor: `SafeAreaInset` is only re-exported from the root entry in `react-simplikit@0.2.0` and later. An existing range is kept only when every version it admits sits on or above that floor; `^0.1.0`, `>=0.1.0` and `*` are raised to `^0.2.0`, because a lockfile could keep an older version under them. A `workspace:`, `catalog:` or `file:` protocol is kept as-is and reported instead, since only you know what it should point at.

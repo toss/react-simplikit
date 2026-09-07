@@ -28,7 +28,7 @@ export default function Home() {
             <p style={{ color: '#666', fontSize: 14, marginTop: 4 }}>Check if code is running on the server</p>
           </li>
           <li style={{ marginTop: 12, padding: 12, background: '#f5f5f5', borderRadius: 8 }}>
-            <Link href="/demos/core-impression-area" style={{ textDecoration: 'none' }}>
+            <Link href="/demos/impression-area" style={{ textDecoration: 'none' }}>
               <strong style={{ color: '#000' }}>ImpressionArea</strong>
               <span
                 style={{
@@ -40,12 +40,10 @@ export default function Home() {
                   borderRadius: 4,
                 }}
               >
-                core
+                components
               </span>
             </Link>
-            <p style={{ color: '#666', fontSize: 14, marginTop: 4 }}>
-              react-simplikit core renders across the RSC boundary
-            </p>
+            <p style={{ color: '#666', fontSize: 14, marginTop: 4 }}>ImpressionArea renders across the RSC boundary</p>
           </li>
         </ul>
       </nav>

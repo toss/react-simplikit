@@ -8,11 +8,10 @@
 
 ## 패키지
 
-| 패키지                                        | 설명                                                                         | 버전                                                                                                      |
-| --------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - 상태/로직 훅과 모바일 웹 유틸리티를 하나의 진입점에서 제공 | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
-
-> **참고**: 모든 훅은 `react-simplikit` 단일 진입점에서 제공됩니다 — 모바일 웹 유틸리티(viewport, keyboard, scroll)도 포함해서요. 기존 `@react-simplikit/mobile` 패키지를 대체합니다. 기존 코드베이스는 `npx react-simplikit-codemod mobile-to-root`로 마이그레이션하세요. 훅은 브라우저 API를 임포트 시점이 아니라 훅 본문 안에서만 사용하므로, React Native와 SSR에서도 루트 임포트가 안전합니다.
+| 패키지                                        | 설명                                                                                             | 버전                                                                                                                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | React 훅, 컴포넌트, 유틸리티: 상태와 로직, 브라우저 이벤트, 모바일 웹(키보드, 안전 영역, 뷰포트) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [react-simplikit-codemod](./packages/codemod) | `react-simplikit` 업그레이드에 맞춰 코드베이스를 고쳐 쓰는 codemod                               | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
 
 ## 특징
 
@@ -29,8 +28,6 @@ npm install react-simplikit
 ```
 
 ## 빠른 시작
-
-### react-simplikit
 
 ```tsx
 import { useState } from 'react';
@@ -59,10 +56,10 @@ function SearchInput() {
 
 디바운스된 함수는 `.cancel()` 메서드를 제공하고, 컴포넌트가 언마운트되면 대기 중인 호출을 자동으로 취소해요.
 
-### 모바일 웹 유틸리티
+### 고정 요소를 온스크린 키보드 위에 유지하기
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -72,13 +69,6 @@ function ChatInput() {
       <input type="text" placeholder="메시지를 입력하세요..." />
     </div>
   );
-}
-
-// `useBodyScrollLock`은 컴포넌트가 마운트될 때 body 스크롤을 잠그고,
-// 언마운트될 때 자동으로 해제해요. 모달이 열려 있는 동안에만 렌더링하세요.
-function BodyScrollLock() {
-  useBodyScrollLock();
-  return null;
 }
 ```
 
@@ -90,12 +80,14 @@ function BodyScrollLock() {
 
 ```
 packages/
-└── react-simplikit/    # react-simplikit (hooks, components, utils; 모바일 웹 유틸리티는 src/mobile)
+├── react-simplikit/    # 라이브러리
+├── codemod/            # react-simplikit-codemod
+└── plugin/             # AI 코딩 어시스턴트용 에이전트 스킬
 ```
 
 ## 기여하기
 
-커뮤니티의 모든 분들의 기여를 환영해요! 기여 가이드를 확인하세요.
+모든 분들의 기여를 환영해요! 기여 가이드를 확인하세요.
 
 [CONTRIBUTING](./.github/CONTRIBUTING.md)
 

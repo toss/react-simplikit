@@ -8,11 +8,10 @@
 
 ## 包
 
-| 包                                            | 说明                                                                     | 版本                                                                                                      |
-| --------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Universal hooks - 状态/逻辑 Hook 与移动端 Web 工具函数，都从单一入口提供 | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit) |
-
-> **注意**：所有 Hook 都从单一的 `react-simplikit` 入口提供，其中也包括移动端 Web 工具函数（viewport、keyboard、scroll）。它取代了已弃用的 `@react-simplikit/mobile` 包。要迁移现有代码库，请运行 `npx react-simplikit-codemod mobile-to-root`。Hook 只在函数体内部才会触碰浏览器 API，因此从根入口导入在 React Native 和 SSR 中同样安全。
+| 包                                            | 说明                                                                                       | 版本                                                                                                                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit) | React Hook、组件和工具函数：状态与逻辑、浏览器事件，以及移动端 Web（键盘、安全区域、视口） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
+| [react-simplikit-codemod](./packages/codemod) | 为升级 `react-simplikit` 而改写代码库的 codemod                                            | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
 
 ## 特性
 
@@ -29,8 +28,6 @@ npm install react-simplikit
 ```
 
 ## 快速开始
-
-### react-simplikit
 
 ```tsx
 import { useState } from 'react';
@@ -59,10 +56,10 @@ function SearchInput() {
 
 防抖后的函数会提供 `.cancel()`，并且在组件卸载时自动取消待执行的调用。
 
-### 移动端 Web 工具函数
+### 让固定元素始终位于软键盘上方
 
 ```tsx
-import { useAvoidKeyboard, useBodyScrollLock } from 'react-simplikit';
+import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
   const { style } = useAvoidKeyboard();
@@ -72,13 +69,6 @@ function ChatInput() {
       <input type="text" placeholder="输入消息..." />
     </div>
   );
-}
-
-// `useBodyScrollLock` 会在组件挂载期间锁定 body 的滚动，
-// 并在卸载时自动解锁。请只在模态框打开时渲染它。
-function BodyScrollLock() {
-  useBodyScrollLock();
-  return null;
 }
 ```
 
@@ -90,7 +80,9 @@ function BodyScrollLock() {
 
 ```
 packages/
-└── react-simplikit/    # react-simplikit (hooks, components, utils; 移动端 Web 工具函数位于 src/mobile)
+├── react-simplikit/    # 库本身
+├── codemod/            # react-simplikit-codemod
+└── plugin/             # 面向 AI 编程助手的 agent skill
 ```
 
 ## 贡献
