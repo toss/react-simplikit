@@ -47,6 +47,7 @@ export function buildLocaleConfig(
           },
           {
             text: strings.referenceLabel,
+            link: `${prefix}/reference`,
             items: sortByText([
               { text: strings.componentsLabel, collapsed: false, items: components },
               { text: strings.hooksLabel, collapsed: false, items: hooks },
