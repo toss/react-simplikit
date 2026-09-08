@@ -156,7 +156,7 @@ export function useStorageState<T>(
       listeners.add(onStoreChange);
 
       const handler = (event: StorageEvent) => {
-        if (event.key === key) {
+        if (event.key == null || event.key === key) {
           onStoreChange();
         }
       };

@@ -327,6 +327,61 @@ describe('useStorageState', () => {
       expect(result.current[0]).toBe('value from other tab');
     });
 
+    it.each(['default', undefined])('should reset to %s when another tab clears localStorage', async defaultValue => {
+      localStorage.setItem('test-key', JSON.stringify('stored value'));
+      const { result } = await renderHookSSR(() =>
+        useStorageState<string>('test-key', { storage: safeLocalStorage, defaultValue })
+      );
+      expect(result.current[0]).toBe('stored value');
+
+      await act(async () => {
+        localStorage.clear();
+        window.dispatchEvent(new StorageEvent('storage', { key: null, storageArea: localStorage }));
+      });
+
+      expect(result.current[0]).toBe(defaultValue);
+    });
+
+    it('should preserve localStorage state when sessionStorage is cleared', async () => {
+      localStorage.setItem('test-key', JSON.stringify('stored value'));
+      sessionStorage.setItem('test-key', JSON.stringify('session value'));
+      const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
+
+      await act(async () => {
+        sessionStorage.clear();
+        window.dispatchEvent(new StorageEvent('storage', { key: null, storageArea: sessionStorage }));
+      });
+
+      expect(result.current[0]).toBe('stored value');
+    });
+
+    it('should reset to defaultValue when another tab removes the observed key', async () => {
+      localStorage.setItem('test-key', JSON.stringify('stored value'));
+      const { result } = await renderHookSSR(() =>
+        useStorageState<string>('test-key', { storage: safeLocalStorage, defaultValue: 'default' })
+      );
+
+      await act(async () => {
+        localStorage.removeItem('test-key');
+        window.dispatchEvent(new StorageEvent('storage', { key: 'test-key', storageArea: localStorage }));
+      });
+
+      expect(result.current[0]).toBe('default');
+    });
+
+    it('should preserve the observed value when another tab removes an unrelated key', async () => {
+      localStorage.setItem('test-key', JSON.stringify('stored value'));
+      localStorage.setItem('other-key', JSON.stringify('other value'));
+      const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
+
+      await act(async () => {
+        localStorage.removeItem('other-key');
+        window.dispatchEvent(new StorageEvent('storage', { key: 'other-key', storageArea: localStorage }));
+      });
+
+      expect(result.current[0]).toBe('stored value');
+    });
+
     it('should return defaultValue when an error occurred while parsing data', async () => {
       const { result } = await renderHookSSR(() =>
         useStorageState<string>('test-key', { storage: safeLocalStorage, defaultValue: 'default' })
