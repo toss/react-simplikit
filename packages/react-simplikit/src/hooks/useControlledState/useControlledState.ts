@@ -60,12 +60,12 @@ export function useControlledState<T>({
   const prevUncontrolledRef = useRef(uncontrolledState);
   useEffect(
     function notifyUncontrolledChange() {
-      if (controlled === true) return;
-      if (equalityFn(prevUncontrolledRef.current, uncontrolledState) === true) return;
+      // The updater below already folds equal values into `prev`, so a reference check is enough here.
+      if (prevUncontrolledRef.current === uncontrolledState) return;
       prevUncontrolledRef.current = uncontrolledState;
       preservedOnChange(uncontrolledState);
     },
-    [controlled, uncontrolledState, equalityFn, preservedOnChange]
+    [uncontrolledState, preservedOnChange]
   );
 
   const setValue = useCallback(
