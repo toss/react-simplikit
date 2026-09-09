@@ -1,6 +1,4 @@
-import { DependencyList, useCallback, useRef } from 'react';
-
-import { usePreservedCallback } from '../usePreservedCallback/index.ts';
+import { DependencyList, useCallback, useEffect, useMemo, useRef } from 'react';
 
 export type CleanupCallback = () => void;
 
@@ -34,11 +32,25 @@ export function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
   deps: DependencyList
 ): (element: RefElement | null) => void {
   // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`:
-  // it requires the `useCallback` dependency list to be an array literal, but `deps` is
+  // it requires the `useMemo` dependency list to be an array literal, but `deps` is
   // supplied by the caller.
   'use no memo';
 
-  const preservedCallback = usePreservedCallback(callback);
+  // Changed dependencies need their callback during ref attachment, before effects run.
+  const callbackRef = useMemo(
+    () => ({ current: callback }),
+    /* eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/use-memo -- `deps` is
+       the caller's dependency list, so it can be neither verified nor written as a literal. */
+    deps
+  );
+
+  useEffect(
+    function syncCallbackRef() {
+      callbackRef.current = callback;
+    },
+    [callback, callbackRef]
+  );
+
   const cleanupCallbackRef = useRef<CleanupCallback>(() => {});
 
   const effect = useCallback(
@@ -50,15 +62,13 @@ export function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
         return;
       }
 
-      const cleanup = preservedCallback(element);
+      const cleanup = callbackRef.current(element);
 
       if (typeof cleanup === 'function') {
         cleanupCallbackRef.current = cleanup;
       }
     },
-    /* eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/use-memo -- `deps` is
-       the caller's dependency list, so it can be neither verified nor written as a literal. */
-    [preservedCallback, ...deps]
+    [callbackRef]
   );
 
   return effect;
