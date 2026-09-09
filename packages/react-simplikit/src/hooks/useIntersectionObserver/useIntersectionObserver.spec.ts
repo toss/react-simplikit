@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { act } from '@testing-library/react';
+import { createElement } from 'react';
+import { act, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, MockInstance, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
@@ -144,4 +145,41 @@ describe('useIntersectionObserver', () => {
     rerender({ threshold: [0.5, 0.25, 0] });
     expect(IntersectionObserverSpy).toHaveBeenCalledTimes(2);
   });
+
+  it.each(['root', 'rootMargin', 'threshold'] as const)(
+    'should move a mounted element to the new observer when %s changes',
+    option => {
+      const observers: MockIntersectionObserver[] = [];
+      IntersectionObserverSpy.mockImplementation(() => {
+        const observer = new MockIntersectionObserver();
+        observers.push(observer);
+        return observer;
+      });
+
+      function Component({ options }: { options: IntersectionObserverInit }) {
+        const ref = useIntersectionObserver<HTMLDivElement>(() => {}, options);
+        return createElement('div', { ref });
+      }
+
+      const initialOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
+      const nextOptions: IntersectionObserverInit = {
+        ...initialOptions,
+        [option]: { root: document.createElement('div'), rootMargin: '10px', threshold: [0, 0.5] }[option],
+      };
+      const { container, rerender, unmount } = render(createElement(Component, { options: initialOptions }));
+      const element = container.firstElementChild;
+
+      rerender(createElement(Component, { options: nextOptions }));
+
+      expect(observers).toHaveLength(2);
+      expect(observers[0].observe).toHaveBeenCalledTimes(1);
+      expect(observers[0].unobserve).toHaveBeenCalledWith(element);
+      expect(observers[1].observe).toHaveBeenCalledTimes(1);
+      expect(observers[1].observe).toHaveBeenCalledWith(element);
+
+      unmount();
+      expect(observers[1].unobserve).toHaveBeenCalledTimes(1);
+      expect(observers[1].unobserve).toHaveBeenCalledWith(element);
+    }
+  );
 });
