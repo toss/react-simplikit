@@ -1,5 +1,28 @@
 # react-simplikit
 
+## 0.3.0
+
+### Minor Changes
+
+- [#471](https://github.com/toss/react-simplikit/pull/471) [`edddd4b`](https://github.com/toss/react-simplikit/commit/edddd4bdc2b4e86158e1d59fdcd71f9d4f084ec3) Thanks [@hyesungoh](https://github.com/hyesungoh)! - Add `useDebouncedValue` and `useThrottledValue`. Both take a value the caller owns and return a delayed copy of it: `useDebouncedValue(value, wait, { leading?, trailing? })` follows the value `wait` milliseconds after the last change, and `useThrottledValue(value, wait, { leading?, trailing? })` follows it at most once per `wait` milliseconds. They pair with the existing `useDebouncedCallback` and `useThrottledCallback`, which wrap a setter instead of a value.
+
+- [#479](https://github.com/toss/react-simplikit/pull/479) [`72ed16e`](https://github.com/toss/react-simplikit/commit/72ed16e9bccabaa5b06ca408885b4440461574ad) Thanks [@Antoliny0919](https://github.com/Antoliny0919)! - Add lazy initializer support to useBooleanState.
+
+- [#469](https://github.com/toss/react-simplikit/pull/469) [`cc8b69e`](https://github.com/toss/react-simplikit/commit/cc8b69e466b1ad11089bc5aca32c898c5c7204ea) Thanks [@DongEun02](https://github.com/DongEun02)! - Add lazy initializer support to useInputState.
+
+### Patch Changes
+
+- [#483](https://github.com/toss/react-simplikit/pull/483) [`6605918`](https://github.com/toss/react-simplikit/commit/66059185a194537b1b73224254683302324b9271) Thanks [@chungyo](https://github.com/chungyo)! - Use the updated callback when useRefEffect dependencies change during DOM ref attachment.
+
+- [#482](https://github.com/toss/react-simplikit/pull/482) [`163ac5c`](https://github.com/toss/react-simplikit/commit/163ac5cc8418458d3c4c53624332ce6cb2d11109) Thanks [@chungyo](https://github.com/chungyo)! - Fix `useStorageState` retaining stale state when another tab clears localStorage.
+
+- [#470](https://github.com/toss/react-simplikit/pull/470) [`52ed163`](https://github.com/toss/react-simplikit/commit/52ed163a7273faad99d1cf5fa7877b2a8a1c2e5f) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `useThrottle` with `edges: ['trailing']` now invokes once per `wait` while calls keep coming in, instead of waiting for the calls to stop. `useThrottledCallback` and `useDebouncedCallback` now keep a single throttle or debounce across calls: `useThrottledCallback` forwards a stream of distinct values at most once per `timeThreshold` instead of every time, and `useDebouncedCallback` with `leading: true` forwards the first value of a burst once instead of every value immediately. Sharing one instance has two further consequences. A call carrying the same value as the last forwarded one is still skipped, but it now occupies a window, so a different value arriving inside that window waits for the window to close. And changing `timeThreshold`, `edges`, `leading` or `trailing` while a value is pending discards that pending value instead of forwarding it. `useImpressionRef` and `ImpressionArea` inherit the `useDebouncedCallback` change: an impression that ends within `timeThreshold` of its start now reports `onImpressionEnd` on the trailing edge rather than immediately, and an end still pending when the element unmounts is emitted during cleanup instead of being dropped.
+
+- [#467](https://github.com/toss/react-simplikit/pull/467) [`92cbb34`](https://github.com/toss/react-simplikit/commit/92cbb349454a1b54f60db3edd1037240677984e4) Thanks [@constantly-dev](https://github.com/constantly-dev)! - `useIntersectionObserver` no longer recreates the underlying `IntersectionObserver` on every render when an inline `options` object is passed. It now recreates it only when `root`, `rootMargin`, or `threshold` actually change.
+
+- [#473](https://github.com/toss/react-simplikit/pull/473) [`6f6361c`](https://github.com/toss/react-simplikit/commit/6f6361c38a5a951a813df8d033d60f6e7754a6d5) Thanks [@JetProc](https://github.com/JetProc)! - Cancel pending useLongPress timers when the component unmounts, preventing
+  onLongPress from firing after unmount.
+
 ## 0.2.0
 
 ### Minor Changes
