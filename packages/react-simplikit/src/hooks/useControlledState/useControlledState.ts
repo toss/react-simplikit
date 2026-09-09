@@ -1,4 +1,6 @@
-import { type Dispatch, type SetStateAction, useCallback, useState } from 'react';
+import { type Dispatch, type SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+
+import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 type ControlledState<T> = { value: T; defaultValue?: never } | { defaultValue: T; value?: T };
 
@@ -51,14 +53,38 @@ export function useControlledState<T>({
   const [uncontrolledState, setUncontrolledState] = useState(defaultValue as T);
   const controlled = valueProp !== undefined;
   const value = controlled ? valueProp : uncontrolledState;
+  const preservedOnChange = usePreservedCallback((next: T) => onChange?.(next));
+
+  // Uncontrolled updates go through React's queue so function updates apply in order.
+  // onChange fires here, after commit, because the updater must stay pure (StrictMode runs it twice).
+  const prevUncontrolledRef = useRef(uncontrolledState);
+  useEffect(
+    function notifyUncontrolledChange() {
+      if (controlled === true) return;
+      if (equalityFn(prevUncontrolledRef.current, uncontrolledState) === true) return;
+      prevUncontrolledRef.current = uncontrolledState;
+      preservedOnChange(uncontrolledState);
+    },
+    [controlled, uncontrolledState, equalityFn, preservedOnChange]
+  );
 
   const setValue = useCallback(
     (next: SetStateAction<T>) => {
+      if (controlled === false) {
+        setUncontrolledState(prev => {
+          const nextValue = isSetStateAction(next) ? next(prev) : next;
+          return equalityFn(prev, nextValue) === true ? prev : nextValue;
+        });
+        return;
+      }
+
+      // Computed from the committed `value` on purpose: two function updates in the same tick
+      // see the same `prev`. Tracking the pending value in a ref needs a forced re-render to
+      // reset it, which loops when the parent rejects a change the caller re-issues every render.
       const nextValue = isSetStateAction(next) ? next(value) : next;
 
       if (equalityFn(value, nextValue) === true) return;
-      if (controlled === false) setUncontrolledState(nextValue);
-      if (controlled === true && nextValue === undefined) setUncontrolledState(nextValue);
+      if (nextValue === undefined) setUncontrolledState(nextValue);
       onChange?.(nextValue);
     },
     [controlled, onChange, equalityFn, value]

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { act, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { useLayoutEffect, useState } from 'react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -114,5 +114,112 @@ describe('useControlledState', () => {
 
     const [nextValue] = result.current;
     expect(nextValue).toBe(8);
+  });
+
+  it('applies multiple function setState actions in order when uncontrolled', async () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() => useControlledState({ defaultValue: 5, onChange }));
+
+    await act(async () => {
+      const [, setValue] = result.current;
+      setValue(prev => prev + 3);
+      setValue(prev => prev + 3);
+    });
+
+    const [nextValue] = result.current;
+    expect(nextValue).toBe(11);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(11);
+  });
+
+  it('does not call onChange on mount when uncontrolled', () => {
+    const onChange = vi.fn();
+    renderHookSSR(() => useControlledState({ defaultValue: 5, onChange }));
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('does not call onChange when equalityFn treats the next value as equal when uncontrolled', async () => {
+    const onChange = vi.fn();
+    const { result } = renderHookSSR(() =>
+      useControlledState({
+        defaultValue: { id: 1 },
+        onChange,
+        equalityFn: (prev, next) => prev.id === next.id,
+      })
+    );
+
+    await act(async () => {
+      const [, setValue] = result.current;
+      setValue({ id: 1 });
+    });
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('reflects the value when the parent changes it externally when controlled', () => {
+    function App() {
+      const [checked, setChecked] = useState(true);
+      const [value] = useControlledState({ value: checked, onChange: setChecked });
+
+      return (
+        <div>
+          <p data-testid="value">{String(value)}</p>
+          <button onClick={() => setChecked(false)}>Clear value</button>
+        </div>
+      );
+    }
+
+    render(<App />);
+    expect(screen.getByTestId('value')).toHaveTextContent('true');
+
+    fireEvent.click(screen.getByText('Clear value'));
+    expect(screen.getByTestId('value')).toHaveTextContent('false');
+  });
+
+  it('toggles with a function setState action through the parent when controlled', () => {
+    const onChange = vi.fn();
+    function App() {
+      const [checked, setChecked] = useState(false);
+      const [value, setValue] = useControlledState({
+        value: checked,
+        onChange: next => {
+          onChange(next);
+          setChecked(next);
+        },
+      });
+
+      return <button role="checkbox" aria-checked={value} onClick={() => setValue(prev => !prev)} />;
+    }
+
+    render(<App />);
+    fireEvent.click(screen.getByRole('checkbox'));
+
+    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-checked', 'true');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(true);
+  });
+
+  it('does not re-render when the parent rejects the change when controlled', () => {
+    let renderCount = 0;
+    function App() {
+      renderCount += 1;
+      const [value, setValue] = useState(10);
+      const [state, setState] = useControlledState({
+        value,
+        onChange: next => setValue(Math.min(next, 10)),
+      });
+
+      useLayoutEffect(function pushEveryRender() {
+        setState(12);
+      });
+
+      return <p data-testid="value">{state}</p>;
+    }
+
+    render(<App />);
+
+    expect(screen.getByTestId('value')).toHaveTextContent('10');
+    expect(renderCount).toBe(1);
   });
 });
