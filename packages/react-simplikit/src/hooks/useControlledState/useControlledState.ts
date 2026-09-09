@@ -84,7 +84,11 @@ export function useControlledState<T>({
       const nextValue = isSetStateAction(next) ? next(value) : next;
 
       if (equalityFn(value, nextValue) === true) return;
-      if (nextValue === undefined) setUncontrolledState(nextValue);
+      if (nextValue === undefined) {
+        // Keep the notify effect from reporting this again once the parent hands control back.
+        prevUncontrolledRef.current = nextValue;
+        setUncontrolledState(nextValue);
+      }
       onChange?.(nextValue);
     },
     [controlled, onChange, equalityFn, value]

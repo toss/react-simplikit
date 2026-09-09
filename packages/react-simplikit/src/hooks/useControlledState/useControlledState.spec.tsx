@@ -139,7 +139,7 @@ describe('useControlledState', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('does not call onChange when equalityFn treats the next value as equal when uncontrolled', async () => {
+  it('does not call onChange for a value equalityFn treats as equal when uncontrolled', async () => {
     const onChange = vi.fn();
     const { result } = renderHookSSR(() =>
       useControlledState({
@@ -157,7 +157,7 @@ describe('useControlledState', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('reflects the value when the parent changes it externally when controlled', () => {
+  it('reflects a value the parent changes externally when controlled', () => {
     function App() {
       const [checked, setChecked] = useState(true);
       const [value] = useControlledState({ value: checked, onChange: setChecked });
@@ -200,7 +200,7 @@ describe('useControlledState', () => {
     expect(onChange).toHaveBeenCalledWith(true);
   });
 
-  it('does not re-render when the parent rejects the change when controlled', () => {
+  it('does not re-render after the parent rejects a change when controlled', () => {
     let renderCount = 0;
     function App() {
       renderCount += 1;
@@ -221,5 +221,37 @@ describe('useControlledState', () => {
 
     expect(screen.getByTestId('value')).toHaveTextContent('10');
     expect(renderCount).toBe(1);
+  });
+
+  it('calls onChange once when setValue(undefined) switches from controlled back to uncontrolled', () => {
+    const onChange = vi.fn();
+    function App() {
+      const [prop, setProp] = useState<string | undefined>(undefined);
+      const [value, setValue] = useControlledState<string | undefined>({
+        value: prop,
+        defaultValue: 'a',
+        onChange: next => {
+          onChange(next);
+          setProp(next);
+        },
+      });
+
+      return (
+        <div>
+          <p data-testid="value">{String(value)}</p>
+          <button data-testid="control" onClick={() => setProp('b')} />
+          <button data-testid="clear" onClick={() => setValue(undefined)} />
+        </div>
+      );
+    }
+
+    render(<App />);
+    fireEvent.click(screen.getByTestId('control'));
+    expect(screen.getByTestId('value')).toHaveTextContent('b');
+
+    fireEvent.click(screen.getByTestId('clear'));
+    expect(screen.getByTestId('value')).toHaveTextContent('undefined');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(undefined);
   });
 });
