@@ -52,10 +52,9 @@ function buildContext(
 ## 예시
 
 ```tsx
-const [Provider, useContext] = buildContext<{ title: string }>(
-  'TestContext',
-  null
-);
+const [Provider, useContext] = buildContext<{ title: string }>('TestContext', {
+  title: 'Default title',
+});
 
 function Inner() {
   const { title } = useContext();

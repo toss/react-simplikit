@@ -4,6 +4,7 @@ import { RefCallback, RefObject } from 'react';
  * @description
  * This function takes multiple refs (RefObject or RefCallback) and returns a single ref that updates all provided refs.
  * It's useful when you need to pass multiple refs to a single element.
+ * When a callback ref returns a cleanup function (React 19), the merged ref returns one as well and runs every cleanup on detach.
  *
  * @template T - The type of target to be referenced.
  *
@@ -36,17 +37,51 @@ import { RefCallback, RefObject } from 'react';
  */
 export function mergeRefs<T>(...refs: Array<RefObject<T> | RefCallback<T> | null | undefined>): RefCallback<T> {
   return value => {
-    for (const ref of refs) {
+    let hasCleanup = false;
+
+    const cleanups = refs.map(ref => {
       if (ref == null) {
-        continue;
+        return undefined;
       }
 
-      if (typeof ref === 'function') {
-        ref(value);
-        continue;
+      const cleanup = setRef(ref, value);
+
+      if (typeof cleanup === 'function') {
+        hasCleanup = true;
       }
 
-      (ref as RefObject<T | null>).current = value;
+      return cleanup;
+    });
+
+    // Returning a function only when a ref asked for one keeps the React 18 path
+    // (React calls this ref again with `null`) untouched and avoids its dev warning.
+    if (!hasCleanup) {
+      return;
     }
+
+    return () => {
+      refs.forEach((ref, index) => {
+        if (ref == null) {
+          return;
+        }
+
+        const cleanup = cleanups[index];
+
+        if (typeof cleanup === 'function') {
+          cleanup();
+          return;
+        }
+
+        setRef(ref, null);
+      });
+    };
   };
+}
+
+function setRef<T>(ref: RefObject<T> | RefCallback<T>, value: T | null) {
+  if (typeof ref === 'function') {
+    return ref(value);
+  }
+
+  (ref as RefObject<T | null>).current = value;
 }

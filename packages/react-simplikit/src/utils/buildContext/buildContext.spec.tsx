@@ -123,4 +123,9 @@ describe('buildContext', () => {
         ))
     ).rejects.toThrow();
   });
+  it('should name the provider after the context for devtools', () => {
+    const [Provider] = buildContext<TestContextType>('Test');
+
+    expect(Provider.displayName).toBe('TestProvider');
+  });
 });

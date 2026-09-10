@@ -1,6 +1,6 @@
-import { useCallback, useRef } from 'react';
-import { act } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { createElement, useCallback, useRef } from 'react';
+import { act, render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -74,5 +74,50 @@ describe('mergeRefs', () => {
 
     expect(result.current.ref1.current).toBe(value);
     expect(ref3Value).toBe(value);
+  });
+  it('should call the cleanup returned by a callback ref when the element unmounts', () => {
+    const cleanup = vi.fn();
+    const callbackRef = vi.fn(() => cleanup);
+
+    const { unmount } = render(createElement('div', { ref: mergeRefs<HTMLDivElement>(callbackRef) }));
+
+    expect(callbackRef).toHaveBeenCalledTimes(1);
+    expect(cleanup).not.toHaveBeenCalled();
+
+    unmount();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(callbackRef).toHaveBeenCalledTimes(1);
+    expect(callbackRef).not.toHaveBeenCalledWith(null);
+  });
+
+  it('should reset refs without a cleanup when another ref returned one', () => {
+    const cleanup = vi.fn();
+    const callbackRefWithCleanup = vi.fn(() => cleanup);
+    const callbackRef = vi.fn(() => undefined);
+    const objectRef = { current: null as HTMLDivElement | null };
+
+    const { unmount } = render(
+      createElement('div', {
+        ref: mergeRefs<HTMLDivElement | null>(callbackRefWithCleanup, objectRef, null, callbackRef),
+      })
+    );
+
+    expect(objectRef.current).toBeInstanceOf(HTMLDivElement);
+
+    unmount();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(objectRef.current).toBeNull();
+    expect(callbackRef).toHaveBeenLastCalledWith(null);
+  });
+
+  it('should return nothing when no ref returns a cleanup', () => {
+    const callbackRef = () => undefined;
+    const objectRef = { current: null as string | null };
+
+    const mergedRef = mergeRefs<string | null>(callbackRef, objectRef);
+
+    expect(mergedRef('test-value')).toBeUndefined();
   });
 });
