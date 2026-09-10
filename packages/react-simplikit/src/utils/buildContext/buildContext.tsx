@@ -14,7 +14,7 @@ type ProviderProps<ContextValuesType> = (ContextValuesType & { children: ReactNo
  * - useContext `() => ContextValuesType` - The hook that uses the context;
  *
  * @example
- * const [Provider, useContext] = buildContext<{ title: string }>('TestContext', null);
+ * const [Provider, useContext] = buildContext<{ title: string }>('TestContext', { title: 'Default title' });
  *
  * function Inner() {
  *   const { title } = useContext();
@@ -43,13 +43,15 @@ export function buildContext<ContextValuesType extends object>(
     'use no memo';
 
     const value = useMemo(
-      () => (Object.keys(contextValues).length > 0 ? contextValues : null),
+      () => (Object.keys(contextValues).length > 0 ? (contextValues as ContextValuesType) : undefined),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [...Object.values(contextValues)]
-    ) as ContextValuesType;
+    );
 
     return <Context.Provider value={value}>{children}</Context.Provider>;
   }
+
+  Provider.displayName = `${contextName}Provider`;
 
   function useInnerContext() {
     const context = useContext(Context);
