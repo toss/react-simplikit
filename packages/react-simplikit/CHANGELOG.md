@@ -1,5 +1,19 @@
 # react-simplikit
 
+## 0.3.1
+
+### Patch Changes
+
+- [#486](https://github.com/toss/react-simplikit/pull/486) [`64d0c6e`](https://github.com/toss/react-simplikit/commit/64d0c6ec6e9278651b4e4dea95a0d4a39df12914) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `buildContext` now sets `displayName` on the returned `Provider` to `` `${contextName}Provider` ``, so React DevTools shows which context a provider belongs to instead of a bare `Provider`. The documentation example also passed `null` as the default values, which the signature rejects; it now passes an object.
+
+- [#484](https://github.com/toss/react-simplikit/pull/484) [`c974fdc`](https://github.com/toss/react-simplikit/commit/c974fdcfe86c496433898be259bc77fdeea5b013) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `useControlledState` now applies multiple `setValue` calls in the same tick in order when uncontrolled, instead of computing each from the value captured at render. This affects both function updates and plain values: `setValue(prev => prev + 3)` twice now adds 6 instead of 3, and `setValue('b')` followed by `setValue('a')` from a current value of `'a'` now settles on `'a'` instead of `'b'`.
+
+  As a consequence, in uncontrolled mode `onChange` is called once after the state commits with the final value, rather than synchronously on every `setValue` call. A parent that mirrors `onChange` into its own state therefore renders once more per update, no call is made when the final value equals the previous one, and a change reported by a component that unmounts in the same commit is dropped. Under StrictMode a single change is now reported once instead of twice.
+
+  Controlled mode is unchanged: it still computes from the current `value` prop, so two function updates in the same tick see the same previous value.
+
+- [#486](https://github.com/toss/react-simplikit/pull/486) [`64d0c6e`](https://github.com/toss/react-simplikit/commit/64d0c6ec6e9278651b4e4dea95a0d4a39df12914) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `mergeRefs` now forwards the cleanup functions that callback refs can return since React 19. When at least one of the merged refs returns a cleanup, the merged ref returns one as well, so React runs those cleanups on detach instead of calling the callbacks with `null`; refs that returned nothing are still reset to `null` inside that cleanup. When no ref returns a cleanup the merged ref returns nothing, as before, so React 18 keeps its existing `null` call and does not warn.
+
 ## 0.3.0
 
 ### Minor Changes
