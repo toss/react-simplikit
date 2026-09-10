@@ -1,6 +1,6 @@
 # mergeRefs
 
-이 함수는 여러 개의 refs(RefObject 또는 RefCallback)를 받아서 제공된 모든 refs를 업데이트하는 단일 ref를 반환해요. 단일 요소에 여러 refs를 전달해야 할 때 유용해요.
+이 함수는 여러 개의 refs(RefObject 또는 RefCallback)를 받아서 제공된 모든 refs를 업데이트하는 단일 ref를 반환해요. 단일 요소에 여러 refs를 전달해야 할 때 유용해요. 콜백 ref가 정리 함수를 반환하면(React 19) 합쳐진 ref도 정리 함수를 반환하고, 분리될 때 모든 정리 함수를 실행해요.
 
 ## 인터페이스
 
