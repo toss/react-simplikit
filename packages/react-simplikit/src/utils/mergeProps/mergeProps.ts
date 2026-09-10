@@ -43,13 +43,7 @@ function pushProp(prev: BaseProps, curr: BaseProps): BaseProps {
         break;
       }
       default: {
-        const mergedFunction = mergeFunction(prev[key], curr[key]);
-
-        if (mergedFunction) {
-          prev[key] = mergedFunction;
-        } else if (curr[key] !== undefined) {
-          prev[key] = curr[key];
-        }
+        prev[key] = mergeFunction(prev[key], curr[key]) ?? curr[key];
       }
     }
   }
