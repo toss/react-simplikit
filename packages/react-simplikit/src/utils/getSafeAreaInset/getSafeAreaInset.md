@@ -24,6 +24,8 @@ function getSafeAreaInset(): SafeAreaInset;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface

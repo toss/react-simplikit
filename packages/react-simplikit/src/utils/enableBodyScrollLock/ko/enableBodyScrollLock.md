@@ -10,6 +10,8 @@ function enableBodyScrollLock(): void;
 
 ### 파라미터
 
+이 함수는 파라미터를 받지 않아요.
+
 ### 반환 값
 
 <Interface name="" type="void" description="" />
