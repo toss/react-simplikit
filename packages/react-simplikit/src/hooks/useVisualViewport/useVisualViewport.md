@@ -14,6 +14,8 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface
