@@ -29,6 +29,8 @@ npm install react-simplikit
 
 ## Inicio rápido
 
+Usa `useDebounce` para llamar a tu función de búsqueda cuando el usuario deje de escribir durante 300 ms. En este ejemplo, `searchAPI` es la función de búsqueda que proporciona tu aplicación.
+
 ```tsx
 import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
@@ -58,6 +60,8 @@ La función con debounce expone `.cancel()`, y las llamadas pendientes se cancel
 
 ### Mantener un elemento fijo por encima del teclado en pantalla
 
+Aplica el estilo que devuelve `useAvoidKeyboard` para mover un campo de entrada fijo por encima del teclado en pantalla cuando se abre.
+
 ```tsx
 import { useAvoidKeyboard } from 'react-simplikit';
 
@@ -71,6 +75,16 @@ function ChatInput() {
   );
 }
 ```
+
+## Integración con IA
+
+Ayuda a tu asistente de programación con IA a encontrar Hooks, componentes y utilidades existentes, y a consultar las reglas de importación y SSR con la skill de agente incluida.
+
+```bash
+npx skills add toss/react-simplikit --skill react-simplikit
+```
+
+Consulta la [guía de integración con IA (en inglés)](https://react-simplikit.slash.page/ai-integration.html) para conocer los detalles de configuración. Los agentes también pueden usar [llms.txt](https://react-simplikit.slash.page/llms.txt) para encontrar documentación de las API.
 
 ## Documentación
 

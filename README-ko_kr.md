@@ -29,6 +29,8 @@ npm install react-simplikit
 
 ## 빠른 시작
 
+`useDebounce`를 사용하면 사용자가 입력을 멈춘 뒤 300ms 후에 검색 함수를 호출할 수 있어요. 아래 예제의 `searchAPI`는 애플리케이션에서 제공하는 검색 함수예요.
+
 ```tsx
 import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
@@ -58,6 +60,8 @@ function SearchInput() {
 
 ### 고정 요소를 온스크린 키보드 위에 유지하기
 
+`useAvoidKeyboard`가 반환하는 스타일을 적용하면 온스크린 키보드가 열릴 때 고정된 입력창을 키보드 위로 이동할 수 있어요.
+
 ```tsx
 import { useAvoidKeyboard } from 'react-simplikit';
 
@@ -71,6 +75,16 @@ function ChatInput() {
   );
 }
 ```
+
+## AI 연동
+
+함께 제공하는 에이전트 스킬로 AI 코딩 어시스턴트가 기존 훅·컴포넌트·유틸리티를 찾고, import와 SSR 규칙을 확인하도록 도와주세요.
+
+```bash
+npx skills add toss/react-simplikit --skill react-simplikit
+```
+
+설정 방법은 [AI 연동 가이드](https://react-simplikit.slash.page/ko/ai-integration.html)를 참고하세요. 에이전트는 [llms.txt](https://react-simplikit.slash.page/llms.txt)에서도 API 문서를 찾을 수 있어요.
 
 ## 문서
 

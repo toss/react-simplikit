@@ -28,6 +28,8 @@ pnpm add react-simplikit
 
 ## Quick Start
 
+Use `useDebounce` to call your search function after the user stops typing for 300 ms. In this example, `searchAPI` is the search function provided by your application.
+
 ```tsx
 import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
@@ -62,6 +64,16 @@ The debounced function exposes `.cancel()`, and pending calls are cancelled auto
 - **Utils** — `buildContext`, `mergeProps`, `mergeRefs`, and mobile web helpers such as `isIOS` and `getKeyboardHeight`
 
 The full list with a one-line description each is on the [reference page](https://react-simplikit.slash.page/reference.html).
+
+## AI Integration
+
+Help your AI coding assistant find existing hooks, components and utilities, and check import and SSR rules with the included agent skill.
+
+```bash
+npx skills add toss/react-simplikit --skill react-simplikit
+```
+
+See the [AI Integration guide](https://react-simplikit.slash.page/ai-integration.html) for setup details. Agents can also use [llms.txt](https://react-simplikit.slash.page/llms.txt) to find API documentation.
 
 ## Documentation
 
