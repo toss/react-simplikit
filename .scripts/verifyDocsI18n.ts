@@ -17,6 +17,7 @@ import {
 import { packageSourceRoot } from '../.vitepress/shared.mts';
 
 import { assertLlmsOutput } from './utils/assertLlmsOutput.ts';
+import { assertSeoOutput } from './utils/assertSeoOutput.ts';
 import { execWithOutput } from './utils/execWithOutput.ts';
 import { getRootPath } from './utils/getRootPath.ts';
 
@@ -91,7 +92,10 @@ const buildOutputDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simp
 // Korean translates every routed English document, so its fallback path only has a route to
 // render on while these English-only fixtures exist. Japanese ships without translated API
 // reference pages, so those routes render from generated fallbacks on every build.
-await fs.writeFile(guideFixturePath, `# ${guideFixtureTitle}\n`);
+await fs.writeFile(
+  guideFixturePath,
+  `# ${guideFixtureTitle}\n\nRead **React** and [hooks](/reference) with \`useToggle\`.\nChoose a hook for your app.\n`
+);
 await fs.mkdir(hookFixtureDirectory, { recursive: true });
 await fs.writeFile(path.join(hookFixtureDirectory, `${hookFixtureName}.md`), `# ${hookFixtureName}\n`);
 
@@ -99,6 +103,7 @@ try {
   await execWithOutput('yarn', ['docs:build', '--outDir', buildOutputDirectory], { cwd: root });
 
   await assertLlmsOutput({ buildOutputDirectory, root });
+  await assertSeoOutput(buildOutputDirectory);
 
   // The redirect stubs are the only thing keeping pre-flattening URLs alive, and a
   // broken route filter would silently emit none of them.

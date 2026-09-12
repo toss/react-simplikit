@@ -5,6 +5,12 @@ import { generatedRewrites, localeDefinitions, rewrites } from './locales.mts';
 import { writeLegacyRedirectStubs } from './libs/legacyRedirects.mts';
 import { SITE_ORIGIN } from './shared.mts';
 
+const fallbackUrls = new Set<string>();
+
+function pageUrl(relativePath: string): string {
+  return relativePath.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '.html');
+}
+
 const locales = Object.fromEntries(
   Object.entries(localeDefinitions).map(([code, definition]) => [
     code,
@@ -78,7 +84,63 @@ Guidelines for AI agents:
     ],
   },
   rewrites: { ...rewrites, ...generatedRewrites },
-  sitemap: { hostname: SITE_ORIGIN },
+  sitemap: {
+    hostname: SITE_ORIGIN,
+    transformItems: items =>
+      items
+        .filter(item => !fallbackUrls.has(item.url))
+        .map(item => ({ ...item, links: item.links?.filter(link => !fallbackUrls.has(link.url)) })),
+  },
+  markdown: {
+    config(md) {
+      md.core.ruler.after('inline', 'page-description', state => {
+        if (state.inlineMode) {
+          return;
+        }
+        const { frontmatter } = state.env as {
+          frontmatter: { description?: string; hero?: { text?: string } };
+        };
+        if (frontmatter.description != null) {
+          return;
+        }
+
+        const paragraph = state.tokens.findIndex(token => token.type === 'paragraph_open' && token.level === 0);
+        const text = state.tokens[paragraph + 1]?.children
+          ?.map(token => {
+            if (token.type === 'text' || token.type === 'code_inline') {
+              return token.content;
+            }
+            return token.type === 'softbreak' || token.type === 'hardbreak' ? ' ' : '';
+          })
+          .join('');
+        frontmatter.description = frontmatter.hero?.text ?? text?.replace(/\s+/g, ' ').trim();
+      });
+    },
+  },
+  transformPageData(pageData) {
+    const url = pageUrl(pageData.relativePath);
+    const isFallback = pageData.frontmatter.untranslated === true;
+    if (isFallback) {
+      fallbackUrls.add(url);
+    } else {
+      fallbackUrls.delete(url);
+    }
+    const canonical = `${SITE_ORIGIN}/${isFallback ? url.slice(url.indexOf('/') + 1) : url}`;
+    const title =
+      pageData.title === '' || pageData.title === 'react-simplikit'
+        ? 'react-simplikit'
+        : `${pageData.title} | react-simplikit`;
+    const head: HeadConfig[] = [
+      ['link', { rel: 'canonical', href: canonical }],
+      ['meta', { property: 'og:url', content: canonical }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: pageData.description }],
+      ['meta', { name: 'twitter:title', content: title }],
+      ['meta', { name: 'twitter:description', content: pageData.description }],
+    ];
+    pageData.frontmatter.head ??= [];
+    pageData.frontmatter.head.push(...head);
+  },
   buildEnd: async siteConfig => {
     const count = writeLegacyRedirectStubs(siteConfig.outDir);
     console.log(`legacy redirect stubs: ${count}`);
@@ -95,24 +157,11 @@ Guidelines for AI agents:
     ['meta', { name: 'keywords', content: 'react, hooks, utility, library, react-simplikit, mobile' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'react-simplikit' }],
-    ['meta', { property: 'og:description', content: 'Lightweight and powerful React utility library' }],
     ['meta', { property: 'og:site_name', content: 'react-simplikit' }],
     ['meta', { property: 'og:image', content: `${SITE_ORIGIN}/images/og.png` }],
     ['meta', { name: 'twitter:image', content: `${SITE_ORIGIN}/images/og.png` }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
-  transformHead: ({ pageData }) => {
-    const head: HeadConfig[] = [];
-    const title = pageData.frontmatter.title || pageData.title || 'react-simplikit';
-    const description =
-      pageData.frontmatter.description || pageData.description || 'Lightweight and powerful React utility library';
-
-    head.push(['meta', { property: 'og:title', content: title }]);
-    head.push(['meta', { property: 'og:description', content: description }]);
-
-    return head;
-  },
   themeConfig: {
     logo: '/images/logo.svg',
     search: {
