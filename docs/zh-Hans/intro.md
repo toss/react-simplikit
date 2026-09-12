@@ -121,3 +121,5 @@ react-use 在 React 和 React-DOM 之外还有 [14 个依赖](https://www.npmjs.
 想进一步了解 react-simplikit，请查看下面的链接：
 
 - [GitHub](https://github.com/toss/react-simplikit)
+
+在[常见使用场景](/zh-Hans/use-cases) 中查看完整示例，或浏览 [API 参考](/zh-Hans/reference)。

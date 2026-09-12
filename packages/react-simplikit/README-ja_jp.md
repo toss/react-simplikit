@@ -73,9 +73,11 @@ function SearchInput() {
 npx skills add toss/react-simplikit --skill react-simplikit
 ```
 
-設定方法は [AI 連携ガイド（英語）](https://react-simplikit.slash.page/ai-integration.html)をご覧ください。エージェントは [llms.txt](https://react-simplikit.slash.page/llms.txt) からも API ドキュメントを探せます。
+設定方法は [AI 連携ガイド](https://react-simplikit.slash.page/ja/ai-integration.html)をご覧ください。エージェントは [llms.txt](https://react-simplikit.slash.page/llms.txt) からも API ドキュメントを探せます。
 
 ## ドキュメント
+
+解決したい問題に合うフックは [用途別の使い方](https://react-simplikit.slash.page/ja/use-cases.html) で探せます。
 
 詳しいドキュメントは [react-simplikit.slash.page](https://react-simplikit.slash.page/ja) をご覧ください。
 

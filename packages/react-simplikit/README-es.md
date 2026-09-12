@@ -73,9 +73,11 @@ Ayuda a tu asistente de programación con IA a encontrar Hooks, componentes y ut
 npx skills add toss/react-simplikit --skill react-simplikit
 ```
 
-Consulta la [guía de integración con IA (en inglés)](https://react-simplikit.slash.page/ai-integration.html) para conocer los detalles de configuración. Los agentes también pueden usar [llms.txt](https://react-simplikit.slash.page/llms.txt) para encontrar documentación de las API.
+Consulta la [guía de integración con IA](https://react-simplikit.slash.page/es/ai-integration.html) para conocer los detalles de configuración. Los agentes también pueden usar [llms.txt](https://react-simplikit.slash.page/llms.txt) para encontrar documentación de las API.
 
 ## Documentación
+
+Elige un Hook según el problema que necesitas resolver en [Casos de uso comunes](https://react-simplikit.slash.page/es/use-cases.html).
 
 Consulta la documentación completa en [react-simplikit.slash.page](https://react-simplikit.slash.page/es).
 

@@ -41,3 +41,12 @@ codex plugin marketplace add https://github.com/toss/react-simplikit
 ## Context7
 
 react-simplikit은 [Context7](https://context7.com/toss/react-simplikit)에 `/toss/react-simplikit`으로 등록되어 있어요. Context7 MCP 서버를 쓰는 에이전트는 별도 설정 없이 문서를 조회할 수 있어요.
+
+## 에이전트 접근 확인하기
+
+1. 설치한 스킬이나 [llms.txt](https://react-simplikit.slash.page/llms.txt)를 사용해 구체적인 작업에 맞는 API를 찾도록 요청하세요. 예를 들어 검색 콜백을 300ms 늦추는 작업을 요청할 수 있어요.
+2. 연결된 [useDebounce Markdown 레퍼런스](https://react-simplikit.slash.page/hooks/useDebounce.md)를 읽고, 코드를 쓰기 전에 import, 파라미터, 기본값과 정리 동작을 설명하도록 요청하세요.
+3. `react-simplikit`의 named import를 사용하는지, 콜백을 늦추는 것과 값을 늦추는 것을 구분하는지, 대기 중인 콜백 취소가 이미 시작한 요청을 중단하지 않는다고 설명하는지 확인하세요.
+4. 설치한 패키지 버전에서 해당 API를 제공하는지 확인하고 프로젝트에서 코드를 실행하세요. 웹사이트는 최신 문서를 제공하므로, 문서를 정확하게 찾았더라도 이전 설치 버전과 호환된다고 보장할 수는 없어요.
+
+에이전트가 스킬을 불러오거나 사이트에 접근하지 못하면 필요한 Markdown 레퍼런스를 직접 제공하세요. 설치만으로 에이전트가 문서를 읽었다고 확인할 수는 없어요. 생성된 스킬 카탈로그에는 API 항목이 있어요. 필요한 동작을 설명할 때는 [문제별 사용법](/ko/use-cases)을 참고하세요.

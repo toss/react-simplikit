@@ -77,6 +77,8 @@ npx skills add toss/react-simplikit --skill react-simplikit
 
 ## 문서
 
+해결하려는 문제에 맞는 훅은 [문제별 사용법](https://react-simplikit.slash.page/ko/use-cases.html)에서 찾아보세요.
+
 자세한 문서는 [react-simplikit.slash.page](https://react-simplikit.slash.page/ko)를 참고하세요.
 
 ## 기여하기

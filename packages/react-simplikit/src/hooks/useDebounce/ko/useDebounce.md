@@ -2,6 +2,8 @@
 
 `useDebounce`는 제공된 콜백 함수의 디바운스 버전을 반환하는 리액트 훅이에요. 함수 실행을 지연시키고 여러 호출을 하나로 그룹화하여 이벤트 처리를 최적화하는 데 도움을 줘요.
 
+기본 옵션에서는 추가 호출 없이 `wait` 밀리초가 지나면 마지막 호출을 실행해요. 언마운트되거나 디바운스 인스턴스가 바뀌면 대기 중인 호출을 취소해요. `.cancel()`은 대기 중인 콜백만 취소하고 이미 시작한 네트워크 요청은 취소하지 않아요. 예제는 전달된 검색어를 로컬에 표시해요. 서버를 연결할 때는 `setSubmittedQuery`를 애플리케이션의 검색 콜백으로 바꾸세요.
+
 ## 인터페이스
 
 ```ts
@@ -63,23 +65,31 @@ function useDebounce<F extends (...args: any[]) => unknown>(
 ## 예시
 
 ```tsx
-function SearchInput() {
-  const [query, setQuery] = useState('');
+import { useState } from 'react';
+import { useDebounce } from 'react-simplikit';
 
-  const debouncedSearch = useDebounce((value: string) => {
-    // 실제 API 호출
-    searchAPI(value);
-  }, 300);
+export function SearchInput() {
+  const [query, setQuery] = useState('');
+  const [submittedQuery, setSubmittedQuery] = useState('');
+  const debouncedSearch = useDebounce(setSubmittedQuery, 300);
 
   return (
-    <input
-      value={query}
-      onChange={e => {
-        setQuery(e.target.value);
-        debouncedSearch(e.target.value);
-      }}
-      placeholder="검색어를 입력하세요"
-    />
+    <section>
+      <label>
+        Search
+        <input
+          value={query}
+          onChange={event => {
+            setQuery(event.target.value);
+            debouncedSearch(event.target.value);
+          }}
+        />
+      </label>
+      <output aria-live="polite">{submittedQuery}</output>
+      <button type="button" onClick={() => debouncedSearch.cancel()}>
+        Cancel pending update
+      </button>
+    </section>
   );
 }
 ```

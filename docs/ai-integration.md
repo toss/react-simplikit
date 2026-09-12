@@ -41,3 +41,12 @@ The documentation is also published in the formats agents read directly:
 ## Context7
 
 react-simplikit is indexed on [Context7](https://context7.com/toss/react-simplikit) as `/toss/react-simplikit`. Agents with the Context7 MCP server can query the documentation from there without any setup on your side.
+
+## Verify agent access
+
+1. Ask the agent to find an API for a concrete task, such as delaying a search callback by 300 ms, using the installed skill or [llms.txt](https://react-simplikit.slash.page/llms.txt).
+2. Have it read the linked [useDebounce Markdown reference](https://react-simplikit.slash.page/hooks/useDebounce.md), then report the import, parameters, defaults and cleanup behavior before writing code.
+3. Confirm that it uses a named import from `react-simplikit`, distinguishes a delayed callback from a delayed value, and explains that cancelling a pending callback does not abort an already-started request.
+4. Check the API against your installed package version and run the resulting code in your project. The website follows the latest documentation; a correct lookup does not prove compatibility with an older installation.
+
+If the agent cannot load its skill or access the site, give it the relevant Markdown reference directly. Installation alone does not prove that an agent read the documentation. The generated skill catalog lists API entries; use [Common use cases](/use-cases) to describe the behavior you need.

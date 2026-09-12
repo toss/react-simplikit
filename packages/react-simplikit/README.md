@@ -77,6 +77,8 @@ See the [AI Integration guide](https://react-simplikit.slash.page/ai-integration
 
 ## Documentation
 
+Choose a hook by the problem you need to solve in [Common use cases](https://react-simplikit.slash.page/use-cases.html).
+
 Visit [react-simplikit.slash.page](https://react-simplikit.slash.page) for full documentation.
 
 ## Contributing

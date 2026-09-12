@@ -73,9 +73,11 @@ function SearchInput() {
 npx skills add toss/react-simplikit --skill react-simplikit
 ```
 
-设置方法请参阅 [AI 集成指南（英文）](https://react-simplikit.slash.page/ai-integration.html)。Agent 也可以通过 [llms.txt](https://react-simplikit.slash.page/llms.txt) 查找 API 文档。
+设置方法请参阅 [AI 集成指南](https://react-simplikit.slash.page/zh-Hans/ai-integration.html)。Agent 也可以通过 [llms.txt](https://react-simplikit.slash.page/llms.txt) 查找 API 文档。
 
 ## 文档
+
+在[常见使用场景](https://react-simplikit.slash.page/zh-Hans/use-cases.html) 中，根据要解决的问题选择 Hook。
 
 完整文档请访问 [react-simplikit.slash.page](https://react-simplikit.slash.page/zh-Hans)。
 
