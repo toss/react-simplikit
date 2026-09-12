@@ -81,7 +81,10 @@ function renderPage(locale: LocaleDefinition, sections: IndexSection[]): string 
     ...(hasFallback ? ['untranslated: true', 'sourceLocale: en'] : []),
     '---',
   ];
-  const body = [`# ${locale.themeStrings.referenceLabel}`, ...sections.map(renderSection)];
+  const prefix = locale.path === '' ? '' : `/${locale.path}`;
+  const guides = locale.themeStrings.guidePages;
+  const navigation = `[${guides.installation}](${prefix}/installation) · [${guides.useCases}](${prefix}/use-cases) · [${guides.aiIntegration}](${prefix}/ai-integration)`;
+  const body = [`# ${locale.themeStrings.referenceLabel}`, navigation, ...sections.map(renderSection)];
 
   return `${frontmatter.join('\n')}\n\n${body.join('\n\n')}\n`;
 }

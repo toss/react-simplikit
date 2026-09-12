@@ -16,6 +16,12 @@ type DebounceOptions = {
  * `useDebounce` is a React hook that returns a debounced version of the provided callback function.
  * It helps optimize event handling by delaying function execution and grouping multiple calls into one.
  *
+ * With the default options, the last call runs after `wait` milliseconds without another call.
+ * Pending calls are cancelled on unmount or when the debounce instance changes.
+ * Calling `.cancel()` only cancels a pending callback, not an already-started network request.
+ * The example displays the submitted query locally; replace `setSubmittedQuery` with your
+ * application's search callback when connecting a server.
+ *
  * @template {(...args: any[]) => unknown} F - The type of the callback function.
  * @param {F} callback - The function to debounce.
  * @param {number} wait - The number of milliseconds to delay the function execution.
@@ -27,23 +33,31 @@ type DebounceOptions = {
  *   It also includes a `cancel` method to cancel any pending debounced execution.
  *
  * @example
- * function SearchInput() {
- *   const [query, setQuery] = useState('');
+ * import { useState } from 'react';
+ * import { useDebounce } from 'react-simplikit';
  *
- *   const debouncedSearch = useDebounce((value: string) => {
- *     // Actual API call
- *     searchAPI(value);
- *   }, 300);
+ * export function SearchInput() {
+ *   const [query, setQuery] = useState('');
+ *   const [submittedQuery, setSubmittedQuery] = useState('');
+ *   const debouncedSearch = useDebounce(setSubmittedQuery, 300);
  *
  *   return (
- *     <input
- *       value={query}
- *       onChange={e => {
- *         setQuery(e.target.value);
- *         debouncedSearch(e.target.value);
- *       }}
- *       placeholder="Enter search term"
- *     />
+ *     <section>
+ *       <label>
+ *         Search
+ *         <input
+ *           value={query}
+ *           onChange={event => {
+ *             setQuery(event.target.value);
+ *             debouncedSearch(event.target.value);
+ *           }}
+ *         />
+ *       </label>
+ *       <output aria-live="polite">{submittedQuery}</output>
+ *       <button type="button" onClick={() => debouncedSearch.cancel()}>
+ *         Cancel pending update
+ *       </button>
+ *     </section>
  *   );
  * }
  */

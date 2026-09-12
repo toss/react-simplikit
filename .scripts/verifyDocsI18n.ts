@@ -17,6 +17,7 @@ import {
 import { packageSourceRoot } from '../.vitepress/shared.mts';
 
 import { assertLlmsOutput } from './utils/assertLlmsOutput.ts';
+import { assertSeoOutput } from './utils/assertSeoOutput.ts';
 import { execWithOutput } from './utils/execWithOutput.ts';
 import { getRootPath } from './utils/getRootPath.ts';
 
@@ -91,7 +92,10 @@ const buildOutputDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simp
 // Korean translates every routed English document, so its fallback path only has a route to
 // render on while these English-only fixtures exist. Japanese ships without translated API
 // reference pages, so those routes render from generated fallbacks on every build.
-await fs.writeFile(guideFixturePath, `# ${guideFixtureTitle}\n`);
+await fs.writeFile(
+  guideFixturePath,
+  `# ${guideFixtureTitle}\n\nRead **React** and [hooks](/reference) with \`useToggle\`.\nChoose a hook for your app.\n`
+);
 await fs.mkdir(hookFixtureDirectory, { recursive: true });
 await fs.writeFile(path.join(hookFixtureDirectory, `${hookFixtureName}.md`), `# ${hookFixtureName}\n`);
 
@@ -99,6 +103,7 @@ try {
   await execWithOutput('yarn', ['docs:build', '--outDir', buildOutputDirectory], { cwd: root });
 
   await assertLlmsOutput({ buildOutputDirectory, root });
+  await assertSeoOutput(buildOutputDirectory);
 
   // The redirect stubs are the only thing keeping pre-flattening URLs alive, and a
   // broken route filter would silently emit none of them.
@@ -158,6 +163,18 @@ try {
   // pointing at a page that does not exist.
   for (const locale of ['', ...localeDirectories]) {
     const referencePage = await fs.readFile(path.join(buildOutputDirectory, locale, 'reference.html'), 'utf8');
+    const prefix = locale === '' ? '' : `/${locale}`;
+    for (const page of ['intro', 'installation', 'reference']) {
+      const html = await fs.readFile(path.join(buildOutputDirectory, locale, `${page}.html`), 'utf8');
+      assert.ok(html.includes(`href="${prefix}/use-cases.html"`), `${locale}/${page} must link the use-case guide`);
+    }
+    for (const page of ['use-cases', 'ai-integration']) {
+      const html = await fs.readFile(path.join(buildOutputDirectory, locale, `${page}.html`), 'utf8');
+      const definition = Object.values(localeDefinitions).find(item => item.path === locale);
+      assert.ok(definition);
+      assert.equal(html.includes(definition.untranslatedNotice), false, `${locale}/${page} must be translated`);
+    }
+
     const renderedLinks = [...referencePage.matchAll(/<li><a href="[^"]*\/(?:hooks|components|utils)\/[^"]+"/g)];
     assert.equal(
       renderedLinks.length,
@@ -228,6 +245,7 @@ const unregisteredLocaleFixture = {
       intro: 'Introdução',
       whyReactSimplikitMatters: 'Por que o react-simplikit importa',
       installation: 'Instalação',
+      useCases: 'Casos de uso comuns',
       aiIntegration: 'Integração com IA',
       designPrinciples: 'Princípios de design',
       mobileWeb: 'Web móvel',
@@ -243,7 +261,7 @@ const unregisteredConfig = buildLocaleConfig(unregisteredLocaleFixture);
 assert.equal(unregisteredConfig.lang, 'pt-BR');
 const unregisteredConfigNav = unregisteredConfig.themeConfig?.nav ?? [];
 assert.deepEqual(unregisteredConfigNav[0], { text: 'Início', link: '/pt-BR/' });
-assert.deepEqual(unregisteredConfigNav[1], { text: 'Guide', link: '/pt-BR/intro' });
+assert.deepEqual(unregisteredConfigNav[1], { text: 'Guia', link: '/pt-BR/intro' });
 assert.equal((unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Referência');
 assert.equal((unregisteredConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/pt-BR/reference');
 assert.deepEqual(Object.keys(unregisteredConfig.themeConfig?.sidebar ?? {}), ['/pt-BR/']);
@@ -254,7 +272,7 @@ const rootConfig = buildLocaleConfig(localeDefinitions.root);
 
 const koConfigNav = koConfig.themeConfig?.nav ?? [];
 assert.deepEqual(koConfigNav[0], { text: '홈', link: '/ko/' });
-assert.deepEqual(koConfigNav[1], { text: 'Guide', link: '/ko/intro' });
+assert.deepEqual(koConfigNav[1], { text: '가이드', link: '/ko/intro' });
 assert.equal((koConfigNav[2] as DefaultTheme.NavItemWithLink).text, '레퍼런스');
 assert.equal((koConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/ko/reference');
 assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.SidebarItem[]>)['/ko/'][0], {
@@ -263,6 +281,7 @@ assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.S
     { text: '소개', link: '/ko/intro' },
     { text: 'react-simplikit, 선택의 이유', link: '/ko/why-react-simplikit-matters' },
     { text: '설치하기', link: '/ko/installation' },
+    { text: '문제별 사용법', link: '/ko/use-cases' },
     { text: 'AI 연동', link: '/ko/ai-integration' },
     { text: '설계 원칙', link: '/ko/design-principles' },
     { text: '모바일 웹', link: '/ko/mobile-web' },
@@ -318,7 +337,7 @@ const jaConfig = buildLocaleConfig(localeDefinitions.ja);
 assert.equal(jaConfig.lang, 'ja');
 const jaConfigNav = jaConfig.themeConfig?.nav ?? [];
 assert.deepEqual(jaConfigNav[0], { text: 'ホーム', link: '/ja/' });
-assert.deepEqual(jaConfigNav[1], { text: 'Guide', link: '/ja/intro' });
+assert.deepEqual(jaConfigNav[1], { text: 'ガイド', link: '/ja/intro' });
 assert.equal((jaConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'リファレンス');
 assert.equal((jaConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/ja/reference');
 assert.equal(jaConfig.themeConfig?.editLink?.text, 'GitHub で編集する');
@@ -333,7 +352,7 @@ const zhHansConfig = buildLocaleConfig(localeDefinitions['zh-Hans']);
 assert.equal(zhHansConfig.lang, 'zh-Hans');
 const zhHansConfigNav = zhHansConfig.themeConfig?.nav ?? [];
 assert.deepEqual(zhHansConfigNav[0], { text: '首页', link: '/zh-Hans/' });
-assert.deepEqual(zhHansConfigNav[1], { text: 'Guide', link: '/zh-Hans/intro' });
+assert.deepEqual(zhHansConfigNav[1], { text: '指南', link: '/zh-Hans/intro' });
 assert.equal((zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).text, '参考');
 assert.equal((zhHansConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/zh-Hans/reference');
 assert.equal(zhHansConfig.themeConfig?.editLink?.text, '在 GitHub 上编辑此页');
@@ -348,7 +367,7 @@ const esConfig = buildLocaleConfig(localeDefinitions.es);
 assert.equal(esConfig.lang, 'es');
 const esConfigNav = esConfig.themeConfig?.nav ?? [];
 assert.deepEqual(esConfigNav[0], { text: 'Inicio', link: '/es/' });
-assert.deepEqual(esConfigNav[1], { text: 'Guide', link: '/es/intro' });
+assert.deepEqual(esConfigNav[1], { text: 'Guía', link: '/es/intro' });
 assert.equal((esConfigNav[2] as DefaultTheme.NavItemWithLink).text, 'Referencia');
 assert.equal((esConfigNav[2] as DefaultTheme.NavItemWithLink).link, '/es/reference');
 assert.equal(esConfig.themeConfig?.editLink?.text, 'Editar esta página en GitHub');

@@ -40,3 +40,5 @@ import { useToggle } from 'react-simplikit';
 ```
 
 Todos los Hooks admiten tree shaking, así que en tu bundle solo se incluye lo que realmente usas.
+
+Consulta [casos de uso comunes](/es/use-cases) para ver ejemplos completos, o explora la [referencia de API](/es/reference).

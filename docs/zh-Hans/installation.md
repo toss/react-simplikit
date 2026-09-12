@@ -40,3 +40,5 @@ import { useToggle } from 'react-simplikit';
 ```
 
 所有 Hook 都支持 tree shaking，因此只有你真正用到的部分才会被打进包里。
+
+在[常见使用场景](/zh-Hans/use-cases) 中查看完整示例，或浏览 [API 参考](/zh-Hans/reference)。

@@ -121,3 +121,5 @@ React と React-DOM を除いて [14 個の依存関係](https://www.npmjs.com/p
 react-simplikit についてさらに詳しく知りたい方は、以下のリンクをご覧ください。
 
 - [GitHub](https://github.com/toss/react-simplikit)
+
+完全な使用例は [用途別の使い方](/ja/use-cases)、ツールの一覧は [API リファレンス](/ja/reference) をご覧ください。
