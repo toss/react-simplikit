@@ -2,15 +2,15 @@
 import * as React from 'react';
 import * as jsxRuntime from 'react/jsx-runtime';
 import { renderToString } from 'react-dom/server';
-import { cleanup, render } from '@testing-library/react';
+import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
-import { afterEach, expect, it } from 'vitest';
+import { afterEach, expect, it, vi } from 'vitest';
 
 import * as simplikit from '../packages/react-simplikit/src/index.ts';
 
 function readExamples(file: string): string[] {
-  return [...readFileSync(file, 'utf8').matchAll(/```tsx\n([\s\S]*?)\n```/g)].map(match => match[1]);
+  return [...readFileSync(file, 'utf8').matchAll(/```tsx[^\n]*\n([\s\S]*?)\n```/g)].map(match => match[1]);
 }
 
 function loadExample(source: string): React.ComponentType {
@@ -38,10 +38,14 @@ function loadExample(source: string): React.ComponentType {
   return exports[componentName];
 }
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+});
 
 for (const [directory, filename, locales] of [
   ['docs', 'use-cases.md', ['ko', 'ja', 'zh-Hans', 'es']],
+  ['docs', 'why-react-simplikit-matters.md', ['ko', 'ja', 'zh-Hans', 'es']],
   ['packages/react-simplikit/src/hooks/useDebounce', 'useDebounce.md', ['ko']],
   ['packages/react-simplikit/src/hooks/useDebouncedValue', 'useDebouncedValue.md', ['ko']],
 ] as const) {
@@ -58,3 +62,30 @@ for (const [directory, filename, locales] of [
     }
   });
 }
+
+it('both search examples update the input immediately and debounce the results', () => {
+  vi.useFakeTimers();
+  const examples = readExamples('docs/why-react-simplikit-matters.md');
+  expect(examples).toHaveLength(2);
+
+  for (const source of examples) {
+    const view = render(React.createElement(loadExample(source)));
+    const input = view.getByRole('textbox', { name: 'Search books' }) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'React' } });
+    expect(input.value).toBe('React');
+    expect(view.getAllByRole('listitem')).toHaveLength(3);
+    act(() => vi.advanceTimersByTime(200));
+    fireEvent.change(input, { target: { value: 'TypeScript' } });
+    act(() => vi.advanceTimersByTime(299));
+    expect(view.getAllByRole('listitem')).toHaveLength(3);
+    act(() => vi.advanceTimersByTime(1));
+    expect(view.getAllByRole('listitem').map(item => item.textContent)).toEqual(['TypeScript Guide']);
+    fireEvent.change(input, { target: { value: '' } });
+    act(() => vi.advanceTimersByTime(300));
+    expect(view.getAllByRole('listitem')).toHaveLength(3);
+    fireEvent.change(input, { target: { value: 'React' } });
+    expect(vi.getTimerCount()).toBeGreaterThan(0);
+    view.unmount();
+    expect(vi.getTimerCount()).toBe(0);
+  }
+});

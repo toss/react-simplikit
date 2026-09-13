@@ -53,8 +53,6 @@ SSR 환경의 활발한 도입으로, 잘못 작성된 컴포넌트나 훅이 SS
 
 ## 링크
 
-react-simplikit에 대한 더 많은 정보는 다음 링크를 확인해 주세요:
-
-- [GitHub](https://github.com/toss/react-simplikit)
+소스 코드는 [GitHub](https://github.com/toss/react-simplikit)에서 확인할 수 있어요.
 
 완전한 예제는 [문제별 사용법](/ko/use-cases)에서 확인하고 전체 도구는 [API 레퍼런스](/ko/reference)에서 찾아보세요.

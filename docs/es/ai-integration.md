@@ -34,9 +34,9 @@ La skill se genera a partir de estas páginas de documentación para mantenerse 
 
 La documentación en inglés también se publica en formatos que los agentes pueden leer directamente.
 
-- [`/llms.txt`](https://react-simplikit.slash.page/llms.txt) — un índice de las páginas en inglés con resúmenes de una línea
-- [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — la documentación en inglés en un solo archivo
-- Sustituye `.html` por `.md` en la URL de una página en inglés para leer el código fuente Markdown. Por ejemplo: [`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md).
+- [`llms.txt`](https://react-simplikit.slash.page/llms.txt) — un índice de las páginas en inglés con resúmenes de una línea
+- [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — la documentación en inglés en un solo archivo
+- Sustituye `.html` por `.md` en la URL de una página en inglés para leer el código fuente Markdown. Por ejemplo, consulta [`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md).
 
 ## Context7
 

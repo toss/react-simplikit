@@ -28,7 +28,7 @@ npm install react-simplikit
 
 ### Ejemplo de botón CTA
 
-El patrón de interfaz móvil más habitual: un botón fijado abajo que se mueve por encima del teclado.
+Este ejemplo mantiene un botón fijado en la parte inferior por encima del teclado.
 
 ```tsx
 import { useAvoidKeyboard } from 'react-simplikit';
@@ -54,7 +54,7 @@ function FixedBottomCTA() {
 
 ### Ejemplo de campo de chat
 
-Una interfaz de chat con un campo de entrada que se mantiene por encima del teclado.
+Este ejemplo mantiene el campo de entrada del chat por encima del teclado.
 
 ```tsx
 import { useState } from 'react';

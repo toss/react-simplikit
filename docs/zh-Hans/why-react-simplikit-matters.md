@@ -4,185 +4,84 @@
 
 ## 声明式接口
 
-React 组件已经从类组件演进到了函数组件。
+在熟悉的 React 代码中，只添加所需的功能。在这个图书搜索示例中，输入内容立即更新，列表则在停止输入 300 毫秒后更新。
 
-函数组件以及具备声明式 API 的 Hook 出现之后，我们可以把过去在类组件里写得非常复杂的[状态和生命周期相关逻辑抽象出来](https://legacy.reactjs.org/docs/hooks-intro.html#its-hard-to-reuse-stateful-logic-between-components)。
-
-然而，React 组件依然很复杂。由于 React [只提供最小限度的接口](https://legacy.reactjs.org/docs/design-principles.html#common-abstraction)，即使功能只是稍微复杂一点的组件，也可能需要定义几十个状态、几十个处理函数，以及随状态变化而触发的副作用。
-
-到了某个阶段，组件里的关注点开始混杂在一起，代码也变得命令式，让人越来越难看清这个组件到底在做什么、里面又运行着哪些逻辑。
-
-`react-simplikit` 为那些常用但实现起来很复杂的功能提供了恰当的抽象。这样一来，即使在编写逻辑复杂的组件时，你也能保持直观的可读性。
-
-`react-simplikit` 提供的接口，能以声明式的方式解决实际业务开发中经常遇到的各种问题。
-
-在此基础上，它引导开发者写出更具声明式风格的 React 组件。
+两个示例都筛选同一个本地列表，无需服务器。渲染 `<BookSearch />`，然后尝试输入 `React`。如果使用支持 Server Components 的框架，请将示例放在 Client Component（`'use client'`）中。
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
-function AutoCompleteInput() {
+import { useEffect, useState } from 'react';
+
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isOpen, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState(query);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
+  useEffect(
+    function debounceSearchQuery() {
+      const timeoutId = setTimeout(() => setSearchQuery(query), 300);
+      return () => clearTimeout(timeoutId);
+    },
+    [query]
+  );
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (query.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    setLoading(true);
-    const timeoutId = setTimeout(async () => {
-      try {
-        const response = await fetch(`/api/search?q=${query}`);
-        const data = await response.json();
-        setResults(data);
-      } catch (error) {
-        console.error('Failed to fetch results:', error);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        placeholder="输入搜索关键词"
-      />
-      {isOpen && (isLoading || results.length > 0) && (
-        <div>
-          {isLoading ? (
-            <div className="p-2">搜索中...</div>
-          ) : (
-            results.map((result, idx) => (
-              <Fragment key={result.id}>
-                <div
-                  onClick={() => {
-                    setQuery(result.title);
-                    setOpen(false);
-                  }}
-                >
-                  {result.title}
-                </div>
-                {idx !== results.length - 1 && <Divider />}
-              </Fragment>
-            ))
-          )}
-        </div>
-      )}
+    <div>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 ```
 
 ```tsx [with-react-simplikit.tsx]
-function AutoCompleteInput() {
+import { useState } from 'react';
+import { useDebouncedValue } from 'react-simplikit';
+
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, startLoading] = useLoading();
-  const [isOpen, openSearchBox, closeSearchBox] = useBooleanState(false);
+  const searchQuery = useDebouncedValue(query, 300);
 
-  const searchBoxState = useMemo(() => {
-    if (!isOpen) return 'CLOSE';
-
-    if (isLoading) return 'LOADING';
-
-    if (results.length > 0) return 'RESULT_EXISTS';
-
-    return 'EMPTY';
-  }, [isOpen, isLoading, results]);
-
-  const searchResults = useDebounce(async (searchQuery: string) => {
-    if (searchQuery.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    const response = await startLoading(
-      fetch(`/api/search?q=${searchQuery}`)
-        .then(res => res.json())
-        .catch(error => {
-          console.error('Failed to fetch results:', error);
-          return [];
-        })
-    );
-
-    setResults(response);
-  }, 300);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  useOutsideClickEffect(containerRef.current, () => closeSearchBox());
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          openSearchBox();
-          searchResults(e.target.value);
-        }}
-        onFocus={openSearchBox}
-        placeholder="输入搜索关键词"
-      />
-      <SwitchCase
-        value={searchBoxState}
-        caseBy={{
-          LOADING: () => <div>搜索中...</div>,
-          EMPTY: () => <div>没有找到结果。</div>,
-          RESULT_EXISTS: () => (
-            <Separated by={<Divider />}>
-              {results.map(result => (
-                <Fragment key={result.id}>
-                  <div
-                    onClick={() => {
-                      setQuery(result.title);
-                      closeSearchBox();
-                    }}
-                  >
-                    {result.title}
-                  </div>
-                </Fragment>
-              ))}
-            </Separated>
-          ),
-          CLOSE: () => null,
-        }}
-      />
+    <div>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 ```
 
 :::
+
+通过 [useDebouncedValue](/zh-Hans/hooks/useDebouncedValue)，你可以将 `searchQuery` 声明为延迟反映 `query` 的值。输入状态仍由 `useState` 管理，只需一行代码即可派生出用于筛选列表的值。Hook 负责管理计时器，并在组件卸载时取消尚未执行的更新。
 
 ## 更小的包体积
 

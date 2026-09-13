@@ -122,8 +122,6 @@ Compared to react-use, which has [14 dependencies](https://www.npmjs.com/package
 
 ## Links
 
-For more information about react-simplikit, please check out the following link:
-
-- [GitHub](https://github.com/toss/react-simplikit)
+Find the source code on [GitHub](https://github.com/toss/react-simplikit).
 
 Continue with [common use cases](/use-cases) for complete examples, or browse the [API reference](/reference).

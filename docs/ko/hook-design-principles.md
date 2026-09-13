@@ -254,7 +254,7 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 > 별도 문서: [react-hook-usage-patterns.md](./react-hook-usage-patterns.md)
 
-React 공식 문서(react.dev) 기반 16개 패턴 (U1-U17, U4 제거):
+React 공식 문서(react.dev)를 바탕으로 정리한 16개 패턴이에요(U1-U17, U4 제외).
 
 | 카테고리     | 개수               | 핵심                                                           |
 | ------------ | ------------------ | -------------------------------------------------------------- |
