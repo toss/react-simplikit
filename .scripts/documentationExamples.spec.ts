@@ -2,15 +2,15 @@
 import * as React from 'react';
 import * as jsxRuntime from 'react/jsx-runtime';
 import { renderToString } from 'react-dom/server';
-import { cleanup, render } from '@testing-library/react';
+import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
-import { afterEach, expect, it } from 'vitest';
+import { afterEach, expect, it, vi } from 'vitest';
 
 import * as simplikit from '../packages/react-simplikit/src/index.ts';
 
 function readExamples(file: string): string[] {
-  return [...readFileSync(file, 'utf8').matchAll(/```tsx\n([\s\S]*?)\n```/g)].map(match => match[1]);
+  return [...readFileSync(file, 'utf8').matchAll(/```tsx[^\n]*\n([\s\S]*?)\n```/g)].map(match => match[1]);
 }
 
 function loadExample(source: string): React.ComponentType {
@@ -38,10 +38,14 @@ function loadExample(source: string): React.ComponentType {
   return exports[componentName];
 }
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+});
 
 for (const [directory, filename, locales] of [
   ['docs', 'use-cases.md', ['ko', 'ja', 'zh-Hans', 'es']],
+  ['docs', 'why-react-simplikit-matters.md', ['ko', 'ja', 'zh-Hans', 'es']],
   ['packages/react-simplikit/src/hooks/useDebounce', 'useDebounce.md', ['ko']],
   ['packages/react-simplikit/src/hooks/useDebouncedValue', 'useDebouncedValue.md', ['ko']],
 ] as const) {
@@ -58,3 +62,31 @@ for (const [directory, filename, locales] of [
     }
   });
 }
+
+it('both countdown examples pause, resume, stop at zero and clean up on unmount', () => {
+  vi.useFakeTimers();
+  const examples = readExamples('docs/why-react-simplikit-matters.md');
+  expect(examples).toHaveLength(2);
+
+  for (const source of examples) {
+    const element = React.createElement(loadExample(source));
+    const view = render(element);
+    act(() => vi.advanceTimersByTime(1000));
+    expect(view.getByText('9 seconds')).toBeDefined();
+    fireEvent.click(view.getByRole('button', { name: 'Pause' }));
+    act(() => vi.advanceTimersByTime(2000));
+    expect(view.getByText('9 seconds')).toBeDefined();
+    expect(vi.getTimerCount()).toBe(0);
+    fireEvent.click(view.getByRole('button', { name: 'Resume' }));
+    for (let tick = 0; tick < 9; tick++) {
+      act(() => vi.advanceTimersByTime(1000));
+    }
+    expect(view.getByText('0 seconds')).toBeDefined();
+    expect(vi.getTimerCount()).toBe(0);
+    view.unmount();
+    const running = render(element);
+    expect(vi.getTimerCount()).toBe(1);
+    running.unmount();
+    expect(vi.getTimerCount()).toBe(0);
+  }
+});

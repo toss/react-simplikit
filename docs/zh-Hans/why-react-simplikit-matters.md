@@ -4,185 +4,86 @@
 
 ## 声明式接口
 
-React 组件已经从类组件演进到了函数组件。
+你可以声明重复任务的执行条件，而不必自己管理计时器。例如，倒计时只应在运行中且还有剩余时间时，每秒减少一次。暂停或归零时，计时器也应停止。
 
-函数组件以及具备声明式 API 的 Hook 出现之后，我们可以把过去在类组件里写得非常复杂的[状态和生命周期相关逻辑抽象出来](https://legacy.reactjs.org/docs/hooks-intro.html#its-hard-to-reuse-stateful-logic-between-components)。
-
-然而，React 组件依然很复杂。由于 React [只提供最小限度的接口](https://legacy.reactjs.org/docs/design-principles.html#common-abstraction)，即使功能只是稍微复杂一点的组件，也可能需要定义几十个状态、几十个处理函数，以及随状态变化而触发的副作用。
-
-到了某个阶段，组件里的关注点开始混杂在一起，代码也变得命令式，让人越来越难看清这个组件到底在做什么、里面又运行着哪些逻辑。
-
-`react-simplikit` 为那些常用但实现起来很复杂的功能提供了恰当的抽象。这样一来，即使在编写逻辑复杂的组件时，你也能保持直观的可读性。
-
-`react-simplikit` 提供的接口，能以声明式的方式解决实际业务开发中经常遇到的各种问题。
-
-在此基础上，它引导开发者写出更具声明式风格的 React 组件。
+两个示例实现相同的倒计时。在 React 应用中渲染 `<Countdown />`，使用 Pause 和 Resume 按钮控制它。如果框架使用 Server Components，请将示例放在 Client Component（`'use client'`）中。
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
-function AutoCompleteInput() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isOpen, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+import { useEffect, useState } from 'react';
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
+function Countdown() {
+  const [remainingSeconds, setRemainingSeconds] = useState(10);
+  const [isRunning, setIsRunning] = useState(true);
+  const enabled = isRunning && remainingSeconds > 0;
+
+  useEffect(
+    function startCountdown() {
+      if (!enabled) {
+        return;
       }
-    };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+      const intervalId = setInterval(() => {
+        setRemainingSeconds(seconds => Math.max(0, seconds - 1));
+      }, 1000);
 
-  useEffect(() => {
-    if (query.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    setLoading(true);
-    const timeoutId = setTimeout(async () => {
-      try {
-        const response = await fetch(`/api/search?q=${query}`);
-        const data = await response.json();
-        setResults(data);
-      } catch (error) {
-        console.error('Failed to fetch results:', error);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+      return () => clearInterval(intervalId);
+    },
+    [enabled]
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        placeholder="输入搜索关键词"
-      />
-      {isOpen && (isLoading || results.length > 0) && (
-        <div>
-          {isLoading ? (
-            <div className="p-2">搜索中...</div>
-          ) : (
-            results.map((result, idx) => (
-              <Fragment key={result.id}>
-                <div
-                  onClick={() => {
-                    setQuery(result.title);
-                    setOpen(false);
-                  }}
-                >
-                  {result.title}
-                </div>
-                {idx !== results.length - 1 && <Divider />}
-              </Fragment>
-            ))
-          )}
-        </div>
-      )}
+    <div>
+      <p>{remainingSeconds} seconds</p>
+      <button
+        type="button"
+        disabled={remainingSeconds === 0}
+        onClick={() => setIsRunning(running => !running)}
+      >
+        {isRunning ? 'Pause' : 'Resume'}
+      </button>
     </div>
   );
 }
 ```
 
 ```tsx [with-react-simplikit.tsx]
-function AutoCompleteInput() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, startLoading] = useLoading();
-  const [isOpen, openSearchBox, closeSearchBox] = useBooleanState(false);
+import { useState } from 'react';
+import { useInterval } from 'react-simplikit';
 
-  const searchBoxState = useMemo(() => {
-    if (!isOpen) return 'CLOSE';
+function Countdown() {
+  const [remainingSeconds, setRemainingSeconds] = useState(10);
+  const [isRunning, setIsRunning] = useState(true);
 
-    if (isLoading) return 'LOADING';
-
-    if (results.length > 0) return 'RESULT_EXISTS';
-
-    return 'EMPTY';
-  }, [isOpen, isLoading, results]);
-
-  const searchResults = useDebounce(async (searchQuery: string) => {
-    if (searchQuery.trim().length === 0) {
-      setResults([]);
-      return;
+  useInterval(
+    () => {
+      setRemainingSeconds(seconds => Math.max(0, seconds - 1));
+    },
+    {
+      delay: 1000,
+      enabled: isRunning && remainingSeconds > 0,
     }
-
-    const response = await startLoading(
-      fetch(`/api/search?q=${searchQuery}`)
-        .then(res => res.json())
-        .catch(error => {
-          console.error('Failed to fetch results:', error);
-          return [];
-        })
-    );
-
-    setResults(response);
-  }, 300);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  useOutsideClickEffect(containerRef.current, () => closeSearchBox());
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          openSearchBox();
-          searchResults(e.target.value);
-        }}
-        onFocus={openSearchBox}
-        placeholder="输入搜索关键词"
-      />
-      <SwitchCase
-        value={searchBoxState}
-        caseBy={{
-          LOADING: () => <div>搜索中...</div>,
-          EMPTY: () => <div>没有找到结果。</div>,
-          RESULT_EXISTS: () => (
-            <Separated by={<Divider />}>
-              {results.map(result => (
-                <Fragment key={result.id}>
-                  <div
-                    onClick={() => {
-                      setQuery(result.title);
-                      closeSearchBox();
-                    }}
-                  >
-                    {result.title}
-                  </div>
-                </Fragment>
-              ))}
-            </Separated>
-          ),
-          CLOSE: () => null,
-        }}
-      />
+    <div>
+      <p>{remainingSeconds} seconds</p>
+      <button
+        type="button"
+        disabled={remainingSeconds === 0}
+        onClick={() => setIsRunning(running => !running)}
+      >
+        {isRunning ? 'Pause' : 'Resume'}
+      </button>
     </div>
   );
 }
 ```
 
 :::
+
+[useInterval](/zh-Hans/hooks/useInterval) 的 `enabled` 声明执行条件，`delay` 声明执行间隔。Hook 根据选项变化管理计时器，并在组件卸载时清理计时器。组件只需声明所需的行为。
 
 ## 更小的包体积
 

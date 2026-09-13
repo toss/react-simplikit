@@ -34,9 +34,9 @@ Skill 由这些文档页面生成，以保持与库的内容一致。源代码�
 
 英文文档也以 agent 可以直接读取的格式发布。
 
-- [`/llms.txt`](https://react-simplikit.slash.page/llms.txt) — 英文文档的索引和一句话摘要
-- [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 合并为单个文件的英文文档
-- 将英文文档 URL 中的 `.html` 替换为 `.md`，即可读取 Markdown 源文件。例如：[`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)。
+- [`llms.txt`](https://react-simplikit.slash.page/llms.txt) — 英文文档的索引和一句话摘要
+- [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 合并为单个文件的英文文档
+- 将英文文档 URL 中的 `.html` 替换为 `.md`，即可读取 Markdown 源文件。例如，你可以阅读 [`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)。
 
 ## Context7
 

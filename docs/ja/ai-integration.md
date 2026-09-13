@@ -34,9 +34,9 @@ codex plugin marketplace add https://github.com/toss/react-simplikit
 
 英語のドキュメントは、エージェントが直接読める形式でも公開されています。
 
-- [`/llms.txt`](https://react-simplikit.slash.page/llms.txt) — 英語ドキュメントの索引と 1 行の要約
-- [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 英語ドキュメントをまとめた 1 ファイル
-- 英語ドキュメントの URL の `.html` を `.md` に置き換えると、Markdown ソースを読めます。例：[`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)。
+- [`llms.txt`](https://react-simplikit.slash.page/llms.txt) — 英語ドキュメントの索引と 1 行の要約
+- [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 英語ドキュメントをまとめた 1 ファイル
+- 英語ドキュメントの URL の `.html` を `.md` に置き換えると、Markdown ソースを読めます。たとえば、[`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md) を参照してください。
 
 ## Context7
 

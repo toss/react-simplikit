@@ -33,7 +33,7 @@ bun add react-simplikit
 
 ## 사용법
 
-패키지에서 직접 훅을 import하세요:
+패키지에서 직접 훅을 import하세요.
 
 ```tsx
 import { useToggle } from 'react-simplikit';

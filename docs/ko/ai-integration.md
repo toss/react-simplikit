@@ -34,9 +34,9 @@ codex plugin marketplace add https://github.com/toss/react-simplikit
 
 영어 문서는 에이전트가 바로 읽을 수 있는 형식으로도 제공해요.
 
-- [`/llms.txt`](https://react-simplikit.slash.page/llms.txt): 영어 문서 목록과 한 줄 요약
-- [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt): 영어 문서를 하나로 합친 파일
-- 영어 문서 URL의 `.html`을 `.md`로 바꾸면 원본 Markdown을 읽을 수 있어요. 예: [`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md).
+- [`llms.txt`](https://react-simplikit.slash.page/llms.txt): 영어 문서 목록과 한 줄 요약
+- [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt): 영어 문서를 하나로 합친 파일
+- 영어 문서 URL의 `.html`을 `.md`로 바꾸면 원본 Markdown을 읽을 수 있어요. 예를 들어 [`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)를 읽어 보세요.
 
 ## Context7
 

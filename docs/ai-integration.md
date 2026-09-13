@@ -32,11 +32,11 @@ The skill is generated from these documentation pages, so it stays in sync with 
 
 ## llms.txt
 
-The English documentation is also published in formats agents can read directly:
+The English documentation is also published in formats agents can read directly.
 
-- [`/llms.txt`](https://react-simplikit.slash.page/llms.txt) — an index of English documentation pages with one-line summaries
-- [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — the English documentation in one file
-- Replace `.html` in an English documentation URL with `.md` to read the Markdown source. Example: [`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md).
+- [`llms.txt`](https://react-simplikit.slash.page/llms.txt) — an index of English documentation pages with one-line summaries
+- [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — the English documentation in one file
+- Replace `.html` in an English documentation URL with `.md` to read the Markdown source. For example, see [`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md).
 
 ## Context7
 

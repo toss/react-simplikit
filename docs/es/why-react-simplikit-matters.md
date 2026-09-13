@@ -4,185 +4,86 @@ Entre las muchas bibliotecas basadas en React, ¿por qué deberías elegir `reac
 
 ## Interfaz declarativa
 
-Los componentes de React han evolucionado desde los componentes de clase hasta los componentes de función.
+En lugar de gestionar los temporizadores, puedes declarar cuándo debe ejecutarse una tarea periódica. Por ejemplo, una cuenta regresiva debe disminuir cada segundo mientras esté en marcha y quede tiempo. Al pausarla o llegar a cero, el temporizador debe detenerse.
 
-Con la llegada de los componentes de función y de los Hooks de API declarativa, ahora podemos [abstraer el estado y la lógica relacionada con el ciclo de vida](https://legacy.reactjs.org/docs/hooks-intro.html#its-hard-to-reuse-stateful-logic-between-components) que antes se escribía de forma complicada en los componentes de clase.
-
-Aun así, los componentes de React siguen siendo complejos. Como React [ofrece interfaces mínimas](https://legacy.reactjs.org/docs/design-principles.html#common-abstraction), un componente con una funcionalidad apenas algo compleja puede necesitar decenas de estados, manejadores y definiciones de efectos secundarios que dependen de los cambios de estado.
-
-En algún momento, los componentes acaban mezclando responsabilidades y se escriben de forma imperativa, y cada vez cuesta más entender qué hace el componente y qué lógica se está ejecutando.
-
-`react-simplikit` ofrece las abstracciones adecuadas para funcionalidades de uso frecuente pero difíciles de implementar. Así puedes mantener una legibilidad intuitiva incluso cuando escribes componentes con lógica compleja.
-
-`react-simplikit` presenta interfaces que resuelven de forma declarativa los distintos problemas que aparecen habitualmente durante el desarrollo real de un servicio.
-
-Sobre esa base, guía a los desarrolladores para que escriban componentes de React más declarativos.
+Ambos ejemplos implementan la misma cuenta regresiva. Renderiza `<Countdown />` en tu aplicación React y contrólala con los botones Pause y Resume. Si tu framework usa Server Components, coloca el ejemplo en un Client Component (`'use client'`).
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
-function AutoCompleteInput() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isOpen, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+import { useEffect, useState } from 'react';
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
+function Countdown() {
+  const [remainingSeconds, setRemainingSeconds] = useState(10);
+  const [isRunning, setIsRunning] = useState(true);
+  const enabled = isRunning && remainingSeconds > 0;
+
+  useEffect(
+    function startCountdown() {
+      if (!enabled) {
+        return;
       }
-    };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+      const intervalId = setInterval(() => {
+        setRemainingSeconds(seconds => Math.max(0, seconds - 1));
+      }, 1000);
 
-  useEffect(() => {
-    if (query.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    setLoading(true);
-    const timeoutId = setTimeout(async () => {
-      try {
-        const response = await fetch(`/api/search?q=${query}`);
-        const data = await response.json();
-        setResults(data);
-      } catch (error) {
-        console.error('Failed to fetch results:', error);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+      return () => clearInterval(intervalId);
+    },
+    [enabled]
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        placeholder="Escribe un término de búsqueda"
-      />
-      {isOpen && (isLoading || results.length > 0) && (
-        <div>
-          {isLoading ? (
-            <div className="p-2">Buscando...</div>
-          ) : (
-            results.map((result, idx) => (
-              <Fragment key={result.id}>
-                <div
-                  onClick={() => {
-                    setQuery(result.title);
-                    setOpen(false);
-                  }}
-                >
-                  {result.title}
-                </div>
-                {idx !== results.length - 1 && <Divider />}
-              </Fragment>
-            ))
-          )}
-        </div>
-      )}
+    <div>
+      <p>{remainingSeconds} seconds</p>
+      <button
+        type="button"
+        disabled={remainingSeconds === 0}
+        onClick={() => setIsRunning(running => !running)}
+      >
+        {isRunning ? 'Pause' : 'Resume'}
+      </button>
     </div>
   );
 }
 ```
 
 ```tsx [with-react-simplikit.tsx]
-function AutoCompleteInput() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, startLoading] = useLoading();
-  const [isOpen, openSearchBox, closeSearchBox] = useBooleanState(false);
+import { useState } from 'react';
+import { useInterval } from 'react-simplikit';
 
-  const searchBoxState = useMemo(() => {
-    if (!isOpen) return 'CLOSE';
+function Countdown() {
+  const [remainingSeconds, setRemainingSeconds] = useState(10);
+  const [isRunning, setIsRunning] = useState(true);
 
-    if (isLoading) return 'LOADING';
-
-    if (results.length > 0) return 'RESULT_EXISTS';
-
-    return 'EMPTY';
-  }, [isOpen, isLoading, results]);
-
-  const searchResults = useDebounce(async (searchQuery: string) => {
-    if (searchQuery.trim().length === 0) {
-      setResults([]);
-      return;
+  useInterval(
+    () => {
+      setRemainingSeconds(seconds => Math.max(0, seconds - 1));
+    },
+    {
+      delay: 1000,
+      enabled: isRunning && remainingSeconds > 0,
     }
-
-    const response = await startLoading(
-      fetch(`/api/search?q=${searchQuery}`)
-        .then(res => res.json())
-        .catch(error => {
-          console.error('Failed to fetch results:', error);
-          return [];
-        })
-    );
-
-    setResults(response);
-  }, 300);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  useOutsideClickEffect(containerRef.current, () => closeSearchBox());
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          openSearchBox();
-          searchResults(e.target.value);
-        }}
-        onFocus={openSearchBox}
-        placeholder="Escribe un término de búsqueda"
-      />
-      <SwitchCase
-        value={searchBoxState}
-        caseBy={{
-          LOADING: () => <div>Buscando...</div>,
-          EMPTY: () => <div>No se encontraron resultados.</div>,
-          RESULT_EXISTS: () => (
-            <Separated by={<Divider />}>
-              {results.map(result => (
-                <Fragment key={result.id}>
-                  <div
-                    onClick={() => {
-                      setQuery(result.title);
-                      closeSearchBox();
-                    }}
-                  >
-                    {result.title}
-                  </div>
-                </Fragment>
-              ))}
-            </Separated>
-          ),
-          CLOSE: () => null,
-        }}
-      />
+    <div>
+      <p>{remainingSeconds} seconds</p>
+      <button
+        type="button"
+        disabled={remainingSeconds === 0}
+        onClick={() => setIsRunning(running => !running)}
+      >
+        {isRunning ? 'Pause' : 'Resume'}
+      </button>
     </div>
   );
 }
 ```
 
 :::
+
+Con [useInterval](/es/hooks/useInterval), `enabled` declara la condición de ejecución y `delay` declara el intervalo. El Hook gestiona el temporizador cuando cambian estas opciones y lo elimina cuando el componente se desmonta. El componente solo declara el comportamiento que necesita.
 
 ## Tamaño de bundle reducido
 

@@ -4,185 +4,86 @@ Among the many React-based libraries, why should you choose `react-simplikit`? L
 
 ## Declarative Interface
 
-React components have evolved from class components to function components.
+Instead of managing timers yourself, declare when a repeated task should run. For example, a countdown should decrease once a second while it is running and has time remaining. Pausing it or reaching zero should stop the timer.
 
-With the introduction of function components and declarative API hooks, we can now [abstract state and lifecycle-related logic](https://legacy.reactjs.org/docs/hooks-intro.html#its-hard-to-reuse-stateful-logic-between-components) that was previously written in a complex way in class components.
-
-However, React components are still complex. Since React [provides minimal interfaces](https://legacy.reactjs.org/docs/design-principles.html#common-abstraction), components with even slightly complex functionality may require dozens of states, handlers, and side effect definitions based on state changes.
-
-At some point, components become mixed with concerns and are written imperatively, making it increasingly difficult to understand what the component doing and what logic is running.
-
-`react-simplikit` provides appropriate abstractions for frequently used but complex-to-implement features. This allows you to maintain intuitive readability even when writing components with complex logic.
-
-`react-simplikit` presents interfaces that declaratively solve various problems commonly encountered during actual service development.
-
-Based on this, it guides developers to write more declarative React components.
+Both examples implement the same countdown. Render `<Countdown />` in your React app and use Pause and Resume to control it. In a framework with Server Components, place the example in a Client Component (`'use client'`).
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
-function AutoCompleteInput() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isOpen, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+import { useEffect, useState } from 'react';
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
+function Countdown() {
+  const [remainingSeconds, setRemainingSeconds] = useState(10);
+  const [isRunning, setIsRunning] = useState(true);
+  const enabled = isRunning && remainingSeconds > 0;
+
+  useEffect(
+    function startCountdown() {
+      if (!enabled) {
+        return;
       }
-    };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+      const intervalId = setInterval(() => {
+        setRemainingSeconds(seconds => Math.max(0, seconds - 1));
+      }, 1000);
 
-  useEffect(() => {
-    if (query.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    setLoading(true);
-    const timeoutId = setTimeout(async () => {
-      try {
-        const response = await fetch(`/api/search?q=${query}`);
-        const data = await response.json();
-        setResults(data);
-      } catch (error) {
-        console.error('Failed to fetch results:', error);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+      return () => clearInterval(intervalId);
+    },
+    [enabled]
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        placeholder="Enter search term"
-      />
-      {isOpen && (isLoading || results.length > 0) && (
-        <div>
-          {isLoading ? (
-            <div className="p-2">Searching...</div>
-          ) : (
-            results.map((result, idx) => (
-              <Fragment key={result.id}>
-                <div
-                  onClick={() => {
-                    setQuery(result.title);
-                    setOpen(false);
-                  }}
-                >
-                  {result.title}
-                </div>
-                {idx !== results.length - 1 && <Divider />}
-              </Fragment>
-            ))
-          )}
-        </div>
-      )}
+    <div>
+      <p>{remainingSeconds} seconds</p>
+      <button
+        type="button"
+        disabled={remainingSeconds === 0}
+        onClick={() => setIsRunning(running => !running)}
+      >
+        {isRunning ? 'Pause' : 'Resume'}
+      </button>
     </div>
   );
 }
 ```
 
 ```tsx [with-react-simplikit.tsx]
-function AutoCompleteInput() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, startLoading] = useLoading();
-  const [isOpen, openSearchBox, closeSearchBox] = useBooleanState(false);
+import { useState } from 'react';
+import { useInterval } from 'react-simplikit';
 
-  const searchBoxState = useMemo(() => {
-    if (!isOpen) return 'CLOSE';
+function Countdown() {
+  const [remainingSeconds, setRemainingSeconds] = useState(10);
+  const [isRunning, setIsRunning] = useState(true);
 
-    if (isLoading) return 'LOADING';
-
-    if (results.length > 0) return 'RESULT_EXISTS';
-
-    return 'EMPTY';
-  }, [isOpen, isLoading, results]);
-
-  const searchResults = useDebounce(async (searchQuery: string) => {
-    if (searchQuery.trim().length === 0) {
-      setResults([]);
-      return;
+  useInterval(
+    () => {
+      setRemainingSeconds(seconds => Math.max(0, seconds - 1));
+    },
+    {
+      delay: 1000,
+      enabled: isRunning && remainingSeconds > 0,
     }
-
-    const response = await startLoading(
-      fetch(`/api/search?q=${searchQuery}`)
-        .then(res => res.json())
-        .catch(error => {
-          console.error('Failed to fetch results:', error);
-          return [];
-        })
-    );
-
-    setResults(response);
-  }, 300);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  useOutsideClickEffect(containerRef.current, () => closeSearchBox());
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          openSearchBox();
-          searchResults(e.target.value);
-        }}
-        onFocus={openSearchBox}
-        placeholder="Enter search term"
-      />
-      <SwitchCase
-        value={searchBoxState}
-        caseBy={{
-          LOADING: () => <div>Searching...</div>,
-          EMPTY: () => <div>No results found.</div>,
-          RESULT_EXISTS: () => (
-            <Separated by={<Divider />}>
-              {results.map(result => (
-                <Fragment key={result.id}>
-                  <div
-                    onClick={() => {
-                      setQuery(result.title);
-                      closeSearchBox();
-                    }}
-                  >
-                    {result.title}
-                  </div>
-                </Fragment>
-              ))}
-            </Separated>
-          ),
-          CLOSE: () => null,
-        }}
-      />
+    <div>
+      <p>{remainingSeconds} seconds</p>
+      <button
+        type="button"
+        disabled={remainingSeconds === 0}
+        onClick={() => setIsRunning(running => !running)}
+      >
+        {isRunning ? 'Pause' : 'Resume'}
+      </button>
     </div>
   );
 }
 ```
 
 :::
+
+With [useInterval](/hooks/useInterval), `enabled` declares the condition for running and `delay` declares the interval. The hook manages the timer as these options change and clears it when the component unmounts. The component only describes the behavior it needs.
 
 ## Small Bundle Size
 
