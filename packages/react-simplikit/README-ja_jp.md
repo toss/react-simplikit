@@ -28,6 +28,8 @@ pnpm add react-simplikit
 
 ## クイックスタート
 
+`useDebounce` を使うと、ユーザーが入力を止めてから 300 ms 後に検索関数を呼び出せます。この例の `searchAPI` は、アプリケーション側で用意する検索関数です。
+
 ```tsx
 import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
@@ -63,7 +65,19 @@ function SearchInput() {
 
 1 行の説明付きの全リストは[リファレンスページ](https://react-simplikit.slash.page/ja/reference.html)にあります。
 
+## AI 連携
+
+付属のエージェントスキルを使うと、AI コーディングアシスタントが既存のフック、コンポーネント、ユーティリティを探し、import と SSR のルールを確認するのに役立ちます。
+
+```bash
+npx skills add toss/react-simplikit --skill react-simplikit
+```
+
+設定方法は [AI 連携ガイド](https://react-simplikit.slash.page/ja/ai-integration.html)をご覧ください。エージェントは [llms.txt](https://react-simplikit.slash.page/llms.txt) からも API ドキュメントを探せます。
+
 ## ドキュメント
+
+解決したい問題に合うフックは [用途別の使い方](https://react-simplikit.slash.page/ja/use-cases.html) で探せます。
 
 詳しいドキュメントは [react-simplikit.slash.page](https://react-simplikit.slash.page/ja) をご覧ください。
 

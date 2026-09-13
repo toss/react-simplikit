@@ -11,6 +11,7 @@ export const zhHans: LocaleThemeStrings = {
     intro: '简介',
     whyReactSimplikitMatters: '为什么选择 react-simplikit',
     installation: '安装',
+    useCases: '常见使用场景',
     aiIntegration: 'AI 集成',
     designPrinciples: '设计原则',
     mobileWeb: '移动端 Web',

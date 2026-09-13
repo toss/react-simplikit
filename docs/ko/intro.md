@@ -1,3 +1,7 @@
+---
+description: React 코드를 간단하게 만드는 훅, 컴포넌트, 유틸리티를 소개해요.
+---
+
 # react-simplikit 소개
 
 어떻게 하면 React 기반 앱을 좀 더 안전하고 탄탄하게 만들 수 있을까요? 우리는 그 답을 '리액트를 리액트답게' 작성하는 것이라고 정의했고, `react-simplikit`으로 그 답을 구체화했어요.
@@ -52,3 +56,5 @@ SSR 환경의 활발한 도입으로, 잘못 작성된 컴포넌트나 훅이 SS
 react-simplikit에 대한 더 많은 정보는 다음 링크를 확인해 주세요:
 
 - [GitHub](https://github.com/toss/react-simplikit)
+
+완전한 예제는 [문제별 사용법](/ko/use-cases)에서 확인하고 전체 도구는 [API 레퍼런스](/ko/reference)에서 찾아보세요.
