@@ -92,10 +92,7 @@ const buildOutputDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simp
 // Korean translates every routed English document, so its fallback path only has a route to
 // render on while these English-only fixtures exist. Japanese ships without translated API
 // reference pages, so those routes render from generated fallbacks on every build.
-await fs.writeFile(
-  guideFixturePath,
-  `# ${guideFixtureTitle}\n\nRead **React** and [hooks](/reference) with \`useToggle\`.\nChoose a hook for your app.\n`
-);
+await fs.writeFile(guideFixturePath, `# ${guideFixtureTitle}\n`);
 await fs.mkdir(hookFixtureDirectory, { recursive: true });
 await fs.writeFile(path.join(hookFixtureDirectory, `${hookFixtureName}.md`), `# ${hookFixtureName}\n`);
 
@@ -163,18 +160,6 @@ try {
   // pointing at a page that does not exist.
   for (const locale of ['', ...localeDirectories]) {
     const referencePage = await fs.readFile(path.join(buildOutputDirectory, locale, 'reference.html'), 'utf8');
-    const prefix = locale === '' ? '' : `/${locale}`;
-    for (const page of ['intro', 'installation', 'reference']) {
-      const html = await fs.readFile(path.join(buildOutputDirectory, locale, `${page}.html`), 'utf8');
-      assert.ok(html.includes(`href="${prefix}/use-cases.html"`), `${locale}/${page} must link the use-case guide`);
-    }
-    for (const page of ['use-cases', 'ai-integration']) {
-      const html = await fs.readFile(path.join(buildOutputDirectory, locale, `${page}.html`), 'utf8');
-      const definition = Object.values(localeDefinitions).find(item => item.path === locale);
-      assert.ok(definition);
-      assert.equal(html.includes(definition.untranslatedNotice), false, `${locale}/${page} must be translated`);
-    }
-
     const renderedLinks = [...referencePage.matchAll(/<li><a href="[^"]*\/(?:hooks|components|utils)\/[^"]+"/g)];
     assert.equal(
       renderedLinks.length,

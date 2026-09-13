@@ -1,3 +1,7 @@
+---
+description: 了解让 React 代码更简单的 Hook、组件和工具函数。
+---
+
 # react-simplikit 简介
 
 我们怎样才能更安全、更可靠地构建基于 React 的应用？我们把答案定义为“用 React 的方式编写 React 代码”，而这个答案正是通过 `react-simplikit` 真正成形的。

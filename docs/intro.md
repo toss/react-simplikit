@@ -1,3 +1,7 @@
+---
+description: React utility hooks, components and utils for simpler application code
+---
+
 # Introduction to react-simplikit
 
 How can we build React-based applications more safely and reliably? We defined the answer as 'writing React codes in a React-like way' and the answer really began to take shape through `react-simplikit`.

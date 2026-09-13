@@ -5,6 +5,7 @@ import { generatedRewrites, localeDefinitions, rewrites } from './locales.mts';
 import { writeLegacyRedirectStubs } from './libs/legacyRedirects.mts';
 import { SITE_ORIGIN } from './shared.mts';
 
+const siteDescription = 'Lightweight, zero-dependency React hooks, components and utils';
 const fallbackUrls = new Set<string>();
 
 function pageUrl(relativePath: string): string {
@@ -26,6 +27,7 @@ const searchLocales = Object.fromEntries(
 
 export default defineConfig({
   title: 'react-simplikit',
+  description: siteDescription,
   locales,
   srcDir: '.',
   srcExclude: [
@@ -91,32 +93,6 @@ Guidelines for AI agents:
         .filter(item => !fallbackUrls.has(item.url))
         .map(item => ({ ...item, links: item.links?.filter(link => !fallbackUrls.has(link.url)) })),
   },
-  markdown: {
-    config(md) {
-      md.core.ruler.after('inline', 'page-description', state => {
-        if (state.inlineMode) {
-          return;
-        }
-        const { frontmatter } = state.env as {
-          frontmatter: { description?: string; hero?: { text?: string } };
-        };
-        if (frontmatter.description != null) {
-          return;
-        }
-
-        const paragraph = state.tokens.findIndex(token => token.type === 'paragraph_open' && token.level === 0);
-        const text = state.tokens[paragraph + 1]?.children
-          ?.map(token => {
-            if (token.type === 'text' || token.type === 'code_inline') {
-              return token.content;
-            }
-            return token.type === 'softbreak' || token.type === 'hardbreak' ? ' ' : '';
-          })
-          .join('');
-        frontmatter.description = frontmatter.hero?.text ?? text?.replace(/\s+/g, ' ').trim();
-      });
-    },
-  },
   transformPageData(pageData) {
     const url = pageUrl(pageData.relativePath);
     const isFallback = pageData.frontmatter.untranslated === true;
@@ -130,13 +106,14 @@ Guidelines for AI agents:
       pageData.title === '' || pageData.title === 'react-simplikit'
         ? 'react-simplikit'
         : `${pageData.title} | react-simplikit`;
+    const description = pageData.description || siteDescription;
     const head: HeadConfig[] = [
       ['link', { rel: 'canonical', href: canonical }],
       ['meta', { property: 'og:url', content: canonical }],
       ['meta', { property: 'og:title', content: title }],
-      ['meta', { property: 'og:description', content: pageData.description }],
+      ['meta', { property: 'og:description', content: description }],
       ['meta', { name: 'twitter:title', content: title }],
-      ['meta', { name: 'twitter:description', content: pageData.description }],
+      ['meta', { name: 'twitter:description', content: description }],
     ];
     pageData.frontmatter.head ??= [];
     pageData.frontmatter.head.push(...head);

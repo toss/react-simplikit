@@ -1,3 +1,7 @@
+---
+description: Hooks, componentes y utilidades para simplificar el código de React.
+---
+
 # Introducción a react-simplikit
 
 ¿Cómo podemos crear aplicaciones basadas en React de forma más segura y fiable? Definimos la respuesta como “escribir código de React a la manera de React”, y esa respuesta empezó a tomar forma de verdad con `react-simplikit`.
