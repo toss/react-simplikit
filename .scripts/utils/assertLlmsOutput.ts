@@ -46,7 +46,7 @@ export async function assertLlmsOutput({ buildOutputDirectory, root }: AssertLlm
   for (const guide of ['installation', 'use-cases', 'ai-integration']) {
     assert.ok(links.includes(`https://react-simplikit.slash.page/${guide}.md`), `llms.txt must link ${guide}`);
     const markdown = await fs.readFile(path.join(buildOutputDirectory, `${guide}.md`), 'utf8');
-    assert.ok(markdown.includes('# '), `${guide}.md must contain readable documentation`);
+    assert.ok(markdown.includes('# '), `${guide}.md must contain a Markdown heading`);
   }
 
   const llmsFullTxt = await fs.readFile(path.join(buildOutputDirectory, 'llms-full.txt'), 'utf8');

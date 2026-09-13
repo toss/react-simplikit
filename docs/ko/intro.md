@@ -57,4 +57,4 @@ react-simplikit에 대한 더 많은 정보는 다음 링크를 확인해 주세
 
 - [GitHub](https://github.com/toss/react-simplikit)
 
-완전한 예제는 [문제별 사용법](/ko/use-cases)에서 확인하고, 전체 도구는 [API 레퍼런스](/ko/reference)에서 찾아보세요.
+완전한 예제는 [문제별 사용법](/ko/use-cases)에서 확인하고 전체 도구는 [API 레퍼런스](/ko/reference)에서 찾아보세요.

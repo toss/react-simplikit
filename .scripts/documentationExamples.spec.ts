@@ -16,7 +16,7 @@ function readExamples(file: string): string[] {
 function loadExample(source: string): React.ComponentType {
   const name = source.match(/function ([A-Z]\w*)\(/)?.[1];
   if (name == null) {
-    throw new Error('The example must declare a component');
+    throw new Error('The example must declare a named component with the function keyword');
   }
   const { outputText } = ts.transpileModule(`${source}\nexport { ${name} };`, {
     compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
@@ -27,7 +27,7 @@ function loadExample(source: string): React.ComponentType {
     'react-simplikit': simplikit,
   };
   const exports: Record<string, React.ComponentType> = {};
-  // Execute the documented snippet, not a copied fixture.
+  // Execute the Markdown example against the current public API.
   new Function('require', 'exports', outputText)((id: string) => {
     if (!(id in modules)) {
       throw new Error(`Unexpected example import: ${id}`);
@@ -44,7 +44,7 @@ for (const [directory, filename, locales] of [
   ['packages/react-simplikit/src/hooks/useDebounce', 'useDebounce.md', ['ko']],
   ['packages/react-simplikit/src/hooks/useDebouncedValue', 'useDebouncedValue.md', ['ko']],
 ] as const) {
-  it(`${filename} examples render and match their translations`, () => {
+  it(`${filename} examples render and use the same code in every translation`, () => {
     const examples = readExamples(`${directory}/${filename}`);
     expect(examples.length).toBeGreaterThan(0);
     for (const source of examples) {

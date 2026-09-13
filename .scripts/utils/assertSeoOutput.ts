@@ -25,7 +25,7 @@ export async function assertSeoOutput(buildOutputDirectory: string): Promise<voi
     );
   }
   const alternates = Array.from(sitemap.window.document.getElementsByTagNameNS('http://www.w3.org/1999/xhtml', 'link'));
-  assert.ok(alternates.length > 0, 'the sitemap must retain translated alternates');
+  assert.ok(alternates.length > 0, 'the sitemap must include alternate-language links');
   for (const alternate of alternates) {
     assert.ok(urls.includes(alternate.getAttribute('href')!), 'alternates must point to canonical pages');
   }
@@ -43,7 +43,7 @@ export async function assertSeoOutput(buildOutputDirectory: string): Promise<voi
     const { document } = dom.window;
     const canonical = `${SITE_ORIGIN}/${canonicalRoute}`;
     const pageUrl = `${SITE_ORIGIN}/${route.replace(/index\.html$/, '')}`;
-    assert.ok(urls.includes(canonical), `${route} canonical must be indexed`);
+    assert.ok(urls.includes(canonical), `${route} canonical URL must appear in the sitemap`);
     assert.equal(urls.includes(pageUrl), pageUrl === canonical, `${route} sitemap membership`);
     const description = document.querySelector('meta[name="description"]')?.getAttribute('content');
     assert.ok(

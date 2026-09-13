@@ -6,6 +6,8 @@ description: Elegir una utilidad de React según el problema que necesitas resol
 
 Elige una API según el comportamiento que necesitas y consulta sus parámetros y casos límite en la referencia. [Instala react-simplikit](/es/installation) antes de probar los ejemplos.
 
+Llama a los Hooks en el nivel superior de un componente React o de un Hook personalizado. Si tu framework usa Server Components, coloca estos ejemplos interactivos en un Client Component (`'use client'`).
+
 ## Elegir una API
 
 | Problema                                 | API                                                      | Qué ofrece                                                                 |
@@ -18,7 +20,7 @@ Elige una API según el comportamiento que necesitas y consulta sus parámetros 
 | Responder a un clic fuera de un elemento | [useOutsideClickEffect](/es/hooks/useOutsideClickEffect) | Una suscripción a clics externos                                           |
 | Mantener un campo sobre el teclado       | [useAvoidKeyboard](/es/hooks/useAvoidKeyboard)           | Un estilo para posicionar un elemento fijo                                 |
 | Insertar separadores entre hijos         | [Separated](/es/components/Separated)                    | Separadores sin uno al final                                               |
-| Conectar varias refs a un elemento       | [mergeRefs](/es/utils/mergeRefs)                         | Un único callback de ref que reenvía a cada ref                            |
+| Conectar varias refs a un elemento       | [mergeRefs](/es/utils/mergeRefs)                         | Un único callback de ref que pasa el elemento a cada ref                   |
 
 ## Mostrar y ocultar detalles
 
@@ -78,13 +80,11 @@ Usa [useDebouncedValue](/es/hooks/useDebouncedValue) cuando necesites un valor p
 
 ## SSR y limpieza
 
-- Llama a los Hooks en el nivel superior de un componente React o de un Hook personalizado. Si tu framework usa Server Components, coloca estos ejemplos interactivos en un Client Component (`'use client'`).
-
 - `useDebouncedValue` devuelve el valor recibido en el servidor y en el primer renderizado. Proporciona el mismo valor inicial al servidor y al cliente; no leas `window` ni el almacenamiento durante el renderizado para construirlo.
 
 - `useStorageState` usa `defaultValue` para la instantánea del servidor y la hidratación, y luego lee el almacenamiento del navegador en el cliente. Al desmontarse, elimina los listeners de almacenamiento.
 
-- `useDebounce` cancela las llamadas pendientes cuando el componente se desmonta o cambia la instancia de debounce. No cancela una solicitud de red que ya haya comenzado; tu aplicación debe gestionar la cancelación o las respuestas obsoletas.
+- `useDebounce` cancela las llamadas pendientes cuando el componente se desmonta o cambian `wait`, `leading` o `trailing`. No cancela una solicitud de red que ya haya comenzado; tu aplicación debe gestionar la cancelación o las respuestas obsoletas.
 
 - Las mediciones del navegador pueden cambiar después del montaje. Consulta los valores iniciales y las restricciones de plataforma en [Web móvil](/es/mobile-web) y en la referencia de cada API.
 

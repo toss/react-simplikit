@@ -6,6 +6,8 @@ description: 根据要解决的问题选择 React 工具函数
 
 先根据所需行为选择 API，再查阅参考文档中的参数和边界情况。尝试示例前，请先[安装 react-simplikit](/zh-Hans/installation)。
 
+在 React 组件或自定义 Hook 的顶层调用 Hook。如果框架使用 Server Components，请将这些交互式示例放在 Client Component（`'use client'`）中。
+
 ## 选择 API
 
 | 问题                   | API                                                           | 提供的功能                             |
@@ -18,7 +20,7 @@ description: 根据要解决的问题选择 React 工具函数
 | 响应元素外部的点击     | [useOutsideClickEffect](/zh-Hans/hooks/useOutsideClickEffect) | 元素外部点击订阅                       |
 | 让输入框保持在键盘上方 | [useAvoidKeyboard](/zh-Hans/hooks/useAvoidKeyboard)           | 用于定位固定元素的样式                 |
 | 在子元素之间插入分隔符 | [Separated](/zh-Hans/components/Separated)                    | 末尾没有分隔符                         |
-| 为一个元素连接多个 ref | [mergeRefs](/zh-Hans/utils/mergeRefs)                         | 向各个 ref 转发的单个 ref 回调         |
+| 为一个元素连接多个 ref | [mergeRefs](/zh-Hans/utils/mergeRefs)                         | 将元素传递给各个 ref 的单个 ref 回调   |
 
 ## 显示和隐藏详情
 
@@ -78,13 +80,11 @@ export function FruitSearch() {
 
 ## SSR 与清理
 
-- 在 React 组件或自定义 Hook 的顶层调用 Hook。如果框架使用 Server Components，请将这些交互式示例放在 Client Component（`'use client'`）中。
-
 - `useDebouncedValue` 在服务端和首次渲染时原样返回传入的值。为服务端和客户端提供相同的初始值，不要在渲染过程中读取 `window` 或存储来构造该值。
 
 - `useStorageState` 使用 `defaultValue` 作为服务端快照和 hydration 的值，随后在客户端读取浏览器存储。卸载时会移除存储监听器。
 
-- `useDebounce` 在组件卸载或防抖实例变化时取消待执行的调用，但不会取消已经开始的网络请求。应用需要处理请求取消或过期响应。
+- `useDebounce` 在组件卸载或 `wait`、`leading`、`trailing` 发生变化时取消待执行的调用，但不会取消已经开始的网络请求。应用需要处理请求取消或过期响应。
 
 - 浏览器测量值可能在挂载后发生变化。请在[移动 Web](/zh-Hans/mobile-web) 指南和各 API 参考文档中查看初始值及平台限制。
 

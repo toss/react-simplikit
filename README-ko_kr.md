@@ -78,7 +78,7 @@ function ChatInput() {
 
 ## AI 연동
 
-함께 제공하는 에이전트 스킬로 AI 코딩 어시스턴트가 기존 훅·컴포넌트·유틸리티를 찾고, import와 SSR 규칙을 확인하도록 도와주세요.
+함께 제공하는 에이전트 스킬로 AI 코딩 어시스턴트가 기존 훅·컴포넌트·유틸리티를 찾고 import와 SSR 규칙을 확인하도록 도와주세요.
 
 ```bash
 npx skills add toss/react-simplikit --skill react-simplikit

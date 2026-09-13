@@ -32,11 +32,11 @@ Skill 由这些文档页面生成，以保持与库的内容一致。源代码�
 
 ## llms.txt
 
-文档也以 agent 可以直接读取的格式发布。
+英文文档也以 agent 可以直接读取的格式发布。
 
-- [`/llms.txt`](https://react-simplikit.slash.page/llms.txt) — 所有页面的索引和一句话摘要
-- [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 合并为单个文件的完整文档
-- 将页面 URL 的后缀改为 `.md` 即可获取原始 Markdown，例如： [`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)
+- [`/llms.txt`](https://react-simplikit.slash.page/llms.txt) — 英文文档的索引和一句话摘要
+- [`/llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 合并为单个文件的英文文档
+- 将英文文档 URL 中的 `.html` 替换为 `.md`，即可读取 Markdown 源文件。例如：[`/hooks/useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)。
 
 ## Context7
 
@@ -44,9 +44,9 @@ react-simplikit 已在 [Context7](https://context7.com/toss/react-simplikit) 中
 
 ## 验证 agent 访问
 
-1. 让 agent 使用已安装的 skill 或 [llms.txt](https://react-simplikit.slash.page/llms.txt)，为具体任务查找 API，例如将搜索回调延迟 300 ms。
+1. 让 agent 使用已安装的 skill 或 [llms.txt](https://react-simplikit.slash.page/llms.txt)，为具体任务查找 API，例如在用户停止输入 300 ms 后调用搜索函数。
 2. 让它读取链接中的 [useDebounce Markdown 参考](https://react-simplikit.slash.page/hooks/useDebounce.md)，并在编写代码前说明 import、参数、默认值和清理行为。
 3. 确认它从 `react-simplikit` 使用具名导入，能够区分延迟回调与延迟值，并说明取消待执行回调不会中止已经开始的请求。
 4. 检查已安装的包版本是否提供该 API，并在项目中运行代码。网站提供最新文档；查找正确并不代表与旧版本兼容。
 
-如果 agent 无法加载 skill 或访问网站，请直接提供相关 Markdown 参考。仅安装 skill 不能证明 agent 已读取文档。生成的 skill 目录列出了 API 条目；描述所需行为时，可以参考[常见使用场景](/zh-Hans/use-cases)。
+如果 agent 无法加载 skill 或访问网站，请直接提供相关 Markdown 参考。仅安装 skill 不能证明 agent 已读取文档。描述所需行为时，可以参考[常见使用场景](/zh-Hans/use-cases)。
