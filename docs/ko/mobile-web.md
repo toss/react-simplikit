@@ -132,7 +132,7 @@ function FixedBottomCTA() {
 
 ### 우리의 접근: 비주얼 뷰포트에 집중
 
-브라우저의 특이한 동작을 불안정한 우회 방법으로 처리하는 대신, 이 훅들은 사용자가 특정 순간에 실제로 볼 수 있는 화면 영역, 즉 **비주얼 뷰포트(Visual Viewport)**를 중심으로 설계됐어요.
+브라우저의 특이한 동작을 불안정한 우회 방법으로 처리하는 대신, 이 훅들은 사용자가 특정 순간에 실제로 볼 수 있는 화면 영역, 즉 **비주얼 뷰포트**(Visual Viewport)를 중심으로 설계됐어요.
 
 [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API)를 기반으로 다음을 할 수 있어요.
 
