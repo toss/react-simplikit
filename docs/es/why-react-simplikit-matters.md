@@ -4,45 +4,45 @@ Entre las muchas bibliotecas basadas en React, ¿por qué deberías elegir `reac
 
 ## Interfaz declarativa
 
-En lugar de gestionar los temporizadores, puedes declarar cuándo debe ejecutarse una tarea periódica. Por ejemplo, una cuenta regresiva debe disminuir cada segundo mientras esté en marcha y quede tiempo. Al pausarla o llegar a cero, el temporizador debe detenerse.
+Agrega solo lo que necesitas al código React que ya conoces. En esta búsqueda de libros, el campo refleja lo que escribes de inmediato, mientras que la lista se actualiza cuando dejas de escribir durante 300 milisegundos.
 
-Ambos ejemplos implementan la misma cuenta regresiva. Renderiza `<Countdown />` en tu aplicación React y contrólala con los botones Pause y Resume. Si tu framework usa Server Components, coloca el ejemplo en un Client Component (`'use client'`).
+Ambos ejemplos filtran la misma lista local sin un servidor. Renderiza `<BookSearch />` y prueba escribir `React`. Si usas un framework con Server Components, coloca el ejemplo en un Client Component (`'use client'`).
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
 import { useEffect, useState } from 'react';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
-  const enabled = isRunning && remainingSeconds > 0;
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(query);
 
   useEffect(
-    function startCountdown() {
-      if (!enabled) {
-        return;
-      }
-
-      const intervalId = setInterval(() => {
-        setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-      }, 1000);
-
-      return () => clearInterval(intervalId);
+    function debounceSearchQuery() {
+      const timeoutId = setTimeout(() => setSearchQuery(query), 300);
+      return () => clearTimeout(timeoutId);
     },
-    [enabled]
+    [query]
+  );
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -50,32 +50,30 @@ function Countdown() {
 
 ```tsx [with-react-simplikit.tsx]
 import { useState } from 'react';
-import { useInterval } from 'react-simplikit';
+import { useDebouncedValue } from 'react-simplikit';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
 
-  useInterval(
-    () => {
-      setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-    },
-    {
-      delay: 1000,
-      enabled: isRunning && remainingSeconds > 0,
-    }
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const searchQuery = useDebouncedValue(query, 300);
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -83,7 +81,7 @@ function Countdown() {
 
 :::
 
-Con [useInterval](/es/hooks/useInterval), `enabled` declara la condición de ejecución y `delay` declara el intervalo. El Hook gestiona el temporizador cuando cambian estas opciones y lo elimina cuando el componente se desmonta. El componente solo declara el comportamiento que necesita.
+Con [useDebouncedValue](/es/hooks/useDebouncedValue), declaras `searchQuery` como una versión de `query` que se actualiza con retraso. Mantienes el estado del campo en `useState` y obtienes el valor para filtrar la lista con una sola línea. El Hook gestiona el temporizador y cancela las actualizaciones pendientes cuando el componente se desmonta.
 
 ## Tamaño de bundle reducido
 

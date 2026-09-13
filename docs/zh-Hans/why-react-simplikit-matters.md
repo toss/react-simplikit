@@ -4,45 +4,45 @@
 
 ## 声明式接口
 
-你可以声明重复任务的执行条件，而不必自己管理计时器。例如，倒计时只应在运行中且还有剩余时间时，每秒减少一次。暂停或归零时，计时器也应停止。
+在熟悉的 React 代码中，只添加所需的功能。在这个图书搜索示例中，输入内容立即更新，列表则在停止输入 300 毫秒后更新。
 
-两个示例实现相同的倒计时。在 React 应用中渲染 `<Countdown />`，使用 Pause 和 Resume 按钮控制它。如果框架使用 Server Components，请将示例放在 Client Component（`'use client'`）中。
+两个示例都筛选同一个本地列表，无需服务器。渲染 `<BookSearch />`，然后尝试输入 `React`。如果使用支持 Server Components 的框架，请将示例放在 Client Component（`'use client'`）中。
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
 import { useEffect, useState } from 'react';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
-  const enabled = isRunning && remainingSeconds > 0;
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(query);
 
   useEffect(
-    function startCountdown() {
-      if (!enabled) {
-        return;
-      }
-
-      const intervalId = setInterval(() => {
-        setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-      }, 1000);
-
-      return () => clearInterval(intervalId);
+    function debounceSearchQuery() {
+      const timeoutId = setTimeout(() => setSearchQuery(query), 300);
+      return () => clearTimeout(timeoutId);
     },
-    [enabled]
+    [query]
+  );
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -50,32 +50,30 @@ function Countdown() {
 
 ```tsx [with-react-simplikit.tsx]
 import { useState } from 'react';
-import { useInterval } from 'react-simplikit';
+import { useDebouncedValue } from 'react-simplikit';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
 
-  useInterval(
-    () => {
-      setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-    },
-    {
-      delay: 1000,
-      enabled: isRunning && remainingSeconds > 0,
-    }
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const searchQuery = useDebouncedValue(query, 300);
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -83,7 +81,7 @@ function Countdown() {
 
 :::
 
-[useInterval](/zh-Hans/hooks/useInterval) 的 `enabled` 声明执行条件，`delay` 声明执行间隔。Hook 根据选项变化管理计时器，并在组件卸载时清理计时器。组件只需声明所需的行为。
+通过 [useDebouncedValue](/zh-Hans/hooks/useDebouncedValue)，你可以将 `searchQuery` 声明为延迟反映 `query` 的值。输入状态仍由 `useState` 管理，只需一行代码即可派生出用于筛选列表的值。Hook 负责管理计时器，并在组件卸载时取消尚未执行的更新。
 
 ## 更小的包体积
 

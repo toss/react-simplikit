@@ -4,45 +4,45 @@
 
 ## 宣言的インターフェース
 
-タイマーを自分で管理する代わりに、繰り返し処理をいつ実行するかを宣言できます。たとえばカウントダウンでは、実行中で残り時間がある間だけ、1 秒ごとに値を減らします。一時停止したときや 0 になったときは、タイマーも停止します。
+使い慣れた React コードに、必要な機能だけを追加できます。この書籍検索では、入力内容はすぐに反映され、入力が 300 ミリ秒間止まると一覧が更新されます。
 
-どちらの例も同じカウントダウンを実装しています。React アプリで `<Countdown />` をレンダリングし、Pause と Resume ボタンで操作してください。Server Components を使うフレームワークでは、例を Client Component（`'use client'`）に配置してください。
+どちらの例も、サーバーを使わずに同じローカルの一覧を絞り込みます。`<BookSearch />` をレンダリングして、`React` と入力してみてください。Server Components を使うフレームワークでは、この例を Client Component（`'use client'`）に配置してください。
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
 import { useEffect, useState } from 'react';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
-  const enabled = isRunning && remainingSeconds > 0;
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(query);
 
   useEffect(
-    function startCountdown() {
-      if (!enabled) {
-        return;
-      }
-
-      const intervalId = setInterval(() => {
-        setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-      }, 1000);
-
-      return () => clearInterval(intervalId);
+    function debounceSearchQuery() {
+      const timeoutId = setTimeout(() => setSearchQuery(query), 300);
+      return () => clearTimeout(timeoutId);
     },
-    [enabled]
+    [query]
+  );
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -50,32 +50,30 @@ function Countdown() {
 
 ```tsx [with-react-simplikit.tsx]
 import { useState } from 'react';
-import { useInterval } from 'react-simplikit';
+import { useDebouncedValue } from 'react-simplikit';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
 
-  useInterval(
-    () => {
-      setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-    },
-    {
-      delay: 1000,
-      enabled: isRunning && remainingSeconds > 0,
-    }
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const searchQuery = useDebouncedValue(query, 300);
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -83,7 +81,7 @@ function Countdown() {
 
 :::
 
-[useInterval](/ja/hooks/useInterval) の `enabled` は実行条件を、`delay` は実行間隔を表します。フックはオプションの変更に応じてタイマーを管理し、コンポーネントのアンマウント時にタイマーを解除します。コンポーネントでは必要な動作を宣言するだけです。
+[useDebouncedValue](/ja/hooks/useDebouncedValue) を使うと、`query` を遅れて反映する値として `searchQuery` を宣言できます。入力の状態は `useState` で管理し、一覧の絞り込みに使う値を 1 行で導き出します。フックがタイマーを管理し、コンポーネントのアンマウント時に保留中の更新をキャンセルします。
 
 ## 小さいバンドルサイズ
 

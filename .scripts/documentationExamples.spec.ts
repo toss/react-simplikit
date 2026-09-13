@@ -63,30 +63,29 @@ for (const [directory, filename, locales] of [
   });
 }
 
-it('both countdown examples pause, resume, stop at zero and clean up on unmount', () => {
+it('both search examples update the input immediately and debounce the results', () => {
   vi.useFakeTimers();
   const examples = readExamples('docs/why-react-simplikit-matters.md');
   expect(examples).toHaveLength(2);
 
   for (const source of examples) {
-    const element = React.createElement(loadExample(source));
-    const view = render(element);
-    act(() => vi.advanceTimersByTime(1000));
-    expect(view.getByText('9 seconds')).toBeDefined();
-    fireEvent.click(view.getByRole('button', { name: 'Pause' }));
-    act(() => vi.advanceTimersByTime(2000));
-    expect(view.getByText('9 seconds')).toBeDefined();
-    expect(vi.getTimerCount()).toBe(0);
-    fireEvent.click(view.getByRole('button', { name: 'Resume' }));
-    for (let tick = 0; tick < 9; tick++) {
-      act(() => vi.advanceTimersByTime(1000));
-    }
-    expect(view.getByText('0 seconds')).toBeDefined();
-    expect(vi.getTimerCount()).toBe(0);
+    const view = render(React.createElement(loadExample(source)));
+    const input = view.getByRole('textbox', { name: 'Search books' }) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'React' } });
+    expect(input.value).toBe('React');
+    expect(view.getAllByRole('listitem')).toHaveLength(3);
+    act(() => vi.advanceTimersByTime(200));
+    fireEvent.change(input, { target: { value: 'TypeScript' } });
+    act(() => vi.advanceTimersByTime(299));
+    expect(view.getAllByRole('listitem')).toHaveLength(3);
+    act(() => vi.advanceTimersByTime(1));
+    expect(view.getAllByRole('listitem').map(item => item.textContent)).toEqual(['TypeScript Guide']);
+    fireEvent.change(input, { target: { value: '' } });
+    act(() => vi.advanceTimersByTime(300));
+    expect(view.getAllByRole('listitem')).toHaveLength(3);
+    fireEvent.change(input, { target: { value: 'React' } });
+    expect(vi.getTimerCount()).toBeGreaterThan(0);
     view.unmount();
-    const running = render(element);
-    expect(vi.getTimerCount()).toBe(1);
-    running.unmount();
     expect(vi.getTimerCount()).toBe(0);
   }
 });

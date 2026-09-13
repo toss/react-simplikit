@@ -4,45 +4,45 @@
 
 ## 선언적 인터페이스
 
-타이머를 직접 관리하는 대신 반복 작업을 언제 실행할지 선언할 수 있어요. 예를 들어 카운트다운은 실행 중이고 남은 시간이 있을 때만 1초마다 값을 줄여야 해요. 일시정지하거나 0에 도달하면 타이머도 멈춰야 해요.
+익숙한 React 코드에 필요한 기능만 더하세요. 책 검색창에 입력한 내용은 즉시 반영하고, 목록은 입력이 300ms 동안 멈추면 갱신해요.
 
-두 예제는 같은 카운트다운을 구현해요. React 앱에서 `<Countdown />`을 렌더링하고 Pause와 Resume 버튼으로 제어해 보세요. Server Components를 사용하는 프레임워크에서는 예제를 Client Component(`'use client'`)에 넣으세요.
+두 예제는 서버 없이 같은 목록에서 책을 찾아요. `<BookSearch />`을 렌더링하고 `React`를 입력해 보세요. Server Components를 사용하는 프레임워크에서는 예제를 Client Component(`'use client'`)에 넣으세요.
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
 import { useEffect, useState } from 'react';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
-  const enabled = isRunning && remainingSeconds > 0;
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(query);
 
   useEffect(
-    function startCountdown() {
-      if (!enabled) {
-        return;
-      }
-
-      const intervalId = setInterval(() => {
-        setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-      }, 1000);
-
-      return () => clearInterval(intervalId);
+    function debounceSearchQuery() {
+      const timeoutId = setTimeout(() => setSearchQuery(query), 300);
+      return () => clearTimeout(timeoutId);
     },
-    [enabled]
+    [query]
+  );
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -50,32 +50,30 @@ function Countdown() {
 
 ```tsx [with-react-simplikit.tsx]
 import { useState } from 'react';
-import { useInterval } from 'react-simplikit';
+import { useDebouncedValue } from 'react-simplikit';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
 
-  useInterval(
-    () => {
-      setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-    },
-    {
-      delay: 1000,
-      enabled: isRunning && remainingSeconds > 0,
-    }
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const searchQuery = useDebouncedValue(query, 300);
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -83,7 +81,7 @@ function Countdown() {
 
 :::
 
-[useInterval](/ko/hooks/useInterval)의 `enabled`는 실행 조건을, `delay`는 실행 주기를 나타내요. 훅은 옵션 변경에 따라 타이머를 관리하고, 컴포넌트가 언마운트되면 타이머를 정리해요. 컴포넌트에는 필요한 동작만 선언하면 돼요.
+[useDebouncedValue](/ko/hooks/useDebouncedValue)를 사용하면 `query`를 늦게 반영하는 값인 `searchQuery`를 선언할 수 있어요. 입력 상태는 `useState`로 관리하고, 목록을 필터링할 값은 한 줄로 만들어요. 훅은 타이머를 관리하고, 컴포넌트가 언마운트되면 대기 중인 갱신을 취소해요.
 
 ## 작은 번들 사이즈
 

@@ -4,45 +4,45 @@ Among the many React-based libraries, why should you choose `react-simplikit`? L
 
 ## Declarative Interface
 
-Instead of managing timers yourself, declare when a repeated task should run. For example, a countdown should decrease once a second while it is running and has time remaining. Pausing it or reaching zero should stop the timer.
+Add just what you need to familiar React code. In this book search, the input updates immediately, while the list follows after you stop typing for 300 milliseconds.
 
-Both examples implement the same countdown. Render `<Countdown />` in your React app and use Pause and Resume to control it. In a framework with Server Components, place the example in a Client Component (`'use client'`).
+Both examples filter the same local list without a server. Render `<BookSearch />` and try typing `React`. In a framework with Server Components, place the example in a Client Component (`'use client'`).
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
 import { useEffect, useState } from 'react';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
-  const enabled = isRunning && remainingSeconds > 0;
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(query);
 
   useEffect(
-    function startCountdown() {
-      if (!enabled) {
-        return;
-      }
-
-      const intervalId = setInterval(() => {
-        setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-      }, 1000);
-
-      return () => clearInterval(intervalId);
+    function debounceSearchQuery() {
+      const timeoutId = setTimeout(() => setSearchQuery(query), 300);
+      return () => clearTimeout(timeoutId);
     },
-    [enabled]
+    [query]
+  );
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -50,32 +50,30 @@ function Countdown() {
 
 ```tsx [with-react-simplikit.tsx]
 import { useState } from 'react';
-import { useInterval } from 'react-simplikit';
+import { useDebouncedValue } from 'react-simplikit';
 
-function Countdown() {
-  const [remainingSeconds, setRemainingSeconds] = useState(10);
-  const [isRunning, setIsRunning] = useState(true);
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
 
-  useInterval(
-    () => {
-      setRemainingSeconds(seconds => Math.max(0, seconds - 1));
-    },
-    {
-      delay: 1000,
-      enabled: isRunning && remainingSeconds > 0,
-    }
+function BookSearch() {
+  const [query, setQuery] = useState('');
+  const searchQuery = useDebouncedValue(query, 300);
+
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
   return (
     <div>
-      <p>{remainingSeconds} seconds</p>
-      <button
-        type="button"
-        disabled={remainingSeconds === 0}
-        onClick={() => setIsRunning(running => !running)}
-      >
-        {isRunning ? 'Pause' : 'Resume'}
-      </button>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -83,7 +81,7 @@ function Countdown() {
 
 :::
 
-With [useInterval](/hooks/useInterval), `enabled` declares the condition for running and `delay` declares the interval. The hook manages the timer as these options change and clears it when the component unmounts. The component only describes the behavior it needs.
+With [useDebouncedValue](/hooks/useDebouncedValue), `searchQuery` declares a delayed version of `query`. Keep the input state in `useState` and derive the value used to filter the list in one line. The hook manages the timer and cancels pending updates when the component unmounts.
 
 ## Small Bundle Size
 
