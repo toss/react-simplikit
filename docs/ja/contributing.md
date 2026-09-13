@@ -126,7 +126,7 @@ JSDoc コメントには `@description` と `@example` を必ず含める必要�
           {
             name: 'paymentMethod.number',
             type: 'string',
-            description: 'Card or account number.<br/>- Card or account number without `-`.<br/>- If the number is a card number, it should be 15 or 16 digits.',
+            description: 'Card or account number.<br/>- Card or account number without <code>-</code>.<br/>- If the number is a card number, it should be 15 or 16 digits.',
           },
         ]"
       />

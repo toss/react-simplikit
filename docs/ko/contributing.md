@@ -126,7 +126,7 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
           {
             name: 'paymentMethod.number',
             type: 'string',
-            description: 'Card or account number.<br/>- Card or account number without `-`.<br/>- If the number is a card number, it should be 15 or 16 digits.',
+            description: 'Card or account number.<br/>- Card or account number without <code>-</code>.<br/>- If the number is a card number, it should be 15 or 16 digits.',
           },
         ]"
       />
