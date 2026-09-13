@@ -38,10 +38,8 @@ const handWrittenPages = await glob(
   [
     'README*.md',
     'packages/react-simplikit/README*.md',
-    'docs/mobile-web.md',
-    'docs/*/mobile-web.md',
-    'docs/use-cases.md',
-    'docs/*/use-cases.md',
+    'docs/{mobile-web,use-cases}.md',
+    'docs/*/{mobile-web,use-cases}.md',
   ],
   { cwd: root }
 );

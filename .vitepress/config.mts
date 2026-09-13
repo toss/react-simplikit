@@ -6,9 +6,9 @@ import { writeLegacyRedirectStubs } from './libs/legacyRedirects.mts';
 import { SITE_ORIGIN } from './shared.mts';
 
 const siteDescription = 'Lightweight, zero-dependency React hooks, components and utils';
-const fallbackUrls = new Set<string>();
+const fallbackPaths = new Set<string>();
 
-function pageUrl(relativePath: string): string {
+function toPagePath(relativePath: string): string {
   return relativePath.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '.html');
 }
 
@@ -52,7 +52,7 @@ export default defineConfig({
       llmstxt({
         domain: SITE_ORIGIN,
         title: 'react-simplikit',
-        description: 'Lightweight, zero-dependency React hooks, components and utils',
+        description: siteDescription,
         details: `\
 react-simplikit provides reliable, typed React hooks, components and utils with zero runtime dependencies, 100% test coverage and SSR safety.
 
@@ -90,26 +90,27 @@ Guidelines for AI agents:
     hostname: SITE_ORIGIN,
     transformItems: items =>
       items
-        .filter(item => !fallbackUrls.has(item.url))
-        .map(item => ({ ...item, links: item.links?.filter(link => !fallbackUrls.has(link.url)) })),
+        .filter(item => !fallbackPaths.has(item.url))
+        .map(item => ({ ...item, links: item.links?.filter(link => !fallbackPaths.has(link.url)) })),
   },
   transformPageData(pageData) {
-    const url = pageUrl(pageData.relativePath);
+    const pagePath = toPagePath(pageData.relativePath);
     const isFallback = pageData.frontmatter.untranslated === true;
     if (isFallback) {
-      fallbackUrls.add(url);
+      fallbackPaths.add(pagePath);
     } else {
-      fallbackUrls.delete(url);
+      fallbackPaths.delete(pagePath);
     }
-    const canonical = `${SITE_ORIGIN}/${isFallback ? url.slice(url.indexOf('/') + 1) : url}`;
+    const canonicalPath = isFallback ? pagePath.slice(pagePath.indexOf('/') + 1) : pagePath;
+    const canonicalUrl = `${SITE_ORIGIN}/${canonicalPath}`;
     const title =
       pageData.title === '' || pageData.title === 'react-simplikit'
         ? 'react-simplikit'
         : `${pageData.title} | react-simplikit`;
     const description = pageData.description || siteDescription;
     const head: HeadConfig[] = [
-      ['link', { rel: 'canonical', href: canonical }],
-      ['meta', { property: 'og:url', content: canonical }],
+      ['link', { rel: 'canonical', href: canonicalUrl }],
+      ['meta', { property: 'og:url', content: canonicalUrl }],
       ['meta', { property: 'og:title', content: title }],
       ['meta', { property: 'og:description', content: description }],
       ['meta', { name: 'twitter:title', content: title }],

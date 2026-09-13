@@ -13,11 +13,11 @@ export async function assertSeoOutput(buildOutputDirectory: string): Promise<voi
   const sitemap = new JSDOM(await readFile(path.join(buildOutputDirectory, 'sitemap.xml'), 'utf8'), {
     contentType: 'application/xml',
   });
-  const entries = Array.from(sitemap.window.document.querySelectorAll('url'));
-  const urls = entries.map(entry => entry.querySelector('loc')!.textContent!);
-  assert.ok(urls.length > 0, 'the sitemap must contain canonical pages');
-  assert.equal(new Set(urls).size, urls.length, 'sitemap URLs must be unique');
-  for (const url of urls) {
+  const entries = sitemap.window.document.querySelectorAll('url');
+  const sitemapUrls = new Set(Array.from(entries, entry => entry.querySelector('loc')!.textContent!));
+  assert.ok(sitemapUrls.size > 0, 'the sitemap must contain canonical pages');
+  assert.equal(sitemapUrls.size, entries.length, 'sitemap URLs must be unique');
+  for (const url of sitemapUrls) {
     assert.equal(
       /\/(?:generated-locales|core|mobile)\/|\/404\.html$/.test(url),
       false,
@@ -27,7 +27,7 @@ export async function assertSeoOutput(buildOutputDirectory: string): Promise<voi
   const alternates = Array.from(sitemap.window.document.getElementsByTagNameNS('http://www.w3.org/1999/xhtml', 'link'));
   assert.ok(alternates.length > 0, 'the sitemap must include alternate-language links');
   for (const alternate of alternates) {
-    assert.ok(urls.includes(alternate.getAttribute('href')!), 'alternates must point to canonical pages');
+    assert.ok(sitemapUrls.has(alternate.getAttribute('href')!), 'alternates must point to canonical pages');
   }
   sitemap.window.close();
 
@@ -43,8 +43,8 @@ export async function assertSeoOutput(buildOutputDirectory: string): Promise<voi
     const { document } = dom.window;
     const canonical = `${SITE_ORIGIN}/${canonicalRoute}`;
     const pageUrl = `${SITE_ORIGIN}/${route.replace(/index\.html$/, '')}`;
-    assert.ok(urls.includes(canonical), `${route} canonical URL must appear in the sitemap`);
-    assert.equal(urls.includes(pageUrl), pageUrl === canonical, `${route} sitemap membership`);
+    assert.ok(sitemapUrls.has(canonical), `${route} canonical URL must appear in the sitemap`);
+    assert.equal(sitemapUrls.has(pageUrl), pageUrl === canonical, `${route} sitemap membership`);
     const description = document.querySelector('meta[name="description"]')?.getAttribute('content');
     assert.ok(
       description != null && description.length > 0 && description !== 'A VitePress site',

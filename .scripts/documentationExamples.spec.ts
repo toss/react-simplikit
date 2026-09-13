@@ -14,11 +14,11 @@ function readExamples(file: string): string[] {
 }
 
 function loadExample(source: string): React.ComponentType {
-  const name = source.match(/function ([A-Z]\w*)\(/)?.[1];
-  if (name == null) {
+  const componentName = source.match(/function ([A-Z]\w*)\(/)?.[1];
+  if (componentName == null) {
     throw new Error('The example must declare a named component with the function keyword');
   }
-  const { outputText } = ts.transpileModule(`${source}\nexport { ${name} };`, {
+  const { outputText } = ts.transpileModule(`${source}\nexport { ${componentName} };`, {
     compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   });
   const modules: Record<string, unknown> = {
@@ -28,13 +28,14 @@ function loadExample(source: string): React.ComponentType {
   };
   const exports: Record<string, React.ComponentType> = {};
   // Execute the Markdown example against the current public API.
-  new Function('require', 'exports', outputText)((id: string) => {
+  const executeExample = new Function('require', 'exports', outputText);
+  executeExample((id: string) => {
     if (!(id in modules)) {
       throw new Error(`Unexpected example import: ${id}`);
     }
     return modules[id];
   }, exports);
-  return exports[name];
+  return exports[componentName];
 }
 
 afterEach(cleanup);
