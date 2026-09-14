@@ -2,7 +2,7 @@
 
 디바이스의 Safe Area Inset을 실시간으로 추적하는 리액트 훅이에요. 화면 방향이 변경될 때(세로 ↔ 가로) 자동으로 업데이트돼요.
 
-Safe Area Inset은 디바이스별 UI 요소를 고려해요:
+Safe Area Inset은 디바이스별 UI 요소를 고려해요.
 
 - **top**: 노치, Dynamic Island, 또는 상태 바
 - **bottom**: Face ID 디바이스의 홈 인디케이터

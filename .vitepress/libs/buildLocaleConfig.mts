@@ -25,7 +25,7 @@ export function buildLocaleConfig(
     themeConfig: {
       nav: [
         { text: strings.homeNavLabel, link: `${prefix}/` },
-        { text: 'Guide', link: `${prefix}/intro` },
+        { text: strings.guideLabel, link: `${prefix}/intro` },
         { text: strings.referenceLabel, link: `${prefix}/reference` },
       ],
       sidebar: {
@@ -39,6 +39,7 @@ export function buildLocaleConfig(
                 link: `${prefix}/why-react-simplikit-matters`,
               },
               { text: strings.guidePages.installation, link: `${prefix}/installation` },
+              { text: strings.guidePages.useCases, link: `${prefix}/use-cases` },
               { text: strings.guidePages.aiIntegration, link: `${prefix}/ai-integration` },
               { text: strings.guidePages.designPrinciples, link: `${prefix}/design-principles` },
               { text: strings.guidePages.mobileWeb, link: `${prefix}/mobile-web` },

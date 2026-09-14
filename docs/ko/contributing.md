@@ -126,7 +126,7 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
           {
             name: 'paymentMethod.number',
             type: 'string',
-            description: 'Card or account number.<br/>- Card or account number without `-`.<br/>- If the number is a card number, it should be 15 or 16 digits.',
+            description: 'Card or account number.<br/>- Card or account number without <code>-</code>.<br/>- If the number is a card number, it should be 15 or 16 digits.',
           },
         ]"
       />
@@ -287,13 +287,13 @@ yarn test:coverage
 
 #### Changeset 생성 방법
 
-1. 변경 사항을 구현한 후, 다음 명령어를 실행하세요:
+1. 변경 사항을 구현한 후, 다음 명령어를 실행하세요.
 
 ```bash
 yarn changeset
 ```
 
-2. 변경 유형을 선택하세요:
+2. 변경 유형을 선택하세요.
 
    - `patch`: 버그 수정이나 작은 변경사항
    - `minor`: 새로운 기능 추가 (하위 호환성 유지)
@@ -314,7 +314,7 @@ Changeset 파일은 `.changeset` 폴더에 생성되며, 이 파일은 PR과 함
 
 ### 배포
 
-`main` 브랜치에 병합되면 자동으로 배포가 진행돼요. 배포 과정은 다음과 같아요:
+`main` 브랜치에 병합되면 자동으로 배포가 진행돼요. 배포 과정은 다음과 같아요.
 
 1. PR이 `main` 브랜치에 병합되면 GitHub Actions가 실행돼요.
 2. Changeset이 있는 경우, 버전 업데이트 PR이 자동으로 생성돼요.
@@ -426,7 +426,7 @@ yarn run scaffold getButton --t u // 유틸 생성
 
 ### SSR 안전 패턴
 
-렌더링 중에 브라우저 API를 읽지 마세요. 서버에는 `window`가 없고, 클라이언트 값이 서버 값과 다르면 hydration mismatch가 생겨요. 고정된 초기값에서 시작해서 effect에서 동기화하세요:
+렌더링 중에 브라우저 API를 읽지 마세요. 서버에는 `window`가 없고, 클라이언트 값이 서버 값과 다르면 hydration mismatch가 생겨요. 고정된 초기값에서 시작해서 effect에서 동기화하세요.
 
 ```ts
 const [state, setState] = useState(FIXED_INITIAL_VALUE);
@@ -444,7 +444,7 @@ useEffect(function syncBrowserState() {
 
 - 고빈도 이벤트(`scroll`, `resize`, `visualViewport` 변화)는 약 16ms로 쓰로틀링하고, 값이 바뀌지 않았으면 업데이트를 건너뛰고, 급하지 않은 업데이트에는 `startTransition`을 써요
 - 핸들러가 `preventDefault`를 호출하지 않는다면 패시브 이벤트 리스너를 써요
-- 한 플랫폼만 고르지 말고 플랫폼 차이를 처리해요:
+- 한 플랫폼만 고르지 말고 플랫폼 차이를 처리해요.
 
   | 기능                       | iOS                         | Android               |
   | -------------------------- | --------------------------- | --------------------- |

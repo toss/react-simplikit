@@ -28,7 +28,7 @@ npm install react-simplikit
 
 ### CTA ボタンの例
 
-もっとも一般的なモバイル UI パターンです。キーボードの上に移動する下部固定ボタンです。
+下部固定ボタンをキーボードの上に表示する例です。
 
 ```tsx
 import { useAvoidKeyboard } from 'react-simplikit';
@@ -54,7 +54,7 @@ function FixedBottomCTA() {
 
 ### チャット入力欄の例
 
-キーボードの上に留まる入力欄を持つチャット UI です。
+チャットの入力欄をキーボードの上に表示する例です。
 
 ```tsx
 import { useState } from 'react';

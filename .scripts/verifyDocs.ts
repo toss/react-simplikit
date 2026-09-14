@@ -35,7 +35,12 @@ for (const name of publicExports) {
 // name behind and nothing else reads them. Both inline code and reference links count.
 const exportNames = new Set(publicExports);
 const handWrittenPages = await glob(
-  ['README*.md', 'packages/react-simplikit/README*.md', 'docs/mobile-web.md', 'docs/*/mobile-web.md'],
+  [
+    'README*.md',
+    'packages/react-simplikit/README*.md',
+    'docs/{mobile-web,use-cases}.md',
+    'docs/*/{mobile-web,use-cases}.md',
+  ],
   { cwd: root }
 );
 const exportMentions = [

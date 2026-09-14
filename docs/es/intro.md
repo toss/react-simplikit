@@ -1,3 +1,7 @@
+---
+description: Hooks, componentes y utilidades para simplificar el código de React.
+---
+
 # Introducción a react-simplikit
 
 ¿Cómo podemos crear aplicaciones basadas en React de forma más segura y fiable? Definimos la respuesta como “escribir código de React a la manera de React”, y esa respuesta empezó a tomar forma de verdad con `react-simplikit`.
@@ -118,6 +122,6 @@ En comparación con react-use, que tiene [14 dependencias](https://www.npmjs.com
 
 ## Enlaces
 
-Para más información sobre react-simplikit, consulta el siguiente enlace:
+Consulta el código fuente en [GitHub](https://github.com/toss/react-simplikit).
 
-- [GitHub](https://github.com/toss/react-simplikit)
+Consulta [casos de uso comunes](/es/use-cases) para ver ejemplos completos, o explora la [referencia de API](/es/reference).
