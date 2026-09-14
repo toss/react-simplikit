@@ -17,7 +17,7 @@ function useOutsideClickEffect(
   required
   name="container"
   type="HTMLElement | HTMLElement[] | null"
-  description="A single HTML element, an array of HTML elements, or <code>null</code>. If <code>null</code>, no event listener is attached."
+  description="A single HTML element, an array of HTML elements, or <code>null</code>. If <code>null</code>, the callback is not executed."
 />
 
 <Interface

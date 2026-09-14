@@ -10,7 +10,7 @@ type OneOrMore<T> = T | T[];
  * It is useful for closing modals, dropdowns, tooltips, and other UI components when clicking outside.
  *
  * @param {HTMLElement | HTMLElement[] | null} container - A single HTML element, an array of HTML elements, or `null`.
- *   If `null`, no event listener is attached.
+ *   If `null`, the callback is not executed.
  * @param {() => void} callback - A function that is executed when clicking outside the specified container(s).
  *
  * @example
