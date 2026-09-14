@@ -28,6 +28,8 @@ pnpm add react-simplikit
 
 ## 快速开始
 
+使用 `useDebounce`，在用户停止输入 300 ms 后调用搜索函数。此示例中的 `searchAPI` 是由你的应用提供的搜索函数。
+
 ```tsx
 import { useState } from 'react';
 import { useDebounce } from 'react-simplikit';
@@ -63,7 +65,19 @@ function SearchInput() {
 
 带一句话说明的完整列表见[参考页面](https://react-simplikit.slash.page/zh-Hans/reference.html)。
 
+## AI 集成
+
+使用随附的 agent skill，帮助 AI 编程助手查找现有的 Hook、组件和工具函数，并确认 import 和 SSR 规则。
+
+```bash
+npx skills add toss/react-simplikit --skill react-simplikit
+```
+
+设置方法请参阅 [AI 集成指南](https://react-simplikit.slash.page/zh-Hans/ai-integration.html)。Agent 也可以通过 [llms.txt](https://react-simplikit.slash.page/llms.txt) 查找 API 文档。
+
 ## 文档
+
+在[常见使用场景](https://react-simplikit.slash.page/zh-Hans/use-cases.html) 中，根据要解决的问题选择 Hook。
 
 完整文档请访问 [react-simplikit.slash.page](https://react-simplikit.slash.page/zh-Hans)。
 

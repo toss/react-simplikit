@@ -28,7 +28,7 @@ npm install react-simplikit
 
 ### Button CTA Example
 
-The most common mobile UI pattern - a fixed bottom button that moves above the keyboard:
+This example keeps a fixed bottom button above the keyboard.
 
 ```tsx
 import { useAvoidKeyboard } from 'react-simplikit';
@@ -54,7 +54,7 @@ function FixedBottomCTA() {
 
 ### Chat Input Example
 
-A chat interface with an input field that stays above the keyboard:
+This example keeps a chat input field above the keyboard.
 
 ```tsx
 import { useState } from 'react';

@@ -40,3 +40,5 @@ import { useToggle } from 'react-simplikit';
 ```
 
 すべてのフックはツリーシェイキング対応なので、実際に使用するものだけがバンドルに含まれます。
+
+完全な使用例は [用途別の使い方](/ja/use-cases)、ツールの一覧は [API リファレンス](/ja/reference) をご覧ください。

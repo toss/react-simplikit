@@ -4,185 +4,84 @@ Among the many React-based libraries, why should you choose `react-simplikit`? L
 
 ## Declarative Interface
 
-React components have evolved from class components to function components.
+Add just what you need to familiar React code. In this book search, the input updates immediately, while the list follows after you stop typing for 300 milliseconds.
 
-With the introduction of function components and declarative API hooks, we can now [abstract state and lifecycle-related logic](https://legacy.reactjs.org/docs/hooks-intro.html#its-hard-to-reuse-stateful-logic-between-components) that was previously written in a complex way in class components.
-
-However, React components are still complex. Since React [provides minimal interfaces](https://legacy.reactjs.org/docs/design-principles.html#common-abstraction), components with even slightly complex functionality may require dozens of states, handlers, and side effect definitions based on state changes.
-
-At some point, components become mixed with concerns and are written imperatively, making it increasingly difficult to understand what the component doing and what logic is running.
-
-`react-simplikit` provides appropriate abstractions for frequently used but complex-to-implement features. This allows you to maintain intuitive readability even when writing components with complex logic.
-
-`react-simplikit` presents interfaces that declaratively solve various problems commonly encountered during actual service development.
-
-Based on this, it guides developers to write more declarative React components.
+Both examples filter the same local list without a server. Render `<BookSearch />` and try typing `React`. In a framework with Server Components, place the example in a Client Component (`'use client'`).
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
-function AutoCompleteInput() {
+import { useEffect, useState } from 'react';
+
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isOpen, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState(query);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
+  useEffect(
+    function debounceSearchQuery() {
+      const timeoutId = setTimeout(() => setSearchQuery(query), 300);
+      return () => clearTimeout(timeoutId);
+    },
+    [query]
+  );
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (query.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    setLoading(true);
-    const timeoutId = setTimeout(async () => {
-      try {
-        const response = await fetch(`/api/search?q=${query}`);
-        const data = await response.json();
-        setResults(data);
-      } catch (error) {
-        console.error('Failed to fetch results:', error);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        placeholder="Enter search term"
-      />
-      {isOpen && (isLoading || results.length > 0) && (
-        <div>
-          {isLoading ? (
-            <div className="p-2">Searching...</div>
-          ) : (
-            results.map((result, idx) => (
-              <Fragment key={result.id}>
-                <div
-                  onClick={() => {
-                    setQuery(result.title);
-                    setOpen(false);
-                  }}
-                >
-                  {result.title}
-                </div>
-                {idx !== results.length - 1 && <Divider />}
-              </Fragment>
-            ))
-          )}
-        </div>
-      )}
+    <div>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 ```
 
 ```tsx [with-react-simplikit.tsx]
-function AutoCompleteInput() {
+import { useState } from 'react';
+import { useDebouncedValue } from 'react-simplikit';
+
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, startLoading] = useLoading();
-  const [isOpen, openSearchBox, closeSearchBox] = useBooleanState(false);
+  const searchQuery = useDebouncedValue(query, 300);
 
-  const searchBoxState = useMemo(() => {
-    if (!isOpen) return 'CLOSE';
-
-    if (isLoading) return 'LOADING';
-
-    if (results.length > 0) return 'RESULT_EXISTS';
-
-    return 'EMPTY';
-  }, [isOpen, isLoading, results]);
-
-  const searchResults = useDebounce(async (searchQuery: string) => {
-    if (searchQuery.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    const response = await startLoading(
-      fetch(`/api/search?q=${searchQuery}`)
-        .then(res => res.json())
-        .catch(error => {
-          console.error('Failed to fetch results:', error);
-          return [];
-        })
-    );
-
-    setResults(response);
-  }, 300);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  useOutsideClickEffect(containerRef.current, () => closeSearchBox());
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          openSearchBox();
-          searchResults(e.target.value);
-        }}
-        onFocus={openSearchBox}
-        placeholder="Enter search term"
-      />
-      <SwitchCase
-        value={searchBoxState}
-        caseBy={{
-          LOADING: () => <div>Searching...</div>,
-          EMPTY: () => <div>No results found.</div>,
-          RESULT_EXISTS: () => (
-            <Separated by={<Divider />}>
-              {results.map(result => (
-                <Fragment key={result.id}>
-                  <div
-                    onClick={() => {
-                      setQuery(result.title);
-                      closeSearchBox();
-                    }}
-                  >
-                    {result.title}
-                  </div>
-                </Fragment>
-              ))}
-            </Separated>
-          ),
-          CLOSE: () => null,
-        }}
-      />
+    <div>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 ```
 
 :::
+
+With [useDebouncedValue](/hooks/useDebouncedValue), `searchQuery` declares a delayed version of `query`. Keep the input state in `useState` and derive the value used to filter the list in one line. The hook manages the timer and cancels pending updates when the component unmounts.
 
 ## Small Bundle Size
 

@@ -264,7 +264,7 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 > Separate document: [react-hook-usage-patterns.md](./react-hook-usage-patterns.md)
 
-16 patterns based on React official docs (react.dev), with source URLs and quotes (U1-U17, U4 removed):
+These 16 patterns are based on the official React docs (react.dev) and include source URLs and quotes (U1-U17, with U4 removed).
 
 | Category     | Count            | Key Patterns                                                                     |
 | ------------ | ---------------- | -------------------------------------------------------------------------------- |

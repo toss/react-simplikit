@@ -1,3 +1,7 @@
+---
+description: 了解让 React 代码更简单的 Hook、组件和工具函数。
+---
+
 # react-simplikit 简介
 
 我们怎样才能更安全、更可靠地构建基于 React 的应用？我们把答案定义为“用 React 的方式编写 React 代码”，而这个答案正是通过 `react-simplikit` 真正成形的。
@@ -118,6 +122,6 @@ react-use 在 React 和 React-DOM 之外还有 [14 个依赖](https://www.npmjs.
 
 ## 链接
 
-想进一步了解 react-simplikit，请查看下面的链接：
+可以在 [GitHub](https://github.com/toss/react-simplikit) 上查看源代码。
 
-- [GitHub](https://github.com/toss/react-simplikit)
+在[常见使用场景](/zh-Hans/use-cases) 中查看完整示例，或浏览 [API 参考](/zh-Hans/reference)。
