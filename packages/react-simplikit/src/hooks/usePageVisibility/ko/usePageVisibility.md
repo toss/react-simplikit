@@ -12,7 +12,7 @@ function usePageVisibility(): PageVisibility;
 
 ### 매개변수
 
-이 훅은 매개변수를 받지 않아요.
+이 함수는 매개변수를 받지 않아요.
 
 ### 반환값
 
@@ -40,7 +40,7 @@ description: '페이지의 현재 가시성 상태',
 
 ### 비디오 플레이어 제어
 
-사용자가 다른 탭으로 전환하면 자동으로 비디오 재생을 일시 정지해요:
+사용자가 다른 탭으로 전환하면 자동으로 비디오 재생을 일시 정지해요.
 
 ```tsx
 function VideoPlayer() {
@@ -62,7 +62,7 @@ function VideoPlayer() {
 
 ### 분석 추적
 
-사용자가 페이지를 떠나거나 돌아올 때를 추적해요:
+사용자가 페이지를 떠나거나 돌아올 때를 추적해요.
 
 ```tsx
 function Analytics() {

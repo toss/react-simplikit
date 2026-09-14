@@ -12,6 +12,7 @@ type GuidePageTitles = {
   intro: string;
   whyReactSimplikitMatters: string;
   installation: string;
+  useCases: string;
   aiIntegration: string;
   designPrinciples: string;
   mobileWeb: string;

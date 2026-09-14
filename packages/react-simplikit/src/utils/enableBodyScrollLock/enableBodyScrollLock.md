@@ -12,6 +12,8 @@ function enableBodyScrollLock(): void;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface name="" type="void" description="" />

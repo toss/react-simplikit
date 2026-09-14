@@ -12,6 +12,8 @@ function useBodyScrollLock(): void;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 This hook does not return anything.

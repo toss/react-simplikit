@@ -10,6 +10,8 @@ function useIsClient(): boolean;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface

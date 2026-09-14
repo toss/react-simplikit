@@ -12,7 +12,7 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
 
 ### 매개변수
 
-이 훅은 매개변수를 받지 않아요.
+이 함수는 매개변수를 받지 않아요.
 
 ### 반환값
 
@@ -95,10 +95,10 @@ if (viewport && viewport.scale > 1.3) {
 - **브라우저 지원**: Visual Viewport API는 최신 모바일 브라우저에서 지원돼요. 지원하지 않는 환경에서는 훅이 `null`을 반환해요.
 - **성능**: 뷰포트 변경 중 블로킹 업데이트를 방지하기 위해 React의 `startTransition`을 사용해요.
 - **더 간단한 대안**: 키보드 높이만 필요하다면 더 간단한 API인 `useKeyboardHeight()`를 사용하세요.
-- **플랫폼 차이점**:
+- **플랫폼 차이점**
   - iOS: 키보드가 나타날 때 `offsetTop`이 음수가 돼요
   - Android: `offsetTop`이 일반적으로 0으로 유지돼요
-- **사용 사례**:
+- **사용 사례**
   - 키보드 나타남 감지
   - 핀치 줌 제스처에 반응
   - 뷰포트 인식 레이아웃 생성
