@@ -12,7 +12,7 @@ function usePageVisibility(): PageVisibility;
 
 ### 매개변수
 
-이 훅은 매개변수를 받지 않아요.
+이 함수는 매개변수를 받지 않아요.
 
 ### 반환값
 

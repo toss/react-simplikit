@@ -17,6 +17,8 @@ function useNetworkStatus(): NetworkStatus;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface

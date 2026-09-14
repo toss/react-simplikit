@@ -199,8 +199,12 @@ ${description}
 ${await prettier.format(`function ${name}${getTemplateCode()}(${getParamsCode()}): ${returns == null ? 'void' : returns.type};`, { ...prettierConfig, parser: 'typescript' })}\`\`\`
 
 ### Parameters
-
-${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { ...prettierConfig, parser: 'vue' })}
+${
+  params.length === 0
+    ? '\nThis function does not accept any parameters.'
+    : `
+${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { ...prettierConfig, parser: 'vue' })}`
+}
 ### Return Value
 ${
   returns == null
