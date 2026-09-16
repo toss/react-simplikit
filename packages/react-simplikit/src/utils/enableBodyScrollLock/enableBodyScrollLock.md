@@ -19,7 +19,7 @@ This function does not accept any parameters.
 
 ### Return Value
 
-<Interface name="" type="void" description="" />
+This function does not return anything.
 
 ## Example
 
