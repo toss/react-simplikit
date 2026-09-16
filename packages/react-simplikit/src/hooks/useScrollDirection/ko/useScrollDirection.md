@@ -12,7 +12,7 @@ function useScrollDirection(
 ): ScrollDirectionState;
 ```
 
-### 매개변수
+### 파라미터
 
 <Interface
   name="options"
@@ -29,7 +29,7 @@ function useScrollDirection(
   ]"
 />
 
-### 반환값
+### 반환 값
 
 <Interface
 name=""
@@ -51,13 +51,13 @@ description: '현재 세로 스크롤 위치 (픽셀 단위)',
 ]"
 />
 
-## 예제
+## 예시
 
 ```tsx
 function Header() {
   const { direction, position } = useScrollDirection();
 
-  // Hide header on scroll down
+  // 아래로 스크롤하면 헤더를 숨겨요
   const isHidden = direction === 'down' && position > 100;
 
   return <header className={isHidden ? 'hidden' : 'visible'}>My Header</header>;
@@ -68,7 +68,7 @@ function Header() {
 
 ```tsx
 function MyComponent() {
-  // Update every 100ms instead of default 50ms
+  // 기본값 50ms 대신 100ms마다 업데이트해요
   const { direction, position } = useScrollDirection({ throttleMs: 100 });
 
   return (

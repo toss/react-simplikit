@@ -58,7 +58,7 @@ export function useUser() {}`
     expect(document).toContain(`The user\\'s name.`);
   });
 
-  it('rejoins a paragraph that the source wrapped across lines', async () => {
+  it('keeps the line breaks of a wrapped @description paragraph, which Markdown renders as spaces', async () => {
     const document = await render(
       'useWrapped',
       `/**
@@ -74,7 +74,7 @@ export function useUser() {}`
 export function useWrapped() {}`
     );
 
-    expect(document).toContain('`useWrapped` does one thing. It also does another thing.');
+    expect(document).toContain('`useWrapped` does one thing.\nIt also does another thing.');
   });
 
   it('escapes a double quote in a nested description, which sits inside a double-quoted attribute', async () => {
@@ -96,7 +96,7 @@ export function useMode() {}`
     expect(document).toContain('Either &quot;wide&quot; or &quot;narrow&quot;.');
   });
 
-  it('rejoins the wrapped continuation lines of a bullet item', async () => {
+  it('keeps the indentation of a wrapped bullet item', async () => {
     const document = await render(
       'useWrappedBullet',
       `/**
@@ -117,7 +117,7 @@ export function useWrappedBullet() {}`
     );
 
     expect(document).toContain(
-      '- The first bullet wraps onto a second line and a third line.\n- The second bullet stays.'
+      '- The first bullet wraps\n  onto a second line\n  and a third line.\n- The second bullet stays.'
     );
   });
 
@@ -425,5 +425,220 @@ export function useSet() {}`
 
     expect(document).toContain("name: '[0]'");
     expect(document).toContain("name: '[1].add'");
+  });
+
+  it('renders a captioned @example under a level-3 heading', async () => {
+    const document = await render(
+      'useBodyScrollLock',
+      `/**
+ * @description
+ * \`useBodyScrollLock\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * <caption>Multiple modals - single lock pattern</caption>
+ * function BodyScrollLock() {}
+ */
+export function useBodyScrollLock() {}`
+    );
+
+    expect(document).toContain(
+      '## Example\n\n### Multiple modals - single lock pattern\n\n```tsx\nfunction BodyScrollLock() {}\n```'
+    );
+  });
+
+  it('renders an uncaptioned @example without a heading', async () => {
+    const document = await render(
+      'usePlain',
+      `/**
+ * @description
+ * \`usePlain\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * usePlain();
+ */
+export function usePlain() {}`
+    );
+
+    expect(document).toContain('## Example\n\n```tsx\nusePlain();\n```');
+    expect(document.split('## Example')[1]).not.toContain('###');
+  });
+
+  it('renders @remarks as a Notes section after the examples', async () => {
+    const document = await render(
+      'useNoted',
+      `/**
+ * @description
+ * \`useNoted\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useNoted();
+ *
+ * @remarks
+ * - **SSR safety**: The hook only runs inside \`useEffect\`,
+ *   so it is safe during server-side rendering.
+ * - **Cleanup**: The lock is released on unmount.
+ */
+export function useNoted() {}`
+    );
+
+    expect(document).toContain(
+      '```tsx\nuseNoted();\n```\n\n## Notes\n\n- **SSR safety**: The hook only runs inside `useEffect`,\n  so it is safe during server-side rendering.\n- **Cleanup**: The lock is released on unmount.\n'
+    );
+  });
+
+  it('omits the Notes section when there is no @remarks', async () => {
+    const document = await render(
+      'useQuiet',
+      `/**
+ * @description
+ * \`useQuiet\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useQuiet();
+ */
+export function useQuiet() {}`
+    );
+
+    expect(document).not.toContain('## Notes');
+    expect(document.trimEnd().endsWith('```')).toBe(true);
+  });
+
+  it('renders a caption written on the @example tag line', async () => {
+    const document = await render(
+      'useTagLine',
+      `/**
+ * @description
+ * \`useTagLine\` does something.
+ *
+ * @returns {void}
+ *
+ * @example <caption>On the tag line</caption>
+ * useTagLine();
+ */
+export function useTagLine() {}`
+    );
+
+    expect(document).toContain('### On the tag line\n\n```tsx\nuseTagLine();\n```');
+    expect(document).not.toContain('@example');
+  });
+
+  it('keeps the first word of a @remarks written on the tag line', async () => {
+    const document = await render(
+      'useInline',
+      `/**
+ * @description
+ * \`useInline\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useInline();
+ *
+ * @remarks Always check for null before use.
+ */
+export function useInline() {}`
+    );
+
+    expect(document).toContain('## Notes\n\nAlways check for null before use.\n');
+  });
+
+  it('renders a captioned @example whose source wraps the code in a fence', async () => {
+    const document = await render(
+      'useFenced',
+      `/**
+ * @description
+ * \`useFenced\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * <caption>Fenced</caption>
+ * \`\`\`tsx
+ * useFenced();
+ * \`\`\`
+ */
+export function useFenced() {}`
+    );
+
+    expect(document).toContain('### Fenced\n\n```tsx\nuseFenced();\n```');
+  });
+
+  it('keeps a fenced code block inside @remarks', async () => {
+    const document = await render(
+      'useFencedNote',
+      `/**
+ * @description
+ * \`useFencedNote\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useFencedNote();
+ *
+ * @remarks
+ * Call it once:
+ *
+ * \`\`\`ts
+ * const a = 1;
+ * const b = 2;
+ * \`\`\`
+ */
+export function useFencedNote() {}`
+    );
+
+    expect(document).toContain('## Notes\n\nCall it once:\n\n```ts\nconst a = 1;\nconst b = 2;\n```');
+  });
+
+  it('keeps a numbered list inside @remarks', async () => {
+    const document = await render(
+      'useNumbered',
+      `/**
+ * @description
+ * \`useNumbered\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useNumbered();
+ *
+ * @remarks
+ * 1. first
+ * 2. second
+ */
+export function useNumbered() {}`
+    );
+
+    expect(document).toContain('## Notes\n\n1. first\n2. second');
+  });
+
+  it('keeps a nested list inside @remarks', async () => {
+    const document = await render(
+      'useNested',
+      `/**
+ * @description
+ * \`useNested\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useNested();
+ *
+ * @remarks
+ * - **Platform**
+ *   - iOS: negative
+ *   - Android: zero
+ */
+export function useNested() {}`
+    );
+
+    expect(document).toContain('- **Platform**\n  - iOS: negative\n  - Android: zero');
   });
 });

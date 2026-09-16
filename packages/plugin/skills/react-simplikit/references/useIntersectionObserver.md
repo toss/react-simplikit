@@ -1,6 +1,7 @@
 # useIntersectionObserver
 
-`useIntersectionObserver` is a React hook that detects whether a specific DOM element is visible on the screen. It uses the `IntersectionObserver` API to execute a callback when the element enters or exits the viewport.
+`useIntersectionObserver` is a React hook that detects whether a specific DOM element is visible on the screen.
+It uses the `IntersectionObserver` API to execute a callback when the element enters or exits the viewport.
 
 ## Interface
 

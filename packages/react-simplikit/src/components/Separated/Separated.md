@@ -1,6 +1,7 @@
 # Separated
 
-`Separated` is a component that inserts a specified component between each child element. It is useful for adding separators, spacing, or other repeating elements in lists.
+`Separated` is a component that inserts a specified component between each child element.
+It is useful for adding separators, spacing, or other repeating elements in lists.
 
 ## Interface
 

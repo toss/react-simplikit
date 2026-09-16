@@ -1,6 +1,7 @@
 # mergeProps
 
-`mergeProps` is a utility function that merges multiple props objects into a single object. It handles merging of `className`, `style`, and `function` properties.
+`mergeProps` is a utility function that merges multiple props objects into a single object.
+It handles merging of `className`, `style`, and `function` properties.
 
 ## Interface
 

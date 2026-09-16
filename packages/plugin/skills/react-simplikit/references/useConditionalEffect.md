@@ -1,6 +1,7 @@
 # useConditionalEffect
 
-`useConditionalEffect` is a React hook that conditionally executes effects based on a predicate function. This provides more control over when effects run beyond just dependency changes.
+`useConditionalEffect` is a React hook that conditionally executes effects based on a predicate function.
+This provides more control over when effects run beyond just dependency changes.
 
 ## Interface
 

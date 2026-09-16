@@ -1,6 +1,8 @@
 # ImpressionArea
 
-`ImpressionArea` is a component that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. This component uses the `useImpressionRef` hook to track the element's visibility.
+`ImpressionArea` is a component that measures the time a specific DOM element is visible on the screen
+and executes callbacks when the element enters or exits the viewport. This component uses the `useImpressionRef`
+hook to track the element's visibility.
 
 ## Interface
 

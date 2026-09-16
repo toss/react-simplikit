@@ -1,6 +1,7 @@
 # useDoubleClick
 
-`useDoubleClick` is a React hook that differentiates between single and double click events. It delays the single click callback execution for a specified time, and cancels it if a second click (i.e. a double click) occurs within that time.
+`useDoubleClick` is a React hook that differentiates between single and double click events.
+It delays the single click callback execution for a specified time, and cancels it if a second click (i.e. a double click) occurs within that time.
 
 ## Interface
 

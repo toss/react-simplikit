@@ -1,10 +1,8 @@
 # useVisualViewport
 
-`useVisualViewport` is a React hook that tracks Visual Viewport changes. It returns the actual visible area in mobile WebView, which changes when the keyboard appears or the user zooms/scrolls.
-
-**Important:** `viewport` is `null` on SSR or in browsers that don't support Visual Viewport API. Always check for null before accessing viewport properties.
-
-**Tip:** If you only need keyboard height, use `useKeyboardHeight()` instead for a simpler API.
+`useVisualViewport` is a React hook that tracks Visual Viewport changes.
+It returns the actual visible area in mobile WebView, which changes when
+the keyboard appears or the user zooms/scrolls.
 
 ## Interface
 
@@ -54,14 +52,14 @@ This function does not accept any parameters.
       type: 'number',
       required: false,
       description:
-        'Viewport top offset in pixels from the layout viewport. Becomes negative on iOS when the keyboard appears, so use <code>-offsetTop</code> for the keyboard height. Typically remains 0 on Android.',
+        'Viewport top offset in pixels from the layout viewport. Becomes negative on iOS when the keyboard appears (e.g., -300px means a 300px keyboard), so use <code>-offsetTop</code> for the keyboard height. Typically remains 0 on Android.',
     },
     {
       name: 'viewport.scale',
       type: 'number',
       required: false,
       description:
-        'Pinch-zoom scaling factor. 1.0 means no zoom, greater than 1.0 means zoomed in.',
+        'Pinch-zoom scaling factor. 1.0 means no zoom, greater than 1.0 means zoomed in, and less than 1.0 means zoomed out (rare, depends on viewport settings).',
     },
   ]"
 />
@@ -90,3 +88,22 @@ function CustomLayout() {
   );
 }
 ```
+
+### Detecting zoom
+
+```tsx
+const { viewport } = useVisualViewport();
+if (viewport && viewport.scale > 1.3) {
+  // Hide floating UI when user zooms in
+  setShowFloatingButton(false);
+}
+```
+
+## Notes
+
+- **SSR safety**: `viewport` is `null` during server-side rendering and in browsers without the Visual Viewport API. Always check for `null` before reading its properties.
+- **Browser support**: The Visual Viewport API is supported in modern mobile browsers. Where it is missing the hook returns `null`.
+- **Performance**: Updates are wrapped in React's `startTransition` so viewport changes do not block urgent rendering.
+- **Simpler alternative**: If you only need the keyboard height, use `useKeyboardHeight()` for a simpler API.
+- **Platform differences**: On iOS `offsetTop` becomes negative when the keyboard appears; on Android it typically stays at 0.
+- **Use cases**: Detecting the keyboard, reacting to pinch-zoom gestures, building viewport-aware layouts, and showing or hiding UI by zoom level.
