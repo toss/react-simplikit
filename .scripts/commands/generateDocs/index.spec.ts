@@ -641,4 +641,23 @@ export function useNested() {}`
 
     expect(document).toContain('- **Platform**\n  - iOS: negative\n  - Android: zero');
   });
+
+  it('renders a fallback message when there are no parameters', async () => {
+    const document = await render(
+      'useNoParams',
+      `/**
+ * @description
+ * \`useNoParams\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useNoParams();
+ *
+ */
+export function useNoParams() {}`
+    );
+
+    expect(document).toContain('\nThis function does not accept any parameters.');
+  });
 });
