@@ -80,13 +80,14 @@ export async function generateDocs(names: string[]) {
   await generateSkill();
 }
 
-// `@returns` carries no name, but the stock name tokenizer still takes the description's first
-// word as one ("An object…" became "object…"). Skipping it for that tag keeps the sentence whole.
-const skipNameForReturns = (spec: OriginSpec) => (spec.tag === 'returns' ? spec : tokenizers.name()(spec));
+// These tags carry no name, but the stock name tokenizer still takes the description's first word
+// as one ("An object…" became "object…"). Skipping it for them keeps the sentence whole.
+const NAMELESS_TAGS = new Set(['returns', 'remarks', 'description']);
+const skipNameForNamelessTags = (spec: OriginSpec) => (NAMELESS_TAGS.has(spec.tag) ? spec : tokenizers.name()(spec));
 
 const parseOptions = (spacing: 'compact' | 'preserve') => ({
   spacing,
-  tokenizers: [tokenizers.tag(), tokenizers.type(spacing), skipNameForReturns, tokenizers.description(spacing)],
+  tokenizers: [tokenizers.tag(), tokenizers.type(spacing), skipNameForNamelessTags, tokenizers.description(spacing)],
 });
 
 function parseJSDoc(source: string) {
@@ -127,6 +128,8 @@ function parseJSDoc(source: string) {
         })
         .join('\n')
         .trim()
+        // jsdoc.app puts the caption on the tag line: `@example <caption>…</caption>`
+        .replace(/^@example\s*/, '')
     )
     .filter(text => text.length > 0)
     .map(text => {
@@ -150,10 +153,10 @@ function parseJSDoc(source: string) {
   };
 }
 
-// A name is a property path or a tuple index path such as `[1].add`.
 /** JSDoc's own caption syntax; the title renders as a heading above the example's code block. */
 const EXAMPLE_CAPTION = /^<caption>(.*?)<\/caption>\s*/;
 
+// A name is a property path or a tuple index path such as `[1].add`; a hyphen is not allowed.
 const NESTED_RETURN_ITEM = /^-\s+([\w.[\]]+)\s+`([^`]+)`\s+-\s+(.*)$/;
 
 /**

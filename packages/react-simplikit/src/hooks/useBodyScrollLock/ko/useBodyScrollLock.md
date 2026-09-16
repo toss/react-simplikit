@@ -54,4 +54,4 @@ function App() {
 - **SSR 안전성**: 이 훅은 `useEffect`를 사용하기 때문에 클라이언트 사이드에서만 실행되어, 서버 사이드 렌더링(SSR)에서도 안전하게 사용할 수 있어요.
 - **자동 정리**: 컴포넌트가 언마운트될 때 스크롤 잠금이 해제돼요.
 - **여러 모달**: 여러 모달이 겹쳐서 표시되는 경우, 각 모달에 개별적으로 잠금을 적용하지 말고 부모 레벨에서 단일 잠금을 구현하세요. 이렇게 하면 충돌을 방지하고 일관된 동작을 보장할 수 있어요.
-- **브라우저 지원**: `enableBodyScrollLock`과 `disableBodyScrollLock` 유틸리티가 적용하는 CSS 수정을 지원하는 모든 최신 브라우저에서 작동해요.
+- **잠금 방식**: `enableBodyScrollLock`이 `body`를 `position: fixed`와 `overflow: hidden`으로 고정하고 스크롤 위치를 data 속성에 저장해요. `disableBodyScrollLock`이 그 스타일을 제거하고 저장한 위치로 되돌려요.

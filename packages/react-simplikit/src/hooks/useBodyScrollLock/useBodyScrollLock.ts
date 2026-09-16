@@ -40,7 +40,7 @@ import { enableBodyScrollLock } from '../../utils/enableBodyScrollLock/index.ts'
  * - **SSR safety**: The lock is applied inside `useEffect`, which only runs on the client, so the hook is safe during server-side rendering.
  * - **Automatic cleanup**: The lock is released when the component unmounts.
  * - **Multiple modals**: When several modals overlap, lock once at the parent level instead of in each modal to avoid conflicts and keep the behaviour consistent.
- * - **Browser support**: Works in every modern browser that supports the CSS applied by `enableBodyScrollLock` and `disableBodyScrollLock`.
+ * - **How it locks**: `enableBodyScrollLock` fixes the `body` in place (`position: fixed` with `overflow: hidden`) and saves the scroll position in a data attribute; `disableBodyScrollLock` removes those styles and restores the position.
  */
 export function useBodyScrollLock(): void {
   useEffect(() => {

@@ -510,4 +510,64 @@ export function useQuiet() {}`
     expect(document).not.toContain('## Notes');
     expect(document.trimEnd().endsWith('```')).toBe(true);
   });
+
+  it('renders a caption written on the @example tag line', async () => {
+    const document = await render(
+      'useTagLine',
+      `/**
+ * @description
+ * \`useTagLine\` does something.
+ *
+ * @returns {void}
+ *
+ * @example <caption>On the tag line</caption>
+ * useTagLine();
+ */
+export function useTagLine() {}`
+    );
+
+    expect(document).toContain('### On the tag line\n\n```tsx\nuseTagLine();\n```');
+    expect(document).not.toContain('@example');
+  });
+
+  it('keeps the first word of a @remarks written on the tag line', async () => {
+    const document = await render(
+      'useInline',
+      `/**
+ * @description
+ * \`useInline\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useInline();
+ *
+ * @remarks Always check for null before use.
+ */
+export function useInline() {}`
+    );
+
+    expect(document).toContain('## Notes\n\nAlways check for null before use.\n');
+  });
+
+  it('renders a captioned @example whose source wraps the code in a fence', async () => {
+    const document = await render(
+      'useFenced',
+      `/**
+ * @description
+ * \`useFenced\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * <caption>Fenced</caption>
+ * \`\`\`tsx
+ * useFenced();
+ * \`\`\`
+ */
+export function useFenced() {}`
+    );
+
+    expect(document).toContain('### Fenced\n\n```tsx\nuseFenced();\n```');
+  });
 });

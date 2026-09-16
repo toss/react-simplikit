@@ -117,8 +117,6 @@ type NavigatorWithConnection = {
  * - [Network Information API specification](https://wicg.github.io/netinfo/)
  * - [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API)
  *
- * @see https://wicg.github.io/netinfo/
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API
  */
 export function useNetworkStatus(): NetworkStatus {
   const [networkStatus, setNetworkStatus] = useState<NetworkStatus>(getNetworkStatus);
