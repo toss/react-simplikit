@@ -24,14 +24,42 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="NetworkStatus"
-  description="status information"
+  description="Network status information"
   :nested="[
     {
-      name: '',
-      type: 'effectiveType',
+      name: 'effectiveType',
+      type: '\'slow-2g\' | \'2g\' | \'3g\' | \'4g\' | undefined',
       required: false,
       description:
-        'Connection quality<br />  : \'slow-2g\' | \'2g\' | \'3g\' | \'4g\' - <code>type</code> - Physical connection<br />  : \'wifi\' | \'cellular\' | \'ethernet\' | etc. - <code>downlink</code> - Downlink speed in Mbps - <code>rtt</code> - Round-trip time in milliseconds - <code>saveData</code> - User\'s data saver preference.',
+        'Connection quality, or <code>undefined</code> if the API is not supported.',
+    },
+    {
+      name: 'type',
+      type: '\'bluetooth\' | \'cellular\' | \'ethernet\' | \'mixed\' | \'none\' | \'other\' | \'unknown\' | \'wifi\' | \'wimax\' | undefined',
+      required: false,
+      description:
+        'Physical connection type, or <code>undefined</code> if the API is not supported.',
+    },
+    {
+      name: 'downlink',
+      type: 'number | undefined',
+      required: false,
+      description:
+        'Downlink speed in Mbps, or <code>undefined</code> if the API is not supported.',
+    },
+    {
+      name: 'rtt',
+      type: 'number | undefined',
+      required: false,
+      description:
+        'Round-trip time in milliseconds, or <code>undefined</code> if the API is not supported.',
+    },
+    {
+      name: 'saveData',
+      type: 'boolean | undefined',
+      required: false,
+      description:
+        'User\'s data saver preference, or <code>undefined</code> if the API is not supported.',
     },
   ]"
 />
@@ -49,7 +77,9 @@ function AdaptiveImage() {
     <img src={useHighQuality ? 'high-res.jpg' : 'low-res.jpg'} alt="Content" />
   );
 }
+```
 
+```tsx
 function VideoPlayer() {
   const { type, downlink } = useNetworkStatus();
 

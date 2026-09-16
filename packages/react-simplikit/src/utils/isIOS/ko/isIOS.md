@@ -8,7 +8,7 @@
 ## 인터페이스
 
 ```ts
-function isIOS(userAgent: string): boolean;
+function isIOS(userAgent?: string): boolean;
 ```
 
 ### 파라미터
@@ -24,12 +24,7 @@ function isIOS(userAgent: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="기기가 iOS 또는 iPadOS에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요. 서버에서는 <code>false</code>를 반환해요"
-  :nested="[
-    {
-      required: false,
-    },
-  ]"
+  description="기기가 iOS 또는 iPadOS에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요. 서버 사이드 렌더링 환경에서는 <code>false</code>를 반환해요."
 />
 
 ## 예시
@@ -39,7 +34,9 @@ if (isIOS()) {
   // iOS에만 해당되는 코드
   enableIOSOptimizations();
 }
+```
 
+```tsx
 // 사용자 에이전트를 직접 넘기는 경우
 const isIOSDevice = isIOS(
   'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)'

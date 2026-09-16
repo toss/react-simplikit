@@ -9,7 +9,7 @@ Notes:
 ## Interface
 
 ```ts
-function isAndroid(userAgent: string): boolean;
+function isAndroid(userAgent?: string): boolean;
 ```
 
 ### Parameters
@@ -25,12 +25,7 @@ function isAndroid(userAgent: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="if the device is running Android, <code>false</code> otherwise. Returns <code>false</code> on server"
-  :nested="[
-    {
-      required: false,
-    },
-  ]"
+  description="<code>true</code> if the device is running Android, <code>false</code> otherwise. Returns <code>false</code> on server-side rendering environments."
 />
 
 ## Example
@@ -40,7 +35,9 @@ if (isAndroid()) {
   // Android-specific code
   enableAndroidOptimizations();
 }
+```
 
+```tsx
 // With custom user agent
 const isAndroidDevice = isAndroid(
   'Mozilla/5.0 (Linux; Android 12; Pixel 6) Chrome/120'

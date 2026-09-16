@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useIntersectionObserver(
+function useIntersectionObserver<Element extends HTMLElement>(
   callback: (entry: IntersectionObserverEntry) => void,
   options: IntersectionObserverInit
 ): (element: Element | null) => void;

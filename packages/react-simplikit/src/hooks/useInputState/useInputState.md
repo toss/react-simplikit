@@ -33,7 +33,7 @@ function useInputState(
 <Interface
   name=""
   type="[value: string, onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>]"
-  description="tuple containing:"
+  description="A tuple containing:"
   :nested="[
     {
       name: 'value',

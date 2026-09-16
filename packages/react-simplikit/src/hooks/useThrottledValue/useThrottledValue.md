@@ -12,7 +12,7 @@ The value is compared by reference. Passing a new object or array on every rende
 function useThrottledValue<T>(
   value: T,
   wait: number,
-  options: ThrottleOptions
+  options?: ThrottleOptions
 ): T;
 ```
 
@@ -58,7 +58,7 @@ function useThrottledValue<T>(
 
 ### Return Value
 
-<Interface name="" type="T" description="throttled value." />
+<Interface name="" type="T" description="The throttled value." />
 
 ## Example
 

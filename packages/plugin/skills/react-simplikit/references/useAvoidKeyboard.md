@@ -6,7 +6,7 @@
 
 ```ts
 function useAvoidKeyboard(
-  options: UseAvoidKeyboardOptions
+  options?: UseAvoidKeyboardOptions
 ): UseAvoidKeyboardResult;
 ```
 
@@ -54,7 +54,7 @@ function useAvoidKeyboard(
 <Interface
   name=""
   type="UseAvoidKeyboardResult"
-  description="object containing the CSS style for keyboard avoidance."
+  description="An object containing the CSS style for keyboard avoidance."
   :nested="[
     {
       name: 'style',
@@ -86,7 +86,9 @@ function FixedBottomCTA() {
     </div>
   );
 }
+```
 
+```tsx
 // With safe area bottom offset (e.g., for iPhone home indicator)
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });

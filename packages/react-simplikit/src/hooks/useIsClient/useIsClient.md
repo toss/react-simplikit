@@ -17,12 +17,7 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="boolean"
-  description="<code>true</code> in a client"
-  :nested="[
-    {
-      required: false,
-    },
-  ]"
+  description="Returns <code>true</code> in a client-side environment, and <code>false</code> otherwise."
 />
 
 ## Example
@@ -37,7 +32,9 @@ function ClientSideContent() {
 
   return <div>Client-side rendered content</div>; // Rendered on the client side
 }
+```
 
+```tsx
 function ClientOnlyMap() {
   const isClient = useIsClient();
 
@@ -45,7 +42,9 @@ function ClientOnlyMap() {
 
   return <div id="map" />;
 }
+```
 
+```tsx
 function ClientTheme() {
   const isClient = useIsClient();
 

@@ -45,7 +45,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
 <Interface
   name=""
   type="(nextValue: T) => void"
-  description="throttled function that forwards the value to <code>onChange</code> at most once per interval."
+  description="A throttled function that forwards the value to <code>onChange</code> at most once per interval."
 />
 
 ## Example

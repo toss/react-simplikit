@@ -5,9 +5,9 @@
 ## 인터페이스
 
 ```ts
-function buildContext(
+function buildContext<ContextValuesType extends object>(
   contextName: string,
-  defaultContextValues: ContextValuesType
+  defaultContextValues?: ContextValuesType
 ): [
   Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element,
   useContext: () => ContextValuesType,

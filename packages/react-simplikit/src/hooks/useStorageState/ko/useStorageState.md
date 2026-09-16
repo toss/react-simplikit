@@ -5,9 +5,9 @@
 ## 인터페이스
 
 ```ts
-function useStorageState(
+function useStorageState<T>(
   key: string,
-  options: Object
+  options?: Object
 ): readonly [
   state: Serializable<T> | undefined,
   setState: (value: SetStateAction<Serializable<T> | undefined>) => void,

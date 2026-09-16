@@ -23,7 +23,7 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="SafeAreaInset"
-  description="object containing safe area insets for all four sides."
+  description="An object containing safe area insets for all four sides."
   :nested="[
     {
       name: 'top',
@@ -75,7 +75,9 @@ function MyComponent() {
     </div>
   );
 }
+```
 
+```tsx
 // Automatically updates when screen rotates
 function RotationAwareHeader() {
   const { top, left, right } = useSafeAreaInset();

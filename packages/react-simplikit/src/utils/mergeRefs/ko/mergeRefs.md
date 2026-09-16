@@ -35,7 +35,9 @@ forwardRef(function Component(props, parentRef) {
 
   return <div ref={mergeRefs(myRef, parentRef)} />;
 });
+```
 
+```tsx
 function Component(props) {
   const ref = useRef(null);
   const [height, setHeight] = useState(0);

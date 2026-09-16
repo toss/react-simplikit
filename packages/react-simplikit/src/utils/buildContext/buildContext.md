@@ -5,9 +5,9 @@
 ## Interface
 
 ```ts
-function buildContext(
+function buildContext<ContextValuesType extends object>(
   contextName: string,
-  defaultContextValues: ContextValuesType
+  defaultContextValues?: ContextValuesType
 ): [
   Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element,
   useContext: () => ContextValuesType,
@@ -34,7 +34,7 @@ function buildContext(
 <Interface
   name=""
   type="[Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element, useContext: () => ContextValuesType]"
-  description="tuple of the form :"
+  description="A tuple of the form :"
   :nested="[
     {
       name: 'Provider',

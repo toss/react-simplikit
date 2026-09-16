@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useImpressionRef(
+function useImpressionRef<Element extends HTMLElement>(
   options: UseImpressionRefOptions
 ): (element: Element | null) => void;
 ```
@@ -59,7 +59,7 @@ function useImpressionRef(
 <Interface
   name=""
   type="(element: Element | null) => void"
-  description="function to set the element. Attach this function to the <code>ref</code> attribute, and the callbacks will be executed whenever the element's visibility changes."
+  description="A function to set the element. Attach this function to the <code>ref</code> attribute, and the callbacks will be executed whenever the element's visibility changes."
 />
 
 ## Example

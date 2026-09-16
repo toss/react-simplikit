@@ -66,11 +66,11 @@ type NavigatorWithConnection = {
  * - Safari: Not supported
  *
  * @returns {NetworkStatus} Network status information
- * - `effectiveType` - Connection quality: 'slow-2g' | '2g' | '3g' | '4g'
- * - `type` - Physical connection: 'wifi' | 'cellular' | 'ethernet' | etc.
- * - `downlink` - Downlink speed in Mbps
- * - `rtt` - Round-trip time in milliseconds
- * - `saveData` - User's data saver preference
+ * - effectiveType `'slow-2g' | '2g' | '3g' | '4g' | undefined` - Connection quality, or `undefined` if the API is not supported
+ * - type `'bluetooth' | 'cellular' | 'ethernet' | 'mixed' | 'none' | 'other' | 'unknown' | 'wifi' | 'wimax' | undefined` - Physical connection type, or `undefined` if the API is not supported
+ * - downlink `number | undefined` - Downlink speed in Mbps, or `undefined` if the API is not supported
+ * - rtt `number | undefined` - Round-trip time in milliseconds, or `undefined` if the API is not supported
+ * - saveData `boolean | undefined` - User's data saver preference, or `undefined` if the API is not supported
  *
  * @example
  * function AdaptiveImage() {

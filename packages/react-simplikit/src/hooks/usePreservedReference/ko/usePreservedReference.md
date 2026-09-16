@@ -7,7 +7,7 @@
 ```ts
 function usePreservedReference<T extends NotNullishValue>(
   value: T,
-  areValuesEqual: (a: T, b: T) => boolean
+  areValuesEqual?: (a: T, b: T) => boolean
 ): T;
 ```
 
@@ -44,6 +44,22 @@ function ExampleComponent() {
   const [state, setState] = useState({ key: 'value' });
 
   const preservedState = usePreservedReference(state);
+
+  return <div>{preservedState.key}</div>;
+}
+```
+
+```tsx
+import { usePreservedReference } from 'react-simplikit';
+import { useState } from 'react';
+
+function ExampleComponent() {
+  const [state, setState] = useState({ key: 'value' });
+
+  const preservedState = usePreservedReference(
+    state,
+    (a, b) => a.key === b.key
+  );
 
   return <div>{preservedState.key}</div>;
 }

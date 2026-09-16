@@ -12,7 +12,7 @@ SSR 환경에서는 DOM에 대한 접근이 불가하기 때문에 useLayoutEffe
 ```ts
 function useIsomorphicLayoutEffect(
   effect: React.EffectCallback,
-  deps: React.DependencyList
+  deps?: React.DependencyList
 ): void;
 ```
 

@@ -14,7 +14,7 @@ This hook runs synchronously after DOM updates but before paint, making it ideal
 ```ts
 function useIsomorphicLayoutEffect(
   effect: React.EffectCallback,
-  deps: React.DependencyList
+  deps?: React.DependencyList
 ): void;
 ```
 

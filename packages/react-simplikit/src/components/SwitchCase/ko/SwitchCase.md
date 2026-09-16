@@ -5,10 +5,10 @@
 ## 인터페이스
 
 ```ts
-function SwitchCase(
+function SwitchCase<Case>(
   value: Case,
   caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>,
-  defaultComponent: () => ReactElement | null
+  defaultComponent?: () => ReactElement | null
 ): ReactElement | null;
 ```
 

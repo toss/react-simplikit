@@ -6,6 +6,8 @@ import { useCallback, useEffect, useRef } from 'react';
  * while ensuring it always has access to the latest state or props. This prevents unnecessary re-renders
  * and simplifies dependency management when passing callbacks to child components or handling event listeners.
  *
+ * @template {any[]} [Arguments=any[]] - The parameter types of the callback.
+ * @template [ReturnValue=unknown] - The return type of the callback.
  * @param {(...args: any[]) => any} callback - The function to preserve.
  *   It always references the latest state or props, even when the component re-renders.
  *

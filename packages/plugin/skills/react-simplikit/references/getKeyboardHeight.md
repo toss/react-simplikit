@@ -23,7 +23,7 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="number"
-  description="keyboard height in pixels. Returns 0 if the keyboard is not visible."
+  description="The keyboard height in pixels. Returns 0 if the keyboard is not visible."
 />
 
 ## Example

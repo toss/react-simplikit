@@ -19,14 +19,20 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="PageVisibility"
-  description="visibility information"
+  description="Page visibility information"
   :nested="[
     {
-      name: '',
-      type: 'isVisible',
+      name: 'isVisible',
+      type: 'boolean',
       required: false,
       description:
-        'True if page is currently visible to the user - <code>visibilityState</code> - Current visibility state<br />  : \'visible\' | \'hidden\'.',
+        '<code>true</code> if the page is currently visible to the user.',
+    },
+    {
+      name: 'visibilityState',
+      type: '\'visible\' | \'hidden\'',
+      required: false,
+      description: 'Current visibility state.',
     },
   ]"
 />
@@ -49,7 +55,9 @@ function VideoPlayer() {
 
   return <video ref={videoRef} src="video.mp4" />;
 }
+```
 
+```tsx
 function Analytics() {
   const { isVisible, visibilityState } = usePageVisibility();
 

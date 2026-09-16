@@ -10,7 +10,7 @@ Notes on platform inconsistencies:
 ## Interface
 
 ```ts
-function isIOS(userAgent: string): boolean;
+function isIOS(userAgent?: string): boolean;
 ```
 
 ### Parameters
@@ -26,12 +26,7 @@ function isIOS(userAgent: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="if the device is running iOS or iPadOS, <code>false</code> otherwise. Returns <code>false</code> on server"
-  :nested="[
-    {
-      required: false,
-    },
-  ]"
+  description="<code>true</code> if the device is running iOS or iPadOS, <code>false</code> otherwise. Returns <code>false</code> on server-side rendering environments."
 />
 
 ## Example
@@ -41,7 +36,9 @@ if (isIOS()) {
   // iOS-specific code
   enableIOSOptimizations();
 }
+```
 
+```tsx
 // With custom user agent
 const isIOSDevice = isIOS(
   'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)'

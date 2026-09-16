@@ -28,7 +28,9 @@ if (isKeyboardVisible()) {
 } else {
   console.log('키보드가 닫혔어요');
 }
+```
 
+```tsx
 // 키보드 표시 여부에 따라 요소를 보이거나 숨기기
 const showFloatingButton = !isKeyboardVisible();
 ```

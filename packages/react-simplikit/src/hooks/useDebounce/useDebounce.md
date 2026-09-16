@@ -10,7 +10,7 @@ With the default options, the last call runs after `wait` milliseconds without a
 function useDebounce<F extends (...args: any[]) => unknown>(
   callback: F,
   wait: number,
-  options: DebounceOptions
+  options?: DebounceOptions
 ): F & { cancel: () => void };
 ```
 
@@ -59,7 +59,7 @@ function useDebounce<F extends (...args: any[]) => unknown>(
 <Interface
   name=""
   type="F & { cancel: () => void }"
-  description="debounced function that delays invoking the callback. It also includes a <code>cancel</code> method to cancel any pending debounced execution."
+  description="A debounced function that delays invoking the callback. It also includes a <code>cancel</code> method to cancel any pending debounced execution."
 />
 
 ## Example

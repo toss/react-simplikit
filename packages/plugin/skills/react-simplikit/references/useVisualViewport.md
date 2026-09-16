@@ -21,7 +21,7 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="{ viewport: VisualViewportState | null }"
-  description="object containing the Visual Viewport state."
+  description="An object containing the Visual Viewport state."
   :nested="[
     {
       name: 'viewport',

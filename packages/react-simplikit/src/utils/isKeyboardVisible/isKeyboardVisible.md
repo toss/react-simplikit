@@ -19,7 +19,7 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="boolean"
-  description="if the keyboard is visible, <code>false</code> otherwise."
+  description="<code>true</code> if the keyboard is visible, <code>false</code> otherwise."
 />
 
 ## Example
@@ -30,7 +30,9 @@ if (isKeyboardVisible()) {
 } else {
   console.log('Keyboard is closed');
 }
+```
 
+```tsx
 // Conditionally show/hide elements based on keyboard visibility
 const showFloatingButton = !isKeyboardVisible();
 ```

@@ -6,7 +6,7 @@
 
 ```ts
 function useKeyboardHeight(
-  options: UseKeyboardHeightOptions
+  options?: UseKeyboardHeightOptions
 ): UseKeyboardHeightResult;
 ```
 
@@ -32,7 +32,7 @@ function useKeyboardHeight(
 <Interface
   name=""
   type="UseKeyboardHeightResult"
-  description="object containing the current keyboard height."
+  description="An object containing the current keyboard height."
   :nested="[
     {
       name: 'keyboardHeight',

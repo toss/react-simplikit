@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useConditionalEffect(
+function useConditionalEffect<T extends DependencyList>(
   effect: EffectCallback,
   deps: DependencyList,
   condition: (prevDeps: T | undefined, currentDeps: T) => boolean

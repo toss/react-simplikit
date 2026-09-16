@@ -20,7 +20,7 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="[loading: boolean, startLoading: <T>(promise: Promise<T>) => Promise<T>]"
-  description="tuple containing:"
+  description="A tuple containing:"
   :nested="[
     {
       name: 'loading',

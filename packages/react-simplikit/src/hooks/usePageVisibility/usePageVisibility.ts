@@ -29,8 +29,8 @@ export type PageVisibility = {
  * @see `useVisibilityEvent` runs a callback on each change instead of returning state.
  *
  * @returns {PageVisibility} Page visibility information
- * - `isVisible` - True if page is currently visible to the user
- * - `visibilityState` - Current visibility state: 'visible' | 'hidden'
+ * - isVisible `boolean` - `true` if the page is currently visible to the user
+ * - visibilityState `'visible' | 'hidden'` - Current visibility state
  *
  * @example
  * function VideoPlayer() {

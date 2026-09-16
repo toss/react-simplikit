@@ -7,7 +7,7 @@
 ```ts
 function useAsyncEffect(
   effect: () => Promise<void | (() => void)>,
-  deps: DependencyList
+  deps?: DependencyList
 ): void;
 ```
 

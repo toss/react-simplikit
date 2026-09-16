@@ -6,6 +6,7 @@ type ProviderProps<ContextValuesType> = (ContextValuesType & { children: ReactNo
  * @description
  * `buildContext` is a helper function that reduces repetitive code when defining React Context.
  *
+ * @template {object} ContextValuesType - The shape of the values the context holds.
  * @param {string} contextName - The name of the context.
  * @param {ContextValuesType} [defaultContextValues] - The default values to be passed to the context.
  *
