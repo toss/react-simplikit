@@ -1,6 +1,7 @@
 # useThrottledCallback
 
-`useThrottledCallback` is a React hook that returns a throttled version of the provided callback function. The throttled callback will only be invoked at most once per specified interval.
+`useThrottledCallback` is a React hook that returns a throttled version of the provided callback function.
+The throttled callback will only be invoked at most once per specified interval.
 
 ## Interface
 

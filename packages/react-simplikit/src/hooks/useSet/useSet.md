@@ -1,6 +1,7 @@
 # useSet
 
-A React hook that manages a Set as state. Provides efficient state management and stable action functions.
+A React hook that manages a Set as state.
+Provides efficient state management and stable action functions.
 
 ## Interface
 

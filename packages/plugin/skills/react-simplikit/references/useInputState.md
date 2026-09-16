@@ -1,6 +1,7 @@
 # useInputState
 
-`useInputState` is a React hook that manages an input state with optional value transformation. The returned `onChange` handler works with both `<input>` and `<textarea>` elements.
+`useInputState` is a React hook that manages an input state with optional value transformation.
+The returned `onChange` handler works with both `<input>` and `<textarea>` elements.
 
 ## Interface
 

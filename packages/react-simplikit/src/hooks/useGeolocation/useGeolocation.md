@@ -1,6 +1,7 @@
 # useGeolocation
 
-`useGeolocation` is a React hook that retrieves and tracks the user's geographical location. It uses the browser's `Geolocation API` to support both one-time position retrieval and continuous location tracking.
+`useGeolocation` is a React hook that retrieves and tracks the user's geographical location.
+It uses the browser's `Geolocation API` to support both one-time position retrieval and continuous location tracking.
 
 ## Interface
 

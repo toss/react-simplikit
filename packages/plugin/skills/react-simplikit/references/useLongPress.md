@@ -1,6 +1,7 @@
 # useLongPress
 
-`useLongPress` is a React hook that detects when an element is pressed and held for a specified duration. It handles both mouse and touch events, making it work consistently across desktop and mobile devices.
+`useLongPress` is a React hook that detects when an element is pressed and held for a specified duration.
+It handles both mouse and touch events, making it work consistently across desktop and mobile devices.
 
 ## Interface
 

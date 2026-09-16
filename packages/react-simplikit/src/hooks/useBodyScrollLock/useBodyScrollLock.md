@@ -1,6 +1,8 @@
 # useBodyScrollLock
 
-`useBodyScrollLock` is a React hook that locks body scroll while the component is mounted. It automatically locks on mount and unlocks on unmount. It is useful for overlay components such as modals and drawers that must keep the page behind them from scrolling.
+`useBodyScrollLock` is a React hook that locks body scroll while the component is mounted.
+It automatically locks on mount and unlocks on unmount.
+It is useful for overlay components such as modals and drawers that must keep the page behind them from scrolling.
 
 ## Interface
 

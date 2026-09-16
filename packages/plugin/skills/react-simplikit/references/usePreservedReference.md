@@ -1,6 +1,8 @@
 # usePreservedReference
 
-`usePreservedReference` is a React hook that helps maintain the reference of a value when it hasn't changed, while ensuring you can safely use the latest state. It prevents unnecessary re-renders while always allowing access to the latest data.
+`usePreservedReference` is a React hook that helps maintain the reference of a value
+when it hasn't changed, while ensuring you can safely use the latest state.
+It prevents unnecessary re-renders while always allowing access to the latest data.
 
 ## Interface
 

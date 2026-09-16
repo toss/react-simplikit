@@ -1,6 +1,7 @@
 # useToggle
 
-`useToggle` is a React hook that simplifies managing a boolean state. It provides a function to toggle the state between `true` and `false`.
+`useToggle` is a React hook that simplifies managing a boolean state.
+It provides a function to toggle the state between `true` and `false`.
 
 ## Interface
 

@@ -1,6 +1,8 @@
 # useNetworkStatus
 
-`useNetworkStatus` is a React hook that provides access to the Network Information API. It provides raw network connection data such as the connection type, quality, speed and the user's data saver preference. Every property is `undefined` if the API is not supported (e.g., Safari, Firefox).
+`useNetworkStatus` is a React hook that provides access to the Network Information API.
+It provides raw network connection data such as the connection type, quality, speed and the user's
+data saver preference. Every property is `undefined` if the API is not supported (e.g., Safari, Firefox).
 
 ## Interface
 

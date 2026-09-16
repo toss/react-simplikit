@@ -1,6 +1,8 @@
 # useVisualViewport
 
-`useVisualViewport` is a React hook that tracks Visual Viewport changes. It returns the actual visible area in mobile WebView, which changes when the keyboard appears or the user zooms/scrolls.
+`useVisualViewport` is a React hook that tracks Visual Viewport changes.
+It returns the actual visible area in mobile WebView, which changes when
+the keyboard appears or the user zooms/scrolls.
 
 ## Interface
 

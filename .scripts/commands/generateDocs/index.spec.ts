@@ -58,7 +58,7 @@ export function useUser() {}`
     expect(document).toContain(`The user\\'s name.`);
   });
 
-  it('rejoins a paragraph that the source wrapped across lines', async () => {
+  it('keeps the line breaks of a wrapped @description paragraph, which Markdown renders as spaces', async () => {
     const document = await render(
       'useWrapped',
       `/**
@@ -74,7 +74,7 @@ export function useUser() {}`
 export function useWrapped() {}`
     );
 
-    expect(document).toContain('`useWrapped` does one thing. It also does another thing.');
+    expect(document).toContain('`useWrapped` does one thing.\nIt also does another thing.');
   });
 
   it('escapes a double quote in a nested description, which sits inside a double-quoted attribute', async () => {
@@ -96,7 +96,7 @@ export function useMode() {}`
     expect(document).toContain('Either &quot;wide&quot; or &quot;narrow&quot;.');
   });
 
-  it('rejoins the wrapped continuation lines of a bullet item', async () => {
+  it('keeps the indentation of a wrapped bullet item', async () => {
     const document = await render(
       'useWrappedBullet',
       `/**
@@ -117,7 +117,7 @@ export function useWrappedBullet() {}`
     );
 
     expect(document).toContain(
-      '- The first bullet wraps onto a second line and a third line.\n- The second bullet stays.'
+      '- The first bullet wraps\n  onto a second line\n  and a third line.\n- The second bullet stays.'
     );
   });
 
@@ -488,7 +488,7 @@ export function useNoted() {}`
     );
 
     expect(document).toContain(
-      '```tsx\nuseNoted();\n```\n\n## Notes\n\n- **SSR safety**: The hook only runs inside `useEffect`, so it is safe during server-side rendering.\n- **Cleanup**: The lock is released on unmount.\n'
+      '```tsx\nuseNoted();\n```\n\n## Notes\n\n- **SSR safety**: The hook only runs inside `useEffect`,\n  so it is safe during server-side rendering.\n- **Cleanup**: The lock is released on unmount.\n'
     );
   });
 
@@ -569,5 +569,76 @@ export function useFenced() {}`
     );
 
     expect(document).toContain('### Fenced\n\n```tsx\nuseFenced();\n```');
+  });
+
+  it('keeps a fenced code block inside @remarks', async () => {
+    const document = await render(
+      'useFencedNote',
+      `/**
+ * @description
+ * \`useFencedNote\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useFencedNote();
+ *
+ * @remarks
+ * Call it once:
+ *
+ * \`\`\`ts
+ * const a = 1;
+ * const b = 2;
+ * \`\`\`
+ */
+export function useFencedNote() {}`
+    );
+
+    expect(document).toContain('## Notes\n\nCall it once:\n\n```ts\nconst a = 1;\nconst b = 2;\n```');
+  });
+
+  it('keeps a numbered list inside @remarks', async () => {
+    const document = await render(
+      'useNumbered',
+      `/**
+ * @description
+ * \`useNumbered\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useNumbered();
+ *
+ * @remarks
+ * 1. first
+ * 2. second
+ */
+export function useNumbered() {}`
+    );
+
+    expect(document).toContain('## Notes\n\n1. first\n2. second');
+  });
+
+  it('keeps a nested list inside @remarks', async () => {
+    const document = await render(
+      'useNested',
+      `/**
+ * @description
+ * \`useNested\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useNested();
+ *
+ * @remarks
+ * - **Platform**
+ *   - iOS: negative
+ *   - Android: zero
+ */
+export function useNested() {}`
+    );
+
+    expect(document).toContain('- **Platform**\n  - iOS: negative\n  - Android: zero');
   });
 });

@@ -2,7 +2,8 @@
 
 `isKeyboardVisible` is a utility function that checks whether the on-screen keyboard is currently visible.
 
-This function uses `getKeyboardHeight()` internally and returns `true` if the keyboard height is greater than 0.
+This function uses `getKeyboardHeight()` internally and returns `true`
+if the keyboard height is greater than 0.
 
 ## Interface
 

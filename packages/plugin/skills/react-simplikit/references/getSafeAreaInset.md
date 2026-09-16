@@ -2,7 +2,8 @@
 
 `getSafeAreaInset` is a utility function that returns all safe area insets in pixels as an object.
 
-This function reads the CSS `env(safe-area-inset-*)` values by creating a temporary DOM element and reading its computed style.
+This function reads the CSS `env(safe-area-inset-*)` values by creating
+a temporary DOM element and reading its computed style.
 
 Safe area insets account for device-specific UI elements:
 

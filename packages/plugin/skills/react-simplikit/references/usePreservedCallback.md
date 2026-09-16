@@ -1,6 +1,8 @@
 # usePreservedCallback
 
-`usePreservedCallback` is a React hook that maintains a stable reference to a callback function while ensuring it always has access to the latest state or props. This prevents unnecessary re-renders and simplifies dependency management when passing callbacks to child components or handling event listeners.
+`usePreservedCallback` is a React hook that maintains a stable reference to a callback function
+while ensuring it always has access to the latest state or props. This prevents unnecessary re-renders
+and simplifies dependency management when passing callbacks to child components or handling event listeners.
 
 ## Interface
 

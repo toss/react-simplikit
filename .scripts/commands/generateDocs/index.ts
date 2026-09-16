@@ -101,10 +101,10 @@ function parseJSDoc(source: string) {
   // collapses their bullet lists. Those two are read with preserved spacing; the rest read better compacted.
   const preservedComments = parse(source, parseOptions('preserve'));
   const preservedComment = preservedComments.at(-1);
-  const description = reflowDescription(
+  const description = trimBlock(
     preservedComment?.tags.find(tag => tag.tag === 'description')?.description ?? preservedComment?.description ?? ''
   );
-  const remarks = reflowDescription(preservedComment?.tags.find(tag => tag.tag === 'remarks')?.description ?? '');
+  const remarks = trimBlock(preservedComment?.tags.find(tag => tag.tag === 'remarks')?.description ?? '');
 
   const params = targetComment.tags.filter(tag => tag.tag === 'param');
 
@@ -174,7 +174,7 @@ function parseReturns(returnTag: Spec): { description: string; nested: Spec[] | 
   const firstItem = lines.findIndex(line => LIST_ITEM.test(line));
 
   if (firstItem === -1) {
-    return { description: reflowDescription(lines.join('\n')), nested: undefined };
+    return { description: joinWrappedLines(lines), nested: undefined };
   }
 
   const nested = lines
@@ -202,7 +202,7 @@ function parseReturns(returnTag: Spec): { description: string; nested: Spec[] | 
     }, []);
 
   return {
-    description: reflowDescription(lines.slice(0, firstItem).join('\n')),
+    description: joinWrappedLines(lines.slice(0, firstItem)),
     nested: nested.map(item => ({ ...item, description: endSentence(item.description) })),
   };
 }
@@ -285,29 +285,25 @@ ${remarks.length === 0 ? '' : `\n## Notes\n\n${remarks}\n`}`;
 const LIST_ITEM = /^[-*]\s/;
 
 /**
- * Undoes the source's line wrapping while keeping the structure a reader relies on.
- *
- * A JSDoc block wraps prose to stay readable in the editor, and those breaks carry no meaning —
- * but blank lines and list items do. Joining everything (the parser's compact mode) loses the
- * lists; keeping everything bakes the editor's wrapping into the page.
+ * `@description` and `@remarks` are Markdown and go to the page as written: a line break inside a
+ * paragraph renders as a space, and fences, numbered and nested lists keep their meaning.
  */
-function reflowDescription(description: string) {
-  return description
+function trimBlock(text: string) {
+  return text
     .split('\n')
-    .map(line => line.trim())
-    .reduce<string[]>((lines, line) => {
-      const previous = lines.at(-1);
-      const continuesParagraph = previous != null && previous !== '' && line !== '' && !LIST_ITEM.test(line);
-
-      if (continuesParagraph) {
-        lines[lines.length - 1] = `${previous} ${line}`;
-        return lines;
-      }
-
-      lines.push(line);
-      return lines;
-    }, [])
+    .map(line => line.trimEnd())
     .join('\n')
+    .trim();
+}
+
+/**
+ * The `@returns` intro lands in an HTML attribute where a line break becomes `<br />`, so the
+ * source's wrapping is joined back into one line; a blank line still separates paragraphs.
+ */
+function joinWrappedLines(lines: string[]) {
+  return lines
+    .join('\n')
+    .replace(/(?<=\S)\n(?=\S)/g, ' ')
     .trim();
 }
 

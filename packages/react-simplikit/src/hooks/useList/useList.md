@@ -1,6 +1,7 @@
 # useList
 
-A React hook that manages an array as state. Provides efficient state management and stable action functions.
+A React hook that manages an array as state.
+Provides efficient state management and stable action functions.
 
 ## Interface
 
