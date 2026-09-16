@@ -32,7 +32,22 @@ function useScrollDirection(
 <Interface
   name=""
   type="ScrollDirectionState"
-  description="Scroll direction state: <code>direction</code> (<code>'up' | 'down' | null</code>) and <code>position</code> (px)."
+  description="An object containing the scroll direction and position."
+  :nested="[
+    {
+      name: 'direction',
+      type: '\'up\' | \'down\' | null',
+      required: false,
+      description:
+        'The current scroll direction. <code>null</code> on the initial render.',
+    },
+    {
+      name: 'position',
+      type: 'number',
+      required: false,
+      description: 'The current vertical scroll position in pixels.',
+    },
+  ]"
 />
 
 ## Example
@@ -47,3 +62,26 @@ function Header() {
   return <header className={isHidden ? 'hidden' : 'visible'}>My Header</header>;
 }
 ```
+
+### Custom throttle interval
+
+```tsx
+function MyComponent() {
+  // Update every 100ms instead of the default 50ms
+  const { direction, position } = useScrollDirection({ throttleMs: 100 });
+
+  return (
+    <div>
+      Scrolling {direction}! Position: {position}px
+    </div>
+  );
+}
+```
+
+## Notes
+
+- **SSR safety**: The hook checks `isServer()` before reading `window.scrollY`, so it is safe during server-side rendering.
+- **Performance**: Scroll events are throttled to limit how often they are processed (default: 50ms).
+- **Passive listener**: The scroll listener is registered with `{ passive: true }` for smoother scrolling.
+- **Cleanup**: The event listener and the throttle timer are removed when the component unmounts.
+- **Browser support**: Requires a browser environment with `window` and `scrollY`.

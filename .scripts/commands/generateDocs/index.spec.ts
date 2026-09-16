@@ -426,4 +426,88 @@ export function useSet() {}`
     expect(document).toContain("name: '[0]'");
     expect(document).toContain("name: '[1].add'");
   });
+
+  it('renders a captioned @example under a level-3 heading', async () => {
+    const document = await render(
+      'useBodyScrollLock',
+      `/**
+ * @description
+ * \`useBodyScrollLock\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * <caption>Multiple modals - single lock pattern</caption>
+ * function BodyScrollLock() {}
+ */
+export function useBodyScrollLock() {}`
+    );
+
+    expect(document).toContain(
+      '## Example\n\n### Multiple modals - single lock pattern\n\n```tsx\nfunction BodyScrollLock() {}\n```'
+    );
+  });
+
+  it('renders an uncaptioned @example without a heading', async () => {
+    const document = await render(
+      'usePlain',
+      `/**
+ * @description
+ * \`usePlain\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * usePlain();
+ */
+export function usePlain() {}`
+    );
+
+    expect(document).toContain('## Example\n\n```tsx\nusePlain();\n```');
+    expect(document.split('## Example')[1]).not.toContain('###');
+  });
+
+  it('renders @remarks as a Notes section after the examples', async () => {
+    const document = await render(
+      'useNoted',
+      `/**
+ * @description
+ * \`useNoted\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useNoted();
+ *
+ * @remarks
+ * - **SSR safety**: The hook only runs inside \`useEffect\`,
+ *   so it is safe during server-side rendering.
+ * - **Cleanup**: The lock is released on unmount.
+ */
+export function useNoted() {}`
+    );
+
+    expect(document).toContain(
+      '```tsx\nuseNoted();\n```\n\n## Notes\n\n- **SSR safety**: The hook only runs inside `useEffect`, so it is safe during server-side rendering.\n- **Cleanup**: The lock is released on unmount.\n'
+    );
+  });
+
+  it('omits the Notes section when there is no @remarks', async () => {
+    const document = await render(
+      'useQuiet',
+      `/**
+ * @description
+ * \`useQuiet\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useQuiet();
+ */
+export function useQuiet() {}`
+    );
+
+    expect(document).not.toContain('## Notes');
+    expect(document.trimEnd().endsWith('```')).toBe(true);
+  });
 });

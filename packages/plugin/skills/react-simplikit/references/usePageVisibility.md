@@ -1,8 +1,6 @@
 # usePageVisibility
 
-`usePageVisibility` is a React hook that detects page visibility changes. It monitors when the user switches tabs or minimizes the browser using the Page Visibility API. Useful for pausing/resuming animations, videos, or background tasks.
-
-**SSR Behavior**: Returns `{ isVisible: true, visibilityState: 'visible' }` during server-side rendering.
+`usePageVisibility` is a React hook that detects page visibility changes. It monitors when the user switches tabs or minimizes the browser using the Page Visibility API. Useful for pausing/resuming animations, videos, or background tasks to improve performance and the user experience.
 
 ## Interface
 
@@ -39,7 +37,10 @@ This function does not accept any parameters.
 
 ## Example
 
+### Video player control
+
 ```tsx
+// Pauses the video automatically when the user switches to another tab
 function VideoPlayer() {
   const { isVisible } = usePageVisibility();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -57,7 +58,10 @@ function VideoPlayer() {
 }
 ```
 
+### Analytics tracking
+
 ```tsx
+// Tracks when the user leaves or returns to the page
 function Analytics() {
   const { isVisible, visibilityState } = usePageVisibility();
 
@@ -71,3 +75,10 @@ function Analytics() {
   return null;
 }
 ```
+
+## Notes
+
+- **SSR safety**: The Page Visibility API is unavailable during server-side rendering, so the hook returns the safe default `{ isVisible: true, visibilityState: 'visible' }`.
+- **Browser support**: The Page Visibility API is supported in every modern browser. See the [MDN browser compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#browser_compatibility) for details.
+- **Performance**: The hook listens to the native `visibilitychange` event, so it adds no polling and negligible overhead.
+- **Visibility state**: Only `'visible'` and `'hidden'` are returned; the deprecated `'prerender'` state is excluded.

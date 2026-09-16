@@ -103,6 +103,7 @@ function parseJSDoc(source: string) {
   const description = reflowDescription(
     preservedComment?.tags.find(tag => tag.tag === 'description')?.description ?? preservedComment?.description ?? ''
   );
+  const remarks = reflowDescription(preservedComment?.tags.find(tag => tag.tag === 'remarks')?.description ?? '');
 
   const params = targetComment.tags.filter(tag => tag.tag === 'param');
 
@@ -127,10 +128,17 @@ function parseJSDoc(source: string) {
         .join('\n')
         .trim()
     )
-    .filter(text => text.length > 0);
+    .filter(text => text.length > 0)
+    .map(text => {
+      const caption = EXAMPLE_CAPTION.exec(text);
+      return caption == null
+        ? { title: undefined, code: text }
+        : { title: caption[1], code: text.slice(caption[0].length) };
+    });
 
   return {
     description,
+    remarks,
     templates,
     examples,
     params,
@@ -143,6 +151,9 @@ function parseJSDoc(source: string) {
 }
 
 // A name is a property path or a tuple index path such as `[1].add`.
+/** JSDoc's own caption syntax; the title renders as a heading above the example's code block. */
+const EXAMPLE_CAPTION = /^<caption>(.*?)<\/caption>\s*/;
+
 const NESTED_RETURN_ITEM = /^-\s+([\w.[\]]+)\s+`([^`]+)`\s+-\s+(.*)$/;
 
 /**
@@ -200,7 +211,7 @@ function endSentence(description: string) {
 }
 
 async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
-  const { templates, description, examples, params, returns, nestedValueOfReturns } = jsdoc;
+  const { templates, description, remarks, examples, params, returns, nestedValueOfReturns } = jsdoc;
 
   const paramsProps = params.reduce<Array<[Spec, Spec[]]>>(
     (acc, param) => {
@@ -262,8 +273,10 @@ ${await prettier.format(getParamUl(returns, nestedValueOfReturns), { ...prettier
 }
 ## Example
 
-${examples.map(example => `\`\`\`tsx\n${example}\n\`\`\``).join('\n\n')}
-`;
+${examples
+  .map(({ title, code }) => `${title == null ? '' : `### ${title}\n\n`}\`\`\`tsx\n${code}\n\`\`\``)
+  .join('\n\n')}
+${remarks.length === 0 ? '' : `\n## Notes\n\n${remarks}\n`}`;
 }
 
 const LIST_ITEM = /^[-*]\s/;

@@ -56,14 +56,8 @@ type NavigatorWithConnection = {
 /**
  * @description
  * `useNetworkStatus` is a React hook that provides access to the Network Information API.
- * It provides raw network connection data. Returns undefined for all properties
- * if the API is not supported (e.g., Safari, Firefox).
- *
- * **Browser Support**:
- * - Chrome/Edge (Android): Full support
- * - Chrome/Edge (Desktop): Partial support (effectiveType, downlink, rtt, saveData)
- * - Firefox: Not supported
- * - Safari: Not supported
+ * It provides raw network connection data such as the connection type, quality, speed and the user's
+ * data saver preference. Every property is `undefined` if the API is not supported (e.g., Safari, Firefox).
  *
  * @returns {NetworkStatus} Network status information
  * - effectiveType `'slow-2g' | '2g' | '3g' | '4g' | undefined` - Connection quality, or `undefined` if the API is not supported
@@ -73,6 +67,7 @@ type NavigatorWithConnection = {
  * - saveData `boolean | undefined` - User's data saver preference, or `undefined` if the API is not supported
  *
  * @example
+ * <caption>Adaptive image quality</caption>
  * function AdaptiveImage() {
  *   const { effectiveType, saveData } = useNetworkStatus();
  *
@@ -88,6 +83,7 @@ type NavigatorWithConnection = {
  * }
  *
  * @example
+ * <caption>Conditional video autoplay</caption>
  * function VideoPlayer() {
  *   const { type, downlink } = useNetworkStatus();
  *
@@ -96,6 +92,30 @@ type NavigatorWithConnection = {
  *
  *   return <video src="video.mp4" autoPlay={shouldAutoplay} />;
  * }
+ *
+ * @remarks
+ * ### Browser support
+ *
+ * - **Chrome/Edge (Android)**: every property is supported
+ * - **Chrome/Edge (Desktop)**: partial support (`effectiveType`, `downlink`, `rtt` and `saveData` are available; `type` may be `undefined`)
+ * - **Firefox**: not supported (every property is `undefined`)
+ * - **Safari**: not supported (every property is `undefined`)
+ *
+ * ### SSR safety
+ *
+ * The hook is safe during server-side rendering. On the server it returns an empty object `{}` and it subscribes to network changes only in the browser.
+ *
+ * ### Recommendations
+ *
+ * - Always check for `undefined` before using a value, since the API is not available in every browser
+ * - Provide a fallback for browsers without the Network Information API
+ * - Use the hook to enhance the experience rather than for essential features
+ * - Consider `effectiveType` together with `saveData` when deciding what to deliver
+ *
+ * ### References
+ *
+ * - [Network Information API specification](https://wicg.github.io/netinfo/)
+ * - [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API)
  *
  * @see https://wicg.github.io/netinfo/
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API

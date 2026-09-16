@@ -39,6 +39,19 @@ type UseKeyboardHeightResult = {
  *     </div>
  *   );
  * }
+ *
+ * @example
+ * function KeyboardStatus() {
+ *   const { keyboardHeight } = useKeyboardHeight();
+ *
+ *   return (
+ *     <div>
+ *       {keyboardHeight > 0
+ *         ? `Keyboard is open (${keyboardHeight}px)`
+ *         : 'Keyboard is closed'}
+ *     </div>
+ *   );
+ * }
  */
 export function useKeyboardHeight(options: UseKeyboardHeightOptions = {}): UseKeyboardHeightResult {
   const { immediate = true } = options;
