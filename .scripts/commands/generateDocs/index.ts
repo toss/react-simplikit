@@ -374,8 +374,10 @@ function replaceDescription(value: string, quote: '"' | "'") {
     .replace(/^\s*-\s*/, '')
     .replace(/--/g, '\n-')
     // The page renders this with `v-html`, so a generic such as `MouseEvent<E>` would become an element.
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+    // Vue decodes entities in the attribute before the prop reaches `v-html`, so the escape is doubled:
+    // `&amp;lt;` is `&lt;` in the prop and `<` on the page.
+    .replace(/</g, '&amp;lt;')
+    .replace(/>/g, '&amp;gt;')
     .replace(/`([^`]*)`/g, '<code>$1</code>')
     .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]*)\*/g, '<em>$1</em>')

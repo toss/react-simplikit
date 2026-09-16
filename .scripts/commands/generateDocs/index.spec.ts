@@ -2,6 +2,7 @@ import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { compileTemplate } from 'vue/compiler-sfc';
 
 import { renderEnglishDoc } from './index.ts';
 
@@ -373,7 +374,13 @@ export function useIsClient() {}`
 export function useHandlers() {}`
     );
 
-    expect(document).toContain('description="Called with a <code>MouseEvent&lt;E&gt;</code>."');
+    expect(document).toContain('description="Called with a <code>MouseEvent&amp;lt;E&amp;gt;</code>."');
+
+    // What `v-html` receives is the prop after Vue's entity decoding, not the Markdown text.
+    const block = /<Interface[\s\S]*?\/>/.exec(document.split('### Parameters')[1])?.[0] ?? '';
+    const { code } = compileTemplate({ source: block, id: 'test', filename: 'test.vue' });
+    const description = /description: "([^"]*)"/.exec(code)?.[1];
+    expect(description).toBe('Called with a <code>MouseEvent&lt;E&gt;</code>.');
   });
 
   it('renders every @template with its constraint and default', async () => {
