@@ -12,7 +12,7 @@
 function useThrottledValue<T>(
   value: T,
   wait: number,
-  options: ThrottleOptions
+  options?: ThrottleOptions
 ): T;
 ```
 

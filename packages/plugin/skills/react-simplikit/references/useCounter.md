@@ -54,7 +54,7 @@ function useCounter(
 <Interface
   name=""
   type="UseCounterReturn"
-  description="object with count value and control functions."
+  description="An object with count value and control functions."
   :nested="[
     {
       name: 'count',

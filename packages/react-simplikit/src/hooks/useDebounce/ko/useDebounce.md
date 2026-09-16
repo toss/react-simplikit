@@ -10,7 +10,7 @@
 function useDebounce<F extends (...args: any[]) => unknown>(
   callback: F,
   wait: number,
-  options: DebounceOptions
+  options?: DebounceOptions
 ): F & { cancel: () => void };
 ```
 

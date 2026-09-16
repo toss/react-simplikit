@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useControlledState(props: Object): [T, Dispatch<SetStateAction<T>>];
+function useControlledState<T>(props: Object): [T, Dispatch<SetStateAction<T>>];
 ```
 
 ### Parameters

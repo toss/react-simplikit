@@ -35,17 +35,17 @@ function useAvoidKeyboard(
     },
     {
       name: 'options.transitionTimingFunction',
-      type: 'string',
+      type: 'CSSProperties[\'transitionTimingFunction\']',
       required: false,
-      description:
-        '애니메이션의 전환 타이밍 함수예요. 기본값은 <code>ease-out</code>이에요.',
+      defaultValue: '\'ease-out\'',
+      description: '애니메이션의 전환 타이밍 함수예요.',
     },
     {
       name: 'options.immediate',
       type: 'boolean',
       required: false,
-      description:
-        '만약 <code>true</code>이면, 마운트 시 즉시 현재 키보드 높이를 가져와요. 기본값은 <code>true</code>예요.',
+      defaultValue: 'true',
+      description: '만약 true이면, 마운트 시점에 초기 키보드 높이를 가져와요.',
     },
   ]"
 />
@@ -60,6 +60,7 @@ function useAvoidKeyboard(
     {
       name: 'style',
       type: 'CSSProperties',
+      required: false,
       description:
         '하단 고정 요소에 적용할 CSS 스타일 객체예요. <code>transform</code>과 <code>transition</code> 속성을 포함해요.',
     },

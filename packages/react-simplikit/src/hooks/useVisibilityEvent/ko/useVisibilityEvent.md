@@ -7,7 +7,7 @@
 ```ts
 function useVisibilityEvent(
   callback: (visibilityState: 'visible' | 'hidden') => void,
-  options: object
+  options?: object
 ): void;
 ```
 

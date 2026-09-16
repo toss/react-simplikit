@@ -5,10 +5,10 @@
 ## Interface
 
 ```ts
-function SwitchCase(
+function SwitchCase<Case>(
   value: Case,
   caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>,
-  defaultComponent: () => ReactElement | null
+  defaultComponent?: () => ReactElement | null
 ): ReactElement | null;
 ```
 
@@ -39,7 +39,7 @@ function SwitchCase(
 <Interface
   name=""
   type="ReactElement | null"
-  description="React component that conditionally renders based on cases."
+  description="A React component that conditionally renders based on cases."
 />
 
 ## Example

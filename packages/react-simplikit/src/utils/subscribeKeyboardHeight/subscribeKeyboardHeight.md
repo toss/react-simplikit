@@ -60,7 +60,7 @@ function subscribeKeyboardHeight(
 <Interface
   name=""
   type="SubscribeKeyboardHeightResult"
-  description="object containing the unsubscribe function."
+  description="An object containing the unsubscribe function."
   :nested="[
     {
       name: 'unsubscribe',

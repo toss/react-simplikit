@@ -56,7 +56,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
 <Interface
   name=""
   type="(nextValue: T) => void"
-  description="debounced function that forwards the value to <code>onChange</code>."
+  description="A debounced function that forwards the value to <code>onChange</code>."
 />
 
 ## Example

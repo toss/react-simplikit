@@ -17,7 +17,7 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="boolean"
-  description="if running in a server environment (SSR), <code>false</code> otherwise."
+  description="<code>true</code> if running in a server environment (SSR), <code>false</code> otherwise."
 />
 
 ## Example

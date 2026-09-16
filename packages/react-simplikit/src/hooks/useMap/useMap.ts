@@ -32,6 +32,8 @@ type UseMapReturn<K, V> = [Omit<Map<K, V>, 'set' | 'clear' | 'delete'>, MapActio
  * A React hook that manages a key-value Map as state.
  * Provides efficient state management and stable action functions.
  *
+ * @template K - The type of the Map keys.
+ * @template V - The type of the Map values.
  * @param {MapOrEntries<K, V>} initialState - Initial Map state (Map object or array of key-value pairs)
  * @returns {UseMapReturn<K, V>} A tuple containing the Map state and actions to manipulate it
  *

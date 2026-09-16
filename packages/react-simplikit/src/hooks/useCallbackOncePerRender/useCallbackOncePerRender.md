@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useCallbackOncePerRender(
+function useCallbackOncePerRender<F extends (...args: any[]) => void>(
   callback: () => void,
   deps: DependencyList
 ): (...args: any[]) => void;
@@ -32,7 +32,7 @@ function useCallbackOncePerRender(
 <Interface
   name=""
   type="(...args: any[]) => void"
-  description="memoized function that will only execute once until dependencies change."
+  description="A memoized function that will only execute once until dependencies change."
 />
 
 ## Example
@@ -47,7 +47,9 @@ function Component() {
 
   return <button onClick={handleOneTimeEvent}>Click me</button>;
 }
+```
 
+```tsx
 // With dependencies
 function TrackingComponent({ userId }: { userId: string }) {
   const trackUserVisit = useCallbackOncePerRender(() => {

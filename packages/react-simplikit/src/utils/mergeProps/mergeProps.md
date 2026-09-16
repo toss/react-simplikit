@@ -24,7 +24,7 @@ function mergeProps<PropsList>(
 <Interface
   name=""
   type="TupleToIntersection<PropsList>"
-  description="merged props object."
+  description="The merged props object."
 />
 
 ## Example

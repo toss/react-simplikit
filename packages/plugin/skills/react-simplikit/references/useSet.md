@@ -21,7 +21,7 @@ function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
 <Interface
   name=""
   type="UseSetReturn<T>"
-  description="tuple containing the Set state and actions to manipulate it."
+  description="A tuple containing the Set state and actions to manipulate it."
   :nested="[
     {
       name: '[0]',

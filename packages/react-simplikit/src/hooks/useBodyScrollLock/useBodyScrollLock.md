@@ -25,7 +25,9 @@ function Modal() {
   useBodyScrollLock();
   return <div className="modal">Modal content</div>;
 }
+```
 
+```tsx
 // Multiple modals - single lock pattern
 function BodyScrollLock() {
   useBodyScrollLock();

@@ -28,7 +28,7 @@ function useBooleanState(
 <Interface
   name=""
   type="readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
-  description="tuple containing:"
+  description="A tuple containing:"
   :nested="[
     {
       name: 'state',

@@ -14,7 +14,7 @@ The value is compared by reference. Passing a new object or array on every rende
 function useDebouncedValue<T>(
   value: T,
   wait: number,
-  options: DebounceOptions
+  options?: DebounceOptions
 ): T;
 ```
 
@@ -60,7 +60,7 @@ function useDebouncedValue<T>(
 
 ### Return Value
 
-<Interface name="" type="T" description="debounced value." />
+<Interface name="" type="T" description="The debounced value." />
 
 ## Example
 

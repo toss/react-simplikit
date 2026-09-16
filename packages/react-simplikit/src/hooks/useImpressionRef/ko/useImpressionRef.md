@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useImpressionRef(
+function useImpressionRef<Element extends HTMLElement>(
   options: UseImpressionRefOptions
 ): (element: Element | null) => void;
 ```

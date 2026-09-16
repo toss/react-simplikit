@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useIntersectionObserver(
+function useIntersectionObserver<Element extends HTMLElement>(
   callback: (entry: IntersectionObserverEntry) => void,
   options: IntersectionObserverInit
 ): (element: Element | null) => void;
@@ -54,7 +54,7 @@ function useIntersectionObserver(
 <Interface
   name=""
   type="(element: Element | null) => void"
-  description="function to set the element. Attach this function to the <code>ref</code> attribute, and the <code>callback</code> will be executed whenever the element's visibility changes."
+  description="A function to set the element. Attach this function to the <code>ref</code> attribute, and the <code>callback</code> will be executed whenever the element's visibility changes."
 />
 
 ## Example

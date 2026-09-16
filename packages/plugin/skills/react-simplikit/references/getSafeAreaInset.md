@@ -31,7 +31,7 @@ This function does not accept any parameters.
 <Interface
   name=""
   type="SafeAreaInset"
-  description="containing safe area insets for all four sides, or all 0 if not available."
+  description="Object containing safe area insets for all four sides, or all 0 if not available."
   :nested="[
     {
       name: 'top',

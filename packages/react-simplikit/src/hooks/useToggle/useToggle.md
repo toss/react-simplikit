@@ -23,7 +23,7 @@ function useToggle(
 <Interface
   name=""
   type="[state: boolean, toggle: () => void]"
-  description="tuple:"
+  description="A tuple:"
   :nested="[
     {
       name: 'state',

@@ -7,6 +7,7 @@ export type CleanupCallback = () => void;
  * `useRefEffect` is a React hook that helps you set a reference to a specific DOM element and execute a callback whenever the element changes.
  * This hook calls a cleanup function whenever the element changes to prevent memory leaks.
  *
+ * @template {HTMLElement} [RefElement=HTMLElement] - The type of the element the ref is attached to.
  * @param {(element: RefElement) => CleanupCallback | void} callback - A callback function that is executed when the element is set. This function can return a cleanup function.
  * @param {DependencyList} deps - An array of dependencies that define when the callback should be re-executed. The `callback` is re-executed whenever the `deps` change.
  *

@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useGeolocation(options: GeolocationOptions): Object;
+function useGeolocation(options?: GeolocationOptions): Object;
 ```
 
 ### Parameters
@@ -54,7 +54,7 @@ function useGeolocation(options: GeolocationOptions): Object;
 <Interface
   name=""
   type="Object"
-  description="containing location data and related functions"
+  description="Object containing location data and related functions"
   :nested="[
     {
       name: 'loading',
@@ -67,14 +67,14 @@ function useGeolocation(options: GeolocationOptions): Object;
       type: 'CustomGeoLocationError|null',
       required: false,
       description:
-        'Error object if an error occurred, or null The hook uses standard Geolocation API error codes (<code>1-3</code>) and adds a custom code (<code>0</code>) <br />  : <code>0</code> - Geolocation is not supported by the environment <br />  : <code>1</code> - User denied permission to access geolocation <br />  : <code>2</code> - Position unavailable <br />  : <code>3</code> - Timeout - geolocation request took too long.',
+        'Error object if an error occurred, or null The hook uses standard Geolocation API error codes (<code>1-3</code>) and adds a custom code (<code>0</code>)<br />: <code>0</code> - Geolocation is not supported by the environment<br />: <code>1</code> - User denied permission to access geolocation<br />: <code>2</code> - Position unavailable<br />: <code>3</code> - Timeout - geolocation request took too long.',
     },
     {
       name: 'data',
       type: 'GeolocationData|null',
       required: false,
       description:
-        'Location data object or null <br />  : latitude <code>number</code> - The latitude in decimal degrees <br />  : longitude <code>number</code> - The longitude in decimal degrees <br />  : accuracy <code>number</code> - The accuracy of position in meters <br />  : altitude <code>number|null</code> - The altitude in meters above the WGS84 ellipsoid <br />  : altitudeAccuracy <code>number|null</code> - The altitude accuracy in meters <br />  : heading <code>number|null</code> - The heading in degrees clockwise from true north <br />  : speed <code>number|null</code> - The speed in meters per second <br />  : timestamp <code>number</code> - The time when the position was retrieved.',
+        'Location data object or null<br />: latitude <code>number</code> - The latitude in decimal degrees<br />: longitude <code>number</code> - The longitude in decimal degrees<br />: accuracy <code>number</code> - The accuracy of position in meters<br />: altitude <code>number|null</code> - The altitude in meters above the WGS84 ellipsoid<br />: altitudeAccuracy <code>number|null</code> - The altitude accuracy in meters<br />: heading <code>number|null</code> - The heading in degrees clockwise from true north<br />: speed <code>number|null</code> - The speed in meters per second<br />: timestamp <code>number</code> - The time when the position was retrieved.',
     },
     {
       name: 'getCurrentPosition',

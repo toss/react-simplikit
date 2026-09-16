@@ -47,7 +47,7 @@ function useDoubleClick<E extends HTMLElement>(
 <Interface
   name=""
   type="(event: MouseEvent<E>) => void"
-  description="click handler function to attach to an element's <code>onClick</code> event."
+  description="A click handler function to attach to an element's <code>onClick</code> event."
 />
 
 ## Example

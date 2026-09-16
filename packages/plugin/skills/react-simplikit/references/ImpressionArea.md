@@ -7,14 +7,14 @@
 ```ts
 function ImpressionArea<T extends ElementType>(
   as: T = 'div',
-  rootMargin: string,
-  areaThreshold: number,
-  timeThreshold: number,
-  onImpressionStart: () => void,
-  onImpressionEnd: () => void,
-  ref: Ref<Element<T>>,
-  children: React.ReactNode,
-  className: string
+  rootMargin?: string,
+  areaThreshold?: number,
+  timeThreshold?: number,
+  onImpressionStart?: () => void,
+  onImpressionEnd?: () => void,
+  ref?: Ref<Element<T>>,
+  children?: React.ReactNode,
+  className?: string
 ): JSX.Element;
 ```
 
@@ -79,7 +79,7 @@ function ImpressionArea<T extends ElementType>(
 <Interface
   name=""
   type="JSX.Element"
-  description="React component that tracks the visibility of its child elements."
+  description="A React component that tracks the visibility of its child elements."
 />
 
 ## Example

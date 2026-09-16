@@ -7,14 +7,14 @@
 ```ts
 function ImpressionArea<T extends ElementType>(
   as: T = 'div',
-  rootMargin: string,
-  areaThreshold: number,
-  timeThreshold: number,
-  onImpressionStart: () => void,
-  onImpressionEnd: () => void,
-  ref: Ref<Element<T>>,
-  children: React.ReactNode,
-  className: string
+  rootMargin?: string,
+  areaThreshold?: number,
+  timeThreshold?: number,
+  onImpressionStart?: () => void,
+  onImpressionEnd?: () => void,
+  ref?: Ref<Element<T>>,
+  children?: React.ReactNode,
+  className?: string
 ): JSX.Element;
 ```
 

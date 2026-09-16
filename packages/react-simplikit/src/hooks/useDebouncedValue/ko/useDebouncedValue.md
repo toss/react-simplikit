@@ -14,7 +14,7 @@
 function useDebouncedValue<T>(
   value: T,
   wait: number,
-  options: DebounceOptions
+  options?: DebounceOptions
 ): T;
 ```
 

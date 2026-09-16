@@ -8,7 +8,7 @@
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
-  options: { edges?: Array<'leading' | 'trailing'> }
+  options?: { edges?: Array<'leading' | 'trailing'> }
 ): F & { cancel: () => void };
 ```
 

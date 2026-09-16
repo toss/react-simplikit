@@ -29,7 +29,7 @@ function Separated(children: React.ReactNode, by: React.ReactNode): JSX.Element;
 <Interface
   name=""
   type="JSX.Element"
-  description="React component that separates children with a specified separator."
+  description="A React component that separates children with a specified separator."
 />
 
 ## Example

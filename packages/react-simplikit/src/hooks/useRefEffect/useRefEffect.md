@@ -5,7 +5,7 @@
 ## Interface
 
 ```ts
-function useRefEffect(
+function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
   callback: (element: RefElement) => CleanupCallback | void,
   deps: DependencyList
 ): (element: RefElement | null) => void;
@@ -32,7 +32,7 @@ function useRefEffect(
 <Interface
   name=""
   type="(element: RefElement | null) => void"
-  description="function to set the element. Pass this function to the <code>ref</code> attribute, and the <code>callback</code> will be called whenever the element changes."
+  description="A function to set the element. Pass this function to the <code>ref</code> attribute, and the <code>callback</code> will be called whenever the element changes."
 />
 
 ## Example

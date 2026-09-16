@@ -181,4 +181,242 @@ export function useSubscription() {}`
     expect(document).toContain('Stops receiving updates.');
     expect(document).not.toContain('Stops receiving updates..');
   });
+
+  it('keeps the first word of a @returns description', async () => {
+    const document = await render(
+      'isIOS',
+      `/**
+ * @description
+ * \`isIOS\` does something.
+ *
+ * @returns {boolean} \`true\` if the device is running iOS, \`false\` otherwise.
+ *
+ * @example
+ * isIOS();
+ */
+export function isIOS() {}`
+    );
+
+    expect(document).toContain(
+      'description="<code>true</code> if the device is running iOS, <code>false</code> otherwise."'
+    );
+  });
+
+  it('does not read a hyphen inside a word of a @returns description as a nested item', async () => {
+    const document = await render(
+      'isServer',
+      `/**
+ * @description
+ * \`isServer\` does something.
+ *
+ * @returns {boolean} Whether it runs on the server.
+ * Returns \`false\` on server-side rendering environments.
+ *
+ * @example
+ * isServer();
+ */
+export function isServer() {}`
+    );
+
+    expect(document).toContain(
+      'description="Whether it runs on the server. Returns <code>false</code> on server-side rendering environments."'
+    );
+    expect(document).not.toContain(':nested');
+  });
+
+  it('reads nested return items line by line without a `;` separator', async () => {
+    const document = await render(
+      'useLongPress',
+      `/**
+ * @description
+ * \`useLongPress\` does something.
+ *
+ * @returns {Object} Event handlers to attach to an element.
+ * - onMouseDown \`() => void\` - Event handler for mouse down events.
+ * - onMouseUp \`() => void\` - Event handler for mouse up events.
+ *
+ * @example
+ * useLongPress();
+ */
+export function useLongPress() {}`
+    );
+
+    expect(document).toContain('description="Event handlers to attach to an element."');
+    expect(document).toContain("name: 'onMouseDown'");
+    expect(document).toContain("name: 'onMouseUp'");
+    expect(document).toContain("description: 'Event handler for mouse down events.'");
+  });
+
+  it('keeps a `:` continuation line of a nested item on its own line', async () => {
+    const document = await render(
+      'useGeolocation',
+      `/**
+ * @description
+ * \`useGeolocation\` does something.
+ *
+ * @returns {Object} Object containing location data.
+ * - error \`Error|null\` - Error object if an error occurred, or null
+ *   The hook uses standard error codes
+ *   : \`0\` - Geolocation is not supported
+ *   : \`1\` - User denied permission;
+ *
+ * @example
+ * useGeolocation();
+ */
+export function useGeolocation() {}`
+    );
+
+    expect(document).toContain(
+      "'Error object if an error occurred, or null The hook uses standard error codes<br />: <code>0</code> - Geolocation is not supported<br />: <code>1</code> - User denied permission.'"
+    );
+  });
+
+  it('strips a leading dash from a @returns description', async () => {
+    const document = await render(
+      'useControlledState',
+      `/**
+ * @description
+ * \`useControlledState\` does something.
+ *
+ * @returns {T} - The state and the setter function.
+ *
+ * @example
+ * useControlledState();
+ */
+export function useControlledState() {}`
+    );
+
+    expect(document).toContain('description="The state and the setter function."');
+    expect(document).not.toContain(':nested');
+  });
+
+  it('throws on a list line of @returns that is not a `- name `type` - description` item', async () => {
+    await expect(
+      render(
+        'useNetworkStatus',
+        `/**
+ * @description
+ * \`useNetworkStatus\` does something.
+ *
+ * @returns {NetworkStatus} Network status information
+ * - \`effectiveType\` - Connection quality
+ *
+ * @example
+ * useNetworkStatus();
+ */
+export function useNetworkStatus() {}`
+      )
+    ).rejects.toThrow('Unrecognised @returns item "- `effectiveType` - Connection quality"');
+  });
+
+  it('marks an optional parameter with `?` and keeps `= default` when one exists', async () => {
+    const document = await render(
+      'useKeyboardHeight',
+      `/**
+ * @description
+ * \`useKeyboardHeight\` does something.
+ *
+ * @param {Options} [options] - Configuration options.
+ * @param {boolean} [options.immediate=true] - Whether to read on mount.
+ * @param {number} [delay=0] - Delay in milliseconds.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useKeyboardHeight();
+ */
+export function useKeyboardHeight() {}`
+    );
+
+    expect(document).toContain('options?: Options');
+    expect(document).toContain('delay: number = 0');
+  });
+
+  it('renders each @example in its own fence', async () => {
+    const document = await render(
+      'useIsClient',
+      `/**
+ * @description
+ * \`useIsClient\` does something.
+ *
+ * @returns {boolean} Whether it is a client.
+ *
+ * @example
+ * useIsClient();
+ *
+ * @example
+ * // With a fallback
+ * useIsClient() ? 1 : 0;
+ */
+export function useIsClient() {}`
+    );
+
+    expect(document).toContain(
+      '```tsx\nuseIsClient();\n```\n\n```tsx\n// With a fallback\nuseIsClient() ? 1 : 0;\n```'
+    );
+  });
+
+  it('escapes angle brackets in a description', async () => {
+    const document = await render(
+      'useHandlers',
+      `/**
+ * @description
+ * \`useHandlers\` does something.
+ *
+ * @param {(event: MouseEvent<E>) => void} onClick - Called with a \`MouseEvent<E>\`.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useHandlers();
+ */
+export function useHandlers() {}`
+    );
+
+    expect(document).toContain('description="Called with a <code>MouseEvent&lt;E&gt;</code>."');
+  });
+
+  it('renders every @template with its constraint and default', async () => {
+    const document = await render(
+      'useRefEffect',
+      `/**
+ * @description
+ * \`useRefEffect\` does something.
+ *
+ * @template {HTMLElement} [RefElement=HTMLElement] - The element type.
+ * @template Value - The value type.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useRefEffect();
+ */
+export function useRefEffect() {}`
+    );
+
+    expect(document).toContain(
+      'function useRefEffect<\n  RefElement extends HTMLElement = HTMLElement,\n  Value,\n>(): void;'
+    );
+  });
+
+  it('accepts a tuple index such as `[0]` or `[1].add` as a nested item name', async () => {
+    const document = await render(
+      'useSet',
+      `/**
+ * @description
+ * \`useSet\` does something.
+ *
+ * @returns {[Set<T>, Actions]} A tuple containing the Set state and actions.
+ * - [0] \`Set<T>\` - The current Set state.
+ * - [1].add \`(value: T) => void\` - Adds a value.
+ *
+ * @example
+ * useSet();
+ */
+export function useSet() {}`
+    );
+
+    expect(document).toContain("name: '[0]'");
+    expect(document).toContain("name: '[1].add'");
+  });
 });
