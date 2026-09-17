@@ -7,6 +7,7 @@ import { DefaultTheme } from 'vitepress';
 import { buildLocaleConfig } from '../.vitepress/libs/buildLocaleConfig.mts';
 import { getSidebarItems } from '../.vitepress/libs/getSidebarItems.mts';
 import { collectLegacyRedirects } from '../.vitepress/libs/legacyRedirects.mts';
+import { segmentWords } from '../.vitepress/libs/segmentWords.mts';
 import {
   generatedLocalesDirectory,
   generatedRewrites,
@@ -101,6 +102,26 @@ try {
 
   await assertLlmsOutput({ buildOutputDirectory, root });
   await assertSeoOutput(buildOutputDirectory);
+
+  // VitePress rebuilds function options from their source text in the browser, where a tokenizer body that
+  // reaches into its module scope throws on every query even though the Node build passes. Test the shipped copy.
+  const siteDataLiteral = (await fs.readFile(path.join(buildOutputDirectory, 'index.html'), 'utf8')).match(
+    /__VP_SITE_DATA__=deserializeFunctions\(JSON\.parse\(("(?:[^"\\]|\\.)*")\)\)/
+  )?.[1];
+  assert.ok(siteDataLiteral !== undefined, 'index.html must inline the site data (metaChunk off) with the tokenizer');
+  const shippedSegmentWords: typeof segmentWords = new Function(
+    `return ${JSON.parse(JSON.parse(siteDataLiteral)).themeConfig.search.options.miniSearch.options.tokenize.replace(/^_vp-fn_/, '')}`
+  )();
+  assert.deepEqual(
+    shippedSegmentWords('window.addEventListener e.target.value'),
+    ['window', 'addEventListener', 'e', 'target', 'value'],
+    'text without CJK must keep the default split, or member names in code samples stop matching'
+  );
+  const clauseTerms = new Set(shippedSegmentWords('更小的包体积'));
+  assert.ok(
+    shippedSegmentWords('包体积').every(term => clauseTerms.has(term)),
+    'a Chinese word in the middle of a clause must be indexed as its own terms'
+  );
 
   // The redirect stubs are the only thing keeping pre-flattening URLs alive, and a
   // broken route filter would silently emit none of them.

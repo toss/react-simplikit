@@ -3,6 +3,7 @@ import llmstxt from 'vitepress-plugin-llms';
 import { buildLocaleConfig } from './libs/buildLocaleConfig.mts';
 import { generatedRewrites, localeDefinitions, localeDirectories, rewrites } from './locales.mts';
 import { writeLegacyRedirectStubs } from './libs/legacyRedirects.mts';
+import { segmentWords } from './libs/segmentWords.mts';
 import { SITE_ORIGIN } from './shared.mts';
 
 const siteDescription = 'Lightweight, zero-dependency React hooks, components and utils';
@@ -143,6 +144,7 @@ Guidelines for AI agents:
       provider: 'local',
       options: {
         locales: searchLocales,
+        miniSearch: { options: { tokenize: segmentWords } },
       },
     },
     socialLinks: [
