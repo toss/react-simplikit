@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useGeolocation(options: GeolocationOptions): Object;
+function useGeolocation(options?: GeolocationOptions): Object;
 ```
 
 ### 파라미터

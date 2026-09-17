@@ -66,6 +66,7 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
  * `useStorageState` is a React that functions like `useState` but persists the state value in browser storage.
  * The value is retained across page reloads and can be shared between tabs when using `localStorage`.
  *
+ * @template T - The type of the stored value.
  * @param {string} key - The key used to store the value in storage.
  * @param {Object} [options] - Configuration options for storage behavior.
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.

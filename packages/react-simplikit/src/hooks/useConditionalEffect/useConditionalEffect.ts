@@ -5,12 +5,14 @@ import { type DependencyList, type EffectCallback, useCallback, useEffect, useRe
  * `useConditionalEffect` is a React hook that conditionally executes effects based on a predicate function.
  * This provides more control over when effects run beyond just dependency changes.
  *
+ * @template {DependencyList} T - The type of the dependencies array.
  * @param {EffectCallback} effect - The effect callback to run.
  * @param {DependencyList} deps - Dependencies array, similar to useEffect.
- * @param {(prevDeps: T | undefined, currentDeps: T) => boolean} condition - Function that determines if the effect should run based on previous and current deps.
- * - On the initial render, `prevDeps` will be `undefined`. Your `condition` function should handle this case.
- * - If you want your effect to run on the initial render, return `true` when `prevDeps` is `undefined`.
- * - If you don't want your effect to run on the initial render, return `false` when `prevDeps` is `undefined`.
+ * @param {(prevDeps: T | undefined, currentDeps: T) => boolean} condition
+ * Function that determines if the effect should run based on previous and current deps.
+ * -- On the initial render, `prevDeps` will be `undefined`. Your `condition` function should handle this case.
+ * -- If you want your effect to run on the initial render, return `true` when `prevDeps` is `undefined`.
+ * -- If you don't want your effect to run on the initial render, return `false` when `prevDeps` is `undefined`.
  *
  * @example
  * import { useConditionalEffect } from 'react-simplikit';

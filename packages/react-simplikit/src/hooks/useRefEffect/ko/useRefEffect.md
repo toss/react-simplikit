@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useRefEffect<RefElement extends HTMLElement>(
+function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
   callback: (element: RefElement) => CleanupCallback | void,
   deps: DependencyList
 ): (element: RefElement | null) => void;

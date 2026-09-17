@@ -8,6 +8,7 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  * `useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once, regardless of how many times it's called.
  *  This is useful for one-time operations that should not be repeated, even if the component re-renders.
  *
+ * @template {(...args: any[]) => void} F - The type of the callback function.
  * @param {() => void} callback - The callback function to be executed once.
  * @param {DependencyList} deps - Dependencies array that will trigger a new one-time execution when changed.
  *

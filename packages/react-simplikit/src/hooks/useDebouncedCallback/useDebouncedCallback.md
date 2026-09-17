@@ -1,6 +1,7 @@
 # useDebouncedCallback
 
-`useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function. It helps optimize event handling by delaying function execution and grouping multiple calls into one.
+`useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function.
+It helps optimize event handling by delaying function execution and grouping multiple calls into one.
 
 Note that if both 'leading' and 'trailing' are set, the function will be called at both the start and end of the delay period. However, it must be called at least twice within debounceMs interval for this to happen, since one debounced function call cannot trigger the function twice.
 
@@ -56,7 +57,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
 <Interface
   name=""
   type="(nextValue: T) => void"
-  description="debounced function that forwards the value to <code>onChange</code>."
+  description="A debounced function that forwards the value to <code>onChange</code>."
 />
 
 ## Example

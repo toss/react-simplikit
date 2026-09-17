@@ -1,11 +1,12 @@
 # useImpressionRef
 
-`useImpressionRef` is a React hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. It uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
+`useImpressionRef` is a React hook that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport.
+It uses `IntersectionObserver` and the `Visibility API` to track the element's visibility.
 
 ## Interface
 
 ```ts
-function useImpressionRef(
+function useImpressionRef<Element extends HTMLElement>(
   options: UseImpressionRefOptions
 ): (element: Element | null) => void;
 ```
@@ -59,7 +60,7 @@ function useImpressionRef(
 <Interface
   name=""
   type="(element: Element | null) => void"
-  description="function to set the element. Attach this function to the <code>ref</code> attribute, and the callbacks will be executed whenever the element's visibility changes."
+  description="A function to set the element. Attach this function to the <code>ref</code> attribute, and the callbacks will be executed whenever the element's visibility changes."
 />
 
 ## Example

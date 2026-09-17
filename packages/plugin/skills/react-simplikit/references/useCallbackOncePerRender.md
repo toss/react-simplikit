@@ -1,11 +1,12 @@
 # useCallbackOncePerRender
 
-`useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once, regardless of how many times it's called. This is useful for one-time operations that should not be repeated, even if the component re-renders.
+`useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once, regardless of how many times it's called.
+This is useful for one-time operations that should not be repeated, even if the component re-renders.
 
 ## Interface
 
 ```ts
-function useCallbackOncePerRender(
+function useCallbackOncePerRender<F extends (...args: any[]) => void>(
   callback: () => void,
   deps: DependencyList
 ): (...args: any[]) => void;
@@ -32,7 +33,7 @@ function useCallbackOncePerRender(
 <Interface
   name=""
   type="(...args: any[]) => void"
-  description="memoized function that will only execute once until dependencies change."
+  description="A memoized function that will only execute once until dependencies change."
 />
 
 ## Example
@@ -47,7 +48,9 @@ function Component() {
 
   return <button onClick={handleOneTimeEvent}>Click me</button>;
 }
+```
 
+```tsx
 // With dependencies
 function TrackingComponent({ userId }: { userId: string }) {
   const trackUserVisit = useCallbackOncePerRender(() => {

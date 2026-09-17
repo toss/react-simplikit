@@ -4,185 +4,84 @@
 
 ## 선언적 인터페이스
 
-리액트 컴포넌트는 클래스형 컴포넌트에서 함수형 컴포넌트로 그 형태가 발전되어 왔어요.
+익숙한 React 코드에 필요한 기능만 더하세요. 책 검색창에 입력한 내용은 즉시 반영하고, 목록은 입력이 300ms 동안 멈추면 갱신해요.
 
-함수형 컴포넌트와 선언적인 API의 훅들이 등장하면서, 기존의 클래스형 컴포넌트에서 복잡하게 작성하던 [상태와 생명주기 관련 로직들을 추상화](https://ko.legacy.reactjs.org/docs/hooks-intro.html#ts-hard-to-reuse-stateful-logic-between-components) 할 수 있게 되었어요.
-
-그러나 여전히 리액트 컴포넌트는 복잡해요. 리액트는 [최소한의 인터페이스를 제공](https://ko.legacy.reactjs.org/docs/design-principles.html#common-abstraction)하고 있기 때문에, 조금만 복잡한 기능이 포함된 컴포넌트를 작성하기 위해서는 수십 개의 상태, 핸들러, 상태 변화에 따른 사이드 이펙트 정의가 포함될 수 있어요.
-
-어느 시점부터 컴포넌트는 관심사가 뒤섞여 명령형으로 작성되고, 컴포넌트가 무슨 일을 하는지, 어떤 로직들이 돌아가는지는 점점 더 파악하기 어려워져요.
-
-`react-simplikit`은 자주 사용되지만 직접 구현하기 복잡한 기능들을 적절히 추상화하여 제공해요. 이를 바탕으로 복잡한 로직을 가지는 컴포넌트를 작성할 때도 직관적인 가독성을 유지할 수 있어요.
-
-`react-simplikit`은 실제 서비스를 개발하면서 자주 접하게 되는 다양한 문제들을 선언적으로 해결하는 인터페이스를 제시해요.
-
-이를 바탕으로 개발자가 한 단계 더 선언적인 React 컴포넌트를 작성할 수 있도록 유도해요.
+두 예제는 서버 없이 같은 목록에서 책을 찾아요. `<BookSearch />`을 렌더링하고 `React`를 입력해 보세요. Server Components를 사용하는 프레임워크에서는 예제를 Client Component(`'use client'`)에 넣으세요.
 
 ::: code-group
 
 ```tsx [without-react-simplikit.tsx]
-function AutoCompleteInput() {
+import { useEffect, useState } from 'react';
+
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isOpen, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState(query);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
+  useEffect(
+    function debounceSearchQuery() {
+      const timeoutId = setTimeout(() => setSearchQuery(query), 300);
+      return () => clearTimeout(timeoutId);
+    },
+    [query]
+  );
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (query.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    setLoading(true);
-    const timeoutId = setTimeout(async () => {
-      try {
-        const response = await fetch(`/api/search?q=${query}`);
-        const data = await response.json();
-        setResults(data);
-      } catch (error) {
-        console.error('Failed to fetch results:', error);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        placeholder="검색어를 입력하세요"
-      />
-      {isOpen && (isLoading || results.length > 0) && (
-        <div>
-          {isLoading ? (
-            <div className="p-2">검색 중...</div>
-          ) : (
-            results.map((result, idx) => (
-              <Fragment key={result.id}>
-                <div
-                  onClick={() => {
-                    setQuery(result.title);
-                    setOpen(false);
-                  }}
-                >
-                  {result.title}
-                </div>
-                {idx !== results.length - 1 && <Divider />}
-              </Fragment>
-            ))
-          )}
-        </div>
-      )}
+    <div>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 ```
 
 ```tsx [with-react-simplikit.tsx]
-function AutoCompleteInput() {
+import { useState } from 'react';
+import { useDebouncedValue } from 'react-simplikit';
+
+const books = ['React Handbook', 'TypeScript Guide', 'CSS Patterns'];
+
+function BookSearch() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, startLoading] = useLoading();
-  const [isOpen, openSearchBox, closeSearchBox] = useBooleanState(false);
+  const searchQuery = useDebouncedValue(query, 300);
 
-  const searchBoxState = useMemo(() => {
-    if (!isOpen) return 'CLOSE';
-
-    if (isLoading) return 'LOADING';
-
-    if (results.length > 0) return 'RESULT_EXISTS';
-
-    return 'EMPTY';
-  }, [isOpen, isLoading, results]);
-
-  const searchResults = useDebounce(async (searchQuery: string) => {
-    if (searchQuery.trim().length === 0) {
-      setResults([]);
-      return;
-    }
-
-    const response = await startLoading(
-      fetch(`/api/search?q=${searchQuery}`)
-        .then(res => res.json())
-        .catch(error => {
-          console.error('Failed to fetch results:', error);
-          return [];
-        })
-    );
-
-    setResults(response);
-  }, 300);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  useOutsideClickEffect(containerRef.current, () => closeSearchBox());
+  const results = books.filter(book =>
+    book.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
 
   return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          openSearchBox();
-          searchResults(e.target.value);
-        }}
-        onFocus={openSearchBox}
-        placeholder="검색어를 입력하세요"
-      />
-      <SwitchCase
-        value={searchBoxState}
-        caseBy={{
-          LOADING: () => <div>검색 중...</div>,
-          EMPTY: () => <div>검색 결과가 없습니다.</div>,
-          RESULT_EXISTS: () => (
-            <Separated by={<Divider />}>
-              {results.map(result => (
-                <Fragment key={result.id}>
-                  <div
-                    onClick={() => {
-                      setQuery(result.title);
-                      closeSearchBox();
-                    }}
-                  >
-                    {result.title}
-                  </div>
-                </Fragment>
-              ))}
-            </Separated>
-          ),
-          CLOSE: () => null,
-        }}
-      />
+    <div>
+      <label>
+        Search books
+        <input value={query} onChange={event => setQuery(event.target.value)} />
+      </label>
+      <p role="status">{results.length} results</p>
+      <ul>
+        {results.map(book => (
+          <li key={book}>{book}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 ```
 
 :::
+
+[useDebouncedValue](/ko/hooks/useDebouncedValue)를 사용하면 `query`를 늦게 반영하는 값인 `searchQuery`를 선언할 수 있어요. 입력 상태는 `useState`로 관리하고, 목록을 필터링할 값은 한 줄로 만들어요. 훅은 타이머를 관리하고, 컴포넌트가 언마운트되면 대기 중인 갱신을 취소해요.
 
 ## 작은 번들 사이즈
 

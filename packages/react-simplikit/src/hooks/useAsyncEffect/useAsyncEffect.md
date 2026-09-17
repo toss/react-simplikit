@@ -1,13 +1,14 @@
 # useAsyncEffect
 
-`useAsyncEffect` is a React hook for handling asynchronous side effects in React components. It follows the same cleanup pattern as `useEffect` while ensuring async operations are handled safely.
+`useAsyncEffect` is a React hook for handling asynchronous side effects in React components.
+It follows the same cleanup pattern as `useEffect` while ensuring async operations are handled safely.
 
 ## Interface
 
 ```ts
 function useAsyncEffect(
   effect: () => Promise<void | (() => void)>,
-  deps: DependencyList
+  deps?: DependencyList
 ): void;
 ```
 
@@ -28,7 +29,7 @@ function useAsyncEffect(
 
 ### Return Value
 
-This hook does not return anything.
+This function does not return anything.
 
 ## Example
 

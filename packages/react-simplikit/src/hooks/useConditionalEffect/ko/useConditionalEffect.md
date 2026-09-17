@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useConditionalEffect(
+function useConditionalEffect<T extends DependencyList>(
   effect: EffectCallback,
   deps: DependencyList,
   condition: (prevDeps: T | undefined, currentDeps: T) => boolean
@@ -37,7 +37,7 @@ function useConditionalEffect(
 
 ### 반환 값
 
-이 훅은 아무 것도 반환하지 않아요.
+이 함수는 아무 것도 반환하지 않아요.
 
 ## 예시
 

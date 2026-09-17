@@ -1,8 +1,10 @@
 # disableBodyScrollLock
 
-`disableBodyScrollLock` is a utility function that unlocks the body scroll. It restores the scroll locked by `enableBodyScrollLock` and returns to the saved scroll position.
+`disableBodyScrollLock` is a utility function that unlocks the body scroll.
+It restores the scroll locked by `enableBodyScrollLock` and returns to the saved scroll position.
 
-Safe to call in SSR environment (no-op on server). Safe to call even if not locked (no-op).
+Safe to call in SSR environment (no-op on server).
+Safe to call even if not locked (no-op).
 
 ## Interface
 
@@ -12,9 +14,11 @@ function disableBodyScrollLock(): void;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
-<Interface name="" type="void" description="" />
+This function does not return anything.
 
 ## Example
 

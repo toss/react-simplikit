@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useCallbackOncePerRender(
+function useCallbackOncePerRender<F extends (...args: any[]) => void>(
   callback: () => void,
   deps: DependencyList
 ): (...args: any[]) => void;
@@ -46,5 +46,20 @@ function Component() {
   }, []);
 
   return <button onClick={handleOneTimeEvent}>누르세요</button>;
+}
+```
+
+```tsx
+// 의존성과 함께 사용하는 경우
+function TrackingComponent({ userId }: { userId: string }) {
+  const trackUserVisit = useCallbackOncePerRender(() => {
+    analytics.trackVisit(userId);
+  }, [userId]);
+
+  useEffect(() => {
+    trackUserVisit();
+  }, [trackUserVisit]);
+
+  return <div>사용자 페이지</div>;
 }
 ```

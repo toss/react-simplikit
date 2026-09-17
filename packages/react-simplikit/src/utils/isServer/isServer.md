@@ -1,6 +1,8 @@
 # isServer
 
-`isServer` is a utility function that checks if the code is running on the server. It returns `true` in SSR (Server-Side Rendering) environments where `window` is undefined, and `false` in client-side environments.
+`isServer` is a utility function that checks if the code is running on the server.
+It returns `true` in SSR (Server-Side Rendering) environments where `window` is undefined,
+and `false` in client-side environments.
 
 ## Interface
 
@@ -10,12 +12,14 @@ function isServer(): boolean;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface
   name=""
   type="boolean"
-  description="if running in a server environment (SSR), <code>false</code> otherwise."
+  description="<code>true</code> if running in a server environment (SSR), <code>false</code> otherwise."
 />
 
 ## Example

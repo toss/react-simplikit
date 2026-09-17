@@ -1,13 +1,16 @@
 # usePreservedCallback
 
-`usePreservedCallback` is a React hook that maintains a stable reference to a callback function while ensuring it always has access to the latest state or props. This prevents unnecessary re-renders and simplifies dependency management when passing callbacks to child components or handling event listeners.
+`usePreservedCallback` is a React hook that maintains a stable reference to a callback function
+while ensuring it always has access to the latest state or props. This prevents unnecessary re-renders
+and simplifies dependency management when passing callbacks to child components or handling event listeners.
 
 ## Interface
 
 ```ts
-function usePreservedCallback(
-  callback: (...args: any[]) => any
-): (...args: any[]) => any;
+function usePreservedCallback<
+  Arguments extends any[] = any[],
+  ReturnValue = unknown,
+>(callback: (...args: any[]) => any): (...args: any[]) => any;
 ```
 
 ### Parameters
@@ -24,7 +27,7 @@ function usePreservedCallback(
 <Interface
   name=""
   type="(...args: any[]) => any"
-  description="function with the same signature as the input callback. The returned function maintains a stable reference while accessing the latest state or props."
+  description="A function with the same signature as the input callback. The returned function maintains a stable reference while accessing the latest state or props."
 />
 
 ## Example

@@ -1,6 +1,7 @@
 # useCounter
 
-`useCounter` is a React hook that manages a numeric counter state with increment, decrement, and reset capabilities. Optionally, you can provide minimum and maximum values to constrain the counter's range.
+`useCounter` is a React hook that manages a numeric counter state with increment, decrement, and reset capabilities.
+Optionally, you can provide minimum and maximum values to constrain the counter's range.
 
 ## Interface
 
@@ -54,7 +55,7 @@ function useCounter(
 <Interface
   name=""
   type="UseCounterReturn"
-  description="object with count value and control functions."
+  description="An object with count value and control functions."
   :nested="[
     {
       name: 'count',

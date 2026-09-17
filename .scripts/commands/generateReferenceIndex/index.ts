@@ -13,8 +13,8 @@ type IndexEntry = { name: string; url: string; description?: string; translated:
 type IndexSection = { label: string; entries: IndexEntry[] };
 
 const GROUPS: Group[] = [
-  { labelKey: 'hooksLabel', directory: 'hooks' },
   { labelKey: 'componentsLabel', directory: 'components' },
+  { labelKey: 'hooksLabel', directory: 'hooks' },
   { labelKey: 'utilsLabel', directory: 'utils' },
 ];
 

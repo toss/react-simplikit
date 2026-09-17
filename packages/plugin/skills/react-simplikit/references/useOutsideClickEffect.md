@@ -1,6 +1,7 @@
 # useOutsideClickEffect
 
-`useOutsideClickEffect` is a React hook that triggers a callback when a click event occurs outside the specified container(s). It is useful for closing modals, dropdowns, tooltips, and other UI components when clicking outside.
+`useOutsideClickEffect` is a React hook that triggers a callback when a click event occurs outside the specified container(s).
+It is useful for closing modals, dropdowns, tooltips, and other UI components when clicking outside.
 
 ## Interface
 
@@ -17,7 +18,7 @@ function useOutsideClickEffect(
   required
   name="container"
   type="HTMLElement | HTMLElement[] | null"
-  description="A single HTML element, an array of HTML elements, or <code>null</code>. If <code>null</code>, no event listener is attached."
+  description="A single HTML element, an array of HTML elements, or <code>null</code>. If <code>null</code>, the callback is not executed."
 />
 
 <Interface
@@ -29,7 +30,7 @@ function useOutsideClickEffect(
 
 ### Return Value
 
-This hook does not return anything.
+This function does not return anything.
 
 ## Example
 

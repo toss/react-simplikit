@@ -1,12 +1,14 @@
 # useKeyboardHeight
 
-`useKeyboardHeight` is a React hook that tracks the on-screen keyboard height. It returns the current keyboard height in pixels, which updates automatically when the keyboard appears, disappears, or changes size.
+`useKeyboardHeight` is a React hook that tracks the on-screen keyboard height.
+It returns the current keyboard height in pixels, which updates automatically
+when the keyboard appears, disappears, or changes size.
 
 ## Interface
 
 ```ts
 function useKeyboardHeight(
-  options: UseKeyboardHeightOptions
+  options?: UseKeyboardHeightOptions
 ): UseKeyboardHeightResult;
 ```
 
@@ -32,7 +34,7 @@ function useKeyboardHeight(
 <Interface
   name=""
   type="UseKeyboardHeightResult"
-  description="object containing the current keyboard height."
+  description="An object containing the current keyboard height."
   :nested="[
     {
       name: 'keyboardHeight',
@@ -53,6 +55,20 @@ function ChatInput() {
   return (
     <div style={{ paddingBottom: `${keyboardHeight}px` }}>
       <input type="text" placeholder="Type a message..." />
+    </div>
+  );
+}
+```
+
+```tsx
+function KeyboardStatus() {
+  const { keyboardHeight } = useKeyboardHeight();
+
+  return (
+    <div>
+      {keyboardHeight > 0
+        ? `Keyboard is open (${keyboardHeight}px)`
+        : 'Keyboard is closed'}
     </div>
   );
 }

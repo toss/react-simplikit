@@ -1,6 +1,7 @@
 # useList
 
-A React hook that manages an array as state. Provides efficient state management and stable action functions.
+A React hook that manages an array as state.
+Provides efficient state management and stable action functions.
 
 ## Interface
 
@@ -17,7 +18,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 <Interface
   name=""
   type="UseListReturn<T>"
-  description="tuple containing the array state and actions to manipulate it."
+  description="A tuple containing the array state and actions to manipulate it."
   :nested="[
     {
       name: 'list',

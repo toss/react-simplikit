@@ -1,11 +1,12 @@
 # useRefEffect
 
-`useRefEffect` is a React hook that helps you set a reference to a specific DOM element and execute a callback whenever the element changes. This hook calls a cleanup function whenever the element changes to prevent memory leaks.
+`useRefEffect` is a React hook that helps you set a reference to a specific DOM element and execute a callback whenever the element changes.
+This hook calls a cleanup function whenever the element changes to prevent memory leaks.
 
 ## Interface
 
 ```ts
-function useRefEffect(
+function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
   callback: (element: RefElement) => CleanupCallback | void,
   deps: DependencyList
 ): (element: RefElement | null) => void;
@@ -32,7 +33,7 @@ function useRefEffect(
 <Interface
   name=""
   type="(element: RefElement | null) => void"
-  description="function to set the element. Pass this function to the <code>ref</code> attribute, and the <code>callback</code> will be called whenever the element changes."
+  description="A function to set the element. Pass this function to the <code>ref</code> attribute, and the <code>callback</code> will be called whenever the element changes."
 />
 
 ## Example

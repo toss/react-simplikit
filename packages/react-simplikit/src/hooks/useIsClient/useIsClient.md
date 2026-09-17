@@ -1,6 +1,8 @@
 # useIsClient
 
-`useIsClient` is a React hook that returns `true` only in the client-side environment. It is primarily used to differentiate between client-side and server-side rendering (SSR). The state is set to `true` only after the component is mounted in the client-side environment.
+`useIsClient` is a React hook that returns `true` only in the client-side environment.
+It is primarily used to differentiate between client-side and server-side rendering (SSR).
+The state is set to `true` only after the component is mounted in the client-side environment.
 
 ## Interface
 
@@ -10,17 +12,14 @@ function useIsClient(): boolean;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface
   name=""
   type="boolean"
-  description="<code>true</code> in a client"
-  :nested="[
-    {
-      required: false,
-    },
-  ]"
+  description="Returns <code>true</code> in a client-side environment, and <code>false</code> otherwise."
 />
 
 ## Example
@@ -35,7 +34,9 @@ function ClientSideContent() {
 
   return <div>Client-side rendered content</div>; // Rendered on the client side
 }
+```
 
+```tsx
 function ClientOnlyMap() {
   const isClient = useIsClient();
 
@@ -43,7 +44,9 @@ function ClientOnlyMap() {
 
   return <div id="map" />;
 }
+```
 
+```tsx
 function ClientTheme() {
   const isClient = useIsClient();
 

@@ -1,6 +1,7 @@
 # useLoading
 
-`useLoading` is a React hook that simplifies managing the loading state of a `Promise`. It provides a state to track whether an asynchronous operation is in progress and a function to handle the loading state automatically.
+`useLoading` is a React hook that simplifies managing the loading state of a `Promise`.
+It provides a state to track whether an asynchronous operation is in progress and a function to handle the loading state automatically.
 
 ## Interface
 
@@ -13,12 +14,14 @@ function useLoading(): [
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface
   name=""
   type="[loading: boolean, startLoading: <T>(promise: Promise<T>) => Promise<T>]"
-  description="tuple containing:"
+  description="A tuple containing:"
   :nested="[
     {
       name: 'loading',

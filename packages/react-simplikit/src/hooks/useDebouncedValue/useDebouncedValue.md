@@ -1,10 +1,20 @@
 # useDebouncedValue
 
-`useDebouncedValue` is a React hook that returns a debounced copy of the given value. The caller keeps owning the state; the hook only delays how quickly the returned value follows it. The returned value updates `wait` milliseconds after the last change, which is useful for deriving a search query or a validation input from fast-changing state.
+`useDebouncedValue` is a React hook that returns a debounced copy of the given value.
+The caller keeps owning the state; the hook only delays how quickly the returned value follows it.
+The returned value updates `wait` milliseconds after the last change, which is useful for
+deriving a search query or a validation input from fast-changing state.
 
-On the first render and on the server the value is returned as is. A change is never scheduled on mount, so with `leading: true` the first change after mount is applied immediately. If both `leading` and `trailing` are `false`, the returned value never updates.
+Pending updates are cancelled when the component unmounts. The example displays the
+delayed query without requiring a search service or an additional component.
 
-The value is compared by reference. Passing a new object or array on every render keeps the returned value updating every `wait` milliseconds; stabilize the reference first, for example with `usePreservedReference`.
+On the first render and on the server the value is returned as is. A change is never scheduled
+on mount, so with `leading: true` the first change after mount is applied immediately.
+If both `leading` and `trailing` are `false`, the returned value never updates.
+
+The value is compared by reference. Passing a new object or array on every render keeps
+the returned value updating every `wait` milliseconds; stabilize the reference first, for
+example with `usePreservedReference`.
 
 ## Interface
 
@@ -12,7 +22,7 @@ The value is compared by reference. Passing a new object or array on every rende
 function useDebouncedValue<T>(
   value: T,
   wait: number,
-  options: DebounceOptions
+  options?: DebounceOptions
 ): T;
 ```
 
@@ -58,7 +68,7 @@ function useDebouncedValue<T>(
 
 ### Return Value
 
-<Interface name="" type="T" description="debounced value." />
+<Interface name="" type="T" description="The debounced value." />
 
 ## Example
 
@@ -72,8 +82,11 @@ function SearchInput() {
 
   return (
     <>
-      <input value={query} onChange={e => setQuery(e.target.value)} />
-      <SearchResults query={debouncedQuery} />
+      <label>
+        Search
+        <input value={query} onChange={e => setQuery(e.target.value)} />
+      </label>
+      <output aria-live="polite">{debouncedQuery}</output>
     </>
   );
 }

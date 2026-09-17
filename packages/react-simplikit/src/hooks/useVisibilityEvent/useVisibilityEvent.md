@@ -7,7 +7,7 @@
 ```ts
 function useVisibilityEvent(
   callback: (visibilityState: 'visible' | 'hidden') => void,
-  options: object
+  options?: object
 ): void;
 ```
 
@@ -38,7 +38,7 @@ function useVisibilityEvent(
 
 ### Return Value
 
-This hook does not return anything.
+This function does not return anything.
 
 ## Example
 

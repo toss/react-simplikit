@@ -1,11 +1,12 @@
 # useConditionalEffect
 
-`useConditionalEffect` is a React hook that conditionally executes effects based on a predicate function. This provides more control over when effects run beyond just dependency changes.
+`useConditionalEffect` is a React hook that conditionally executes effects based on a predicate function.
+This provides more control over when effects run beyond just dependency changes.
 
 ## Interface
 
 ```ts
-function useConditionalEffect(
+function useConditionalEffect<T extends DependencyList>(
   effect: EffectCallback,
   deps: DependencyList,
   condition: (prevDeps: T | undefined, currentDeps: T) => boolean
@@ -32,12 +33,12 @@ function useConditionalEffect(
   required
   name="condition"
   type="(prevDeps: T | undefined, currentDeps: T) => boolean"
-  description="Function that determines if the effect should run based on previous and current deps. - On the initial render, <code>prevDeps</code> will be <code>undefined</code>. Your <code>condition</code> function should handle this case. - If you want your effect to run on the initial render, return <code>true</code> when <code>prevDeps</code> is <code>undefined</code>. - If you don't want your effect to run on the initial render, return <code>false</code> when <code>prevDeps</code> is <code>undefined</code>."
+  description="Function that determines if the effect should run based on previous and current deps. <br />- On the initial render, <code>prevDeps</code> will be <code>undefined</code>. Your <code>condition</code> function should handle this case. <br />- If you want your effect to run on the initial render, return <code>true</code> when <code>prevDeps</code> is <code>undefined</code>. <br />- If you don't want your effect to run on the initial render, return <code>false</code> when <code>prevDeps</code> is <code>undefined</code>."
 />
 
 ### Return Value
 
-This hook does not return anything.
+This function does not return anything.
 
 ## Example
 

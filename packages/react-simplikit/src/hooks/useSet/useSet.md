@@ -1,6 +1,7 @@
 # useSet
 
-A React hook that manages a Set as state. Provides efficient state management and stable action functions.
+A React hook that manages a Set as state.
+Provides efficient state management and stable action functions.
 
 ## Interface
 
@@ -21,7 +22,7 @@ function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
 <Interface
   name=""
   type="UseSetReturn<T>"
-  description="tuple containing the Set state and actions to manipulate it."
+  description="A tuple containing the Set state and actions to manipulate it."
   :nested="[
     {
       name: '[0]',

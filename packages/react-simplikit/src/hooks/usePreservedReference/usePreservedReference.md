@@ -1,13 +1,15 @@
 # usePreservedReference
 
-`usePreservedReference` is a React hook that helps maintain the reference of a value when it hasn't changed, while ensuring you can safely use the latest state. It prevents unnecessary re-renders while always allowing access to the latest data.
+`usePreservedReference` is a React hook that helps maintain the reference of a value
+when it hasn't changed, while ensuring you can safely use the latest state.
+It prevents unnecessary re-renders while always allowing access to the latest data.
 
 ## Interface
 
 ```ts
 function usePreservedReference<T extends NotNullishValue>(
   value: T,
-  areValuesEqual: (a: T, b: T) => boolean
+  areValuesEqual?: (a: T, b: T) => boolean
 ): T;
 ```
 
@@ -31,7 +33,7 @@ function usePreservedReference<T extends NotNullishValue>(
 <Interface
   name=""
   type="T"
-  description="the same reference if the value is considered equal to the previous one, otherwise returns a new reference."
+  description="Returns the same reference if the value is considered equal to the previous one, otherwise returns a new reference."
 />
 
 ## Example
@@ -47,7 +49,9 @@ function ExampleComponent() {
 
   return <div>{preservedState.key}</div>;
 }
+```
 
+```tsx
 import { usePreservedReference } from 'react-simplikit';
 import { useState } from 'react';
 

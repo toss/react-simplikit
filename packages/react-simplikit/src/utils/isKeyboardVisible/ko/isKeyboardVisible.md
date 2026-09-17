@@ -10,6 +10,8 @@ function isKeyboardVisible(): boolean;
 
 ### 파라미터
 
+이 함수는 파라미터를 받지 않아요.
+
 ### 반환 값
 
 <Interface
@@ -26,7 +28,9 @@ if (isKeyboardVisible()) {
 } else {
   console.log('키보드가 닫혔어요');
 }
+```
 
+```tsx
 // 키보드 표시 여부에 따라 요소를 보이거나 숨기기
 const showFloatingButton = !isKeyboardVisible();
 ```

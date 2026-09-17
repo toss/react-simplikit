@@ -1,3 +1,7 @@
+---
+description: React のコードをシンプルにするフック、コンポーネント、ユーティリティを紹介します。
+---
+
 # react-simplikit の紹介
 
 どうすればもっと安全で堅牢な React ベースのアプリケーションを作れるでしょうか。私たちはその答えを「React を React らしく書くこと」と定義し、`react-simplikit` でその答えを具体化しました。
@@ -118,6 +122,6 @@ React と React-DOM を除いて [14 個の依存関係](https://www.npmjs.com/p
 
 ## リンク
 
-react-simplikit についてさらに詳しく知りたい方は、以下のリンクをご覧ください。
+ソースコードは [GitHub](https://github.com/toss/react-simplikit) で確認できます。
 
-- [GitHub](https://github.com/toss/react-simplikit)
+完全な使用例は [用途別の使い方](/ja/use-cases)、ツールの一覧は [API リファレンス](/ja/reference) をご覧ください。

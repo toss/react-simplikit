@@ -1,4 +1,4 @@
-import { parse, Spec as OriginSpec } from 'comment-parser';
+import { parse, Spec as OriginSpec, tokenizers } from 'comment-parser';
 import glob from 'fast-glob';
 import * as fs from 'fs/promises';
 import { Listr } from 'listr2';
@@ -80,30 +80,42 @@ export async function generateDocs(names: string[]) {
   await generateSkill();
 }
 
+// These tags carry no name, but the stock name tokenizer still takes the description's first word
+// as one ("An object…" became "object…"). Skipping it for them keeps the sentence whole.
+const NAMELESS_TAGS = new Set(['returns', 'remarks', 'description']);
+const skipNameForNamelessTags = (spec: OriginSpec) => (NAMELESS_TAGS.has(spec.tag) ? spec : tokenizers.name()(spec));
+
+const parseOptions = (spacing: 'compact' | 'preserve') => ({
+  spacing,
+  tokenizers: [tokenizers.tag(), tokenizers.type(spacing), skipNameForNamelessTags, tokenizers.description(spacing)],
+});
+
 function parseJSDoc(source: string) {
-  const parsedComments = parse(source);
+  const parsedComments = parse(source, parseOptions('compact'));
 
   const targetComment = parsedComments[parsedComments.length - 1];
 
-  const template = targetComment.tags.find(tag => tag.tag === 'template');
+  const templates = targetComment.tags.filter(tag => tag.tag === 'template');
 
-  // The default compact spacing joins every line of `@description` into one, which collapses its
-  // bullet lists. Only that tag is re-read with preserved spacing; the rest read better compacted.
-  const preservedComment = parse(source, { spacing: 'preserve' }).at(-1);
-  const description = reflowDescription(
+  // The default compact spacing joins every line of `@description` and `@returns` into one, which
+  // collapses their bullet lists. Those two are read with preserved spacing; the rest read better compacted.
+  const preservedComments = parse(source, parseOptions('preserve'));
+  const preservedComment = preservedComments.at(-1);
+  const description = trimBlock(
     preservedComment?.tags.find(tag => tag.tag === 'description')?.description ?? preservedComment?.description ?? ''
   );
+  const remarks = trimBlock(preservedComment?.tags.find(tag => tag.tag === 'remarks')?.description ?? '');
 
   const params = targetComment.tags.filter(tag => tag.tag === 'param');
 
   const returns =
-    parsedComments
+    preservedComments
       .find(comment => comment.tags.find(tag => tag.tag === 'returns') != null)
       ?.tags.filter(tag => tag.tag === 'returns') ?? [];
 
-  const nestedValueOfReturns = returns.length === 0 ? undefined : getNestedValuesFromReturn(returns[0]);
+  const parsedReturns = returns.length === 0 ? undefined : parseReturns(returns[0]);
 
-  const example = targetComment.tags
+  const examples = targetComment.tags
     .filter(tag => tag.tag === 'example')
     .map(tag =>
       tag.source
@@ -116,52 +128,93 @@ function parseJSDoc(source: string) {
         })
         .join('\n')
         .trim()
+        // jsdoc.app puts the caption on the tag line: `@example <caption>…</caption>`
+        .replace(/^@example\s*/, '')
     )
     .filter(text => text.length > 0)
-    .join('\n\n');
+    .map(text => {
+      const caption = EXAMPLE_CAPTION.exec(text);
+      return caption == null
+        ? { title: undefined, code: text }
+        : { title: caption[1], code: text.slice(caption[0].length) };
+    });
 
   return {
     description,
-    template,
-    example,
+    remarks,
+    templates,
+    examples,
     params,
     returns:
-      returns.length === 0
+      parsedReturns == null
         ? undefined
-        : {
-            ...returns[0],
-            name: '',
-            description:
-              nestedValueOfReturns == null ? returns[0].description : returns[0].description.split('-')[0].trim(),
-            optional: true,
-          },
-    nestedValueOfReturns,
+        : { ...returns[0], name: '', description: parsedReturns.description, optional: true },
+    nestedValueOfReturns: parsedReturns?.nested,
   };
 }
 
-function getNestedValuesFromReturn(returnTag: Spec): Spec[] | undefined {
-  if (!returnTag.description.includes('-')) {
-    return;
+/** JSDoc's own caption syntax; the title renders as a heading above the example's code block. */
+const EXAMPLE_CAPTION = /^<caption>(.*?)<\/caption>\s*/;
+
+// A name is a property path or a tuple index path such as `[1].add`; a hyphen is not allowed.
+const NESTED_RETURN_ITEM = /^-\s+([\w.[\]]+)\s+`([^`]+)`\s+-\s+(.*)$/;
+
+/**
+ * Splits a `@returns` description into its intro and the `- name `type` - description` items.
+ *
+ * Items are recognised per line, so a hyphen inside a word ("server-side") cannot start one, a
+ * `;` separator is no longer needed, and a `:` inside a type stays where it is. A list line that
+ * matches neither an item nor a continuation is a typo the build should not paper over.
+ */
+function parseReturns(returnTag: Spec): { description: string; nested: Spec[] | undefined } {
+  const lines = returnTag.description
+    .replace(/^[ \t]*-[ \t]+/, '')
+    .split('\n')
+    .map(line => line.trim());
+  const firstItem = lines.findIndex(line => LIST_ITEM.test(line));
+
+  if (firstItem === -1) {
+    return { description: joinWrappedLines(lines), nested: undefined };
   }
 
-  const nestedDerscriptions = returnTag.description
-    .split('-')
-    .splice(1, 999)
-    .join('-')
-    .split(';')
-    .filter(description => description.trim().length > 0)
-    .map(description => (description.trimEnd().endsWith('.') ? description : `${description}.`));
+  const nested = lines
+    .slice(firstItem)
+    .filter(line => line !== '')
+    .reduce<Spec[]>((items, line) => {
+      const previous = items.at(-1);
 
-  return nestedDerscriptions
-    .filter(origin => origin.trim().length > 0)
-    .map(origin => {
-      const [, name, type, description] = /([^-\s]*)\s*`([^`]+)`\s+-\s+(.*)/.exec(origin) ?? [];
-      return { name, type, description: description?.replaceAll(':', '\n  :'), optional: true };
-    });
+      if (!LIST_ITEM.test(line) && previous != null) {
+        // A `:` line is a sub-item and keeps its own line; anything else is the editor's wrapping.
+        const description = line.startsWith(':')
+          ? `${previous.description}\n${line}`
+          : `${previous.description} ${line}`;
+        return [...items.slice(0, -1), { ...previous, description }];
+      }
+
+      const match = NESTED_RETURN_ITEM.exec(line);
+
+      if (match == null) {
+        throw new Error(`Unrecognised @returns item "${line}" — expected "- name \`type\` - description"`);
+      }
+
+      const [, name, type, description] = match;
+      return [...items, { name, type, description, optional: true }];
+    }, []);
+
+  return {
+    description: joinWrappedLines(lines.slice(0, firstItem)),
+    nested: nested.map(item => ({ ...item, description: endSentence(item.description) })),
+  };
+}
+
+/** Items used to end with `;` as the separator; a period closes the sentence either way. */
+function endSentence(description: string) {
+  const trimmed = description.replace(/;$/, '').trimEnd();
+  return trimmed.endsWith('.') ? trimmed : `${trimmed}.`;
 }
 
 async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
-  const { template, description, example, params, returns, nestedValueOfReturns } = jsdoc;
+  const { templates, description, remarks, examples, params, returns, nestedValueOfReturns } = jsdoc;
 
   const paramsProps = params.reduce<Array<[Spec, Spec[]]>>(
     (acc, param) => {
@@ -180,13 +233,22 @@ async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
   );
 
   const getTemplateCode = () =>
-    template == null ? '' : `<${template.name}${template.type.length === 0 ? '>' : ` extends ${template.type}>`}`;
+    templates.length === 0
+      ? ''
+      : `<${templates
+          .map(template => {
+            const constraint = template.type.length === 0 ? '' : ` extends ${template.type}`;
+            const fallback = template.default == null ? '' : ` = ${template.default}`;
+            return `${template.name}${constraint}${fallback}`;
+          })
+          .join(', ')}>`;
   const getParamsCode = () =>
     params
       .filter(param => !param.name.includes('.'))
       .map(param => {
         const { rest, type } = splitRestMarker(param.type);
-        return `${rest}${param.name}: ${type}${param.default == null ? '' : ` = ${param.default}`}`;
+        const optional = param.optional && param.default == null ? '?' : '';
+        return `${rest}${param.name}${optional}: ${type}${param.default == null ? '' : ` = ${param.default}`}`;
       });
 
   return `# ${name}
@@ -199,49 +261,49 @@ ${description}
 ${await prettier.format(`function ${name}${getTemplateCode()}(${getParamsCode()}): ${returns == null ? 'void' : returns.type};`, { ...prettierConfig, parser: 'typescript' })}\`\`\`
 
 ### Parameters
-
-${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { ...prettierConfig, parser: 'vue' })}
+${
+  params.length === 0
+    ? '\nThis function does not accept any parameters.'
+    : `
+${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''), { ...prettierConfig, parser: 'vue' })}`
+}
 ### Return Value
 ${
   returns == null
-    ? '\nThis hook does not return anything.'
+    ? '\nThis function does not return anything.'
     : `
 ${await prettier.format(getParamUl(returns, nestedValueOfReturns), { ...prettierConfig, parser: 'vue' })}`
 }
 ## Example
 
-\`\`\`tsx
-${example}
-\`\`\`
-`;
+${examples
+  .map(({ title, code }) => `${title == null ? '' : `### ${title}\n\n`}\`\`\`tsx\n${code}\n\`\`\``)
+  .join('\n\n')}
+${remarks.length === 0 ? '' : `\n## Notes\n\n${remarks}\n`}`;
 }
 
 const LIST_ITEM = /^[-*]\s/;
 
 /**
- * Undoes the source's line wrapping while keeping the structure a reader relies on.
- *
- * A JSDoc block wraps prose to stay readable in the editor, and those breaks carry no meaning —
- * but blank lines and list items do. Joining everything (the parser's compact mode) loses the
- * lists; keeping everything bakes the editor's wrapping into the page.
+ * `@description` and `@remarks` are Markdown and go to the page as written: a line break inside a
+ * paragraph renders as a space, and fences, numbered and nested lists keep their meaning.
  */
-function reflowDescription(description: string) {
-  return description
+function trimBlock(text: string) {
+  return text
     .split('\n')
-    .map(line => line.trim())
-    .reduce<string[]>((lines, line) => {
-      const previous = lines.at(-1);
-      const continuesParagraph = previous != null && previous !== '' && line !== '' && !LIST_ITEM.test(line);
-
-      if (continuesParagraph) {
-        lines[lines.length - 1] = `${previous} ${line}`;
-        return lines;
-      }
-
-      lines.push(line);
-      return lines;
-    }, [])
+    .map(line => line.trimEnd())
     .join('\n')
+    .trim();
+}
+
+/**
+ * The `@returns` intro lands in an HTML attribute where a line break becomes `<br />`, so the
+ * source's wrapping is joined back into one line; a blank line still separates paragraphs.
+ */
+function joinWrappedLines(lines: string[]) {
+  return lines
+    .join('\n')
+    .replace(/(?<=\S)\n(?=\S)/g, ' ')
     .trim();
 }
 
@@ -323,6 +385,11 @@ function replaceDescription(value: string, quote: '"' | "'") {
   const replaced = value
     .replace(/^\s*-\s*/, '')
     .replace(/--/g, '\n-')
+    // The page renders this with `v-html`, so a generic such as `MouseEvent<E>` would become an element.
+    // Vue decodes entities in the attribute before the prop reaches `v-html`, so the escape is doubled:
+    // `&amp;lt;` is `&lt;` in the prop and `<` on the page.
+    .replace(/</g, '&amp;lt;')
+    .replace(/>/g, '&amp;gt;')
     .replace(/`([^`]*)`/g, '<code>$1</code>')
     .replace(/\*\*([^**]*)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]*)\*/g, '<em>$1</em>')

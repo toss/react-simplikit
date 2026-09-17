@@ -1,6 +1,8 @@
 # useSafeAreaInset
 
-`useSafeAreaInset` is a React hook that tracks safe area inset changes. It returns the safe area insets that automatically update when the screen orientation changes (e.g., portrait to landscape).
+`useSafeAreaInset` is a React hook that tracks safe area inset changes.
+It returns the safe area insets that automatically update when the screen
+orientation changes (e.g., portrait to landscape).
 
 Safe area insets account for device-specific UI elements:
 
@@ -16,12 +18,14 @@ function useSafeAreaInset(): SafeAreaInset;
 
 ### Parameters
 
+This function does not accept any parameters.
+
 ### Return Value
 
 <Interface
   name=""
   type="SafeAreaInset"
-  description="object containing safe area insets for all four sides."
+  description="An object containing safe area insets for all four sides."
   :nested="[
     {
       name: 'top',
@@ -73,7 +77,9 @@ function MyComponent() {
     </div>
   );
 }
+```
 
+```tsx
 // Automatically updates when screen rotates
 function RotationAwareHeader() {
   const { top, left, right } = useSafeAreaInset();

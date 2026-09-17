@@ -8,6 +8,10 @@
 function useIsClient(): boolean;
 ```
 
+### 파라미터
+
+이 함수는 파라미터를 받지 않아요.
+
 ### 반환 값
 
 <Interface
@@ -19,15 +23,33 @@ function useIsClient(): boolean;
 ## 예시
 
 ```tsx
-import { useIsClient } from 'react-simplikit';
-
 function ClientSideContent() {
   const isClient = useIsClient();
 
   if (!isClient) {
-    return <div>Loading...</div>;
+    return <div>로딩 중...</div>; // 서버 사이드에서 렌더링돼요
   }
 
-  return <div>Client-side rendered content</div>;
+  return <div>클라이언트 사이드에서 렌더링된 내용</div>; // 클라이언트 사이드에서 렌더링돼요
+}
+```
+
+```tsx
+function ClientOnlyMap() {
+  const isClient = useIsClient();
+
+  if (!isClient) return null;
+
+  return <div id="map" />;
+}
+```
+
+```tsx
+function ClientTheme() {
+  const isClient = useIsClient();
+
+  const theme = isClient ? localStorage.getItem('theme') : 'light';
+
+  return <div>현재 테마: {theme}</div>;
 }
 ```

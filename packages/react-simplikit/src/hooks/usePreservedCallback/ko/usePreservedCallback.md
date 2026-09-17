@@ -5,9 +5,10 @@
 ## 인터페이스
 
 ```ts
-function usePreservedCallback(
-  callback: (...args: any[]) => any
-): (...args: any[]) => any;
+function usePreservedCallback<
+  Arguments extends any[] = any[],
+  ReturnValue = unknown,
+>(callback: (...args: any[]) => any): (...args: any[]) => any;
 ```
 
 ### 파라미터

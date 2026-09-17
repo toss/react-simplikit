@@ -5,7 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useMap(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
+function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
 ```
 
 ### 파라미터

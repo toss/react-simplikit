@@ -1,12 +1,14 @@
 # useAvoidKeyboard
 
-`useAvoidKeyboard` is a React hook that helps fixed-bottom elements avoid the on-screen keyboard. It returns a CSS style that can be applied to `position: fixed` elements to smoothly move them above the keyboard when it appears.
+`useAvoidKeyboard` is a React hook that helps fixed-bottom elements avoid the on-screen keyboard.
+It returns a CSS style that can be applied to `position: fixed` elements
+to smoothly move them above the keyboard when it appears.
 
 ## Interface
 
 ```ts
 function useAvoidKeyboard(
-  options: UseAvoidKeyboardOptions
+  options?: UseAvoidKeyboardOptions
 ): UseAvoidKeyboardResult;
 ```
 
@@ -54,7 +56,7 @@ function useAvoidKeyboard(
 <Interface
   name=""
   type="UseAvoidKeyboardResult"
-  description="object containing the CSS style for keyboard avoidance."
+  description="An object containing the CSS style for keyboard avoidance."
   :nested="[
     {
       name: 'style',
@@ -86,7 +88,9 @@ function FixedBottomCTA() {
     </div>
   );
 }
+```
 
+```tsx
 // With safe area bottom offset (e.g., for iPhone home indicator)
 function FixedBottomCTA() {
   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });

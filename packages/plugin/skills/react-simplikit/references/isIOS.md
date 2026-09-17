@@ -5,12 +5,14 @@
 Notes on platform inconsistencies:
 
 - Prior to iPadOS 13, iPads reported their platform as "iPad" (or matched /iPad/ in UA).
-- Starting from iPadOS 13, Apple changed the platform string to "MacIntel" to make websites treat iPadOS as desktop-class Safari. However, these devices still expose multi-touch capabilities.
+- Starting from iPadOS 13, Apple changed the platform string to "MacIntel"
+  to make websites treat iPadOS as desktop-class Safari.
+  However, these devices still expose multi-touch capabilities.
 
 ## Interface
 
 ```ts
-function isIOS(userAgent: string): boolean;
+function isIOS(userAgent?: string): boolean;
 ```
 
 ### Parameters
@@ -26,12 +28,7 @@ function isIOS(userAgent: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="if the device is running iOS or iPadOS, <code>false</code> otherwise. Returns <code>false</code> on server"
-  :nested="[
-    {
-      required: false,
-    },
-  ]"
+  description="<code>true</code> if the device is running iOS or iPadOS, <code>false</code> otherwise. Returns <code>false</code> on server-side rendering environments."
 />
 
 ## Example
@@ -41,7 +38,9 @@ if (isIOS()) {
   // iOS-specific code
   enableIOSOptimizations();
 }
+```
 
+```tsx
 // With custom user agent
 const isIOSDevice = isIOS(
   'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)'

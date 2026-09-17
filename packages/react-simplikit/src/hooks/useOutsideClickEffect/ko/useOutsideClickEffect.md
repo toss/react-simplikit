@@ -17,7 +17,7 @@ function useOutsideClickEffect(
   required
   name="container"
   type="HTMLElement | HTMLElement[] | null"
-  description="단일 HTML 요소, HTML 요소 배열 또는 <code>null</code>이에요. <code>null</code>인 경우, 이벤트 리스너가 연결되지 않아요."
+  description="단일 HTML 요소, HTML 요소 배열 또는 <code>null</code>이에요. <code>null</code>인 경우, 콜백이 실행되지 않아요."
 />
 
 <Interface
@@ -29,7 +29,7 @@ function useOutsideClickEffect(
 
 ### 반환 값
 
-이 훅은 아무것도 반환하지 않아요.
+이 함수는 아무것도 반환하지 않아요.
 
 ## 예시
 

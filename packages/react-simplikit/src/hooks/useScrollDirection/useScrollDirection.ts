@@ -24,7 +24,9 @@ type UseScrollDirectionOptions = {
  *
  * @param {UseScrollDirectionOptions} [options] - Configuration options.
  * @param {number} [options.throttleMs=50] - Throttle interval in milliseconds.
- * @returns {ScrollDirectionState} Scroll direction state: `direction` (`'up' | 'down' | null`) and `position` (px).
+ * @returns {ScrollDirectionState} An object containing the scroll direction and position.
+ * - direction `'up' | 'down' | null` - The current scroll direction. `null` on the initial render
+ * - position `number` - The current vertical scroll position in pixels
  *
  * @example
  * function Header() {
@@ -39,6 +41,26 @@ type UseScrollDirectionOptions = {
  *     </header>
  *   );
  * }
+ *
+ * @example
+ * <caption>Custom throttle interval</caption>
+ * function MyComponent() {
+ *   // Update every 100ms instead of the default 50ms
+ *   const { direction, position } = useScrollDirection({ throttleMs: 100 });
+ *
+ *   return (
+ *     <div>
+ *       Scrolling {direction}! Position: {position}px
+ *     </div>
+ *   );
+ * }
+ *
+ * @remarks
+ * - **SSR safety**: The hook checks `isServer()` before reading `window.scrollY`, so it is safe during server-side rendering.
+ * - **Performance**: Scroll events are throttled to limit how often they are processed (default: 50ms).
+ * - **Passive listener**: The scroll listener is registered with `{ passive: true }` for smoother scrolling.
+ * - **Cleanup**: The event listener and the throttle timer are removed when the component unmounts.
+ * - **Browser support**: Requires a browser environment with `window` and `scrollY`.
  */
 export function useScrollDirection(options: UseScrollDirectionOptions = {}): ScrollDirectionState {
   const { throttleMs = 50 } = options;

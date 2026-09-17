@@ -15,6 +15,7 @@ export type UseControlledStateProps<T> = ControlledState<T> & {
  * If you pass the state to `value`, it will be a controlled state, and if you pass the state to `defaultValue`, it will be an uncontrolled state.
  * If both `value` and `defaultValue` are passed, `value` will take precedence.
  *
+ * @template T - The type of the state value.
  * @param {Object} props
  * @param {T} [props.value] - The value of the state.
  * @param {T} [props.defaultValue] - The default value of the state.

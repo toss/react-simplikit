@@ -1,14 +1,16 @@
 # SwitchCase
 
-`SwitchCase` is a component that allows you to declaratively render components based on a given value, similar to a `switch-case` statement. It is useful when you need to conditionally render different components depending on a specific state.
+`SwitchCase` is a component that allows you to declaratively render components based on a given value,
+similar to a `switch-case` statement. It is useful when you need to conditionally render different
+components depending on a specific state.
 
 ## Interface
 
 ```ts
-function SwitchCase(
+function SwitchCase<Case>(
   value: Case,
   caseBy: Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>,
-  defaultComponent: () => ReactElement | null
+  defaultComponent?: () => ReactElement | null
 ): ReactElement | null;
 ```
 
@@ -39,7 +41,7 @@ function SwitchCase(
 <Interface
   name=""
   type="ReactElement | null"
-  description="React component that conditionally renders based on cases."
+  description="A React component that conditionally renders based on cases."
 />
 
 ## Example

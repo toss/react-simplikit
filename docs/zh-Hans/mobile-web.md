@@ -28,7 +28,7 @@ npm install react-simplikit
 
 ### CTA 按钮示例
 
-最常见的移动端 UI 模式，就是固定在底部、会移动到键盘上方的按钮：
+这个示例让底部固定按钮保持在键盘上方。
 
 ```tsx
 import { useAvoidKeyboard } from 'react-simplikit';
@@ -54,7 +54,7 @@ function FixedBottomCTA() {
 
 ### 聊天输入框示例
 
-一个聊天界面，其中的输入框会始终停留在键盘上方：
+这个示例让聊天输入框保持在键盘上方。
 
 ```tsx
 import { useState } from 'react';

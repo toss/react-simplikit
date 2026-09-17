@@ -17,6 +17,7 @@ type Props<Case> = {
  * similar to a `switch-case` statement. It is useful when you need to conditionally render different
  * components depending on a specific state.
  *
+ * @template Case - The type of the value being matched.
  * @param {Case} value - The value to compare against.
  *   The component associated with the matching key in `caseBy` will be rendered.
  * @param {Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>} caseBy - An object that maps values to

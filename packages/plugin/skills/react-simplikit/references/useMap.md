@@ -1,11 +1,12 @@
 # useMap
 
-A React hook that manages a key-value Map as state. Provides efficient state management and stable action functions.
+A React hook that manages a key-value Map as state.
+Provides efficient state management and stable action functions.
 
 ## Interface
 
 ```ts
-function useMap(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
+function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
 ```
 
 ### Parameters
@@ -22,7 +23,7 @@ function useMap(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
 <Interface
   name=""
   type="UseMapReturn<K, V>"
-  description="tuple containing the Map state and actions to manipulate it"
+  description="A tuple containing the Map state and actions to manipulate it"
 />
 
 ## Example

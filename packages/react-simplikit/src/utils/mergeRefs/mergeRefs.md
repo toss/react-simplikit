@@ -1,6 +1,8 @@
 # mergeRefs
 
-This function takes multiple refs (RefObject or RefCallback) and returns a single ref that updates all provided refs. It's useful when you need to pass multiple refs to a single element. When a callback ref returns a cleanup function (React 19), the merged ref returns one as well and runs every cleanup on detach.
+This function takes multiple refs (RefObject or RefCallback) and returns a single ref that updates all provided refs.
+It's useful when you need to pass multiple refs to a single element.
+When a callback ref returns a cleanup function (React 19), the merged ref returns one as well and runs every cleanup on detach.
 
 ## Interface
 
@@ -24,7 +26,7 @@ function mergeRefs<T>(
 <Interface
   name=""
   type="RefCallback<T>"
-  description="single ref callback that updates all provided refs."
+  description="A single ref callback that updates all provided refs."
 />
 
 ## Example
@@ -35,7 +37,9 @@ forwardRef(function Component(props, parentRef) {
 
   return <div ref={mergeRefs(myRef, parentRef)} />;
 });
+```
 
+```tsx
 function Component(props) {
   const ref = useRef(null);
   const [height, setHeight] = useState(0);

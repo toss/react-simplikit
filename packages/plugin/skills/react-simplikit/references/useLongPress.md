@@ -1,13 +1,14 @@
 # useLongPress
 
-`useLongPress` is a React hook that detects when an element is pressed and held for a specified duration. It handles both mouse and touch events, making it work consistently across desktop and mobile devices.
+`useLongPress` is a React hook that detects when an element is pressed and held for a specified duration.
+It handles both mouse and touch events, making it work consistently across desktop and mobile devices.
 
 ## Interface
 
 ```ts
 function useLongPress<E extends HTMLElement>(
   onLongPress: (event: React.MouseEvent<E> | React.TouchEvent<E>) => void,
-  options: UseLongPressOptions
+  options?: UseLongPressOptions
 ): Object;
 ```
 
@@ -72,14 +73,51 @@ function useLongPress<E extends HTMLElement>(
 <Interface
   name=""
   type="Object"
-  description="handlers to attach to an element."
+  description="Event handlers to attach to an element."
   :nested="[
     {
       name: 'onMouseDown',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
+      description: 'Event handler for mouse down events.',
+    },
+    {
+      name: 'onMouseUp',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: 'Event handler for mouse up events.',
+    },
+    {
+      name: 'onMouseLeave',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: 'Event handler for mouse leave events.',
+    },
+    {
+      name: 'onTouchStart',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: 'Event handler for touch start events.',
+    },
+    {
+      name: 'onTouchEnd',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description: 'Event handler for touch end events.',
+    },
+    {
+      name: 'onMouseMove',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
       description:
-        'Event handler for mouse down events. - onMouseUp <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for mouse up events. - onMouseLeave <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for mouse leave events. - onTouchStart <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for touch start events. - onTouchEnd <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for touch end events. - onMouseMove <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for mouse move events. Included if <code>moveThreshold</code> is provided. - onTouchMove <code>(event<br />  : MouseEvent<E> | TouchEvent<E>) => void</code> - Event handler for touch move events. Included if <code>moveThreshold</code> is provided.',
+        'Event handler for mouse move events. Included if <code>moveThreshold</code> is provided.',
+    },
+    {
+      name: 'onTouchMove',
+      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      required: false,
+      description:
+        'Event handler for touch move events. Included if <code>moveThreshold</code> is provided.',
     },
   ]"
 />

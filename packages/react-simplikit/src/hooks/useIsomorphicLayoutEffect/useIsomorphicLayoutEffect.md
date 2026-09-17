@@ -1,6 +1,7 @@
 # useIsomorphicLayoutEffect
 
-`useIsomorphicLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering. During SSR, there is no DOM to synchronously measure or mutate, so React warns about using `useLayoutEffect`.
+`useIsomorphicLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering.
+During SSR, there is no DOM to synchronously measure or mutate, so React warns about using `useLayoutEffect`.
 
 This hook runs synchronously after DOM updates but before paint, making it ideal for:
 
@@ -14,7 +15,7 @@ This hook runs synchronously after DOM updates but before paint, making it ideal
 ```ts
 function useIsomorphicLayoutEffect(
   effect: React.EffectCallback,
-  deps: React.DependencyList
+  deps?: React.DependencyList
 ): void;
 ```
 
@@ -35,7 +36,7 @@ function useIsomorphicLayoutEffect(
 
 ### Return Value
 
-This hook does not return anything.
+This function does not return anything.
 
 ## Example
 

@@ -1,6 +1,7 @@
 # useInterval
 
-`useInterval` is a React hook that executes a function at a specified interval. It is useful for timers, polling data, and other recurring tasks.
+`useInterval` is a React hook that executes a function at a specified interval.
+It is useful for timers, polling data, and other recurring tasks.
 
 ## Interface
 
@@ -53,7 +54,7 @@ function useInterval(
 
 ### Return Value
 
-This hook does not return anything.
+This function does not return anything.
 
 ## Example
 

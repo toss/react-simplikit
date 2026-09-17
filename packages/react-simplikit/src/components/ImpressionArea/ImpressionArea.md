@@ -1,20 +1,22 @@
 # ImpressionArea
 
-`ImpressionArea` is a component that measures the time a specific DOM element is visible on the screen and executes callbacks when the element enters or exits the viewport. This component uses the `useImpressionRef` hook to track the element's visibility.
+`ImpressionArea` is a component that measures the time a specific DOM element is visible on the screen
+and executes callbacks when the element enters or exits the viewport. This component uses the `useImpressionRef`
+hook to track the element's visibility.
 
 ## Interface
 
 ```ts
 function ImpressionArea<T extends ElementType>(
   as: T = 'div',
-  rootMargin: string,
-  areaThreshold: number,
-  timeThreshold: number,
-  onImpressionStart: () => void,
-  onImpressionEnd: () => void,
-  ref: Ref<Element<T>>,
-  children: React.ReactNode,
-  className: string
+  rootMargin?: string,
+  areaThreshold?: number,
+  timeThreshold?: number,
+  onImpressionStart?: () => void,
+  onImpressionEnd?: () => void,
+  ref?: Ref<Element<T>>,
+  children?: React.ReactNode,
+  className?: string
 ): JSX.Element;
 ```
 
@@ -79,7 +81,7 @@ function ImpressionArea<T extends ElementType>(
 <Interface
   name=""
   type="JSX.Element"
-  description="React component that tracks the visibility of its child elements."
+  description="A React component that tracks the visibility of its child elements."
 />
 
 ## Example

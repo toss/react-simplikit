@@ -13,8 +13,6 @@ const SCROLL_POSITION_ATTR = 'data-simplikit-scroll-y';
  * Safe to call in SSR environment (no-op on server).
  * Safe to call even if not locked (no-op).
  *
- * @returns {void}
- *
  * @example
  * // When modal opens
  * enableBodyScrollLock();
