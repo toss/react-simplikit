@@ -270,7 +270,7 @@ ${await prettier.format(paramsProps.map(props => getParamUl(...props)).join(''),
 ### Return Value
 ${
   returns == null
-    ? '\nThis hook does not return anything.'
+    ? '\nThis function does not return anything.'
     : `
 ${await prettier.format(getParamUl(returns, nestedValueOfReturns), { ...prettierConfig, parser: 'vue' })}`
 }

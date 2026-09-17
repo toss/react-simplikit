@@ -38,7 +38,7 @@ function useVisibilityEvent(
 
 ### 반환 값
 
-이 훅은 아무것도 반환하지 않아요.
+이 함수는 아무것도 반환하지 않아요.
 
 ## 예시
 

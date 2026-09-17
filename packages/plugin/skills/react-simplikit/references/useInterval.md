@@ -54,7 +54,7 @@ function useInterval(
 
 ### Return Value
 
-This hook does not return anything.
+This function does not return anything.
 
 ## Example
 
