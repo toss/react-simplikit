@@ -660,4 +660,21 @@ export function useNoParams() {}`
 
     expect(document).toContain('\nThis function does not accept any parameters.');
   });
+
+  it('renders a fallback message when there are no return value', async () => {
+    const document = await render(
+      'useNoReturnValue',
+      `/**
+ * @description
+ * \`useNoReturnValue\` does something.
+ *
+ * @example
+ * useNoReturnValue();
+ *
+ */
+export function useNoReturnValue() {}`
+    );
+
+    expect(document).toContain('\nThis function does not return anything.');
+  });
 });

@@ -26,7 +26,7 @@ function useTimeout(callback: () => void, delay: number = 0): void;
 
 ### Return Value
 
-This hook does not return anything.
+This function does not return anything.
 
 ## Example
 

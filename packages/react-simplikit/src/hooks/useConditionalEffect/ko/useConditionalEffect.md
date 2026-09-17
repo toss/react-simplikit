@@ -37,7 +37,7 @@ function useConditionalEffect<T extends DependencyList>(
 
 ### 반환 값
 
-이 훅은 아무 것도 반환하지 않아요.
+이 함수는 아무 것도 반환하지 않아요.
 
 ## 예시
 
