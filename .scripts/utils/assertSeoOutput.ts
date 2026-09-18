@@ -36,7 +36,7 @@ export async function assertSeoOutput(buildOutputDirectory: string): Promise<voi
     ['ko/index.html', 'ko/'],
     ['installation.html', 'installation.html'],
     ['ko/use-cases.html', 'ko/use-cases.html'],
-    ['ja/hooks/useDebounce.html', 'hooks/useDebounce.html'],
+    ['ko/hooks/useUntranslatedFallbackFixture.html', 'hooks/useUntranslatedFallbackFixture.html'],
   ]) {
     const html = await readFile(path.join(buildOutputDirectory, route), 'utf8');
     const dom = new JSDOM(html.slice(0, html.indexOf('</head>') + '</head>'.length));
