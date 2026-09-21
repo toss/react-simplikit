@@ -61,7 +61,9 @@ function Header() {
   // Oculta el encabezado al desplazarte hacia abajo
   const isHidden = direction === 'down' && position > 100;
 
-  return <header className={isHidden ? 'hidden' : 'visible'}>Mi encabezado</header>;
+  return (
+    <header className={isHidden ? 'hidden' : 'visible'}>Mi encabezado</header>
+  );
 }
 ```
 

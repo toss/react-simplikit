@@ -66,7 +66,9 @@ function GalleryCard() {
   });
 
   return (
-    <div onClick={handleEvent}>{selected ? 'Seleccionado' : 'No seleccionado'}</div>
+    <div onClick={handleEvent}>
+      {selected ? 'Seleccionado' : 'No seleccionado'}
+    </div>
   );
 }
 ```

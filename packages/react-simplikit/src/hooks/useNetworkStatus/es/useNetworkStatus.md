@@ -71,7 +71,10 @@ function AdaptiveImage() {
   const useHighQuality = effectiveType === '4g' && !saveData;
 
   return (
-    <img src={useHighQuality ? 'high-res.jpg' : 'low-res.jpg'} alt="Contenido" />
+    <img
+      src={useHighQuality ? 'high-res.jpg' : 'low-res.jpg'}
+      alt="Contenido"
+    />
   );
 }
 ```

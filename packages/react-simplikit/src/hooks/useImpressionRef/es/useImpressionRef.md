@@ -70,7 +70,8 @@ import { useImpressionRef } from 'react-simplikit';
 
 function Component() {
   const ref = useImpressionRef<HTMLDivElement>({
-    onImpressionStart: () => console.log('El elemento entró en el área visible'),
+    onImpressionStart: () =>
+      console.log('El elemento entró en el área visible'),
     onImpressionEnd: () => console.log('El elemento salió del área visible'),
     timeThreshold: 1000,
     areaThreshold: 0.5,
