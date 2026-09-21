@@ -91,8 +91,9 @@ const hookFixtureDirectory = path.join(root, 'packages/react-simplikit/src/hooks
 const buildOutputDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-docs-'));
 
 // Korean translates every routed English document, so its fallback path only has a route to
-// render on while these English-only fixtures exist. Japanese translates the hook pages but not
-// the component and util pages, so those routes render from generated fallbacks on every build.
+// render on while these English-only fixtures exist. A locale with untranslated API reference
+// pages renders those routes from generated fallbacks on every build, but which pages those are
+// changes as translations land, so the assertions target the fixtures instead.
 await fs.writeFile(guideFixturePath, `# ${guideFixtureTitle}\n`);
 await fs.mkdir(hookFixtureDirectory, { recursive: true });
 await fs.writeFile(path.join(hookFixtureDirectory, `${hookFixtureName}.md`), `# ${hookFixtureName}\n`);
