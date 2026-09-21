@@ -74,7 +74,7 @@ function useGeolocation(options?: GeolocationOptions): Object;
       type: 'GeolocationData|null',
       required: false,
       description:
-        '위치 데이터 객체 또는 null이에요 <br />  : 위도 <code>number</code> - 십진수로 표현된 위도예요 <br />  : 경도 <code>number</code> - 십진수로 표현된 경도예요 <br />  : 정확도 <code>number</code> - 위치의 정확도(미터)예요 <br />  : 고도 <code>number|null</code> - WGS84 타원체 기준의 고도(미터)예요 <br />  : 고도 정확도 <code>number|null</code> - 고도의 정확도(미터)예요 <br />  : 방위 <code>number|null</code> - 진북에서 시계방향으로의 방위(도)예요 <br />  : 속도 <code>number|null</code> - 속도(미터/초)예요 <br />  : 타임스탬프 <code>number</code> - 위치가 검색된 시간이에요.',
+        '위치 데이터 객체 또는 null이에요 <br />  : latitude <code>number</code> - 십진수로 표현된 위도예요 <br />  : longitude <code>number</code> - 십진수로 표현된 경도예요 <br />  : accuracy <code>number</code> - 위치의 정확도(미터)예요 <br />  : altitude <code>number|null</code> - WGS84 타원체 기준의 고도(미터)예요 <br />  : altitudeAccuracy <code>number|null</code> - 고도의 정확도(미터)예요 <br />  : heading <code>number|null</code> - 진북에서 시계방향으로의 방위(도)예요 <br />  : speed <code>number|null</code> - 속도(미터/초)예요 <br />  : timestamp <code>number</code> - 위치가 검색된 시간이에요.',
     },
     {
       name: 'getCurrentPosition',
