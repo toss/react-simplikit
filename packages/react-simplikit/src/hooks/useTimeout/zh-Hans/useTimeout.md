@@ -31,18 +31,18 @@ function useTimeout(callback: () => void, delay: number = 0): void;
 
 ```tsx
 // Updating a title after a delay
-import { useTimeout } from "react-simplikit";
-import { useState } from "react";
+import { useTimeout } from 'react-simplikit';
+import { useState } from 'react';
 
 function Example() {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
 
   useTimeout(() => {
-    setTitle("Searching for products...");
+    setTitle('Searching for products...');
   }, 2000);
 
   useTimeout(() => {
-    setTitle("Almost done...");
+    setTitle('Almost done...');
   }, 4000);
 
   return <div>{title}</div>;
