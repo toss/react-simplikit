@@ -14,7 +14,7 @@
 ```ts
 function useIsomorphicLayoutEffect(
   effect: React.EffectCallback,
-  deps?: React.DependencyList
+  deps?: React.DependencyList,
 ): void;
 ```
 
