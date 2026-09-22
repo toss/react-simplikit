@@ -6,7 +6,7 @@
 
 ```ts
 function useScrollDirection(
-  options?: UseScrollDirectionOptions
+  options?: UseScrollDirectionOptions,
 ): ScrollDirectionState;
 ```
 
@@ -36,7 +36,7 @@ function useScrollDirection(
   :nested="[
     {
       name: 'direction',
-      type: '\\'up\\' | \\'down\\' | null',
+      type: '\'up\' | \'down\' | null',
       required: false,
       description:
         '当前的滚动方向。在首次渲染时为 <code>null</code>。',
@@ -57,9 +57,9 @@ function Header() {
   const { direction, position } = useScrollDirection();
 
   // 向下滚动时隐藏头部
-  const isHidden = direction === 'down' && position > 100;
+  const isHidden = direction === "down" && position > 100;
 
-  return <header className={isHidden ? 'hidden' : 'visible'}>My Header</header>;
+  return <header className={isHidden ? "hidden" : "visible"}>My Header</header>;
 }
 ```
 
