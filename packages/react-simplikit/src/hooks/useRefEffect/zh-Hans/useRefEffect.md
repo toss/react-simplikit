@@ -7,7 +7,7 @@
 ```ts
 function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
   callback: (element: RefElement) => CleanupCallback | void,
-  deps: DependencyList
+  deps: DependencyList,
 ): (element: RefElement | null) => void;
 ```
 
@@ -38,14 +38,14 @@ function useRefEffect<RefElement extends HTMLElement = HTMLElement>(
 ## 示例
 
 ```tsx
-import { useRefEffect } from 'react-simplikit';
+import { useRefEffect } from "react-simplikit";
 
 function Component() {
-  const ref = useRefEffect<HTMLDivElement>(element => {
-    console.log('Element mounted:', element);
+  const ref = useRefEffect<HTMLDivElement>((element) => {
+    console.log("Element mounted:", element);
 
     return () => {
-      console.log('Element unmounted:', element);
+      console.log("Element unmounted:", element);
     };
   }, []);
 
