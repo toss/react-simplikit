@@ -29,12 +29,12 @@ function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
 
 ```tsx
 const [userMap, actions] = useMap<string, User>([
-  ['user1', { name: 'John', age: 30 }],
+  ["user1", { name: "John", age: 30 }],
 ]);
 
 // Using values from the Map
-const user1 = userMap.get('user1');
+const user1 = userMap.get("user1");
 
 // Updating the Map
-actions.set('user2', { name: 'Jane', age: 25 });
+actions.set("user2", { name: "Jane", age: 25 });
 ```
