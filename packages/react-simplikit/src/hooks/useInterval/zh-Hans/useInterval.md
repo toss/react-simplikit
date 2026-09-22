@@ -7,7 +7,7 @@
 ```ts
 function useInterval(
   callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean },
+  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
 ): void;
 ```
 
@@ -58,14 +58,14 @@ function useInterval(
 ## 示例
 
 ```tsx
-import { useInterval } from "react-simplikit";
-import { useState } from "react";
+import { useInterval } from 'react-simplikit';
+import { useState } from 'react';
 
 function Timer() {
   const [time, setTime] = useState(0);
 
   useInterval(() => {
-    setTime((prev) => prev + 1);
+    setTime(prev => prev + 1);
   }, 1000);
 
   return (
