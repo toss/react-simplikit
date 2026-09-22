@@ -66,9 +66,9 @@ function Analytics() {
   const { isVisible, visibilityState } = usePageVisibility();
 
   useEffect(() => {
-    if (visibilityState === "hidden") {
+    if (visibilityState === 'hidden') {
       // 跟踪用户离开页面
-      analytics.track("page_hidden");
+      analytics.track('page_hidden');
     }
   }, [visibilityState]);
 
