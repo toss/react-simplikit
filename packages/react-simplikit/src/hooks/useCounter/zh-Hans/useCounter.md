@@ -7,7 +7,7 @@
 ```ts
 function useCounter(
   initialValue: number = 0,
-  options: UseCounterOptions
+  options: UseCounterOptions,
 ): UseCounterReturn;
 ```
 
@@ -93,7 +93,7 @@ function useCounter(
 ## 示例
 
 ```tsx
-import { useCounter } from 'react-simplikit';
+import { useCounter } from "react-simplikit";
 
 function ShoppingCart() {
   const { count, increment, decrement, reset } = useCounter(1, {
