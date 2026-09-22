@@ -6,7 +6,7 @@
 
 ```ts
 function useScrollDirection(
-  options?: UseScrollDirectionOptions,
+  options?: UseScrollDirectionOptions
 ): ScrollDirectionState;
 ```
 
@@ -57,9 +57,9 @@ function Header() {
   const { direction, position } = useScrollDirection();
 
   // 向下滚动时隐藏头部
-  const isHidden = direction === "down" && position > 100;
+  const isHidden = direction === 'down' && position > 100;
 
-  return <header className={isHidden ? "hidden" : "visible"}>My Header</header>;
+  return <header className={isHidden ? 'hidden' : 'visible'}>My Header</header>;
 }
 ```
 
