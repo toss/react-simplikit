@@ -6,7 +6,7 @@
 
 ```ts
 function useAvoidKeyboard(
-  options?: UseAvoidKeyboardOptions
+  options?: UseAvoidKeyboardOptions,
 ): UseAvoidKeyboardResult;
 ```
 
@@ -34,9 +34,9 @@ function useAvoidKeyboard(
     },
     {
       name: 'options.transitionTimingFunction',
-      type: 'CSSProperties[\\'transitionTimingFunction\\']',
+      type: 'CSSProperties[\'transitionTimingFunction\']',
       required: false,
-      defaultValue: '\\'ease-out\\'',
+      defaultValue: '\'ease-out\'',
       description: '动画的过渡时间函数。',
     },
     {
@@ -75,7 +75,7 @@ function FixedBottomCTA() {
   return (
     <div
       style={{
-        position: 'fixed',
+        position: "fixed",
         bottom: 0,
         left: 0,
         right: 0,
@@ -96,7 +96,7 @@ function FixedBottomCTA() {
   return (
     <div
       style={{
-        position: 'fixed',
+        position: "fixed",
         bottom: 0,
         left: 0,
         right: 0,
