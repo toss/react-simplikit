@@ -70,7 +70,7 @@ function Toggle({ value, defaultValue, onChange }: ToggleProps) {
   });
 
   return (
-    <button onClick={() => setOn(prev => !prev)}>{on ? 'ON' : 'OFF'}</button>
+    <button onClick={() => setOn((prev) => !prev)}>{on ? "ON" : "OFF"}</button>
   );
 }
 ```
