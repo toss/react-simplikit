@@ -28,7 +28,7 @@ function usePageVisibility(): PageVisibility;
     },
     {
       name: 'visibilityState',
-      type: '\\'visible\\' | \\'hidden\\'',
+      type: '\'visible\' | \'hidden\'',
       required: false,
       description: '当前的可见性状态。',
     },
@@ -66,9 +66,9 @@ function Analytics() {
   const { isVisible, visibilityState } = usePageVisibility();
 
   useEffect(() => {
-    if (visibilityState === 'hidden') {
+    if (visibilityState === "hidden") {
       // 跟踪用户离开页面
-      analytics.track('page_hidden');
+      analytics.track("page_hidden");
     }
   }, [visibilityState]);
 
