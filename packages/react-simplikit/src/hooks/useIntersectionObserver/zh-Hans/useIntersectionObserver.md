@@ -7,7 +7,7 @@
 ```ts
 function useIntersectionObserver<Element extends HTMLElement>(
   callback: (entry: IntersectionObserverEntry) => void,
-  options: IntersectionObserverInit,
+  options: IntersectionObserverInit
 ): (element: Element | null) => void;
 ```
 
@@ -60,18 +60,18 @@ function useIntersectionObserver<Element extends HTMLElement>(
 ## 示例
 
 ```tsx
-import { useIntersectionObserver } from "react-simplikit";
+import { useIntersectionObserver } from 'react-simplikit';
 
 function Component() {
   const ref = useIntersectionObserver<HTMLDivElement>(
-    (entry) => {
+    entry => {
       if (entry.isIntersecting) {
-        console.log("Element is in view:", entry.target);
+        console.log('Element is in view:', entry.target);
       } else {
-        console.log("Element is out of view:", entry.target);
+        console.log('Element is out of view:', entry.target);
       }
     },
-    { threshold: 0.5 },
+    { threshold: 0.5 }
   );
 
   return <div ref={ref}>Observe me!</div>;
