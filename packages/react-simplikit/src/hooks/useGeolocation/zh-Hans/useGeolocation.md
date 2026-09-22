@@ -110,7 +110,7 @@ function useGeolocation(options?: GeolocationOptions): Object;
 const { loading, error, data, getCurrentPosition } = useGeolocation();
 
 // Automatically fetch location when component mounts
-const { loading, error, data } = useGeolocation({ mountBehavior: 'get' });
+const { loading, error, data } = useGeolocation({ mountBehavior: "get" });
 
 // Location tracking
 const { loading, error, data, startTracking, stopTracking, isTracking } =
