@@ -8,7 +8,7 @@
 function useConditionalEffect<T extends DependencyList>(
   effect: EffectCallback,
   deps: DependencyList,
-  condition: (prevDeps: T | undefined, currentDeps: T) => boolean,
+  condition: (prevDeps: T | undefined, currentDeps: T) => boolean
 ): void;
 ```
 
@@ -42,7 +42,7 @@ function useConditionalEffect<T extends DependencyList>(
 ## 示例
 
 ```tsx
-import { useConditionalEffect } from "react-simplikit";
+import { useConditionalEffect } from 'react-simplikit';
 
 function Component() {
   const [count, setCount] = useState(0);
@@ -56,11 +56,11 @@ function Component() {
     (prevDeps, currentDeps) => {
       // Only run when count is defined and has increased
       return prevDeps && currentDeps[0] > prevDeps[0];
-    },
+    }
   );
 
   return (
-    <button onClick={() => setCount((prev) => prev + 1)}>
+    <button onClick={() => setCount(prev => prev + 1)}>
       Increment: {count}
     </button>
   );
