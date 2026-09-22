@@ -66,10 +66,10 @@ function AdaptiveImage() {
   const { effectiveType, saveData } = useNetworkStatus();
 
   // 根据应用需求决定图片质量
-  const useHighQuality = effectiveType === "4g" && !saveData;
+  const useHighQuality = effectiveType === '4g' && !saveData;
 
   return (
-    <img src={useHighQuality ? "high-res.jpg" : "low-res.jpg"} alt="Content" />
+    <img src={useHighQuality ? 'high-res.jpg' : 'low-res.jpg'} alt="Content" />
   );
 }
 ```
@@ -81,7 +81,7 @@ function VideoPlayer() {
   const { type, downlink } = useNetworkStatus();
 
   // 自定义逻辑：仅在 wifi 且带宽充足时自动播放
-  const shouldAutoplay = type === "wifi" && (downlink ?? 0) > 5;
+  const shouldAutoplay = type === 'wifi' && (downlink ?? 0) > 5;
 
   return <video src="video.mp4" autoPlay={shouldAutoplay} />;
 }
