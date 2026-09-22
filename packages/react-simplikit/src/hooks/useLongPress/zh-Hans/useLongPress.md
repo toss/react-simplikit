@@ -7,7 +7,7 @@
 ```ts
 function useLongPress<E extends HTMLElement>(
   onLongPress: (event: React.MouseEvent<E> | React.TouchEvent<E>) => void,
-  options?: UseLongPressOptions,
+  options?: UseLongPressOptions
 ): Object;
 ```
 
@@ -124,15 +124,15 @@ function useLongPress<E extends HTMLElement>(
 ## 示例
 
 ```tsx
-import { useLongPress } from "react-simplikit";
+import { useLongPress } from 'react-simplikit';
 
 function ContextMenu() {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const longPressHandlers = useLongPress(() => setMenuVisible(true), {
     delay: 400,
-    onClick: () => console.log("Normal click"),
-    onLongPressEnd: () => console.log("Long press completed"),
+    onClick: () => console.log('Normal click'),
+    onLongPressEnd: () => console.log('Long press completed'),
   });
 
   return (
