@@ -12,7 +12,7 @@
 function useThrottledValue<T>(
   value: T,
   wait: number,
-  options?: ThrottleOptions
+  options?: ThrottleOptions,
 ): T;
 ```
 
@@ -63,15 +63,15 @@ function useThrottledValue<T>(
 ## 示例
 
 ```tsx
-import { useThrottledValue } from 'react-simplikit';
-import { useState } from 'react';
+import { useThrottledValue } from "react-simplikit";
+import { useState } from "react";
 
 function ScrollProgress() {
   const [scrollY, setScrollY] = useState(0);
   const throttledScrollY = useThrottledValue(scrollY, 100);
 
   return (
-    <div onScroll={e => setScrollY(e.currentTarget.scrollTop)}>
+    <div onScroll={(e) => setScrollY(e.currentTarget.scrollTop)}>
       <ProgressBar position={throttledScrollY} />
     </div>
   );
