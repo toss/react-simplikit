@@ -6,8 +6,8 @@
 
 ```ts
 function useVisibilityEvent(
-  callback: (visibilityState: "visible" | "hidden") => void,
-  options?: object,
+  callback: (visibilityState: 'visible' | 'hidden') => void,
+  options?: object
 ): void;
 ```
 
@@ -43,10 +43,10 @@ function useVisibilityEvent(
 ## 示例
 
 ```tsx
-import { useVisibilityEvent } from "react-simplikit";
+import { useVisibilityEvent } from 'react-simplikit';
 
 function Component() {
-  useVisibilityEvent((visibilityState) => {
+  useVisibilityEvent(visibilityState => {
     console.log(`Document is now ${visibilityState}`);
   });
 
