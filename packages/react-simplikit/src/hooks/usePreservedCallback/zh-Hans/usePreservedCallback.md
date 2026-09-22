@@ -31,15 +31,15 @@ function usePreservedCallback<
 ## 示例
 
 ```tsx
-import { usePreservedCallback } from "react-simplikit";
-import { useState } from "react";
+import { usePreservedCallback } from 'react-simplikit';
+import { useState } from 'react';
 
 function Counter() {
   const [count, setCount] = useState(0);
 
   const handleClick = usePreservedCallback(() => {
     console.log(`Current count: ${count}`);
-    setCount((prev) => prev + 1);
+    setCount(prev => prev + 1);
   });
 
   return <button onClick={handleClick}>Click me</button>;
