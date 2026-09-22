@@ -6,7 +6,7 @@
 
 ```ts
 function useToggle(
-  initialValue: boolean = false,
+  initialValue: boolean = false
 ): [state: boolean, toggle: () => void];
 ```
 
@@ -43,14 +43,14 @@ function useToggle(
 ## 示例
 
 ```tsx
-import { useToggle } from "react-simplikit";
+import { useToggle } from 'react-simplikit';
 
 function Component() {
   const [open, toggle] = useToggle(false);
 
   return (
     <div>
-      <p>Bottom Sheet state: {open ? "opened" : "closed"}</p>
+      <p>Bottom Sheet state: {open ? 'opened' : 'closed'}</p>
       <button onClick={toggle}>Toggle</button>
     </div>
   );
