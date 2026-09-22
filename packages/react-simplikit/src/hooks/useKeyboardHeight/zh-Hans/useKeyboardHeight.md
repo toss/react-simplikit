@@ -6,7 +6,7 @@
 
 ```ts
 function useKeyboardHeight(
-  options?: UseKeyboardHeightOptions,
+  options?: UseKeyboardHeightOptions
 ): UseKeyboardHeightResult;
 ```
 
@@ -66,7 +66,7 @@ function KeyboardStatus() {
     <div>
       {keyboardHeight > 0
         ? `Keyboard is open (${keyboardHeight}px)`
-        : "Keyboard is closed"}
+        : 'Keyboard is closed'}
     </div>
   );
 }
