@@ -14,7 +14,7 @@
 function useDebouncedValue<T>(
   value: T,
   wait: number,
-  options?: DebounceOptions,
+  options?: DebounceOptions
 ): T;
 ```
 
@@ -65,18 +65,18 @@ function useDebouncedValue<T>(
 ## 示例
 
 ```tsx
-import { useDebouncedValue } from "react-simplikit";
-import { useState } from "react";
+import { useDebouncedValue } from 'react-simplikit';
+import { useState } from 'react';
 
 function SearchInput() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 300);
 
   return (
     <>
       <label>
         Search
-        <input value={query} onChange={(e) => setQuery(e.target.value)} />
+        <input value={query} onChange={e => setQuery(e.target.value)} />
       </label>
       <output aria-live="polite">{debouncedQuery}</output>
     </>
