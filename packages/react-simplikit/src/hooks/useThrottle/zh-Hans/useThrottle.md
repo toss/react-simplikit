@@ -8,7 +8,7 @@
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  options?: { edges?: Array<"leading" | "trailing"> },
 ): F & { cancel: () => void };
 ```
 
@@ -57,16 +57,16 @@ function useThrottle<F extends (...args: any[]) => any>(
 ```tsx
 const throttledScroll = useThrottle(
   () => {
-    console.log('Scroll event');
+    console.log("Scroll event");
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { edges: ["leading", "trailing"] },
 );
 
 useEffect(() => {
-  window.addEventListener('scroll', throttledScroll);
+  window.addEventListener("scroll", throttledScroll);
   return () => {
-    window.removeEventListener('scroll', throttledScroll);
+    window.removeEventListener("scroll", throttledScroll);
     throttledScroll.cancel();
   };
 }, [throttledScroll]);
