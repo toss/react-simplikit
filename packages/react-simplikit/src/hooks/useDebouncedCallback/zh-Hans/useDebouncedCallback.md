@@ -62,11 +62,11 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
 ## 示例
 
 ```tsx
-import { useDebouncedCallback } from "react-simplikit";
-import { useState } from "react";
+import { useDebouncedCallback } from 'react-simplikit';
+import { useState } from 'react';
 
 function SearchInput() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const setQueryDebounced = useDebouncedCallback({
     onChange: setQuery,
     timeThreshold: 300,
@@ -74,7 +74,7 @@ function SearchInput() {
 
   return (
     <>
-      <input onChange={(e) => setQueryDebounced(e.target.value)} />
+      <input onChange={e => setQueryDebounced(e.target.value)} />
       <p>Searching for: {query}</p>
     </>
   );
