@@ -10,7 +10,7 @@
 function useDebounce<F extends (...args: any[]) => unknown>(
   callback: F,
   wait: number,
-  options?: DebounceOptions
+  options?: DebounceOptions,
 ): F & { cancel: () => void };
 ```
 
@@ -65,12 +65,12 @@ function useDebounce<F extends (...args: any[]) => unknown>(
 ## 示例
 
 ```tsx
-import { useState } from 'react';
-import { useDebounce } from 'react-simplikit';
+import { useState } from "react";
+import { useDebounce } from "react-simplikit";
 
 export function SearchInput() {
-  const [query, setQuery] = useState('');
-  const [submittedQuery, setSubmittedQuery] = useState('');
+  const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
   const debouncedSearch = useDebounce(setSubmittedQuery, 300);
 
   return (
@@ -79,7 +79,7 @@ export function SearchInput() {
         Search
         <input
           value={query}
-          onChange={event => {
+          onChange={(event) => {
             setQuery(event.target.value);
             debouncedSearch(event.target.value);
           }}
