@@ -6,7 +6,7 @@
 
 ```ts
 function useBooleanState(
-  initialValue: boolean | (() => boolean) = false
+  initialValue: boolean | (() => boolean) = false,
 ): readonly [
   state: boolean,
   setTrue: () => void,
