@@ -50,13 +50,13 @@ function ConfirmButton() {
       const result = await startLoading(postConfirmation());
       router.push(`/success?id=${result.id}`);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   }, [startLoading]);
 
   return (
     <button disabled={loading} onClick={handleSubmit}>
-      {loading ? 'Loading...' : 'Confirm'}
+      {loading ? "Loading..." : "Confirm"}
     </button>
   );
 }
