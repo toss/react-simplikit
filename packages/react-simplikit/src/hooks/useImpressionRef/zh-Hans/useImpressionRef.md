@@ -6,7 +6,7 @@
 
 ```ts
 function useImpressionRef<Element extends HTMLElement>(
-  options: UseImpressionRefOptions,
+  options: UseImpressionRefOptions
 ): (element: Element | null) => void;
 ```
 
@@ -65,12 +65,12 @@ function useImpressionRef<Element extends HTMLElement>(
 ## 示例
 
 ```tsx
-import { useImpressionRef } from "react-simplikit";
+import { useImpressionRef } from 'react-simplikit';
 
 function Component() {
   const ref = useImpressionRef<HTMLDivElement>({
-    onImpressionStart: () => console.log("Element entered view"),
-    onImpressionEnd: () => console.log("Element exited view"),
+    onImpressionStart: () => console.log('Element entered view'),
+    onImpressionEnd: () => console.log('Element exited view'),
     timeThreshold: 1000,
     areaThreshold: 0.5,
   });
