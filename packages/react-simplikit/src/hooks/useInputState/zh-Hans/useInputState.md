@@ -6,8 +6,8 @@
 
 ```ts
 function useInputState(
-  initialValue: string | (() => string) = "",
-  transformValue: (value: string) => string = (v: string) => v,
+  initialValue: string | (() => string) = '',
+  transformValue: (value: string) => string = (v: string) => v
 ): [
   value: string,
   onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
@@ -54,7 +54,7 @@ function useInputState(
 
 ```tsx
 function Example() {
-  const [value, onChange] = useInputState("");
+  const [value, onChange] = useInputState('');
   return (
     <>
       <input type="text" value={value} onChange={onChange} />
