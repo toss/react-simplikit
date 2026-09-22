@@ -6,7 +6,7 @@
 
 ```ts
 function useAvoidKeyboard(
-  options?: UseAvoidKeyboardOptions,
+  options?: UseAvoidKeyboardOptions
 ): UseAvoidKeyboardResult;
 ```
 
@@ -75,7 +75,7 @@ function FixedBottomCTA() {
   return (
     <div
       style={{
-        position: "fixed",
+        position: 'fixed',
         bottom: 0,
         left: 0,
         right: 0,
@@ -96,7 +96,7 @@ function FixedBottomCTA() {
   return (
     <div
       style={{
-        position: "fixed",
+        position: 'fixed',
         bottom: 0,
         left: 0,
         right: 0,
