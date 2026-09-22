@@ -7,7 +7,7 @@
 ```ts
 function useOutsideClickEffect(
   container: HTMLElement | HTMLElement[] | null,
-  callback: () => void
+  callback: () => void,
 ): void;
 ```
 
@@ -34,14 +34,14 @@ function useOutsideClickEffect(
 ## 示例
 
 ```tsx
-import { useOutsideClickEffect } from 'react-simplikit';
-import { useState } from 'react';
+import { useOutsideClickEffect } from "react-simplikit";
+import { useState } from "react";
 
 function Example() {
   const [wrapperEl, setWrapperEl] = useState<HTMLDivElement | null>(null);
 
   useOutsideClickEffect(wrapperEl, () => {
-    console.log('Outside clicked!');
+    console.log("Outside clicked!");
   });
 
   return <div ref={setWrapperEl}>Content</div>;
