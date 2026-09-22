@@ -6,7 +6,7 @@
 
 ```ts
 function useDoubleClick<E extends HTMLElement>(
-  props: Object,
+  props: Object
 ): (event: MouseEvent<E>) => void;
 ```
 
@@ -56,8 +56,8 @@ function useDoubleClick<E extends HTMLElement>(
 function GalleryCard() {
   const [selected, setSelected] = useState(false);
 
-  const handleClick = () => setSelected((prev) => !prev);
-  const handleDoubleClick = () => alert("Zoom in!");
+  const handleClick = () => setSelected(prev => !prev);
+  const handleDoubleClick = () => alert('Zoom in!');
 
   const handleEvent = useDoubleClick({
     click: handleClick,
@@ -65,7 +65,7 @@ function GalleryCard() {
   });
 
   return (
-    <div onClick={handleEvent}>{selected ? "Selected" : "Not selected"}</div>
+    <div onClick={handleEvent}>{selected ? 'Selected' : 'Not selected'}</div>
   );
 }
 ```
