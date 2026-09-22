@@ -7,7 +7,7 @@
 ```ts
 function useAsyncEffect(
   effect: () => Promise<void | (() => void)>,
-  deps?: DependencyList,
+  deps?: DependencyList
 ): void;
 ```
 
@@ -38,7 +38,7 @@ useAsyncEffect(async () => {
   setData(data);
 
   return () => {
-    console.log("Cleanup on unmount or dependencies change");
+    console.log('Cleanup on unmount or dependencies change');
   };
 }, [dependencies]);
 ```
