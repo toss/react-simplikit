@@ -48,7 +48,7 @@ function ClientOnlyMap() {
 function ClientTheme() {
   const isClient = useIsClient();
 
-  const theme = isClient ? localStorage.getItem("theme") : "light";
+  const theme = isClient ? localStorage.getItem('theme') : 'light';
 
   return <div>Current theme: {theme}</div>;
 }
