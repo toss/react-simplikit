@@ -7,7 +7,7 @@
 ```ts
 function useStorageState<T>(
   key: string,
-  options?: Object
+  options?: Object,
 ): readonly [
   state: Serializable<T> | undefined,
   setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
@@ -90,15 +90,15 @@ function useStorageState<T>(
 
 ```tsx
 // Counter with persistent state
-import { useStorageState } from 'react-simplikit';
+import { useStorageState } from "react-simplikit";
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
+  const [count, setCount] = useStorageState<number>("counter", {
     defaultValue: 0,
   });
 
   return (
-    <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>
+    <button onClick={() => setCount((prev) => prev + 1)}>Count: {count}</button>
   );
 }
 ```
