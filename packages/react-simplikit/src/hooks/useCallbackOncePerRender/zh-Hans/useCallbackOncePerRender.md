@@ -7,7 +7,7 @@
 ```ts
 function useCallbackOncePerRender<F extends (...args: any[]) => void>(
   callback: () => void,
-  deps: DependencyList,
+  deps: DependencyList
 ): (...args: any[]) => void;
 ```
 
@@ -38,11 +38,11 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
 ## 示例
 
 ```tsx
-import { useCallbackOncePerRender } from "react-simplikit";
+import { useCallbackOncePerRender } from 'react-simplikit';
 
 function Component() {
   const handleOneTimeEvent = useCallbackOncePerRender(() => {
-    console.log("This will only run once");
+    console.log('This will only run once');
   }, []);
 
   return <button onClick={handleOneTimeEvent}>Click me</button>;
