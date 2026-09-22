@@ -67,22 +67,22 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## 示例
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const [list, actions] = useList<string>(["apple", "banana"]);
 
 // Add an item
-actions.push('cherry');
+actions.push("cherry");
 
 // Insert at index
-actions.insertAt(1, 'grape');
+actions.insertAt(1, "grape");
 
 // Update at index
-actions.updateAt(0, 'orange');
+actions.updateAt(0, "orange");
 
 // Remove at index
 actions.removeAt(2);
 
 // Replace all
-actions.setAll(['kiwi', 'mango']);
+actions.setAll(["kiwi", "mango"]);
 
 // Reset to initial state
 actions.reset();
