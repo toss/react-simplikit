@@ -51,8 +51,8 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
 ## 示例
 
 ```tsx
-import { useThrottledCallback } from "react-simplikit";
-import { useState } from "react";
+import { useThrottledCallback } from 'react-simplikit';
+import { useState } from 'react';
 
 function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
@@ -62,7 +62,7 @@ function ScrollPosition() {
   });
 
   return (
-    <div onScroll={(e) => setScrollTopThrottled(e.currentTarget.scrollTop)}>
+    <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>
       <p>Scrolled {scrollTop}px</p>
     </div>
   );
