@@ -1,6 +1,6 @@
 # useVisualViewport
 
-`useVisualViewport` 是一个跟踪 Visual Viewport 变化 的 React Hook。它返回移动 WebView 中实际可见的区域，当键盘出现或用户缩放、滚动时，该区域会发生变化。
+`useVisualViewport` 是一个跟踪 Visual Viewport 变化的 React Hook。它返回移动 WebView 中实际可见的区域，当键盘出现或用户缩放、滚动时，该区域会发生变化。
 
 ## 接口
 

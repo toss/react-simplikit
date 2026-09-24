@@ -21,7 +21,7 @@ function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
 <Interface
   name=""
   type="UseSetReturn<T>"
-  description="包含 Set 状态及其操作函数 的元组。"
+  description="包含 Set 状态及其操作函数的元组。"
   :nested="[
     {
       name: '[0]',

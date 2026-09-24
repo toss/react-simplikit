@@ -1,6 +1,6 @@
 # useAvoidKeyboard
 
-`useAvoidKeyboard` 是一个帮助固定在底部的元素避开屏幕键盘 的 React Hook。它返回一个可以应用到 `position: fixed` 元素上的 CSS 样式，当键盘出现时平滑地将元素移动到键盘上方。
+`useAvoidKeyboard` 是一个帮助固定在底部的元素避开屏幕键盘的 React Hook。它返回一个可以应用到 `position: fixed` 元素上的 CSS 样式，当键盘出现时平滑地将元素移动到键盘上方。
 
 ## 接口
 

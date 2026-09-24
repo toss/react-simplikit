@@ -1,6 +1,6 @@
 # useRefEffect
 
-`useRefEffect` 是一个帮助你为特定 DOM 元素设置引用、并在元素变化时执行回调 的 React Hook。此 Hook 会在元素变化时调用清理函数，以防止内存泄漏。
+`useRefEffect` 是一个帮助你为特定 DOM 元素设置引用、并在元素变化时执行回调的 React Hook。此 Hook 会在元素变化时调用清理函数，以防止内存泄漏。
 
 ## 接口
 

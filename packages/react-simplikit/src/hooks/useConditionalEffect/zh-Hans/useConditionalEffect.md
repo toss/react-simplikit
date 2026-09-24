@@ -1,6 +1,6 @@
 # useConditionalEffect
 
-`useConditionalEffect` 是一个根据谓词函数条件性地执行 effects 的 React Hook。这让你在 effects 何时运行方面拥有比仅依赖变化 更多 的控制。
+`useConditionalEffect` 是一个根据谓词函数条件性地执行 effects 的 React Hook。这让你在 effects 何时运行方面拥有比仅依赖变化更多的控制。
 
 ## 接口
 

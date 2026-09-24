@@ -1,6 +1,6 @@
 # usePreservedReference
 
-`usePreservedReference` 是一个在值未变化时帮助维持其引用、同时确保你始终能安全使用最新状态 的 React Hook。它在避免不必要的重复渲染的同时，始终允许访问最新数据。
+`usePreservedReference` 是一个在值未变化时帮助维持其引用、同时确保你始终能安全使用最新状态的 React Hook。它在避免不必要的重复渲染的同时，始终允许访问最新数据。
 
 ## 接口
 

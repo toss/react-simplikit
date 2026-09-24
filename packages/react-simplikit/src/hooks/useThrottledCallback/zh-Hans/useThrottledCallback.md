@@ -1,6 +1,6 @@
 # useThrottledCallback
 
-`useThrottledCallback` 是一个返回所提供回调函数节流版本 的 React Hook。节流后的回调在指定的时间间隔内最多只会被调用一次。
+`useThrottledCallback` 是一个返回所提供回调函数节流版本的 React Hook。节流后的回调在指定的时间间隔内最多只会被调用一次。
 
 ## 接口
 

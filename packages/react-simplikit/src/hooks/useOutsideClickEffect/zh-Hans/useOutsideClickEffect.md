@@ -1,6 +1,6 @@
 # useOutsideClickEffect
 
-`useOutsideClickEffect` 是一个在点击事件发生于指定容器之外时触发回调 的 React Hook。它适用于在点击外部时关闭模态框、下拉菜单、工具提示以及其他 UI 组件。
+`useOutsideClickEffect` 是一个在点击事件发生于指定容器之外时触发回调的 React Hook。它适用于在点击外部时关闭模态框、下拉菜单、工具提示以及其他 UI 组件。
 
 ## 接口
 

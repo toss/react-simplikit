@@ -1,6 +1,6 @@
 # useTimeout
 
-`useTimeout` 是一个在指定延迟后执行回调函数 的 React Hook。它按照 React 生命周期来管理 `setTimeout`，确保在卸载时或依赖变化时执行清理。
+`useTimeout` 是一个在指定延迟后执行回调函数的 React Hook。它按照 React 生命周期来管理 `setTimeout`，确保在卸载时或依赖变化时执行清理。
 
 ## 接口
 
