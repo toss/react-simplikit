@@ -1,6 +1,6 @@
 # useIntersectionObserver
 
-`useIntersectionObserver` 是一个检测特定 DOM 元素是否在屏幕上可见 的 React Hook。它使用 `IntersectionObserver` API，在元素进入或退出视口时执行回调。
+`useIntersectionObserver` 是一个检测特定 DOM 元素是否在屏幕上可见的 React Hook。它使用 `IntersectionObserver` API，在元素进入或退出视口时执行回调。
 
 ## 接口
 

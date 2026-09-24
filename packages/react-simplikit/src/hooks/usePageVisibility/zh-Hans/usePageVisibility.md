@@ -1,6 +1,6 @@
 # usePageVisibility
 
-`usePageVisibility` 是一个检测页面可见性变化 的 React Hook。它使用 Page Visibility API 监控用户何时切换标签页或最小化浏览器。它适用于暂停或恢复动画、视频或后台任务，以提升性能并改善用户体验。
+`usePageVisibility` 是一个检测页面可见性变化的 React Hook。它使用 Page Visibility API 监控用户何时切换标签页或最小化浏览器。它适用于暂停或恢复动画、视频或后台任务，以提升性能并改善用户体验。
 
 ## 接口
 

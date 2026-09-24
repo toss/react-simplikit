@@ -22,7 +22,7 @@ function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
 <Interface
   name=""
   type="UseMapReturn<K, V>"
-  description="包含 Map 状态及其操作函数 的元组"
+  description="包含 Map 状态及其操作函数的元组"
 />
 
 ## 示例

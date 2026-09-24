@@ -1,6 +1,6 @@
 # useKeyboardHeight
 
-`useKeyboardHeight` 是一个跟踪屏幕键盘高度 的 React Hook。它返回当前键盘的高度（像素），当键盘出现、消失或改变大小时会自动更新。
+`useKeyboardHeight` 是一个跟踪屏幕键盘高度的 React Hook。它返回当前键盘的高度（像素），当键盘出现、消失或改变大小时会自动更新。
 
 ## 接口
 

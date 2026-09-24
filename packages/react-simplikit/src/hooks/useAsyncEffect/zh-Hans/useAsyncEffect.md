@@ -1,6 +1,6 @@
 # useAsyncEffect
 
-`useAsyncEffect` 是一个用于在 React 组件中处理异步副作用 的 Hook。它遵循与 `useEffect` 相同的清理模式，同时确保异步操作被安全处理。
+`useAsyncEffect` 是一个用于在 React 组件中处理异步副作用的 Hook。它遵循与 `useEffect` 相同的清理模式，同时确保异步操作被安全处理。
 
 ## 接口
 

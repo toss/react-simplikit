@@ -54,7 +54,7 @@ function useCounter(
 <Interface
   name=""
   type="UseCounterReturn"
-  description="包含计数值和控制函数 的对象。"
+  description="包含计数值和控制函数的对象。"
   :nested="[
     {
       name: 'count',

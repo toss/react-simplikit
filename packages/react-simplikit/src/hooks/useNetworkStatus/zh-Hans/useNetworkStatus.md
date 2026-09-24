@@ -1,6 +1,6 @@
 # useNetworkStatus
 
-`useNetworkStatus` 是一个提供 Network Information API 访问权限的 React Hook。它提供原始的网络连接数据，例如连接类型、连接质量、速度以及用户的数据节省偏好。如果该 API 不受支持（例如 Safari、Firefox），每个属性 都是 `undefined`。
+`useNetworkStatus` 是一个提供 Network Information API 访问权限的 React Hook。它提供原始的网络连接数据，例如连接类型、连接质量、速度以及用户的数据节省偏好。如果该 API 不受支持（例如 Safari、Firefox），每个属性都是 `undefined`。
 
 ## 接口
 
@@ -93,8 +93,8 @@ function VideoPlayer() {
 
 - **Chrome/Edge（Android）**：支持所有属性
 - **Chrome/Edge（桌面）**：部分支持（`effectiveType`、`downlink`、`rtt` 和 `saveData` 可用；`type` 可能为 `undefined`）
-- **Firefox**：不支持（所有属性 都是 `undefined`）
-- **Safari**：不支持（所有属性 都是 `undefined`）
+- **Firefox**：不支持（所有属性都是 `undefined`）
+- **Safari**：不支持（所有属性都是 `undefined`）
 
 ### 服务端渲染安全性
 

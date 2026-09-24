@@ -1,6 +1,6 @@
 # useIsomorphicLayoutEffect
 
-`useIsomorphicLayoutEffect` 是一个提供 `useLayoutEffect` 行为、同时避免在服务端渲染期间触发警告 的 React Hook。在 SSR 期间，没有 DOM 可供同步测量或变更，因此 React 会对使用 `useLayoutEffect` 发出警告。
+`useIsomorphicLayoutEffect` 是一个提供 `useLayoutEffect` 行为、同时避免在服务端渲染期间触发警告的 React Hook。在 SSR 期间，没有 DOM 可供同步测量或变更，因此 React 会对使用 `useLayoutEffect` 发出警告。
 
 此 Hook 在 DOM 更新之后、绘制之前同步运行，因此非常适合：
 
