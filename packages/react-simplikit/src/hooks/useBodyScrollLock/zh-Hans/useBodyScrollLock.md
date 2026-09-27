@@ -1,6 +1,6 @@
 # useBodyScrollLock
 
-`useBodyScrollLock` 是一个在组件挂载期间锁定 body 滚动 的 React Hook。它会在挂载时自动锁定，并在卸载时自动解锁。它适用于模态框和抽屉等覆盖层组件，这些组件必须防止其后的页面滚动。
+`useBodyScrollLock` 是一个在组件挂载期间锁定 body 滚动的 React Hook。它会在挂载时自动锁定，并在卸载时自动解锁。它适用于模态框和抽屉等覆盖层组件，这些组件必须防止其后的页面滚动。
 
 ## 接口
 

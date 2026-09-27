@@ -1,6 +1,6 @@
 # useSafeAreaInset
 
-`useSafeAreaInset` 是一个跟踪安全区域内边距变化 的 React Hook。它返回安全区域的内边距，当屏幕方向变化（例如从竖屏到横屏）时会自动更新。
+`useSafeAreaInset` 是一个跟踪安全区域内边距变化的 React Hook。它返回安全区域的内边距，当屏幕方向变化（例如从竖屏到横屏）时会自动更新。
 
 安全区域的内边距考虑了特定设备上的 UI 元素：
 

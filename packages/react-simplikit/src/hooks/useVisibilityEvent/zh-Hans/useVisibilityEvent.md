@@ -1,6 +1,6 @@
 # useVisibilityEvent
 
-`useVisibilityEvent` 是一个监听文档可见性状态变化并触发回调 的 React Hook。
+`useVisibilityEvent` 是一个监听文档可见性状态变化并触发回调的 React Hook。
 
 ## 接口
 

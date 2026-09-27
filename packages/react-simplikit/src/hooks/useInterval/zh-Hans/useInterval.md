@@ -1,6 +1,6 @@
 # useInterval
 
-`useInterval` 是一个按指定时间间隔执行函数 的 React Hook。它适用于计时器、轮询数据以及其他周期性任务。
+`useInterval` 是一个按指定时间间隔执行函数的 React Hook。它适用于计时器、轮询数据以及其他周期性任务。
 
 ## 接口
 

@@ -1,6 +1,6 @@
 # useImpressionRef
 
-`useImpressionRef` 是一个测量特定 DOM 元素在屏幕上可见时长、并在元素进入或退出视口时执行回调 的 React Hook。它使用 `IntersectionObserver` 和 `Visibility API` 来跟踪元素的可见性。
+`useImpressionRef` 是一个测量特定 DOM 元素在屏幕上可见时长、并在元素进入或退出视口时执行回调的 React Hook。它使用 `IntersectionObserver` 和 `Visibility API` 来跟踪元素的可见性。
 
 ## 接口
 

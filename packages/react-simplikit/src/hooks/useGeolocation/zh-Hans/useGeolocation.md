@@ -1,6 +1,6 @@
 # useGeolocation
 
-`useGeolocation` 是一个获取并跟踪用户地理位置 的 React Hook。它使用浏览器的 `Geolocation API`，同时支持一次性位置获取和持续的定位跟踪。
+`useGeolocation` 是一个获取并跟踪用户地理位置的 React Hook。它使用浏览器的 `Geolocation API`，同时支持一次性位置获取和持续的定位跟踪。
 
 ## 接口
 

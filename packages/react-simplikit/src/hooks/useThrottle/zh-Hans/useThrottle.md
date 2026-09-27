@@ -1,6 +1,6 @@
 # useThrottle
 
-`useThrottle` 是一个创建回调函数节流版本 的 React Hook。它适用于限制函数的调用频率，例如在处理滚动或调整大小事件时。
+`useThrottle` 是一个创建回调函数节流版本的 React Hook。它适用于限制函数的调用频率，例如在处理滚动或调整大小事件时。
 
 ## 接口
 

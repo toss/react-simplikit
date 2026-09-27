@@ -1,6 +1,6 @@
 # useScrollDirection
 
-`useScrollDirection` 是一个检测滚动方向 的 React Hook。它返回滚动方向（向上/向下）和当前的滚动位置。默认进行节流（50ms）以优化性能。
+`useScrollDirection` 是一个检测滚动方向的 React Hook。它返回滚动方向（向上/向下）和当前的滚动位置。默认进行节流（50ms）以优化性能。
 
 ## 接口
 
