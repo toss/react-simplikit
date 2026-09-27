@@ -12,9 +12,9 @@
 
 典型值（配备 Face ID 的 iPhone，竖屏模式）：
 
-- top: 47-59px（刘海/灵动岛）
-- bottom: 34px（主屏幕指示条）
-- left/right: 0px
+- top：47-59px（刘海/灵动岛）
+- bottom：34px（主屏幕指示条）
+- left/right：0px
 
 ## 接口
 

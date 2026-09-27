@@ -4,8 +4,8 @@
 
 关于平台不一致性的说明：
 
-- 在 iPadOS 13 之前，iPad 申报的平台为 “iPad”（或在 UA 中匹配 /iPad/）。
-- 从 iPadOS 13 开始，Apple 将平台字符串改为 “MacIntel”，让网站将 iPadOS 当作桌面级 Safari 对待。但这些设备仍然支持多点触控。
+- 在 iPadOS 13 之前，iPad 申报的平台为“iPad”（或在 UA 中匹配 /iPad/）。
+- 从 iPadOS 13 开始，Apple 将平台字符串改为“MacIntel”，让网站将 iPadOS 当作桌面级 Safari 对待。但这些设备仍然支持多点触控。
 
 ## 接口
 

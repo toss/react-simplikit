@@ -4,7 +4,7 @@
 
 注意：
 
-- 所有 Android 浏览器的 user agent 中都包含 “Android” 字符串。
+- 所有 Android 浏览器的 user agent 中都包含“Android”字符串。
 
 ## 接口
 
