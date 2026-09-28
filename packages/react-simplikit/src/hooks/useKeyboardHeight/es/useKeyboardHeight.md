@@ -7,9 +7,7 @@ cuando el teclado aparece, desaparece o cambia de tamaño.
 ## Interfaz
 
 ```ts
-function useKeyboardHeight(
-  options?: UseKeyboardHeightOptions
-): UseKeyboardHeightResult;
+function useKeyboardHeight(options?: UseKeyboardHeightOptions): number;
 ```
 
 ### Parámetros
@@ -33,24 +31,15 @@ function useKeyboardHeight(
 
 <Interface
   name=""
-  type="UseKeyboardHeightResult"
-  description="Un objeto que contiene la altura actual del teclado."
-  :nested="[
-    {
-      name: 'keyboardHeight',
-      type: 'number',
-      required: false,
-      description:
-        'La altura actual del teclado en píxeles. Es 0 cuando el teclado está oculto.',
-    },
-  ]"
+  type="number"
+  description="La altura actual del teclado en píxeles. Es 0 cuando el teclado está oculto."
 />
 
 ## Ejemplo
 
 ```tsx
 function ChatInput() {
-  const { keyboardHeight } = useKeyboardHeight();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <div style={{ paddingBottom: `${keyboardHeight}px` }}>
@@ -62,7 +51,7 @@ function ChatInput() {
 
 ```tsx
 function KeyboardStatus() {
-  const { keyboardHeight } = useKeyboardHeight();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <div>

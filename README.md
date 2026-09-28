@@ -66,7 +66,7 @@ Use the style returned by `useAvoidKeyboard` to move a fixed input above the on-
 import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
 
   return (
     <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, ...style }}>

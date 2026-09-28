@@ -7,9 +7,7 @@ to smoothly move them above the keyboard when it appears.
 ## Interface
 
 ```ts
-function useAvoidKeyboard(
-  options?: UseAvoidKeyboardOptions
-): UseAvoidKeyboardResult;
+function useAvoidKeyboard(options?: UseAvoidKeyboardOptions): CSSProperties;
 ```
 
 ### Parameters
@@ -55,24 +53,15 @@ function useAvoidKeyboard(
 
 <Interface
   name=""
-  type="UseAvoidKeyboardResult"
-  description="An object containing the CSS style for keyboard avoidance."
-  :nested="[
-    {
-      name: 'style',
-      type: 'CSSProperties',
-      required: false,
-      description:
-        'CSS style object to apply to the fixed bottom element. Contains <code>transform</code> and <code>transition</code> properties.',
-    },
-  ]"
+  type="CSSProperties"
+  description="The CSS style to apply to the fixed bottom element. Contains <code>transform</code> and <code>transition</code> properties."
 />
 
 ## Example
 
 ```tsx
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
 
   return (
     <div
@@ -93,7 +82,7 @@ function FixedBottomCTA() {
 ```tsx
 // With safe area bottom offset (e.g., for iPhone home indicator)
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
+  const style = useAvoidKeyboard({ safeAreaBottom: 34 });
 
   return (
     <div

@@ -7,9 +7,7 @@ para desplazarlos suavemente por encima del teclado cuando aparece.
 ## Interfaz
 
 ```ts
-function useAvoidKeyboard(
-  options?: UseAvoidKeyboardOptions
-): UseAvoidKeyboardResult;
+function useAvoidKeyboard(options?: UseAvoidKeyboardOptions): CSSProperties;
 ```
 
 ### Parámetros
@@ -55,24 +53,15 @@ function useAvoidKeyboard(
 
 <Interface
   name=""
-  type="UseAvoidKeyboardResult"
-  description="Un objeto que contiene el estilo CSS para evitar que el teclado cubra el elemento."
-  :nested="[
-    {
-      name: 'style',
-      type: 'CSSProperties',
-      required: false,
-      description:
-        'Objeto de estilo CSS que puedes aplicar al elemento fijo en la parte inferior. Contiene las propiedades <code>transform</code> y <code>transition</code>.',
-    },
-  ]"
+  type="CSSProperties"
+  description="Objeto de estilo CSS que puedes aplicar al elemento fijo en la parte inferior. Contiene las propiedades <code>transform</code> y <code>transition</code>."
 />
 
 ## Ejemplo
 
 ```tsx
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
 
   return (
     <div
@@ -93,7 +82,7 @@ function FixedBottomCTA() {
 ```tsx
 // Con desplazamiento inferior del área segura (p. ej., para el indicador de inicio del iPhone)
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
+  const style = useAvoidKeyboard({ safeAreaBottom: 34 });
 
   return (
     <div

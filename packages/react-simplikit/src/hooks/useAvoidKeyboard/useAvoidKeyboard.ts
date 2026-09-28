@@ -26,14 +26,6 @@ type UseAvoidKeyboardOptions = {
   immediate?: boolean;
 };
 
-type UseAvoidKeyboardResult = {
-  /**
-   * CSS style object to apply to the fixed bottom element.
-   * Contains transform and transition properties.
-   */
-  style: CSSProperties;
-};
-
 /**
  * @description
  * `useAvoidKeyboard` is a React hook that helps fixed-bottom elements avoid the on-screen keyboard.
@@ -46,12 +38,11 @@ type UseAvoidKeyboardResult = {
  * @param {CSSProperties['transitionTimingFunction']} [options.transitionTimingFunction='ease-out'] - Transition timing function for the animation.
  * @param {boolean} [options.immediate=true] - If true, gets the initial keyboard height on mount.
  *
- * @returns {UseAvoidKeyboardResult} An object containing the CSS style for keyboard avoidance.
- * - style `CSSProperties` - CSS style object to apply to the fixed bottom element. Contains `transform` and `transition` properties;
+ * @returns {CSSProperties} The CSS style to apply to the fixed bottom element. Contains `transform` and `transition` properties.
  *
  * @example
  * function FixedBottomCTA() {
- *   const { style } = useAvoidKeyboard();
+ *   const style = useAvoidKeyboard();
  *
  *   return (
  *     <div
@@ -71,7 +62,7 @@ type UseAvoidKeyboardResult = {
  * @example
  * // With safe area bottom offset (e.g., for iPhone home indicator)
  * function FixedBottomCTA() {
- *   const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
+ *   const style = useAvoidKeyboard({ safeAreaBottom: 34 });
  *
  *   return (
  *     <div
@@ -88,7 +79,7 @@ type UseAvoidKeyboardResult = {
  *   );
  * }
  */
-export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoidKeyboardResult {
+export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): CSSProperties {
   const {
     safeAreaBottom = 0,
     transitionDuration = 200,
@@ -96,7 +87,7 @@ export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoi
     immediate = true,
   } = options;
 
-  const { keyboardHeight } = useKeyboardHeight({ immediate });
+  const keyboardHeight = useKeyboardHeight({ immediate });
 
   const style = useMemo<CSSProperties>(() => {
     const translateY = keyboardHeight > 0 ? -(keyboardHeight + safeAreaBottom) : 0;
@@ -107,5 +98,5 @@ export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoi
     };
   }, [keyboardHeight, safeAreaBottom, transitionDuration, transitionTimingFunction]);
 
-  return { style };
+  return style;
 }

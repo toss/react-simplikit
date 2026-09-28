@@ -7,9 +7,7 @@
 ## インターフェース
 
 ```ts
-function useAvoidKeyboard(
-  options?: UseAvoidKeyboardOptions
-): UseAvoidKeyboardResult;
+function useAvoidKeyboard(options?: UseAvoidKeyboardOptions): CSSProperties;
 ```
 
 ### パラメータ
@@ -55,24 +53,15 @@ function useAvoidKeyboard(
 
 <Interface
   name=""
-  type="UseAvoidKeyboardResult"
-  description="キーボードとの重なりを避けるための CSS スタイルを含むオブジェクト。"
-  :nested="[
-    {
-      name: 'style',
-      type: 'CSSProperties',
-      required: false,
-      description:
-        '画面下部に固定された要素に適用する CSS スタイルオブジェクトです。<code>transform</code> と <code>transition</code> プロパティを含みます。',
-    },
-  ]"
+  type="CSSProperties"
+  description="画面下部に固定された要素に適用する CSS スタイルオブジェクトです。<code>transform</code> と <code>transition</code> プロパティを含みます。"
 />
 
 ## 使用例
 
 ```tsx
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
 
   return (
     <div
@@ -93,7 +82,7 @@ function FixedBottomCTA() {
 ```tsx
 // セーフエリアの下端オフセットを指定する場合（例：iPhone のホームインジケーター）
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
+  const style = useAvoidKeyboard({ safeAreaBottom: 34 });
 
   return (
     <div

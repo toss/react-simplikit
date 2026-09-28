@@ -34,7 +34,7 @@ Este ejemplo mantiene un botón fijado en la parte inferior por encima del tecla
 import { useAvoidKeyboard } from 'react-simplikit';
 
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
 
   return (
     <div
@@ -61,7 +61,7 @@ import { useState } from 'react';
 import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
   const [message, setMessage] = useState('');
 
   return (
@@ -98,7 +98,7 @@ En los dispositivos con indicador de inicio (como el iPhone), puedes añadir un 
 import { useAvoidKeyboard } from 'react-simplikit';
 
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
+  const style = useAvoidKeyboard({ safeAreaBottom: 34 });
 
   return (
     <div

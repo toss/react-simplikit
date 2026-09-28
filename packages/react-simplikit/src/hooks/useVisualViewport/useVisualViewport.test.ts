@@ -41,8 +41,8 @@ describe('useVisualViewport', () => {
   it('should return initial viewport state', () => {
     const { result } = renderHook(() => useVisualViewport());
 
-    expect(result.current.viewport).not.toBeNull();
-    expect(result.current.viewport).toEqual({
+    expect(result.current).not.toBeNull();
+    expect(result.current).toEqual({
       width: 375,
       height: 667,
       offsetLeft: 0,
@@ -74,8 +74,8 @@ describe('useVisualViewport', () => {
       await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    expect(result.current.viewport).not.toBeNull();
-    expect(result.current.viewport).toEqual({
+    expect(result.current).not.toBeNull();
+    expect(result.current).toEqual({
       width: 375,
       height: 400,
       offsetLeft: 0,
@@ -99,8 +99,8 @@ describe('useVisualViewport', () => {
       await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    expect(result.current.viewport).not.toBeNull();
-    expect(result.current.viewport).toEqual({
+    expect(result.current).not.toBeNull();
+    expect(result.current).toEqual({
       width: 375,
       height: 667,
       offsetLeft: 10,
@@ -124,10 +124,10 @@ describe('useVisualViewport', () => {
       await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    expect(result.current.viewport).not.toBeNull();
-    expect(result.current.viewport?.scale).toBe(2.0);
-    expect(result.current.viewport?.width).toBe(187);
-    expect(result.current.viewport?.height).toBe(333);
+    expect(result.current).not.toBeNull();
+    expect(result.current?.scale).toBe(2.0);
+    expect(result.current?.width).toBe(187);
+    expect(result.current?.height).toBe(333);
   });
 
   it('should remove event listeners on unmount', () => {
@@ -149,7 +149,7 @@ describe('useVisualViewport', () => {
 
     const { result } = renderHook(() => useVisualViewport());
 
-    expect(result.current.viewport).toBeNull();
+    expect(result.current).toBeNull();
   });
 
   it('should handle null visualViewport', () => {
@@ -161,13 +161,13 @@ describe('useVisualViewport', () => {
 
     const { result } = renderHook(() => useVisualViewport());
 
-    expect(result.current.viewport).toBeNull();
+    expect(result.current).toBeNull();
   });
 
   it('is safe on server side rendering', () => {
     const result = renderHookSSR.serverOnly(() => useVisualViewport());
 
-    expect(result.current.viewport).toBeNull();
+    expect(result.current).toBeNull();
   });
 
   it('should return null when visualViewport disappears before an update', async () => {
@@ -186,7 +186,7 @@ describe('useVisualViewport', () => {
       await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    expect(result.current.viewport).toBeNull();
+    expect(result.current).toBeNull();
   });
 
   it('should handle multiple rapid updates correctly', async () => {
@@ -206,8 +206,8 @@ describe('useVisualViewport', () => {
     });
 
     // Should reflect the last update
-    expect(result.current.viewport).not.toBeNull();
-    expect(result.current.viewport?.height).toBe(400);
+    expect(result.current).not.toBeNull();
+    expect(result.current?.height).toBe(400);
   });
 
   it('should handle edge case with zero dimensions', async () => {
@@ -223,8 +223,8 @@ describe('useVisualViewport', () => {
       await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    expect(result.current.viewport).not.toBeNull();
-    expect(result.current.viewport).toEqual({
+    expect(result.current).not.toBeNull();
+    expect(result.current).toEqual({
       width: 0,
       height: 0,
       offsetLeft: 0,
@@ -247,9 +247,9 @@ describe('useVisualViewport', () => {
       await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    expect(result.current.viewport).not.toBeNull();
-    expect(result.current.viewport?.offsetTop).toBe(-300);
-    expect(result.current.viewport?.height).toBe(367);
+    expect(result.current).not.toBeNull();
+    expect(result.current?.offsetTop).toBe(-300);
+    expect(result.current?.height).toBe(367);
   });
 
   it('should handle zoom out scenario (scale < 1)', async () => {
@@ -267,8 +267,8 @@ describe('useVisualViewport', () => {
       await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    expect(result.current.viewport).not.toBeNull();
-    expect(result.current.viewport?.scale).toBe(0.5);
-    expect(result.current.viewport?.width).toBe(750);
+    expect(result.current).not.toBeNull();
+    expect(result.current?.scale).toBe(0.5);
+    expect(result.current?.width).toBe(750);
   });
 });
