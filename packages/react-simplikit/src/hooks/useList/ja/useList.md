@@ -18,7 +18,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 <Interface
   name=""
   type="UseListReturn<T>"
-  description="配列の状態と、それを操作するアクションを含むタプルです。"
+  description="配列の状態と、それを操作するアクションを含むオブジェクトです。"
   :nested="[
     {
       name: 'list',
@@ -27,37 +27,37 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
       description: '現在の配列の状態です。',
     },
     {
-      name: 'actions.push',
+      name: 'push',
       type: '(value: T) => void',
       required: false,
       description: 'リストの末尾に値を追加します。',
     },
     {
-      name: 'actions.insertAt',
+      name: 'insertAt',
       type: '(index: number, value: T) => void',
       required: false,
       description: '指定したインデックスに値を挿入します。',
     },
     {
-      name: 'actions.updateAt',
+      name: 'updateAt',
       type: '(index: number, value: T) => void',
       required: false,
       description: '指定したインデックスの値を更新します。',
     },
     {
-      name: 'actions.removeAt',
+      name: 'removeAt',
       type: '(index: number) => void',
       required: false,
       description: '指定したインデックスの値を削除します。',
     },
     {
-      name: 'actions.setAll',
+      name: 'setAll',
       type: '(values: T[]) => void',
       required: false,
       description: 'リスト全体を新しい配列に置き換えます。',
     },
     {
-      name: 'actions.reset',
+      name: 'reset',
       type: '() => void',
       required: false,
       description: 'リストを初期状態に戻します。',
@@ -68,23 +68,24 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## 使用例
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const { list, push, insertAt, updateAt, removeAt, setAll, reset } =
+  useList<string>(['apple', 'banana']);
 
 // 項目を追加します
-actions.push('cherry');
+push('cherry');
 
 // 指定したインデックスに挿入します
-actions.insertAt(1, 'grape');
+insertAt(1, 'grape');
 
 // 指定したインデックスの値を更新します
-actions.updateAt(0, 'orange');
+updateAt(0, 'orange');
 
 // 指定したインデックスの値を削除します
-actions.removeAt(2);
+removeAt(2);
 
 // 全体を置き換えます
-actions.setAll(['kiwi', 'mango']);
+setAll(['kiwi', 'mango']);
 
 // 初期状態に戻します
-actions.reset();
+reset();
 ```

@@ -18,7 +18,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 <Interface
   name=""
   type="UseListReturn<T>"
-  description="Una tupla que contiene el estado del arreglo y las acciones para manipularlo."
+  description="Un objeto que contiene el estado del arreglo y las acciones para manipularlo."
   :nested="[
     {
       name: 'list',
@@ -27,37 +27,37 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
       description: 'El estado actual del arreglo.',
     },
     {
-      name: 'actions.push',
+      name: 'push',
       type: '(value: T) => void',
       required: false,
       description: 'Añade un valor al final de la lista.',
     },
     {
-      name: 'actions.insertAt',
+      name: 'insertAt',
       type: '(index: number, value: T) => void',
       required: false,
       description: 'Inserta un valor en el índice especificado.',
     },
     {
-      name: 'actions.updateAt',
+      name: 'updateAt',
       type: '(index: number, value: T) => void',
       required: false,
       description: 'Actualiza el valor en el índice especificado.',
     },
     {
-      name: 'actions.removeAt',
+      name: 'removeAt',
       type: '(index: number) => void',
       required: false,
       description: 'Elimina el valor en el índice especificado.',
     },
     {
-      name: 'actions.setAll',
+      name: 'setAll',
       type: '(values: T[]) => void',
       required: false,
       description: 'Reemplaza toda la lista por un nuevo arreglo.',
     },
     {
-      name: 'actions.reset',
+      name: 'reset',
       type: '() => void',
       required: false,
       description: 'Restablece la lista a su estado inicial.',
@@ -68,23 +68,24 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## Ejemplo
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const { list, push, insertAt, updateAt, removeAt, setAll, reset } =
+  useList<string>(['apple', 'banana']);
 
 // Añadir un elemento
-actions.push('cherry');
+push('cherry');
 
 // Insertar en un índice
-actions.insertAt(1, 'grape');
+insertAt(1, 'grape');
 
 // Actualizar en un índice
-actions.updateAt(0, 'orange');
+updateAt(0, 'orange');
 
 // Eliminar en un índice
-actions.removeAt(2);
+removeAt(2);
 
 // Reemplazar todo
-actions.setAll(['kiwi', 'mango']);
+setAll(['kiwi', 'mango']);
 
 // Restablecer al estado inicial
-actions.reset();
+reset();
 ```

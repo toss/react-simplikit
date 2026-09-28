@@ -18,7 +18,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 <Interface
   name=""
   type="UseListReturn<T>"
-  description="A tuple containing the array state and actions to manipulate it."
+  description="An object containing the array state and actions to manipulate it."
   :nested="[
     {
       name: 'list',
@@ -27,37 +27,37 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
       description: 'The current array state.',
     },
     {
-      name: 'actions.push',
+      name: 'push',
       type: '(value: T) => void',
       required: false,
       description: 'Appends a value to the end of the list.',
     },
     {
-      name: 'actions.insertAt',
+      name: 'insertAt',
       type: '(index: number, value: T) => void',
       required: false,
       description: 'Inserts a value at the specified index.',
     },
     {
-      name: 'actions.updateAt',
+      name: 'updateAt',
       type: '(index: number, value: T) => void',
       required: false,
       description: 'Updates the value at the specified index.',
     },
     {
-      name: 'actions.removeAt',
+      name: 'removeAt',
       type: '(index: number) => void',
       required: false,
       description: 'Removes the value at the specified index.',
     },
     {
-      name: 'actions.setAll',
+      name: 'setAll',
       type: '(values: T[]) => void',
       required: false,
       description: 'Replaces the entire list with a new array.',
     },
     {
-      name: 'actions.reset',
+      name: 'reset',
       type: '() => void',
       required: false,
       description: 'Resets the list to its initial state.',
@@ -68,23 +68,24 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## Example
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const { list, push, insertAt, updateAt, removeAt, setAll, reset } =
+  useList<string>(['apple', 'banana']);
 
 // Add an item
-actions.push('cherry');
+push('cherry');
 
 // Insert at index
-actions.insertAt(1, 'grape');
+insertAt(1, 'grape');
 
 // Update at index
-actions.updateAt(0, 'orange');
+updateAt(0, 'orange');
 
 // Remove at index
-actions.removeAt(2);
+removeAt(2);
 
 // Replace all
-actions.setAll(['kiwi', 'mango']);
+setAll(['kiwi', 'mango']);
 
 // Reset to initial state
-actions.reset();
+reset();
 ```

@@ -9,11 +9,7 @@ The value is retained across page reloads and can be shared between tabs when us
 function useStorageState<T>(
   key: string,
   options?: Object
-): readonly [
-  state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-  refreshState: () => void,
-];
+): StorageStateReturn<Serializable<T> | undefined>;
 ```
 
 ### Parameters
@@ -63,26 +59,26 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="A tuple:"
+  type="StorageStateReturn<Serializable<T> | undefined>"
+  description="An object containing:"
   :nested="[
     {
-      name: 'state',
+      name: 'value',
       type: 'Serializable<T> | undefined',
       required: false,
       description: 'The current state value retrieved from storage.',
     },
     {
-      name: 'setState',
+      name: 'setValue',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
-      description: 'A function to update and persist the state.',
+      description: 'Updates and persists the state.',
     },
     {
-      name: 'refreshState',
+      name: 'refresh',
       type: '() => void',
       required: false,
-      description: 'A function to refresh the state from storage.',
+      description: 'Refreshes the state from storage.',
     },
   ]"
 />
@@ -94,9 +90,12 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
-    defaultValue: 0,
-  });
+  const { value: count, setValue: setCount } = useStorageState<number>(
+    'counter',
+    {
+      defaultValue: 0,
+    }
+  );
 
   return (
     <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>

@@ -21,9 +21,15 @@ type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
   deserializer: (value: string) => Serializable<T>;
 };
 
-type SerializableGuard<T extends readonly any[]> = T[0] extends any
+type StorageStateReturn<T> = {
+  value: T;
+  setValue: (value: SetStateAction<T>) => void;
+  refresh: () => void;
+};
+
+type SerializableGuard<T extends { value: unknown }> = T['value'] extends any
   ? T
-  : T[0] extends never
+  : T['value'] extends never
     ? 'Received a non-serializable value'
     : T;
 
@@ -49,16 +55,16 @@ function isPlainObject(value: unknown): value is Record<PropertyKey, any> {
   return Object.prototype.toString.call(value) === '[object Object]';
 }
 
-const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGuard<T> => {
+const ensureSerializable = <T extends { value: unknown }>(result: T): SerializableGuard<T> => {
   if (
-    value[0] != null &&
-    !['string', 'number', 'boolean'].includes(typeof value[0]) &&
-    !(isPlainObject(value[0]) || Array.isArray(value[0]))
+    result.value != null &&
+    !['string', 'number', 'boolean'].includes(typeof result.value) &&
+    !(isPlainObject(result.value) || Array.isArray(result.value))
   ) {
     throw new Error('Received a non-serializable value');
   }
 
-  return value as SerializableGuard<T>;
+  return result as SerializableGuard<T>;
 };
 
 /**
@@ -74,43 +80,35 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
  * @param {Function} [options.serializer] - A function to serialize the state value to a string.
  * @param {Function} [options.deserializer] - A function to deserialize the state value from a string.
  *
- * @returns {readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]} A tuple:
- * - state `Serializable<T> | undefined` - The current state value retrieved from storage;
- * - setState `(value: SetStateAction<Serializable<T> | undefined>) => void` - A function to update and persist the state;
- * - refreshState `() => void` - A function to refresh the state from storage;
+ * @returns {StorageStateReturn<Serializable<T> | undefined>} An object containing:
+ * - value `Serializable<T> | undefined` - The current state value retrieved from storage;
+ * - setValue `(value: SetStateAction<Serializable<T> | undefined>) => void` - Updates and persists the state;
+ * - refresh `() => void` - Refreshes the state from storage;
  * @example
  * // Counter with persistent state
  * import { useStorageState } from 'react-simplikit';
  *
  * function Counter() {
- *   const [count, setCount] = useStorageState<number>('counter', {
+ *   const { value: count, setValue: setCount } = useStorageState<number>('counter', {
  *     defaultValue: 0,
  *   });
  *
  *   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
  * }
  */
-export function useStorageState<T>(
-  key: string
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+export function useStorageState<T>(key: string): SerializableGuard<StorageStateReturn<Serializable<T> | undefined>>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptionsWithDefaultValue<T>
-): SerializableGuard<readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void, () => void]>;
+): SerializableGuard<StorageStateReturn<Serializable<T>>>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptions<T>
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+): SerializableGuard<StorageStateReturn<Serializable<T> | undefined>>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptionsWithSerializer<T>
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+): SerializableGuard<StorageStateReturn<Serializable<T> | undefined>>;
 export function useStorageState<T>(
   key: string,
   {
@@ -118,9 +116,7 @@ export function useStorageState<T>(
     defaultValue,
     ...options
   }: StorageStateOptions<T> | StorageStateOptionsWithSerializer<T> = {}
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
-> {
+): SerializableGuard<StorageStateReturn<Serializable<T> | undefined>> {
   // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
   // because `cache.current` is read from `getSnapshot`, which `useSyncExternalStore` calls
   // during render. Belongs on this implementation signature — the overload declarations
@@ -195,7 +191,7 @@ export function useStorageState<T>(
 
   /* eslint-disable-next-line react-hooks/refs -- the two callbacks close over `cache` through
      `getSnapshot`, so the rule treats handing them to any function as a possible ref read
-     during render. `ensureSerializable` only inspects element 0 — `storageState`, a plain
+     during render. `ensureSerializable` only inspects `value` — `storageState`, a plain
      value — and never calls them; passing either callback alone reproduces the report. */
-  return ensureSerializable([storageState, setStorageState, refreshStorageState] as const);
+  return ensureSerializable({ value: storageState, setValue: setStorageState, refresh: refreshStorageState });
 }

@@ -6,14 +6,12 @@
 ## インターフェース
 
 ```ts
-function useBooleanState(
-  initialValue: boolean | (() => boolean) = false
-): readonly [
-  state: boolean,
-  setTrue: () => void,
-  setFalse: () => void,
-  toggle: () => void,
-];
+function useBooleanState(initialValue: boolean | (() => boolean) = false): {
+  value: boolean;
+  setTrue: () => void;
+  setFalse: () => void;
+  toggle: () => void;
+};
 ```
 
 ### パラメータ
@@ -28,11 +26,11 @@ function useBooleanState(
 
 <Interface
   name=""
-  type="readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
-  description="以下を含むタプル。"
+  type="{ value: boolean; setTrue: () => void; setFalse: () => void; toggle: () => void }"
+  description="以下を含むオブジェクト。"
   :nested="[
     {
-      name: 'state',
+      name: 'value',
       type: 'boolean',
       required: false,
       description: '現在の状態の値。',
@@ -61,6 +59,10 @@ function useBooleanState(
 ## 使用例
 
 ```tsx
-const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
-  useBooleanState(false);
+const {
+  value: open,
+  setTrue: openBottomSheet,
+  setFalse: closeBottomSheet,
+  toggle: toggleBottomSheet,
+} = useBooleanState(false);
 ```

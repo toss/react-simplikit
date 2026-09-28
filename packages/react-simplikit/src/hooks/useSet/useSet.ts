@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 import { usePreservedReference } from '../usePreservedReference/usePreservedReference.ts';
@@ -13,7 +13,7 @@ type SetActions<T> = {
   reset: () => void;
 };
 
-type UseSetReturn<T> = [Omit<Set<T>, 'add' | 'clear' | 'delete'>, SetActions<T>];
+type UseSetReturn<T> = { set: Omit<Set<T>, 'add' | 'clear' | 'delete'> } & SetActions<T>;
 
 /**
  * @description
@@ -24,20 +24,20 @@ type UseSetReturn<T> = [Omit<Set<T>, 'add' | 'clear' | 'delete'>, SetActions<T>]
  *
  * @param {SetOrValues<T>} [initialState=new Set()] - Initial Set state (Set object or array of values).
  *
- * @returns {UseSetReturn<T>} A tuple containing the Set state and actions to manipulate it.
- * - [0] `Omit<Set<T>, 'add' | 'clear' | 'delete'>` - The current Set state with mutation methods hidden;
- * - [1].add `(value: T) => void` - Adds a value to the set;
- * - [1].remove `(value: T) => void` - Removes a value from the set;
- * - [1].toggle `(value: T) => void` - Adds the value if absent, removes it if present;
- * - [1].setAll `(values: Set<T> | T[]) => void` - Replaces all values in the set;
- * - [1].reset `() => void` - Resets the set to its initial state;
+ * @returns {UseSetReturn<T>} An object containing the Set state and actions to manipulate it.
+ * - set `Omit<Set<T>, 'add' | 'clear' | 'delete'>` - The current Set state with mutation methods hidden;
+ * - add `(value: T) => void` - Adds a value to the set;
+ * - remove `(value: T) => void` - Removes a value from the set;
+ * - toggle `(value: T) => void` - Adds the value if absent, removes it if present;
+ * - setAll `(values: Set<T> | T[]) => void` - Replaces all values in the set;
+ * - reset `() => void` - Resets the set to its initial state;
  *
  * @example
  * ```tsx
  * import { useSet } from 'react-simplikit';
  *
  * function TagSelector() {
- *   const [selectedTags, { add, remove, toggle }] = useSet<string>(['react']);
+ *   const { set: selectedTags, add, remove, toggle } = useSet<string>(['react']);
  *
  *   return (
  *     <div>
@@ -92,10 +92,5 @@ export function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetRetur
     setSet(() => new Set(preservedInitialState));
   });
 
-  const actions = useMemo<SetActions<T>>(
-    () => ({ add, remove, toggle, setAll, reset }),
-    [add, remove, toggle, setAll, reset]
-  );
-
-  return [set, actions];
+  return { set, add, remove, toggle, setAll, reset };
 }

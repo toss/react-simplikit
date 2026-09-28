@@ -8,11 +8,7 @@
 function useStorageState<T>(
   key: string,
   options?: Object
-): readonly [
-  state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-  refreshState: () => void,
-];
+): StorageStateReturn<Serializable<T> | undefined>;
 ```
 
 ### 参数
@@ -62,23 +58,23 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="一个元组："
+  type="StorageStateReturn<Serializable<T> | undefined>"
+  description="一个对象："
   :nested="[
     {
-      name: 'state',
+      name: 'value',
       type: 'Serializable<T> | undefined',
       required: false,
       description: '从存储中检索到的当前状态值。',
     },
     {
-      name: 'setState',
+      name: 'setValue',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
       description: '更新并持久化状态的函数。',
     },
     {
-      name: 'refreshState',
+      name: 'refresh',
       type: '() => void',
       required: false,
       description: '从存储中刷新状态的函数。',
@@ -93,9 +89,10 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
-    defaultValue: 0,
-  });
+  const { value: count, setValue: setCount } = useStorageState<number>(
+    'counter',
+    { defaultValue: 0 }
+  );
 
   return (
     <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>

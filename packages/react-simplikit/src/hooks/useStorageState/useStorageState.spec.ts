@@ -149,35 +149,35 @@ describe('useStorageState', () => {
     it('is safe on server side rendering', () => {
       const result = renderHookSSR.serverOnly(() => useStorageState('test-key', { defaultValue: 'default', storage }));
 
-      const [value] = result.current;
+      const { value } = result.current;
       expect(value).toBe('default');
     });
 
     it('should initialize without default value', async () => {
       const { result } = await renderHookSSR(() => useStorageState('test-key', { storage }));
-      expect(result.current[0]).toBeUndefined();
+      expect(result.current.value).toBeUndefined();
     });
 
     it('should initialize with default value', async () => {
       const defaultValue = 'default';
       const { result } = await renderHookSSR(() => useStorageState('test-key', { defaultValue, storage }));
-      expect(result.current[0]).toBe(defaultValue);
+      expect(result.current.value).toBe(defaultValue);
     });
 
     it('should set and get value', async () => {
       const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
       await act(async () => {
-        result.current[1]('new value');
+        result.current.setValue('new value');
       });
-      expect(result.current[0]).toBe('new value');
+      expect(result.current.value).toBe('new value');
     });
 
     it('should update value using function', async () => {
       const { result } = await renderHookSSR(() => useStorageState<number>('test-key', { defaultValue: 0, storage }));
       await act(async () => {
-        result.current[1](prev => prev + 1);
+        result.current.setValue(prev => prev + 1);
       });
-      expect(result.current[0]).toBe(1);
+      expect(result.current.value).toBe(1);
     });
 
     it('should sync between multiple hooks with same key', async () => {
@@ -185,10 +185,10 @@ describe('useStorageState', () => {
       const { result: result2 } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
 
       await act(async () => {
-        result1.current[1]('updated value');
+        result1.current.setValue('updated value');
       });
 
-      expect(result2.current[0]).toBe('updated value');
+      expect(result2.current.value).toBe('updated value');
     });
 
     it('should refresh storage state', async () => {
@@ -197,10 +197,10 @@ describe('useStorageState', () => {
       storage.set('test-key', JSON.stringify({ hello: 'world' }));
 
       await act(async () => {
-        result.current[2]();
+        result.current.refresh();
       });
 
-      expect(result.current[0]).toEqual({ hello: 'world' });
+      expect(result.current.value).toEqual({ hello: 'world' });
     });
 
     it('should work with custom serializer and deserializer', async () => {
@@ -212,10 +212,10 @@ describe('useStorageState', () => {
       const { result } = await renderHookSSR(() => useStorageState('test-key', { storage, serializer, deserializer }));
 
       await act(async () => {
-        result.current[1]('hello');
+        result.current.setValue('hello');
       });
 
-      expect(result.current[0]).toEqual('hello');
+      expect(result.current.value).toEqual('hello');
     });
 
     it('should throw error when value is not serializable', async () => {
@@ -244,11 +244,11 @@ describe('useStorageState', () => {
       const { result, rerender } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
 
       await act(async () => {
-        result.current[1]('memo value');
+        result.current.setValue('memo value');
       });
 
       rerender();
-      expect(result.current[0]).toBe('memo value');
+      expect(result.current.value).toBe('memo value');
     });
   });
 
@@ -266,11 +266,11 @@ describe('useStorageState', () => {
       );
 
       await act(async () => {
-        result.current[1]('session value');
+        result.current.setValue('session value');
       });
 
       rerender();
-      expect(result.current[0]).toBe('session value');
+      expect(result.current.value).toBe('session value');
     });
 
     it('should not sync between different tabs', async () => {
@@ -287,7 +287,7 @@ describe('useStorageState', () => {
         );
       });
 
-      expect(result.current[0]).toBeUndefined();
+      expect(result.current.value).toBeUndefined();
     });
   });
 
@@ -304,11 +304,11 @@ describe('useStorageState', () => {
       );
 
       await act(async () => {
-        result.current[1]('local value');
+        result.current.setValue('local value');
       });
 
       rerender();
-      expect(result.current[0]).toBe('local value');
+      expect(result.current.value).toBe('local value');
     });
 
     it('should sync between different tabs', async () => {
@@ -324,7 +324,7 @@ describe('useStorageState', () => {
         );
       });
 
-      expect(result.current[0]).toBe('value from other tab');
+      expect(result.current.value).toBe('value from other tab');
     });
 
     it.each(['default', undefined])('should reset to %s when another tab clears localStorage', async defaultValue => {
@@ -332,14 +332,14 @@ describe('useStorageState', () => {
       const { result } = await renderHookSSR(() =>
         useStorageState<string>('test-key', { storage: safeLocalStorage, defaultValue })
       );
-      expect(result.current[0]).toBe('stored value');
+      expect(result.current.value).toBe('stored value');
 
       await act(async () => {
         localStorage.clear();
         window.dispatchEvent(new StorageEvent('storage', { key: null, storageArea: localStorage }));
       });
 
-      expect(result.current[0]).toBe(defaultValue);
+      expect(result.current.value).toBe(defaultValue);
     });
 
     it('should preserve localStorage state when sessionStorage is cleared', async () => {
@@ -352,7 +352,7 @@ describe('useStorageState', () => {
         window.dispatchEvent(new StorageEvent('storage', { key: null, storageArea: sessionStorage }));
       });
 
-      expect(result.current[0]).toBe('stored value');
+      expect(result.current.value).toBe('stored value');
     });
 
     it('should reset to defaultValue when another tab removes the observed key', async () => {
@@ -366,7 +366,7 @@ describe('useStorageState', () => {
         window.dispatchEvent(new StorageEvent('storage', { key: 'test-key', storageArea: localStorage }));
       });
 
-      expect(result.current[0]).toBe('default');
+      expect(result.current.value).toBe('default');
     });
 
     it('should preserve the observed value when another tab removes an unrelated key', async () => {
@@ -379,7 +379,7 @@ describe('useStorageState', () => {
         window.dispatchEvent(new StorageEvent('storage', { key: 'other-key', storageArea: localStorage }));
       });
 
-      expect(result.current[0]).toBe('stored value');
+      expect(result.current.value).toBe('stored value');
     });
 
     it('should return defaultValue when an error occurred while parsing data', async () => {
@@ -397,23 +397,23 @@ describe('useStorageState', () => {
         );
       });
 
-      expect(result.current[0]).toBe('default');
+      expect(result.current.value).toBe('default');
     });
 
     it('should remove value when set value to undefined', async () => {
       const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
 
       await act(async () => {
-        result.current[1]('value');
+        result.current.setValue('value');
       });
 
-      expect(result.current[0]).toBe('value');
+      expect(result.current.value).toBe('value');
 
       await act(async () => {
-        result.current[1](undefined);
+        result.current.setValue(undefined);
       });
 
-      expect(result.current[0]).toBeUndefined();
+      expect(result.current.value).toBeUndefined();
     });
   });
 });

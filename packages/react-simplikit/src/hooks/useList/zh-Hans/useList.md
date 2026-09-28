@@ -17,7 +17,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 <Interface
   name=""
   type="UseListReturn<T>"
-  description="包含数组状态及其操作函数的元组。"
+  description="包含数组状态及其操作函数的对象。"
   :nested="[
     {
       name: 'list',
@@ -26,37 +26,37 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
       description: '当前的数组状态。',
     },
     {
-      name: 'actions.push',
+      name: 'push',
       type: '(value: T) => void',
       required: false,
       description: '将一个值追加到列表末尾。',
     },
     {
-      name: 'actions.insertAt',
+      name: 'insertAt',
       type: '(index: number, value: T) => void',
       required: false,
       description: '在指定索引处插入一个值。',
     },
     {
-      name: 'actions.updateAt',
+      name: 'updateAt',
       type: '(index: number, value: T) => void',
       required: false,
       description: '更新指定索引处的值。',
     },
     {
-      name: 'actions.removeAt',
+      name: 'removeAt',
       type: '(index: number) => void',
       required: false,
       description: '移除指定索引处的值。',
     },
     {
-      name: 'actions.setAll',
+      name: 'setAll',
       type: '(values: T[]) => void',
       required: false,
       description: '用新数组替换整个列表。',
     },
     {
-      name: 'actions.reset',
+      name: 'reset',
       type: '() => void',
       required: false,
       description: '将列表重置为其初始状态。',
@@ -67,23 +67,24 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## 示例
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const { list, push, insertAt, updateAt, removeAt, setAll, reset } =
+  useList<string>(['apple', 'banana']);
 
 // Add an item
-actions.push('cherry');
+push('cherry');
 
 // Insert at index
-actions.insertAt(1, 'grape');
+insertAt(1, 'grape');
 
 // Update at index
-actions.updateAt(0, 'orange');
+updateAt(0, 'orange');
 
 // Remove at index
-actions.removeAt(2);
+removeAt(2);
 
 // Replace all
-actions.setAll(['kiwi', 'mango']);
+setAll(['kiwi', 'mango']);
 
 // Reset to initial state
-actions.reset();
+reset();
 ```
