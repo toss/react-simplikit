@@ -5,30 +5,34 @@
 ## 接口
 
 ```ts
-function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
+function useThrottledCallback<T>(
+  onChange: (newValue: T) => void,
+  throttleMs: number,
+  options?: ThrottleOptions
+): (nextValue: T) => void;
 ```
 
 ### 参数
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="接收值的回调函数。"
+/>
+
+<Interface
+  required
+  name="throttleMs"
+  type="number"
+  description="节流间隔，单位为毫秒。"
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="选项对象。"
+  type="ThrottleOptions"
+  description="配置其他行为的选项。"
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        '要被节流的回调。携带与上一次转发的值相同的调用会被跳过。',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description: '将调用节流到的毫秒数。',
-    },
     {
       name: 'options.edges',
       type: 'Array<\'leading\' | \'trailing\'>',
@@ -56,10 +60,7 @@ import { useState } from 'react';
 
 function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
-  const setScrollTopThrottled = useThrottledCallback({
-    onChange: setScrollTop,
-    timeThreshold: 200,
-  });
+  const setScrollTopThrottled = useThrottledCallback(setScrollTop, 200);
 
   return (
     <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>

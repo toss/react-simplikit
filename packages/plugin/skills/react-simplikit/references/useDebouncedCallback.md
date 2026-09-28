@@ -8,31 +8,34 @@ Note that if both 'leading' and 'trailing' are set, the function will be called 
 ## Interface
 
 ```ts
-function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
+function useDebouncedCallback<T>(
+  onChange: (newValue: T) => void,
+  debounceMs: number,
+  options?: DebounceOptions
+): (nextValue: T) => void;
 ```
 
 ### Parameters
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="The callback to debounce. A call with the same value as the last forwarded one is skipped."
+/>
+
+<Interface
+  required
+  name="debounceMs"
+  type="number"
+  description="The debounce delay in milliseconds."
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="The options object."
+  type="DebounceOptions"
+  description="Optional edge behavior."
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        'The callback to debounce. A call with the same value as the last forwarded one is skipped.',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description:
-        'The number of milliseconds to delay the function execution.',
-    },
     {
       name: 'options.leading',
       type: 'boolean',
@@ -68,10 +71,7 @@ import { useState } from 'react';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const setQueryDebounced = useDebouncedCallback({
-    onChange: setQuery,
-    timeThreshold: 300,
-  });
+  const setQueryDebounced = useDebouncedCallback(setQuery, 300);
 
   return (
     <>

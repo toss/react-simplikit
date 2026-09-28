@@ -8,31 +8,34 @@ Ten en cuenta que, si activas tanto “leading” como “trailing”, la funci�
 ## Interfaz
 
 ```ts
-function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
+function useDebouncedCallback<T>(
+  onChange: (newValue: T) => void,
+  debounceMs: number,
+  options?: DebounceOptions
+): (nextValue: T) => void;
 ```
 
 ### Parámetros
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="Función que recibe el valor."
+/>
+
+<Interface
+  required
+  name="debounceMs"
+  type="number"
+  description="Retraso del debounce en milisegundos."
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="El objeto de opciones."
+  type="DebounceOptions"
+  description="Opciones para configurar el comportamiento adicional."
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        'El callback al que quieres aplicar debounce. Las llamadas con el mismo valor que el último enviado se omiten.',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description:
-        'El número de milisegundos que debe retrasarse la ejecución de la función.',
-    },
     {
       name: 'options.leading',
       type: 'boolean',
@@ -68,10 +71,7 @@ import { useState } from 'react';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const setQueryDebounced = useDebouncedCallback({
-    onChange: setQuery,
-    timeThreshold: 300,
-  });
+  const setQueryDebounced = useDebouncedCallback(setQuery, 300);
 
   return (
     <>

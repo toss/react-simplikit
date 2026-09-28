@@ -59,9 +59,8 @@ export function useImpressionRef<Element extends HTMLElement>({
   // An element that was never impressed can still report `false` (it starts outside the viewport,
   // or the tab is hidden before it ever intersects); an end without a start must not be emitted.
   const hasImpressionStartedRef = useRef(false);
-  const impressionEventHandler = useDebouncedCallback({
-    timeThreshold,
-    onChange: (impressed: boolean) => {
+  const impressionEventHandler = useDebouncedCallback(
+    (impressed: boolean) => {
       if (impressed) {
         hasImpressionStartedRef.current = true;
         impressionStartHandler();
@@ -73,8 +72,9 @@ export function useImpressionRef<Element extends HTMLElement>({
         impressionEndHandler();
       }
     },
-    leading: true,
-  });
+    timeThreshold,
+    { leading: true }
+  );
 
   const requestImpressionChange = (impressed: boolean) => {
     requestedImpressionRef.current = impressed;

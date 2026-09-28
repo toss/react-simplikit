@@ -11,14 +11,14 @@ describe('useDebouncedCallback', () => {
 
   it('is safe on server side rendering', () => {
     const onChange = vi.fn();
-    renderHookSSR.serverOnly(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+    renderHookSSR.serverOnly(() => useDebouncedCallback(onChange, 100));
 
     expect(onChange).not.toHaveBeenCalled();
   });
 
   it('should debounce the callback with the specified time threshold', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+    const { result } = renderHookSSR(() => useDebouncedCallback(onChange, 100));
 
     result.current(true);
     expect(onChange).not.toBeCalled();
@@ -44,7 +44,7 @@ describe('useDebouncedCallback', () => {
 
   it('should handle leading edge', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100, leading: true }));
+    const { result } = renderHookSSR(() => useDebouncedCallback(onChange, 100, { leading: true }));
 
     result.current(true);
     expect(onChange).toBeCalledTimes(1);
@@ -64,7 +64,7 @@ describe('useDebouncedCallback', () => {
 
   it('should not trigger callback if value has not changed', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+    const { result } = renderHookSSR(() => useDebouncedCallback(onChange, 100));
 
     result.current(true);
     vi.advanceTimersByTime(100);
@@ -77,7 +77,7 @@ describe('useDebouncedCallback', () => {
 
   it('forwards a string value to onChange', () => {
     const onChange = vi.fn<(value: string) => void>();
-    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+    const { result } = renderHookSSR(() => useDebouncedCallback(onChange, 100));
 
     result.current('react');
     vi.advanceTimersByTime(100);
@@ -87,7 +87,7 @@ describe('useDebouncedCallback', () => {
 
   it('invokes the callback when the first value is false', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+    const { result } = renderHookSSR(() => useDebouncedCallback(onChange, 100));
 
     result.current(false);
     vi.advanceTimersByTime(100);
@@ -98,7 +98,7 @@ describe('useDebouncedCallback', () => {
 
   it('discards a pending value when the caller returns to the last forwarded one', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+    const { result } = renderHookSSR(() => useDebouncedCallback(onChange, 100));
 
     result.current('seoul');
     vi.advanceTimersByTime(100);
@@ -114,7 +114,7 @@ describe('useDebouncedCallback', () => {
 
   it('should cleanup on unmount', async () => {
     const onChange = vi.fn();
-    const { result, unmount } = await renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100 }));
+    const { result, unmount } = await renderHookSSR(() => useDebouncedCallback(onChange, 100));
 
     result.current(true);
     unmount();
@@ -125,7 +125,7 @@ describe('useDebouncedCallback', () => {
 
   it('debounces a stream of distinct values when leading is true', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useDebouncedCallback({ onChange, timeThreshold: 100, leading: true }));
+    const { result } = renderHookSSR(() => useDebouncedCallback(onChange, 100, { leading: true }));
 
     for (const value of ['a', 'b', 'c']) {
       result.current(value);
@@ -139,9 +139,7 @@ describe('useDebouncedCallback', () => {
 
   it('forwards only the first value of a burst when trailing is false', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() =>
-      useDebouncedCallback({ onChange, timeThreshold: 100, leading: true, trailing: false })
-    );
+    const { result } = renderHookSSR(() => useDebouncedCallback(onChange, 100, { leading: true, trailing: false }));
 
     for (const value of ['a', 'b', 'c']) {
       result.current(value);

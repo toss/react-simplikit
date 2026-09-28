@@ -8,7 +8,8 @@ It is useful for timers, polling data, and other recurring tasks.
 ```ts
 function useInterval(
   callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
+  delayMs: number,
+  options?: IntervalOptions
 ): void;
 ```
 
@@ -23,17 +24,16 @@ function useInterval(
 
 <Interface
   required
+  name="delayMs"
+  type="number"
+  description="The interval duration in milliseconds."
+/>
+
+<Interface
   name="options"
-  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
+  type="IntervalOptions"
   description="Configures the interval behavior."
   :nested="[
-    {
-      name: 'options.delay',
-      type: 'number',
-      required: true,
-      description:
-        'The interval duration in milliseconds. If <code>null</code>, the interval will not run.',
-    },
     {
       name: 'options.immediate',
       type: 'boolean',
