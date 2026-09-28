@@ -7,7 +7,7 @@ the keyboard appears or the user zooms/scrolls.
 ## Interface
 
 ```ts
-function useVisualViewport(): { viewport: VisualViewportState | null };
+function useVisualViewport(): VisualViewportState | null;
 ```
 
 ### Parameters
@@ -18,44 +18,37 @@ This function does not accept any parameters.
 
 <Interface
   name=""
-  type="{ viewport: VisualViewportState | null }"
-  description="An object containing the Visual Viewport state."
+  type="VisualViewportState | null"
+  description="The Visual Viewport state, or <code>null</code> if not supported (SSR or browsers without the Visual Viewport API);"
   :nested="[
     {
-      name: 'viewport',
-      type: 'VisualViewportState | null',
-      required: false,
-      description:
-        'Visual Viewport state object, or <code>null</code> if not supported (SSR or browsers without the Visual Viewport API).',
-    },
-    {
-      name: 'viewport.width',
+      name: 'width',
       type: 'number',
       required: false,
       description: 'Viewport width in pixels.',
     },
     {
-      name: 'viewport.height',
+      name: 'height',
       type: 'number',
       required: false,
       description: 'Viewport height in pixels.',
     },
     {
-      name: 'viewport.offsetLeft',
+      name: 'offsetLeft',
       type: 'number',
       required: false,
       description:
         'Viewport left offset in pixels from the layout viewport. Typically 0 unless horizontal scrolling or panning occurs.',
     },
     {
-      name: 'viewport.offsetTop',
+      name: 'offsetTop',
       type: 'number',
       required: false,
       description:
         'Viewport top offset in pixels from the layout viewport. Becomes negative on iOS when the keyboard appears (e.g., -300px means a 300px keyboard), so use <code>-offsetTop</code> for the keyboard height. Typically remains 0 on Android.',
     },
     {
-      name: 'viewport.scale',
+      name: 'scale',
       type: 'number',
       required: false,
       description:
@@ -68,7 +61,7 @@ This function does not accept any parameters.
 
 ```tsx
 function CustomLayout() {
-  const { viewport } = useVisualViewport();
+  const viewport = useVisualViewport();
 
   // Always check for null first
   if (!viewport) {
@@ -92,7 +85,7 @@ function CustomLayout() {
 ### Detecting zoom
 
 ```tsx
-const { viewport } = useVisualViewport();
+const viewport = useVisualViewport();
 if (viewport && viewport.scale > 1.3) {
   // Hide floating UI when user zooms in
   setShowFloatingButton(false);

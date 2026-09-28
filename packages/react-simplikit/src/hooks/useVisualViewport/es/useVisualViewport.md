@@ -7,7 +7,7 @@ aparece el teclado o el usuario ajusta el zoom o se desplaza.
 ## Interfaz
 
 ```ts
-function useVisualViewport(): { viewport: VisualViewportState | null };
+function useVisualViewport(): VisualViewportState | null;
 ```
 
 ### Parámetros
@@ -18,44 +18,37 @@ Esta función no acepta parámetros.
 
 <Interface
   name=""
-  type="{ viewport: VisualViewportState | null }"
+  type="VisualViewportState | null"
   description="Un objeto que contiene el estado del área visible."
   :nested="[
     {
-      name: 'viewport',
-      type: 'VisualViewportState | null',
-      required: false,
-      description:
-        'Objeto de estado del área visible, o <code>null</code> si no está disponible (SSR o navegadores sin la API Visual Viewport).',
-    },
-    {
-      name: 'viewport.width',
+      name: 'width',
       type: 'number',
       required: false,
       description: 'Ancho del área de visualización en píxeles.',
     },
     {
-      name: 'viewport.height',
+      name: 'height',
       type: 'number',
       required: false,
       description: 'Altura del área de visualización en píxeles.',
     },
     {
-      name: 'viewport.offsetLeft',
+      name: 'offsetLeft',
       type: 'number',
       required: false,
       description:
         'Desplazamiento del borde izquierdo del área visible con respecto al área de diseño (layout viewport), en píxeles. Normalmente es 0, salvo cuando hay desplazamiento horizontal o un gesto de arrastre.',
     },
     {
-      name: 'viewport.offsetTop',
+      name: 'offsetTop',
       type: 'number',
       required: false,
       description:
         'Desplazamiento del borde superior del área visible con respecto al área de diseño (layout viewport), en píxeles. En iOS pasa a ser negativo cuando aparece el teclado (por ejemplo, -300px indica un teclado de 300px), así que usa <code>-offsetTop</code> para obtener la altura del teclado. En Android normalmente permanece en 0.',
     },
     {
-      name: 'viewport.scale',
+      name: 'scale',
       type: 'number',
       required: false,
       description:
@@ -68,7 +61,7 @@ Esta función no acepta parámetros.
 
 ```tsx
 function CustomLayout() {
-  const { viewport } = useVisualViewport();
+  const viewport = useVisualViewport();
 
   // Comprueba siempre null primero
   if (!viewport) {
@@ -92,7 +85,7 @@ function CustomLayout() {
 ### Detección del zoom
 
 ```tsx
-const { viewport } = useVisualViewport();
+const viewport = useVisualViewport();
 if (viewport && viewport.scale > 1.3) {
   // Oculta la interfaz flotante cuando el usuario amplía el zoom
   setShowFloatingButton(false);

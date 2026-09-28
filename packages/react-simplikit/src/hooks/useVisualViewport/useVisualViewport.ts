@@ -31,7 +31,7 @@ type VisualViewportState = {
    *
    * @example
    * ```tsx
-   * const { viewport } = useVisualViewport();
+   * const viewport = useVisualViewport();
    * if (viewport && viewport.scale > 1.3) {
    *   // Hide floating UI when user zooms in
    *   setShowFloatingButton(false);
@@ -47,19 +47,18 @@ type VisualViewportState = {
  * It returns the actual visible area in mobile WebView, which changes when
  * the keyboard appears or the user zooms/scrolls.
  *
- * @returns {{ viewport: VisualViewportState | null }} An object containing the Visual Viewport state.
- * - viewport `VisualViewportState | null` - Visual Viewport state object, or `null` if not supported (SSR or browsers without the Visual Viewport API);
- * - viewport.width `number` - Viewport width in pixels;
- * - viewport.height `number` - Viewport height in pixels;
- * - viewport.offsetLeft `number` - Viewport left offset in pixels from the layout viewport. Typically 0 unless horizontal scrolling or panning occurs;
- * - viewport.offsetTop `number` - Viewport top offset in pixels from the layout viewport. Becomes negative on iOS when the keyboard appears (e.g., -300px means a 300px keyboard), so use `-offsetTop` for the keyboard height. Typically remains 0 on Android;
- * - viewport.scale `number` - Pinch-zoom scaling factor. 1.0 means no zoom, greater than 1.0 means zoomed in, and less than 1.0 means zoomed out (rare, depends on viewport settings);
+ * @returns {VisualViewportState | null} The Visual Viewport state, or `null` if not supported (SSR or browsers without the Visual Viewport API);
+ * - width `number` - Viewport width in pixels;
+ * - height `number` - Viewport height in pixels;
+ * - offsetLeft `number` - Viewport left offset in pixels from the layout viewport. Typically 0 unless horizontal scrolling or panning occurs;
+ * - offsetTop `number` - Viewport top offset in pixels from the layout viewport. Becomes negative on iOS when the keyboard appears (e.g., -300px means a 300px keyboard), so use `-offsetTop` for the keyboard height. Typically remains 0 on Android;
+ * - scale `number` - Pinch-zoom scaling factor. 1.0 means no zoom, greater than 1.0 means zoomed in, and less than 1.0 means zoomed out (rare, depends on viewport settings);
  *
  * @see {@link useKeyboardHeight} - Simpler hook for keyboard height only
  *
  * @example
  * function CustomLayout() {
- *   const { viewport } = useVisualViewport();
+ *   const viewport = useVisualViewport();
  *
  *   // Always check for null first
  *   if (!viewport) {
@@ -81,7 +80,7 @@ type VisualViewportState = {
  *
  * @example
  * <caption>Detecting zoom</caption>
- * const { viewport } = useVisualViewport();
+ * const viewport = useVisualViewport();
  * if (viewport && viewport.scale > 1.3) {
  *   // Hide floating UI when user zooms in
  *   setShowFloatingButton(false);
@@ -95,7 +94,7 @@ type VisualViewportState = {
  * - **Platform differences**: On iOS `offsetTop` becomes negative when the keyboard appears; on Android it typically stays at 0.
  * - **Use cases**: Detecting the keyboard, reacting to pinch-zoom gestures, building viewport-aware layouts, and showing or hiding UI by zoom level.
  */
-export function useVisualViewport(): { viewport: VisualViewportState | null } {
+export function useVisualViewport(): VisualViewportState | null {
   const visualViewport = isServer() ? null : window.visualViewport;
 
   const [viewport, setViewport] = useState<VisualViewportState | null>(() =>
@@ -121,7 +120,7 @@ export function useVisualViewport(): { viewport: VisualViewportState | null } {
     [updateViewportState]
   );
 
-  return { viewport };
+  return viewport;
 }
 
 function getVisualViewportState(visualViewport: VisualViewport): VisualViewportState {

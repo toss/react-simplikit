@@ -34,7 +34,7 @@ This example keeps a fixed bottom button above the keyboard.
 import { useAvoidKeyboard } from 'react-simplikit';
 
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
 
   return (
     <div
@@ -61,7 +61,7 @@ import { useState } from 'react';
 import { useAvoidKeyboard } from 'react-simplikit';
 
 function ChatInput() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
   const [message, setMessage] = useState('');
 
   return (
@@ -98,7 +98,7 @@ For devices with home indicators (like iPhone), you can add a safe area offset:
 import { useAvoidKeyboard } from 'react-simplikit';
 
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
+  const style = useAvoidKeyboard({ safeAreaBottom: 34 });
 
   return (
     <div

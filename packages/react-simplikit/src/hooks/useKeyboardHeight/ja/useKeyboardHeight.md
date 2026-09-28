@@ -7,9 +7,7 @@
 ## インターフェース
 
 ```ts
-function useKeyboardHeight(
-  options?: UseKeyboardHeightOptions
-): UseKeyboardHeightResult;
+function useKeyboardHeight(options?: UseKeyboardHeightOptions): number;
 ```
 
 ### パラメータ
@@ -33,24 +31,15 @@ function useKeyboardHeight(
 
 <Interface
   name=""
-  type="UseKeyboardHeightResult"
-  description="現在のキーボードの高さを含むオブジェクトです。"
-  :nested="[
-    {
-      name: 'keyboardHeight',
-      type: 'number',
-      required: false,
-      description:
-        '現在のキーボードの高さ（ピクセル）です。キーボードが非表示のときは 0 です。',
-    },
-  ]"
+  type="number"
+  description="現在のキーボードの高さ（ピクセル）です。キーボードが非表示のときは 0 です。"
 />
 
 ## 使用例
 
 ```tsx
 function ChatInput() {
-  const { keyboardHeight } = useKeyboardHeight();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <div style={{ paddingBottom: `${keyboardHeight}px` }}>
@@ -62,7 +51,7 @@ function ChatInput() {
 
 ```tsx
 function KeyboardStatus() {
-  const { keyboardHeight } = useKeyboardHeight();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <div>

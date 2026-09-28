@@ -5,9 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useAvoidKeyboard(
-  options?: UseAvoidKeyboardOptions
-): UseAvoidKeyboardResult;
+function useAvoidKeyboard(options?: UseAvoidKeyboardOptions): CSSProperties;
 ```
 
 ### 파라미터
@@ -54,24 +52,15 @@ function useAvoidKeyboard(
 
 <Interface
   name=""
-  type="UseAvoidKeyboardResult"
-  description="키보드 회피를 위한 CSS 스타일을 담은 객체예요."
-  :nested="[
-    {
-      name: 'style',
-      type: 'CSSProperties',
-      required: false,
-      description:
-        '하단 고정 요소에 적용할 CSS 스타일 객체예요. <code>transform</code>과 <code>transition</code> 속성을 포함해요.',
-    },
-  ]"
+  type="CSSProperties"
+  description="하단 고정 요소에 적용할 CSS 스타일 객체예요. <code>transform</code>과 <code>transition</code> 속성을 포함해요."
 />
 
 ## 예시
 
 ```tsx
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
 
   return (
     <div
@@ -92,7 +81,7 @@ function FixedBottomCTA() {
 ```tsx
 // iPhone 홈 인디케이터 오프셋을 포함한 예시
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
+  const style = useAvoidKeyboard({ safeAreaBottom: 34 });
 
   return (
     <div

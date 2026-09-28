@@ -91,7 +91,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 - **Single value**: `useDebounce<T>(value, delay): T`
 - **Tuple** (state + action, 2 items): `useToggle(init): [boolean, () => void]`
 - **Object** (3+ items): `usePagination(): { page, nextPage, prevPage }`
-- **Object** also when the shape is expected to grow: browser measurements such as `useKeyboardHeight(): { keyboardHeight }`
+- **Single value** for browser measurements: `useKeyboardHeight(): number`
 
 ### Performance Patterns
 

@@ -6,7 +6,7 @@
 ## インターフェース
 
 ```ts
-function useVisualViewport(): { viewport: VisualViewportState | null };
+function useVisualViewport(): VisualViewportState | null;
 ```
 
 ### パラメータ
@@ -17,44 +17,37 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
 
 <Interface
   name=""
-  type="{ viewport: VisualViewportState | null }"
+  type="VisualViewportState | null"
   description="Visual Viewport の状態を含むオブジェクト。"
   :nested="[
     {
-      name: 'viewport',
-      type: 'VisualViewportState | null',
-      required: false,
-      description:
-        'Visual Viewport の状態オブジェクト。非対応の環境（SSR、または Visual Viewport API 非対応のブラウザー）では <code>null</code> です。',
-    },
-    {
-      name: 'viewport.width',
+      name: 'width',
       type: 'number',
       required: false,
       description: 'ビューポートの幅（ピクセル単位）。',
     },
     {
-      name: 'viewport.height',
+      name: 'height',
       type: 'number',
       required: false,
       description: 'ビューポートの高さ（ピクセル単位）。',
     },
     {
-      name: 'viewport.offsetLeft',
+      name: 'offsetLeft',
       type: 'number',
       required: false,
       description:
         'レイアウトビューポートを基準とした、ビューポート左端のオフセット（ピクセル単位）。通常、水平スクロールやパン操作がなければ 0 です。',
     },
     {
-      name: 'viewport.offsetTop',
+      name: 'offsetTop',
       type: 'number',
       required: false,
       description:
         'レイアウトビューポートを基準とした、ビューポート上端のオフセット（ピクセル単位）。iOS ではキーボードが表示されると負の値になります（例：-300px はキーボードの高さが 300px であることを表します）。そのため、キーボードの高さには <code>-offsetTop</code> を使ってください。Android では通常 0 のままです。',
     },
     {
-      name: 'viewport.scale',
+      name: 'scale',
       type: 'number',
       required: false,
       description:
@@ -67,7 +60,7 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
 
 ```tsx
 function CustomLayout() {
-  const { viewport } = useVisualViewport();
+  const viewport = useVisualViewport();
 
   // 必ず最初に null かどうかを確認します
   if (!viewport) {
@@ -91,7 +84,7 @@ function CustomLayout() {
 ### ズームを検出する
 
 ```tsx
-const { viewport } = useVisualViewport();
+const viewport = useVisualViewport();
 if (viewport && viewport.scale > 1.3) {
   // ユーザーがズームインしたときにフローティング UI を非表示にします
   setShowFloatingButton(false);

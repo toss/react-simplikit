@@ -5,9 +5,7 @@
 ## 接口
 
 ```ts
-function useAvoidKeyboard(
-  options?: UseAvoidKeyboardOptions
-): UseAvoidKeyboardResult;
+function useAvoidKeyboard(options?: UseAvoidKeyboardOptions): CSSProperties;
 ```
 
 ### 参数
@@ -53,24 +51,15 @@ function useAvoidKeyboard(
 
 <Interface
   name=""
-  type="UseAvoidKeyboardResult"
-  description="一个包含键盘避让 CSS 样式的对象。"
-  :nested="[
-    {
-      name: 'style',
-      type: 'CSSProperties',
-      required: false,
-      description:
-        '应用到固定底部元素上的 CSS 样式对象。包含 <code>transform</code> 和 <code>transition</code> 属性。',
-    },
-  ]"
+  type="CSSProperties"
+  description="应用到固定底部元素上的 CSS 样式对象。包含 <code>transform</code> 和 <code>transition</code> 属性。"
 />
 
 ## 示例
 
 ```tsx
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard();
+  const style = useAvoidKeyboard();
 
   return (
     <div
@@ -91,7 +80,7 @@ function FixedBottomCTA() {
 ```tsx
 // With safe area bottom offset (e.g., for iPhone home indicator)
 function FixedBottomCTA() {
-  const { style } = useAvoidKeyboard({ safeAreaBottom: 34 });
+  const style = useAvoidKeyboard({ safeAreaBottom: 34 });
 
   return (
     <div

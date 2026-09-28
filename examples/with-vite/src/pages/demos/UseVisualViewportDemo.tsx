@@ -7,7 +7,7 @@ import { DemoLayout } from '../../components/DemoLayout.tsx';
 const EXAMPLE_CODE = `import { useVisualViewport } from 'react-simplikit';
 
 function CustomLayout() {
-  const { viewport } = useVisualViewport();
+  const viewport = useVisualViewport();
 
   if (!viewport) {
     return <div>Not supported</div>;
@@ -28,7 +28,7 @@ function CustomLayout() {
 }`;
 
 export function UseVisualViewportDemo() {
-  const { viewport } = useVisualViewport();
+  const viewport = useVisualViewport();
   const [inputValue, setInputValue] = useState('');
 
   if (!viewport) {

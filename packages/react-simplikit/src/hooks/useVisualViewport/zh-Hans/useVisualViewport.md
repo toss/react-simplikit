@@ -5,7 +5,7 @@
 ## 接口
 
 ```ts
-function useVisualViewport(): { viewport: VisualViewportState | null };
+function useVisualViewport(): VisualViewportState | null;
 ```
 
 ### 参数
@@ -16,44 +16,37 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
 
 <Interface
   name=""
-  type="{ viewport: VisualViewportState | null }"
+  type="VisualViewportState | null"
   description="包含 Visual Viewport 状态的对象。"
   :nested="[
     {
-      name: 'viewport',
-      type: 'VisualViewportState | null',
-      required: false,
-      description:
-        'Visual Viewport 状态对象，如果不支持则为 <code>null</code>（服务端渲染或没有 Visual Viewport API 的浏览器）。',
-    },
-    {
-      name: 'viewport.width',
+      name: 'width',
       type: 'number',
       required: false,
       description: '视口宽度（像素）。',
     },
     {
-      name: 'viewport.height',
+      name: 'height',
       type: 'number',
       required: false,
       description: '视口高度（像素）。',
     },
     {
-      name: 'viewport.offsetLeft',
+      name: 'offsetLeft',
       type: 'number',
       required: false,
       description:
         '视口相对于布局视口的左侧偏移（像素）。通常为 0，除非发生水平滚动或平移。',
     },
     {
-      name: 'viewport.offsetTop',
+      name: 'offsetTop',
       type: 'number',
       required: false,
       description:
         '视口相对于布局视口的顶部偏移（像素）。在 iOS 上当键盘出现时会变为负值（例如 -300px 表示 300px 高的键盘），因此可使用 <code>-offsetTop</code> 作为键盘高度。在 Android 上通常保持为 0。',
     },
     {
-      name: 'viewport.scale',
+      name: 'scale',
       type: 'number',
       required: false,
       description:
@@ -66,7 +59,7 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
 
 ```tsx
 function CustomLayout() {
-  const { viewport } = useVisualViewport();
+  const viewport = useVisualViewport();
 
   // 始终先检查是否为 null
   if (!viewport) {
@@ -90,7 +83,7 @@ function CustomLayout() {
 ### 检测缩放
 
 ```tsx
-const { viewport } = useVisualViewport();
+const viewport = useVisualViewport();
 if (viewport && viewport.scale > 1.3) {
   // 当用户放大时隐藏浮动 UI
   setShowFloatingButton(false);

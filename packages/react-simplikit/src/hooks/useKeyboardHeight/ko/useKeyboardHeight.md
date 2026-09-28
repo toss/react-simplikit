@@ -5,9 +5,7 @@
 ## 인터페이스
 
 ```ts
-function useKeyboardHeight(
-  options?: UseKeyboardHeightOptions
-): UseKeyboardHeightResult;
+function useKeyboardHeight(options?: UseKeyboardHeightOptions): number;
 ```
 
 ### 파라미터
@@ -32,23 +30,15 @@ function useKeyboardHeight(
 
 <Interface
   name=""
-  type="UseKeyboardHeightResult"
-  description="키보드 높이 정보를 담은 객체예요."
-  :nested="[
-    {
-      name: 'keyboardHeight',
-      type: 'number',
-      description:
-        '현재 키보드 높이(px)예요. 키보드가 닫혀 있으면 <code>0</code>이에요.',
-    },
-  ]"
+  type="number"
+  description="현재 키보드 높이(px)예요. 키보드가 닫혀 있으면 <code>0</code>이에요."
 />
 
 ## 예시
 
 ```tsx
 function ChatInput() {
-  const { keyboardHeight } = useKeyboardHeight();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <div style={{ paddingBottom: `${keyboardHeight}px` }}>
@@ -60,7 +50,7 @@ function ChatInput() {
 
 ```tsx
 function KeyboardStatus() {
-  const { keyboardHeight } = useKeyboardHeight();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <div>

@@ -5,9 +5,7 @@
 ## 接口
 
 ```ts
-function useKeyboardHeight(
-  options?: UseKeyboardHeightOptions
-): UseKeyboardHeightResult;
+function useKeyboardHeight(options?: UseKeyboardHeightOptions): number;
 ```
 
 ### 参数
@@ -31,24 +29,15 @@ function useKeyboardHeight(
 
 <Interface
   name=""
-  type="UseKeyboardHeightResult"
-  description="一个包含当前键盘高度的对象。"
-  :nested="[
-    {
-      name: 'keyboardHeight',
-      type: 'number',
-      required: false,
-      description:
-        '当前键盘高度（像素）。键盘隐藏时为 0。',
-    },
-  ]"
+  type="number"
+  description="当前键盘高度（像素）。键盘隐藏时为 0。"
 />
 
 ## 示例
 
 ```tsx
 function ChatInput() {
-  const { keyboardHeight } = useKeyboardHeight();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <div style={{ paddingBottom: `${keyboardHeight}px` }}>
@@ -60,7 +49,7 @@ function ChatInput() {
 
 ```tsx
 function KeyboardStatus() {
-  const { keyboardHeight } = useKeyboardHeight();
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <div>
