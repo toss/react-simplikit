@@ -1,6 +1,6 @@
 # useDebouncedCallback
 
-`useDebouncedCallback` 是一个返回所提供回调函数防抖版本 的 React Hook。它通过延迟函数执行并将多次调用合并为一次，帮助优化事件处理。
+`useDebouncedCallback` 是一个返回所提供回调函数防抖版本的 React Hook。它通过延迟函数执行并将多次调用合并为一次，帮助优化事件处理。
 
 请注意，如果同时设置了 `leading` 和 `trailing`，函数会在延迟期的开始和结束都被调用。不过，要发生这种情况，必须在 debounceMs 时间间隔内至少调用两次，因为一次防抖函数调用无法两次触发该函数。
 

@@ -17,7 +17,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 <Interface
   name=""
   type="UseListReturn<T>"
-  description="包含数组状态及其操作函数 的元组。"
+  description="包含数组状态及其操作函数的元组。"
   :nested="[
     {
       name: 'list',
