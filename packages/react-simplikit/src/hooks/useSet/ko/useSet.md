@@ -21,40 +21,40 @@ function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
 <Interface
   name=""
   type="UseSetReturn<T>"
-  description="Set 상태와 이를 조작하는 액션을 담은 튜플이에요."
+  description="Set 상태와 이를 조작하는 액션을 담은 객체예요."
   :nested="[
     {
-      name: '[0]',
+      name: 'set',
       type: 'Omit<Set<T>, \'add\' | \'clear\' | \'delete\'>',
       required: false,
       description: '변경 메서드가 숨겨진 현재 Set 상태예요.',
     },
     {
-      name: '[1].add',
+      name: 'add',
       type: '(value: T) => void',
       required: false,
       description: 'Set에 값을 추가해요.',
     },
     {
-      name: '[1].remove',
+      name: 'remove',
       type: '(value: T) => void',
       required: false,
       description: 'Set에서 값을 제거해요.',
     },
     {
-      name: '[1].toggle',
+      name: 'toggle',
       type: '(value: T) => void',
       required: false,
       description: '값이 없으면 추가하고, 있으면 제거해요.',
     },
     {
-      name: '[1].setAll',
+      name: 'setAll',
       type: '(values: Set<T> | T[]) => void',
       required: false,
       description: 'Set의 모든 값을 교체해요.',
     },
     {
-      name: '[1].reset',
+      name: 'reset',
       type: '() => void',
       required: false,
       description: 'Set을 초기 상태로 리셋해요.',
@@ -68,7 +68,7 @@ function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
 import { useSet } from 'react-simplikit';
 
 function TagSelector() {
-  const [selectedTags, { add, remove, toggle }] = useSet<string>(['react']);
+  const { set: selectedTags, add, remove, toggle } = useSet<string>(['react']);
 
   return (
     <div>

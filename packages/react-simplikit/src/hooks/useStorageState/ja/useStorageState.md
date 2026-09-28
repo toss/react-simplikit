@@ -9,11 +9,7 @@
 function useStorageState<T>(
   key: string,
   options?: Object
-): readonly [
-  state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-  refreshState: () => void,
-];
+): StorageStateReturn<Serializable<T> | undefined>;
 ```
 
 ### パラメータ
@@ -63,23 +59,23 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="次の要素を含むタプル。"
+  type="StorageStateReturn<Serializable<T> | undefined>"
+  description="次の要素を含むオブジェクト。"
   :nested="[
     {
-      name: 'state',
+      name: 'value',
       type: 'Serializable<T> | undefined',
       required: false,
       description: 'ストレージから取得した現在の状態の値。',
     },
     {
-      name: 'setState',
+      name: 'setValue',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
       description: '状態を更新し、永続化する関数。',
     },
     {
-      name: 'refreshState',
+      name: 'refresh',
       type: '() => void',
       required: false,
       description: 'ストレージから状態を再取得する関数。',
@@ -94,9 +90,10 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
-    defaultValue: 0,
-  });
+  const { value: count, setValue: setCount } = useStorageState<number>(
+    'counter',
+    { defaultValue: 0 }
+  );
 
   return (
     <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>

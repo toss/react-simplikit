@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 import { usePreservedReference } from '../usePreservedReference/usePreservedReference.ts';
@@ -12,7 +12,7 @@ type ListActions<T> = {
   reset: () => void;
 };
 
-type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
+type UseListReturn<T> = { list: ReadonlyArray<T> } & ListActions<T>;
 
 /**
  * @description
@@ -23,36 +23,36 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  *
  * @param {T[]} [initialState=[]] - Initial array state.
  *
- * @returns {UseListReturn<T>} A tuple containing the array state and actions to manipulate it.
+ * @returns {UseListReturn<T>} An object containing the array state and actions to manipulate it.
  * - list `ReadonlyArray<T>` - The current array state;
- * - actions.push `(value: T) => void` - Appends a value to the end of the list;
- * - actions.insertAt `(index: number, value: T) => void` - Inserts a value at the specified index;
- * - actions.updateAt `(index: number, value: T) => void` - Updates the value at the specified index;
- * - actions.removeAt `(index: number) => void` - Removes the value at the specified index;
- * - actions.setAll `(values: T[]) => void` - Replaces the entire list with a new array;
- * - actions.reset `() => void` - Resets the list to its initial state;
+ * - push `(value: T) => void` - Appends a value to the end of the list;
+ * - insertAt `(index: number, value: T) => void` - Inserts a value at the specified index;
+ * - updateAt `(index: number, value: T) => void` - Updates the value at the specified index;
+ * - removeAt `(index: number) => void` - Removes the value at the specified index;
+ * - setAll `(values: T[]) => void` - Replaces the entire list with a new array;
+ * - reset `() => void` - Resets the list to its initial state;
  *
  * @example
  * ```tsx
- * const [list, actions] = useList<string>(['apple', 'banana']);
+ * const { list, push, insertAt, updateAt, removeAt, setAll, reset } = useList<string>(['apple', 'banana']);
  *
  * // Add an item
- * actions.push('cherry');
+ * push('cherry');
  *
  * // Insert at index
- * actions.insertAt(1, 'grape');
+ * insertAt(1, 'grape');
  *
  * // Update at index
- * actions.updateAt(0, 'orange');
+ * updateAt(0, 'orange');
  *
  * // Remove at index
- * actions.removeAt(2);
+ * removeAt(2);
  *
  * // Replace all
- * actions.setAll(['kiwi', 'mango']);
+ * setAll(['kiwi', 'mango']);
  *
  * // Reset to initial state
- * actions.reset();
+ * reset();
  * ```
  */
 export function useList<T>(initialState: T[] = []): UseListReturn<T> {
@@ -96,10 +96,5 @@ export function useList<T>(initialState: T[] = []): UseListReturn<T> {
     setList(preservedInitialState);
   });
 
-  const actions = useMemo<ListActions<T>>(
-    () => ({ push, insertAt, updateAt, removeAt, setAll, reset }),
-    [push, insertAt, updateAt, removeAt, setAll, reset]
-  );
-
-  return [list, actions];
+  return { list, push, insertAt, updateAt, removeAt, setAll, reset };
 }

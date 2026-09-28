@@ -22,13 +22,13 @@ function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
 <Interface
   name=""
   type="UseMapReturn<K, V>"
-  description="맵 상태와 이를 조작하는 액션을 포함한 튜플이에요"
+  description="맵 상태와 이를 조작하는 액션을 포함한 객체예요"
 />
 
 ## 예시
 
 ```tsx
-const [userMap, actions] = useMap<string, User>([
+const { map: userMap, set } = useMap<string, User>([
   ['user1', { name: 'John', age: 30 }],
 ]);
 
@@ -36,5 +36,5 @@ const [userMap, actions] = useMap<string, User>([
 const user1 = userMap.get('user1');
 
 // 맵 업데이트하기
-actions.set('user2', { name: 'Jane', age: 25 });
+set('user2', { name: 'Jane', age: 25 });
 ```

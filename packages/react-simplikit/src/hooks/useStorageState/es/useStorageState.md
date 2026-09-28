@@ -9,11 +9,7 @@ El valor persiste cuando recargas la página y puedes compartirlo entre pestaña
 function useStorageState<T>(
   key: string,
   options?: Object
-): readonly [
-  state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-  refreshState: () => void,
-];
+): StorageStateReturn<Serializable<T> | undefined>;
 ```
 
 ### Parámetros
@@ -63,23 +59,23 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="Una tupla:"
+  type="StorageStateReturn<Serializable<T> | undefined>"
+  description="Un objeto:"
   :nested="[
     {
-      name: 'state',
+      name: 'value',
       type: 'Serializable<T> | undefined',
       required: false,
       description: 'El valor actual del estado obtenido del almacenamiento.',
     },
     {
-      name: 'setState',
+      name: 'setValue',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
       description: 'Una función para actualizar y guardar el estado de forma persistente.',
     },
     {
-      name: 'refreshState',
+      name: 'refresh',
       type: '() => void',
       required: false,
       description: 'Una función para actualizar el estado a partir del almacenamiento.',
@@ -94,9 +90,10 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
-    defaultValue: 0,
-  });
+  const { value: count, setValue: setCount } = useStorageState<number>(
+    'counter',
+    { defaultValue: 0 }
+  );
 
   return (
     <button onClick={() => setCount(prev => prev + 1)}>Conteo: {count}</button>

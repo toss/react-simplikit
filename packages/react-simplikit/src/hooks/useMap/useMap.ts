@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { usePreservedReference } from '../usePreservedReference/usePreservedReference.ts';
 
@@ -25,7 +25,7 @@ type MapActions<K, V> = {
  * Return type of the useMap hook.
  * Hides certain methods to prevent direct mutations.
  */
-type UseMapReturn<K, V> = [Omit<Map<K, V>, 'set' | 'clear' | 'delete'>, MapActions<K, V>];
+type UseMapReturn<K, V> = { map: Omit<Map<K, V>, 'set' | 'clear' | 'delete'> } & MapActions<K, V>;
 
 /**
  * @description
@@ -35,11 +35,11 @@ type UseMapReturn<K, V> = [Omit<Map<K, V>, 'set' | 'clear' | 'delete'>, MapActio
  * @template K - The type of the Map keys.
  * @template V - The type of the Map values.
  * @param {MapOrEntries<K, V>} initialState - Initial Map state (Map object or array of key-value pairs)
- * @returns {UseMapReturn<K, V>} A tuple containing the Map state and actions to manipulate it
+ * @returns {UseMapReturn<K, V>} An object containing the Map state and actions to manipulate it
  *
  * @example
  * ```tsx
- * const [userMap, actions] = useMap<string, User>([
+ * const { map: userMap, set } = useMap<string, User>([
  *   ['user1', { name: 'John', age: 30 }]
  * ]);
  *
@@ -47,7 +47,7 @@ type UseMapReturn<K, V> = [Omit<Map<K, V>, 'set' | 'clear' | 'delete'>, MapActio
  * const user1 = userMap.get('user1');
  *
  * // Updating the Map
- * actions.set('user2', { name: 'Jane', age: 25 });
+ * set('user2', { name: 'Jane', age: 25 });
  * ```
  */
 export function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): UseMapReturn<K, V> {
@@ -81,9 +81,5 @@ export function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): UseM
     setMap(() => new Map(preservedInitialState));
   }, [preservedInitialState]);
 
-  const actions = useMemo<MapActions<K, V>>(() => {
-    return { set, setAll, remove, reset };
-  }, [set, setAll, remove, reset]);
-
-  return [map, actions];
+  return { map, set, setAll, remove, reset };
 }

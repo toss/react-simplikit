@@ -10,46 +10,46 @@ describe('useMap', () => {
     const initialMap = new Map([[1, 'initial']]);
     const { result } = await renderHookSSR(() => useMap(initialMap));
 
-    expect(result.current[0].get(1)).toBe('initial');
+    expect(result.current.map.get(1)).toBe('initial');
   });
 
   it('should initialize with an array of entries', async () => {
     const { result } = await renderHookSSR(() => useMap([[1, 'initial']]));
 
-    expect(result.current[0].get(1)).toBe('initial');
+    expect(result.current.map.get(1)).toBe('initial');
   });
 
   it('should initialize with an empty Map when no arguments provided', async () => {
     const { result } = await renderHookSSR(() => useMap());
 
-    expect(result.current[0].size).toBe(0);
+    expect(result.current.map.size).toBe(0);
   });
 
   it('should add a new value to the Map', async () => {
     const { result, rerender } = await renderHookSSR(() => useMap<number, string>());
-    const [, actions] = result.current;
+    const actions = result.current;
 
-    expect(result.current[0].get(1)).toBeUndefined();
+    expect(result.current.map.get(1)).toBeUndefined();
 
     await act(async () => {
       actions.set(1, 'added');
       rerender();
     });
 
-    expect(result.current[0].get(1)).toBe('added');
+    expect(result.current.map.get(1)).toBe('added');
   });
 
   it('should update an existing value in the Map', async () => {
     const initialMap = new Map([[1, 'initial']]);
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
-    const [, actions] = result.current;
+    const actions = result.current;
 
     await act(async () => {
       actions.set(1, 'edited');
       rerender();
     });
 
-    expect(result.current[0].get(1)).toBe('edited');
+    expect(result.current.map.get(1)).toBe('edited');
   });
 
   it('should replace all values with setAll', async () => {
@@ -58,40 +58,40 @@ describe('useMap', () => {
       [2, 'example'],
     ]);
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
-    const [, actions] = result.current;
+    const actions = result.current;
 
-    expect(result.current[0].get(1)).toBe('initial');
-    expect(result.current[0].get(2)).toBe('example');
-    expect(result.current[0].size).toBe(2);
+    expect(result.current.map.get(1)).toBe('initial');
+    expect(result.current.map.get(2)).toBe('example');
+    expect(result.current.map.size).toBe(2);
 
     await act(async () => {
       actions.setAll([[1, 'edited']]);
       rerender();
     });
 
-    expect(result.current[0].get(1)).toBe('edited');
-    expect(result.current[0].get(2)).toBeUndefined();
-    expect(result.current[0].size).toBe(1);
+    expect(result.current.map.get(1)).toBe('edited');
+    expect(result.current.map.get(2)).toBeUndefined();
+    expect(result.current.map.size).toBe(1);
   });
 
   it('should remove an existing value from the Map', async () => {
     const initialMap = new Map([[1, 'initial']]);
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
-    const [, actions] = result.current;
+    const actions = result.current;
 
     await act(async () => {
       actions.remove(1);
       rerender();
     });
 
-    expect(result.current[0].get(1)).toBeUndefined();
-    expect(result.current[0].size).toBe(0);
+    expect(result.current.map.get(1)).toBeUndefined();
+    expect(result.current.map.size).toBe(0);
   });
 
   it('should reset the Map to its initial state', async () => {
     const initialMap = new Map([[1, 'initial']]);
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
-    const [, actions] = result.current;
+    const actions = result.current;
 
     // First modify the map
     await act(async () => {
@@ -100,9 +100,9 @@ describe('useMap', () => {
       rerender();
     });
 
-    expect(result.current[0].get(1)).toBe('modified');
-    expect(result.current[0].get(2)).toBe('added');
-    expect(result.current[0].size).toBe(2);
+    expect(result.current.map.get(1)).toBe('modified');
+    expect(result.current.map.get(2)).toBe('added');
+    expect(result.current.map.size).toBe(2);
 
     // Then reset to initial state
     await act(async () => {
@@ -111,14 +111,14 @@ describe('useMap', () => {
     });
 
     // Should be back to initial state
-    expect(result.current[0].get(1)).toBe('initial');
-    expect(result.current[0].get(2)).toBeUndefined();
-    expect(result.current[0].size).toBe(1);
+    expect(result.current.map.get(1)).toBe('initial');
+    expect(result.current.map.get(2)).toBeUndefined();
+    expect(result.current.map.size).toBe(1);
   });
 
   it('should reset to empty Map when initialized with empty Map', async () => {
     const { result, rerender } = await renderHookSSR(() => useMap<number, string>());
-    const [, actions] = result.current;
+    const actions = result.current;
 
     // Add some items
     await act(async () => {
@@ -127,7 +127,7 @@ describe('useMap', () => {
       rerender();
     });
 
-    expect(result.current[0].size).toBe(2);
+    expect(result.current.map.size).toBe(2);
 
     // Reset should restore to empty state
     await act(async () => {
@@ -135,37 +135,37 @@ describe('useMap', () => {
       rerender();
     });
 
-    expect(result.current[0].size).toBe(0);
+    expect(result.current.map.size).toBe(0);
   });
 
   it('should create a new Map reference when values change', async () => {
     const initialMap = new Map<number, number>();
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
-    const [originalMapRef, actions] = result.current;
+    const { map: originalMapRef, set } = result.current;
 
     await act(async () => {
-      actions.set(1, 1);
+      set(1, 1);
       rerender();
     });
 
-    expect(originalMapRef).not.toBe(result.current[0]);
+    expect(originalMapRef).not.toBe(result.current.map);
     expect(originalMapRef.get(1)).toBeUndefined();
-    expect(result.current[0].get(1)).toBe(1);
+    expect(result.current.map.get(1)).toBe(1);
   });
 
   it('should maintain stable actions reference after Map changes', async () => {
     const initialMap = new Map<number, number>();
     const { result, rerender } = await renderHookSSR(() => useMap(initialMap));
-    const [, originalActionsRef] = result.current;
+    const originalActionsRef = result.current;
 
-    expect(result.current[1]).toBe(originalActionsRef);
+    expect(result.current.set).toBe(originalActionsRef.set);
 
     await act(async () => {
       originalActionsRef.set(1, 1);
       rerender();
     });
 
-    expect(result.current[1]).toBe(originalActionsRef);
+    expect(result.current.set).toBe(originalActionsRef.set);
   });
 
   it('is safe in server-side rendering', () => {

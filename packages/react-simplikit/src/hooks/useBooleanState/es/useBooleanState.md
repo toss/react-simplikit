@@ -6,14 +6,12 @@ Proporciona funciones para establecer el estado en `true`, establecerlo en `fals
 ## Interfaz
 
 ```ts
-function useBooleanState(
-  initialValue: boolean | (() => boolean) = false
-): readonly [
-  state: boolean,
-  setTrue: () => void,
-  setFalse: () => void,
-  toggle: () => void,
-];
+function useBooleanState(initialValue: boolean | (() => boolean) = false): {
+  value: boolean;
+  setTrue: () => void;
+  setFalse: () => void;
+  toggle: () => void;
+};
 ```
 
 ### Parámetros
@@ -28,11 +26,11 @@ function useBooleanState(
 
 <Interface
   name=""
-  type="readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
-  description="Una tupla que contiene:"
+  type="{ value: boolean; setTrue: () => void; setFalse: () => void; toggle: () => void }"
+  description="Un objeto que contiene:"
   :nested="[
     {
-      name: 'state',
+      name: 'value',
       type: 'boolean',
       required: false,
       description: 'El valor actual del estado.',
@@ -61,6 +59,10 @@ function useBooleanState(
 ## Ejemplo
 
 ```tsx
-const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
-  useBooleanState(false);
+const {
+  value: open,
+  setTrue: openBottomSheet,
+  setFalse: closeBottomSheet,
+  toggle: toggleBottomSheet,
+} = useBooleanState(false);
 ```
