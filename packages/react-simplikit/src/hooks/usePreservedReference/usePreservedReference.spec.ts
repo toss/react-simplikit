@@ -48,11 +48,11 @@ describe('usePreservedReference', () => {
     const initialValue = { key: 'value', action: initialFunction };
     const initialProps: {
       value: any;
-      areValuesEqual?: (a: any, b: any) => boolean;
-    } = { value: initialValue, areValuesEqual: areDeeplyEqual };
+      equalityFn?: (a: any, b: any) => boolean;
+    } = { value: initialValue, equalityFn: areDeeplyEqual };
 
     const { result, rerender } = await renderHookSSR(
-      ({ value, areValuesEqual }) => usePreservedReference(value, areValuesEqual),
+      ({ value, equalityFn }) => usePreservedReference(value, equalityFn),
       {
         initialProps,
       }
@@ -65,11 +65,11 @@ describe('usePreservedReference', () => {
     expect(result.current.action).toBe(initialFunction);
 
     /**
-     * The default behavior of areValuesEqual provided by usePreservedReference
+     * The default behavior of equalityFn provided by usePreservedReference
      * is to compare using JSON.stringify, which cannot detect changes in functions.
      * Therefore, a separate comparator that can compare functions should be provided.
      */
-    rerender({ value: newValue, areValuesEqual: areDeeplyEqual });
+    rerender({ value: newValue, equalityFn: areDeeplyEqual });
     expect(result.current.action).not.toBe(initialFunction);
     expect(result.current.action).toBe(newFunction);
   });
