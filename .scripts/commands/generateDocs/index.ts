@@ -82,7 +82,7 @@ export async function generateDocs(names: string[]) {
 
 // These tags carry no name, but the stock name tokenizer still takes the description's first word
 // as one ("An object…" became "object…"). Skipping it for them keeps the sentence whole.
-const NAMELESS_TAGS = new Set(['returns', 'remarks', 'description']);
+const NAMELESS_TAGS = new Set(['returns', 'remarks', 'description', 'deprecated']);
 const skipNameForNamelessTags = (spec: OriginSpec) => (NAMELESS_TAGS.has(spec.tag) ? spec : tokenizers.name()(spec));
 
 const parseOptions = (spacing: 'compact' | 'preserve') => ({
@@ -105,6 +105,7 @@ function parseJSDoc(source: string) {
     preservedComment?.tags.find(tag => tag.tag === 'description')?.description ?? preservedComment?.description ?? ''
   );
   const remarks = trimBlock(preservedComment?.tags.find(tag => tag.tag === 'remarks')?.description ?? '');
+  const deprecation = readDeprecation(source);
 
   const params = targetComment.tags.filter(tag => tag.tag === 'param');
 
@@ -142,6 +143,7 @@ function parseJSDoc(source: string) {
   return {
     description,
     remarks,
+    deprecation,
     templates,
     examples,
     params,
@@ -151,6 +153,32 @@ function parseJSDoc(source: string) {
         : { ...returns[0], name: '', description: parsedReturns.description, optional: true },
     nestedValueOfReturns: parsedReturns?.nested,
   };
+}
+
+/**
+ * The `@deprecated` text of the comment a page is generated from (the last one in the file), or
+ * `undefined` when there is none. `verifySkill.ts` reads it too, so a `@deprecated` on another
+ * comment in the file, such as an options type, does not mark the export itself.
+ */
+export function readDeprecation(source: string): string | undefined {
+  const tag = parse(source, parseOptions('preserve'))
+    .at(-1)
+    ?.tags.find(tag => tag.tag === 'deprecated');
+
+  if (tag == null) {
+    return undefined;
+  }
+
+  const text = trimBlock(tag.description);
+  const namesReplacement = /`[^`]+`/.test(text);
+
+  if (!namesReplacement) {
+    throw new Error(
+      '@deprecated must name the replacement in backticks, e.g. "@deprecated Use `newName` instead.", not with {@link newName}'
+    );
+  }
+
+  return text;
 }
 
 /** JSDoc's own caption syntax; the title renders as a heading above the example's code block. */
@@ -214,7 +242,7 @@ function endSentence(description: string) {
 }
 
 async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
-  const { templates, description, remarks, examples, params, returns, nestedValueOfReturns } = jsdoc;
+  const { templates, description, remarks, deprecation, examples, params, returns, nestedValueOfReturns } = jsdoc;
 
   const paramsProps = params.reduce<Array<[Spec, Spec[]]>>(
     (acc, param) => {
@@ -251,9 +279,11 @@ async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
         return `${rest}${param.name}${optional}: ${type}${param.default == null ? '' : ` = ${param.default}`}`;
       });
 
+  // The notice sits above the description so the page opens with it. `extractDescription` skips it,
+  // and the skill catalog reads it back to list the export as deprecated.
   return `# ${name}
 
-${description}
+${deprecation == null ? '' : `::: warning Deprecated\n${deprecation}\n:::\n\n`}${description}
 
 ## Interface
 
