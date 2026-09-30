@@ -1,10 +1,8 @@
-import { useCallback, useEffect } from 'react';
-
-type Options = {
-  immediate?: boolean;
-};
+import { usePageVisibilityEffect } from '../usePageVisibilityEffect/index.ts';
 
 /**
+ * @deprecated Use `usePageVisibilityEffect` instead.
+ *
  * @description
  * `useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback.
  *
@@ -27,21 +25,4 @@ type Options = {
  *   return <p>Check the console for visibility changes.</p>;
  * }
  */
-
-export function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') => void, options: Options = {}) {
-  const handleVisibilityChange = useCallback(() => {
-    callback(document.visibilityState);
-  }, [callback]);
-
-  useEffect(() => {
-    if (options?.immediate ?? false) {
-      handleVisibilityChange();
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [handleVisibilityChange, options?.immediate]);
-}
+export const useVisibilityEvent = usePageVisibilityEffect;

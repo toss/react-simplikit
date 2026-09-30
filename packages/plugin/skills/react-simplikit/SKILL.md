@@ -43,7 +43,7 @@ Backticks in this table mark catalog entries only.
 | Long press / double click                                           | `useLongPress` / `useDoubleClick`        |
 | Element enters or leaves the viewport                               | `useIntersectionObserver`                |
 | How long an element stayed visible (impression tracking)            | `useImpressionRef` / `ImpressionArea`    |
-| React to tab / page visibility changes with a callback              | `useVisibilityEvent`                     |
+| React to tab / page visibility changes with a callback              | `usePageVisibilityEffect`                |
 | Read the current tab / page visibility as state                     | `usePageVisibility`                      |
 | Device location                                                     | `useGeolocation`                         |
 | Combine multiple refs into one                                      | `mergeRefs`                              |
@@ -99,6 +99,7 @@ Backticks in this table mark catalog entries only.
 | [`useNetworkStatus`](references/useNetworkStatus.md) | `useNetworkStatus` is a React hook that provides access to the Network Information API. |
 | [`useOutsideClickEffect`](references/useOutsideClickEffect.md) | `useOutsideClickEffect` is a React hook that triggers a callback when a click event occurs outside the specified container(s). |
 | [`usePageVisibility`](references/usePageVisibility.md) | `usePageVisibility` is a React hook that detects page visibility changes. |
+| [`usePageVisibilityEffect`](references/usePageVisibilityEffect.md) | `usePageVisibilityEffect` is a React hook that listens to changes in the document's visibility state and triggers a callback. |
 | [`usePreservedCallback`](references/usePreservedCallback.md) | `usePreservedCallback` is a React hook that maintains a stable reference to a callback function while ensuring it always has access to the latest state or props. |
 | [`usePreservedReference`](references/usePreservedReference.md) | `usePreservedReference` is a React hook that helps maintain the reference of a value when it hasn't changed, while ensuring you can safely use the latest state. |
 | [`usePrevious`](references/usePrevious.md) | `usePrevious` is a React hook that returns the previous value of the input state. |
@@ -112,7 +113,6 @@ Backticks in this table mark catalog entries only.
 | [`useThrottledValue`](references/useThrottledValue.md) | `useThrottledValue` is a React hook that returns a throttled copy of the given value. |
 | [`useTimeout`](references/useTimeout.md) | `useTimeout` is a React hook that executes a callback function after a specified delay. |
 | [`useToggle`](references/useToggle.md) | `useToggle` is a React hook that simplifies managing a boolean state. |
-| [`useVisibilityEvent`](references/useVisibilityEvent.md) | `useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback. |
 | [`useVisualViewport`](references/useVisualViewport.md) | `useVisualViewport` is a React hook that tracks Visual Viewport changes. |
 
 ### components
@@ -147,6 +147,7 @@ These still work but are kept only for backward compatibility. Do not use them i
 | Name | Notice |
 | --- | --- |
 | `useCallbackOncePerRender` | Use `useCallbackOnce` instead. |
+| `useVisibilityEvent` | Use `usePageVisibilityEffect` instead. |
 
 ## Learn more
 
