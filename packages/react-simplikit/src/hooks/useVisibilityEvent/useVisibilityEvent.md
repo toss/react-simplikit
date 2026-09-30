@@ -1,5 +1,9 @@
 # useVisibilityEvent
 
+::: warning Deprecated
+Use `usePageVisibilityEffect` instead.
+:::
+
 `useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback.
 
 ## Interface

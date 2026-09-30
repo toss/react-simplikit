@@ -1,15 +1,11 @@
-# useVisibilityEvent
+# usePageVisibilityEffect
 
-::: warning 已弃用
-请改用 `usePageVisibilityEffect`。
-:::
-
-`useVisibilityEvent` 是一个监听文档可见性状态变化并触发回调的 React Hook。
+`usePageVisibilityEffect` 是一个监听文档可见性状态变化并触发回调的 React Hook。
 
 ## 接口
 
 ```ts
-function useVisibilityEvent(
+function usePageVisibilityEffect(
   callback: (visibilityState: 'visible' | 'hidden') => void,
   options?: object
 ): void;
@@ -47,10 +43,10 @@ function useVisibilityEvent(
 ## 示例
 
 ```tsx
-import { useVisibilityEvent } from 'react-simplikit';
+import { usePageVisibilityEffect } from 'react-simplikit';
 
 function Component() {
-  useVisibilityEvent(visibilityState => {
+  usePageVisibilityEffect(visibilityState => {
     console.log(`Document is now ${visibilityState}`);
   });
 
