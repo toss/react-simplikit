@@ -1,15 +1,11 @@
-# useCallbackOncePerRender
+# useCallbackOnce
 
-::: warning 已弃用
-请改用 `useCallbackOnce`。
-:::
-
-`useCallbackOncePerRender` 是一个 React Hook，在 `deps` 变化之前，无论返回的函数被调用多少次，它都只会执行一次回调函数。它适用于那些即使组件重复渲染也不应重复执行的一次性操作。
+`useCallbackOnce` 是一个 React Hook，在 `deps` 变化之前，无论返回的函数被调用多少次，它都只会执行一次回调函数。它适用于那些即使组件重复渲染也不应重复执行的一次性操作。
 
 ## 接口
 
 ```ts
-function useCallbackOncePerRender<F extends (...args: any[]) => void>(
+function useCallbackOnce<F extends (...args: any[]) => void>(
   callback: F,
   deps: DependencyList
 ): (...args: Parameters<F>) => void;
@@ -42,10 +38,10 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
 ## 示例
 
 ```tsx
-import { useCallbackOncePerRender } from 'react-simplikit';
+import { useCallbackOnce } from 'react-simplikit';
 
 function Component() {
-  const handleOneTimeEvent = useCallbackOncePerRender(() => {
+  const handleOneTimeEvent = useCallbackOnce(() => {
     console.log('This will only run once');
   }, []);
 
@@ -56,7 +52,7 @@ function Component() {
 ```tsx
 // With dependencies
 function TrackingComponent({ userId }: { userId: string }) {
-  const trackUserVisit = useCallbackOncePerRender(() => {
+  const trackUserVisit = useCallbackOnce(() => {
     analytics.trackVisit(userId);
   }, [userId]);
 

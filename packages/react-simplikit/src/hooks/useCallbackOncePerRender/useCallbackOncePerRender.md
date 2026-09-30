@@ -1,15 +1,19 @@
 # useCallbackOncePerRender
 
-`useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once, regardless of how many times it's called.
+::: warning Deprecated
+Use `useCallbackOnce` instead.
+:::
+
+`useCallbackOncePerRender` is a React hook that runs a callback only once until `deps` change, no matter how many times the returned function is called.
 This is useful for one-time operations that should not be repeated, even if the component re-renders.
 
 ## Interface
 
 ```ts
 function useCallbackOncePerRender<F extends (...args: any[]) => void>(
-  callback: () => void,
+  callback: F,
   deps: DependencyList
-): (...args: any[]) => void;
+): (...args: Parameters<F>) => void;
 ```
 
 ### Parameters
@@ -17,23 +21,23 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
 <Interface
   required
   name="callback"
-  type="() => void"
-  description="The callback function to be executed once."
+  type="F"
+  description="The callback function to be executed once. It receives the arguments passed to the returned function."
 />
 
 <Interface
   required
   name="deps"
   type="DependencyList"
-  description="Dependencies array that will trigger a new one-time execution when changed."
+  description="Dependencies array. When it changes, the returned function can run the callback once more."
 />
 
 ### Return Value
 
 <Interface
   name=""
-  type="(...args: any[]) => void"
-  description="A memoized function that will only execute once until dependencies change."
+  type="(...args: Parameters<F>) => void"
+  description="A function whose reference never changes. It runs the callback only once until <code>deps</code> change."
 />
 
 ## Example
@@ -59,7 +63,7 @@ function TrackingComponent({ userId }: { userId: string }) {
 
   useEffect(() => {
     trackUserVisit();
-  }, [trackUserVisit]);
+  }, [trackUserVisit, userId]);
 
   return <div>User page</div>;
 }
