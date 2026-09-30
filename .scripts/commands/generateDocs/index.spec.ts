@@ -4,7 +4,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { compileTemplate } from 'vue/compiler-sfc';
 
-import { renderEnglishDoc } from './index.ts';
+import { readDeprecation, renderEnglishDoc } from './index.ts';
 
 async function render(name: string, source: string) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'generate-docs-'));
@@ -676,5 +676,138 @@ export function useNoReturnValue() {}`
     );
 
     expect(document).toContain('\nThis function does not return anything.');
+  });
+
+  it('renders @deprecated as a warning container between the heading and the description', async () => {
+    const document = await render(
+      'useOld',
+      `/**
+ * @deprecated Use \`useNew\` instead.
+ *
+ * @description
+ * \`useOld\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useOld();
+ */
+export function useOld() {}`
+    );
+
+    expect(
+      document.startsWith(
+        '# useOld\n\n::: warning Deprecated\nUse `useNew` instead.\n:::\n\n`useOld` does something.\n'
+      )
+    ).toBe(true);
+  });
+
+  it('keeps the line breaks of a wrapped @deprecated text inside the container', async () => {
+    const document = await render(
+      'useOld',
+      `/**
+ * @description
+ * \`useOld\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useOld();
+ *
+ * @deprecated
+ * Use \`useNew\` instead.
+ * It will be removed in the next major version.
+ */
+export function useOld() {}`
+    );
+
+    expect(document).toContain(
+      '::: warning Deprecated\nUse `useNew` instead.\nIt will be removed in the next major version.\n:::'
+    );
+  });
+
+  it('renders no container when there is no @deprecated', async () => {
+    const document = await render(
+      'useCurrent',
+      `/**
+ * @description
+ * \`useCurrent\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useCurrent();
+ */
+export function useCurrent() {}`
+    );
+
+    expect(document.startsWith('# useCurrent\n\n`useCurrent` does something.\n')).toBe(true);
+    expect(document).not.toContain(':::');
+  });
+});
+
+describe('readDeprecation', () => {
+  it('reads @deprecated from the comment the page is generated from', () => {
+    expect(
+      readDeprecation(`/**
+ * @description Does something.
+ * @deprecated Use \`useNew\` instead.
+ */
+export function useOld() {}`)
+    ).toBe('Use `useNew` instead.');
+  });
+
+  it('ignores @deprecated on an earlier comment, such as an options type', () => {
+    expect(
+      readDeprecation(`type Options = {
+  /** @deprecated Use \`delay\` instead. */
+  wait?: number;
+};
+
+/**
+ * @description Does something.
+ */
+export function useCurrent(options: Options) {}`)
+    ).toBeUndefined();
+  });
+
+  it('throws on a @deprecated that does not say what to use instead', () => {
+    expect(() =>
+      readDeprecation(`/**
+ * @description Does something.
+ * @deprecated
+ */
+export function useOld() {}`)
+    ).toThrow('@deprecated must name the replacement in backticks');
+  });
+
+  it('throws on a @deprecated that names no replacement', () => {
+    expect(() =>
+      readDeprecation(`/**
+ * @description Does something.
+ * @deprecated Will be removed in v2.
+ */
+export function useOld() {}`)
+    ).toThrow('@deprecated must name the replacement in backticks');
+  });
+
+  it('throws on a @deprecated that opens with {@link}, which the parser reads as a type', () => {
+    expect(() =>
+      readDeprecation(`/**
+ * @description Does something.
+ * @deprecated {@link useNew} instead.
+ */
+export function useOld() {}`)
+    ).toThrow('@deprecated must name the replacement in backticks');
+  });
+
+  it('throws on a @deprecated that names the replacement with {@link}, which the page would show as written', () => {
+    expect(() =>
+      readDeprecation(`/**
+ * @description Does something.
+ * @deprecated Use {@link useNew} instead.
+ */
+export function useOld() {}`)
+    ).toThrow('@deprecated must name the replacement in backticks');
   });
 });

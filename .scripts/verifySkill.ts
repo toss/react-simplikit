@@ -4,6 +4,8 @@ import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
+import { readDeprecation } from './commands/generateDocs/index.ts';
+import { readDeprecatedNames } from './commands/generateSkill/catalog.ts';
 import { generateSkill, PACKAGE_INDEX_FILE, SKILL_DIRECTORY } from './commands/generateSkill/index.ts';
 import { collectPublicExports } from './utils/collectPublicExports.ts';
 import { getRootPath } from './utils/getRootPath.ts';
@@ -84,25 +86,40 @@ for (const name of publicExports) {
   );
 }
 
-// The skill has no "Deprecated" section by design; a deprecated export would be listed as if it were current.
-const sourceFiles = await glob('packages/react-simplikit/src/**/*.{ts,tsx}', {
-  cwd: root,
-  ignore: ['**/*.spec.*', '**/*.test.*'],
-});
+// The generator only sees the pages, so this reads the source to catch a deprecated export that
+// the skill would still list as current.
+const deprecatedExports: string[] = [];
 
-for (const file of sourceFiles) {
-  assert.equal(
-    (await fs.readFile(path.join(root, file), 'utf8')).includes('@deprecated'),
-    false,
-    `${file} is @deprecated, but the skill catalog has no way to say so — un-deprecate it or add a Deprecated section to the template`
-  );
+for (const name of publicExports) {
+  const [sourceFilePath] = await glob(`packages/react-simplikit/src/**/${name}.ts?(x)`, {
+    absolute: true,
+    cwd: root,
+    ignore: ['**/*.spec.*', '**/*.test.*'],
+  });
+
+  assert.ok(sourceFilePath, `${name} is exported but has no source file`);
+
+  if (readDeprecation(await fs.readFile(sourceFilePath, 'utf8')) != null) {
+    deprecatedExports.push(name);
+  }
 }
+
+assert.deepEqual(
+  readDeprecatedNames(skill).toSorted(),
+  deprecatedExports,
+  'the Deprecated section must list exactly the exports whose JSDoc is @deprecated — run `yarn docs:gen <name>`'
+);
 
 // The hand-written table may only name catalog entries, or it drifts from the source.
 const commonNeeds = skill.slice(skill.indexOf('## Common needs'), skill.indexOf('## Workflow'));
 
 for (const [, token] of commonNeeds.matchAll(/`([^`]+)`/g)) {
   assert.equal(publicExports.includes(token), true, `"${token}" in the Common needs table is not a public export`);
+  assert.equal(
+    deprecatedExports.includes(token),
+    false,
+    `"${token}" in the Common needs table is @deprecated — name its replacement in template.md`
+  );
 }
 
 async function readVerifiedSkill(directory: string, name: string): Promise<string> {
