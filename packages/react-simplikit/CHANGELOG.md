@@ -1,5 +1,13 @@
 # react-simplikit
 
+## 0.3.2
+
+### Patch Changes
+
+- [#508](https://github.com/toss/react-simplikit/pull/508) [`aaacc83`](https://github.com/toss/react-simplikit/commit/aaacc83fe953388cbff992161d1eda38934b926c) Thanks [@hyesungoh](https://github.com/hyesungoh)! - The JSDoc of every public export now declares its generic parameters with `@template`, and the `@returns` members of `useNetworkStatus` and `usePageVisibility` carry their types, so editors that read the published `.d.ts` comments see the same signatures the documentation shows. The English API pages were regenerated from JSDoc after fixing the generator: return descriptions keep their first word, optional parameters are marked with `?`, each `@example` renders in its own code block, nested return items are read per line, and angle brackets in descriptions no longer disappear on the page.
+
+- [#509](https://github.com/toss/react-simplikit/pull/509) [`50b68ee`](https://github.com/toss/react-simplikit/commit/50b68ee6deb93b71abe3fc7aaab8c8d4bf8da3f8) Thanks [@hyesungoh](https://github.com/hyesungoh)! - The JSDoc of `useBodyScrollLock`, `useKeyboardHeight`, `useNetworkStatus`, `usePageVisibility`, `useScrollDirection` and `useVisualViewport` now carries the examples and notes that previously existed only in the Korean documentation, as captioned `@example` blocks and a `@remarks` section, so the generated English pages and editor hovers show the same guidance.
+
 ## 0.3.1
 
 ### Patch Changes
