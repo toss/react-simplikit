@@ -1,16 +1,12 @@
-# useCallbackOncePerRender
+# useCallbackOnce
 
-::: warning 非推奨
-代わりに `useCallbackOnce` を使用してください。
-:::
-
-`useCallbackOncePerRender` は、返された関数が何度呼び出されても、`deps` が変わるまではコールバック関数を一度だけ実行する React フックです。
+`useCallbackOnce` は、返された関数が何度呼び出されても、`deps` が変わるまではコールバック関数を一度だけ実行する React フックです。
 コンポーネントが再レンダリングされても繰り返すべきでない、一度限りの処理に便利です。
 
 ## インターフェース
 
 ```ts
-function useCallbackOncePerRender<F extends (...args: any[]) => void>(
+function useCallbackOnce<F extends (...args: any[]) => void>(
   callback: F,
   deps: DependencyList
 ): (...args: Parameters<F>) => void;
@@ -43,10 +39,10 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
 ## 使用例
 
 ```tsx
-import { useCallbackOncePerRender } from 'react-simplikit';
+import { useCallbackOnce } from 'react-simplikit';
 
 function Component() {
-  const handleOneTimeEvent = useCallbackOncePerRender(() => {
+  const handleOneTimeEvent = useCallbackOnce(() => {
     console.log('This will only run once');
   }, []);
 
@@ -57,7 +53,7 @@ function Component() {
 ```tsx
 // 依存関係を指定する場合
 function TrackingComponent({ userId }: { userId: string }) {
-  const trackUserVisit = useCallbackOncePerRender(() => {
+  const trackUserVisit = useCallbackOnce(() => {
     analytics.trackVisit(userId);
   }, [userId]);
 
