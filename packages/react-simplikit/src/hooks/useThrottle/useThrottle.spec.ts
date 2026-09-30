@@ -89,7 +89,7 @@ describe('useThrottle', () => {
 
     const callback = vi.fn();
     const throttleMs = 50;
-    const { result } = await renderHookSSR(() => useThrottle(callback, throttleMs, { edges: ['leading', 'trailing'] }));
+    const { result } = await renderHookSSR(() => useThrottle(callback, throttleMs, { leading: true, trailing: true }));
 
     result.current();
 

@@ -10,7 +10,7 @@ such as when handling scroll or resize events.
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
 
@@ -32,16 +32,24 @@ function useThrottle<F extends (...args: any[]) => any>(
 
 <Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
+  type="ThrottleOptions"
   description="Options to control the behavior of the throttle."
   :nested="[
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        'An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.',
+        'If <code>true</code>, allows an immediate call at the start of a throttle window.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        'If <code>true</code>, allows a pending call to run after the delay with the latest arguments.',
     },
   ]"
 />
@@ -62,7 +70,7 @@ const throttledScroll = useThrottle(
     console.log('Scroll event');
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { leading: true, trailing: true }
 );
 
 useEffect(() => {
