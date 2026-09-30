@@ -6,12 +6,12 @@
 ## インターフェース
 
 ```ts
-function useList<T>(initialState: T[] = []): UseListReturn<T>;
+function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 ```
 
 ### パラメータ
 
-<Interface name="initialState" type="T[]" description="配列の初期状態です。" />
+<Interface name="initialValue" type="T[]" description="配列の初期状態です。" />
 
 ### 戻り値
 

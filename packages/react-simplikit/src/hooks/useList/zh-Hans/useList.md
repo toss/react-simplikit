@@ -5,12 +5,12 @@
 ## 接口
 
 ```ts
-function useList<T>(initialState: T[] = []): UseListReturn<T>;
+function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 ```
 
 ### 参数
 
-<Interface name="initialState" type="T[]" description="初始数组状态。" />
+<Interface name="initialValue" type="T[]" description="初始数组状态。" />
 
 ### 返回值
 

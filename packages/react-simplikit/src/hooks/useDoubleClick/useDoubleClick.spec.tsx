@@ -5,18 +5,18 @@ import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { useDoubleClick } from './useDoubleClick.ts';
 
 function TestComponent({
-  delay = 250,
+  delayMs = 250,
   onClick,
   onDoubleClick,
 }: {
-  delay?: number;
+  delayMs?: number;
   onClick?: (event: MouseEvent<HTMLElement>) => void;
   onDoubleClick: (event: MouseEvent<HTMLElement>) => void;
 }) {
   const handleEvent = useDoubleClick({
-    delay,
-    click: onClick,
-    doubleClick: onDoubleClick,
+    delayMs,
+    onClick,
+    onDoubleClick,
   });
 
   return <button onClick={handleEvent}>Test Button</button>;
@@ -102,7 +102,7 @@ describe('useDoubleClick', () => {
   });
 
   it('respects custom delay time', () => {
-    const { getByText } = render(<TestComponent delay={500} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+    const { getByText } = render(<TestComponent delayMs={500} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
     const button = getByText('Test Button');
 
     fireEvent.click(button, { detail: 1 });
@@ -117,7 +117,7 @@ describe('useDoubleClick', () => {
   });
 
   it('does not call click if doubleClick is triggered before delay', () => {
-    const { getByText } = render(<TestComponent delay={300} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+    const { getByText } = render(<TestComponent delayMs={300} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
     const button = getByText('Test Button');
 
     fireEvent.click(button, { detail: 1 });

@@ -6,13 +6,13 @@ Set を状態として管理する React フックです。
 ## インターフェース
 
 ```ts
-function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
+function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T>;
 ```
 
 ### パラメータ
 
 <Interface
-  name="initialState"
+  name="initialValue"
   type="SetOrValues<T>"
   description="Set の初期状態（Set オブジェクトまたは値の配列）。"
 />

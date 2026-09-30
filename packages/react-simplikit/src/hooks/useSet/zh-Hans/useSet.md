@@ -5,13 +5,13 @@
 ## 接口
 
 ```ts
-function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
+function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T>;
 ```
 
 ### 参数
 
 <Interface
-  name="initialState"
+  name="initialValue"
   type="SetOrValues<T>"
   description="初始 Set 状态（Set 对象或值数组）。"
 />

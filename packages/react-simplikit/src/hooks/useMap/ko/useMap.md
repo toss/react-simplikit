@@ -5,14 +5,14 @@
 ## 인터페이스
 
 ```ts
-function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
+function useMap<K, V>(initialValue: MapOrEntries<K, V>): UseMapReturn<K, V>;
 ```
 
 ### 파라미터
 
 <Interface
   required
-  name="initialState"
+  name="initialValue"
   type="MapOrEntries<K, V>"
   description="초기 맵 상태 (맵 객체 또는 키-값 쌍의 배열)"
 />

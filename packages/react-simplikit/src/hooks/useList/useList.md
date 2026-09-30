@@ -6,12 +6,12 @@ Provides efficient state management and stable action functions.
 ## Interface
 
 ```ts
-function useList<T>(initialState: T[] = []): UseListReturn<T>;
+function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 ```
 
 ### Parameters
 
-<Interface name="initialState" type="T[]" description="Initial array state." />
+<Interface name="initialValue" type="T[]" description="Initial array state." />
 
 ### Return Value
 

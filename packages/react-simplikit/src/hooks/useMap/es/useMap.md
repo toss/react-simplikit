@@ -6,14 +6,14 @@ Proporciona una gestión eficiente del estado y funciones de acción estables.
 ## Interfaz
 
 ```ts
-function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
+function useMap<K, V>(initialValue: MapOrEntries<K, V>): UseMapReturn<K, V>;
 ```
 
 ### Parámetros
 
 <Interface
   required
-  name="initialState"
+  name="initialValue"
   type="MapOrEntries<K, V>"
   description="Estado inicial del Map (objeto Map o arreglo de pares clave-valor)"
 />

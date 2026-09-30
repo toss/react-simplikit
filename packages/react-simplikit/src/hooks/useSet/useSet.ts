@@ -22,7 +22,7 @@ type UseSetReturn<T> = [Omit<Set<T>, 'add' | 'clear' | 'delete'>, SetActions<T>]
  *
  * @template T - The type of the values held in the set.
  *
- * @param {SetOrValues<T>} [initialState=new Set()] - Initial Set state (Set object or array of values).
+ * @param {SetOrValues<T>} [initialValue=new Set()] - Initial Set state (Set object or array of values).
  *
  * @returns {UseSetReturn<T>} A tuple containing the Set state and actions to manipulate it.
  * - [0] `Omit<Set<T>, 'add' | 'clear' | 'delete'>` - The current Set state with mutation methods hidden;
@@ -51,10 +51,10 @@ type UseSetReturn<T> = [Omit<Set<T>, 'add' | 'clear' | 'delete'>, SetActions<T>]
  * }
  * ```
  */
-export function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T> {
-  const [set, setSet] = useState(() => new Set(initialState));
+export function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T> {
+  const [set, setSet] = useState(() => new Set(initialValue));
 
-  const preservedInitialState = usePreservedReference(initialState);
+  const preservedInitialValue = usePreservedReference(initialValue);
 
   const add = usePreservedCallback((value: T) => {
     setSet(prev => {
@@ -89,7 +89,7 @@ export function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetRetur
   });
 
   const reset = usePreservedCallback(() => {
-    setSet(() => new Set(preservedInitialState));
+    setSet(() => new Set(preservedInitialValue));
   });
 
   const actions = useMemo<SetActions<T>>(

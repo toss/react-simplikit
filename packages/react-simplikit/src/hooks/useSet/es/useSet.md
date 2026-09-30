@@ -6,13 +6,13 @@ Proporciona una gestión eficiente del estado y funciones de acción estables.
 ## Interfaz
 
 ```ts
-function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
+function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T>;
 ```
 
 ### Parámetros
 
 <Interface
-  name="initialState"
+  name="initialValue"
   type="SetOrValues<T>"
   description="Estado inicial del Set (objeto Set o arreglo de valores)."
 />
