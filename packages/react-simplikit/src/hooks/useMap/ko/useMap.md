@@ -14,7 +14,7 @@ function useMap<K, V>(initialValue: MapOrEntries<K, V>): UseMapReturn<K, V>;
   required
   name="initialValue"
   type="MapOrEntries<K, V>"
-  description="초기 맵 값 (맵 객체 또는 키-값 쌍의 배열)"
+  description="초기 맵 값이에요 (맵 객체 또는 키-값 쌍의 배열)"
 />
 
 ### 반환 값
