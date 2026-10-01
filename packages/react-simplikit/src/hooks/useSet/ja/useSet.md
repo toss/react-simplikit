@@ -14,7 +14,7 @@ function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T>;
 <Interface
   name="initialValue"
   type="SetOrValues<T>"
-  description="Set の初期状態（Set オブジェクトまたは値の配列）。"
+  description="Set の初期値（Set オブジェクトまたは値の配列）。"
 />
 
 ### 戻り値

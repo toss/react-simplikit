@@ -15,7 +15,7 @@ function useMap<K, V>(initialValue: MapOrEntries<K, V>): UseMapReturn<K, V>;
   required
   name="initialValue"
   type="MapOrEntries<K, V>"
-  description="Map の初期状態（Map オブジェクトまたはキーと値のペアの配列）です。"
+  description="Map の初期値（Map オブジェクトまたはキーと値のペアの配列）です。"
 />
 
 ### 戻り値

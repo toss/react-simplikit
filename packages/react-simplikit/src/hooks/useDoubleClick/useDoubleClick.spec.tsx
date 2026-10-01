@@ -64,7 +64,7 @@ describe('useDoubleClick', () => {
     expect(doubleClickSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('does not throw if click is not provided', () => {
+  it('does not throw if onClick is not provided', () => {
     const { getByText } = render(<TestComponent onDoubleClick={doubleClickSpy} />);
     const button = getByText('Test Button');
 
@@ -116,7 +116,7 @@ describe('useDoubleClick', () => {
     expect(clickSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('does not call click if doubleClick is triggered before delay', () => {
+  it('does not call onClick if onDoubleClick is triggered before delayMs', () => {
     const { getByText } = render(<TestComponent delayMs={300} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
     const button = getByText('Test Button');
 

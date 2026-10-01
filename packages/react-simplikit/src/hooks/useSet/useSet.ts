@@ -22,7 +22,7 @@ type UseSetReturn<T> = [Omit<Set<T>, 'add' | 'clear' | 'delete'>, SetActions<T>]
  *
  * @template T - The type of the values held in the set.
  *
- * @param {SetOrValues<T>} [initialValue=new Set()] - Initial Set state (Set object or array of values).
+ * @param {SetOrValues<T>} [initialValue=new Set()] - Initial Set value (Set object or array of values).
  *
  * @returns {UseSetReturn<T>} A tuple containing the Set state and actions to manipulate it.
  * - [0] `Omit<Set<T>, 'add' | 'clear' | 'delete'>` - The current Set state with mutation methods hidden;

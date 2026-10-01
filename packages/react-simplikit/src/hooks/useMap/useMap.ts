@@ -34,7 +34,7 @@ type UseMapReturn<K, V> = [Omit<Map<K, V>, 'set' | 'clear' | 'delete'>, MapActio
  *
  * @template K - The type of the Map keys.
  * @template V - The type of the Map values.
- * @param {MapOrEntries<K, V>} initialValue - Initial Map state (Map object or array of key-value pairs)
+ * @param {MapOrEntries<K, V>} initialValue - Initial Map value (Map object or array of key-value pairs)
  * @returns {UseMapReturn<K, V>} A tuple containing the Map state and actions to manipulate it
  *
  * @example

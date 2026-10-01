@@ -21,7 +21,7 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  *
  * @template T - The type of the values held in the list.
  *
- * @param {T[]} [initialValue=[]] - Initial array state.
+ * @param {T[]} [initialValue=[]] - Initial array value.
  *
  * @returns {UseListReturn<T>} A tuple containing the array state and actions to manipulate it.
  * - list `ReadonlyArray<T>` - The current array state;

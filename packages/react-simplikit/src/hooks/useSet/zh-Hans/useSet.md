@@ -13,7 +13,7 @@ function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T>;
 <Interface
   name="initialValue"
   type="SetOrValues<T>"
-  description="初始 Set 状态（Set 对象或值数组）。"
+  description="Set 的初始值（Set 对象或值数组）。"
 />
 
 ### 返回值

@@ -11,7 +11,7 @@ function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 
 ### Parameters
 
-<Interface name="initialValue" type="T[]" description="Initial array state." />
+<Interface name="initialValue" type="T[]" description="Initial array value." />
 
 ### Return Value
 

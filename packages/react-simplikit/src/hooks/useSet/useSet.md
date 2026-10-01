@@ -14,7 +14,7 @@ function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T>;
 <Interface
   name="initialValue"
   type="SetOrValues<T>"
-  description="Initial Set state (Set object or array of values)."
+  description="Initial Set value (Set object or array of values)."
 />
 
 ### Return Value

@@ -11,7 +11,7 @@ function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 
 ### パラメータ
 
-<Interface name="initialValue" type="T[]" description="配列の初期状態です。" />
+<Interface name="initialValue" type="T[]" description="配列の初期値です。" />
 
 ### 戻り値
 

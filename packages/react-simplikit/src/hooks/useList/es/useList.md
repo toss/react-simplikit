@@ -11,7 +11,7 @@ function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 
 ### Parámetros
 
-<Interface name="initialValue" type="T[]" description="Estado inicial del arreglo." />
+<Interface name="initialValue" type="T[]" description="Valor inicial del arreglo." />
 
 ### Valor de retorno
 

@@ -10,7 +10,7 @@ function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 
 ### 参数
 
-<Interface name="initialValue" type="T[]" description="初始数组状态。" />
+<Interface name="initialValue" type="T[]" description="数组的初始值。" />
 
 ### 返回值
 

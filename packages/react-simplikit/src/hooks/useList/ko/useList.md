@@ -10,7 +10,7 @@ function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 
 ### 파라미터
 
-<Interface name="initialValue" type="T[]" description="초기 배열 상태예요." />
+<Interface name="initialValue" type="T[]" description="초기 배열 값이에요." />
 
 ### 반환 값
 

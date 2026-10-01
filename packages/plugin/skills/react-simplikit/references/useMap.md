@@ -15,7 +15,7 @@ function useMap<K, V>(initialValue: MapOrEntries<K, V>): UseMapReturn<K, V>;
   required
   name="initialValue"
   type="MapOrEntries<K, V>"
-  description="Initial Map state (Map object or array of key-value pairs)"
+  description="Initial Map value (Map object or array of key-value pairs)"
 />
 
 ### Return Value
