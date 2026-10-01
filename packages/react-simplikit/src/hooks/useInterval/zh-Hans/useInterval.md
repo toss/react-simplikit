@@ -7,7 +7,8 @@
 ```ts
 function useInterval(
   callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
+  delayMs: number,
+  options?: IntervalOptions
 ): void;
 ```
 
@@ -22,17 +23,16 @@ function useInterval(
 
 <Interface
   required
+  name="delayMs"
+  type="number"
+  description="周期执行的间隔，单位为毫秒。"
+/>
+
+<Interface
   name="options"
-  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
-  description="配置时间间隔的行为。"
+  type="IntervalOptions"
+  description="配置其他行为的选项。"
   :nested="[
-    {
-      name: 'options.delay',
-      type: 'number',
-      required: true,
-      description:
-        '间隔的时长，单位为毫秒。如果为 <code>null</code>，则不会运行。',
-    },
     {
       name: 'options.immediate',
       type: 'boolean',

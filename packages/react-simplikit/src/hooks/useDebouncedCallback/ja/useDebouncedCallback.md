@@ -8,31 +8,34 @@
 ## インターフェース
 
 ```ts
-function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
+function useDebouncedCallback<T>(
+  onChange: (newValue: T) => void,
+  debounceMs: number,
+  options?: DebounceOptions
+): (nextValue: T) => void;
 ```
 
 ### パラメータ
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="値を受け取るコールバックです。"
+/>
+
+<Interface
+  required
+  name="debounceMs"
+  type="number"
+  description="デバウンスの待機時間をミリ秒で指定します。"
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="オプションオブジェクト。"
+  type="DebounceOptions"
+  description="追加の動作を設定するオプションです。"
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        'デバウンスするコールバックです。最後に渡した値と同じ値での呼び出しはスキップします。',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description:
-        '関数の実行を遅らせる時間（ミリ秒単位）。',
-    },
     {
       name: 'options.leading',
       type: 'boolean',
@@ -68,10 +71,7 @@ import { useState } from 'react';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const setQueryDebounced = useDebouncedCallback({
-    onChange: setQuery,
-    timeThreshold: 300,
-  });
+  const setQueryDebounced = useDebouncedCallback(setQuery, 300);
 
   return (
     <>

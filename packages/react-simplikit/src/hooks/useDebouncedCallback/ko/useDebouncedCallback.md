@@ -5,31 +5,34 @@
 ## 인터페이스
 
 ```ts
-function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
+function useDebouncedCallback<T>(
+  onChange: (newValue: T) => void,
+  debounceMs: number,
+  options?: DebounceOptions
+): (nextValue: T) => void;
 ```
 
 ### 파라미터
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="값을 전달받을 콜백이에요."
+/>
+
+<Interface
+  required
+  name="debounceMs"
+  type="number"
+  description="디바운스 지연 시간(ms)이에요."
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="옵션 객체예요."
+  type="DebounceOptions"
+  description="추가 동작을 설정하는 옵션이에요."
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        '디바운스할 콜백이에요. 마지막으로 전달된 값과 같은 값으로 호출하면 건너뛰어요.',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description:
-        '함수 실행을 지연할 밀리초(ms)이에요.',
-    },
     {
       name: 'options.leading',
       type: 'boolean',
@@ -65,10 +68,7 @@ import { useState } from 'react';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const setQueryDebounced = useDebouncedCallback({
-    onChange: setQuery,
-    timeThreshold: 300,
-  });
+  const setQueryDebounced = useDebouncedCallback(setQuery, 300);
 
   return (
     <>

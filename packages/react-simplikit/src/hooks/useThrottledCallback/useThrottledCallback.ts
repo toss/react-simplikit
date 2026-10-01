@@ -21,9 +21,9 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  * The throttled callback will only be invoked at most once per specified interval.
  *
  * @template T - The type of the value passed to `onChange`.
- * @param {Object} options - The options object.
- * @param {(newValue: T) => void} options.onChange - The callback to throttle. A call with the same value as the last forwarded one is skipped.
- * @param {number} options.timeThreshold - The number of milliseconds to throttle invocations to.
+ * @param {(newValue: T) => void} onChange - The callback to throttle. A call with the same value as the last forwarded one is skipped.
+ * @param {number} throttleMs - The throttle interval in milliseconds.
+ * @param {ThrottleOptions} [options] - Optional edge behavior.
  * @param {Array<'leading' | 'trailing'>} [options.edges=['leading', 'trailing']] - An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.
  *
  * @returns {(nextValue: T) => void} A throttled function that forwards the value to `onChange` at most once per interval.
@@ -34,7 +34,7 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  *
  * function ScrollPosition() {
  *   const [scrollTop, setScrollTop] = useState(0);
- *   const setScrollTopThrottled = useThrottledCallback({ onChange: setScrollTop, timeThreshold: 200 });
+ *   const setScrollTopThrottled = useThrottledCallback(setScrollTop, 200);
  *
  *   return (
  *     <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>
@@ -43,14 +43,11 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  *   );
  * }
  */
-export function useThrottledCallback<T>({
-  onChange,
-  timeThreshold,
-  edges = ['leading', 'trailing'],
-}: ThrottleOptions & {
-  onChange: (newValue: T) => void;
-  timeThreshold: number;
-}): (nextValue: T) => void {
+export function useThrottledCallback<T>(
+  onChange: (newValue: T) => void,
+  throttleMs: number,
+  { edges = ['leading', 'trailing'] }: ThrottleOptions = {}
+): (nextValue: T) => void {
   const lastForwardedRef = useRef<T | typeof NOT_INVOKED>(NOT_INVOKED);
 
   return useThrottle(
@@ -63,7 +60,7 @@ export function useThrottledCallback<T>({
 
       lastForwardedRef.current = nextValue;
     },
-    timeThreshold,
+    throttleMs,
     { edges }
   );
 }

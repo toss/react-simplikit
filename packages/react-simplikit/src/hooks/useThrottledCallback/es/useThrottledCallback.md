@@ -6,30 +6,34 @@ El callback se ejecuta como máximo una vez por intervalo especificado.
 ## Interfaz
 
 ```ts
-function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
+function useThrottledCallback<T>(
+  onChange: (newValue: T) => void,
+  throttleMs: number,
+  options?: ThrottleOptions
+): (nextValue: T) => void;
 ```
 
 ### Parámetros
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="Función que recibe el valor."
+/>
+
+<Interface
+  required
+  name="throttleMs"
+  type="number"
+  description="Intervalo del throttle en milisegundos."
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="El objeto de opciones."
+  type="ThrottleOptions"
+  description="Opciones para configurar el comportamiento adicional."
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        'El callback cuya frecuencia de ejecución quieres limitar. El Hook omite las llamadas con el mismo valor que el último que transmitió.',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description: 'El intervalo en milisegundos que limita la frecuencia de las llamadas.',
-    },
     {
       name: 'options.edges',
       type: 'Array<\'leading\' | \'trailing\'>',
@@ -57,10 +61,7 @@ import { useState } from 'react';
 
 function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
-  const setScrollTopThrottled = useThrottledCallback({
-    onChange: setScrollTop,
-    timeThreshold: 200,
-  });
+  const setScrollTopThrottled = useThrottledCallback(setScrollTop, 200);
 
   return (
     <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>

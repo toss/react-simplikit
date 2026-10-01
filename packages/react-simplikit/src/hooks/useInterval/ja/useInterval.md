@@ -8,7 +8,8 @@
 ```ts
 function useInterval(
   callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
+  delayMs: number,
+  options?: IntervalOptions
 ): void;
 ```
 
@@ -23,17 +24,16 @@ function useInterval(
 
 <Interface
   required
+  name="delayMs"
+  type="number"
+  description="実行間隔をミリ秒で指定します。"
+/>
+
+<Interface
   name="options"
-  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
-  description="定期実行の動作を設定します。"
+  type="IntervalOptions"
+  description="追加の動作を設定するオプションです。"
   :nested="[
-    {
-      name: 'options.delay',
-      type: 'number',
-      required: true,
-      description:
-        '実行間隔（ミリ秒）です。<code>null</code> の場合、定期実行は行われません。',
-    },
     {
       name: 'options.immediate',
       type: 'boolean',

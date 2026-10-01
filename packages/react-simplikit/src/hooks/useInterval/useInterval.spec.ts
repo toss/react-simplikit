@@ -36,8 +36,7 @@ describe('useInterval', () => {
   it('should not set interval when enabled is false', async () => {
     const callback = vi.fn();
     await renderHookSSR(() =>
-      useInterval(callback, {
-        delay: 1000,
+      useInterval(callback, 1000, {
         enabled: false,
       })
     );
@@ -79,11 +78,10 @@ describe('useInterval', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should support options object parameter', async () => {
+  it('should support an optional options object', async () => {
     const callback = vi.fn();
     await renderHookSSR(() =>
-      useInterval(callback, {
-        delay: 1000,
+      useInterval(callback, 1000, {
         enabled: true,
       })
     );
@@ -96,8 +94,7 @@ describe('useInterval', () => {
     it('should execute callback immediately when trailing is false', async () => {
       const callback = vi.fn();
       await renderHookSSR(() =>
-        useInterval(callback, {
-          delay: 1000,
+        useInterval(callback, 1000, {
           immediate: true,
         })
       );
@@ -111,8 +108,7 @@ describe('useInterval', () => {
     it('should wait for first delay when trailing is true', async () => {
       const callback = vi.fn();
       await renderHookSSR(() =>
-        useInterval(callback, {
-          delay: 1000,
+        useInterval(callback, 1000, {
           immediate: false,
         })
       );
@@ -128,8 +124,7 @@ describe('useInterval', () => {
     const callback = vi.fn();
     const { rerender } = await renderHookSSR(
       ({ enabled }) =>
-        useInterval(callback, {
-          delay: 1000,
+        useInterval(callback, 1000, {
           immediate: true,
           enabled,
         }),
@@ -148,8 +143,7 @@ describe('useInterval', () => {
     const callback = vi.fn();
     const { rerender } = await renderHookSSR(
       ({ enabled }) =>
-        useInterval(callback, {
-          delay: 1000,
+        useInterval(callback, 1000, {
           enabled,
         }),
       { initialProps: { enabled: true } }

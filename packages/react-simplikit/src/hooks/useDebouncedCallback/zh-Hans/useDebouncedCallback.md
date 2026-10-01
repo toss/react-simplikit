@@ -7,31 +7,34 @@
 ## 接口
 
 ```ts
-function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
+function useDebouncedCallback<T>(
+  onChange: (newValue: T) => void,
+  debounceMs: number,
+  options?: DebounceOptions
+): (nextValue: T) => void;
 ```
 
 ### 参数
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="接收值的回调函数。"
+/>
+
+<Interface
+  required
+  name="debounceMs"
+  type="number"
+  description="防抖延迟，单位为毫秒。"
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="选项对象。"
+  type="DebounceOptions"
+  description="配置其他行为的选项。"
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        '要被防抖的回调。携带与上一次转发的值相同的调用会被跳过。',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description:
-        '延迟函数执行的毫秒数。',
-    },
     {
       name: 'options.leading',
       type: 'boolean',
@@ -67,10 +70,7 @@ import { useState } from 'react';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  const setQueryDebounced = useDebouncedCallback({
-    onChange: setQuery,
-    timeThreshold: 300,
-  });
+  const setQueryDebounced = useDebouncedCallback(setQuery, 300);
 
   return (
     <>

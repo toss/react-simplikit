@@ -2,13 +2,10 @@ import { useEffect, useRef } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
-type IntervalOptions =
-  | number
-  | {
-      delay: number;
-      immediate?: boolean;
-      enabled?: boolean;
-    };
+type IntervalOptions = {
+  immediate?: boolean;
+  enabled?: boolean;
+};
 
 /**
  * @description
@@ -16,8 +13,8 @@ type IntervalOptions =
  * It is useful for timers, polling data, and other recurring tasks.
  *
  * @param {() => void} callback - The function to be executed periodically.
- * @param {number | { delay: number; enabled?: boolean; immediate?: boolean }} options - Configures the interval behavior.
- * @param {number} options.delay - The interval duration in milliseconds. If `null`, the interval will not run.
+ * @param {number} delayMs - The interval duration in milliseconds.
+ * @param {IntervalOptions} [options] - Configures the interval behavior.
  * @param {boolean} [options.immediate=false] - If `true`, executes immediately before starting the interval.
  * @param {boolean} [options.enabled=true] - If `false`, the interval will not run.
  *
@@ -39,10 +36,8 @@ type IntervalOptions =
  *   );
  * }
  */
-export function useInterval(callback: () => void, options: IntervalOptions) {
-  const delay = typeof options === 'number' ? options : options.delay;
-  const immediate = typeof options === 'number' ? false : options.immediate;
-  const enabled = typeof options === 'number' ? true : (options.enabled ?? true);
+export function useInterval(callback: () => void, delayMs: number, options: IntervalOptions = {}) {
+  const { immediate = false, enabled = true } = options;
 
   const preservedCallback = usePreservedCallback(callback);
   const immediateCalledRef = useRef(false);
@@ -74,9 +69,9 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
         return;
       }
 
-      const id = setInterval(preservedCallback, delay);
+      const id = setInterval(preservedCallback, delayMs);
       return () => clearInterval(id);
     },
-    [delay, preservedCallback, enabled]
+    [delayMs, preservedCallback, enabled]
   );
 }

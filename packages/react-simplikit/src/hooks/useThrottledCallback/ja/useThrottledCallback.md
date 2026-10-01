@@ -6,30 +6,34 @@
 ## インターフェース
 
 ```ts
-function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
+function useThrottledCallback<T>(
+  onChange: (newValue: T) => void,
+  throttleMs: number,
+  options?: ThrottleOptions
+): (nextValue: T) => void;
 ```
 
 ### パラメータ
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="値を受け取るコールバックです。"
+/>
+
+<Interface
+  required
+  name="throttleMs"
+  type="number"
+  description="スロットルの間隔をミリ秒で指定します。"
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="オプションのオブジェクト。"
+  type="ThrottleOptions"
+  description="追加の動作を設定するオプションです。"
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        'スロットリングするコールバック。最後に渡された値と同じ値での呼び出しはスキップされます。',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description: '呼び出しを制限する間隔（ミリ秒単位）。',
-    },
     {
       name: 'options.edges',
       type: 'Array<\'leading\' | \'trailing\'>',
@@ -57,10 +61,7 @@ import { useState } from 'react';
 
 function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
-  const setScrollTopThrottled = useThrottledCallback({
-    onChange: setScrollTop,
-    timeThreshold: 200,
-  });
+  const setScrollTopThrottled = useThrottledCallback(setScrollTop, 200);
 
   return (
     <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>

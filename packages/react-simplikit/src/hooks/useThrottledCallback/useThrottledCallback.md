@@ -6,30 +6,34 @@ The throttled callback will only be invoked at most once per specified interval.
 ## Interface
 
 ```ts
-function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
+function useThrottledCallback<T>(
+  onChange: (newValue: T) => void,
+  throttleMs: number,
+  options?: ThrottleOptions
+): (nextValue: T) => void;
 ```
 
 ### Parameters
 
 <Interface
   required
+  name="onChange"
+  type="(newValue: T) => void"
+  description="The callback to throttle. A call with the same value as the last forwarded one is skipped."
+/>
+
+<Interface
+  required
+  name="throttleMs"
+  type="number"
+  description="The throttle interval in milliseconds."
+/>
+
+<Interface
   name="options"
-  type="Object"
-  description="The options object."
+  type="ThrottleOptions"
+  description="Optional edge behavior."
   :nested="[
-    {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
-      required: true,
-      description:
-        'The callback to throttle. A call with the same value as the last forwarded one is skipped.',
-    },
-    {
-      name: 'options.timeThreshold',
-      type: 'number',
-      required: true,
-      description: 'The number of milliseconds to throttle invocations to.',
-    },
     {
       name: 'options.edges',
       type: 'Array<\'leading\' | \'trailing\'>',
@@ -57,10 +61,7 @@ import { useState } from 'react';
 
 function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
-  const setScrollTopThrottled = useThrottledCallback({
-    onChange: setScrollTop,
-    timeThreshold: 200,
-  });
+  const setScrollTopThrottled = useThrottledCallback(setScrollTop, 200);
 
   return (
     <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>
