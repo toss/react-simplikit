@@ -1,15 +1,11 @@
-# useVisibilityEvent
+# usePageVisibilityEffect
 
-::: warning Deprecated
-Use `usePageVisibilityEffect` instead.
-:::
-
-`useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback.
+`usePageVisibilityEffect` is a React hook that listens to changes in the document's visibility state and triggers a callback.
 
 ## Interface
 
 ```ts
-function useVisibilityEvent(
+function usePageVisibilityEffect(
   callback: (visibilityState: 'visible' | 'hidden') => void,
   options?: object
 ): void;
@@ -47,10 +43,10 @@ This function does not return anything.
 ## Example
 
 ```tsx
-import { useVisibilityEvent } from 'react-simplikit';
+import { usePageVisibilityEffect } from 'react-simplikit';
 
 function Component() {
-  useVisibilityEvent(visibilityState => {
+  usePageVisibilityEffect(visibilityState => {
     console.log(`Document is now ${visibilityState}`);
   });
 

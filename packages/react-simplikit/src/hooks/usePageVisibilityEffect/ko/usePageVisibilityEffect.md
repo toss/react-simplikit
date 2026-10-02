@@ -1,15 +1,11 @@
-# useVisibilityEvent
-
-::: warning 더 이상 권장하지 않음
-대신 `usePageVisibilityEffect` 훅을 사용하세요.
-:::
+# usePageVisibilityEffect
 
 문서의 가시성 상태 변화를 감지하고 콜백을 실행하는 리액트 훅이에요.
 
 ## 인터페이스
 
 ```ts
-function useVisibilityEvent(
+function usePageVisibilityEffect(
   callback: (visibilityState: 'visible' | 'hidden') => void,
   options?: object
 ): void;
@@ -47,10 +43,10 @@ function useVisibilityEvent(
 ## 예시
 
 ```tsx
-import { useVisibilityEvent } from 'react-simplikit';
+import { usePageVisibilityEffect } from 'react-simplikit';
 
 function Component() {
-  useVisibilityEvent(visibilityState => {
+  usePageVisibilityEffect(visibilityState => {
     console.log(`Document is now ${visibilityState}`);
   });
 
