@@ -4,7 +4,7 @@ import path from 'node:path';
 import { collectPublicExportEntries } from '../../utils/collectPublicExports.ts';
 import { getRootPath } from '../../utils/getRootPath.ts';
 
-import { CatalogEntry, extractDescription, getCategory, renderSkill } from './catalog.ts';
+import { CatalogEntry, extractDeprecation, extractDescription, getCategory, renderSkill } from './catalog.ts';
 
 export const SKILL_DIRECTORY = 'packages/plugin/skills/react-simplikit';
 export const PACKAGE_INDEX_FILE = 'packages/react-simplikit/src/index.ts';
@@ -20,6 +20,7 @@ type GenerateSkillOptions = {
  * Writes the consumer-facing agent skill: `SKILL.md` (template + a catalog of every public export)
  * and `references/<name>.md` (a verbatim copy of each export's English documentation page).
  * The output depends only on `index.ts` and the pages, so re-running on unchanged sources changes nothing.
+ * That is also why a deprecated export is recognised by the notice on its page, not by its source's JSDoc.
  */
 export async function generateSkill({
   root = getRootPath(),
@@ -40,7 +41,12 @@ export async function generateSkill({
 
       await fs.writeFile(path.join(referencesDirectory, `${name}.md`), markdown);
 
-      return { name, category: getCategory(sourcePath), description: extractDescription(markdown, name) };
+      return {
+        name,
+        category: getCategory(sourcePath),
+        description: extractDescription(markdown, name),
+        deprecation: extractDeprecation(markdown),
+      };
     })
   );
 

@@ -1,16 +1,12 @@
-# useCallbackOncePerRender
+# useCallbackOnce
 
-::: warning Deprecated
-Use `useCallbackOnce` instead.
-:::
-
-`useCallbackOncePerRender` is a React hook that runs a callback only once until `deps` change, no matter how many times the returned function is called.
+`useCallbackOnce` is a React hook that runs a callback only once until `deps` change, no matter how many times the returned function is called.
 This is useful for one-time operations that should not be repeated, even if the component re-renders.
 
 ## Interface
 
 ```ts
-function useCallbackOncePerRender<F extends (...args: any[]) => void>(
+function useCallbackOnce<F extends (...args: any[]) => void>(
   callback: F,
   deps: DependencyList
 ): (...args: Parameters<F>) => void;
@@ -43,10 +39,10 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
 ## Example
 
 ```tsx
-import { useCallbackOncePerRender } from 'react-simplikit';
+import { useCallbackOnce } from 'react-simplikit';
 
 function Component() {
-  const handleOneTimeEvent = useCallbackOncePerRender(() => {
+  const handleOneTimeEvent = useCallbackOnce(() => {
     console.log('This will only run once');
   }, []);
 
@@ -57,7 +53,7 @@ function Component() {
 ```tsx
 // With dependencies
 function TrackingComponent({ userId }: { userId: string }) {
-  const trackUserVisit = useCallbackOncePerRender(() => {
+  const trackUserVisit = useCallbackOnce(() => {
     analytics.trackVisit(userId);
   }, [userId]);
 

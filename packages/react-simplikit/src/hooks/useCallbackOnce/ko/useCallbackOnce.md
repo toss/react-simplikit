@@ -1,15 +1,11 @@
-# useCallbackOncePerRender
-
-::: warning 더 이상 권장하지 않음
-대신 `useCallbackOnce` 훅을 사용하세요.
-:::
+# useCallbackOnce
 
 `deps`가 바뀌기 전까지는 반환된 함수를 몇 번 호출하든 콜백을 한 번만 실행하는 리액트 훅이에요. 이는 컴포넌트가 다시 렌더링되더라도 반복되지 말아야 하는 일회성 작업에 유용해요.
 
 ## 인터페이스
 
 ```ts
-function useCallbackOncePerRender<F extends (...args: any[]) => void>(
+function useCallbackOnce<F extends (...args: any[]) => void>(
   callback: F,
   deps: DependencyList
 ): (...args: Parameters<F>) => void;
@@ -42,10 +38,10 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
 ## 예시
 
 ```tsx
-import { useCallbackOncePerRender } from 'react-simplikit';
+import { useCallbackOnce } from 'react-simplikit';
 
 function Component() {
-  const handleOneTimeEvent = useCallbackOncePerRender(() => {
+  const handleOneTimeEvent = useCallbackOnce(() => {
     console.log('이것은 한 번만 실행될 거예요');
   }, []);
 
@@ -56,7 +52,7 @@ function Component() {
 ```tsx
 // 의존성과 함께 사용하는 경우
 function TrackingComponent({ userId }: { userId: string }) {
-  const trackUserVisit = useCallbackOncePerRender(() => {
+  const trackUserVisit = useCallbackOnce(() => {
     analytics.trackVisit(userId);
   }, [userId]);
 
