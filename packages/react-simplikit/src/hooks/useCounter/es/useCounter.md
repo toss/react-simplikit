@@ -8,7 +8,7 @@ Opcionalmente, puedes proporcionar valores mínimo y máximo para limitar el ran
 ```ts
 function useCounter(
   initialValue: number = 0,
-  options: UseCounterOptions
+  options?: UseCounterOptions
 ): UseCounterReturn;
 ```
 
@@ -21,7 +21,6 @@ function useCounter(
 />
 
 <Interface
-  required
   name="options"
   type="UseCounterOptions"
   description="Las opciones del contador."

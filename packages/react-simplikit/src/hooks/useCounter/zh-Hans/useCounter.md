@@ -7,7 +7,7 @@
 ```ts
 function useCounter(
   initialValue: number = 0,
-  options: UseCounterOptions
+  options?: UseCounterOptions
 ): UseCounterReturn;
 ```
 
@@ -20,7 +20,6 @@ function useCounter(
 />
 
 <Interface
-  required
   name="options"
   type="UseCounterOptions"
   description="计数器的选项。"
