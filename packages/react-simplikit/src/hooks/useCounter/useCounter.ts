@@ -32,7 +32,7 @@ const validateValue = (value: number, { min, max }: Omit<UseCounterOptions, 'ste
  * Optionally, you can provide minimum and maximum values to constrain the counter's range.
  *
  * @param {number} [initialValue=0] - Initial value for the counter. Defaults to 0.
- * @param {UseCounterOptions} options - The options for the counter.
+ * @param {UseCounterOptions} [options] - The options for the counter.
  * @param {number} [options.min] - Minimum value the counter can reach. If not provided, there is no lower limit.
  * @param {number} [options.max] - Maximum value the counter can reach. If not provided, there is no upper limit.
  * @param {number} [options.step=1] - Value to increment or decrement by. Defaults to 1.
