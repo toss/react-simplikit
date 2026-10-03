@@ -114,4 +114,42 @@ describe('useThrottle', () => {
 
     vi.useRealTimers();
   });
+
+  it('should skip the leading edge when leading is false', async () => {
+    vi.useFakeTimers();
+
+    const callback = vi.fn();
+    const throttleMs = 50;
+    const { result } = await renderHookSSR(() => useThrottle(callback, throttleMs, { leading: false }));
+
+    result.current();
+
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    await vi.advanceTimersByTimeAsync(throttleMs);
+
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    vi.useRealTimers();
+  });
+
+  it('should skip the trailing edge when trailing is false', async () => {
+    vi.useFakeTimers();
+
+    const callback = vi.fn();
+    const throttleMs = 50;
+    const { result } = await renderHookSSR(() => useThrottle(callback, throttleMs, { trailing: false }));
+
+    result.current();
+
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    result.current();
+
+    await vi.advanceTimersByTimeAsync(throttleMs);
+
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    vi.useRealTimers();
+  });
 });
