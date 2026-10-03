@@ -47,7 +47,7 @@ function useThrottle<F extends (...args: any[]) => any>(
       required: false,
       defaultValue: 'true',
       description:
-        '如果为 <code>true</code>，则允许在延迟结束后使用最新参数执行待处理的调用。',
+        '如果为 <code>true</code>，则允许待执行的调用在延迟结束后以最新参数运行。',
     },
   ]"
 />

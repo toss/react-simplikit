@@ -43,7 +43,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
       required: false,
       defaultValue: 'true',
       description:
-        '如果为 <code>true</code>，则允许在延迟结束后使用最新值执行待处理的调用。',
+        '如果为 <code>true</code>，则允许待执行的调用在延迟结束后以最新值运行。',
     },
   ]"
 />
