@@ -47,7 +47,9 @@ describe('useThrottledCallback', () => {
 
   it('should handle trailing edge', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100, edges: ['trailing'] }));
+    const { result } = renderHookSSR(() =>
+      useThrottledCallback({ onChange, timeThreshold: 100, leading: false, trailing: true })
+    );
 
     result.current(true);
     expect(onChange).not.toBeCalled();
@@ -73,7 +75,7 @@ describe('useThrottledCallback', () => {
   it('should cleanup on unmount', async () => {
     const onChange = vi.fn();
     const { result, unmount } = await renderHookSSR(() =>
-      useThrottledCallback({ onChange, timeThreshold: 100, edges: ['trailing'] })
+      useThrottledCallback({ onChange, timeThreshold: 100, leading: false, trailing: true })
     );
 
     result.current(true);
@@ -86,7 +88,7 @@ describe('useThrottledCallback', () => {
   it('should handle leading and trailing edges together', () => {
     const onChange = vi.fn();
     const { result } = renderHookSSR(() =>
-      useThrottledCallback({ onChange, timeThreshold: 100, edges: ['leading', 'trailing'] })
+      useThrottledCallback({ onChange, timeThreshold: 100, leading: true, trailing: true })
     );
 
     result.current(true);
@@ -132,7 +134,9 @@ describe('useThrottledCallback', () => {
 
   it('discards a pending trailing value when the caller returns to the last forwarded one', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100, edges: ['trailing'] }));
+    const { result } = renderHookSSR(() =>
+      useThrottledCallback({ onChange, timeThreshold: 100, leading: false, trailing: true })
+    );
 
     result.current('seoul');
     vi.advanceTimersByTime(100);
@@ -177,7 +181,9 @@ describe('useThrottledCallback', () => {
 
   it('keeps forwarding once per interval while values keep changing with trailing edge only', () => {
     const onChange = vi.fn();
-    const { result } = renderHookSSR(() => useThrottledCallback({ onChange, timeThreshold: 100, edges: ['trailing'] }));
+    const { result } = renderHookSSR(() =>
+      useThrottledCallback({ onChange, timeThreshold: 100, leading: false, trailing: true })
+    );
 
     for (let i = 1; i <= 10; i++) {
       result.current(i);

@@ -7,8 +7,6 @@ type ThrottleOptions = {
   trailing?: boolean;
 };
 
-type Edge = 'leading' | 'trailing';
-
 /**
  * @description
  * `useThrottledValue` is a React hook that returns a throttled copy of the given value.
@@ -55,7 +53,8 @@ export function useThrottledValue<T>(
 ): T {
   const [throttledValue, setThrottledValue] = useState(() => value);
   const throttled = useThrottle((next: T) => setThrottledValue(() => next), wait, {
-    edges: toEdges(leading, trailing),
+    leading,
+    trailing,
   });
   const lastForwardedRef = useRef(value);
 
@@ -74,17 +73,4 @@ export function useThrottledValue<T>(
   );
 
   return throttledValue;
-}
-
-// Adapts this hook's `leading` / `trailing` booleans to the `edges` array `useThrottle` still takes.
-// Delete once `useThrottle` accepts the booleans, and pass the options straight through.
-function toEdges(leading: boolean, trailing: boolean): Edge[] {
-  const edges: Edge[] = [];
-  if (leading) {
-    edges.push('leading');
-  }
-  if (trailing) {
-    edges.push('trailing');
-  }
-  return edges;
 }

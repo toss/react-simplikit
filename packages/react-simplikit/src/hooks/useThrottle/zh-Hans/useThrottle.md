@@ -8,7 +8,7 @@
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
 
@@ -30,16 +30,24 @@ function useThrottle<F extends (...args: any[]) => any>(
 
 <Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
+  type="ThrottleOptions"
   description="用于控制节流行为的选项。"
   :nested="[
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        '一个可选的数组，用于指定应在领先边缘、落后边缘或两者处调用该函数。',
+        '如果为 <code>true</code>，则允许在节流时间窗口开始时立即调用。',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        '如果为 <code>true</code>，则允许待执行的调用在延迟结束后以最新参数运行。',
     },
   ]"
 />
@@ -60,7 +68,7 @@ const throttledScroll = useThrottle(
     console.log('Scroll event');
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { leading: true, trailing: true }
 );
 
 useEffect(() => {
