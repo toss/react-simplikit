@@ -5,16 +5,16 @@
 ## 接口
 
 ```ts
-function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
+function useMap<K, V>(initialValue: MapOrEntries<K, V>): UseMapReturn<K, V>;
 ```
 
 ### 参数
 
 <Interface
   required
-  name="initialState"
+  name="initialValue"
   type="MapOrEntries<K, V>"
-  description="初始 Map 状态（Map 对象或键值对数组）"
+  description="Map 的初始值（Map 对象或键值对数组）"
 />
 
 ### 返回值

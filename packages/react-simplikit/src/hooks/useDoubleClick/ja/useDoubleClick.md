@@ -20,7 +20,7 @@ function useDoubleClick<E extends HTMLElement>(
   description="クリック処理の設定オプション。"
   :nested="[
     {
-      name: 'props.delay',
+      name: 'props.delayMs',
       type: 'number',
       required: false,
       defaultValue: '250',
@@ -28,13 +28,13 @@ function useDoubleClick<E extends HTMLElement>(
         'シングルクリックのコールバックを実行するまでの待機時間（ミリ秒単位）です。デフォルトは 250 ミリ秒です。',
     },
     {
-      name: 'props.click',
+      name: 'props.onClick',
       type: '(event: MouseEvent<E>) => void',
       required: false,
       description: 'シングルクリック時に実行するコールバック関数。',
     },
     {
-      name: 'props.doubleClick',
+      name: 'props.onDoubleClick',
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
@@ -61,8 +61,8 @@ function GalleryCard() {
   const handleDoubleClick = () => alert('Zoom in!');
 
   const handleEvent = useDoubleClick({
-    click: handleClick,
-    doubleClick: handleDoubleClick,
+    onClick: handleClick,
+    onDoubleClick: handleDoubleClick,
   });
 
   return (
