@@ -33,7 +33,7 @@ function useImpressionRef<Element extends HTMLElement>(
       description: '要素が表示領域から出たときに実行するコールバック関数。',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.timeThresholdMs',
       type: 'number',
       required: false,
       defaultValue: '0',
@@ -72,7 +72,7 @@ function Component() {
   const ref = useImpressionRef<HTMLDivElement>({
     onImpressionStart: () => console.log('Element entered view'),
     onImpressionEnd: () => console.log('Element exited view'),
-    timeThreshold: 1000,
+    timeThresholdMs: 1000,
     areaThreshold: 0.5,
   });
 

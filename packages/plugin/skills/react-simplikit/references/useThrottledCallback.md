@@ -25,7 +25,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
         'The callback to throttle. A call with the same value as the last forwarded one is skipped.',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.throttleMs',
       type: 'number',
       required: true,
       description: 'The number of milliseconds to throttle invocations to.',
@@ -67,7 +67,7 @@ function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
   const setScrollTopThrottled = useThrottledCallback({
     onChange: setScrollTop,
-    timeThreshold: 200,
+    throttleMs: 200,
   });
 
   return (

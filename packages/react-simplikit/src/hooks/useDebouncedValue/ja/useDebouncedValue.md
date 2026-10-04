@@ -2,7 +2,7 @@
 
 `useDebouncedValue` は、渡された値をデバウンスした値として返す React フックです。
 状態は引き続き呼び出し側で管理し、このフックは戻り値がその状態に追従するタイミングだけを遅らせます。
-戻り値は最後の変更から `wait` ミリ秒後に更新されるため、頻繁に変わる状態から
+戻り値は最後の変更から `debounceMs` ミリ秒後に更新されるため、頻繁に変わる状態から
 検索クエリやバリデーション用の入力値を得る場合に便利です。
 
 コンポーネントのアンマウント時に、保留中の更新をキャンセルします。使用例では、
@@ -13,7 +13,7 @@
 `leading` と `trailing` が両方とも `false` の場合、戻り値は更新されません。
 
 値は参照で比較します。レンダリングのたびに新しいオブジェクトや配列を渡すと、
-戻り値が `wait` ミリ秒ごとに更新され続けます。まず `usePreservedReference` などを使って、
+戻り値が `debounceMs` ミリ秒ごとに更新され続けます。まず `usePreservedReference` などを使って、
 参照を安定させてください。
 
 ## インターフェース
@@ -21,7 +21,7 @@
 ```ts
 function useDebouncedValue<T>(
   value: T,
-  wait: number,
+  debounceMs: number,
   options?: DebounceOptions
 ): T;
 ```
@@ -37,7 +37,7 @@ function useDebouncedValue<T>(
 
 <Interface
   required
-  name="wait"
+  name="debounceMs"
   type="number"
   description="最後の変更から更新まで待機する時間（ミリ秒単位）。"
 />
@@ -61,7 +61,7 @@ function useDebouncedValue<T>(
       required: false,
       defaultValue: 'true',
       description:
-        '<code>true</code> の場合、<code>wait</code> ミリ秒後に最後の変更を反映します。',
+        '<code>true</code> の場合、<code>debounceMs</code> ミリ秒後に最後の変更を反映します。',
     },
   ]"
 />

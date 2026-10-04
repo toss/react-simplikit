@@ -24,7 +24,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
         '스로틀링할 콜백이에요. 마지막으로 전달된 값과 같은 값으로 호출하면 건너뛰어요.',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.throttleMs',
       type: 'number',
       required: true,
       description: '호출을 스로틀링할 밀리초(ms)이에요.',
@@ -66,7 +66,7 @@ function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
   const setScrollTopThrottled = useThrottledCallback({
     onChange: setScrollTop,
-    timeThreshold: 200,
+    throttleMs: 200,
   });
 
   return (

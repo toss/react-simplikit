@@ -6,13 +6,18 @@ It manages `setTimeout` in accordance with the React lifecycle, ensuring cleanup
 ## Interface
 
 ```ts
+<<<<<<< HEAD
 function useTimeout(options: Object): void;
+=======
+function useTimeout(callback: () => void, delayMs: number = 0): void;
+>>>>>>> d6be727 (refactor: make millisecond units explicit in time parameter names)
 ```
 
 ### Parameters
 
 <Interface
   required
+<<<<<<< HEAD
   name="options"
   type="Object"
   description="Configures the timeout behavior."
@@ -32,6 +37,17 @@ function useTimeout(options: Object): void;
         'The time in milliseconds to wait before executing <code>onTimeout</code>.',
     },
   ]"
+=======
+  name="callback"
+  type="() => void"
+  description="The function to be executed after the delay."
+/>
+
+<Interface
+  name="delayMs"
+  type="number"
+  description="The time in milliseconds to wait before executing the callback."
+>>>>>>> d6be727 (refactor: make millisecond units explicit in time parameter names)
 />
 
 ### Return Value

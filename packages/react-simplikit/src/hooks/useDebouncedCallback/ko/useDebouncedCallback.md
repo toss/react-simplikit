@@ -24,7 +24,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
         '디바운스할 콜백이에요. 마지막으로 전달된 값과 같은 값으로 호출하면 건너뛰어요.',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.debounceMs',
       type: 'number',
       required: true,
       description:
@@ -67,7 +67,7 @@ function SearchInput() {
   const [query, setQuery] = useState('');
   const setQueryDebounced = useDebouncedCallback({
     onChange: setQuery,
-    timeThreshold: 300,
+    debounceMs: 300,
   });
 
   return (

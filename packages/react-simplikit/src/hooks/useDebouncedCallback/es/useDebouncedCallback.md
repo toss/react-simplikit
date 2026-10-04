@@ -27,7 +27,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
         'El callback al que quieres aplicar debounce. Las llamadas con el mismo valor que el último enviado se omiten.',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.debounceMs',
       type: 'number',
       required: true,
       description:
@@ -70,7 +70,7 @@ function SearchInput() {
   const [query, setQuery] = useState('');
   const setQueryDebounced = useDebouncedCallback({
     onChange: setQuery,
-    timeThreshold: 300,
+    debounceMs: 300,
   });
 
   return (
