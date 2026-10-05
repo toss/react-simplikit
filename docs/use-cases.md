@@ -84,7 +84,7 @@ Use [useDebouncedValue](/hooks/useDebouncedValue) when you need a value for rend
 
 - `useStorageState` uses `defaultValue` for the server snapshot and hydration, then reads browser storage on the client. Its storage listeners are removed on unmount.
 
-- `useDebounce` cancels pending calls when the component unmounts or when `wait`, `leading`, or `trailing` changes. It does not cancel a network request that has already started; the application must handle request cancellation or stale responses.
+- `useDebounce` cancels pending calls when the component unmounts or when `debounceMs`, `leading`, or `trailing` changes. It does not cancel a network request that has already started; the application must handle request cancellation or stale responses.
 
 - Browser measurements can change after mount. Check the initial values and platform constraints in [Mobile Web](/mobile-web) and the individual API reference.
 
