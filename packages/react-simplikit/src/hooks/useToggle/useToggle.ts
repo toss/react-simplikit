@@ -1,4 +1,4 @@
-import { useBooleanState } from '../useBooleanState/index.ts';
+import { useReducer } from 'react';
 
 /**
  * @description
@@ -26,7 +26,7 @@ import { useBooleanState } from '../useBooleanState/index.ts';
  * }
  */
 export function useToggle(initialValue: boolean = false): [boolean, () => void] {
-  const [state, { toggle }] = useBooleanState(initialValue);
-
-  return [state, toggle];
+  return useReducer(toggle, initialValue);
 }
+
+const toggle = (state: boolean) => !state;

@@ -16,4 +16,4 @@ const [token, { setValue, refresh }] = useStorageState<string>('token');
 const [count, { increment, decrement, reset, setCount }] = useCounter(0);
 ```
 
-`useToggle` keeps its `[value, toggle]` signature, is now built on `useBooleanState`, and declares its return type so that React 18 consumers no longer see the React 19 `ActionDispatch` type.
+`useToggle` keeps its `[value, toggle]` signature and now declares its return type, so React 18 consumers no longer see the React 19 `ActionDispatch` type.
