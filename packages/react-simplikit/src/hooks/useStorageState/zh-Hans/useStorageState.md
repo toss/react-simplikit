@@ -88,7 +88,7 @@ function useStorageState<T>(
 ## 示例
 
 ```tsx
-// Counter with persistent state
+// 具有持久化状态的计数器
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {

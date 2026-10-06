@@ -85,7 +85,7 @@ function useCounter(
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
-        '카운트를 특정 값으로 설정하거나 새로운 값을 반환하는 함수예요.',
+        '카운트를 특정 값으로 설정하거나, 이전 카운트를 받아 다음 값을 반환하는 함수로 갱신하는 함수예요.',
     },
   ]"
 />

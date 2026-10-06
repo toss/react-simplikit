@@ -86,7 +86,7 @@ function useCounter(
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
-        '特定の値、または新しい値を返す関数を渡して、カウンターの値を設定する関数。',
+        '特定の値、または前のカウントを受け取って次の値を返す関数を渡して、カウンターの値を設定する関数。',
     },
   ]"
 />

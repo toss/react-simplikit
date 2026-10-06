@@ -86,7 +86,7 @@ function useCounter(
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
-        'A function to set the count to a specific value or a function that returns a new value.',
+        'A function to set the count, either to a value or with an updater function that receives the previous count and returns the next one.',
     },
   ]"
 />

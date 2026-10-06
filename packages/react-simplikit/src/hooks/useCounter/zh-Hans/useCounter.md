@@ -85,7 +85,7 @@ function useCounter(
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
-        '将计数设置为特定值，或设置为返回新值的函数的函数。',
+        '将计数设置为特定值，或通过接收上一个计数并返回下一个值的函数来更新计数。',
     },
   ]"
 />

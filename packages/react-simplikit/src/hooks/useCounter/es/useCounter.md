@@ -86,7 +86,7 @@ function useCounter(
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
-        'Una función para actualizar el contador con un valor específico o con una función que devuelve un nuevo valor.',
+        'Una función para actualizar el contador con un valor específico o con una función que recibe el valor anterior y devuelve el siguiente.',
     },
   ]"
 />

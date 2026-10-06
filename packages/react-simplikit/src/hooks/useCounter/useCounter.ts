@@ -43,7 +43,7 @@ const validateValue = (value: number, { min, max }: Omit<UseCounterOptions, 'ste
  * - actions.increment `() => void` - A function to increment the count;
  * - actions.decrement `() => void` - A function to decrement the count;
  * - actions.reset `() => void` - A function to reset the count to the initial value;
- * - actions.setCount `(value: number | ((prev: number) => number)) => void` - A function to set the count to a specific value or a function that returns a new value;
+ * - actions.setCount `(value: number | ((prev: number) => number)) => void` - A function to set the count, either to a value or with an updater function that receives the previous count and returns the next one;
  *
  * @example
  * import { useCounter } from 'react-simplikit';
