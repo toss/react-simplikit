@@ -54,7 +54,7 @@ function useCounter(
 <Interface
   name=""
   type="UseCounterReturn"
-  description="카운트 값과 제어 함수들을 가진 객체예요."
+  description="카운트 값과 카운트를 바꾸는 액션을 담은 튜플이에요."
   :nested="[
     {
       name: 'count',
@@ -63,25 +63,25 @@ function useCounter(
       description: '현재 카운트 값이에요.',
     },
     {
-      name: 'increment',
+      name: 'actions.increment',
       type: '() => void',
       required: false,
       description: '카운트를 증가시키는 함수예요.',
     },
     {
-      name: 'decrement',
+      name: 'actions.decrement',
       type: '() => void',
       required: false,
       description: '카운트를 감소시키는 함수예요.',
     },
     {
-      name: 'reset',
+      name: 'actions.reset',
       type: '() => void',
       required: false,
       description: '카운트를 초기값으로 재설정하는 함수예요.',
     },
     {
-      name: 'setCount',
+      name: 'actions.setCount',
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
@@ -96,7 +96,7 @@ function useCounter(
 import { useCounter } from 'react-simplikit';
 
 function ShoppingCart() {
-  const { count, increment, decrement, reset } = useCounter(1, {
+  const [count, { increment, decrement, reset }] = useCounter(1, {
     min: 1,
     max: 10,
   });

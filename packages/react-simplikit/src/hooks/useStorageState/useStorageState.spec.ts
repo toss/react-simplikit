@@ -167,7 +167,7 @@ describe('useStorageState', () => {
     it('should set and get value', async () => {
       const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
       await act(async () => {
-        result.current[1]('new value');
+        result.current[1].setValue('new value');
       });
       expect(result.current[0]).toBe('new value');
     });
@@ -175,9 +175,19 @@ describe('useStorageState', () => {
     it('should update value using function', async () => {
       const { result } = await renderHookSSR(() => useStorageState<number>('test-key', { defaultValue: 0, storage }));
       await act(async () => {
-        result.current[1](prev => prev + 1);
+        result.current[1].setValue(prev => prev + 1);
       });
       expect(result.current[0]).toBe(1);
+    });
+
+    it('should keep the actions object stable across renders', async () => {
+      const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
+      const [, actions] = result.current;
+      await act(async () => {
+        actions.setValue('new value');
+      });
+      expect(result.current[0]).toBe('new value');
+      expect(result.current[1]).toBe(actions);
     });
 
     it('should sync between multiple hooks with same key', async () => {
@@ -185,7 +195,7 @@ describe('useStorageState', () => {
       const { result: result2 } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
 
       await act(async () => {
-        result1.current[1]('updated value');
+        result1.current[1].setValue('updated value');
       });
 
       expect(result2.current[0]).toBe('updated value');
@@ -197,7 +207,7 @@ describe('useStorageState', () => {
       storage.set('test-key', JSON.stringify({ hello: 'world' }));
 
       await act(async () => {
-        result.current[2]();
+        result.current[1].refresh();
       });
 
       expect(result.current[0]).toEqual({ hello: 'world' });
@@ -212,7 +222,7 @@ describe('useStorageState', () => {
       const { result } = await renderHookSSR(() => useStorageState('test-key', { storage, serializer, deserializer }));
 
       await act(async () => {
-        result.current[1]('hello');
+        result.current[1].setValue('hello');
       });
 
       expect(result.current[0]).toEqual('hello');
@@ -244,7 +254,7 @@ describe('useStorageState', () => {
       const { result, rerender } = await renderHookSSR(() => useStorageState<string>('test-key', { storage }));
 
       await act(async () => {
-        result.current[1]('memo value');
+        result.current[1].setValue('memo value');
       });
 
       rerender();
@@ -266,7 +276,7 @@ describe('useStorageState', () => {
       );
 
       await act(async () => {
-        result.current[1]('session value');
+        result.current[1].setValue('session value');
       });
 
       rerender();
@@ -304,7 +314,7 @@ describe('useStorageState', () => {
       );
 
       await act(async () => {
-        result.current[1]('local value');
+        result.current[1].setValue('local value');
       });
 
       rerender();
@@ -404,13 +414,13 @@ describe('useStorageState', () => {
       const { result } = await renderHookSSR(() => useStorageState<string>('test-key', { storage: safeLocalStorage }));
 
       await act(async () => {
-        result.current[1]('value');
+        result.current[1].setValue('value');
       });
 
       expect(result.current[0]).toBe('value');
 
       await act(async () => {
-        result.current[1](undefined);
+        result.current[1].setValue(undefined);
       });
 
       expect(result.current[0]).toBeUndefined();

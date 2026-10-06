@@ -54,7 +54,7 @@ function useCounter(
 <Interface
   name=""
   type="UseCounterReturn"
-  description="包含计数值和控制函数的对象。"
+  description="包含计数值和计数修改操作的元组。"
   :nested="[
     {
       name: 'count',
@@ -63,25 +63,25 @@ function useCounter(
       description: '当前的计数值。',
     },
     {
-      name: 'increment',
+      name: 'actions.increment',
       type: '() => void',
       required: false,
       description: '递增计数的函数。',
     },
     {
-      name: 'decrement',
+      name: 'actions.decrement',
       type: '() => void',
       required: false,
       description: '递减计数的函数。',
     },
     {
-      name: 'reset',
+      name: 'actions.reset',
       type: '() => void',
       required: false,
       description: '将计数重置为初始值的函数。',
     },
     {
-      name: 'setCount',
+      name: 'actions.setCount',
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
@@ -96,7 +96,7 @@ function useCounter(
 import { useCounter } from 'react-simplikit';
 
 function ShoppingCart() {
-  const { count, increment, decrement, reset } = useCounter(1, {
+  const [count, { increment, decrement, reset }] = useCounter(1, {
     min: 1,
     max: 10,
   });
