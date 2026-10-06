@@ -2,9 +2,13 @@
 import { useEffect, useMemo } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-import { usePreservedReference } from '../usePreservedReference/index.ts';
 
 import { throttle } from './throttle.ts';
+
+type ThrottleOptions = {
+  leading?: boolean;
+  trailing?: boolean;
+};
 
 /**
  * @description
@@ -15,14 +19,15 @@ import { throttle } from './throttle.ts';
  * @template {(...args: any[]) => any} F - The type of the callback function.
  * @param {F} callback - The function to be throttled.
  * @param {number} wait - The number of milliseconds to throttle invocations to.
- * @param {{ edges?: Array<'leading' | 'trailing'> }} [options] - Options to control the behavior of the throttle.
- * @param {Array<'leading' | 'trailing'>} [options.edges=['leading', 'trailing']] - An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.
+ * @param {ThrottleOptions} [options] - Options to control the behavior of the throttle.
+ * @param {boolean} [options.leading=true] - If `true`, allows an immediate call at the start of a throttle window.
+ * @param {boolean} [options.trailing=true] - If `true`, allows a pending call to run after the delay with the latest arguments.
  * @returns {F & { cancel: () => void }} - Returns the throttled function with a `cancel` method to cancel pending executions.
  *
  * @example
  * const throttledScroll = useThrottle(() => {
  *   console.log('Scroll event');
- * }, 200, { edges: ['leading', 'trailing'] });
+ * }, 200, { leading: true, trailing: true });
  *
  * useEffect(() => {
  *   window.addEventListener('scroll', throttledScroll);
@@ -35,14 +40,26 @@ import { throttle } from './throttle.ts';
 export function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
-  options?: Parameters<typeof throttle>[2]
+  { leading = true, trailing = true }: ThrottleOptions = {}
 ) {
   const preservedCallback = usePreservedCallback(callback);
-  const preservedOptions = usePreservedReference(options ?? {});
+
+  const edges = useMemo(() => {
+    const _edges: Array<'leading' | 'trailing'> = [];
+    if (leading) {
+      _edges.push('leading');
+    }
+
+    if (trailing) {
+      _edges.push('trailing');
+    }
+
+    return _edges;
+  }, [leading, trailing]);
 
   const throttledCallback = useMemo(
-    () => throttle(preservedCallback, wait, preservedOptions),
-    [preservedOptions, preservedCallback, wait]
+    () => throttle(preservedCallback, wait, { edges }),
+    [preservedCallback, wait, edges]
   );
 
   useEffect(() => {

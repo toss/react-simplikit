@@ -10,7 +10,7 @@ por ejemplo, al manejar eventos de desplazamiento o de cambio de tamaño.
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
   wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
 
@@ -32,16 +32,24 @@ function useThrottle<F extends (...args: any[]) => any>(
 
 <Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
+  type="ThrottleOptions"
   description="Opciones para controlar la limitación de frecuencia."
   :nested="[
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        'Un arreglo opcional que especifica si la función debe ejecutarse al inicio del intervalo, al final o en ambos momentos.',
+        'Si es <code>true</code>, permite una llamada inmediata al inicio del intervalo de limitación de frecuencia.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        'Si es <code>true</code>, permite ejecutar una llamada pendiente después de la espera con los argumentos más recientes.',
     },
   ]"
 />
@@ -62,7 +70,7 @@ const throttledScroll = useThrottle(
     console.log('Evento de desplazamiento');
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { leading: true, trailing: true }
 );
 
 useEffect(() => {
