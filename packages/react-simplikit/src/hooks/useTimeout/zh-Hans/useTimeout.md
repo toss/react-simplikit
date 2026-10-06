@@ -5,22 +5,31 @@
 ## 接口
 
 ```ts
-function useTimeout(callback: () => void, delay: number = 0): void;
+function useTimeout(options: Object): void;
 ```
 
 ### 参数
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="在延迟之后要执行的函数。"
-/>
-
-<Interface
-  name="delay"
-  type="number"
-  description="执行回调之前要等待的毫秒数。"
+  name="options"
+  type="Object"
+  description="配置超时的行为。"
+  :nested="[
+    {
+      name: 'options.onTimeout',
+      type: '() => void',
+      required: true,
+      description: '在延迟之后要执行的函数。',
+    },
+    {
+      name: 'options.delayMs',
+      type: 'number',
+      required: false,
+      defaultValue: '0',
+      description: '执行 <code>onTimeout</code> 之前要等待的毫秒数。',
+    },
+  ]"
 />
 
 ### 返回值
@@ -37,13 +46,15 @@ import { useState } from 'react';
 function Example() {
   const [title, setTitle] = useState('');
 
-  useTimeout(() => {
-    setTitle('Searching for products...');
-  }, 2000);
+  useTimeout({
+    onTimeout: () => setTitle('Searching for products...'),
+    delayMs: 2000,
+  });
 
-  useTimeout(() => {
-    setTitle('Almost done...');
-  }, 4000);
+  useTimeout({
+    onTimeout: () => setTitle('Almost done...'),
+    delayMs: 4000,
+  });
 
   return <div>{title}</div>;
 }

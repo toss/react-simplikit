@@ -5,33 +5,28 @@
 ## 인터페이스
 
 ```ts
-function useInterval(
-  callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
-): void;
+function useInterval(options: Object): void;
 ```
 
 ### 파라미터
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="주기적으로 실행될 함수예요."
-/>
-
-<Interface
-  required
   name="options"
-  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
+  type="Object"
   description="간격 동작을 설정해요."
   :nested="[
     {
-      name: 'options.delay',
+      name: 'options.onTick',
+      type: '() => void',
+      required: true,
+      description: '주기적으로 실행될 함수예요.',
+    },
+    {
+      name: 'options.delayMs',
       type: 'number',
       required: true,
-      description:
-        '밀리초 단위의 간격 지속 시간이에요. <code>null</code>인 경우 간격이 실행되지 않아요.',
+      description: '실행 간격(밀리초)이에요.',
     },
     {
       name: 'options.immediate',
@@ -62,9 +57,10 @@ import { useState } from 'react';
 function Timer() {
   const [time, setTime] = useState(0);
 
-  useInterval(() => {
-    setTime(prev => prev + 1);
-  }, 1000);
+  useInterval({
+    onTick: () => setTime(prev => prev + 1),
+    delayMs: 1000,
+  });
 
   return (
     <div>
