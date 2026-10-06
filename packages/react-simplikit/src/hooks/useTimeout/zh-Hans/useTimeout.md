@@ -39,7 +39,7 @@ function useTimeout(options: Object): void;
 ## 示例
 
 ```tsx
-// Updating a title after a delay
+// 延迟后更新标题
 import { useTimeout } from 'react-simplikit';
 import { useState } from 'react';
 

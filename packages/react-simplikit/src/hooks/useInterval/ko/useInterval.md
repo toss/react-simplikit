@@ -1,6 +1,6 @@
 # useInterval
 
-`useInterval`는 정해진 간격으로 함수를 실행하는 리액트 훅이에요. 타이머, 데이터 폴링 및 기타 반복 작업에 유용해요.
+`useInterval`은 정해진 간격으로 함수를 실행하는 리액트 훅이에요. 타이머, 데이터 폴링 및 기타 반복 작업에 유용해요.
 
 ## 인터페이스
 
@@ -31,6 +31,7 @@ function useInterval(options: Object): void;
     {
       name: 'options.immediate',
       type: 'boolean',
+      required: false,
       defaultValue: 'false',
       description:
         '만약 <code>true</code>이면, 간격 시작 전에 즉시 실행돼요.',
@@ -38,6 +39,7 @@ function useInterval(options: Object): void;
     {
       name: 'options.enabled',
       type: 'boolean',
+      required: false,
       defaultValue: 'true',
       description: '<code>false</code>인 경우 간격이 실행되지 않아요.',
     },
