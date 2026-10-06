@@ -1,5 +1,11 @@
 # react-simplikit
 
+## 0.3.3
+
+### Patch Changes
+
+- [#551](https://github.com/toss/react-simplikit/pull/551) [`5ed94bd`](https://github.com/toss/react-simplikit/commit/5ed94bd919188181ec23b22756e7c7fbeabf22d6) Thanks [@theluckystrike](https://github.com/theluckystrike)! - The JSDoc of `useCounter` now marks `options` as optional, matching its `= {}` default, so the generated API pages and the agent skill no longer list it as required.
+
 ## 0.3.2
 
 ### Patch Changes
