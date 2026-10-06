@@ -90,7 +90,7 @@ Backticks in this table mark catalog entries only.
 | [`useIntersectionObserver`](references/useIntersectionObserver.md) | `useIntersectionObserver` is a React hook that detects whether a specific DOM element is visible on the screen. |
 | [`useInterval`](references/useInterval.md) | `useInterval` is a React hook that executes a function at a specified interval. |
 | [`useIsClient`](references/useIsClient.md) | `useIsClient` is a React hook that returns `true` only in the client-side environment. |
-| [`useIsomorphicLayoutEffect`](references/useIsomorphicLayoutEffect.md) | `useIsomorphicLayoutEffect` is a React hook that provides the behavior of `useLayoutEffect` without triggering warnings during server-side rendering. |
+| [`useIsomorphicLayoutEffect`](references/useIsomorphicLayoutEffect.md) | `useIsomorphicLayoutEffect` is a React hook that runs `useLayoutEffect` in the browser without triggering its warning during server-side rendering. |
 | [`useKeyboardHeight`](references/useKeyboardHeight.md) | `useKeyboardHeight` is a React hook that tracks the on-screen keyboard height. |
 | [`useList`](references/useList.md) | A React hook that manages an array as state. |
 | [`useLoading`](references/useLoading.md) | `useLoading` is a React hook that simplifies managing the loading state of a `Promise`. |

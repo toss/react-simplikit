@@ -1,14 +1,16 @@
 # useIsomorphicLayoutEffect
 
-`useIsomorphicLayoutEffect` es un Hook de React que proporciona el comportamiento de `useLayoutEffect` sin generar advertencias durante el renderizado en el servidor.
+`useIsomorphicLayoutEffect` es un Hook de React que ejecuta `useLayoutEffect` en el navegador sin generar su advertencia durante el renderizado en el servidor.
 Durante el SSR, no hay un DOM que puedas medir o modificar de forma síncrona, por lo que React advierte sobre el uso de `useLayoutEffect`.
 
-Este Hook se ejecuta de forma síncrona después de las actualizaciones del DOM, pero antes de que el navegador pinte la pantalla, lo que lo hace ideal para:
+React no ejecuta efectos en el servidor, así que el efecto solo se ejecuta en el navegador. En el servidor, este Hook es `useEffect`, que React omite.
+Solo existe para evitar la advertencia: no ejecuta nada en el servidor ni hace que la salida del servidor coincida con la del cliente.
+
+En el navegador, se ejecuta de forma síncrona después de las actualizaciones del DOM, pero antes de que el navegador pinte la pantalla, lo que lo hace ideal para:
 
 - Medir elementos del DOM después del renderizado
 - Aplicar cambios al DOM antes de que el navegador pinte la pantalla
 - Evitar parpadeos en la interfaz o cambios en la disposición de los elementos
-- Funcionar de forma segura tanto en el entorno del cliente como en el del servidor
 
 ## Interfaz
 
