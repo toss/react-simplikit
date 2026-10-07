@@ -1,6 +1,7 @@
 # usePageVisibilityEffect
 
 `usePageVisibilityEffect` は、ドキュメントの表示状態の変化を監視し、コールバックを呼び出す React フックです。
+v0 では、このフックは `useVisibilityEvent` という名前でした。以前の名前も引き続き動作しますが、非推奨です。
 
 ## インターフェース
 

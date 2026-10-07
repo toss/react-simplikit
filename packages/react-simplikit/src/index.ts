@@ -33,7 +33,7 @@ export {
 } from './hooks/useNetworkStatus/index.ts';
 export { useOutsideClickEffect } from './hooks/useOutsideClickEffect/index.ts';
 export { type PageVisibility, usePageVisibility, type VisibilityState } from './hooks/usePageVisibility/index.ts';
-export { usePageVisibilityEffect } from './hooks/usePageVisibilityEffect/index.ts';
+export { usePageVisibilityEffect, useVisibilityEvent } from './hooks/usePageVisibilityEffect/index.ts';
 export { usePreservedCallback } from './hooks/usePreservedCallback/index.ts';
 export { usePreservedReference } from './hooks/usePreservedReference/index.ts';
 export { usePrevious } from './hooks/usePrevious/index.ts';
@@ -47,7 +47,6 @@ export { useThrottledCallback } from './hooks/useThrottledCallback/index.ts';
 export { useThrottledValue } from './hooks/useThrottledValue/index.ts';
 export { useTimeout } from './hooks/useTimeout/index.ts';
 export { useToggle } from './hooks/useToggle/index.ts';
-export { useVisibilityEvent } from './hooks/useVisibilityEvent/index.ts';
 export { useVisualViewport } from './hooks/useVisualViewport/index.ts';
 export { buildContext } from './utils/buildContext/index.ts';
 export { disableBodyScrollLock } from './utils/disableBodyScrollLock/index.ts';

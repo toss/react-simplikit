@@ -1,6 +1,6 @@
 # usePageVisibilityEffect
 
-문서의 가시성 상태 변화를 감지하고 콜백을 실행하는 리액트 훅이에요.
+문서의 가시성 상태 변화를 감지하고 콜백을 실행하는 리액트 훅이에요. v0에서는 이 훅의 이름이 `useVisibilityEvent`였어요. 이전 이름도 계속 동작하지만 deprecated 상태예요.
 
 ## 인터페이스
 

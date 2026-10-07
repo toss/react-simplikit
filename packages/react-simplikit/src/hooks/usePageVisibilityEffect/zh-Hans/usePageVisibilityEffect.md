@@ -1,6 +1,6 @@
 # usePageVisibilityEffect
 
-`usePageVisibilityEffect` 是一个监听文档可见性状态变化并触发回调的 React Hook。
+`usePageVisibilityEffect` 是一个监听文档可见性状态变化并触发回调的 React Hook。在 v0 中，这个 Hook 名为 `useVisibilityEvent`。旧名称仍然可用，但已弃用。
 
 ## 接口
 

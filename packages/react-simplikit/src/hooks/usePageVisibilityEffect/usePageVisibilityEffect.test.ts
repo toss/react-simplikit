@@ -2,9 +2,9 @@ import { act } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
-import { useVisibilityEvent } from '../useVisibilityEvent/useVisibilityEvent.ts';
 
 import { usePageVisibilityEffect } from './usePageVisibilityEffect.ts';
+import { useVisibilityEvent } from './useVisibilityEvent.ts';
 
 describe('usePageVisibilityEffect', () => {
   it('calls the callback when visibility changes', async () => {

@@ -48,6 +48,8 @@ const RETIRED_MOBILE_PAGES = new Set([
 const RENAMED_REFERENCE_REDIRECTS: RedirectPair[] = [
   { from: 'hooks/useCallbackOncePerRender.html', to: 'hooks/useCallbackOnce.html' },
   { from: 'core/hooks/useCallbackOncePerRender.html', to: 'hooks/useCallbackOnce.html' },
+  { from: 'hooks/useVisibilityEvent.html', to: 'hooks/usePageVisibilityEffect.html' },
+  { from: 'core/hooks/useVisibilityEvent.html', to: 'hooks/usePageVisibilityEffect.html' },
 ];
 
 export function collectLegacyRedirects(): RedirectPair[] {

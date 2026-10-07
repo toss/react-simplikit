@@ -142,7 +142,7 @@ try {
     )
   ).reduce((total, count) => total + count, 0);
   const guidePageCount = 11;
-  const renamedPageRedirectCount = 2;
+  const renamedPageRedirectCount = 4;
 
   assert.equal(
     stubs.length,
@@ -161,6 +161,8 @@ try {
     'ja/mobile/utils/isServer.html',
     'hooks/useCallbackOncePerRender.html',
     'ko/core/hooks/useCallbackOncePerRender.html',
+    'hooks/useVisibilityEvent.html',
+    'ko/core/hooks/useVisibilityEvent.html',
   ]) {
     assert.equal(stubPaths.has(expected), true, `the legacy URL ${expected} must keep a redirect`);
   }
@@ -177,12 +179,17 @@ try {
   }
 
   // A renamed export has no page of its own, so its old URLs must land on the page of its new name.
-  for (const from of ['hooks/useCallbackOncePerRender.html', 'ja/core/hooks/useCallbackOncePerRender.html']) {
-    assert.equal(
-      stubs.find(stub => stub.from === from)?.to,
-      from.replace('core/', '').replace('useCallbackOncePerRender', 'useCallbackOnce'),
-      `${from} must redirect to the useCallbackOnce page`
-    );
+  for (const [oldName, newName] of [
+    ['useCallbackOncePerRender', 'useCallbackOnce'],
+    ['useVisibilityEvent', 'usePageVisibilityEffect'],
+  ]) {
+    for (const from of [`hooks/${oldName}.html`, `ja/core/hooks/${oldName}.html`]) {
+      assert.equal(
+        stubs.find(stub => stub.from === from)?.to,
+        from.replace('core/', '').replace(oldName, newName),
+        `${from} must redirect to the ${newName} page`
+      );
+    }
   }
 
   for (const { from, to } of stubs) {

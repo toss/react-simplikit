@@ -1,6 +1,7 @@
 # usePageVisibilityEffect
 
 `usePageVisibilityEffect` is a React hook that listens to changes in the document's visibility state and triggers a callback.
+In v0 this hook was named `useVisibilityEvent`. The old name still works but is deprecated.
 
 ## Interface
 
