@@ -3,13 +3,14 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
+import { usePageVisibilityEffect } from './usePageVisibilityEffect.ts';
 import { useVisibilityEvent } from './useVisibilityEvent.ts';
 
-describe('useVisibilityEvent', () => {
+describe('usePageVisibilityEffect', () => {
   it('calls the callback when visibility changes', async () => {
     const mockCallback = vi.fn();
 
-    await renderHookSSR(() => useVisibilityEvent(mockCallback));
+    await renderHookSSR(() => usePageVisibilityEffect(mockCallback));
 
     await act(async () => simulateVisibilityChange('hidden'));
 
@@ -22,7 +23,7 @@ describe('useVisibilityEvent', () => {
 
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    renderHookSSR.serverOnly(() => useVisibilityEvent(callback));
+    renderHookSSR.serverOnly(() => usePageVisibilityEffect(callback));
 
     expect(callback).not.toHaveBeenCalled();
   });
@@ -30,7 +31,7 @@ describe('useVisibilityEvent', () => {
   it('should not call the callback on initial render if immediate is false', async () => {
     const mockCallback = vi.fn();
 
-    await renderHookSSR(() => useVisibilityEvent(mockCallback, { immediate: false }));
+    await renderHookSSR(() => usePageVisibilityEffect(mockCallback, { immediate: false }));
 
     expect(mockCallback).not.toHaveBeenCalled();
   });
@@ -40,7 +41,7 @@ describe('useVisibilityEvent', () => {
 
     await act(async () => simulateVisibilityChange('visible'));
 
-    await renderHookSSR(() => useVisibilityEvent(mockCallback, { immediate: true }));
+    await renderHookSSR(() => usePageVisibilityEffect(mockCallback, { immediate: true }));
 
     expect(mockCallback).toHaveBeenCalledWith('visible');
   });
@@ -48,13 +49,17 @@ describe('useVisibilityEvent', () => {
   it('should remove the event listener on unmount', async () => {
     const mockCallback = vi.fn();
 
-    const { unmount } = await renderHookSSR(() => useVisibilityEvent(mockCallback));
+    const { unmount } = await renderHookSSR(() => usePageVisibilityEffect(mockCallback));
 
     unmount();
 
     await act(async () => simulateVisibilityChange('hidden'));
 
     expect(mockCallback).not.toHaveBeenCalled();
+  });
+
+  it('keeps the deprecated useVisibilityEvent as the same function', () => {
+    expect(useVisibilityEvent).toBe(usePageVisibilityEffect);
   });
 });
 

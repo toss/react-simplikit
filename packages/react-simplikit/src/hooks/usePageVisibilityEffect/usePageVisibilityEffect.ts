@@ -6,7 +6,8 @@ type Options = {
 
 /**
  * @description
- * `useVisibilityEvent` is a React hook that listens to changes in the document's visibility state and triggers a callback.
+ * `usePageVisibilityEffect` is a React hook that listens to changes in the document's visibility state and triggers a callback.
+ * In v0 this hook was named `useVisibilityEvent`. The old name still works but is deprecated.
  *
  * @see `usePageVisibility` returns the visibility as state instead of running a callback.
  *
@@ -17,10 +18,10 @@ type Options = {
  * with the current visibility state.
  *
  * @example
- * import { useVisibilityEvent } from 'react-simplikit';
+ * import { usePageVisibilityEffect } from 'react-simplikit';
  *
  * function Component() {
- *   useVisibilityEvent(visibilityState => {
+ *   usePageVisibilityEffect(visibilityState => {
  *     console.log(`Document is now ${visibilityState}`);
  *   });
  *
@@ -28,7 +29,10 @@ type Options = {
  * }
  */
 
-export function useVisibilityEvent(callback: (visibilityState: 'visible' | 'hidden') => void, options: Options = {}) {
+export function usePageVisibilityEffect(
+  callback: (visibilityState: 'visible' | 'hidden') => void,
+  options: Options = {}
+) {
   const handleVisibilityChange = useCallback(() => {
     callback(document.visibilityState);
   }, [callback]);

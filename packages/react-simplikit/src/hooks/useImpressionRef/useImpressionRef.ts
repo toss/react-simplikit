@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 
 import { useDebouncedCallback } from '../useDebouncedCallback/useDebouncedCallback.ts';
 import { useIntersectionObserver } from '../useIntersectionObserver/index.ts';
+import { usePageVisibilityEffect } from '../usePageVisibilityEffect/index.ts';
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-import { useVisibilityEvent } from '../useVisibilityEvent/index.ts';
 
 export type UseImpressionRefOptions = Partial<{
   onImpressionStart: () => void;
@@ -96,7 +96,7 @@ export function useImpressionRef<Element extends HTMLElement>({
     [impressionEndHandler]
   );
 
-  useVisibilityEvent(documentVisible => {
+  usePageVisibilityEffect(documentVisible => {
     if (!isIntersectingRef.current) {
       return;
     }

@@ -1,11 +1,12 @@
-# useVisibilityEvent
+# usePageVisibilityEffect
 
-`useVisibilityEvent` は、ドキュメントの表示状態の変化を監視し、コールバックを呼び出す React フックです。
+`usePageVisibilityEffect` は、ドキュメントの表示状態の変化を監視し、コールバックを呼び出す React フックです。
+v0 では、このフックは `useVisibilityEvent` という名前でした。以前の名前も引き続き動作しますが、非推奨です。
 
 ## インターフェース
 
 ```ts
-function useVisibilityEvent(
+function usePageVisibilityEffect(
   callback: (visibilityState: 'visible' | 'hidden') => void,
   options?: object
 ): void;
@@ -43,10 +44,10 @@ function useVisibilityEvent(
 ## 使用例
 
 ```tsx
-import { useVisibilityEvent } from 'react-simplikit';
+import { usePageVisibilityEffect } from 'react-simplikit';
 
 function Component() {
-  useVisibilityEvent(visibilityState => {
+  usePageVisibilityEffect(visibilityState => {
     console.log(`Document is now ${visibilityState}`);
   });
 
