@@ -17,8 +17,11 @@ import {
 } from '../.vitepress/locales.mts';
 import { packageSourceRoot } from '../.vitepress/shared.mts';
 
+import { PACKAGE_INDEX_FILE } from './commands/generateSkill/index.ts';
 import { assertLlmsOutput } from './utils/assertLlmsOutput.ts';
 import { assertSeoOutput } from './utils/assertSeoOutput.ts';
+import { collectDeprecatedExports } from './utils/collectDeprecatedExports.ts';
+import { collectPublicExports } from './utils/collectPublicExports.ts';
 import { execWithOutput } from './utils/execWithOutput.ts';
 import { getRootPath } from './utils/getRootPath.ts';
 
@@ -139,11 +142,12 @@ try {
     )
   ).reduce((total, count) => total + count, 0);
   const guidePageCount = 11;
+  const renamedPageRedirectCount = 4;
 
   assert.equal(
     stubs.length,
-    (guidePageCount + referenceItemCount) * localeCount,
-    'the legacy redirect set must cover every pre-flattening URL across all locales'
+    (guidePageCount + referenceItemCount + renamedPageRedirectCount) * localeCount,
+    'the legacy redirect set must cover every pre-flattening and renamed URL across all locales'
   );
 
   // Spot-check the shape itself: a renamed `from` would keep the count intact and
@@ -155,8 +159,37 @@ try {
     'mobile/roadmap.html',
     'ko/core/utils/mergeRefs.html',
     'ja/mobile/utils/isServer.html',
+    'hooks/useCallbackOncePerRender.html',
+    'ko/core/hooks/useCallbackOncePerRender.html',
+    'hooks/useVisibilityEvent.html',
+    'ko/core/hooks/useVisibilityEvent.html',
   ]) {
     assert.equal(stubPaths.has(expected), true, `the legacy URL ${expected} must keep a redirect`);
+  }
+
+  // A deprecated export lost its page, so forgetting its redirect would turn the published URL into a 404.
+  const publicExports = await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE));
+
+  for (const name of await collectDeprecatedExports(root, publicExports)) {
+    assert.equal(
+      ['hooks', 'components', 'utils'].some(category => stubPaths.has(`${category}/${name}.html`)),
+      true,
+      `${name} is @deprecated and has no page, so its old URL must redirect — add it to the renamed pages in legacyRedirects.mts`
+    );
+  }
+
+  // A renamed export has no page of its own, so its old URLs must land on the page of its new name.
+  for (const [oldName, newName] of [
+    ['useCallbackOncePerRender', 'useCallbackOnce'],
+    ['useVisibilityEvent', 'usePageVisibilityEffect'],
+  ]) {
+    for (const from of [`hooks/${oldName}.html`, `ja/core/hooks/${oldName}.html`]) {
+      assert.equal(
+        stubs.find(stub => stub.from === from)?.to,
+        from.replace('core/', '').replace(oldName, newName),
+        `${from} must redirect to the ${newName} page`
+      );
+    }
   }
 
   for (const { from, to } of stubs) {
