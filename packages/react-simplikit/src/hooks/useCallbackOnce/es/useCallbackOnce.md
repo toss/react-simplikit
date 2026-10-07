@@ -2,6 +2,7 @@
 
 `useCallbackOnce` es un Hook de React que ejecuta un callback una sola vez hasta que cambie `deps`, sin importar cuántas veces llames a la función que devuelve.
 Te resulta útil para operaciones que solo deben ejecutarse una vez, incluso si el componente vuelve a renderizarse.
+En v0 este Hook se llamaba `useCallbackOncePerRender`. El nombre anterior sigue funcionando, pero está obsoleto.
 
 ## Interfaz
 

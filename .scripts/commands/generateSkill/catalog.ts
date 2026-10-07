@@ -6,13 +6,18 @@ export type CatalogEntry = {
   name: string;
   category: Category;
   description: string;
-  /** The page's deprecation notice; a deprecated entry is listed under Deprecated instead of its category. */
-  deprecation?: string;
+};
+
+/** A deprecated export: it has no documentation page, so it is listed by name with its `@deprecated` text. */
+export type DeprecatedEntry = {
+  name: string;
+  notice: string;
 };
 
 type RenderSkillOptions = {
   template: string;
   entries: CatalogEntry[];
+  deprecatedEntries: DeprecatedEntry[];
 };
 
 const CATALOG_PLACEHOLDER = '<!-- CATALOG -->';
@@ -21,13 +26,7 @@ const DEPRECATED_HEADING = '### Deprecated';
 
 const CATALOG_ROW = /^\| \[`([^`]+)`\]\(references\/\1\.md\) \| .+ \|$/gm;
 
-// A translated page carries the notice under its own title, so any container directly under the
-// heading is skipped, not only the English one.
-const LEADING_CONTAINER = /^:::[^\n]*\n[\s\S]*?\n:::(?:\n|$)/;
-
-// Only where `docs:gen` writes it: a `::: warning Deprecated` further down, in the Notes for
-// example, says something about the page, not that the export is deprecated.
-const DEPRECATION_NOTICE = /^# [^\n]*\n\n::: warning Deprecated\n([\s\S]*?)\n:::(?:\n|$)/;
+const DEPRECATED_ROW = /^\| `([^`]+)` \| .+ \|$/gm;
 
 /** Catalog heading for an export: the first segment of its source path, `./hooks/x/index.ts` → `hooks`. */
 export function getCategory(sourcePath: string): Category {
@@ -43,15 +42,10 @@ export function getCategory(sourcePath: string): Category {
 
 /**
  * First sentence of a documentation page's opening paragraph, which `docs:gen` writes from the
- * JSDoc `@description`. A period inside backticks (`options.leading`) does not end the sentence,
- * and a deprecation notice above the paragraph is not part of it.
+ * JSDoc `@description`. A period inside backticks (`options.leading`) does not end the sentence.
  */
 export function extractDescription(markdown: string, name: string): string {
-  const body = markdown
-    .replace(/^# .*\n/, '')
-    .trimStart()
-    .replace(LEADING_CONTAINER, '')
-    .trimStart();
+  const body = markdown.replace(/^# .*\n/, '').trimStart();
   const paragraph = body
     .split(/\n\s*\n/)[0]
     .replace(/\n/g, ' ')
@@ -85,27 +79,18 @@ export function extractDescription(markdown: string, name: string): string {
 }
 
 /**
- * Text of the deprecation notice `docs:gen` writes under a page's heading from the JSDoc
- * `@deprecated`, on one line so it fits a table cell; `undefined` when the page has none.
- */
-export function extractDeprecation(markdown: string): string | undefined {
-  return DEPRECATION_NOTICE.exec(markdown)?.[1]
-    .trim()
-    .replace(/\s*\n\s*/g, ' ');
-}
-
-/**
  * Fills the template's `<!-- CATALOG -->` with one table per category, then a Deprecated table
- * when an entry is deprecated. Categories keep the order of `CATEGORIES`; rows keep the order
- * they are given (sorted by name upstream).
+ * when there are deprecated entries. Categories keep the order of `CATEGORIES`; rows keep the order
+ * they are given (sorted by name upstream). A Deprecated row links nowhere, because a deprecated
+ * export has no reference page.
  */
-export function renderSkill({ template, entries }: RenderSkillOptions): string {
+export function renderSkill({ template, entries, deprecatedEntries }: RenderSkillOptions): string {
   if (!template.includes(CATALOG_PLACEHOLDER)) {
     throw new Error(`The skill template must contain ${CATALOG_PLACEHOLDER}`);
   }
 
   const sections = CATEGORIES.flatMap(category => {
-    const rows = entries.filter(entry => entry.category === category && entry.deprecation == null);
+    const rows = entries.filter(entry => entry.category === category);
 
     if (rows.length === 0) {
       return [];
@@ -123,11 +108,8 @@ export function renderSkill({ template, entries }: RenderSkillOptions): string {
     ];
   });
 
-  const deprecatedRows = entries.flatMap(({ name, deprecation }) =>
-    deprecation == null ? [] : [`| [\`${name}\`](references/${name}.md) | ${escapeTableCell(deprecation)} |`]
-  );
   const deprecatedSection =
-    deprecatedRows.length === 0
+    deprecatedEntries.length === 0
       ? []
       : [
           DEPRECATED_HEADING,
@@ -136,16 +118,25 @@ export function renderSkill({ template, entries }: RenderSkillOptions): string {
           '',
           '| Name | Notice |',
           '| --- | --- |',
-          ...deprecatedRows,
+          // A wrapped `@deprecated` text is joined into one line so it fits the table cell.
+          ...deprecatedEntries.map(
+            ({ name, notice }) => `| \`${name}\` | ${escapeTableCell(notice.replace(/\s*\n\s*/g, ' '))} |`
+          ),
           '',
         ];
 
   return template.replace(CATALOG_PLACEHOLDER, [...sections, ...deprecatedSection].join('\n').trimEnd());
 }
 
+/** Names of the catalog rows of a rendered `SKILL.md`: the rows that link `references/<name>.md` from their first cell. */
+export function readCatalogNames(skill: string): string[] {
+  return [...skill.matchAll(CATALOG_ROW)].map(match => match[1]);
+}
+
 /**
  * Names in the Deprecated table of a rendered `SKILL.md`, which `renderSkill` writes last in the
- * catalog; empty when there is none. Only catalog rows link `references/<name>.md` from their first cell.
+ * catalog; empty when there is none. The section ends at the next heading, so a table further
+ * down the template is not read as part of it.
  */
 export function readDeprecatedNames(skill: string): string[] {
   const deprecatedStart = skill.indexOf(`\n${DEPRECATED_HEADING}\n`);
@@ -154,7 +145,9 @@ export function readDeprecatedNames(skill: string): string[] {
     return [];
   }
 
-  return [...skill.slice(deprecatedStart).matchAll(CATALOG_ROW)].map(match => match[1]);
+  const [section] = skill.slice(deprecatedStart + `\n${DEPRECATED_HEADING}\n`.length).split(/^#+ /m);
+
+  return [...section.matchAll(DEPRECATED_ROW)].map(match => match[1]);
 }
 
 function escapeTableCell(text: string): string {

@@ -3,9 +3,9 @@ import { DependencyList, useEffect } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
-import { useCallbackOncePerRender } from '../useCallbackOncePerRender/useCallbackOncePerRender.ts';
 
 import { useCallbackOnce } from './useCallbackOnce.ts';
+import { useCallbackOncePerRender } from './useCallbackOncePerRender.ts';
 
 function useCaller(callback: (...args: any) => any, deps: DependencyList) {
   useEffect(() => {

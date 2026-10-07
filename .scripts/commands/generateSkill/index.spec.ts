@@ -4,8 +4,6 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, it } from 'vitest';
 
-import { renderEnglishDoc } from '../generateDocs/index.ts';
-
 import { generateSkill, PACKAGE_INDEX_FILE } from './index.ts';
 
 const fixtureDirectories: string[] = [];
@@ -81,43 +79,23 @@ export { useToggle } from './hooks/useToggle/index.ts';
     assert.equal((await fs.readFile(path.join(outputDirectory, 'SKILL.md'), 'utf8')).includes('isIOS'), false);
   });
 
-  it('lists an export whose JSDoc is @deprecated under Deprecated, from the page docs:gen renders', async () => {
-    const [oldPage, newPage] = await Promise.all([
-      renderFixtureDoc(
-        'useOld',
-        `/**
- * @deprecated Use \`useNew\` instead.
- *
- * @description
- * \`useOld\` flips a boolean.
- *
- * @returns {void}
- *
- * @example
- * useOld();
- */
-export function useOld() {}`
-      ),
-      renderFixtureDoc(
-        'useNew',
-        `/**
- * @description
- * \`useNew\` flips a boolean.
- *
- * @returns {void}
- *
- * @example
- * useNew();
- */
-export function useNew() {}`
-      ),
-    ]);
+  it('lists an export whose JSDoc is @deprecated under Deprecated, without a page or a reference', async () => {
     const root = await writeFixtureRoot({
       index: `
-export { useNew } from './hooks/useNew/index.ts';
-export { useOld } from './hooks/useOld/index.ts';
+export { useNew, useOld } from './hooks/useNew/index.ts';
 `,
-      pages: { 'hooks/useNew/useNew.md': newPage, 'hooks/useOld/useOld.md': oldPage },
+      pages: { 'hooks/useNew/useNew.md': '# useNew\n\n`useNew` flips a boolean.\n' },
+      sources: {
+        'hooks/useNew/useNew.ts': 'export function useNew() {}\n',
+        'hooks/useNew/useOld.ts': `/**
+ * @description
+ * \`useOld\` is the name \`useNew\` had before.
+ *
+ * @deprecated Use \`useNew\` instead.
+ */
+export const useOld = useNew;
+`,
+      },
     });
     const outputDirectory = path.join(root, 'out');
 
@@ -130,17 +108,42 @@ export { useOld } from './hooks/useOld/index.ts';
       ),
       true
     );
-    assert.equal(
-      skill.includes('| Name | Notice |\n| --- | --- |\n| [`useOld`](references/useOld.md) | Use `useNew` instead. |'),
-      true
+    assert.equal(skill.includes('| Name | Notice |\n| --- | --- |\n| `useOld` | Use `useNew` instead. |'), true);
+    assert.equal(skill.includes('references/useOld.md'), false);
+    assert.deepEqual(await fs.readdir(path.join(outputDirectory, 'references')), ['useNew.md']);
+  });
+
+  it('reads a component source from a .tsx file', async () => {
+    const root = await writeFixtureRoot({
+      index: `export { Separated } from './components/Separated/index.ts';\n`,
+      pages: { 'components/Separated/Separated.md': '# Separated\n\n`Separated` joins children.\n' },
+      sources: { 'components/Separated/Separated.tsx': 'export function Separated() {}\n' },
+    });
+    const outputDirectory = path.join(root, 'out');
+
+    await generateSkill({ root, outputDirectory });
+
+    assert.deepEqual(await fs.readdir(path.join(outputDirectory, 'references')), ['Separated.md']);
+  });
+
+  it('fails when an export has no source file next to its index', async () => {
+    const root = await writeFixtureRoot({
+      index: `export { useToggle } from './hooks/useToggle/index.ts';\n`,
+      pages: { 'hooks/useToggle/useToggle.md': '# useToggle\n\n`useToggle` flips a boolean.\n' },
+      sources: {},
+    });
+
+    await assert.rejects(
+      generateSkill({ root, outputDirectory: path.join(root, 'out') }),
+      /useToggle has no source file/
     );
-    assert.equal(await fs.readFile(path.join(outputDirectory, 'references', 'useOld.md'), 'utf8'), oldPage);
   });
 
   it('fails when an export has no documentation page', async () => {
     const root = await writeFixtureRoot({
       index: `export { useToggle } from './hooks/useToggle/index.ts';\n`,
       pages: {},
+      sources: { 'hooks/useToggle/useToggle.ts': 'export function useToggle() {}\n' },
     });
 
     await assert.rejects(
@@ -150,29 +153,29 @@ export { useOld } from './hooks/useOld/index.ts';
   });
 });
 
-async function writeFixtureRoot({ index, pages }: { index: string; pages: Record<string, string> }): Promise<string> {
+type FixtureRoot = {
+  index: string;
+  pages: Record<string, string>;
+  /** Replaces the default: a `<name>.ts` without JSDoc next to each page, which is how a current export looks. */
+  sources?: Record<string, string>;
+};
+
+async function writeFixtureRoot({ index, pages, sources }: FixtureRoot): Promise<string> {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-skill-'));
   fixtureDirectories.push(root);
   const sourceDirectory = path.join(root, path.dirname(PACKAGE_INDEX_FILE));
+  const pageSources = Object.fromEntries(
+    Object.keys(pages).map(pagePath => [pagePath.replace(/\.md$/, '.ts'), 'export {};\n'])
+  );
 
   await fs.mkdir(sourceDirectory, { recursive: true });
   await fs.writeFile(path.join(root, PACKAGE_INDEX_FILE), index);
 
-  for (const [relativePath, content] of Object.entries(pages)) {
-    const pagePath = path.join(sourceDirectory, relativePath);
-    await fs.mkdir(path.dirname(pagePath), { recursive: true });
-    await fs.writeFile(pagePath, content);
+  for (const [relativePath, content] of Object.entries({ ...pages, ...(sources ?? pageSources) })) {
+    const filePath = path.join(sourceDirectory, relativePath);
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, content);
   }
 
   return root;
-}
-
-async function renderFixtureDoc(name: string, source: string): Promise<string> {
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'react-simplikit-skill-doc-'));
-  fixtureDirectories.push(directory);
-  const sourceFilePath = path.join(directory, `${name}.ts`);
-
-  await fs.writeFile(sourceFilePath, source);
-
-  return renderEnglishDoc(name, sourceFilePath);
 }

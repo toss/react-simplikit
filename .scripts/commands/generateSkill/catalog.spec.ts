@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'vitest';
 
-import { extractDeprecation, extractDescription, getCategory, readDeprecatedNames, renderSkill } from './catalog.ts';
+import { extractDescription, getCategory, readCatalogNames, readDeprecatedNames, renderSkill } from './catalog.ts';
 
 describe('getCategory', () => {
   it('derives the category from the export source path', () => {
@@ -43,42 +43,12 @@ into one.
     assert.equal(extractDescription(markdown, 'useX'), 'A React hook that manages a Set as state');
   });
 
-  it('skips the deprecation notice above the paragraph, whatever its title', () => {
-    const english = `# useOld\n\n::: warning Deprecated\nUse \`useNew\` instead.\n:::\n\n\`useOld\` does something. More.\n`;
-    const korean = `# useOld\n\n::: warning 더 이상 권장하지 않음\n대신 \`useNew\` 훅을 사용하세요.\n:::\n\n무언가를 하는 훅이에요. 더.\n`;
-
-    assert.equal(extractDescription(english, 'useOld'), '`useOld` does something.');
-    assert.equal(extractDescription(korean, 'useOld'), '무언가를 하는 훅이에요.');
-  });
-
   it('rejects a page that does not open with a paragraph', () => {
     assert.throws(
       () => extractDescription('# useX\n\n## Interface\n', 'useX'),
       /must open with a description paragraph/
     );
     assert.throws(() => extractDescription('# useX\n', 'useX'), /must open with a description paragraph/);
-    assert.throws(
-      () => extractDescription('# useX\n\n::: warning Deprecated\nUse `useY` instead.\n:::\n', 'useX'),
-      /must open with a description paragraph/
-    );
-  });
-});
-
-describe('extractDeprecation', () => {
-  it('returns the notice under the heading on one line', () => {
-    const markdown = `# useOld\n\n::: warning Deprecated\nUse \`useNew\` instead.\nIt goes away\nlater.\n:::\n\n\`useOld\` does something.\n`;
-
-    assert.equal(extractDeprecation(markdown), 'Use `useNew` instead. It goes away later.');
-  });
-
-  it('returns undefined for a page without the notice under its heading', () => {
-    assert.equal(extractDeprecation('# useX\n\n`useX` does something.\n'), undefined);
-    assert.equal(
-      extractDeprecation(
-        '# useX\n\n`useX` does something.\n\n## Notes\n\n::: warning Deprecated\nThe `wait` option.\n:::\n'
-      ),
-      undefined
-    );
   });
 });
 
@@ -90,6 +60,7 @@ describe('renderSkill', () => {
         { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
         { name: 'useToggle', category: 'hooks', description: 'Toggles a | boolean.' },
       ],
+      deprecatedEntries: [],
     });
 
     assert.equal(
@@ -115,13 +86,11 @@ describe('renderSkill', () => {
     );
   });
 
-  it('lists a deprecated entry under Deprecated, not under its category', () => {
+  it('lists a deprecated entry under Deprecated as an unlinked row with its notice on one line', () => {
     const rendered = renderSkill({
       template: '# Skill\n\n## Catalog\n\n<!-- CATALOG -->\n\n## Learn more\n',
-      entries: [
-        { name: 'useNew', category: 'hooks', description: 'Does it.' },
-        { name: 'useOld', category: 'hooks', description: 'Does it.', deprecation: 'Use `useNew` | not this.' },
-      ],
+      entries: [{ name: 'useNew', category: 'hooks', description: 'Does it.' }],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` | not this.\nIt goes away\nlater.' }],
     });
 
     assert.equal(
@@ -142,7 +111,7 @@ These still work but are kept only for backward compatibility. Do not use them i
 
 | Name | Notice |
 | --- | --- |
-| [\`useOld\`](references/useOld.md) | Use \`useNew\` \\| not this. |
+| \`useOld\` | Use \`useNew\` \\| not this. It goes away later. |
 
 ## Learn more
 `
@@ -150,19 +119,35 @@ These still work but are kept only for backward compatibility. Do not use them i
   });
 
   it('rejects a template without the placeholder', () => {
-    assert.throws(() => renderSkill({ template: '# Skill\n', entries: [] }), /<!-- CATALOG -->/);
+    assert.throws(() => renderSkill({ template: '# Skill\n', entries: [], deprecatedEntries: [] }), /<!-- CATALOG -->/);
+  });
+});
+
+describe('readCatalogNames', () => {
+  it('reads the linked rows only, so a deprecated export is not counted as documented', () => {
+    const skill = renderSkill({
+      template: '# Skill\n\n| Need | Use |\n| --- | --- |\n| Toggle | `useToggle` |\n\n<!-- CATALOG -->\n',
+      entries: [
+        { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
+        { name: 'useNew', category: 'hooks', description: 'Does it.' },
+      ],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` instead.' }],
+    });
+
+    assert.deepEqual(readCatalogNames(skill), ['useNew', 'isIOS']);
   });
 });
 
 describe('readDeprecatedNames', () => {
   it('reads only the names in the Deprecated table of the rendered catalog', () => {
     const skill = renderSkill({
-      template: '# Skill\n\n| Need | Use |\n| --- | --- |\n| Toggle | `useToggle` |\n\n<!-- CATALOG -->\n',
+      template:
+        '# Skill\n\n| Need | Use |\n| --- | --- |\n| `useBefore` | Toggle |\n\n<!-- CATALOG -->\n\n## Learn more\n\n| Name | Link |\n| --- | --- |\n| `useAfter` | Docs |\n',
       entries: [
         { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
         { name: 'useNew', category: 'hooks', description: 'Does it.' },
-        { name: 'useOld', category: 'hooks', description: 'Does it.', deprecation: 'Use `useNew` instead.' },
       ],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` instead.' }],
     });
 
     assert.deepEqual(readDeprecatedNames(skill), ['useOld']);
@@ -172,6 +157,7 @@ describe('readDeprecatedNames', () => {
     const skill = renderSkill({
       template: '<!-- CATALOG -->\n',
       entries: [{ name: 'useNew', category: 'hooks', description: 'Does it.' }],
+      deprecatedEntries: [],
     });
 
     assert.deepEqual(readDeprecatedNames(skill), []);

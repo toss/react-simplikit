@@ -2,6 +2,7 @@
 
 `useCallbackOnce` is a React hook that runs a callback only once until `deps` change, no matter how many times the returned function is called.
 This is useful for one-time operations that should not be repeated, even if the component re-renders.
+In v0 this hook was named `useCallbackOncePerRender`. The old name still works but is deprecated.
 
 ## Interface
 

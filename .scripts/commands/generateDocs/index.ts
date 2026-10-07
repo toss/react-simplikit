@@ -1,4 +1,4 @@
-import { parse, Spec as OriginSpec, tokenizers } from 'comment-parser';
+import { parse, Spec as OriginSpec } from 'comment-parser';
 import glob from 'fast-glob';
 import * as fs from 'fs/promises';
 import { Listr } from 'listr2';
@@ -6,6 +6,7 @@ import path from 'path';
 import * as prettier from 'prettier';
 
 import { getRootPath } from '../../utils/getRootPath.ts';
+import { parseOptions, readDeprecation, trimBlock } from '../../utils/jsdoc.ts';
 import { generateSkill } from '../generateSkill/index.ts';
 
 type Spec = Pick<OriginSpec, 'type' | 'name' | 'description' | 'optional' | 'default'>;
@@ -23,10 +24,17 @@ const prettierConfig: prettier.Options = {
  *
  * `verifyDocs.ts` compares a committed page against this, so the formatting applied here has to be
  * the same formatting the page is written with — hence prettier runs inside, not at the call site.
+ *
+ * Throws for an export whose JSDoc is `@deprecated`: it has no page, and the page of the export
+ * that replaces it says what it was renamed from.
  */
 export async function renderEnglishDoc(name: string, sourceFilePath: string): Promise<string> {
   const documentPath = `${path.dirname(sourceFilePath)}/${name}.md`;
-  const docSource = await jsdocToMd(name, parseJSDoc(await fs.readFile(sourceFilePath, 'utf-8')));
+  const source = await fs.readFile(sourceFilePath, 'utf-8');
+
+  assertHasPage(name, source);
+
+  const docSource = await jsdocToMd(name, parseJSDoc(source));
 
   return prettier.format(docSource, {
     ...(await prettier.resolveConfig(documentPath)),
@@ -36,43 +44,50 @@ export async function renderEnglishDoc(name: string, sourceFilePath: string): Pr
 
 export async function generateDocs(names: string[]) {
   const tasks = new Listr([], { concurrent: 10 });
+  const targets = names.map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]]);
 
-  names
-    .map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]])
-    .forEach(([name, sourceFilePath]) => {
-      const subCtx: { document?: string } = {};
-      tasks.add([
-        {
-          title: `Generate documents: ${sourceFilePath}`,
-          task: async (_, task) =>
-            task.newListr<{ document?: string }>(
-              [
-                {
-                  title: `Convert JSDoc to markdown`,
-                  task: async ctx => {
-                    ctx.document = await renderEnglishDoc(name, sourceFilePath);
-                  },
-                },
-                {
-                  title: `Write English document`,
-                  task: async ctx => {
-                    const { document } = ctx;
+  // Checked before any task runs: the tasks below collect their errors instead of exiting, and a
+  // deprecated name has to fail the command without writing anything.
+  for (const [name, sourceFilePath] of targets) {
+    if (sourceFilePath !== undefined) {
+      assertHasPage(name, await fs.readFile(sourceFilePath, 'utf-8'));
+    }
+  }
 
-                    if (document != null) {
-                      // Written already formatted: `.prettierignore`'s `src/hooks/**/*.md` is anchored to the
-                      // repo root and never reaches packages/, so prettier (yarn fix, autofix.ci) reformats
-                      // these pages later. `generateSkill()` below copies them, and an unformatted copy
-                      // would drift from the page the moment prettier runs.
-                      await fs.writeFile(`${path.dirname(sourceFilePath)}/${name}.md`, document);
-                    }
-                  },
+  targets.forEach(([name, sourceFilePath]) => {
+    const subCtx: { document?: string } = {};
+    tasks.add([
+      {
+        title: `Generate documents: ${sourceFilePath}`,
+        task: async (_, task) =>
+          task.newListr<{ document?: string }>(
+            [
+              {
+                title: `Convert JSDoc to markdown`,
+                task: async ctx => {
+                  ctx.document = await renderEnglishDoc(name, sourceFilePath);
                 },
-              ],
-              { concurrent: false, ctx: subCtx, exitOnError: false }
-            ),
-        },
-      ]);
-    });
+              },
+              {
+                title: `Write English document`,
+                task: async ctx => {
+                  const { document } = ctx;
+
+                  if (document != null) {
+                    // Written already formatted: `.prettierignore`'s `src/hooks/**/*.md` is anchored to the
+                    // repo root and never reaches packages/, so prettier (yarn fix, autofix.ci) reformats
+                    // these pages later. `generateSkill()` below copies them, and an unformatted copy
+                    // would drift from the page the moment prettier runs.
+                    await fs.writeFile(`${path.dirname(sourceFilePath)}/${name}.md`, document);
+                  }
+                },
+              },
+            ],
+            { concurrent: false, ctx: subCtx, exitOnError: false }
+          ),
+      },
+    ]);
+  });
 
   await tasks.run();
 
@@ -80,15 +95,13 @@ export async function generateDocs(names: string[]) {
   await generateSkill();
 }
 
-// These tags carry no name, but the stock name tokenizer still takes the description's first word
-// as one ("An object…" became "object…"). Skipping it for them keeps the sentence whole.
-const NAMELESS_TAGS = new Set(['returns', 'remarks', 'description', 'deprecated']);
-const skipNameForNamelessTags = (spec: OriginSpec) => (NAMELESS_TAGS.has(spec.tag) ? spec : tokenizers.name()(spec));
-
-const parseOptions = (spacing: 'compact' | 'preserve') => ({
-  spacing,
-  tokenizers: [tokenizers.tag(), tokenizers.type(spacing), skipNameForNamelessTags, tokenizers.description(spacing)],
-});
+function assertHasPage(name: string, source: string) {
+  if (readDeprecation(source) != null) {
+    throw new Error(
+      `${name} is @deprecated, and a deprecated export has no documentation page — document the rename on its replacement's page instead`
+    );
+  }
+}
 
 function parseJSDoc(source: string) {
   const parsedComments = parse(source, parseOptions('compact'));
@@ -105,7 +118,6 @@ function parseJSDoc(source: string) {
     preservedComment?.tags.find(tag => tag.tag === 'description')?.description ?? preservedComment?.description ?? ''
   );
   const remarks = trimBlock(preservedComment?.tags.find(tag => tag.tag === 'remarks')?.description ?? '');
-  const deprecation = readDeprecation(source);
 
   const params = targetComment.tags.filter(tag => tag.tag === 'param');
 
@@ -143,7 +155,6 @@ function parseJSDoc(source: string) {
   return {
     description,
     remarks,
-    deprecation,
     templates,
     examples,
     params,
@@ -153,32 +164,6 @@ function parseJSDoc(source: string) {
         : { ...returns[0], name: '', description: parsedReturns.description, optional: true },
     nestedValueOfReturns: parsedReturns?.nested,
   };
-}
-
-/**
- * The `@deprecated` text of the comment a page is generated from (the last one in the file), or
- * `undefined` when there is none. `verifySkill.ts` reads it too, so a `@deprecated` on another
- * comment in the file, such as an options type, does not mark the export itself.
- */
-export function readDeprecation(source: string): string | undefined {
-  const tag = parse(source, parseOptions('preserve'))
-    .at(-1)
-    ?.tags.find(tag => tag.tag === 'deprecated');
-
-  if (tag == null) {
-    return undefined;
-  }
-
-  const text = trimBlock(tag.description);
-  const namesReplacement = /`[^`]+`/.test(text);
-
-  if (!namesReplacement) {
-    throw new Error(
-      '@deprecated must name the replacement in backticks, e.g. "@deprecated Use `newName` instead.", not with {@link newName}'
-    );
-  }
-
-  return text;
 }
 
 /** JSDoc's own caption syntax; the title renders as a heading above the example's code block. */
@@ -242,7 +227,7 @@ function endSentence(description: string) {
 }
 
 async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
-  const { templates, description, remarks, deprecation, examples, params, returns, nestedValueOfReturns } = jsdoc;
+  const { templates, description, remarks, examples, params, returns, nestedValueOfReturns } = jsdoc;
 
   const paramsProps = params.reduce<Array<[Spec, Spec[]]>>(
     (acc, param) => {
@@ -279,11 +264,9 @@ async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
         return `${rest}${param.name}${optional}: ${type}${param.default == null ? '' : ` = ${param.default}`}`;
       });
 
-  // The notice sits above the description so the page opens with it. `extractDescription` skips it,
-  // and the skill catalog reads it back to list the export as deprecated.
   return `# ${name}
 
-${deprecation == null ? '' : `::: warning Deprecated\n${deprecation}\n:::\n\n`}${description}
+${description}
 
 ## Interface
 
@@ -313,18 +296,6 @@ ${remarks.length === 0 ? '' : `\n## Notes\n\n${remarks}\n`}`;
 }
 
 const LIST_ITEM = /^[-*]\s/;
-
-/**
- * `@description` and `@remarks` are Markdown and go to the page as written: a line break inside a
- * paragraph renders as a space, and fences, numbered and nested lists keep their meaning.
- */
-function trimBlock(text: string) {
-  return text
-    .split('\n')
-    .map(line => line.trimEnd())
-    .join('\n')
-    .trim();
-}
 
 /**
  * The `@returns` intro lands in an HTML attribute where a line break becomes `<br />`, so the

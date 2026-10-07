@@ -4,9 +4,9 @@ import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-import { readDeprecation } from './commands/generateDocs/index.ts';
-import { readDeprecatedNames } from './commands/generateSkill/catalog.ts';
+import { readCatalogNames, readDeprecatedNames } from './commands/generateSkill/catalog.ts';
 import { generateSkill, PACKAGE_INDEX_FILE, SKILL_DIRECTORY } from './commands/generateSkill/index.ts';
+import { collectDeprecatedExports } from './utils/collectDeprecatedExports.ts';
 import { collectPublicExports } from './utils/collectPublicExports.ts';
 import { getRootPath } from './utils/getRootPath.ts';
 
@@ -66,11 +66,21 @@ for (const [label, contents] of [
 }
 
 const publicExports = await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE));
-const catalogNames = [...skill.matchAll(/^\| \[`([^`]+)`\]\(references\/\1\.md\) \| .+ \|$/gm)].map(match => match[1]);
+const deprecatedExports = await collectDeprecatedExports(root, publicExports);
+const documentedExports = publicExports.filter(name => !deprecatedExports.includes(name));
 
-assert.deepEqual(catalogNames.toSorted(), publicExports, 'the catalog must list exactly the public exports');
+assert.deepEqual(
+  readCatalogNames(skill).toSorted(),
+  documentedExports,
+  'the catalog must link exactly the public exports that are not @deprecated — run `yarn skill:gen`'
+);
+assert.deepEqual(
+  readDeprecatedNames(skill).toSorted(),
+  deprecatedExports,
+  'the Deprecated section must list exactly the exports whose JSDoc is @deprecated — run `yarn skill:gen`'
+);
 
-for (const name of publicExports) {
+for (const name of documentedExports) {
   const page = await fs.readFile(path.join(skillDirectory, 'references', `${name}.md`), 'utf8');
 
   // References are one level deep: a page that links to another local page would be read as a dead link.
@@ -85,30 +95,6 @@ for (const name of publicExports) {
     `references/${name}.md still mentions the legacy package — fix the JSDoc example and run \`yarn docs:gen ${name}\``
   );
 }
-
-// The generator only sees the pages, so this reads the source to catch a deprecated export that
-// the skill would still list as current.
-const deprecatedExports: string[] = [];
-
-for (const name of publicExports) {
-  const [sourceFilePath] = await glob(`packages/react-simplikit/src/**/${name}.ts?(x)`, {
-    absolute: true,
-    cwd: root,
-    ignore: ['**/*.spec.*', '**/*.test.*'],
-  });
-
-  assert.ok(sourceFilePath, `${name} is exported but has no source file`);
-
-  if (readDeprecation(await fs.readFile(sourceFilePath, 'utf8')) != null) {
-    deprecatedExports.push(name);
-  }
-}
-
-assert.deepEqual(
-  readDeprecatedNames(skill).toSorted(),
-  deprecatedExports,
-  'the Deprecated section must list exactly the exports whose JSDoc is @deprecated — run `yarn docs:gen <name>`'
-);
 
 // The hand-written table may only name catalog entries, or it drifts from the source.
 const commonNeeds = skill.slice(skill.indexOf('## Common needs'), skill.indexOf('## Workflow'));

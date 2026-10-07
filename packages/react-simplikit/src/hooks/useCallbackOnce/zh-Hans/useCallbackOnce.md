@@ -1,6 +1,6 @@
 # useCallbackOnce
 
-`useCallbackOnce` 是一个 React Hook，在 `deps` 变化之前，无论返回的函数被调用多少次，它都只会执行一次回调函数。它适用于那些即使组件重复渲染也不应重复执行的一次性操作。
+`useCallbackOnce` 是一个 React Hook，在 `deps` 变化之前，无论返回的函数被调用多少次，它都只会执行一次回调函数。它适用于那些即使组件重复渲染也不应重复执行的一次性操作。在 v0 中，这个 Hook 名为 `useCallbackOncePerRender`。旧名称仍然可用，但已弃用。
 
 ## 接口
 

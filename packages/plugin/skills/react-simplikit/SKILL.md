@@ -146,7 +146,7 @@ These still work but are kept only for backward compatibility. Do not use them i
 
 | Name | Notice |
 | --- | --- |
-| [`useCallbackOncePerRender`](references/useCallbackOncePerRender.md) | Use `useCallbackOnce` instead. |
+| `useCallbackOncePerRender` | Use `useCallbackOnce` instead. |
 
 ## Learn more
 
