@@ -5,14 +5,17 @@ import path from 'node:path';
 
 import { renderEnglishDoc } from './commands/generateDocs/index.ts';
 import { PACKAGE_INDEX_FILE } from './commands/generateSkill/index.ts';
+import { collectDeprecatedExports } from './utils/collectDeprecatedExports.ts';
 import { collectPublicExports } from './utils/collectPublicExports.ts';
 import { getRootPath } from './utils/getRootPath.ts';
 
 const root = getRootPath();
 const publicExports = await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE));
+const deprecatedExports = new Set(await collectDeprecatedExports(root, publicExports));
 
 // The English pages are generated from JSDoc, and `verifySkill.ts` checks the skill against those
 // pages — so a page that drifts from its source carries the drift into the skill unnoticed.
+// A deprecated export is the exception: it has no page, and its replacement's page names it.
 for (const name of publicExports) {
   const [sourceFilePath] = await glob(`packages/react-simplikit/src/**/${name}.ts?(x)`, {
     absolute: true,
@@ -23,6 +26,22 @@ for (const name of publicExports) {
   assert.ok(sourceFilePath, `${name} is exported but has no source file`);
 
   const documentPath = path.join(path.dirname(sourceFilePath), `${name}.md`);
+
+  if (deprecatedExports.has(name)) {
+    // The sidebar, the reference index and the legacy redirects list one entry per folder, so an
+    // alias in a folder of its own would be listed there with no page behind it.
+    assert.notEqual(
+      path.basename(path.dirname(sourceFilePath)),
+      name,
+      `${name} is @deprecated, so it cannot keep a folder of its own — move it into the folder of the export that replaces it`
+    );
+    assert.equal(
+      await pathExists(documentPath),
+      false,
+      `${path.relative(root, documentPath)} must not exist: ${name} is @deprecated, and a deprecated export has no documentation page — delete it and its translations, and say what was renamed on the replacement's page`
+    );
+    continue;
+  }
 
   assert.equal(
     await fs.readFile(documentPath, 'utf8'),
@@ -55,5 +74,14 @@ for (const page of handWrittenPages) {
     for (const [, name] of text.matchAll(pattern)) {
       assert.equal(exportNames.has(name), true, `${page} names \`${name}\`, which is not a public export`);
     }
+  }
+}
+
+async function pathExists(target: string): Promise<boolean> {
+  try {
+    await fs.access(target);
+    return true;
+  } catch {
+    return false;
   }
 }

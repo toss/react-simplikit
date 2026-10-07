@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
+import { useCallbackOnce } from './useCallbackOnce.ts';
 import { useCallbackOncePerRender } from './useCallbackOncePerRender.ts';
 
 function useCaller(callback: (...args: any) => any, deps: DependencyList) {
@@ -13,20 +14,17 @@ function useCaller(callback: (...args: any) => any, deps: DependencyList) {
   }, deps);
 }
 
-describe('useCallbackOncePerRender', () => {
+describe('useCallbackOnce', () => {
   it('is safe on server side rendering', () => {
     const mockFn = vi.fn();
-    renderHookSSR.serverOnly(() => useCallbackOncePerRender(mockFn, []));
+    renderHookSSR.serverOnly(() => useCallbackOnce(mockFn, []));
   });
 
   it('should execute callback only once', async () => {
     const mockFn = vi.fn();
-    const { rerender } = await renderHookSSR(
-      ({ effect }) => useCaller(useCallbackOncePerRender(mockFn, []), [effect]),
-      {
-        initialProps: { effect: 0 },
-      }
-    );
+    const { rerender } = await renderHookSSR(({ effect }) => useCaller(useCallbackOnce(mockFn, []), [effect]), {
+      initialProps: { effect: 0 },
+    });
 
     rerender({ effect: 1 });
     rerender({ effect: 2 });
@@ -38,7 +36,7 @@ describe('useCallbackOncePerRender', () => {
   it('should reset and execute again when dependencies change', async () => {
     const mockFn = vi.fn();
     const { rerender } = await renderHookSSR(
-      ({ effect, call }) => useCaller(useCallbackOncePerRender(mockFn, [call]), [effect, call]),
+      ({ effect, call }) => useCaller(useCallbackOnce(mockFn, [call]), [effect, call]),
       {
         initialProps: { effect: 0, call: 0 },
       }
@@ -55,8 +53,12 @@ describe('useCallbackOncePerRender', () => {
 
   it('should pass arguments to callback', async () => {
     const mockFn = vi.fn();
-    const { result } = await renderHookSSR(() => useCallbackOncePerRender(mockFn, []));
+    const { result } = await renderHookSSR(() => useCallbackOnce(mockFn, []));
     result.current('test', 123);
     expect(mockFn).toHaveBeenCalledWith('test', 123);
+  });
+
+  it('is also exported under the deprecated name useCallbackOncePerRender', () => {
+    expect(useCallbackOncePerRender).toBe(useCallbackOnce);
   });
 });

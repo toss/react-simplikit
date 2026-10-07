@@ -5,20 +5,21 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 /**
  * @description
- * `useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once, regardless of how many times it's called.
+ * `useCallbackOnce` is a React hook that runs a callback only once until `deps` change, no matter how many times the returned function is called.
  *  This is useful for one-time operations that should not be repeated, even if the component re-renders.
+ *  In v0 this hook was named `useCallbackOncePerRender`. The old name still works but is deprecated.
  *
  * @template {(...args: any[]) => void} F - The type of the callback function.
- * @param {() => void} callback - The callback function to be executed once.
- * @param {DependencyList} deps - Dependencies array that will trigger a new one-time execution when changed.
+ * @param {F} callback - The callback function to be executed once. It receives the arguments passed to the returned function.
+ * @param {DependencyList} deps - Dependencies array. When it changes, the returned function can run the callback once more.
  *
- * @returns {(...args: any[]) => void} A memoized function that will only execute once until dependencies change.
+ * @returns {(...args: Parameters<F>) => void} A function whose reference never changes. It runs the callback only once until `deps` change.
  *
  * @example
- * import { useCallbackOncePerRender } from 'react-simplikit';
+ * import { useCallbackOnce } from 'react-simplikit';
  *
  * function Component() {
- *   const handleOneTimeEvent = useCallbackOncePerRender(() => {
+ *   const handleOneTimeEvent = useCallbackOnce(() => {
  *     console.log('This will only run once');
  *   }, []);
  *
@@ -28,18 +29,18 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  * @example
  * // With dependencies
  * function TrackingComponent({ userId }: { userId: string }) {
- *   const trackUserVisit = useCallbackOncePerRender(() => {
+ *   const trackUserVisit = useCallbackOnce(() => {
  *     analytics.trackVisit(userId);
  *   }, [userId]);
  *
  *   useEffect(() => {
  *     trackUserVisit();
- *   }, [trackUserVisit]);
+ *   }, [trackUserVisit, userId]);
  *
  *   return <div>User page</div>;
  * }
  */
-export function useCallbackOncePerRender<F extends (...args: any[]) => void>(callback: F, deps: DependencyList) {
+export function useCallbackOnce<F extends (...args: any[]) => void>(callback: F, deps: DependencyList) {
   // Same reason as `useAsyncEffect`: the body itself is compiler-clean, but React Compiler
   // bails on any function carrying a React ESLint suppression, and the
   // `react-hooks/exhaustive-deps` suppression below is unavoidable for a caller-supplied `deps`.

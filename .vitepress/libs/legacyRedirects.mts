@@ -43,8 +43,15 @@ const RETIRED_MOBILE_PAGES = new Set([
   'subscribeKeyboardHeight',
 ]);
 
+// A renamed export keeps no page under its old name, so its old URLs point at the new page: the
+// current one and the pre-flattening one its folder used to produce.
+const RENAMED_REFERENCE_REDIRECTS: RedirectPair[] = [
+  { from: 'hooks/useCallbackOncePerRender.html', to: 'hooks/useCallbackOnce.html' },
+  { from: 'core/hooks/useCallbackOncePerRender.html', to: 'hooks/useCallbackOnce.html' },
+];
+
 export function collectLegacyRedirects(): RedirectPair[] {
-  return [...GUIDE_REDIRECTS, ...collectReferenceRedirects()].flatMap(pair => [
+  return [...GUIDE_REDIRECTS, ...collectReferenceRedirects(), ...RENAMED_REFERENCE_REDIRECTS].flatMap(pair => [
     pair,
     ...localeDirectories.map(locale => ({ from: `${locale}/${pair.from}`, to: `${locale}/${pair.to}` })),
   ]);

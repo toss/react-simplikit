@@ -5,7 +5,7 @@ export { useAsyncEffect } from './hooks/useAsyncEffect/index.ts';
 export { useAvoidKeyboard } from './hooks/useAvoidKeyboard/index.ts';
 export { useBodyScrollLock } from './hooks/useBodyScrollLock/index.ts';
 export { useBooleanState } from './hooks/useBooleanState/index.ts';
-export { useCallbackOncePerRender } from './hooks/useCallbackOncePerRender/index.ts';
+export { useCallbackOnce, useCallbackOncePerRender } from './hooks/useCallbackOnce/index.ts';
 export { useConditionalEffect } from './hooks/useConditionalEffect/index.ts';
 export { useControlledState } from './hooks/useControlledState/index.ts';
 export { useCounter } from './hooks/useCounter/index.ts';

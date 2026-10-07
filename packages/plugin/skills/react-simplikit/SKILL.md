@@ -76,7 +76,7 @@ Backticks in this table mark catalog entries only.
 | [`useAvoidKeyboard`](references/useAvoidKeyboard.md) | `useAvoidKeyboard` is a React hook that helps fixed-bottom elements avoid the on-screen keyboard. |
 | [`useBodyScrollLock`](references/useBodyScrollLock.md) | `useBodyScrollLock` is a React hook that locks body scroll while the component is mounted. |
 | [`useBooleanState`](references/useBooleanState.md) | `useBooleanState` is a React hook that simplifies managing a boolean state. |
-| [`useCallbackOncePerRender`](references/useCallbackOncePerRender.md) | `useCallbackOncePerRender` is a React hook that ensures a callback function is executed only once, regardless of how many times it's called. |
+| [`useCallbackOnce`](references/useCallbackOnce.md) | `useCallbackOnce` is a React hook that runs a callback only once until `deps` change, no matter how many times the returned function is called. |
 | [`useConditionalEffect`](references/useConditionalEffect.md) | `useConditionalEffect` is a React hook that conditionally executes effects based on a predicate function. |
 | [`useControlledState`](references/useControlledState.md) | `useControlledState` is a React hook that allows you to control both controlled and uncontrolled states. |
 | [`useCounter`](references/useCounter.md) | `useCounter` is a React hook that manages a numeric counter state with increment, decrement, and reset capabilities. |
@@ -139,6 +139,14 @@ Backticks in this table mark catalog entries only.
 | [`mergeProps`](references/mergeProps.md) | `mergeProps` is a utility function that merges multiple props objects into a single object. |
 | [`mergeRefs`](references/mergeRefs.md) | This function takes multiple refs (RefObject or RefCallback) and returns a single ref that updates all provided refs. |
 | [`subscribeKeyboardHeight`](references/subscribeKeyboardHeight.md) | `subscribeKeyboardHeight` is a utility function that subscribes to changes in the on-screen keyboard height. |
+
+### Deprecated
+
+These still work but are kept only for backward compatibility. Do not use them in new code; each row names the replacement.
+
+| Name | Notice |
+| --- | --- |
+| `useCallbackOncePerRender` | Use `useCallbackOnce` instead. |
 
 ## Learn more
 
