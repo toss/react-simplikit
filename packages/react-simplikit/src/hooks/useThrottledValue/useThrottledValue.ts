@@ -7,12 +7,10 @@ type ThrottleOptions = {
   trailing?: boolean;
 };
 
-type Edge = 'leading' | 'trailing';
-
 /**
  * @description
  * `useThrottledValue` is a React hook that returns a throttled copy of the given value.
- * The caller keeps owning the state; the returned value follows it at most once per `wait` milliseconds,
+ * The caller keeps owning the state; the returned value follows it at most once per `throttleMs` milliseconds,
  * which is useful for driving expensive renders from scroll position, pointer position, or an element's
  * size on resize.
  *
@@ -21,15 +19,15 @@ type Edge = 'leading' | 'trailing';
  * If both `leading` and `trailing` are `false`, the returned value never updates.
  *
  * The value is compared by reference. Passing a new object or array on every render keeps
- * the returned value updating every `wait` milliseconds; stabilize the reference first, for
+ * the returned value updating every `throttleMs` milliseconds; stabilize the reference first, for
  * example with `usePreservedReference`.
  *
  * @template T - The type of the value.
  * @param {T} value - The value to throttle.
- * @param {number} wait - The length of the throttle window in milliseconds.
+ * @param {number} throttleMs - The length of the throttle window in milliseconds.
  * @param {ThrottleOptions} [options] - Configuration options for throttle behavior.
  * @param {boolean} [options.leading=true] - If `true`, the first change in a window is applied immediately.
- * @param {boolean} [options.trailing=true] - If `true`, the last change in a window is applied `wait` milliseconds after that change.
+ * @param {boolean} [options.trailing=true] - If `true`, the last change in a window is applied `throttleMs` milliseconds after that change.
  *
  * @returns {T} The throttled value.
  *
@@ -50,12 +48,13 @@ type Edge = 'leading' | 'trailing';
  */
 export function useThrottledValue<T>(
   value: T,
-  wait: number,
+  throttleMs: number,
   { leading = true, trailing = true }: ThrottleOptions = {}
 ): T {
   const [throttledValue, setThrottledValue] = useState(() => value);
-  const throttled = useThrottle((next: T) => setThrottledValue(() => next), wait, {
-    edges: toEdges(leading, trailing),
+  const throttled = useThrottle((next: T) => setThrottledValue(() => next), throttleMs, {
+    leading,
+    trailing,
   });
   const lastForwardedRef = useRef(value);
 
@@ -74,17 +73,4 @@ export function useThrottledValue<T>(
   );
 
   return throttledValue;
-}
-
-// Adapts this hook's `leading` / `trailing` booleans to the `edges` array `useThrottle` still takes.
-// Delete once `useThrottle` accepts the booleans, and pass the options straight through.
-function toEdges(leading: boolean, trailing: boolean): Edge[] {
-  const edges: Edge[] = [];
-  if (leading) {
-    edges.push('leading');
-  }
-  if (trailing) {
-    edges.push('trailing');
-  }
-  return edges;
 }

@@ -43,7 +43,7 @@ Backticks in this table mark catalog entries only.
 | Long press / double click                                           | `useLongPress` / `useDoubleClick`        |
 | Element enters or leaves the viewport                               | `useIntersectionObserver`                |
 | How long an element stayed visible (impression tracking)            | `useImpressionRef` / `ImpressionArea`    |
-| React to tab / page visibility changes with a callback              | `useVisibilityEvent`                     |
+| React to tab / page visibility changes with a callback              | `usePageVisibilityEffect`                |
 | Read the current tab / page visibility as state                     | `usePageVisibility`                      |
 | Device location                                                     | `useGeolocation`                         |
 | Combine multiple refs into one                                      | `mergeRefs`                              |

@@ -7,12 +7,7 @@
 ```ts
 function useBooleanState(
   initialValue: boolean | (() => boolean) = false
-): readonly [
-  state: boolean,
-  setTrue: () => void,
-  setFalse: () => void,
-  toggle: () => void,
-];
+): readonly [state: boolean, actions: BooleanStateActions];
 ```
 
 ### 파라미터
@@ -27,8 +22,8 @@ function useBooleanState(
 
 <Interface
   name=""
-  type="readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
-  description="다음 값들을 포함하는 튜플이에요:"
+  type="readonly [state: boolean, actions: BooleanStateActions]"
+  description="상태와 상태를 바꾸는 액션을 담은 튜플이에요."
   :nested="[
     {
       name: 'state',
@@ -37,19 +32,19 @@ function useBooleanState(
       description: '현재 상태 값이에요.',
     },
     {
-      name: 'setTrue',
+      name: 'actions.setTrue',
       type: '() => void',
       required: false,
       description: '상태를 <code>true</code>로 설정하는 함수예요.',
     },
     {
-      name: 'setFalse',
+      name: 'actions.setFalse',
       type: '() => void',
       required: false,
       description: '상태를 <code>false</code>로 설정하는 함수예요.',
     },
     {
-      name: 'toggle',
+      name: 'actions.toggle',
       type: '() => void',
       required: false,
       description: '상태를 토글하는 함수예요.',
@@ -60,6 +55,6 @@ function useBooleanState(
 ## 예시
 
 ```tsx
-const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
+const [open, { setTrue: openBottomSheet, setFalse: closeBottomSheet }] =
   useBooleanState(false);
 ```

@@ -1,6 +1,6 @@
 # useStorageState
 
-리액트 훅으로, `useState`처럼 작동하지만 상태 값을 브라우저 저장소에 저장해요. 이 값은 페이지를 새로고침해도 유지되며, `localStorage`를 사용할 경우 탭 간에 공유될 수 있어요.
+`useStorageState`는 `useState`처럼 작동하지만 상태 값을 브라우저 저장소에 저장하는 리액트 훅이에요. 이 값은 페이지를 새로고침해도 유지되며, `localStorage`를 사용할 경우 탭 간에 공유될 수 있어요.
 
 ## 인터페이스
 
@@ -10,8 +10,7 @@ function useStorageState<T>(
   options?: Object
 ): readonly [
   state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-  refreshState: () => void,
+  actions: StorageStateActions<Serializable<T> | undefined>,
 ];
 ```
 
@@ -62,8 +61,8 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="튜플이에요:"
+  type="readonly [state: Serializable<T> | undefined, actions: StorageStateActions<Serializable<T> | undefined>]"
+  description="상태와 상태를 바꾸는 액션을 담은 튜플이에요."
   :nested="[
     {
       name: 'state',
@@ -72,13 +71,13 @@ function useStorageState<T>(
       description: '저장소에서 가져온 현재 상태 값이에요.',
     },
     {
-      name: 'setState',
+      name: 'actions.setValue',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
       description: '상태를 업데이트하고 지속하는 함수예요.',
     },
     {
-      name: 'refreshState',
+      name: 'actions.refresh',
       type: '() => void',
       required: false,
       description: '저장소에서 상태를 다시 가져오는 함수예요.',
@@ -93,12 +92,12 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
+  const [count, { setValue }] = useStorageState<number>('counter', {
     defaultValue: 0,
   });
 
   return (
-    <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>
+    <button onClick={() => setValue(prev => prev + 1)}>Count: {count}</button>
   );
 }
 ```

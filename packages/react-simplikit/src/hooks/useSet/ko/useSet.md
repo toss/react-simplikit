@@ -5,15 +5,15 @@
 ## 인터페이스
 
 ```ts
-function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
+function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T>;
 ```
 
 ### 파라미터
 
 <Interface
-  name="initialState"
+  name="initialValue"
   type="SetOrValues<T>"
-  description="초기 Set 상태예요. Set 객체나 값의 배열을 넘길 수 있어요."
+  description="초기 Set 값이에요. Set 객체나 값의 배열을 넘길 수 있어요."
 />
 
 ### 반환 값

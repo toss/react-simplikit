@@ -6,12 +6,12 @@ Proporciona una gestión eficiente del estado y funciones de acción estables.
 ## Interfaz
 
 ```ts
-function useList<T>(initialState: T[] = []): UseListReturn<T>;
+function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 ```
 
 ### Parámetros
 
-<Interface name="initialState" type="T[]" description="Estado inicial del arreglo." />
+<Interface name="initialValue" type="T[]" description="Valor inicial del arreglo." />
 
 ### Valor de retorno
 

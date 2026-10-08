@@ -11,8 +11,7 @@ function useStorageState<T>(
   options?: Object
 ): readonly [
   state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-  refreshState: () => void,
+  actions: StorageStateActions<Serializable<T> | undefined>,
 ];
 ```
 
@@ -63,8 +62,8 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="Una tupla:"
+  type="readonly [state: Serializable<T> | undefined, actions: StorageStateActions<Serializable<T> | undefined>]"
+  description="Una tupla con el estado y las acciones para cambiarlo."
   :nested="[
     {
       name: 'state',
@@ -73,13 +72,13 @@ function useStorageState<T>(
       description: 'El valor actual del estado obtenido del almacenamiento.',
     },
     {
-      name: 'setState',
+      name: 'actions.setValue',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
       description: 'Una función para actualizar y guardar el estado de forma persistente.',
     },
     {
-      name: 'refreshState',
+      name: 'actions.refresh',
       type: '() => void',
       required: false,
       description: 'Una función para actualizar el estado a partir del almacenamiento.',
@@ -94,12 +93,12 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
+  const [count, { setValue }] = useStorageState<number>('counter', {
     defaultValue: 0,
   });
 
   return (
-    <button onClick={() => setCount(prev => prev + 1)}>Conteo: {count}</button>
+    <button onClick={() => setValue(prev => prev + 1)}>Conteo: {count}</button>
   );
 }
 ```

@@ -15,14 +15,14 @@ describe('useTimeout', () => {
 
   it('is safe on server side rendering', () => {
     const callback = vi.fn();
-    renderHookSSR.serverOnly(() => useTimeout(callback, 1000));
+    renderHookSSR.serverOnly(() => useTimeout({ onTimeout: callback, delayMs: 1000 }));
 
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it('should call callback after specified delay', async () => {
+  it('should call callback after specified delayMs', async () => {
     const callback = vi.fn();
-    await renderHookSSR(() => useTimeout(callback, 1000));
+    await renderHookSSR(() => useTimeout({ onTimeout: callback, delayMs: 1000 }));
 
     expect(callback).not.toHaveBeenCalled();
 
@@ -30,9 +30,9 @@ describe('useTimeout', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should use 0ms as default delay', async () => {
+  it('should use 0ms as default delayMs', async () => {
     const callback = vi.fn();
-    await renderHookSSR(() => useTimeout(callback));
+    await renderHookSSR(() => useTimeout({ onTimeout: callback }));
 
     expect(callback).not.toHaveBeenCalled();
 
@@ -42,7 +42,7 @@ describe('useTimeout', () => {
 
   it('should clear timeout on unmount', async () => {
     const callback = vi.fn();
-    const { unmount } = await renderHookSSR(() => useTimeout(callback, 1000));
+    const { unmount } = await renderHookSSR(() => useTimeout({ onTimeout: callback, delayMs: 1000 }));
 
     unmount();
     vi.advanceTimersByTime(1000);
@@ -52,7 +52,7 @@ describe('useTimeout', () => {
 
   it('should keep the timeout when rerendering happens', async () => {
     const callback = vi.fn();
-    const { rerender } = await renderHookSSR(() => useTimeout(callback, 3000));
+    const { rerender } = await renderHookSSR(() => useTimeout({ onTimeout: callback, delayMs: 3000 }));
 
     vi.advanceTimersByTime(1500);
     rerender();
@@ -62,9 +62,9 @@ describe('useTimeout', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should reset timeout when delay changes', async () => {
+  it('should reset timeout when delayMs changes', async () => {
     const callback = vi.fn();
-    const { rerender } = await renderHookSSR(({ delay }) => useTimeout(callback, delay), {
+    const { rerender } = await renderHookSSR(({ delay }) => useTimeout({ onTimeout: callback, delayMs: delay }), {
       initialProps: { delay: 1000 },
     });
 
@@ -84,8 +84,8 @@ describe('useTimeout', () => {
     const callback2 = vi.fn();
 
     await renderHookSSR(() => {
-      useTimeout(callback1, 1000);
-      useTimeout(callback2, 2000);
+      useTimeout({ onTimeout: callback1, delayMs: 1000 });
+      useTimeout({ onTimeout: callback2, delayMs: 2000 });
     });
 
     vi.advanceTimersByTime(1000);
@@ -96,18 +96,18 @@ describe('useTimeout', () => {
     expect(callback2).toHaveBeenCalledTimes(1);
   });
 
-  it('should treat negative delay as 0ms', async () => {
+  it('should treat negative delayMs as 0ms', async () => {
     const callback = vi.fn();
-    await renderHookSSR(() => useTimeout(callback, -1000));
+    await renderHookSSR(() => useTimeout({ onTimeout: callback, delayMs: -1000 }));
 
     expect(callback).not.toHaveBeenCalled();
     vi.advanceTimersByTime(0);
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should treat undefined delay as 0ms', async () => {
+  it('should treat undefined delayMs as 0ms', async () => {
     const callback = vi.fn();
-    await renderHookSSR(() => useTimeout(callback, undefined));
+    await renderHookSSR(() => useTimeout({ onTimeout: callback, delayMs: undefined }));
 
     vi.advanceTimersByTime(0);
     expect(callback).toHaveBeenCalledTimes(1);

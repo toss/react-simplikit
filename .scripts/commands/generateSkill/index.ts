@@ -3,8 +3,9 @@ import path from 'node:path';
 
 import { collectPublicExportEntries } from '../../utils/collectPublicExports.ts';
 import { getRootPath } from '../../utils/getRootPath.ts';
+import { readDeprecation } from '../../utils/jsdoc.ts';
 
-import { CatalogEntry, extractDescription, getCategory, renderSkill } from './catalog.ts';
+import { CatalogEntry, DeprecatedEntry, extractDescription, getCategory, renderSkill } from './catalog.ts';
 
 export const SKILL_DIRECTORY = 'packages/plugin/skills/react-simplikit';
 export const PACKAGE_INDEX_FILE = 'packages/react-simplikit/src/index.ts';
@@ -19,7 +20,11 @@ type GenerateSkillOptions = {
 /**
  * Writes the consumer-facing agent skill: `SKILL.md` (template + a catalog of every public export)
  * and `references/<name>.md` (a verbatim copy of each export's English documentation page).
- * The output depends only on `index.ts` and the pages, so re-running on unchanged sources changes nothing.
+ * The output depends only on `index.ts`, the pages and each export's `@deprecated` tag, so re-running
+ * on unchanged sources changes nothing.
+ *
+ * An export whose JSDoc is `@deprecated` has no page, so it is recognised from its source file. It
+ * gets no reference page and is listed in the Deprecated table instead of its category.
  */
 export async function generateSkill({
   root = getRootPath(),
@@ -33,20 +38,41 @@ export async function generateSkill({
   await fs.rm(referencesDirectory, { force: true, recursive: true });
   await fs.mkdir(referencesDirectory, { recursive: true });
 
-  const entries: CatalogEntry[] = await Promise.all(
+  const publicExports: Array<{ entry: CatalogEntry } | { deprecatedEntry: DeprecatedEntry }> = await Promise.all(
     (await collectPublicExportEntries(indexFilePath)).map(async ({ name, sourcePath }) => {
-      const documentPath = path.join(packageSourceDirectory, path.dirname(sourcePath), `${name}.md`);
-      const markdown = await readDocumentationPage(documentPath, name);
+      const exportDirectory = path.join(packageSourceDirectory, path.dirname(sourcePath));
+      const notice = readDeprecation(await readExportSource(exportDirectory, name));
+
+      if (notice != null) {
+        return { deprecatedEntry: { name, notice } };
+      }
+
+      const markdown = await readDocumentationPage(path.join(exportDirectory, `${name}.md`), name);
 
       await fs.writeFile(path.join(referencesDirectory, `${name}.md`), markdown);
 
-      return { name, category: getCategory(sourcePath), description: extractDescription(markdown, name) };
+      return { entry: { name, category: getCategory(sourcePath), description: extractDescription(markdown, name) } };
     })
   );
+  const entries = publicExports.flatMap(item => ('entry' in item ? [item.entry] : []));
+  const deprecatedEntries = publicExports.flatMap(item => ('deprecatedEntry' in item ? [item.deprecatedEntry] : []));
 
   const template = await fs.readFile(TEMPLATE_FILE, 'utf8');
 
-  await fs.writeFile(path.join(outputDirectory, 'SKILL.md'), renderSkill({ template, entries }));
+  await fs.writeFile(path.join(outputDirectory, 'SKILL.md'), renderSkill({ template, entries, deprecatedEntries }));
+}
+
+/** The file an export is declared in sits next to the `index.ts` that re-exports it, named after the export. */
+async function readExportSource(exportDirectory: string, name: string): Promise<string> {
+  for (const extension of ['ts', 'tsx']) {
+    try {
+      return await fs.readFile(path.join(exportDirectory, `${name}.${extension}`), 'utf8');
+    } catch {
+      continue;
+    }
+  }
+
+  throw new Error(`${name} has no source file at ${path.join(exportDirectory, name)}.ts(x)`);
 }
 
 async function readDocumentationPage(documentPath: string, name: string): Promise<string> {
