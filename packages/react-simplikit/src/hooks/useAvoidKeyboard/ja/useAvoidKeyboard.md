@@ -28,7 +28,7 @@ function useAvoidKeyboard(
         'キーボードが非表示のときの、下端からの基本オフセット（ピクセル単位）です。iPhone のホームインジケーター領域を考慮する際に役立ちます。',
     },
     {
-      name: 'options.transitionDuration',
+      name: 'options.transitionDurationMs',
       type: 'number',
       required: false,
       defaultValue: '200',

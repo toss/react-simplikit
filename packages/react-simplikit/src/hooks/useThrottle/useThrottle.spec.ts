@@ -38,7 +38,7 @@ describe('useThrottle', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should trigger a trailing call after wait time', async () => {
+  it('should trigger a trailing call after throttleMs time', async () => {
     vi.useFakeTimers();
 
     const callback = vi.fn();
@@ -66,7 +66,7 @@ describe('useThrottle', () => {
     expect(callback).toHaveBeenCalledWith('test', 123);
   });
 
-  it('should execute immediately if not called within wait time', async () => {
+  it('should execute immediately if not called within throttleMs time', async () => {
     vi.useFakeTimers();
 
     const callback = vi.fn();

@@ -24,7 +24,7 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  * @template T - The type of the value passed to `onChange`.
  * @param {Object} options - The options object.
  * @param {(newValue: T) => void} options.onChange - The callback to throttle. A call with the same value as the last forwarded one is skipped.
- * @param {number} options.timeThreshold - The number of milliseconds to throttle invocations to.
+ * @param {number} options.throttleMs - The number of milliseconds to throttle invocations to.
  * @param {boolean} [options.leading=true] - If `true`, allows an immediate call at the start of a throttle window.
  * @param {boolean} [options.trailing=true] - If `true`, allows a pending call to run after the delay with the latest value.
  *
@@ -36,7 +36,7 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  *
  * function ScrollPosition() {
  *   const [scrollTop, setScrollTop] = useState(0);
- *   const setScrollTopThrottled = useThrottledCallback({ onChange: setScrollTop, timeThreshold: 200 });
+ *   const setScrollTopThrottled = useThrottledCallback({ onChange: setScrollTop, throttleMs: 200 });
  *
  *   return (
  *     <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>
@@ -47,12 +47,12 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  */
 export function useThrottledCallback<T>({
   onChange,
-  timeThreshold,
+  throttleMs,
   leading = true,
   trailing = true,
 }: ThrottleOptions & {
   onChange: (newValue: T) => void;
-  timeThreshold: number;
+  throttleMs: number;
 }): (nextValue: T) => void {
   const lastForwardedRef = useRef<T | typeof NOT_INVOKED>(NOT_INVOKED);
 
@@ -66,7 +66,7 @@ export function useThrottledCallback<T>({
 
       lastForwardedRef.current = nextValue;
     },
-    timeThreshold,
+    throttleMs,
     { leading, trailing }
   );
 }

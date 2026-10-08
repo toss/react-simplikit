@@ -33,7 +33,7 @@ function useImpressionRef<Element extends HTMLElement>(
       description: 'Callback que se ejecuta cuando el elemento sale del área visible',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.timeThresholdMs',
       type: 'number',
       required: false,
       defaultValue: '0',
@@ -73,7 +73,7 @@ function Component() {
     onImpressionStart: () =>
       console.log('El elemento entró en el área visible'),
     onImpressionEnd: () => console.log('El elemento salió del área visible'),
-    timeThreshold: 1000,
+    timeThresholdMs: 1000,
     areaThreshold: 0.5,
   });
 

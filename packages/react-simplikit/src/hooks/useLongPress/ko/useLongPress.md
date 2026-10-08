@@ -26,7 +26,7 @@ function useLongPress<E extends HTMLElement>(
   description="길게 누름 동작을 위한 설정 옵션이에요."
   :nested="[
     {
-      name: 'options.delay',
+      name: 'options.delayMs',
       type: 'number',
       required: false,
       defaultValue: '500',
@@ -130,7 +130,7 @@ function ContextMenu() {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const longPressHandlers = useLongPress(() => setMenuVisible(true), {
-    delay: 400,
+    delayMs: 400,
     onClick: () => console.log('일반 클릭'),
     onLongPressEnd: () => console.log('길게 누름 완료'),
   });

@@ -24,7 +24,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
         '要被节流的回调。携带与上一次转发的值相同的调用会被跳过。',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.throttleMs',
       type: 'number',
       required: true,
       description: '将调用节流到的毫秒数。',
@@ -66,7 +66,7 @@ function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
   const setScrollTopThrottled = useThrottledCallback({
     onChange: setScrollTop,
-    timeThreshold: 200,
+    throttleMs: 200,
   });
 
   return (

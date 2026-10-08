@@ -9,7 +9,7 @@ such as when handling scroll or resize events.
 ```ts
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
-  wait: number,
+  throttleMs: number,
   options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
@@ -25,7 +25,7 @@ function useThrottle<F extends (...args: any[]) => any>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="The number of milliseconds to throttle invocations to."
 />

@@ -18,7 +18,7 @@ type ThrottleOptions = {
  *
  * @template {(...args: any[]) => any} F - The type of the callback function.
  * @param {F} callback - The function to be throttled.
- * @param {number} wait - The number of milliseconds to throttle invocations to.
+ * @param {number} throttleMs  - The number of milliseconds to throttle invocations to.
  * @param {ThrottleOptions} [options] - Options to control the behavior of the throttle.
  * @param {boolean} [options.leading=true] - If `true`, allows an immediate call at the start of a throttle window.
  * @param {boolean} [options.trailing=true] - If `true`, allows a pending call to run after the delay with the latest arguments.
@@ -39,7 +39,7 @@ type ThrottleOptions = {
  */
 export function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
-  wait: number,
+  throttleMs: number,
   { leading = true, trailing = true }: ThrottleOptions = {}
 ) {
   const preservedCallback = usePreservedCallback(callback);
@@ -58,8 +58,8 @@ export function useThrottle<F extends (...args: any[]) => any>(
   }, [leading, trailing]);
 
   const throttledCallback = useMemo(
-    () => throttle(preservedCallback, wait, { edges }),
-    [preservedCallback, wait, edges]
+    () => throttle(preservedCallback, throttleMs, { edges }),
+    [preservedCallback, throttleMs, edges]
   );
 
   useEffect(() => {

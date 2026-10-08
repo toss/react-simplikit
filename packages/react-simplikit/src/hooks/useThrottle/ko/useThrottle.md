@@ -7,7 +7,7 @@
 ```ts
 function useThrottle<F extends (...args: any[]) => any>(
   callback: F,
-  wait: number,
+  throttleMs: number,
   options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
@@ -23,7 +23,7 @@ function useThrottle<F extends (...args: any[]) => any>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="호출을 스로틀링할 밀리초의 수예요."
 />
