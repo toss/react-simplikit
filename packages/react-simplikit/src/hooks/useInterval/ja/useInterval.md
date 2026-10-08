@@ -6,33 +6,28 @@
 ## インターフェース
 
 ```ts
-function useInterval(
-  callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
-): void;
+function useInterval(options: Object): void;
 ```
 
 ### パラメータ
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="定期的に実行する関数です。"
-/>
-
-<Interface
-  required
   name="options"
-  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
+  type="Object"
   description="定期実行の動作を設定します。"
   :nested="[
     {
-      name: 'options.delay',
+      name: 'options.onTick',
+      type: '() => void',
+      required: true,
+      description: '定期的に実行する関数です。',
+    },
+    {
+      name: 'options.delayMs',
       type: 'number',
       required: true,
-      description:
-        '実行間隔（ミリ秒）です。<code>null</code> の場合、定期実行は行われません。',
+      description: '実行間隔（ミリ秒）です。',
     },
     {
       name: 'options.immediate',
@@ -65,9 +60,10 @@ import { useState } from 'react';
 function Timer() {
   const [time, setTime] = useState(0);
 
-  useInterval(() => {
-    setTime(prev => prev + 1);
-  }, 1000);
+  useInterval({
+    onTick: () => setTime(prev => prev + 1),
+    delayMs: 1000,
+  });
 
   return (
     <div>

@@ -6,22 +6,31 @@ React のライフサイクルに合わせて `setTimeout` を管理し、アン
 ## インターフェース
 
 ```ts
-function useTimeout(callback: () => void, delay: number = 0): void;
+function useTimeout(options: Object): void;
 ```
 
 ### パラメータ
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="指定した時間が経過した後に実行する関数。"
-/>
-
-<Interface
-  name="delay"
-  type="number"
-  description="コールバックを実行するまでの待機時間（ミリ秒単位）。"
+  name="options"
+  type="Object"
+  description="タイムアウトの動作を設定します。"
+  :nested="[
+    {
+      name: 'options.onTimeout',
+      type: '() => void',
+      required: true,
+      description: '指定した時間が経過した後に実行する関数です。',
+    },
+    {
+      name: 'options.delayMs',
+      type: 'number',
+      required: false,
+      defaultValue: '0',
+      description: '<code>onTimeout</code> を実行するまでの待機時間（ミリ秒）です。',
+    },
+  ]"
 />
 
 ### 戻り値
@@ -38,13 +47,15 @@ import { useState } from 'react';
 function Example() {
   const [title, setTitle] = useState('');
 
-  useTimeout(() => {
-    setTitle('Searching for products...');
-  }, 2000);
+  useTimeout({
+    onTimeout: () => setTitle('Searching for products...'),
+    delayMs: 2000,
+  });
 
-  useTimeout(() => {
-    setTitle('Almost done...');
-  }, 4000);
+  useTimeout({
+    onTimeout: () => setTitle('Almost done...'),
+    delayMs: 4000,
+  });
 
   return <div>{title}</div>;
 }
