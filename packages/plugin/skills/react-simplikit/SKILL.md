@@ -107,7 +107,7 @@ Backticks in this table mark catalog entries only.
 | [`useSafeAreaInset`](references/useSafeAreaInset.md) | `useSafeAreaInset` is a React hook that tracks safe area inset changes. |
 | [`useScrollDirection`](references/useScrollDirection.md) | `useScrollDirection` is a React hook that detects scroll direction. |
 | [`useSet`](references/useSet.md) | A React hook that manages a Set as state. |
-| [`useStorageState`](references/useStorageState.md) | `useStorageState` is a React that functions like `useState` but persists the state value in browser storage. |
+| [`useStorageState`](references/useStorageState.md) | `useStorageState` is a React hook that functions like `useState` but persists the state value in browser storage. |
 | [`useThrottle`](references/useThrottle.md) | `useThrottle` is a React hook that creates a throttled version of a callback function. |
 | [`useThrottledCallback`](references/useThrottledCallback.md) | `useThrottledCallback` is a React hook that returns a throttled version of the provided callback function. |
 | [`useThrottledValue`](references/useThrottledValue.md) | `useThrottledValue` is a React hook that returns a throttled copy of the given value. |
