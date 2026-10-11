@@ -82,6 +82,7 @@ Backticks in this table mark catalog entries only.
 | [`useCounter`](references/useCounter.md) | `useCounter` is a React hook that manages a numeric counter state with increment, decrement, and reset capabilities. |
 | [`useDebounce`](references/useDebounce.md) | `useDebounce` is a React hook that returns a debounced version of the provided callback function. |
 | [`useDebouncedCallback`](references/useDebouncedCallback.md) | `useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function. |
+| [`useDebouncedState`](references/useDebouncedState.md) | `useDebouncedState` is a React hook that manages state and returns a debounced setter. |
 | [`useDebouncedValue`](references/useDebouncedValue.md) | `useDebouncedValue` is a React hook that returns a debounced copy of the given value. |
 | [`useDoubleClick`](references/useDoubleClick.md) | `useDoubleClick` is a React hook that differentiates between single and double click events. |
 | [`useGeolocation`](references/useGeolocation.md) | `useGeolocation` is a React hook that retrieves and tracks the user's geographical location. |

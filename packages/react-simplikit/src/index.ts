@@ -11,6 +11,7 @@ export { useControlledState } from './hooks/useControlledState/index.ts';
 export { useCounter } from './hooks/useCounter/index.ts';
 export { useDebounce } from './hooks/useDebounce/index.ts';
 export { useDebouncedCallback } from './hooks/useDebouncedCallback/index.ts';
+export { useDebouncedState } from './hooks/useDebouncedState/index.ts';
 export { useDebouncedValue } from './hooks/useDebouncedValue/index.ts';
 export { useDoubleClick } from './hooks/useDoubleClick/index.ts';
 export { useGeolocation } from './hooks/useGeolocation/index.ts';
