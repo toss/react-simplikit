@@ -45,6 +45,7 @@ export { useSet } from './hooks/useSet/index.ts';
 export { useStorageState } from './hooks/useStorageState/index.ts';
 export { useThrottle } from './hooks/useThrottle/index.ts';
 export { useThrottledCallback } from './hooks/useThrottledCallback/index.ts';
+export { useThrottledState } from './hooks/useThrottledState/index.ts';
 export { useThrottledValue } from './hooks/useThrottledValue/index.ts';
 export { useTimeout } from './hooks/useTimeout/index.ts';
 export { useToggle } from './hooks/useToggle/index.ts';
