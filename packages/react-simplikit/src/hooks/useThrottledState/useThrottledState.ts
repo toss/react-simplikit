@@ -28,9 +28,9 @@ type ThrottleOptions = {
  * @param {boolean} [options.leading=true] - If `true`, allows an immediate update at the start of a throttle window.
  * @param {boolean} [options.trailing=true] - If `true`, allows a pending update to run after the delay with the latest value.
  *
- * @returns {[state: T, setState: (nextValue: T) => void]} A tuple:
+ * @returns {[state: T, setState: Dispatch<SetStateAction<T>>]} A tuple:
  * - state `T` - The current state value;
- * - setState `(nextValue: T) => void` - A throttled setter that accepts the next state value;
+ * - setState `Dispatch<SetStateAction<T>>` - A throttled setter that accepts the next state value or an updater function that receives the previous state;
  *
  * @example
  * import { useThrottledState } from 'react-simplikit';

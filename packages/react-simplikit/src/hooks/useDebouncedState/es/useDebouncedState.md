@@ -13,7 +13,7 @@ function useDebouncedState<T>(
   initialValue: T,
   debounceMs: number,
   options?: DebounceOptions
-): [state: T, setState: (nextValue: T) => void];
+): [state: T, setState: Dispatch<SetStateAction<T>>];
 ```
 
 ### Parámetros
@@ -60,7 +60,7 @@ function useDebouncedState<T>(
 
 <Interface
   name=""
-  type="[state: T, setState: (nextValue: T) => void]"
+  type="[state: T, setState: Dispatch<SetStateAction<T>>]"
   description="Una tupla:"
   :nested="[
     {
@@ -71,9 +71,9 @@ function useDebouncedState<T>(
     },
     {
       name: 'setState',
-      type: '(nextValue: T) => void',
+      type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: 'Una función de actualización con debounce que acepta el siguiente valor del estado.',
+      description: 'Una función de actualización con debounce que acepta el siguiente valor del estado o una función que recibe el estado anterior.',
     },
   ]"
 />

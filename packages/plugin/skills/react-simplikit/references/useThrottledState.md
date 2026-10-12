@@ -19,7 +19,7 @@ function useThrottledState<T>(
   initialValue: T,
   throttleMs: number,
   options?: ThrottleOptions
-): [state: T, setState: (nextValue: T) => void];
+): [state: T, setState: Dispatch<SetStateAction<T>>];
 ```
 
 ### Parameters
@@ -66,7 +66,7 @@ function useThrottledState<T>(
 
 <Interface
   name=""
-  type="[state: T, setState: (nextValue: T) => void]"
+  type="[state: T, setState: Dispatch<SetStateAction<T>>]"
   description="A tuple:"
   :nested="[
     {
@@ -77,9 +77,10 @@ function useThrottledState<T>(
     },
     {
       name: 'setState',
-      type: '(nextValue: T) => void',
+      type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: 'A throttled setter that accepts the next state value.',
+      description:
+        'A throttled setter that accepts the next state value or an updater function that receives the previous state.',
     },
   ]"
 />

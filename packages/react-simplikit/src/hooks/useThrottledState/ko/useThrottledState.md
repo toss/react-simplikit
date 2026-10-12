@@ -18,7 +18,7 @@ function useThrottledState<T>(
   initialValue: T,
   throttleMs: number,
   options?: ThrottleOptions
-): [state: T, setState: (nextValue: T) => void];
+): [state: T, setState: Dispatch<SetStateAction<T>>];
 ```
 
 ### 파라미터
@@ -65,7 +65,7 @@ function useThrottledState<T>(
 
 <Interface
   name=""
-  type="[state: T, setState: (nextValue: T) => void]"
+  type="[state: T, setState: Dispatch<SetStateAction<T>>]"
   description="다음 요소를 담은 튜플이에요."
   :nested="[
     {
@@ -76,9 +76,9 @@ function useThrottledState<T>(
     },
     {
       name: 'setState',
-      type: '(nextValue: T) => void',
+      type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '다음 상태 값을 받는 스로틀된 setter예요.',
+      description: '다음 상태 값이나 이전 상태를 받는 updater 함수를 받는 스로틀된 setter예요.',
     },
   ]"
 />

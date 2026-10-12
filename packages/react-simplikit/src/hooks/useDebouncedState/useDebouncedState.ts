@@ -27,9 +27,9 @@ type DebounceOptions = {
  * @param {boolean} [options.leading=false] - If `true`, the first setter call after an idle period is applied immediately.
  * @param {boolean} [options.trailing=true] - If `true`, the last value is applied after `debounceMs` milliseconds.
  *
- * @returns {[state: T, setState: (nextValue: T) => void]} A tuple:
+ * @returns {[state: T, setState: Dispatch<SetStateAction<T>>]} A tuple:
  * - state `T` - The current state value;
- * - setState `(nextValue: T) => void` - A debounced setter that accepts the next state value;
+ * - setState `Dispatch<SetStateAction<T>>` - A debounced setter that accepts the next state value or an updater function that receives the previous state;
  *
  * @example
  * import { useDebouncedState } from 'react-simplikit';

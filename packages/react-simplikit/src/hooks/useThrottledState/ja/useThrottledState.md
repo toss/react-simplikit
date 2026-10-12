@@ -19,7 +19,7 @@ function useThrottledState<T>(
   initialValue: T,
   throttleMs: number,
   options?: ThrottleOptions
-): [state: T, setState: (nextValue: T) => void];
+): [state: T, setState: Dispatch<SetStateAction<T>>];
 ```
 
 ### パラメータ
@@ -66,7 +66,7 @@ function useThrottledState<T>(
 
 <Interface
   name=""
-  type="[state: T, setState: (nextValue: T) => void]"
+  type="[state: T, setState: Dispatch<SetStateAction<T>>]"
   description="次の要素を含むタプル。"
   :nested="[
     {
@@ -77,9 +77,9 @@ function useThrottledState<T>(
     },
     {
       name: 'setState',
-      type: '(nextValue: T) => void',
+      type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '次の状態の値を受け取る、スロットリングされた setter。',
+      description: '次の状態の値、または前の状態を受け取る更新関数を受け付ける、スロットリングされた setter。',
     },
   ]"
 />

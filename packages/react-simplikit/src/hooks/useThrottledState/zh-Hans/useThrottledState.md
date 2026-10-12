@@ -18,7 +18,7 @@ function useThrottledState<T>(
   initialValue: T,
   throttleMs: number,
   options?: ThrottleOptions
-): [state: T, setState: (nextValue: T) => void];
+): [state: T, setState: Dispatch<SetStateAction<T>>];
 ```
 
 ### 参数
@@ -65,7 +65,7 @@ function useThrottledState<T>(
 
 <Interface
   name=""
-  type="[state: T, setState: (nextValue: T) => void]"
+  type="[state: T, setState: Dispatch<SetStateAction<T>>]"
   description="包含以下元素的元组："
   :nested="[
     {
@@ -76,9 +76,9 @@ function useThrottledState<T>(
     },
     {
       name: 'setState',
-      type: '(nextValue: T) => void',
+      type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '接收下一个状态值的节流 setter。',
+      description: '接收下一个状态值或以前一个状态为参数的更新函数的节流 setter。',
     },
   ]"
 />

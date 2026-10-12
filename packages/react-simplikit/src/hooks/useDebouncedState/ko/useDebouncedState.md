@@ -13,7 +13,7 @@ function useDebouncedState<T>(
   initialValue: T,
   debounceMs: number,
   options?: DebounceOptions
-): [state: T, setState: (nextValue: T) => void];
+): [state: T, setState: Dispatch<SetStateAction<T>>];
 ```
 
 ### 파라미터
@@ -60,7 +60,7 @@ function useDebouncedState<T>(
 
 <Interface
   name=""
-  type="[state: T, setState: (nextValue: T) => void]"
+  type="[state: T, setState: Dispatch<SetStateAction<T>>]"
   description="다음 요소를 담은 튜플이에요."
   :nested="[
     {
@@ -71,9 +71,9 @@ function useDebouncedState<T>(
     },
     {
       name: 'setState',
-      type: '(nextValue: T) => void',
+      type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '다음 상태 값을 받는 디바운스된 setter예요.',
+      description: '다음 상태 값이나 이전 상태를 받는 updater 함수를 받는 디바운스된 setter예요.',
     },
   ]"
 />

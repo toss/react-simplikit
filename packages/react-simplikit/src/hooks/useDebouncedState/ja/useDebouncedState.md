@@ -13,7 +13,7 @@ function useDebouncedState<T>(
   initialValue: T,
   debounceMs: number,
   options?: DebounceOptions
-): [state: T, setState: (nextValue: T) => void];
+): [state: T, setState: Dispatch<SetStateAction<T>>];
 ```
 
 ### パラメータ
@@ -60,7 +60,7 @@ function useDebouncedState<T>(
 
 <Interface
   name=""
-  type="[state: T, setState: (nextValue: T) => void]"
+  type="[state: T, setState: Dispatch<SetStateAction<T>>]"
   description="以下の要素を持つタプル："
   :nested="[
     {
@@ -71,9 +71,9 @@ function useDebouncedState<T>(
     },
     {
       name: 'setState',
-      type: '(nextValue: T) => void',
+      type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '次の状態の値を受け取る、デバウンスされたセッター。',
+      description: '次の状態の値、または前の状態を受け取る更新関数を受け付ける、デバウンスされたセッター。',
     },
   ]"
 />

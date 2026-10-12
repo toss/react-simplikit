@@ -13,7 +13,7 @@ function useDebouncedState<T>(
   initialValue: T,
   debounceMs: number,
   options?: DebounceOptions
-): [state: T, setState: (nextValue: T) => void];
+): [state: T, setState: Dispatch<SetStateAction<T>>];
 ```
 
 ### 参数
@@ -60,7 +60,7 @@ function useDebouncedState<T>(
 
 <Interface
   name=""
-  type="[state: T, setState: (nextValue: T) => void]"
+  type="[state: T, setState: Dispatch<SetStateAction<T>>]"
   description="包含以下元素的元组："
   :nested="[
     {
@@ -71,9 +71,9 @@ function useDebouncedState<T>(
     },
     {
       name: 'setState',
-      type: '(nextValue: T) => void',
+      type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '接收下一个状态值的防抖状态设置函数。',
+      description: '接收下一个状态值或以前一个状态为参数的更新函数的防抖状态设置函数。',
     },
   ]"
 />
