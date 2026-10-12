@@ -79,7 +79,7 @@ describe('useThrottledState', () => {
     expect(getValue()).toBe('e');
   });
 
-  it('should update on leading and trailing edges by default', () => {
+  it('should update on leading and trailing edges by default throttle options', () => {
     const { result } = renderHookSSR(() => useThrottledState('a', 100));
     const { getValue, setValue } = actions(result);
 
