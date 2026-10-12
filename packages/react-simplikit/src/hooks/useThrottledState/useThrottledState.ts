@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 
 import { useThrottle } from '../useThrottle/useThrottle.ts';
 
@@ -49,11 +49,16 @@ export function useThrottledState<T>(
   initialValue: T,
   throttleMs: number,
   { leading = true, trailing = true }: ThrottleOptions = {}
-): [T, (nextValue: T) => void] {
+): [T, Dispatch<SetStateAction<T>>] {
   const [throttledValue, setThrottledValue] = useState(() => initialValue);
   const lastForwardedRef = useRef(initialValue);
 
-  function forwardChangedValue(value: T) {
+  function forwardChangedValue(value: SetStateAction<T>) {
+    if (typeof value === 'function') {
+      setThrottledValue(value);
+      return;
+    }
+
     const unchanged = Object.is(lastForwardedRef.current, value);
     const settled = Object.is(value, throttledValue);
     if (unchanged && settled) {
@@ -64,7 +69,10 @@ export function useThrottledState<T>(
     setThrottledValue(() => value);
   }
 
-  const throttled = useThrottle((next: T) => forwardChangedValue(next), throttleMs, { leading, trailing });
+  const throttled = useThrottle((next: SetStateAction<T>) => forwardChangedValue(next), throttleMs, {
+    leading,
+    trailing,
+  });
 
   return [throttledValue, throttled];
 }

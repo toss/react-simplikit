@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 
 import { useDebounce } from '../useDebounce/useDebounce.ts';
 
@@ -52,11 +52,16 @@ export function useDebouncedState<T>(
   initialValue: T,
   debounceMs: number,
   { leading = false, trailing = true }: DebounceOptions = {}
-): [T, (nextValue: T) => void] {
+): [T, Dispatch<SetStateAction<T>>] {
   const [debouncedValue, setDebouncedValue] = useState(() => initialValue);
   const lastForwardedRef = useRef(initialValue);
 
-  function forwardChangedValue(value: T) {
+  function forwardChangedValue(value: SetStateAction<T>) {
+    if (typeof value === 'function') {
+      setDebouncedValue(value);
+      return;
+    }
+
     const unchanged = Object.is(lastForwardedRef.current, value);
     const settled = Object.is(value, debouncedValue);
     if (unchanged && settled) {
@@ -67,7 +72,10 @@ export function useDebouncedState<T>(
     setDebouncedValue(() => value);
   }
 
-  const debounced = useDebounce((next: T) => forwardChangedValue(next), debounceMs, { leading, trailing });
+  const debounced = useDebounce((next: SetStateAction<T>) => forwardChangedValue(next), debounceMs, {
+    leading,
+    trailing,
+  });
 
   return [debouncedValue, debounced];
 }

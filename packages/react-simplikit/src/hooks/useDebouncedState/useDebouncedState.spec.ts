@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { act } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -5,12 +6,12 @@ import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useDebouncedState } from './useDebouncedState.ts';
 
-function actions<T>(result: { current: [T, (nextValue: T) => void] }) {
+function actions<T>(result: { current: [T, Dispatch<SetStateAction<T>>] }) {
   function getValue() {
     return result.current[0];
   }
 
-  function setValue(value: T) {
+  function setValue(value: SetStateAction<T>) {
     act(() => {
       result.current[1](value);
     });
@@ -162,6 +163,39 @@ describe('useDebouncedState', () => {
     expect(valueLog).not.toContain('b');
   });
 
+  it('should support updater functions followed by direct value updates', () => {
+    const { result } = renderHookSSR(() => useDebouncedState('a', 100));
+    const { getValue, setValue } = actions(result);
+
+    setValue(prev => prev + 'b');
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+    expect(getValue()).toBe('ab');
+
+    setValue('c');
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+    expect(getValue()).toBe('c');
+  });
+
+  it('should apply only the last updater function during continuous updates', () => {
+    const { result } = renderHookSSR(() => useDebouncedState('z', 100));
+    const { getValue, setValue } = actions(result);
+
+    setValue(prev => prev + 'b');
+    act(() => {
+      vi.advanceTimersByTime(99);
+    });
+
+    setValue(prev => prev + 'c');
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+    expect(getValue()).toBe('zc');
+  });
+
   it('should store a function initial value without calling it', () => {
     const fn = vi.fn(() => 'result');
     const { result } = renderHookSSR(() => useDebouncedState(fn, 100));
@@ -177,7 +211,7 @@ describe('useDebouncedState', () => {
 
     const { getValue, setValue } = actions(result);
 
-    setValue(nextFn);
+    setValue(() => nextFn);
 
     act(() => {
       vi.advanceTimersByTime(100);

@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { act, cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -5,12 +6,12 @@ import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useThrottledState } from './useThrottledState.ts';
 
-function actions<T>(result: { current: [T, (nextValue: T) => void] }) {
+function actions<T>(result: { current: [T, Dispatch<SetStateAction<T>>] }) {
   function getValue() {
     return result.current[0];
   }
 
-  function setValue(value: T) {
+  function setValue(value: SetStateAction<T>) {
     act(() => {
       result.current[1](value);
     });
@@ -163,6 +164,34 @@ describe('useThrottledState', () => {
     expect(valueLog).not.toContain('b');
   });
 
+  it('should support updater functions followed by direct value updates', () => {
+    const { result } = renderHookSSR(() => useThrottledState('a', 100));
+    const { getValue, setValue } = actions(result);
+
+    setValue(prev => prev + 'b');
+    expect(getValue()).toBe('ab');
+
+    act(() => vi.advanceTimersByTime(50));
+    setValue('c');
+    expect(getValue()).toBe('ab');
+
+    act(() => vi.advanceTimersByTime(100));
+    expect(getValue()).toBe('c');
+  });
+
+  it('should apply only the last updater function during continuous updates when leading is false', () => {
+    const { result } = renderHookSSR(() => useThrottledState('z', 100, { leading: false }));
+    const { getValue, setValue } = actions(result);
+
+    setValue(prev => prev + 'b');
+    act(() => vi.advanceTimersByTime(99));
+    expect(getValue()).toBe('z');
+
+    setValue(prev => prev + 'c');
+    act(() => vi.advanceTimersByTime(100));
+    expect(getValue()).toBe('zc');
+  });
+
   it('should store a function initial value without calling it', () => {
     const fn = vi.fn(() => 'result');
     const { result } = renderHookSSR(() => useThrottledState(fn, 100));
@@ -178,7 +207,7 @@ describe('useThrottledState', () => {
 
     const { getValue, setValue } = actions(result);
 
-    setValue(nextFn);
+    setValue(() => nextFn);
 
     act(() => {
       vi.advanceTimersByTime(100);
