@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 
-import { useDebounce } from '../useDebounce/useDebounce.ts';
+import { useDebounce } from '../useDebounce/index.ts';
 
 type DebounceOptions = {
   leading?: boolean;
