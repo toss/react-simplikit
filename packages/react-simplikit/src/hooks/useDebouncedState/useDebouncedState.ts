@@ -29,7 +29,7 @@ type DebounceOptions = {
  *
  * @returns {[state: T, setState: Dispatch<SetStateAction<T>>]} A tuple:
  * - state `T` - The current state value;
- * - setState `Dispatch<SetStateAction<T>>` - A debounced setter that accepts the next state value or an updater function that receives the previous state;
+ * - setState `Dispatch<SetStateAction<T>>` - A debounced setter that accepts the next state value or an updater function;
  *
  * @example
  * import { useDebouncedState } from 'react-simplikit';

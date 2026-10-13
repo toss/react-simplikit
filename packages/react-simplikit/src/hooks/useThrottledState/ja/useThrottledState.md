@@ -79,7 +79,7 @@ function useThrottledState<T>(
       name: 'setState',
       type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '次の状態の値、または前の状態を受け取る更新関数を受け付ける、スロットリングされた setter。',
+      description: '次の状態の値、または更新関数を受け付ける、スロットリングされた setter。',
     },
   ]"
 />

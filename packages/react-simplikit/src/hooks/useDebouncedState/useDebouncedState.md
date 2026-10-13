@@ -79,7 +79,7 @@ function useDebouncedState<T>(
       type: 'Dispatch<SetStateAction<T>>',
       required: false,
       description:
-        'A debounced setter that accepts the next state value or an updater function that receives the previous state.',
+        'A debounced setter that accepts the next state value or an updater function.',
     },
   ]"
 />

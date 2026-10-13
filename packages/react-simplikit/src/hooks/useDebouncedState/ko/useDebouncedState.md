@@ -73,7 +73,7 @@ function useDebouncedState<T>(
       name: 'setState',
       type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '다음 상태 값이나 이전 상태를 받는 updater 함수를 받는 디바운스된 setter예요.',
+      description: '다음 상태 값이나 업데이트 함수를 받는 디바운스된 setter예요.',
     },
   ]"
 />

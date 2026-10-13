@@ -73,7 +73,7 @@ function useDebouncedState<T>(
       name: 'setState',
       type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: '接收下一个状态值或以前一个状态为参数的更新函数的防抖状态设置函数。',
+      description: '接收下一个状态值或更新函数的防抖状态设置函数。',
     },
   ]"
 />

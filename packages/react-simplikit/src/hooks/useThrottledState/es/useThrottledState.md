@@ -78,7 +78,7 @@ function useThrottledState<T>(
       name: 'setState',
       type: 'Dispatch<SetStateAction<T>>',
       required: false,
-      description: 'Un setter con limitación de frecuencia que acepta el siguiente valor del estado o una función que recibe el estado anterior.',
+      description: 'Un setter con limitación de frecuencia que acepta el siguiente valor del estado o una función de actualización.',
     },
   ]"
 />

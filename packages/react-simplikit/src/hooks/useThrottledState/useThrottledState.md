@@ -80,7 +80,7 @@ function useThrottledState<T>(
       type: 'Dispatch<SetStateAction<T>>',
       required: false,
       description:
-        'A throttled setter that accepts the next state value or an updater function that receives the previous state.',
+        'A throttled setter that accepts the next state value or an updater function.',
     },
   ]"
 />
