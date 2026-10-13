@@ -204,10 +204,8 @@ describe('useStorageState', () => {
     });
 
     it('should work with custom serializer and deserializer', async () => {
-      const serializer = (value: any) =>
-        ['string', 'number', 'boolean'].includes(typeof value) ? value : JSON.stringify(value);
-      const deserializer = (value: any) =>
-        /^(\d+)|(true|false)|([^[].*)|([^{].*)$/.test(value) ? value : JSON.parse(value);
+      const serializer = (value: string) => value;
+      const deserializer = (value: string) => value;
 
       const { result } = await renderHookSSR(() => useStorageState('test-key', { storage, serializer, deserializer }));
 
@@ -220,12 +218,25 @@ describe('useStorageState', () => {
 
     it('should throw error when value is not serializable', async () => {
       await expect(
-        async () => await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: () => 'world' }))
+        async () =>
+          await renderHookSSR(() =>
+            useStorageState('test-key', {
+              storage,
+              // @ts-expect-error Functions are not serializable.
+              defaultValue: () => 'world',
+            })
+          )
       ).rejects.toThrow('Received a non-serializable value');
 
       await expect(
         async () =>
-          await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: new (class Cls {})() }))
+          await renderHookSSR(() =>
+            useStorageState('test-key', {
+              storage,
+              // @ts-expect-error Class instances are not serializable.
+              defaultValue: new (class Cls {})(),
+            })
+          )
       ).rejects.toThrow('Received a non-serializable value');
     });
   };

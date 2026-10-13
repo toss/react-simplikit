@@ -9,11 +9,11 @@ export type Serializable<T> = T extends string | number | boolean ? T : ToObject
 
 type StorageStateOptions<T> = {
   storage?: Storage;
-  defaultValue?: T;
+  defaultValue?: T & Serializable<T>;
 };
 
 type StorageStateOptionsWithDefaultValue<T> = StorageStateOptions<T> & {
-  defaultValue: T;
+  defaultValue: T & Serializable<T>;
 };
 
 type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
@@ -21,19 +21,13 @@ type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
   deserializer: (value: string) => Serializable<T>;
 };
 
-type SerializableGuard<T extends readonly any[]> = T[0] extends any
-  ? T
-  : T[0] extends never
-    ? 'Received a non-serializable value'
-    : T;
-
 const listeners = new Set<() => void>();
 
 const emitListeners = () => {
   listeners.forEach(listener => listener());
 };
 
-function isPlainObject(value: unknown): value is Record<PropertyKey, any> {
+function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
   if (typeof value !== 'object') {
     return false;
   }
@@ -49,7 +43,7 @@ function isPlainObject(value: unknown): value is Record<PropertyKey, any> {
   return Object.prototype.toString.call(value) === '[object Object]';
 }
 
-const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGuard<T> => {
+const ensureSerializable = <T extends readonly unknown[]>(value: T): T => {
   if (
     value[0] != null &&
     !['string', 'number', 'boolean'].includes(typeof value[0]) &&
@@ -58,7 +52,7 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
     throw new Error('Received a non-serializable value');
   }
 
-  return value as SerializableGuard<T>;
+  return value;
 };
 
 /**
@@ -92,25 +86,19 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
  */
 export function useStorageState<T>(
   key: string
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptionsWithDefaultValue<T>
-): SerializableGuard<readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void, () => void]>;
+): readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void, () => void];
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptions<T>
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptionsWithSerializer<T>
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void];
 export function useStorageState<T>(
   key: string,
   {
@@ -118,9 +106,7 @@ export function useStorageState<T>(
     defaultValue,
     ...options
   }: StorageStateOptions<T> | StorageStateOptionsWithSerializer<T> = {}
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
-> {
+): readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void] {
   // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
   // because `cache.current` is read from `getSnapshot`, which `useSyncExternalStore` calls
   // during render. Belongs on this implementation signature — the overload declarations
