@@ -39,7 +39,7 @@ function useStorageState<T>(
     },
     {
       name: 'options.defaultValue',
-      type: 'T',
+      type: 'T & Serializable<T>',
       required: false,
       description: '기존의 값을 찾을 수 없을 때의 초기 값이에요.',
     },

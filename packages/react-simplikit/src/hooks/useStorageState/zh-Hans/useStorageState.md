@@ -39,7 +39,7 @@ function useStorageState<T>(
     },
     {
       name: 'options.defaultValue',
-      type: 'T',
+      type: 'T & Serializable<T>',
       required: false,
       description: '未找到现有值时的初始值。',
     },

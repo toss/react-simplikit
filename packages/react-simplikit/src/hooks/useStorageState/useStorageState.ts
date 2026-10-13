@@ -64,7 +64,7 @@ const ensureSerializable = <T extends readonly unknown[]>(value: T): T => {
  * @param {string} key - The key used to store the value in storage.
  * @param {Object} [options] - Configuration options for storage behavior.
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
- * @param {T} [options.defaultValue] - The initial value if no existing value is found.
+ * @param {T & Serializable<T>} [options.defaultValue] - The initial value if no existing value is found.
  * @param {Function} [options.serializer] - A function to serialize the state value to a string.
  * @param {Function} [options.deserializer] - A function to deserialize the state value from a string.
  *

@@ -40,7 +40,7 @@ function useStorageState<T>(
     },
     {
       name: 'options.defaultValue',
-      type: 'T',
+      type: 'T & Serializable<T>',
       required: false,
       description: '保存済みの値がない場合の初期値。',
     },
