@@ -1,5 +1,13 @@
 # react-simplikit
 
+## 0.3.3
+
+### Patch Changes
+
+- [#551](https://github.com/toss/react-simplikit/pull/551) [`5ed94bd`](https://github.com/toss/react-simplikit/commit/5ed94bd919188181ec23b22756e7c7fbeabf22d6) Thanks [@theluckystrike](https://github.com/theluckystrike)! - The JSDoc of `useCounter` now marks `options` as optional, matching its `= {}` default, so the generated API pages and the agent skill no longer list it as required.
+
+- [#557](https://github.com/toss/react-simplikit/pull/557) [`ffa5c36`](https://github.com/toss/react-simplikit/commit/ffa5c36b37b93081a03249cd291511d9c902aa09) Thanks [@mnxmnz](https://github.com/mnxmnz)! - The JSDoc of `useIsomorphicLayoutEffect` now states that the effect never runs on the server and that the hook only avoids the `useLayoutEffect` warning that React 18 and earlier emit during server-side rendering, and no longer claims it supports both client and server environments.
+
 ## 0.3.2
 
 ### Patch Changes
