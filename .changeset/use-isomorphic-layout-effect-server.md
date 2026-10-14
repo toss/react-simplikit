@@ -2,4 +2,4 @@
 'react-simplikit': patch
 ---
 
-The JSDoc of `useIsomorphicLayoutEffect` now states that the effect never runs on the server and that the hook only avoids the `useLayoutEffect` warning, and no longer claims it supports both client and server environments.
+The JSDoc of `useIsomorphicLayoutEffect` now states that the effect never runs on the server and that the hook only avoids the `useLayoutEffect` warning that React 18 and earlier emit during server-side rendering, and no longer claims it supports both client and server environments.

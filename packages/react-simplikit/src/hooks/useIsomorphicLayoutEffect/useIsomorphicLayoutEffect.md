@@ -1,10 +1,10 @@
 # useIsomorphicLayoutEffect
 
 `useIsomorphicLayoutEffect` is a React hook that runs `useLayoutEffect` in the browser without triggering its warning during server-side rendering.
-During SSR, there is no DOM to synchronously measure or mutate, so React warns about using `useLayoutEffect`.
-
-React does not run effects on the server, so the effect only runs in the browser. On the server, this hook is `useEffect`, which React skips.
-It exists only to avoid the warning: it does not run anything on the server, and it does not make the server output match the client.
+During SSR, there is no DOM to synchronously measure or mutate, so using `useLayoutEffect` triggers a warning on React 18 and earlier.
+React does not run effects on the server, so the effect only runs in the browser.
+This hook exists only to avoid that warning: it does not run anything on the server, and it does not make the server output match the client.
+React 19 no longer warns, so on React 19 you can use `useLayoutEffect` directly.
 
 In the browser, it runs synchronously after DOM updates but before paint, making it ideal for:
 

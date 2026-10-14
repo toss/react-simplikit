@@ -1,8 +1,6 @@
 # useIsomorphicLayoutEffect
 
-`useIsomorphicLayoutEffect`는 서버 사이드 렌더링 중에 경고를 일으키지 않고 브라우저에서 `useLayoutEffect`를 실행하는 리액트 훅이에요. SSR 환경에서는 동기적으로 측정하거나 변경할 DOM이 없기 때문에, `useLayoutEffect`를 사용하면 리액트가 경고를 보내요.
-
-리액트는 서버에서 effect를 실행하지 않으므로 effect는 브라우저에서만 실행돼요. 서버에서 이 훅은 `useEffect`이고, 리액트는 이를 실행하지 않아요. 이 훅은 경고를 피하기 위해서만 존재해요. 서버에서 아무것도 실행하지 않으며, 서버 출력을 클라이언트와 맞춰 주지도 않아요.
+`useIsomorphicLayoutEffect`는 서버 사이드 렌더링 중에 경고를 일으키지 않고 브라우저에서 `useLayoutEffect`를 실행하는 리액트 훅이에요. SSR 환경에서는 동기적으로 측정하거나 변경할 DOM이 없기 때문에, React 18 이하에서는 `useLayoutEffect`를 사용하면 경고가 발생해요. 리액트는 서버에서 effect를 실행하지 않으므로 effect는 브라우저에서만 실행돼요. 이 훅은 이 경고를 피하기 위해서만 존재해요. 서버에서 아무것도 실행하지 않으며, 서버 출력을 클라이언트와 맞춰 주지도 않아요. React 19부터는 경고가 발생하지 않으므로 `useLayoutEffect`를 바로 사용해도 돼요.
 
 브라우저에서는 DOM 업데이트 후 페인트 전에 동기적으로 실행되므로, 다음과 같은 상황에 적합해요.
 
