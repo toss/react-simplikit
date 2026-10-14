@@ -39,9 +39,9 @@ function useStorageState<T>(
     },
     {
       name: 'options.defaultValue',
-      type: 'T & Serializable<T>',
+      type: 'T',
       required: false,
-      description: '未找到现有值时的初始值。',
+      description: '未找到现有值时使用的可序列化初始值。',
     },
     {
       name: 'options.serializer',

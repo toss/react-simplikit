@@ -1,5 +1,5 @@
 import { act } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, expectTypeOf, it } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -238,6 +238,24 @@ describe('useStorageState', () => {
             })
           )
       ).rejects.toThrow('Received a non-serializable value');
+    });
+
+    it('should preserve useful types for serializable default values', () => {
+      function useTypeCheck() {
+        const [count, setCount] = useStorageState('counter', { defaultValue: 0 });
+        expectTypeOf(count).toEqualTypeOf<number>();
+        setCount(count + 1);
+        setCount(prev => prev + 1);
+
+        const [theme, setTheme] = useStorageState('theme', { defaultValue: 'light' });
+        expectTypeOf(theme).toEqualTypeOf<string>();
+        setTheme('dark');
+
+        useStorageState<string | null>('token', { defaultValue: null });
+        useStorageState<'light' | 'dark'>('theme', { defaultValue: 'light' });
+      }
+
+      expectTypeOf(useTypeCheck).toBeFunction();
     });
   };
 

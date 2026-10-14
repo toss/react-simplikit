@@ -7,13 +7,15 @@ type ToObject<T> = T extends unknown[] | Record<string, unknown> ? T : never;
 
 export type Serializable<T> = T extends string | number | boolean ? T : ToObject<T>;
 
+type ObjectCheck<T> = T extends string | number | boolean ? unknown : ToObject<T>;
+
 type StorageStateOptions<T> = {
   storage?: Storage;
-  defaultValue?: T & Serializable<T>;
+  defaultValue?: T & ObjectCheck<T>;
 };
 
 type StorageStateOptionsWithDefaultValue<T> = StorageStateOptions<T> & {
-  defaultValue: T & Serializable<T>;
+  defaultValue: T & ObjectCheck<T>;
 };
 
 type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
@@ -64,7 +66,7 @@ const ensureSerializable = <T extends readonly unknown[]>(value: T): T => {
  * @param {string} key - The key used to store the value in storage.
  * @param {Object} [options] - Configuration options for storage behavior.
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
- * @param {T & Serializable<T>} [options.defaultValue] - The initial value if no existing value is found.
+ * @param {T} [options.defaultValue] - The serializable initial value if no existing value is found.
  * @param {Function} [options.serializer] - A function to serialize the state value to a string.
  * @param {Function} [options.deserializer] - A function to deserialize the state value from a string.
  *

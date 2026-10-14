@@ -40,9 +40,10 @@ function useStorageState<T>(
     },
     {
       name: 'options.defaultValue',
-      type: 'T & Serializable<T>',
+      type: 'T',
       required: false,
-      description: 'The initial value if no existing value is found.',
+      description:
+        'The serializable initial value if no existing value is found.',
     },
     {
       name: 'options.serializer',
