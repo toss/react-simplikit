@@ -7,6 +7,8 @@ type ThrottleOptions = {
   trailing?: boolean;
 };
 
+const UPDATER_FORWARDED = Symbol('UPDATER_FORWARDED');
+
 /**
  * @description
  * `useThrottledState` is a React hook that manages state and returns a throttled setter.
@@ -51,10 +53,11 @@ export function useThrottledState<T>(
   { leading = true, trailing = true }: ThrottleOptions = {}
 ): [T, Dispatch<SetStateAction<T>>] {
   const [throttledValue, setThrottledValue] = useState(() => initialValue);
-  const lastForwardedRef = useRef(initialValue);
+  const lastForwardedRef = useRef<T | typeof UPDATER_FORWARDED>(initialValue);
 
   function forwardChangedValue(value: SetStateAction<T>) {
     if (typeof value === 'function') {
+      lastForwardedRef.current = UPDATER_FORWARDED;
       setThrottledValue(value);
       return;
     }

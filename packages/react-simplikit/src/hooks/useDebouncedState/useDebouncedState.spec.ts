@@ -196,6 +196,19 @@ describe('useDebouncedState', () => {
     expect(getValue()).toBe('zc');
   });
 
+  it('should apply a direct value after an updater without a render in between', () => {
+    const { result } = renderHookSSR(() => useDebouncedState(0, 100, { leading: true }));
+    const { getValue, setValue } = actions(result);
+
+    act(() => {
+      setValue(prev => prev + 1);
+      setValue(0);
+      vi.advanceTimersByTime(100);
+    });
+
+    expect(getValue()).toBe(0);
+  });
+
   it('should store a function initial value without calling it', () => {
     const fn = vi.fn(() => 'result');
     const { result } = renderHookSSR(() => useDebouncedState(fn, 100));

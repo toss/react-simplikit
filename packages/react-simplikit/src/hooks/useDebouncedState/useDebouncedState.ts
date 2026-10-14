@@ -7,6 +7,8 @@ type DebounceOptions = {
   trailing?: boolean;
 };
 
+const UPDATER_FORWARDED = Symbol('UPDATER_FORWARDED');
+
 /**
  * @description
  * `useDebouncedState` is a React hook that manages state and returns a debounced setter.
@@ -54,10 +56,11 @@ export function useDebouncedState<T>(
   { leading = false, trailing = true }: DebounceOptions = {}
 ): [T, Dispatch<SetStateAction<T>>] {
   const [debouncedValue, setDebouncedValue] = useState(() => initialValue);
-  const lastForwardedRef = useRef(initialValue);
+  const lastForwardedRef = useRef<T | typeof UPDATER_FORWARDED>(initialValue);
 
   function forwardChangedValue(value: SetStateAction<T>) {
     if (typeof value === 'function') {
+      lastForwardedRef.current = UPDATER_FORWARDED;
       setDebouncedValue(value);
       return;
     }
