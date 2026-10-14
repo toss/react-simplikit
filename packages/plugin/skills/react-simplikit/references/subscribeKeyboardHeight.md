@@ -4,6 +4,7 @@
 
 The provided callback is invoked whenever the keyboard height may change,
 including when the keyboard appears, disappears, or changes size.
+By default, it is also invoked once with the current keyboard height when the subscription starts.
 
 Internally, this function listens to both `resize` and `scroll` events
 on the Visual Viewport:
@@ -44,7 +45,7 @@ function subscribeKeyboardHeight(
       name: 'options.immediate',
       type: 'boolean',
       required: false,
-      defaultValue: 'false',
+      defaultValue: 'true',
       description:
         'If true, the callback will be invoked immediately with the current keyboard height.',
     },
@@ -82,7 +83,6 @@ const { unsubscribe } = subscribeKeyboardHeight({
   callback: height => {
     footer.style.paddingBottom = `${height}px`;
   },
-  immediate: true,
 });
 
 // Later, when cleanup is needed
