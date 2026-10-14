@@ -32,7 +32,7 @@ function useImpressionRef<Element extends HTMLElement>(
       description: '요소가 뷰에서 나갈 때 실행되는 콜백 함수예요',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.timeThresholdMs',
       type: 'number',
       required: false,
       defaultValue: '0',
@@ -71,7 +71,7 @@ function Component() {
   const ref = useImpressionRef<HTMLDivElement>({
     onImpressionStart: () => console.log('Element entered view'),
     onImpressionEnd: () => console.log('Element exited view'),
-    timeThreshold: 1000,
+    timeThresholdMs: 1000,
     areaThreshold: 0.5,
   });
 

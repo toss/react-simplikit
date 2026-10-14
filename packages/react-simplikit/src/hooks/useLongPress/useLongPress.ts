@@ -4,7 +4,7 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 type Handler<E extends HTMLElement> = (event: MouseEvent<E> | TouchEvent<E>) => void;
 
 export type UseLongPressOptions<E extends HTMLElement> = {
-  delay?: number;
+  delayMs?: number;
   moveThreshold?: {
     x?: number;
     y?: number;
@@ -21,7 +21,7 @@ export type UseLongPressOptions<E extends HTMLElement> = {
  * @template {HTMLElement} E - The HTML element type that will use the long press handlers.
  * @param {(event: React.MouseEvent<E> | React.TouchEvent<E>) => void} onLongPress - The callback function to be executed when a long press is detected.
  * @param {UseLongPressOptions} [options] - Configuration options for the long press behavior.
- * @param {number} [options.delay=500] - The time in milliseconds before triggering the long press. Defaults to 500ms.
+ * @param {number} [options.delayMs=500] - The time in milliseconds before triggering the long press. Defaults to 500ms.
  * @param {Object} [options.moveThreshold] - Maximum movement allowed before canceling a long press.
  * @param {number} [options.moveThreshold.x] - Maximum horizontal movement in pixels.
  * @param {number} [options.moveThreshold.y] - Maximum vertical movement in pixels.
@@ -46,7 +46,7 @@ export type UseLongPressOptions<E extends HTMLElement> = {
  *   const longPressHandlers = useLongPress(
  *     () => setMenuVisible(true),
  *     {
- *       delay: 400,
+ *       delayMs: 400,
  *       onClick: () => console.log('Normal click'),
  *       onLongPressEnd: () => console.log('Long press completed')
  *     }
@@ -62,7 +62,7 @@ export type UseLongPressOptions<E extends HTMLElement> = {
  */
 export function useLongPress<E extends HTMLElement = HTMLElement>(
   onLongPress: Handler<E>,
-  { delay = 500, moveThreshold, onClick, onLongPressEnd }: UseLongPressOptions<E> = {}
+  { delayMs = 500, moveThreshold, onClick, onLongPressEnd }: UseLongPressOptions<E> = {}
 ) {
   const timeoutRef = useRef<number | null>(null);
   const isLongPressActiveRef = useRef(false);
@@ -124,9 +124,9 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
       timeoutRef.current = window.setTimeout(() => {
         isLongPressActiveRef.current = true;
         preservedOnLongPress(event);
-      }, delay);
+      }, delayMs);
     },
-    [cancelLongPress, delay, getClientPosition, preservedOnLongPress]
+    [cancelLongPress, delayMs, getClientPosition, preservedOnLongPress]
   );
 
   const handlePressEnd = useCallback(

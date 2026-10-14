@@ -2,22 +2,21 @@ import { useEffect, useRef } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
-type IntervalOptions =
-  | number
-  | {
-      delay: number;
-      immediate?: boolean;
-      enabled?: boolean;
-    };
+type UseIntervalOptions = {
+  onTick: () => void;
+  delayMs: number;
+  immediate?: boolean;
+  enabled?: boolean;
+};
 
 /**
  * @description
  * `useInterval` is a React hook that executes a function at a specified interval.
  * It is useful for timers, polling data, and other recurring tasks.
  *
- * @param {() => void} callback - The function to be executed periodically.
- * @param {number | { delay: number; enabled?: boolean; immediate?: boolean }} options - Configures the interval behavior.
- * @param {number} options.delay - The interval duration in milliseconds. If `null`, the interval will not run.
+ * @param {Object} options - Configures the interval behavior.
+ * @param {() => void} options.onTick - The function to be executed periodically.
+ * @param {number} options.delayMs - The interval duration in milliseconds.
  * @param {boolean} [options.immediate=false] - If `true`, executes immediately before starting the interval.
  * @param {boolean} [options.enabled=true] - If `false`, the interval will not run.
  *
@@ -28,9 +27,10 @@ type IntervalOptions =
  * function Timer() {
  *   const [time, setTime] = useState(0);
  *
- *   useInterval(() => {
- *     setTime(prev => prev + 1);
- *   }, 1000);
+ *   useInterval({
+ *     onTick: () => setTime(prev => prev + 1),
+ *     delayMs: 1000,
+ *   });
  *
  *   return (
  *     <div>
@@ -39,12 +39,8 @@ type IntervalOptions =
  *   );
  * }
  */
-export function useInterval(callback: () => void, options: IntervalOptions) {
-  const delay = typeof options === 'number' ? options : options.delay;
-  const immediate = typeof options === 'number' ? false : options.immediate;
-  const enabled = typeof options === 'number' ? true : (options.enabled ?? true);
-
-  const preservedCallback = usePreservedCallback(callback);
+export function useInterval({ onTick, delayMs, immediate = false, enabled = true }: UseIntervalOptions) {
+  const preservedCallback = usePreservedCallback(onTick);
   const immediateCalledRef = useRef(false);
 
   useEffect(
@@ -74,9 +70,9 @@ export function useInterval(callback: () => void, options: IntervalOptions) {
         return;
       }
 
-      const id = setInterval(preservedCallback, delay);
+      const id = setInterval(preservedCallback, delayMs);
       return () => clearInterval(id);
     },
-    [delay, preservedCallback, enabled]
+    [delayMs, preservedCallback, enabled]
   );
 }

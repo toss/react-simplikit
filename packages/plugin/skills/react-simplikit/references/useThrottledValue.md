@@ -1,7 +1,7 @@
 # useThrottledValue
 
 `useThrottledValue` is a React hook that returns a throttled copy of the given value.
-The caller keeps owning the state; the returned value follows it at most once per `wait` milliseconds,
+The caller keeps owning the state; the returned value follows it at most once per `throttleMs` milliseconds,
 which is useful for driving expensive renders from scroll position, pointer position, or an element's
 size on resize.
 
@@ -10,7 +10,7 @@ on mount, so the first change after mount is applied immediately when `leading` 
 If both `leading` and `trailing` are `false`, the returned value never updates.
 
 The value is compared by reference. Passing a new object or array on every render keeps
-the returned value updating every `wait` milliseconds; stabilize the reference first, for
+the returned value updating every `throttleMs` milliseconds; stabilize the reference first, for
 example with `usePreservedReference`.
 
 ## Interface
@@ -18,7 +18,7 @@ example with `usePreservedReference`.
 ```ts
 function useThrottledValue<T>(
   value: T,
-  wait: number,
+  throttleMs: number,
   options?: ThrottleOptions
 ): T;
 ```
@@ -34,7 +34,7 @@ function useThrottledValue<T>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="The length of the throttle window in milliseconds."
 />
@@ -58,7 +58,7 @@ function useThrottledValue<T>(
       required: false,
       defaultValue: 'true',
       description:
-        'If <code>true</code>, the last change in a window is applied <code>wait</code> milliseconds after that change.',
+        'If <code>true</code>, the last change in a window is applied <code>throttleMs</code> milliseconds after that change.',
     },
   ]"
 />

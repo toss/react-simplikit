@@ -8,7 +8,7 @@ type SubscribeKeyboardHeightOptions = {
   callback: (height: number) => void;
   /**
    * If true, the callback will be invoked immediately with the current keyboard height.
-   * @default false
+   * @default true
    */
   immediate?: boolean;
   /**
@@ -32,6 +32,7 @@ type SubscribeKeyboardHeightResult = {
  *
  * The provided callback is invoked whenever the keyboard height may change,
  * including when the keyboard appears, disappears, or changes size.
+ * By default, it is also invoked once with the current keyboard height when the subscription starts.
  *
  * Internally, this function listens to both `resize` and `scroll` events
  * on the Visual Viewport:
@@ -45,7 +46,7 @@ type SubscribeKeyboardHeightResult = {
  *
  * @param {SubscribeKeyboardHeightOptions} options - Configuration options
  * @param {(height: number) => void} options.callback - A function that will be called with the updated keyboard height in pixels.
- * @param {boolean} [options.immediate=false] - If true, the callback will be invoked immediately with the current keyboard height.
+ * @param {boolean} [options.immediate=true] - If true, the callback will be invoked immediately with the current keyboard height.
  * @param {number} [options.throttleMs=16] - Throttle interval in milliseconds.
  *
  * @returns {SubscribeKeyboardHeightResult} An object containing the unsubscribe function.
@@ -56,7 +57,6 @@ type SubscribeKeyboardHeightResult = {
  *   callback: (height) => {
  *     footer.style.paddingBottom = `${height}px`;
  *   },
- *   immediate: true,
  * });
  *
  * // Later, when cleanup is needed
@@ -64,7 +64,7 @@ type SubscribeKeyboardHeightResult = {
  */
 export function subscribeKeyboardHeight({
   callback,
-  immediate = false,
+  immediate = true,
   throttleMs = 16,
 }: SubscribeKeyboardHeightOptions): SubscribeKeyboardHeightResult {
   if (isServer()) {

@@ -11,7 +11,7 @@ type DebounceOptions = {
  * @description
  * `useDebouncedValue` is a React hook that returns a debounced copy of the given value.
  * The caller keeps owning the state; the hook only delays how quickly the returned value follows it.
- * The returned value updates `wait` milliseconds after the last change, which is useful for
+ * The returned value updates `debounceMs` milliseconds after the last change, which is useful for
  * deriving a search query or a validation input from fast-changing state.
  *
  * Pending updates are cancelled when the component unmounts. The example displays the
@@ -22,15 +22,15 @@ type DebounceOptions = {
  * If both `leading` and `trailing` are `false`, the returned value never updates.
  *
  * The value is compared by reference. Passing a new object or array on every render keeps
- * the returned value updating every `wait` milliseconds; stabilize the reference first, for
+ * the returned value updating every `debounceMs` milliseconds; stabilize the reference first, for
  * example with `usePreservedReference`.
  *
  * @template T - The type of the value.
  * @param {T} value - The value to debounce.
- * @param {number} wait - The number of milliseconds to wait after the last change before updating.
+ * @param {number} debounceMs - The number of milliseconds to wait after the last change before updating.
  * @param {DebounceOptions} [options] - Configuration options for debounce behavior.
  * @param {boolean} [options.leading=false] - If `true`, the first change after an idle period is applied immediately.
- * @param {boolean} [options.trailing=true] - If `true`, the last change is applied after `wait` milliseconds.
+ * @param {boolean} [options.trailing=true] - If `true`, the last change is applied after `debounceMs` milliseconds.
  *
  * @returns {T} The debounced value.
  *
@@ -55,11 +55,11 @@ type DebounceOptions = {
  */
 export function useDebouncedValue<T>(
   value: T,
-  wait: number,
+  debounceMs: number,
   { leading = false, trailing = true }: DebounceOptions = {}
 ): T {
   const [debouncedValue, setDebouncedValue] = useState(() => value);
-  const debounced = useDebounce((next: T) => setDebouncedValue(() => next), wait, { leading, trailing });
+  const debounced = useDebounce((next: T) => setDebouncedValue(() => next), debounceMs, { leading, trailing });
   const lastForwardedRef = useRef(value);
 
   useEffect(

@@ -26,7 +26,7 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  * @template T - The type of the value passed to `onChange`.
  * @param {Object} options - The options object.
  * @param {(newValue: T) => void} options.onChange - The callback to debounce. A call with the same value as the last forwarded one is skipped.
- * @param {number} options.timeThreshold - The number of milliseconds to delay the function execution.
+ * @param {number} options.debounceMs - The number of milliseconds to delay the function execution.
  * @param {boolean} [options.leading=false] - If `true`, the function is called at the start of the sequence.
  * @param {boolean} [options.trailing=true] - If `true`, the function is called at the end of the sequence.
  *
@@ -38,7 +38,7 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  *
  * function SearchInput() {
  *   const [query, setQuery] = useState('');
- *   const setQueryDebounced = useDebouncedCallback({ onChange: setQuery, timeThreshold: 300 });
+ *   const setQueryDebounced = useDebouncedCallback({ onChange: setQuery, debounceMs: 300 });
  *
  *   return (
  *     <>
@@ -50,12 +50,12 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  */
 export function useDebouncedCallback<T>({
   onChange,
-  timeThreshold,
+  debounceMs,
   leading = false,
   trailing = true,
 }: DebounceOptions & {
   onChange: (newValue: T) => void;
-  timeThreshold: number;
+  debounceMs: number;
 }): (nextValue: T) => void {
   const lastForwardedRef = useRef<T | typeof NOT_INVOKED>(NOT_INVOKED);
 
@@ -69,7 +69,7 @@ export function useDebouncedCallback<T>({
 
       lastForwardedRef.current = nextValue;
     },
-    timeThreshold,
+    debounceMs,
     { leading, trailing }
   );
 }

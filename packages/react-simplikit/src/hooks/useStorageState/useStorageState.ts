@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { SetStateAction, useCallback, useRef, useSyncExternalStore } from 'react';
+import { SetStateAction, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
 
 import { safeLocalStorage, Storage } from './storage.ts';
 
@@ -19,6 +19,11 @@ type StorageStateOptionsWithDefaultValue<T> = StorageStateOptions<T> & {
 type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
   serializer: (value: Serializable<T>) => string;
   deserializer: (value: string) => Serializable<T>;
+};
+
+type StorageStateActions<V> = {
+  setValue: (value: SetStateAction<V>) => void;
+  refresh: () => void;
 };
 
 type SerializableGuard<T extends readonly any[]> = T[0] extends any
@@ -63,7 +68,7 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
 
 /**
  * @description
- * `useStorageState` is a React that functions like `useState` but persists the state value in browser storage.
+ * `useStorageState` is a React hook that functions like `useState` but persists the state value in browser storage.
  * The value is retained across page reloads and can be shared between tabs when using `localStorage`.
  *
  * @template T - The type of the stored value.
@@ -74,43 +79,37 @@ const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGua
  * @param {Function} [options.serializer] - A function to serialize the state value to a string.
  * @param {Function} [options.deserializer] - A function to deserialize the state value from a string.
  *
- * @returns {readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]} A tuple:
+ * @returns {readonly [state: Serializable<T> | undefined, actions: StorageStateActions<Serializable<T> | undefined>]} A tuple containing the state and actions to change it.
  * - state `Serializable<T> | undefined` - The current state value retrieved from storage;
- * - setState `(value: SetStateAction<Serializable<T> | undefined>) => void` - A function to update and persist the state;
- * - refreshState `() => void` - A function to refresh the state from storage;
+ * - actions.setValue `(value: SetStateAction<Serializable<T> | undefined>) => void` - A function to update and persist the state;
+ * - actions.refresh `() => void` - A function to refresh the state from storage;
  * @example
  * // Counter with persistent state
  * import { useStorageState } from 'react-simplikit';
  *
  * function Counter() {
- *   const [count, setCount] = useStorageState<number>('counter', {
+ *   const [count, { setValue }] = useStorageState<number>('counter', {
  *     defaultValue: 0,
  *   });
  *
- *   return <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>;
+ *   return <button onClick={() => setValue(prev => prev + 1)}>Count: {count}</button>;
  * }
  */
 export function useStorageState<T>(
   key: string
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+): SerializableGuard<readonly [Serializable<T> | undefined, StorageStateActions<Serializable<T> | undefined>]>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptionsWithDefaultValue<T>
-): SerializableGuard<readonly [Serializable<T>, (value: SetStateAction<Serializable<T>>) => void, () => void]>;
+): SerializableGuard<readonly [Serializable<T>, StorageStateActions<Serializable<T>>]>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptions<T>
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+): SerializableGuard<readonly [Serializable<T> | undefined, StorageStateActions<Serializable<T> | undefined>]>;
 export function useStorageState<T>(
   key: string,
   options: StorageStateOptionsWithSerializer<T>
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
->;
+): SerializableGuard<readonly [Serializable<T> | undefined, StorageStateActions<Serializable<T> | undefined>]>;
 export function useStorageState<T>(
   key: string,
   {
@@ -118,9 +117,7 @@ export function useStorageState<T>(
     defaultValue,
     ...options
   }: StorageStateOptions<T> | StorageStateOptionsWithSerializer<T> = {}
-): SerializableGuard<
-  readonly [Serializable<T> | undefined, (value: SetStateAction<Serializable<T> | undefined>) => void, () => void]
-> {
+): SerializableGuard<readonly [Serializable<T> | undefined, StorageStateActions<Serializable<T> | undefined>]> {
   // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
   // because `cache.current` is read from `getSnapshot`, which `useSyncExternalStore` calls
   // during render. Belongs on this implementation signature — the overload declarations
@@ -193,9 +190,14 @@ export function useStorageState<T>(
     setStorageState(getSnapshot());
   }, [storage, getSnapshot, setStorageState]);
 
-  /* eslint-disable-next-line react-hooks/refs -- the two callbacks close over `cache` through
-     `getSnapshot`, so the rule treats handing them to any function as a possible ref read
+  const actions = useMemo<StorageStateActions<Serializable<T> | undefined>>(
+    () => ({ setValue: setStorageState, refresh: refreshStorageState }),
+    [setStorageState, refreshStorageState]
+  );
+
+  /* eslint-disable-next-line react-hooks/refs -- the two callbacks in `actions` close over `cache`
+     through `getSnapshot`, so the rule treats handing them to any function as a possible ref read
      during render. `ensureSerializable` only inspects element 0 — `storageState`, a plain
-     value — and never calls them; passing either callback alone reproduces the report. */
-  return ensureSerializable([storageState, setStorageState, refreshStorageState] as const);
+     value — and never calls them. */
+  return ensureSerializable([storageState, actions] as const);
 }

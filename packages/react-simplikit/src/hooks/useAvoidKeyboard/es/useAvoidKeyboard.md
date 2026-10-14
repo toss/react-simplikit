@@ -28,7 +28,7 @@ function useAvoidKeyboard(
         'Desplazamiento inferior base en píxeles cuando el teclado está oculto. Útil para tener en cuenta el área del indicador de inicio del iPhone.',
     },
     {
-      name: 'options.transitionDuration',
+      name: 'options.transitionDurationMs',
       type: 'number',
       required: false,
       defaultValue: '200',

@@ -20,7 +20,7 @@ function useDoubleClick<E extends HTMLElement>(
   description="Opciones de configuración para gestionar los clics."
   :nested="[
     {
-      name: 'props.delay',
+      name: 'props.delayMs',
       type: 'number',
       required: false,
       defaultValue: '250',
@@ -28,13 +28,13 @@ function useDoubleClick<E extends HTMLElement>(
         'El número de milisegundos de espera antes de ejecutar el callback de un solo clic. El valor predeterminado es 250 ms.',
     },
     {
-      name: 'props.click',
+      name: 'props.onClick',
       type: '(event: MouseEvent<E>) => void',
       required: false,
       description: 'El callback que debe ejecutarse al hacer un solo clic.',
     },
     {
-      name: 'props.doubleClick',
+      name: 'props.onDoubleClick',
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
@@ -61,8 +61,8 @@ function GalleryCard() {
   const handleDoubleClick = () => alert('¡Ampliar!');
 
   const handleEvent = useDoubleClick({
-    click: handleClick,
-    doubleClick: handleDoubleClick,
+    onClick: handleClick,
+    onDoubleClick: handleDoubleClick,
   });
 
   return (

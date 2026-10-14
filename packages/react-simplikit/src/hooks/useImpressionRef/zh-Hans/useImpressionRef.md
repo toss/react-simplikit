@@ -32,7 +32,7 @@ function useImpressionRef<Element extends HTMLElement>(
       description: '元素退出视图时执行的回调函数',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.timeThresholdMs',
       type: 'number',
       required: false,
       defaultValue: '0',
@@ -71,7 +71,7 @@ function Component() {
   const ref = useImpressionRef<HTMLDivElement>({
     onImpressionStart: () => console.log('Element entered view'),
     onImpressionEnd: () => console.log('Element exited view'),
-    timeThreshold: 1000,
+    timeThresholdMs: 1000,
     areaThreshold: 0.5,
   });
 

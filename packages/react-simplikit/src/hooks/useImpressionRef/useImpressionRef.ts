@@ -2,15 +2,15 @@ import { useEffect, useRef } from 'react';
 
 import { useDebouncedCallback } from '../useDebouncedCallback/useDebouncedCallback.ts';
 import { useIntersectionObserver } from '../useIntersectionObserver/index.ts';
+import { usePageVisibilityEffect } from '../usePageVisibilityEffect/index.ts';
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-import { useVisibilityEvent } from '../useVisibilityEvent/index.ts';
 
 export type UseImpressionRefOptions = Partial<{
   onImpressionStart: () => void;
   onImpressionEnd: () => void;
   rootMargin: string;
   areaThreshold: number;
-  timeThreshold: number;
+  timeThresholdMs: number;
 }>;
 
 /**
@@ -22,7 +22,7 @@ export type UseImpressionRefOptions = Partial<{
  * @param {UseImpressionRefOptions} options - Options for tracking the element's visibility.
  * @param {() => void} [options.onImpressionStart] - Callback function executed when the element enters the view
  * @param {() => void} [options.onImpressionEnd] - Callback function executed when the element exits the view
- * @param {number} [options.timeThreshold=0] - Minimum time the element must be visible (in milliseconds)
+ * @param {number} [options.timeThresholdMs=0] - Minimum time the element must be visible (in milliseconds)
  * @param {number} [options.areaThreshold=0] - Minimum ratio of the element that must be visible (0 to 1)
  * @param {string} options.rootMargin - Margin to adjust the detection area
  *
@@ -35,7 +35,7 @@ export type UseImpressionRefOptions = Partial<{
  *   const ref = useImpressionRef<HTMLDivElement>({
  *     onImpressionStart: () => console.log('Element entered view'),
  *     onImpressionEnd: () => console.log('Element exited view'),
- *     timeThreshold: 1000,
+ *     timeThresholdMs: 1000,
  *     areaThreshold: 0.5,
  *   });
  *
@@ -47,7 +47,7 @@ export function useImpressionRef<Element extends HTMLElement>({
   onImpressionEnd = () => {},
   rootMargin,
   areaThreshold = 0,
-  timeThreshold = 0,
+  timeThresholdMs = 0,
 }: UseImpressionRefOptions) {
   const impressionStartHandler = usePreservedCallback(onImpressionStart);
   const impressionEndHandler = usePreservedCallback(onImpressionEnd);
@@ -60,7 +60,7 @@ export function useImpressionRef<Element extends HTMLElement>({
   // or the tab is hidden before it ever intersects); an end without a start must not be emitted.
   const hasImpressionStartedRef = useRef(false);
   const impressionEventHandler = useDebouncedCallback({
-    timeThreshold,
+    debounceMs: timeThresholdMs,
     onChange: (impressed: boolean) => {
       if (impressed) {
         hasImpressionStartedRef.current = true;
@@ -96,7 +96,7 @@ export function useImpressionRef<Element extends HTMLElement>({
     [impressionEndHandler]
   );
 
-  useVisibilityEvent(documentVisible => {
+  usePageVisibilityEffect(documentVisible => {
     if (!isIntersectingRef.current) {
       return;
     }

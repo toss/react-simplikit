@@ -24,7 +24,7 @@ export type PageVisibility = {
  * It monitors when the user switches tabs or minimizes the browser using the Page Visibility API.
  * Useful for pausing/resuming animations, videos, or background tasks to improve performance and the user experience.
  *
- * @see `useVisibilityEvent` runs a callback on each change instead of returning state.
+ * @see `usePageVisibilityEffect` runs a callback on each change instead of returning state.
  *
  * @returns {PageVisibility} Page visibility information
  * - isVisible `boolean` - `true` if the page is currently visible to the user
