@@ -6,9 +6,9 @@
 
 ```ts
 function usePreservedCallback<
-  Arguments extends any[] = any[],
+  Arguments extends unknown[] = unknown[],
   ReturnValue = unknown,
->(callback: (...args: any[]) => any): (...args: any[]) => any;
+>(callback: (...args: unknown[]) => unknown): (...args: unknown[]) => unknown;
 ```
 
 ### 파라미터
@@ -16,7 +16,7 @@ function usePreservedCallback<
 <Interface
   required
   name="callback"
-  type="(...args: any[]) => any"
+  type="(...args: unknown[]) => unknown"
   description="유지할 함수예요. 컴포넌트가 리렌더링될 때도 항상 최신 상태나 props를 참조해요."
 />
 
@@ -24,7 +24,7 @@ function usePreservedCallback<
 
 <Interface
   name=""
-  type="(...args: any[]) => any"
+  type="(...args: unknown[]) => unknown"
   description="입력 콜백과 동일한 시그니처를 가지는 함수예요. 반환된 함수는 최신 상태나 props에 접근하면서 안정적인 참조를 유지해요."
 />
 

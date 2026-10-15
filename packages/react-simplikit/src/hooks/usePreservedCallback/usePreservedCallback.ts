@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef } from 'react';
 /**
  * @description
@@ -6,12 +5,12 @@ import { useCallback, useEffect, useRef } from 'react';
  * while ensuring it always has access to the latest state or props. This prevents unnecessary re-renders
  * and simplifies dependency management when passing callbacks to child components or handling event listeners.
  *
- * @template {any[]} [Arguments=any[]] - The parameter types of the callback.
+ * @template {unknown[]} [Arguments=unknown[]] - The parameter types of the callback.
  * @template [ReturnValue=unknown] - The return type of the callback.
- * @param {(...args: any[]) => any} callback - The function to preserve.
+ * @param {(...args: unknown[]) => unknown} callback - The function to preserve.
  *   It always references the latest state or props, even when the component re-renders.
  *
- * @returns {(...args: any[]) => any} A function with the same signature as the input callback.
+ * @returns {(...args: unknown[]) => unknown} A function with the same signature as the input callback.
  *   The returned function maintains a stable reference while accessing the latest state or props.
  *
  * @example
@@ -29,7 +28,7 @@ import { useCallback, useEffect, useRef } from 'react';
  *   return <button onClick={handleClick}>Click me</button>;
  * }
  */
-export function usePreservedCallback<Arguments extends any[] = any[], ReturnValue = unknown>(
+export function usePreservedCallback<Arguments extends unknown[] = unknown[], ReturnValue = unknown>(
   callback: (...args: Arguments) => ReturnValue
 ) {
   const callbackRef = useRef(callback);

@@ -8,9 +8,9 @@ y simplifica la gestión de dependencias cuando pasas callbacks a componentes hi
 
 ```ts
 function usePreservedCallback<
-  Arguments extends any[] = any[],
+  Arguments extends unknown[] = unknown[],
   ReturnValue = unknown,
->(callback: (...args: any[]) => any): (...args: any[]) => any;
+>(callback: (...args: unknown[]) => unknown): (...args: unknown[]) => unknown;
 ```
 
 ### Parámetros
@@ -18,7 +18,7 @@ function usePreservedCallback<
 <Interface
   required
   name="callback"
-  type="(...args: any[]) => any"
+  type="(...args: unknown[]) => unknown"
   description="La función que quieres preservar. Siempre hace referencia al estado o las props más recientes, incluso cuando el componente vuelve a renderizarse."
 />
 
@@ -26,7 +26,7 @@ function usePreservedCallback<
 
 <Interface
   name=""
-  type="(...args: any[]) => any"
+  type="(...args: unknown[]) => unknown"
   description="Una función con la misma firma que el callback de entrada. La función devuelta mantiene una referencia estable y accede al estado o las props más recientes."
 />
 
