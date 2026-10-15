@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { useThrottle } from '../useThrottle/index.ts';
+import { useThrottle } from '../_internal/useThrottle/useThrottle.ts';
 
 type ThrottleOptions = {
   leading?: boolean;
