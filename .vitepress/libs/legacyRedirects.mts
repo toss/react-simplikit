@@ -61,10 +61,12 @@ export function collectLegacyRedirects(): RedirectPair[] {
 
 function collectReferenceRedirects(): RedirectPair[] {
   return ['hooks', 'components', 'utils'].flatMap(category =>
-    listDirectories(path.join(packageSourceRoot, category)).map(name => ({
-      from: `${RETIRED_MOBILE_PAGES.has(name) ? 'mobile' : 'core'}/${category}/${name}.html`,
-      to: `${category}/${name}.html`,
-    }))
+    listDirectories(path.join(packageSourceRoot, category))
+      .filter(name => name !== '_internal')
+      .map(name => ({
+        from: `${RETIRED_MOBILE_PAGES.has(name) ? 'mobile' : 'core'}/${category}/${name}.html`,
+        to: `${category}/${name}.html`,
+      }))
   );
 }
 

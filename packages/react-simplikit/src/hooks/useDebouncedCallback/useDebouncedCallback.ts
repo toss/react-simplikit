@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { useDebounce } from '../useDebounce/index.ts';
+import { useDebounce } from '../_internal/useDebounce/useDebounce.ts';
 
 type DebounceOptions = {
   leading?: boolean;
