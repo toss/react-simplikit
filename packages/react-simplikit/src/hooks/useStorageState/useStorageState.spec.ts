@@ -1,5 +1,5 @@
 import { act } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, expectTypeOf, it } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -231,12 +231,12 @@ describe('useStorageState', () => {
     it('should throw error when value is not serializable', async () => {
       await expect(
         async () => await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: () => 'world' }))
-      ).rejects.toThrow('Received a non-serializable value');
+      ).rejects.toThrow('defaultValue is not JSON-serializable');
 
       await expect(
         async () =>
           await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: new (class Cls {})() }))
-      ).rejects.toThrow('Received a non-serializable value');
+      ).rejects.toThrow('defaultValue is not JSON-serializable');
     });
   };
 
@@ -424,6 +424,186 @@ describe('useStorageState', () => {
       });
 
       expect(result.current[0]).toBeUndefined();
+    });
+  });
+
+  describe('when the value is stored as JSON', () => {
+    const storage = new MemoStorage();
+
+    afterEach(() => {
+      storage.clear();
+    });
+
+    it('should throw with the path when a nested Date is set', async () => {
+      const { result } = await renderHookSSR(() =>
+        useStorageState<{ list: Array<{ at: Date | string }> }>('test-key', {
+          storage,
+          defaultValue: { list: [{ at: 'now' }] },
+        })
+      );
+
+      expect(() => act(() => result.current[1].setValue({ list: [{ at: 'now' }, { at: new Date() }] }))).toThrow(
+        'value.list[1].at is not JSON-serializable'
+      );
+      expect(storage.get('test-key')).toBeNull();
+    });
+
+    it('should throw when a nested function is set through an updater', async () => {
+      const { result } = await renderHookSSR(() =>
+        useStorageState<Record<string, unknown>>('test-key', { storage, defaultValue: {} })
+      );
+
+      expect(() => act(() => result.current[1].setValue(prev => ({ ...prev, onClick: () => {} })))).toThrow(
+        'value.onClick is not JSON-serializable'
+      );
+    });
+
+    it('should throw for NaN and for undefined inside an array', async () => {
+      const { result } = await renderHookSSR(() => useStorageState<unknown>('test-key', { storage }));
+
+      expect(() => act(() => result.current[1].setValue({ ratio: NaN }))).toThrow(
+        'value.ratio is not JSON-serializable'
+      );
+      expect(() => act(() => result.current[1].setValue([1, undefined]))).toThrow('value[1] is not JSON-serializable');
+    });
+
+    it('should drop an undefined property like JSON.stringify does', async () => {
+      const { result } = await renderHookSSR(() =>
+        useStorageState<{ nickname: string | undefined; age: number }>('test-key', {
+          storage,
+          defaultValue: { nickname: undefined, age: 1 },
+        })
+      );
+
+      await act(async () => {
+        result.current[1].setValue({ nickname: undefined, age: 2 });
+      });
+
+      expect(storage.get('test-key')).toBe('{"age":2}');
+    });
+
+    it('should check defaultValue on mount even when storage already holds a value', async () => {
+      storage.set('test-key', JSON.stringify({ at: '2026-01-01' }));
+
+      await expect(
+        async () =>
+          await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: { at: new Date(0) } }))
+      ).rejects.toThrow('defaultValue.at is not JSON-serializable');
+    });
+  });
+
+  describe('when serializer and deserializer are passed', () => {
+    const storage = new MemoStorage();
+
+    afterEach(() => {
+      storage.clear();
+    });
+
+    it('should store a Date default and updates without the JSON check', async () => {
+      const { result } = await renderHookSSR(() =>
+        useStorageState('test-key', {
+          storage,
+          defaultValue: new Date(0),
+          serializer: date => date.toISOString(),
+          deserializer: text => new Date(text),
+        })
+      );
+
+      expect(result.current[0]).toEqual(new Date(0));
+
+      await act(async () => {
+        result.current[1].setValue(new Date(1000));
+      });
+
+      expect(storage.get('test-key')).toBe('1970-01-01T00:00:01.000Z');
+      expect(result.current[0]).toEqual(new Date(1000));
+    });
+
+    it('should ignore a deserializer passed without a serializer', async () => {
+      storage.set('test-key', JSON.stringify('stored'));
+      const options = { storage, deserializer: () => 'custom' };
+
+      // @ts-expect-error A lone deserializer would read a format the value was never written in.
+      const { result } = await renderHookSSR(() => useStorageState('test-key', options));
+
+      expect(result.current[0]).toBe('stored');
+    });
+  });
+
+  describe('types', () => {
+    type User = { name: string };
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- users declare stored shapes as interfaces too, and an interface has no implicit index signature
+    interface Settings {
+      theme: string;
+    }
+
+    it('should infer the state type from defaultValue and the generic', () => {
+      function useTypeCheck() {
+        const [count, { setValue: setCount }] = useStorageState('count', { defaultValue: 0 });
+        expectTypeOf(count).toEqualTypeOf<number>();
+        setCount(count + 1);
+        setCount(prev => prev + 1);
+
+        const [theme] = useStorageState('theme', { defaultValue: 'light' });
+        expectTypeOf(theme).toEqualTypeOf<string>();
+
+        const [mode, { setValue: setMode }] = useStorageState<'light' | 'dark'>('mode', { defaultValue: 'light' });
+        expectTypeOf(mode).toEqualTypeOf<'light' | 'dark'>();
+        // @ts-expect-error 'blue' is not one of the declared modes.
+        setMode('blue');
+
+        const [token] = useStorageState<string>('token');
+        expectTypeOf(token).toEqualTypeOf<string | undefined>();
+      }
+
+      expectTypeOf(useTypeCheck).toBeFunction();
+    });
+
+    it('should keep null, interfaces and records in the state type', () => {
+      function useTypeCheck() {
+        const [user] = useStorageState<User | null>('user', { defaultValue: null });
+        expectTypeOf(user).toEqualTypeOf<User | null>();
+
+        const [settings] = useStorageState<Settings>('settings', { defaultValue: { theme: 'light' } });
+        expectTypeOf(settings).toEqualTypeOf<Settings>();
+
+        const [record] = useStorageState<Record<string, unknown>>('record', { defaultValue: { a: 1 } });
+        expectTypeOf(record).toEqualTypeOf<Record<string, unknown>>();
+      }
+
+      expectTypeOf(useTypeCheck).toBeFunction();
+    });
+
+    it('should type serializer and deserializer from defaultValue', () => {
+      function useTypeCheck() {
+        const [date] = useStorageState('date', {
+          defaultValue: new Date(0),
+          serializer: value => value.toISOString(),
+          deserializer: text => new Date(text),
+        });
+        expectTypeOf(date).toEqualTypeOf<Date>();
+
+        const [maybeDate] = useStorageState<Date>('maybe-date', {
+          serializer: value => value.toISOString(),
+          deserializer: text => new Date(text),
+        });
+        expectTypeOf(maybeDate).toEqualTypeOf<Date | undefined>();
+
+        // @ts-expect-error A serializer needs a matching deserializer.
+        useStorageState('half', { defaultValue: 0, serializer: value => String(value) });
+      }
+
+      expectTypeOf(useTypeCheck).toBeFunction();
+    });
+
+    it('should accept a generic value from a wrapping hook', () => {
+      function useWrapped<T>(key: string, defaultValue: T) {
+        const [value, { setValue }] = useStorageState(key, { defaultValue });
+        setValue(value);
+        return value;
+      }
+
+      expectTypeOf(useWrapped<number>).returns.toEqualTypeOf<number>();
     });
   });
 });
