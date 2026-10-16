@@ -1,5 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { SetStateAction, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
+import { SetStateAction, useMemo, useRef, useSyncExternalStore } from 'react';
+
+import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 import { safeLocalStorage, Storage } from './storage.ts';
 
@@ -161,15 +162,15 @@ export function useStorageState<T>(
     parsed: defaultValue,
   });
 
-  const getSnapshot = useCallback(() => {
+  // Runs during render, so it reads this render's options instead of a ref that effects update later.
+  const getSnapshot = () => {
     const data = storage.get(key);
 
     if (data !== cache.current.data) {
       const isMount = cache.current.data === undefined;
       const fallsBackToDefault = data == null;
-      const needsDefaultCheck = codec === null && defaultValue !== undefined && (isMount || fallsBackToDefault);
 
-      if (needsDefaultCheck) {
+      if (codec === null && defaultValue !== undefined && (isMount || fallsBackToDefault)) {
         assertJson(defaultValue, 'defaultValue');
       }
 
@@ -182,7 +183,7 @@ export function useStorageState<T>(
     }
 
     return cache.current.parsed;
-  }, [defaultValue, key, storage]);
+  };
 
   const storageState = useSyncExternalStore<T | undefined>(
     onStoreChange => {
@@ -201,27 +202,25 @@ export function useStorageState<T>(
         window.removeEventListener('storage', handler);
       };
     },
-    () => getSnapshot(),
+    getSnapshot,
     () => defaultValue
   );
 
-  const setStorageState = useCallback(
-    (value: SetStateAction<T | undefined>) => {
-      const nextValue = isUpdater(value) ? value(getSnapshot()) : value;
+  // Called from handlers after commit, so preserving it keeps `actions` stable with inline options.
+  const setStorageState = usePreservedCallback((value: SetStateAction<T | undefined>) => {
+    const nextValue = isUpdater(value) ? value(getSnapshot()) : value;
 
-      if (nextValue == null) {
-        storage.remove(key);
-      } else {
-        storage.set(key, serialize(nextValue));
-      }
-      emitListeners();
-    },
-    [getSnapshot, key, storage]
-  );
+    if (nextValue == null) {
+      storage.remove(key);
+    } else {
+      storage.set(key, serialize(nextValue));
+    }
+    emitListeners();
+  });
 
-  const refreshStorageState = useCallback(() => {
+  const refreshStorageState = usePreservedCallback(() => {
     setStorageState(getSnapshot());
-  }, [storage, getSnapshot, setStorageState]);
+  });
 
   const actions = useMemo<StorageStateActions<T | undefined>>(
     () => ({ setValue: setStorageState, refresh: refreshStorageState }),

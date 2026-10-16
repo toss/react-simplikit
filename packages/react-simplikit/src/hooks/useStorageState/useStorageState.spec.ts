@@ -528,6 +528,81 @@ describe('useStorageState', () => {
 
       expect(result.current[0]).toBe('stored');
     });
+
+    it('should write with the serializer from the latest render', async () => {
+      const { result, rerender } = await renderHookSSR(
+        ({ prefix }: { prefix: string }) =>
+          useStorageState('test-key', {
+            storage,
+            defaultValue: 'a',
+            serializer: value => `${prefix}:${value}`,
+            deserializer: text => text.slice(text.indexOf(':') + 1),
+          }),
+        { initialProps: { prefix: 'v1' } }
+      );
+
+      rerender({ prefix: 'v2' });
+      await act(async () => {
+        result.current[1].setValue('b');
+      });
+
+      expect(storage.get('test-key')).toBe('v2:b');
+    });
+
+    it('should read with the deserializer from the latest render', async () => {
+      const { result, rerender } = await renderHookSSR(
+        ({ suffix }: { suffix: string }) =>
+          useStorageState('test-key', {
+            storage,
+            defaultValue: 'a',
+            serializer: value => value,
+            deserializer: text => `${text}${suffix}`,
+          }),
+        { initialProps: { suffix: '' } }
+      );
+
+      rerender({ suffix: '!' });
+      await act(async () => {
+        result.current[1].setValue('b');
+      });
+
+      expect(result.current[0]).toBe('b!');
+    });
+
+    it('should read with the new deserializer when the key and deserializer change together', async () => {
+      storage.set('a', 'A');
+      storage.set('b', 'B');
+      const { result, rerender } = await renderHookSSR(
+        ({ key, tag }: { key: string; tag: string }) =>
+          useStorageState(key, {
+            storage,
+            defaultValue: '',
+            serializer: value => value,
+            deserializer: text => `${tag}:${text}`,
+          }),
+        { initialProps: { key: 'a', tag: 'old' } }
+      );
+
+      rerender({ key: 'b', tag: 'new' });
+
+      expect(result.current[0]).toBe('new:B');
+    });
+
+    it('should keep the actions object stable when the functions are passed inline', async () => {
+      const { result, rerender } = await renderHookSSR(() =>
+        useStorageState('test-key', {
+          storage,
+          defaultValue: 0,
+          serializer: value => String(value),
+          deserializer: text => Number(text),
+        })
+      );
+      const [, actions] = result.current;
+
+      rerender();
+
+      expect(result.current[1]).toBe(actions);
+    });
   });
 
   describe('types', () => {
