@@ -38,4 +38,4 @@ The documentation is written in English and translated into several languages; a
 - **Strict Type Definitions**: All parameters, return values, and options are fully typed
 - **IntelliSense Support**: Get autocompletion and inline documentation in your IDE
 - **Generic Types**: Flexible APIs that preserve your type information
-- **No `any` Types**: We avoid escape hatches that compromise type safety
+- **No `any` in Implementation**: Implementation code never uses `any`. The one exception is APIs that take your function: their parameter types come from your own annotations, so unannotated parameters end up as `any`

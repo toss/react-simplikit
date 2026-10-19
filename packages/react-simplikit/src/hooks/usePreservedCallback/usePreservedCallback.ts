@@ -1,5 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef } from 'react';
+
+import type { CallerTypedArgs } from '../../_internal/types.ts';
+
 /**
  * @description
  * `usePreservedCallback` is a React hook that maintains a stable reference to a callback function
@@ -29,7 +31,7 @@ import { useCallback, useEffect, useRef } from 'react';
  *   return <button onClick={handleClick}>Click me</button>;
  * }
  */
-export function usePreservedCallback<Arguments extends any[] = any[], ReturnValue = unknown>(
+export function usePreservedCallback<Arguments extends CallerTypedArgs = CallerTypedArgs, ReturnValue = unknown>(
   callback: (...args: Arguments) => ReturnValue
 ) {
   const callbackRef = useRef(callback);

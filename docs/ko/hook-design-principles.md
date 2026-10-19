@@ -107,16 +107,21 @@ useEffect(function tick() {
 }, []);
 ```
 
-#### C4. No `any` Types
+#### C4. No `any` in Implementation
 
-제네릭 `<T>` 사용. any 전파 → 타입 시스템 무력화. 정당한 사유(generic callback 등) 시 per-line eslint-disable + 코멘트 허용.
+제네릭 `<T>` 사용. `any`는 전파되어 타입 시스템 무력화 → 구현 코드의 `any`는 lint가 거부. 유일한 예외는 호출자가 넘기는 함수의 파라미터 목록. 함수 파라미터는 반공변적으로 비교 → `unknown[]`은 타입을 명시한 콜백을 거부. 이 자리에는 `any` 대신 `_internal/types.ts`의 공용 타입 `CallerTypedArgs` 사용.
 
 ```ts
-// ✅ Generic
+// ✅ 제네릭
 function useDebounce<T>(value: T, delay: number): T;
 
-// ✅ 정당한 예외 (코멘트 필수)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback
+// ✅ 호출자의 함수: 파라미터 타입은 호출자가 명시한 타입을 따름
+function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
+  callback: F,
+  wait: number
+);
+
+// ❌ `_internal/types.ts` 밖에서 `any`를 직접 씀 (eslint-disable 주석이 있어도 금지)
 type AnyFunction = (...args: any[]) => unknown;
 ```
 
