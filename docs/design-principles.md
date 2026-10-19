@@ -38,4 +38,4 @@ The documentation is written in English and translated into several languages; a
 - **Strict Type Definitions**: All parameters, return values, and options are fully typed
 - **IntelliSense Support**: Get autocompletion and inline documentation in your IDE
 - **Generic Types**: Flexible APIs that preserve your type information
-- **No `any` in Implementation**: Implementation code never uses `any`. The one exception is APIs that take your function: their parameter types come from your own annotations, so unannotated parameters end up as `any`
+- **No `any` in Implementation**: Implementation code never uses `any`. The one exception is generic APIs that wrap your function, such as `usePreservedCallback`: the parameter types of the function you pass come from your annotations or the inference context, and fall back to `any` when there is neither
