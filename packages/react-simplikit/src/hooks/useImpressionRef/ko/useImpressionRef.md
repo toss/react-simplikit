@@ -48,7 +48,7 @@ function useImpressionRef<Element extends HTMLElement>(
     {
       name: 'options.rootMargin',
       type: 'string',
-      required: true,
+      required: false,
       description: '감지 영역을 조정하는 마진이에요',
     },
   ]"

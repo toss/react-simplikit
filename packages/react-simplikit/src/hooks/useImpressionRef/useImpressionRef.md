@@ -49,7 +49,7 @@ function useImpressionRef<Element extends HTMLElement>(
     {
       name: 'options.rootMargin',
       type: 'string',
-      required: true,
+      required: false,
       description: 'Margin to adjust the detection area',
     },
   ]"
