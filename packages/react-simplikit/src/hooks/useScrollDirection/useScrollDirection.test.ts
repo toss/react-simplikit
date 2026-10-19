@@ -374,6 +374,30 @@ describe('useScrollDirection', () => {
     expect(result.current.position).toBe(300);
   });
 
+  it('should keep tracking scroll after throttleMs changes while the throttle timer is pending', async () => {
+    const { result, rerender } = renderHook(({ throttleMs }) => useScrollDirection({ throttleMs }), {
+      initialProps: { throttleMs: 50 },
+    });
+
+    // Start a throttle window, then change throttleMs before it ends
+    await act(async () => {
+      Object.defineProperty(window, 'scrollY', { value: 100 });
+      window.dispatchEvent(new Event('scroll'));
+    });
+
+    expect(result.current.position).toBe(100);
+
+    rerender({ throttleMs: 100 });
+
+    await act(async () => {
+      vi.runAllTimers();
+      Object.defineProperty(window, 'scrollY', { value: 200 });
+      window.dispatchEvent(new Event('scroll'));
+    });
+
+    expect(result.current).toEqual({ direction: 'down', position: 200 });
+  });
+
   it('should handle edge case with negative scroll (should not happen in practice)', async () => {
     // Start with positive scroll
     Object.defineProperty(window, 'scrollY', { value: 100 });

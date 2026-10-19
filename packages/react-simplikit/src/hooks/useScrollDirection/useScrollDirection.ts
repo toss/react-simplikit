@@ -115,6 +115,8 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}): Scr
         window.removeEventListener('scroll', handleScroll);
         if (throttleTimerRef.current != null) {
           clearTimeout(throttleTimerRef.current);
+          // The cleared timer never resets the ref, so reset it here or the next listener ignores every scroll.
+          throttleTimerRef.current = null;
         }
       };
     },
