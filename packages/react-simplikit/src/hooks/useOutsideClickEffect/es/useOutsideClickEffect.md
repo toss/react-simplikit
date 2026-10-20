@@ -7,7 +7,7 @@ Es útil para cerrar modales, menús desplegables, descripciones emergentes y ot
 
 ```ts
 function useOutsideClickEffect(
-  container: HTMLElement | HTMLElement[] | null,
+  container: HTMLElement | (HTMLElement | null)[] | null,
   callback: () => void
 ): void;
 ```
@@ -17,8 +17,8 @@ function useOutsideClickEffect(
 <Interface
   required
   name="container"
-  type="HTMLElement | HTMLElement[] | null"
-  description="Un único elemento HTML, un arreglo de elementos HTML o <code>null</code>. Si es <code>null</code>, el callback no se ejecuta."
+  type="HTMLElement | (HTMLElement | null)[] | null"
+  description="Un único elemento HTML, un arreglo de elementos HTML o valores <code>null</code>, o <code>null</code>. Los valores <code>null</code> del arreglo se ignoran. Si no queda ningún elemento HTML, el callback no se ejecuta."
 />
 
 <Interface
