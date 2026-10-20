@@ -7,7 +7,7 @@ It is useful for closing modals, dropdowns, tooltips, and other UI components wh
 
 ```ts
 function useOutsideClickEffect(
-  container: HTMLElement | HTMLElement[] | null,
+  container: HTMLElement | (HTMLElement | null)[] | null,
   callback: () => void
 ): void;
 ```
@@ -17,8 +17,8 @@ function useOutsideClickEffect(
 <Interface
   required
   name="container"
-  type="HTMLElement | HTMLElement[] | null"
-  description="A single HTML element, an array of HTML elements, or <code>null</code>. If <code>null</code>, the callback is not executed."
+  type="HTMLElement | (HTMLElement | null)[] | null"
+  description="A single HTML element, an array of HTML elements or <code>null</code> values, or <code>null</code>. <code>null</code> entries are ignored. If no HTML elements remain, the callback is not executed."
 />
 
 <Interface

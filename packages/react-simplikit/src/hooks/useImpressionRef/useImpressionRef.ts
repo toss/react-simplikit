@@ -24,7 +24,7 @@ export type UseImpressionRefOptions = Partial<{
  * @param {() => void} [options.onImpressionEnd] - Callback function executed when the element exits the view
  * @param {number} [options.timeThresholdMs=0] - Minimum time the element must be visible (in milliseconds)
  * @param {number} [options.areaThreshold=0] - Minimum ratio of the element that must be visible (0 to 1)
- * @param {string} options.rootMargin - Margin to adjust the detection area
+ * @param {string} [options.rootMargin] - Margin to adjust the detection area
  *
  * @returns {(element: Element | null) => void} A function to set the element. Attach this function to the `ref` attribute, and the callbacks will be executed whenever the element's visibility changes.
  *
