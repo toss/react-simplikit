@@ -116,9 +116,9 @@ Never initialize state with browser API calls (causes hydration mismatch).
 ### Hook Return Value Convention
 
 - **Single value**: `useDebounce<T>(value, delay): T`
-- **Tuple** (2 items): `useToggle(init): [boolean, () => void]`
-- **Object** (3+ items): `usePagination(): { page, nextPage, prevPage }`
-- **Object** also when the shape is expected to grow: `useKeyboardHeight(): { keyboardHeight }`
+- **Tuple** (state + one action): `useToggle(init): [boolean, () => void]`
+- **Tuple with an actions object** (state + two or more actions): `useBooleanState(init): [boolean, { setTrue, setFalse, toggle }]`, `useList`, `useCounter`
+- **Object** for results that are not state + actions, and whenever the shape is expected to grow: browser measurements such as `useKeyboardHeight(): { keyboardHeight }`
 
 ## Testing
 

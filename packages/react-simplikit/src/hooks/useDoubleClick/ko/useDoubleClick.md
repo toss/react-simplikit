@@ -19,7 +19,7 @@ function useDoubleClick<E extends HTMLElement>(
   description="클릭 처리를 위한 설정 옵션이에요."
   :nested="[
     {
-      name: 'props.delay',
+      name: 'props.delayMs',
       type: 'number',
       required: false,
       defaultValue: '250',
@@ -27,13 +27,13 @@ function useDoubleClick<E extends HTMLElement>(
         '단일 클릭 콜백을 실행하기 전에 기다리는 밀리초 단위 수로, 기본값은 250ms예요.',
     },
     {
-      name: 'props.click',
+      name: 'props.onClick',
       type: '(event: MouseEvent<E>) => void',
       required: false,
       description: '단일 클릭 시 실행되는 콜백 함수예요.',
     },
     {
-      name: 'props.doubleClick',
+      name: 'props.onDoubleClick',
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
@@ -60,8 +60,8 @@ function GalleryCard() {
   const handleDoubleClick = () => alert('확대!');
 
   const handleEvent = useDoubleClick({
-    click: handleClick,
-    doubleClick: handleDoubleClick,
+    onClick: handleClick,
+    onDoubleClick: handleDoubleClick,
   });
 
   return <div onClick={handleEvent}>{selected ? '선택됨' : '선택 안됨'}</div>;

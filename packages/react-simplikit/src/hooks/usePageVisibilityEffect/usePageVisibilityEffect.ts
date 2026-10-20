@@ -1,0 +1,51 @@
+import { useCallback, useEffect } from 'react';
+
+type Options = {
+  immediate?: boolean;
+};
+
+/**
+ * @description
+ * `usePageVisibilityEffect` is a React hook that listens to changes in the document's visibility state and triggers a callback.
+ * In v0 this hook was named `useVisibilityEvent`. The old name still works but is deprecated.
+ *
+ * @see `usePageVisibility` returns the visibility as state instead of running a callback.
+ *
+ * @param {(visibilityState: 'visible' | 'hidden') => void} callback - A function to be called
+ * when the visibility state changes. It receives the current visibility state ('visible' or 'hidden') as an argument.
+ * @param {object} [options] - Optional configuration for the hook.
+ * @param {boolean} [options.immediate=false] - If true, the callback is invoked immediately upon mounting
+ * with the current visibility state.
+ *
+ * @example
+ * import { usePageVisibilityEffect } from 'react-simplikit';
+ *
+ * function Component() {
+ *   usePageVisibilityEffect(visibilityState => {
+ *     console.log(`Document is now ${visibilityState}`);
+ *   });
+ *
+ *   return <p>Check the console for visibility changes.</p>;
+ * }
+ */
+
+export function usePageVisibilityEffect(
+  callback: (visibilityState: 'visible' | 'hidden') => void,
+  options: Options = {}
+) {
+  const handleVisibilityChange = useCallback(() => {
+    callback(document.visibilityState);
+  }, [callback]);
+
+  useEffect(() => {
+    if (options?.immediate ?? false) {
+      handleVisibilityChange();
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [handleVisibilityChange, options?.immediate]);
+}

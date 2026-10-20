@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'vitest';
 
-import { extractDescription, getCategory, renderSkill } from './catalog.ts';
+import { extractDescription, getCategory, readCatalogNames, readDeprecatedNames, renderSkill } from './catalog.ts';
 
 describe('getCategory', () => {
   it('derives the category from the export source path', () => {
@@ -60,6 +60,7 @@ describe('renderSkill', () => {
         { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
         { name: 'useToggle', category: 'hooks', description: 'Toggles a | boolean.' },
       ],
+      deprecatedEntries: [],
     });
 
     assert.equal(
@@ -85,7 +86,80 @@ describe('renderSkill', () => {
     );
   });
 
+  it('lists a deprecated entry under Deprecated as an unlinked row with its notice on one line', () => {
+    const rendered = renderSkill({
+      template: '# Skill\n\n## Catalog\n\n<!-- CATALOG -->\n\n## Learn more\n',
+      entries: [{ name: 'useNew', category: 'hooks', description: 'Does it.' }],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` | not this.\nIt goes away\nlater.' }],
+    });
+
+    assert.equal(
+      rendered,
+      `# Skill
+
+## Catalog
+
+### hooks
+
+| Name | Description |
+| --- | --- |
+| [\`useNew\`](references/useNew.md) | Does it. |
+
+### Deprecated
+
+These still work but are kept only for backward compatibility. Do not use them in new code; each row names the replacement.
+
+| Name | Notice |
+| --- | --- |
+| \`useOld\` | Use \`useNew\` \\| not this. It goes away later. |
+
+## Learn more
+`
+    );
+  });
+
   it('rejects a template without the placeholder', () => {
-    assert.throws(() => renderSkill({ template: '# Skill\n', entries: [] }), /<!-- CATALOG -->/);
+    assert.throws(() => renderSkill({ template: '# Skill\n', entries: [], deprecatedEntries: [] }), /<!-- CATALOG -->/);
+  });
+});
+
+describe('readCatalogNames', () => {
+  it('reads the linked rows only, so a deprecated export is not counted as documented', () => {
+    const skill = renderSkill({
+      template: '# Skill\n\n| Need | Use |\n| --- | --- |\n| Toggle | `useToggle` |\n\n<!-- CATALOG -->\n',
+      entries: [
+        { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
+        { name: 'useNew', category: 'hooks', description: 'Does it.' },
+      ],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` instead.' }],
+    });
+
+    assert.deepEqual(readCatalogNames(skill), ['useNew', 'isIOS']);
+  });
+});
+
+describe('readDeprecatedNames', () => {
+  it('reads only the names in the Deprecated table of the rendered catalog', () => {
+    const skill = renderSkill({
+      template:
+        '# Skill\n\n| Need | Use |\n| --- | --- |\n| `useBefore` | Toggle |\n\n<!-- CATALOG -->\n\n## Learn more\n\n| Name | Link |\n| --- | --- |\n| `useAfter` | Docs |\n',
+      entries: [
+        { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
+        { name: 'useNew', category: 'hooks', description: 'Does it.' },
+      ],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` instead.' }],
+    });
+
+    assert.deepEqual(readDeprecatedNames(skill), ['useOld']);
+  });
+
+  it('reports no deprecated names when the catalog has no Deprecated table', () => {
+    const skill = renderSkill({
+      template: '<!-- CATALOG -->\n',
+      entries: [{ name: 'useNew', category: 'hooks', description: 'Does it.' }],
+      deprecatedEntries: [],
+    });
+
+    assert.deepEqual(readDeprecatedNames(skill), []);
   });
 });

@@ -11,7 +11,7 @@ function ImpressionArea<T extends ElementType>(
   as: T = 'div',
   rootMargin?: string,
   areaThreshold?: number,
-  timeThreshold?: number,
+  timeThresholdMs?: number,
   onImpressionStart?: () => void,
   onImpressionEnd?: () => void,
   ref?: Ref<Element<T>>,
@@ -41,7 +41,7 @@ function ImpressionArea<T extends ElementType>(
 />
 
 <Interface
-  name="timeThreshold"
+  name="timeThresholdMs"
   type="number"
   description="Minimum time the element must be visible (in milliseconds)."
 />
@@ -92,7 +92,7 @@ function App() {
     <ImpressionArea
       onImpressionStart={() => console.log('Element entered view')}
       onImpressionEnd={() => console.log('Element exited view')}
-      timeThreshold={1000}
+      timeThresholdMs={1000}
       areaThreshold={0.5}
     >
       <div>Track me!</div>

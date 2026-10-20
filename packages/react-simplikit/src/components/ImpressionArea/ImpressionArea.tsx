@@ -25,7 +25,7 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  * @param {T} [as='div'] - The HTML tag to render. Defaults to `div`.
  * @param {string} [rootMargin] - Margin to adjust the detection area.
  * @param {number} [areaThreshold] - Minimum ratio of the element that must be visible (0 to 1).
- * @param {number} [timeThreshold] - Minimum time the element must be visible (in milliseconds).
+ * @param {number} [timeThresholdMs] - Minimum time the element must be visible (in milliseconds).
  * @param {() => void} [onImpressionStart] - Callback function executed when the element enters the view.
  * @param {() => void} [onImpressionEnd] - Callback function executed when the element exits the view.
  * @param {Ref<Element<T>>} [ref] - Reference to the element.
@@ -40,7 +40,7 @@ type Props<Tag extends ElementType> = React.ComponentPropsWithoutRef<Tag> &
  *     <ImpressionArea
  *       onImpressionStart={() => console.log('Element entered view')}
  *       onImpressionEnd={() => console.log('Element exited view')}
- *       timeThreshold={1000}
+ *       timeThresholdMs={1000}
  *       areaThreshold={0.5}
  *     >
  *       <div>Track me!</div>
@@ -53,7 +53,7 @@ export const ImpressionArea = forwardRef(ImpressionAreaImpl) as <T extends Eleme
 ) => React.ReactElement;
 
 function ImpressionAreaImpl<T extends ElementType = 'div'>(
-  { as, rootMargin, areaThreshold, timeThreshold, onImpressionStart, onImpressionEnd, ...props }: Props<T>,
+  { as, rootMargin, areaThreshold, timeThresholdMs, onImpressionStart, onImpressionEnd, ...props }: Props<T>,
   ref: Ref<unknown>
 ) {
   const Component = as ?? 'div';
@@ -61,7 +61,7 @@ function ImpressionAreaImpl<T extends ElementType = 'div'>(
     onImpressionStart,
     onImpressionEnd,
     areaThreshold,
-    timeThreshold,
+    timeThresholdMs,
     rootMargin,
   });
 

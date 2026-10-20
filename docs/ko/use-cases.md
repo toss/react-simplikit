@@ -84,7 +84,7 @@ export function FruitSearch() {
 
 - `useStorageState`는 서버 스냅샷과 hydration에 `defaultValue`를 사용한 뒤 클라이언트에서 브라우저 저장소를 읽어요. 언마운트 시 저장소 리스너를 제거해요.
 
-- `useDebounce`는 컴포넌트가 언마운트되거나 `wait`, `leading`, `trailing`이 바뀌면 대기 중인 호출을 취소해요. 이미 시작한 네트워크 요청은 취소하지 않으므로 요청 취소나 오래된 응답 처리는 애플리케이션에서 담당해야 해요.
+- `useDebounce`는 컴포넌트가 언마운트되거나 `debounceMs`, `leading`, `trailing`이 바뀌면 대기 중인 호출을 취소해요. 이미 시작한 네트워크 요청은 취소하지 않으므로 요청 취소나 오래된 응답 처리는 애플리케이션에서 담당해야 해요.
 
 - 브라우저 측정값은 마운트 후에 바뀔 수 있어요. 초기값과 플랫폼 제약은 [모바일 웹](/ko/mobile-web) 가이드와 개별 API 레퍼런스에서 확인하세요.
 

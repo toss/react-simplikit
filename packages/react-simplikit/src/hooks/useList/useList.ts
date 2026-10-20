@@ -21,7 +21,7 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  *
  * @template T - The type of the values held in the list.
  *
- * @param {T[]} [initialState=[]] - Initial array state.
+ * @param {T[]} [initialValue=[]] - Initial array value.
  *
  * @returns {UseListReturn<T>} A tuple containing the array state and actions to manipulate it.
  * - list `ReadonlyArray<T>` - The current array state;
@@ -55,10 +55,10 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  * actions.reset();
  * ```
  */
-export function useList<T>(initialState: T[] = []): UseListReturn<T> {
-  const [list, setList] = useState(initialState);
+export function useList<T>(initialValue: T[] = []): UseListReturn<T> {
+  const [list, setList] = useState(initialValue);
 
-  const preservedInitialState = usePreservedReference(initialState);
+  const preservedInitialValue = usePreservedReference(initialValue);
 
   const push = usePreservedCallback((value: T) => {
     setList(prev => [...prev, value]);
@@ -93,7 +93,7 @@ export function useList<T>(initialState: T[] = []): UseListReturn<T> {
   });
 
   const reset = usePreservedCallback(() => {
-    setList(preservedInitialState);
+    setList(preservedInitialValue);
   });
 
   const actions = useMemo<ListActions<T>>(

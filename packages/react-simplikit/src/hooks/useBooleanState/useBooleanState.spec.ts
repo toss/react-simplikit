@@ -23,7 +23,7 @@ describe('useBooleanState', () => {
 
   it('should set value to true when setTrue is called', async () => {
     const { result } = await renderHookSSR(() => useBooleanState(false));
-    const [, setTrue] = result.current;
+    const [, { setTrue }] = result.current;
 
     await act(async () => {
       setTrue();
@@ -35,7 +35,7 @@ describe('useBooleanState', () => {
 
   it('should set value to false when setFalse is called', async () => {
     const { result } = await renderHookSSR(() => useBooleanState(true));
-    const [, , setFalse] = result.current;
+    const [, { setFalse }] = result.current;
 
     await act(async () => {
       setFalse();
@@ -47,7 +47,7 @@ describe('useBooleanState', () => {
 
   it('should toggle value when toggle is called', async () => {
     const { result } = await renderHookSSR(() => useBooleanState(false));
-    const [, , , toggle] = result.current;
+    const [, { toggle }] = result.current;
 
     await act(async () => {
       toggle();
@@ -85,5 +85,17 @@ describe('useBooleanState', () => {
     rerender();
 
     expect(initializer).toHaveBeenCalledTimes(1);
+  });
+
+  it('should keep the actions object stable across renders', async () => {
+    const { result } = await renderHookSSR(() => useBooleanState(false));
+    const [, actions] = result.current;
+
+    await act(async () => {
+      actions.toggle();
+    });
+
+    expect(result.current[0]).toBe(true);
+    expect(result.current[1]).toBe(actions);
   });
 });

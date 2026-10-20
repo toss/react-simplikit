@@ -25,7 +25,7 @@ import { useReducer } from 'react';
  *   );
  * }
  */
-export function useToggle(initialValue: boolean = false) {
+export function useToggle(initialValue: boolean = false): [boolean, () => void] {
   return useReducer(toggle, initialValue);
 }
 

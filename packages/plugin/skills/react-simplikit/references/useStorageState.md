@@ -1,6 +1,6 @@
 # useStorageState
 
-`useStorageState` is a React that functions like `useState` but persists the state value in browser storage.
+`useStorageState` is a React hook that functions like `useState` but persists the state value in browser storage.
 The value is retained across page reloads and can be shared between tabs when using `localStorage`.
 
 ## Interface
@@ -11,8 +11,7 @@ function useStorageState<T>(
   options?: Object
 ): readonly [
   state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-  refreshState: () => void,
+  actions: StorageStateActions<Serializable<T> | undefined>,
 ];
 ```
 
@@ -63,8 +62,8 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="A tuple:"
+  type="readonly [state: Serializable<T> | undefined, actions: StorageStateActions<Serializable<T> | undefined>]"
+  description="A tuple containing the state and actions to change it."
   :nested="[
     {
       name: 'state',
@@ -73,13 +72,13 @@ function useStorageState<T>(
       description: 'The current state value retrieved from storage.',
     },
     {
-      name: 'setState',
+      name: 'actions.setValue',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
       description: 'A function to update and persist the state.',
     },
     {
-      name: 'refreshState',
+      name: 'actions.refresh',
       type: '() => void',
       required: false,
       description: 'A function to refresh the state from storage.',
@@ -94,12 +93,12 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
+  const [count, { setValue }] = useStorageState<number>('counter', {
     defaultValue: 0,
   });
 
   return (
-    <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>
+    <button onClick={() => setValue(prev => prev + 1)}>Count: {count}</button>
   );
 }
 ```

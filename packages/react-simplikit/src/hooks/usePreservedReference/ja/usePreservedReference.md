@@ -8,7 +8,7 @@
 ```ts
 function usePreservedReference<T extends NotNullishValue>(
   value: T,
-  areValuesEqual?: (a: T, b: T) => boolean
+  equalityFn?: (a: T, b: T) => boolean
 ): T;
 ```
 
@@ -22,7 +22,7 @@ function usePreservedReference<T extends NotNullishValue>(
 />
 
 <Interface
-  name="areValuesEqual"
+  name="equalityFn"
   type="(a: T, b: T) => boolean"
   description="2 つの値が等しいかを判定する省略可能な関数。デフォルトでは <code>JSON.stringify</code> で比較します。"
 />

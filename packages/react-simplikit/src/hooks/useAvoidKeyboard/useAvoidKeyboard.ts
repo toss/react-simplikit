@@ -13,7 +13,7 @@ type UseAvoidKeyboardOptions = {
    * Transition duration in milliseconds for smooth animation.
    * @default 200
    */
-  transitionDuration?: number;
+  transitionDurationMs?: number;
   /**
    * Transition timing function for the animation.
    * @default 'ease-out'
@@ -42,7 +42,7 @@ type UseAvoidKeyboardResult = {
  *
  * @param {UseAvoidKeyboardOptions} [options] - Configuration options.
  * @param {number} [options.safeAreaBottom=0] - Base bottom offset in pixels when the keyboard is hidden. Useful for accounting for the iPhone home indicator area.
- * @param {number} [options.transitionDuration=200] - Transition duration in milliseconds for smooth animation.
+ * @param {number} [options.transitionDurationMs=200] - Transition duration in milliseconds for smooth animation.
  * @param {CSSProperties['transitionTimingFunction']} [options.transitionTimingFunction='ease-out'] - Transition timing function for the animation.
  * @param {boolean} [options.immediate=true] - If true, gets the initial keyboard height on mount.
  *
@@ -91,7 +91,7 @@ type UseAvoidKeyboardResult = {
 export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoidKeyboardResult {
   const {
     safeAreaBottom = 0,
-    transitionDuration = 200,
+    transitionDurationMs = 200,
     transitionTimingFunction = 'ease-out',
     immediate = true,
   } = options;
@@ -103,9 +103,9 @@ export function useAvoidKeyboard(options: UseAvoidKeyboardOptions = {}): UseAvoi
 
     return {
       transform: `translateY(${translateY}px)`,
-      transition: `transform ${transitionDuration}ms ${transitionTimingFunction}`,
+      transition: `transform ${transitionDurationMs}ms ${transitionTimingFunction}`,
     };
-  }, [keyboardHeight, safeAreaBottom, transitionDuration, transitionTimingFunction]);
+  }, [keyboardHeight, safeAreaBottom, transitionDurationMs, transitionTimingFunction]);
 
   return { style };
 }
