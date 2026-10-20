@@ -6,7 +6,7 @@
 
 ```ts
 function useOutsideClickEffect(
-  container: HTMLElement | HTMLElement[] | null,
+  container: HTMLElement | (HTMLElement | null)[] | null,
   callback: () => void
 ): void;
 ```
@@ -16,8 +16,8 @@ function useOutsideClickEffect(
 <Interface
   required
   name="container"
-  type="HTMLElement | HTMLElement[] | null"
-  description="단일 HTML 요소, HTML 요소 배열 또는 <code>null</code>이에요. <code>null</code>인 경우, 콜백이 실행되지 않아요."
+  type="HTMLElement | (HTMLElement | null)[] | null"
+  description="단일 HTML 요소, HTML 요소나 <code>null</code>을 담은 배열 또는 <code>null</code>이에요. 배열의 <code>null</code>은 무시돼요. HTML 요소가 하나도 남지 않으면 콜백이 실행되지 않아요."
 />
 
 <Interface
