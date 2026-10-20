@@ -1,4 +1,5 @@
-import { act } from '@testing-library/react';
+import { createElement, useEffect } from 'react';
+import { act, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, expectTypeOf, it } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
@@ -602,6 +603,54 @@ describe('useStorageState', () => {
       rerender();
 
       expect(result.current[1]).toBe(actions);
+    });
+  });
+
+  describe('when a child effect calls setValue in the commit that changes the options', () => {
+    const storage = new MemoStorage();
+
+    afterEach(() => {
+      storage.clear();
+    });
+
+    function Child({ value, setValue }: { value: string; setValue: (value: string) => void }) {
+      useEffect(
+        function forwardValue() {
+          setValue(value);
+        },
+        [value, setValue]
+      );
+      return null;
+    }
+
+    it('should write to the new key', async () => {
+      function Parent({ id }: { id: string }) {
+        const [, { setValue }] = useStorageState<string>(`draft:${id}`, { storage });
+        return createElement(Child, { value: id, setValue });
+      }
+
+      const { rerender } = render(createElement(Parent, { id: 'a' }));
+      rerender(createElement(Parent, { id: 'b' }));
+
+      expect(storage.get('draft:a')).toBe('"a"');
+      expect(storage.get('draft:b')).toBe('"b"');
+    });
+
+    it('should write with the new serializer', async () => {
+      function Parent({ version }: { version: string }) {
+        const [, { setValue }] = useStorageState('test-key', {
+          storage,
+          defaultValue: '',
+          serializer: value => `${version}:${value}`,
+          deserializer: text => text.slice(text.indexOf(':') + 1),
+        });
+        return createElement(Child, { value: version, setValue });
+      }
+
+      const { rerender } = render(createElement(Parent, { version: 'v1' }));
+      rerender(createElement(Parent, { version: 'v2' }));
+
+      expect(storage.get('test-key')).toBe('v2:v2');
     });
   });
 

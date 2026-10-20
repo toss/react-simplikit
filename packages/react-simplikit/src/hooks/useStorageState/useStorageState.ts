@@ -1,6 +1,4 @@
-import { SetStateAction, useMemo, useRef, useSyncExternalStore } from 'react';
-
-import { usePreservedCallback } from '../usePreservedCallback/index.ts';
+import { SetStateAction, useInsertionEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 
 import { safeLocalStorage, Storage } from './storage.ts';
 
@@ -206,8 +204,26 @@ export function useStorageState<T>(
     () => defaultValue
   );
 
-  // Called from handlers after commit, so preserving it keeps `actions` stable with inline options.
-  const setStorageState = usePreservedCallback((value: SetStateAction<T | undefined>) => {
+  // Insertion effects run before every layout and passive effect, so a child effect that calls
+  // `setValue` in the commit that changed `key` or the serializer already sees this render's values.
+  // `usePreservedCallback` syncs in a passive effect, which runs after the child's.
+  const latest = useRef({ getSnapshot, writeValue });
+  useInsertionEffect(function syncLatestRender() {
+    latest.current = { getSnapshot, writeValue };
+  });
+
+  // Reads through `latest`, so `actions` stays stable even when the options are passed inline.
+  const actions = useMemo<StorageStateActions<T | undefined>>(
+    () => ({
+      setValue: value => latest.current.writeValue(value),
+      refresh: () => latest.current.writeValue(latest.current.getSnapshot()),
+    }),
+    []
+  );
+
+  return [storageState, actions] as const;
+
+  function writeValue(value: SetStateAction<T | undefined>) {
     const nextValue = isUpdater(value) ? value(getSnapshot()) : value;
 
     if (nextValue == null) {
@@ -216,18 +232,7 @@ export function useStorageState<T>(
       storage.set(key, serialize(nextValue));
     }
     emitListeners();
-  });
-
-  const refreshStorageState = usePreservedCallback(() => {
-    setStorageState(getSnapshot());
-  });
-
-  const actions = useMemo<StorageStateActions<T | undefined>>(
-    () => ({ setValue: setStorageState, refresh: refreshStorageState }),
-    [setStorageState, refreshStorageState]
-  );
-
-  return [storageState, actions] as const;
+  }
 
   function serialize(value: T): string {
     if (codec !== null) {
