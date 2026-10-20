@@ -1,11 +1,17 @@
+import { testPlatform } from '../../_internal/platform/testPlatform.ts';
+import { testUserAgent } from '../../_internal/platform/testUserAgent.ts';
 import { isServer } from '../isServer/index.ts';
 
 /**
  * @description
  * `isAndroid` is a utility function that detects whether the current device is running Android.
  *
+ * Detection prefers the User-Agent Client Hints API (`navigator.userAgentData.platform`)
+ * and falls back to matching `"Android"` in Client Hints brands or `navigator.userAgent`.
+ *
  * Notes:
  * - All Android browsers include the token "Android" in the user agent.
+ * - Chromium on Android typically exposes Client Hints `platform` as `"Android"`.
  *
  * @param {string} [userAgent] - Optional user agent string to check. Defaults to `navigator.userAgent`.
  *
@@ -27,6 +33,9 @@ export function isAndroid(userAgent?: string): boolean {
     return false;
   }
 
-  const ua = userAgent ?? navigator.userAgent;
-  return /Android/i.test(ua);
+  if (userAgent !== undefined) {
+    return /Android/i.test(userAgent);
+  }
+
+  return testPlatform(/^Android/i) || testUserAgent(/Android/i);
 }

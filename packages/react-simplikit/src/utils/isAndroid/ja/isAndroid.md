@@ -2,9 +2,12 @@
 
 `isAndroid` は、現在のデバイスで Android が動作しているかどうかを判定するユーティリティ関数です。
 
+User-Agent Client Hints API（`navigator.userAgentData.platform`）を優先し、利用できない場合は Client Hints の brands または `navigator.userAgent` で `"Android"` を照合します。
+
 補足：
 
 - すべての Android ブラウザーのユーザーエージェントには、トークン「Android」が含まれます。
+- Android 上の Chromium は、通常 Client Hints の `platform` を `"Android"` として公開します。
 
 ## インターフェース
 
@@ -17,7 +20,7 @@ function isAndroid(userAgent?: string): boolean;
 <Interface
   name="userAgent"
   type="string"
-  description="判定対象のユーザーエージェント文字列（省略可能）。デフォルトは <code>navigator.userAgent</code> です。"
+  description="判定に使う任意のユーザーエージェント文字列。省略時は <code>navigator.userAgent</code> を使います。"
 />
 
 ### 戻り値
@@ -25,20 +28,20 @@ function isAndroid(userAgent?: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="デバイスで Android が動作している場合は <code>true</code>、それ以外の場合は <code>false</code>。サーバーサイドレンダリング環境では <code>false</code> を返します。"
+  description="デバイスが Android で動作している場合は <code>true</code>、そうでなければ <code>false</code> を返します。サーバーサイドレンダリング環境では <code>false</code> を返します。"
 />
 
-## 使用例
+## 例
 
 ```tsx
 if (isAndroid()) {
-  // Android 固有のコード
+  // Android 固有の処理
   enableAndroidOptimizations();
 }
 ```
 
 ```tsx
-// カスタムのユーザーエージェントを指定する場合
+// ユーザーエージェントを直接渡す場合
 const isAndroidDevice = isAndroid(
   'Mozilla/5.0 (Linux; Android 12; Pixel 6) Chrome/120'
 );

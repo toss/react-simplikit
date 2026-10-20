@@ -2,9 +2,13 @@
 
 `isAndroid` is a utility function that detects whether the current device is running Android.
 
+Detection prefers the User-Agent Client Hints API (`navigator.userAgentData.platform`)
+and falls back to matching `"Android"` in Client Hints brands or `navigator.userAgent`.
+
 Notes:
 
 - All Android browsers include the token "Android" in the user agent.
+- Chromium on Android typically exposes Client Hints `platform` as `"Android"`.
 
 ## Interface
 

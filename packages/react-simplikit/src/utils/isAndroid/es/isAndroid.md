@@ -2,9 +2,12 @@
 
 `isAndroid` es una función de utilidad que detecta si el dispositivo actual usa Android.
 
+Prioriza la API User-Agent Client Hints (`navigator.userAgentData.platform`) y, si no está disponible, busca `"Android"` en las marcas de Client Hints o en `navigator.userAgent`.
+
 Notas:
 
 - Todos los navegadores de Android incluyen el token “Android” en el agente de usuario.
+- Chromium en Android suele exponer el `platform` de Client Hints como `"Android"`.
 
 ## Interfaz
 
@@ -17,7 +20,7 @@ function isAndroid(userAgent?: string): boolean;
 <Interface
   name="userAgent"
   type="string"
-  description="Cadena opcional del agente de usuario que quieres comprobar. El valor predeterminado es <code>navigator.userAgent</code>."
+  description="Cadena opcional de agente de usuario a comprobar. Por defecto usa <code>navigator.userAgent</code>."
 />
 
 ### Valor de retorno
@@ -25,7 +28,7 @@ function isAndroid(userAgent?: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="<code>true</code> si el dispositivo usa Android; <code>false</code> en caso contrario. Devuelve <code>false</code> en entornos de renderizado en el servidor."
+  description="<code>true</code> si el dispositivo usa Android; <code>false</code> en caso contrario. Devuelve <code>false</code> en entornos de renderizado del lado del servidor."
 />
 
 ## Ejemplo

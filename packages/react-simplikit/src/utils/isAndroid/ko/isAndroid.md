@@ -2,9 +2,12 @@
 
 `isAndroid`는 현재 기기가 안드로이드에서 실행 중인지 감지하는 유틸리티 함수예요.
 
+User-Agent Client Hints API(`navigator.userAgentData.platform`)를 우선 사용하고, 없으면 Client Hints brands 또는 `navigator.userAgent`에서 `"Android"`를 매칭해요.
+
 **참고 사항**
 
 - 모든 안드로이드 브라우저는 사용자 에이전트에 'Android' 토큰을 포함해요.
+- 안드로이드의 Chromium은 Client Hints `platform`을 보통 `"Android"`로 노출해요.
 
 ## 인터페이스
 
