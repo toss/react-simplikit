@@ -137,7 +137,7 @@ try {
         async directory =>
           (
             await fs.readdir(path.join(root, 'packages/react-simplikit/src', directory), { withFileTypes: true })
-          ).filter(entry => entry.isDirectory()).length
+          ).filter(entry => entry.isDirectory() && entry.name !== '_internal').length
       )
     )
   ).reduce((total, count) => total + count, 0);
