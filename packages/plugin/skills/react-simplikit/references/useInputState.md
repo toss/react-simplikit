@@ -8,7 +8,9 @@ The returned `onChange` handler works with both `<input>` and `<textarea>` eleme
 ```ts
 function useInputState(
   initialValue: string | (() => string) = '',
-  transformValue: (value: string) => string = (v: string) => v
+  transformValue: (nextValue: string, previousValue: string) => string = (
+    nextValue: string
+  ) => nextValue
 ): [
   value: string,
   onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
@@ -25,8 +27,8 @@ function useInputState(
 
 <Interface
   name="transformValue"
-  type="(value: string) => string"
-  description="A function to transform the input value. Defaults to an identity function that returns the input unchanged."
+  type="(nextValue: string, previousValue: string) => string"
+  description="A function to transform the input value. The previous state value is available as its second argument. Defaults to an identity function that returns the next input unchanged."
 />
 
 ### Return Value
