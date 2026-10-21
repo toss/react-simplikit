@@ -10,8 +10,9 @@ type InitialValue = string | (() => string);
  * The returned `onChange` handler works with both `<input>` and `<textarea>` elements.
  *
  * @param {string | (() => string)} [initialValue=""] - The initial value of the input. Defaults to an empty string (`""`).
- * @param {(value: string) => string} [transformValue=(v: string) => v] - A function to transform the input value.
- *   Defaults to an identity function that returns the input unchanged.
+ * @param {(nextValue: string, previousValue: string) => string} [transformValue=(nextValue: string) => nextValue]
+ * - A function to transform the input value. The previous state value is available as its second argument.
+ *   Defaults to an identity function that returns the next input unchanged.
  *
  * @returns {[value: string, onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>]} A tuple containing:
  * - value `string` - The current state value;
@@ -28,12 +29,15 @@ type InitialValue = string | (() => string);
  *   );
  * }
  */
-export function useInputState(initialValue: InitialValue = '', transformValue: (value: string) => string = echo) {
+export function useInputState(
+  initialValue: InitialValue = '',
+  transformValue: (nextValue: string, previousValue: string) => string = echo
+) {
   const [value, setValue] = useState(initialValue);
 
   const handleValueChange: ChangeEventHandler<InputLikeElement> = useCallback(
-    ({ target: { value } }: ChangeEvent<InputLikeElement>) => {
-      setValue(transformValue(value));
+    ({ target: { value: nextValue } }: ChangeEvent<InputLikeElement>) => {
+      setValue(previousValue => transformValue(nextValue, previousValue));
     },
     [transformValue]
   );

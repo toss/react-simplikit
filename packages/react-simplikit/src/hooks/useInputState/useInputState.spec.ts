@@ -67,6 +67,19 @@ describe('useInputState', () => {
     expect(input).toHaveValue('MUST BE UPPERCASE');
   });
 
+  it('should provide the previous value to the transform function', () => {
+    const { getByRole } = render(
+      createElement(
+        createTestInput('value', (nextValue, previousValue) => (nextValue.length > 5 ? previousValue : nextValue))
+      )
+    );
+
+    const input = getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'values' } });
+
+    expect(input).toHaveValue('value');
+  });
+
   it('should update value when change event occurs on a textarea', async () => {
     const { getByRole } = render(createElement(createTestTextarea()));
     const textarea = getByRole('textbox');
