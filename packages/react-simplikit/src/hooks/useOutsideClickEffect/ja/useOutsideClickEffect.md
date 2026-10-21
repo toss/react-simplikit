@@ -7,7 +7,7 @@
 
 ```ts
 function useOutsideClickEffect(
-  container: HTMLElement | HTMLElement[] | null,
+  container: HTMLElement | (HTMLElement | null)[] | null,
   callback: () => void
 ): void;
 ```
@@ -17,8 +17,8 @@ function useOutsideClickEffect(
 <Interface
   required
   name="container"
-  type="HTMLElement | HTMLElement[] | null"
-  description="単一の HTML 要素、HTML 要素の配列、または <code>null</code> です。<code>null</code> の場合、コールバックは実行されません。"
+  type="HTMLElement | (HTMLElement | null)[] | null"
+  description="単一の HTML 要素、HTML 要素や <code>null</code> を含む配列、または <code>null</code> です。配列内の <code>null</code> は無視されます。HTML 要素が一つも残らない場合、コールバックは実行されません。"
 />
 
 <Interface
