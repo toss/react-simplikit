@@ -36,7 +36,8 @@ export function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,
   wait: number,
   options?: Parameters<typeof throttle>[2]
-) {
+  // Written out because the inferred type names `CallerTypedArgs`, which consumers emitting declarations cannot import (TS2742)
+): { (...args: Parameters<F>): void; cancel: () => void } {
   const preservedCallback = usePreservedCallback(callback);
   const preservedOptions = usePreservedReference(options ?? {});
 

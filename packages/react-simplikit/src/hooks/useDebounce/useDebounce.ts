@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import type { CallerTypedArgs } from '../../_internal/types.ts';
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
-import { debounce, DebouncedFunction } from './debounce.ts';
+import { debounce } from './debounce.ts';
 
 type DebounceOptions = {
   leading?: boolean;
@@ -65,7 +65,8 @@ export function useDebounce<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,
   wait: number,
   options: DebounceOptions = {}
-): DebouncedFunction<F> {
+  // Written out because `DebouncedFunction` is not exported from the package entry, so consumers emitting declarations cannot name it (TS2742)
+): { (...args: Parameters<F>): void; cancel: () => void } {
   const preservedCallback = usePreservedCallback(callback) as F;
 
   const { leading = false, trailing = true } = options;
