@@ -1,16 +1,17 @@
 # useList
 
 리액트 훅으로, 배열을 상태로 관리해요. 효율적인 상태 관리를 제공하고 안정적인 액션 함수를 제공해요.
+초기값과 `setAll`에 일반 배열과 읽기 전용 배열을 모두 전달할 수 있어요.
 
 ## 인터페이스
 
 ```ts
-function useList<T>(initialState: T[] = []): UseListReturn<T>;
+function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
 ```
 
 ### 파라미터
 
-<Interface name="initialState" type="T[]" description="초기 배열 상태예요." />
+<Interface name="initialState" type="readonly T[]" description="초기 배열 상태예요." />
 
 ### 반환 값
 
@@ -51,7 +52,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
     },
     {
       name: 'actions.setAll',
-      type: '(values: T[]) => void',
+      type: '(values: readonly T[]) => void',
       required: false,
       description: '전체 리스트를 새 배열로 교체해요.',
     },
@@ -67,7 +68,8 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## 예시
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const initialItems = ['apple', 'banana'] as const;
+const [list, actions] = useList<string>(initialItems);
 
 // 항목 추가하기
 actions.push('cherry');

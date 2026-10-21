@@ -1,5 +1,5 @@
 import { act } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -7,9 +7,11 @@ import { useList } from './useList.ts';
 
 describe('useList', () => {
   it('is safe on server side rendering', () => {
-    const result = renderHookSSR.serverOnly(() => useList(['a', 'b']));
+    const initialState = ['a', 'b'] as const;
+    const result = renderHookSSR.serverOnly(() => useList(initialState));
 
     expect(result.current[0]).toEqual(['a', 'b']);
+    expectTypeOf(result.current[0]).toEqualTypeOf<ReadonlyArray<'a' | 'b'>>();
   });
 
   it('should initialize with an array', async () => {
@@ -22,6 +24,29 @@ describe('useList', () => {
     const { result } = await renderHookSSR(() => useList());
 
     expect(result.current[0]).toEqual([]);
+  });
+
+  it('should update and reset a list initialized with a readonly array', async () => {
+    const initialState = Object.freeze(['a', 'b']);
+    const { result, rerender } = await renderHookSSR(() => useList(initialState));
+
+    expectTypeOf(result.current[0]).toEqualTypeOf<ReadonlyArray<string>>();
+    expectTypeOf(result.current[1].push).parameter(0).toEqualTypeOf<string>();
+
+    await act(async () => {
+      result.current[1].push('c');
+      rerender();
+    });
+
+    expect(result.current[0]).toEqual(['a', 'b', 'c']);
+    expect(initialState).toEqual(['a', 'b']);
+
+    await act(async () => {
+      result.current[1].reset();
+      rerender();
+    });
+
+    expect(result.current[0]).toEqual(['a', 'b']);
   });
 
   it('should push a value to the end of the list', async () => {
@@ -118,6 +143,36 @@ describe('useList', () => {
     });
 
     expect(result.current[0]).toEqual(['x', 'y', 'z']);
+  });
+
+  it('should accept readonly arrays and returned lists in setAll', async () => {
+    const replacement = Object.freeze(['x', 'y']);
+    const { result, rerender } = await renderHookSSR(() => useList(['a', 'b']));
+    const [originalList, actions] = result.current;
+
+    expectTypeOf(actions.setAll).parameter(0).toEqualTypeOf<readonly string[]>();
+
+    await act(async () => {
+      actions.setAll(replacement);
+      rerender();
+    });
+
+    expect(result.current[0]).toEqual(['x', 'y']);
+
+    await act(async () => {
+      actions.push('z');
+      rerender();
+    });
+
+    expect(result.current[0]).toEqual(['x', 'y', 'z']);
+    expect(replacement).toEqual(['x', 'y']);
+
+    await act(async () => {
+      actions.setAll(originalList);
+      rerender();
+    });
+
+    expect(result.current[0]).toEqual(['a', 'b']);
   });
 
   it('should reset the list to its initial state', async () => {

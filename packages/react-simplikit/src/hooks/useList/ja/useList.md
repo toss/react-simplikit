@@ -2,16 +2,17 @@
 
 配列を状態として管理する React フックです。
 効率的な状態管理と、参照が安定したアクション関数を提供します。
+初期状態と `setAll` には、変更可能な配列と読み取り専用の配列の両方を渡せます。
 
 ## インターフェース
 
 ```ts
-function useList<T>(initialState: T[] = []): UseListReturn<T>;
+function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
 ```
 
 ### パラメータ
 
-<Interface name="initialState" type="T[]" description="配列の初期状態です。" />
+<Interface name="initialState" type="readonly T[]" description="配列の初期状態です。" />
 
 ### 戻り値
 
@@ -52,7 +53,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
     },
     {
       name: 'actions.setAll',
-      type: '(values: T[]) => void',
+      type: '(values: readonly T[]) => void',
       required: false,
       description: 'リスト全体を新しい配列に置き換えます。',
     },
@@ -68,7 +69,8 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## 使用例
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const initialItems = ['apple', 'banana'] as const;
+const [list, actions] = useList<string>(initialItems);
 
 // 項目を追加します
 actions.push('cherry');
