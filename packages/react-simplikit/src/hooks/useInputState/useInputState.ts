@@ -37,9 +37,9 @@ export function useInputState(
 
   const handleValueChange: ChangeEventHandler<InputLikeElement> = useCallback(
     ({ target: { value: nextValue } }: ChangeEvent<InputLikeElement>) => {
-      setValue(previousValue => transformValue(nextValue, previousValue));
+      setValue(transformValue(nextValue, value));
     },
-    [transformValue]
+    [transformValue, value]
   );
 
   return [value, handleValueChange] as const;

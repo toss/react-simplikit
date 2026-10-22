@@ -1,4 +1,4 @@
-import { createElement } from 'react';
+import { ChangeEvent, createElement, StrictMode, useState } from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -78,6 +78,61 @@ describe('useInputState', () => {
     fireEvent.change(input, { target: { value: 'values' } });
 
     expect(input).toHaveValue('value');
+  });
+
+  it('should call transformValue once per change in StrictMode', () => {
+    const transformValue = vi.fn((nextValue: string) => nextValue);
+    const { getByRole } = render(createElement(StrictMode, null, createElement(createTestInput('', transformValue))));
+
+    fireEvent.change(getByRole('textbox'), { target: { value: 'a' } });
+
+    expect(transformValue).toHaveBeenCalledTimes(1);
+  });
+
+  it('should let transformValue update another component', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    function Input({ onTooLong }: { onTooLong: (tooLong: boolean) => void }) {
+      const [, setTouched] = useState(false);
+      const [value, onChange] = useInputState('', (nextValue, previousValue) => {
+        onTooLong(nextValue.length > 3);
+        return nextValue.length > 3 ? previousValue : nextValue;
+      });
+
+      return createElement('input', {
+        value,
+        onChange: (event: ChangeEvent<HTMLInputElement>) => {
+          setTouched(true);
+          onChange(event);
+        },
+      });
+    }
+
+    function Form() {
+      const [tooLong, setTooLong] = useState(false);
+      return createElement('div', null, createElement(Input, { onTooLong: setTooLong }), tooLong ? 'too long' : '');
+    }
+
+    const { getByRole, getByText } = render(createElement(Form));
+    fireEvent.change(getByRole('textbox'), { target: { value: 'abcd' } });
+
+    expect(getByText('too long')).toBeInTheDocument();
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+
+  it('should pass the latest state as previousValue', () => {
+    const { getByRole } = render(
+      createElement(
+        createTestInput('', (nextValue, previousValue) => (nextValue.length > 3 ? previousValue : nextValue))
+      )
+    );
+    const input = getByRole('textbox');
+
+    fireEvent.change(input, { target: { value: 'abc' } });
+    fireEvent.change(input, { target: { value: 'abcd' } });
+
+    expect(input).toHaveValue('abc');
   });
 
   it('should update value when change event occurs on a textarea', async () => {
