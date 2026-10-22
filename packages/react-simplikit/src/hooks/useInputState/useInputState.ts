@@ -45,6 +45,6 @@ export function useInputState(
   return [value, handleValueChange] as const;
 }
 
-function echo(v: string) {
-  return v;
+function echo(nextValue: string) {
+  return nextValue;
 }
