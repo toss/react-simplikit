@@ -6,6 +6,7 @@ The value is retained across page reloads and can be shared between tabs when us
 Without `serializer` and `deserializer`, the value is stored as JSON and must be JSON-serializable all the way down:
 a `Date`, `Map`, class instance or function anywhere in it throws when it is set, and `defaultValue` is checked on mount.
 Pass both functions to store any other type. The stored string is not validated when it is read back.
+The value read back is reused until the stored string changes, so call `refresh` when `deserializer` changes what it returns.
 
 ## Interface
 
@@ -85,7 +86,7 @@ function useStorageState<T>(
       name: 'actions.refresh',
       type: '() => void',
       required: false,
-      description: 'A function to refresh the state from storage.',
+      description: 'Reads the value from storage again without writing to it.',
     },
   ]"
 />

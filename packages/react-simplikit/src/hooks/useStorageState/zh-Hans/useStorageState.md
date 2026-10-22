@@ -2,7 +2,7 @@
 
 `useStorageState` 是一个功能类似于 `useState`、但会将状态值持久化到浏览器存储中的 React Hook。该值会在页面刷新后保留，并且在配合 `localStorage` 使用时可以在标签页之间共享。
 
-如果不传入 `serializer` 和 `deserializer`，值会以 JSON 形式存储，因此值的每一层都必须能够序列化为 JSON：值中任何位置出现 `Date`、`Map`、类实例或函数时，设置该值都会抛出错误，`defaultValue` 则会在挂载时检查。要存储其他类型，请同时传入这两个函数。从存储中读回的字符串不会经过校验。
+如果不传入 `serializer` 和 `deserializer`，值会以 JSON 形式存储，因此值的每一层都必须能够序列化为 JSON：值中任何位置出现 `Date`、`Map`、类实例或函数时，设置该值都会抛出错误，`defaultValue` 则会在挂载时检查。要存储其他类型，请同时传入这两个函数。从存储中读回的字符串不会经过校验。读回的值会一直复用，直到存储的字符串发生变化，因此当 `deserializer` 的返回结果改变时，请调用 `refresh`。
 
 ## 接口
 
@@ -79,7 +79,7 @@ function useStorageState<T>(
       name: 'actions.refresh',
       type: '() => void',
       required: false,
-      description: '从存储中刷新状态的函数。',
+      description: '从存储中重新读取值而不写入的函数。',
     },
   ]"
 />

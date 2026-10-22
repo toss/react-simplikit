@@ -8,6 +8,8 @@ Without `serializer` and `deserializer`, the value is stored as JSON and is now 
 
 `serializer` and `deserializer` must be passed together. A lone one is a type error and is ignored at runtime. When both are passed, the value is not checked, so a `Date` default works, and the callback parameters are typed from `defaultValue`.
 
+`refresh` now reads storage again without writing to it. Before, it wrote the current value back: an empty key got `defaultValue`, an unreadable value was replaced with `defaultValue` or removed, and a function stored with `serializer` and `deserializer` was run as an updater. Call `refresh` when `deserializer` changes what it returns for the same stored string.
+
 ```ts
 // before: the state was typed `string`, though it can be `null`
 const [token] = useStorageState<string | null>('token', { defaultValue: null });

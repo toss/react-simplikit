@@ -94,6 +94,7 @@ function assertJson(value: unknown, name: string): void {
  * Without `serializer` and `deserializer`, the value is stored as JSON and must be JSON-serializable all the way down:
  * a `Date`, `Map`, class instance or function anywhere in it throws when it is set, and `defaultValue` is checked on mount.
  * Pass both functions to store any other type. The stored string is not validated when it is read back.
+ * The value read back is reused until the stored string changes, so call `refresh` when `deserializer` changes what it returns.
  *
  * @template T - The type of the stored value.
  * @param {string} key - The key used to store the value in storage.
@@ -106,7 +107,7 @@ function assertJson(value: unknown, name: string): void {
  * @returns {readonly [state: T | undefined, actions: StorageStateActions<T | undefined>]} A tuple containing the state and actions to change it.
  * - state `T | undefined` - The current state value retrieved from storage. It is `T` when `defaultValue` is given;
  * - actions.setValue `(value: SetStateAction<T | undefined>) => void` - A function to update and persist the state;
- * - actions.refresh `() => void` - A function to refresh the state from storage;
+ * - actions.refresh `() => void` - Reads the value from storage again without writing to it;
  * @example
  * // Counter with persistent state
  * import { useStorageState } from 'react-simplikit';
@@ -150,8 +151,8 @@ export function useStorageState<T>(
   // Both functions are picked by one condition so a value is never written in one format and read in another.
   const codec = serializer !== undefined && deserializer !== undefined ? { serializer, deserializer } : null;
 
-  // `data` starts as `undefined`, which storage never returns, so the first snapshot always runs
-  // the branch below and checks `defaultValue` on mount, even when storage already holds a value.
+  // `data` is `undefined` on mount and after `refresh`, a value storage never returns, so the next
+  // snapshot always runs the branch below and checks `defaultValue`, even when storage holds a value.
   const cache = useRef<{
     data: string | null | undefined;
     parsed: T | undefined;
@@ -165,10 +166,10 @@ export function useStorageState<T>(
     const data = storage.get(key);
 
     if (data !== cache.current.data) {
-      const isMount = cache.current.data === undefined;
+      const isFirstRead = cache.current.data === undefined;
       const fallsBackToDefault = data == null;
 
-      if (codec === null && defaultValue !== undefined && (isMount || fallsBackToDefault)) {
+      if (codec === null && defaultValue !== undefined && (isFirstRead || fallsBackToDefault)) {
         assertJson(defaultValue, 'defaultValue');
       }
 
@@ -207,16 +208,21 @@ export function useStorageState<T>(
   // Insertion effects run before every layout and passive effect, so a child effect that calls
   // `setValue` in the commit that changed `key` or the serializer already sees this render's values.
   // `usePreservedCallback` syncs in a passive effect, which runs after the child's.
-  const latest = useRef({ getSnapshot, writeValue });
+  const latest = useRef({ writeValue });
   useInsertionEffect(function syncLatestRender() {
-    latest.current = { getSnapshot, writeValue };
+    latest.current = { writeValue };
   });
 
   // Reads through `latest`, so `actions` stays stable even when the options are passed inline.
   const actions = useMemo<StorageStateActions<T | undefined>>(
     () => ({
       setValue: value => latest.current.writeValue(value),
-      refresh: () => latest.current.writeValue(latest.current.getSnapshot()),
+      // Reads storage again without writing to it, so a stored function is never run as an updater
+      // and a value read with a previous deserializer is never written back.
+      refresh: () => {
+        cache.current.data = undefined;
+        emitListeners();
+      },
     }),
     []
   );

@@ -2,7 +2,7 @@
 
 `useStorageState`는 `useState`처럼 작동하지만 상태 값을 브라우저 저장소에 저장하는 리액트 훅이에요. 이 값은 페이지를 새로고침해도 유지되며, `localStorage`를 사용할 경우 탭 간에 공유될 수 있어요.
 
-`serializer`와 `deserializer`를 전달하지 않으면 값을 JSON으로 저장하므로, 값의 안쪽까지 모두 JSON으로 직렬화할 수 있어야 해요. 값 어딘가에 `Date`, `Map`, 클래스 인스턴스나 함수가 있으면 값을 설정할 때 에러가 발생하고, `defaultValue`는 마운트 시 검사해요. 다른 타입을 저장하려면 두 함수를 함께 전달하세요. 저장소에서 읽어 온 문자열은 따로 검증하지 않아요.
+`serializer`와 `deserializer`를 전달하지 않으면 값을 JSON으로 저장하므로, 값의 안쪽까지 모두 JSON으로 직렬화할 수 있어야 해요. 값 어딘가에 `Date`, `Map`, 클래스 인스턴스나 함수가 있으면 값을 설정할 때 에러가 발생하고, `defaultValue`는 마운트 시 검사해요. 다른 타입을 저장하려면 두 함수를 함께 전달하세요. 저장소에서 읽어 온 문자열은 따로 검증하지 않아요. 읽어 온 값은 저장된 문자열이 바뀔 때까지 재사용하므로, `deserializer`가 반환하는 값이 달라지면 `refresh`를 호출하세요.
 
 ## 인터페이스
 
@@ -79,7 +79,7 @@ function useStorageState<T>(
       name: 'actions.refresh',
       type: '() => void',
       required: false,
-      description: '저장소에서 상태를 다시 가져오는 함수예요.',
+      description: '저장소에 쓰지 않고 저장소에서 값을 다시 읽어 오는 함수예요.',
     },
   ]"
 />

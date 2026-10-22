@@ -1,6 +1,6 @@
 import { createElement, useEffect } from 'react';
 import { act, render } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, expectTypeOf, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -491,6 +491,17 @@ describe('useStorageState', () => {
           await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: { at: new Date(0) } }))
       ).rejects.toThrow('defaultValue.at is not JSON-serializable');
     });
+
+    it('should not write defaultValue to storage on refresh', async () => {
+      const { result } = await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: { a: 1 } }));
+
+      await act(async () => {
+        result.current[1].refresh();
+      });
+
+      expect(storage.get('test-key')).toBeNull();
+      expect(result.current[0]).toEqual({ a: 1 });
+    });
   });
 
   describe('when serializer and deserializer are passed', () => {
@@ -603,6 +614,51 @@ describe('useStorageState', () => {
       rerender();
 
       expect(result.current[1]).toBe(actions);
+    });
+
+    it('should not run a stored function as an updater on refresh', async () => {
+      const greet = vi.fn(() => 'hello');
+      const { result } = await renderHookSSR(() =>
+        useStorageState('test-key', {
+          storage,
+          defaultValue: greet,
+          serializer: () => 'greet',
+          deserializer: () => greet,
+        })
+      );
+
+      await act(async () => {
+        result.current[1].setValue(() => greet);
+      });
+      await act(async () => {
+        result.current[1].refresh();
+      });
+
+      expect(greet).not.toHaveBeenCalled();
+      expect(result.current[0]).toBe(greet);
+      expect(storage.get('test-key')).toBe('greet');
+    });
+
+    it('should read with the new deserializer on refresh without writing the value back', async () => {
+      storage.set('test-key', 'same');
+      const { result, rerender } = await renderHookSSR(
+        ({ tag }: { tag: string }) =>
+          useStorageState('test-key', {
+            storage,
+            defaultValue: '',
+            serializer: value => value,
+            deserializer: text => `${tag}:${text}`,
+          }),
+        { initialProps: { tag: 'old' } }
+      );
+
+      rerender({ tag: 'new' });
+      await act(async () => {
+        result.current[1].refresh();
+      });
+
+      expect(result.current[0]).toBe('new:same');
+      expect(storage.get('test-key')).toBe('same');
     });
   });
 

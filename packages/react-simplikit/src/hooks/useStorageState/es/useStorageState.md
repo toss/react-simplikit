@@ -3,7 +3,7 @@
 `useStorageState` es un Hook de React que funciona como `useState`, pero conserva el valor del estado en el almacenamiento del navegador.
 El valor persiste cuando recargas la página y puedes compartirlo entre pestañas al usar `localStorage`.
 
-Si no pasas `serializer` y `deserializer`, el valor se guarda como JSON y debe poder serializarse a JSON en todos sus niveles: si contiene en cualquier parte un `Date`, un `Map`, una instancia de clase o una función, se lanza un error al establecer el valor, y `defaultValue` se comprueba al montar el componente. Para guardar cualquier otro tipo, pasa ambas funciones. La cadena guardada no se valida al volver a leerla.
+Si no pasas `serializer` y `deserializer`, el valor se guarda como JSON y debe poder serializarse a JSON en todos sus niveles: si contiene en cualquier parte un `Date`, un `Map`, una instancia de clase o una función, se lanza un error al establecer el valor, y `defaultValue` se comprueba al montar el componente. Para guardar cualquier otro tipo, pasa ambas funciones. La cadena guardada no se valida al volver a leerla. El valor leído se reutiliza hasta que cambia la cadena guardada, así que llama a `refresh` cuando `deserializer` cambie lo que devuelve.
 
 ## Interfaz
 
@@ -80,7 +80,7 @@ function useStorageState<T>(
       name: 'actions.refresh',
       type: '() => void',
       required: false,
-      description: 'Una función para actualizar el estado a partir del almacenamiento.',
+      description: 'Una función para volver a leer el valor del almacenamiento sin escribir en él.',
     },
   ]"
 />
