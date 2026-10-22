@@ -69,8 +69,7 @@ function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
 ## Ejemplo
 
 ```tsx
-const initialItems = ['apple', 'banana'] as const;
-const [list, actions] = useList<string>(initialItems);
+const [list, actions] = useList(['apple', 'banana']);
 
 // Añadir un elemento
 actions.push('cherry');

@@ -68,8 +68,7 @@ function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
 ## 예시
 
 ```tsx
-const initialItems = ['apple', 'banana'] as const;
-const [list, actions] = useList<string>(initialItems);
+const [list, actions] = useList(['apple', 'banana']);
 
 // 항목 추가하기
 actions.push('cherry');

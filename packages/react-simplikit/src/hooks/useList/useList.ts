@@ -35,8 +35,7 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  *
  * @example
  * ```tsx
- * const initialItems = ['apple', 'banana'] as const;
- * const [list, actions] = useList<string>(initialItems);
+ * const [list, actions] = useList(['apple', 'banana']);
  *
  * // Add an item
  * actions.push('cherry');
