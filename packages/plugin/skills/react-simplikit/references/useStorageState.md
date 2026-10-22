@@ -3,16 +3,18 @@
 `useStorageState` is a React hook that functions like `useState` but persists the state value in browser storage.
 The value is retained across page reloads and can be shared between tabs when using `localStorage`.
 
+Without `serializer` and `deserializer`, the value is stored as JSON and must be JSON-serializable all the way down:
+a `Date`, `Map`, class instance or function anywhere in it throws when it is set, and `defaultValue` is checked on mount.
+Pass both functions to store any other type. The stored string is not validated when it is read back.
+The value read back is reused until the stored string changes, so call `refresh` when `deserializer` changes what it returns.
+
 ## Interface
 
 ```ts
 function useStorageState<T>(
   key: string,
   options?: Object
-): readonly [
-  state: Serializable<T> | undefined,
-  actions: StorageStateActions<Serializable<T> | undefined>,
-];
+): readonly [state: T | undefined, actions: StorageStateActions<T | undefined>];
 ```
 
 ### Parameters
@@ -45,15 +47,17 @@ function useStorageState<T>(
     },
     {
       name: 'options.serializer',
-      type: 'Function',
+      type: '(value: T) => string',
       required: false,
-      description: 'A function to serialize the state value to a string.',
+      description:
+        'Converts the value to a string. Pass it together with <code>deserializer</code>.',
     },
     {
       name: 'options.deserializer',
-      type: 'Function',
+      type: '(value: string) => T',
       required: false,
-      description: 'A function to deserialize the state value from a string.',
+      description:
+        'Converts the stored string back to a value. Pass it together with <code>serializer</code>.',
     },
   ]"
 />
@@ -62,18 +66,19 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, actions: StorageStateActions<Serializable<T> | undefined>]"
+  type="readonly [state: T | undefined, actions: StorageStateActions<T | undefined>]"
   description="A tuple containing the state and actions to change it."
   :nested="[
     {
       name: 'state',
-      type: 'Serializable<T> | undefined',
+      type: 'T | undefined',
       required: false,
-      description: 'The current state value retrieved from storage.',
+      description:
+        'The current state value retrieved from storage. It is <code>T</code> when <code>defaultValue</code> is given.',
     },
     {
       name: 'actions.setValue',
-      type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
+      type: '(value: SetStateAction<T | undefined>) => void',
       required: false,
       description: 'A function to update and persist the state.',
     },
@@ -81,7 +86,7 @@ function useStorageState<T>(
       name: 'actions.refresh',
       type: '() => void',
       required: false,
-      description: 'A function to refresh the state from storage.',
+      description: 'Reads the value from storage again without writing to it.',
     },
   ]"
 />
@@ -93,7 +98,7 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, { setValue }] = useStorageState<number>('counter', {
+  const [count, { setValue }] = useStorageState('counter', {
     defaultValue: 0,
   });
 
