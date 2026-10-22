@@ -7,17 +7,23 @@ import { useList } from './useList.ts';
 
 describe('useList', () => {
   it('is safe on server side rendering', () => {
-    const initialState = ['a', 'b'] as const;
-    const result = renderHookSSR.serverOnly(() => useList(initialState));
+    const result = renderHookSSR.serverOnly(() => useList(['a', 'b']));
 
     expect(result.current[0]).toEqual(['a', 'b']);
-    expectTypeOf(result.current[0]).toEqualTypeOf<ReadonlyArray<'a' | 'b'>>();
   });
 
   it('should initialize with an array', async () => {
     const { result } = await renderHookSSR(() => useList(['a', 'b']));
 
     expect(result.current[0]).toEqual(['a', 'b']);
+  });
+
+  it('should preserve element types inferred from a readonly tuple', () => {
+    const initialState = ['a', 'b'] as const;
+    const result = renderHookSSR.serverOnly(() => useList(initialState));
+
+    expect(result.current[0]).toEqual(['a', 'b']);
+    expectTypeOf(result.current[0]).toEqualTypeOf<ReadonlyArray<'a' | 'b'>>();
   });
 
   it('should initialize with an empty array when no arguments provided', async () => {
