@@ -1,16 +1,17 @@
 # useList
 
 一个将数组作为状态进行管理的 React Hook。它提供高效的状态管理和稳定的操作函数。
+初始状态和 `setAll` 均接受可变数组和只读数组。
 
 ## 接口
 
 ```ts
-function useList<T>(initialState: T[] = []): UseListReturn<T>;
+function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
 ```
 
 ### 参数
 
-<Interface name="initialState" type="T[]" description="初始数组状态。" />
+<Interface name="initialState" type="readonly T[]" description="初始数组状态。" />
 
 ### 返回值
 
@@ -51,7 +52,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
     },
     {
       name: 'actions.setAll',
-      type: '(values: T[]) => void',
+      type: '(values: readonly T[]) => void',
       required: false,
       description: '用新数组替换整个列表。',
     },
@@ -67,7 +68,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## 示例
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const [list, actions] = useList(['apple', 'banana']);
 
 // Add an item
 actions.push('cherry');

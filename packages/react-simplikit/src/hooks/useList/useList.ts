@@ -8,7 +8,7 @@ type ListActions<T> = {
   insertAt: (index: number, value: T) => void;
   updateAt: (index: number, value: T) => void;
   removeAt: (index: number) => void;
-  setAll: (values: T[]) => void;
+  setAll: (values: readonly T[]) => void;
   reset: () => void;
 };
 
@@ -18,10 +18,11 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  * @description
  * A React hook that manages an array as state.
  * Provides efficient state management and stable action functions.
+ * Accepts mutable and readonly arrays for the initial state and `setAll`.
  *
  * @template T - The type of the values held in the list.
  *
- * @param {T[]} [initialState=[]] - Initial array state.
+ * @param {readonly T[]} [initialState=[]] - Initial array state.
  *
  * @returns {UseListReturn<T>} A tuple containing the array state and actions to manipulate it.
  * - list `ReadonlyArray<T>` - The current array state;
@@ -29,12 +30,12 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  * - actions.insertAt `(index: number, value: T) => void` - Inserts a value at the specified index;
  * - actions.updateAt `(index: number, value: T) => void` - Updates the value at the specified index;
  * - actions.removeAt `(index: number) => void` - Removes the value at the specified index;
- * - actions.setAll `(values: T[]) => void` - Replaces the entire list with a new array;
+ * - actions.setAll `(values: readonly T[]) => void` - Replaces the entire list with a new array;
  * - actions.reset `() => void` - Resets the list to its initial state;
  *
  * @example
  * ```tsx
- * const [list, actions] = useList<string>(['apple', 'banana']);
+ * const [list, actions] = useList(['apple', 'banana']);
  *
  * // Add an item
  * actions.push('cherry');
@@ -55,8 +56,8 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  * actions.reset();
  * ```
  */
-export function useList<T>(initialState: T[] = []): UseListReturn<T> {
-  const [list, setList] = useState(initialState);
+export function useList<T>(initialState: readonly T[] = []): UseListReturn<T> {
+  const [list, setList] = useState<readonly T[]>(initialState);
 
   const preservedInitialState = usePreservedReference(initialState);
 
@@ -88,7 +89,7 @@ export function useList<T>(initialState: T[] = []): UseListReturn<T> {
     });
   });
 
-  const setAll = usePreservedCallback((values: T[]) => {
+  const setAll = usePreservedCallback((values: readonly T[]) => {
     setList(values);
   });
 
