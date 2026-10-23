@@ -1,5 +1,23 @@
 # react-simplikit
 
+## 0.4.0
+
+### Minor Changes
+
+- [#571](https://github.com/toss/react-simplikit/pull/571) [`a62e7d6`](https://github.com/toss/react-simplikit/commit/a62e7d69c46287984bd67a0d9109bed2de7cd665) Thanks [@hyesungoh](https://github.com/hyesungoh)! - The emitted declarations of `usePreservedCallback`, `useDebounce`, `useThrottle` and `useCallbackOncePerRender` now name their callback parameter type `CallerTypedArgs` instead of `any[]`. It is the same type, so they accept the same callbacks. `useThrottle` also constrains the callback's return type to `unknown` instead of `any`, which accepts the same callbacks.
+
+  The throttled function returned by `useThrottle` now accepts the callback's parameters instead of `any[]`, so calling it with arguments the callback does not take is a type error. The return types of `useThrottle` and `useDebounce` are now written out in their declarations, so a consumer that emits declarations can export their result without a TS2742 error.
+
+### Patch Changes
+
+- [#572](https://github.com/toss/react-simplikit/pull/572) [`cf0dd83`](https://github.com/toss/react-simplikit/commit/cf0dd83e46dc75bec4d5535d50d8ba903d57edb6) Thanks [@GamjaIsMine02](https://github.com/GamjaIsMine02)! - Document that `useOutsideClickEffect` accepts `null` entries in container arrays, matching its existing type and behavior.
+
+- [#569](https://github.com/toss/react-simplikit/pull/569) [`8ead31d`](https://github.com/toss/react-simplikit/commit/8ead31d229ace4dd59a12ff8cfc4081518e2e29c) Thanks [@GamjaIsMine02](https://github.com/GamjaIsMine02)! - Mark `useImpressionRef`'s `rootMargin` option as optional in the JSDoc and documentation, matching its existing type.
+
+- [#575](https://github.com/toss/react-simplikit/pull/575) [`5a21c39`](https://github.com/toss/react-simplikit/commit/5a21c399616198eb48068f6095231eec73f60de6) Thanks [@GamjaIsMine02](https://github.com/GamjaIsMine02)! - Allow readonly arrays as the initial state and `setAll` input of `useList`.
+
+- [#567](https://github.com/toss/react-simplikit/pull/567) [`d8e8147`](https://github.com/toss/react-simplikit/commit/d8e8147720b441f21000f46b8b618212af99d827) Thanks [@rjsgud49](https://github.com/rjsgud49)! - `useScrollDirection` no longer stops tracking scroll when `throttleMs` changes, or the component's effects re-run, while a throttle window is still open. The cleanup cleared the pending timer but left its id in the ref, so the next listener treated every scroll as throttled.
+
 ## 0.3.3
 
 ### Patch Changes
