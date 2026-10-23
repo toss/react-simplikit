@@ -8,7 +8,9 @@ El controlador `onChange` que devuelve funciona tanto con elementos `<input>` co
 ```ts
 function useInputState(
   initialValue: string | (() => string) = '',
-  transformValue: (value: string) => string = (v: string) => v
+  transformValue: (nextValue: string, previousValue: string) => string = (
+    nextValue: string
+  ) => nextValue
 ): [
   value: string,
   onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
@@ -25,8 +27,8 @@ function useInputState(
 
 <Interface
   name="transformValue"
-  type="(value: string) => string"
-  description="Una función para transformar el valor del campo de entrada. La función predeterminada es una función identidad que devuelve el valor sin cambios."
+  type="(nextValue: string, previousValue: string) => string"
+  description="Una función para transformar el valor del campo de entrada. Recibe el valor anterior del estado como segundo argumento. La función predeterminada es una función identidad que devuelve el siguiente valor de entrada sin cambios."
 />
 
 ### Valor de retorno
