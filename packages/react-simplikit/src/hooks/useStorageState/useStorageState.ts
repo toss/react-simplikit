@@ -21,7 +21,7 @@ type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
   deserializer: (value: string) => Serializable<T>;
 };
 
-type SerializableGuard<T extends readonly any[]> = T[0] extends any
+type SerializableGuard<T extends readonly unknown[]> = T[0] extends unknown
   ? T
   : T[0] extends never
     ? 'Received a non-serializable value'
@@ -33,7 +33,7 @@ const emitListeners = () => {
   listeners.forEach(listener => listener());
 };
 
-function isPlainObject(value: unknown): value is Record<PropertyKey, any> {
+function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
   if (typeof value !== 'object') {
     return false;
   }
@@ -49,7 +49,7 @@ function isPlainObject(value: unknown): value is Record<PropertyKey, any> {
   return Object.prototype.toString.call(value) === '[object Object]';
 }
 
-const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGuard<T> => {
+const ensureSerializable = <T extends readonly unknown[]>(value: T): SerializableGuard<T> => {
   if (
     value[0] != null &&
     !['string', 'number', 'boolean'].includes(typeof value[0]) &&

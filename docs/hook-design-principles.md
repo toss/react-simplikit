@@ -115,16 +115,21 @@ useEffect(function tick() {
 }, []);
 ```
 
-#### C4. No `any` Types
+#### C4. No `any` in Implementation
 
-Use generics `<T>`. `any` propagates and defeats the type system. Justified `eslint-disable` with comment is acceptable for generic callback types.
+Use generics `<T>`. `any` propagates and defeats the type system, so lint rejects it in implementation code. The only exception is the parameter list of a function the caller passes in: `unknown[]` would reject annotated callbacks, because function parameters are compared contravariantly. Use the shared `CallerTypedArgs` type from `_internal/types.ts` there instead of writing `any`.
 
 ```ts
 // ✅ Generic
 function useDebounce<T>(value: T, delay: number): T;
 
-// ✅ Justified exception (comment required)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback
+// ✅ Caller's function: its parameter types come from the caller's annotations
+function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
+  callback: F,
+  wait: number
+);
+
+// ❌ `any` written directly anywhere outside `_internal/types.ts`, even with an eslint-disable comment
 type AnyFunction = (...args: any[]) => unknown;
 ```
 

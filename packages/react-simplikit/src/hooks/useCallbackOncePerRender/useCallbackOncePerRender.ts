@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DependencyList, useEffect, useRef } from 'react';
 
+import type { CallerTypedArgs } from '../../_internal/types.ts';
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 /**
@@ -39,7 +39,10 @@ import { usePreservedCallback } from '../usePreservedCallback/index.ts';
  *   return <div>User page</div>;
  * }
  */
-export function useCallbackOncePerRender<F extends (...args: any[]) => void>(callback: F, deps: DependencyList) {
+export function useCallbackOncePerRender<F extends (...args: CallerTypedArgs) => void>(
+  callback: F,
+  deps: DependencyList
+) {
   // Same reason as `useAsyncEffect`: the body itself is compiler-clean, but React Compiler
   // bails on any function carrying a React ESLint suppression, and the
   // `react-hooks/exhaustive-deps` suppression below is unavoidable for a caller-supplied `deps`.

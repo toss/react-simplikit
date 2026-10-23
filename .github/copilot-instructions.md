@@ -12,7 +12,7 @@
 - Use `type` not `interface` for type aliases
 - Named functions in useEffect: `useEffect(function handleResize() { ... }, [])`
 - No default exports — named exports only
-- No `any` types — strict TypeScript
+- No `any` in implementation (lint error) — for the parameters of a caller-supplied function, use `CallerTypedArgs` from `_internal/types.ts`
 - Use `.ts`/`.tsx` extensions in source imports (tsdown rewrites them to `.mjs`/`.cjs`)
 - No implicit boolean coercion: `if (value)` → `if (value != null)` (enforced by `strict-boolean-expressions`)
 - Nullish checks: `== null` for both null and undefined, `!== undefined` only when distinction matters
