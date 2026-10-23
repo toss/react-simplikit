@@ -7,7 +7,7 @@ such as when handling scroll or resize events.
 ## Interface
 
 ```ts
-function useThrottle<F extends (...args: any[]) => any>(
+function useThrottle<F extends (...args: any[]) => unknown>(
   callback: F,
   wait: number,
   options?: { edges?: Array<'leading' | 'trailing'> }

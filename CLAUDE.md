@@ -68,7 +68,7 @@ src/
 - **useEffect cleanup** — Always return cleanup to remove listeners/subscriptions
 - **`"use client"` banner** — tsdown adds this to every emitted file for RSC compatibility
 - **Named exports only** — No default exports
-- **No `any` types** — Full TypeScript strict mode, no escape hatches
+- **No `any` in implementation** — Full TypeScript strict mode, and lint rejects `any`. The only exception is `CallerTypedArgs` in `src/_internal/types.ts`, the parameter list of a function the caller passes in
 - **Zero dependencies** — No runtime dependencies in `react-simplikit`. `react-simplikit-codemod` is a dev-time CLI and declares `commander`, `detect-indent`, `fast-glob`, `semver` and `typescript` in `dependencies`
 
 ### SSR-Safe Coding Pattern

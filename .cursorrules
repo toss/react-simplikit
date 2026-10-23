@@ -15,7 +15,7 @@ Unidirectional layers: `components → hooks → utils → _internal`
 - `type` over `interface` for type aliases
 - Named functions in useEffect: `useEffect(function handleResize() { ... }, [])`
 - Named exports only, no default exports
-- No `any` — strict TypeScript
+- No `any` in implementation (lint error) — for the parameters of a caller-supplied function, use `CallerTypedArgs` from `_internal/types.ts`
 - `.ts`/`.tsx` extensions in source imports (tsdown rewrites to `.mjs`/`.cjs`)
 - No implicit boolean coercion: `if (value)` → `if (value != null)` (enforced by `strict-boolean-expressions`)
 - Nullish checks: `== null` for both null and undefined, `!== undefined` only when distinction matters

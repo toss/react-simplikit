@@ -38,4 +38,4 @@ La documentación se escribe en inglés y se traduce a varios idiomas; una pági
 - **Definiciones de tipos estrictas**: todos los parámetros, valores de retorno y opciones están completamente tipados
 - **Compatibilidad con IntelliSense**: obtén autocompletado y documentación integrada en tu IDE
 - **Tipos genéricos**: APIs flexibles que preservan tu información de tipos
-- **Sin tipos `any`**: evitamos las vías de escape que comprometen la seguridad de tipos
+- **Sin `any` en la implementación**: el código de implementación nunca usa `any`. La única excepción son las APIs genéricas que envuelven tu función, como `usePreservedCallback`: los tipos de los parámetros de tu función vienen de tus anotaciones o del contexto de inferencia, y quedan como `any` cuando no hay ninguno de los dos
