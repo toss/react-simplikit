@@ -75,7 +75,7 @@ export default defineConfig(
       import: importPlugin,
     },
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/strict-boolean-expressions': 'error',
       '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
       'react/react-in-jsx-scope': 'off',
@@ -122,6 +122,13 @@ export default defineConfig(
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    // Only implementation code must be free of `any`; tests may use it for mocks and fixtures.
+    files: ['**/*.{spec,test}.{ts,tsx}', '**/_internal/test-utils/**'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
   prettierRecommended

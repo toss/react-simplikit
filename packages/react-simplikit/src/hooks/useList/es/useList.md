@@ -2,16 +2,17 @@
 
 Un Hook de React que gestiona un arreglo como estado.
 Proporciona una gestión eficiente del estado y funciones de acción estables.
+Acepta arreglos mutables y de solo lectura como estado inicial y como argumento de `setAll`.
 
 ## Interfaz
 
 ```ts
-function useList<T>(initialState: T[] = []): UseListReturn<T>;
+function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
 ```
 
 ### Parámetros
 
-<Interface name="initialState" type="T[]" description="Estado inicial del arreglo." />
+<Interface name="initialState" type="readonly T[]" description="Estado inicial del arreglo." />
 
 ### Valor de retorno
 
@@ -52,7 +53,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
     },
     {
       name: 'actions.setAll',
-      type: '(values: T[]) => void',
+      type: '(values: readonly T[]) => void',
       required: false,
       description: 'Reemplaza toda la lista por un nuevo arreglo.',
     },
@@ -68,7 +69,7 @@ function useList<T>(initialState: T[] = []): UseListReturn<T>;
 ## Ejemplo
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const [list, actions] = useList(['apple', 'banana']);
 
 // Añadir un elemento
 actions.push('cherry');
