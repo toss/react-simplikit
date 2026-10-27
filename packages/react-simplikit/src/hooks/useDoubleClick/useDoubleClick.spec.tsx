@@ -172,11 +172,30 @@ describe('useDoubleClick', () => {
     });
 
     it('forwards the original event to click', () => {
-      const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+      const received: MouseEvent<HTMLElement>[] = [];
+
+      function CaptureComponent() {
+        const handleEvent = useDoubleClick({ click: clickSpy, doubleClick: doubleClickSpy });
+
+        return (
+          <button
+            onClick={event => {
+              received.push(event);
+              handleEvent(event);
+            }}
+          >
+            Test Button
+          </button>
+        );
+      }
+
+      const { getByText } = render(<CaptureComponent />);
 
       fireEvent.click(getByText('Test Button'), { detail: 0 });
 
-      expect(clickSpy).toHaveBeenCalledWith(expect.objectContaining({ type: 'click', detail: 0 }));
+      expect(received).toHaveLength(1);
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+      expect(clickSpy.mock.calls[0][0]).toBe(received[0]);
     });
 
     it('does not throw if click is not provided', () => {
