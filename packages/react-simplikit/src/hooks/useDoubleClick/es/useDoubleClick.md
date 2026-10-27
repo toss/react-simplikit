@@ -1,7 +1,8 @@
 # useDoubleClick
 
 `useDoubleClick` es un Hook de React que distingue entre los eventos de un solo clic y los de doble clic.
-Retrasa la ejecución del callback de un solo clic durante el tiempo que especificas y la cancela si ocurre un segundo clic (es decir, un doble clic) dentro de ese período.
+Para los clics de puntero, retrasa la ejecución del callback de un solo clic durante el tiempo que especificas y la cancela si ocurre un segundo clic (es decir, un doble clic) dentro de ese período.
+Los clics que no llevan un conteo de clics (`event.detail === 0`, por ejemplo la activación de un botón con el teclado) no pueden formar parte de un doble clic, así que `click` se ejecuta de inmediato para ellos y `doubleClick` no se llama.
 
 ## Interfaz
 
@@ -25,7 +26,7 @@ function useDoubleClick<E extends HTMLElement>(
       required: false,
       defaultValue: '250',
       description:
-        'El número de milisegundos de espera antes de ejecutar el callback de un solo clic. El valor predeterminado es 250 ms.',
+        'El número de milisegundos que un solo clic de puntero espera un posible segundo clic antes de ejecutar <code>click</code>. Los clics sin conteo de clics (<code>event.detail === 0</code>) ejecutan <code>click</code> de inmediato e ignoran <code>delay</code>. El valor predeterminado es 250 ms.',
     },
     {
       name: 'props.click',
