@@ -7,7 +7,9 @@
 ```ts
 function useInputState(
   initialValue: string | (() => string) = '',
-  transformValue: (value: string) => string = (v: string) => v
+  transformValue: (nextValue: string, previousValue: string) => string = (
+    nextValue: string
+  ) => nextValue
 ): [
   value: string,
   onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
@@ -24,8 +26,8 @@ function useInputState(
 
 <Interface
   name="transformValue"
-  type="(value: string) => string"
-  description="입력 값을 변환하는 함수예요. 기본값은 아무 변화 없이 입력을 반환하는 함수예요."
+  type="(nextValue: string, previousValue: string) => string"
+  description="입력 값을 변환하는 함수예요. 이전 상태 값이 두 번째 인자로 전달돼요. 기본값은 다음 입력 값을 그대로 반환하는 함수예요."
 />
 
 ### 반환 값
@@ -33,7 +35,7 @@ function useInputState(
 <Interface
   name=""
   type="[value: string, onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>]"
-  description="튜플을 포함해요:"
+  description="다음 항목을 포함한 튜플이에요:"
   :nested="[
     {
       name: 'value',

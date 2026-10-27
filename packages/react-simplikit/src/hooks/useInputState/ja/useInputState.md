@@ -8,7 +8,9 @@
 ```ts
 function useInputState(
   initialValue: string | (() => string) = '',
-  transformValue: (value: string) => string = (v: string) => v
+  transformValue: (nextValue: string, previousValue: string) => string = (
+    nextValue: string
+  ) => nextValue
 ): [
   value: string,
   onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
@@ -25,8 +27,8 @@ function useInputState(
 
 <Interface
   name="transformValue"
-  type="(value: string) => string"
-  description="入力値を変換する関数です。デフォルトは入力値をそのまま返す恒等関数です。"
+  type="(nextValue: string, previousValue: string) => string"
+  description="入力値を変換する関数です。前の状態値を第2引数として受け取ります。デフォルトは次の入力値をそのまま返す恒等関数です。"
 />
 
 ### 戻り値
