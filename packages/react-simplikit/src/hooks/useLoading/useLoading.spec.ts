@@ -82,4 +82,72 @@ describe('useLoading', () => {
     // No errors should occur, and the loading state should not update after unmount
     expect(true).toBe(true);
   });
+  it('should stay loading until every overlapping promise has settled', async () => {
+    const { result } = await renderHookSSR(() => useLoading());
+    const [, startLoading] = result.current;
+
+    let resolveFirst: () => void = () => {};
+    let resolveSecond: () => void = () => {};
+    const first = new Promise<void>(resolve => {
+      resolveFirst = resolve;
+    });
+    const second = new Promise<void>(resolve => {
+      resolveSecond = resolve;
+    });
+
+    await act(async () => {
+      startLoading(first);
+      startLoading(second);
+    });
+
+    expect(result.current[0]).toBe(true);
+
+    await act(async () => {
+      resolveFirst();
+      await first;
+    });
+
+    expect(result.current[0]).toBe(true);
+
+    await act(async () => {
+      resolveSecond();
+      await second;
+    });
+
+    expect(result.current[0]).toBe(false);
+  });
+
+  it('should stay loading while another promise is pending after one rejects', async () => {
+    const { result } = await renderHookSSR(() => useLoading());
+    const [, startLoading] = result.current;
+
+    let rejectFirst: (error: Error) => void = () => {};
+    let resolveSecond: () => void = () => {};
+    const first = new Promise<void>((_, reject) => {
+      rejectFirst = reject;
+    });
+    const second = new Promise<void>(resolve => {
+      resolveSecond = resolve;
+    });
+
+    let firstResult: Promise<void> = Promise.resolve();
+    await act(async () => {
+      firstResult = startLoading(first);
+      startLoading(second);
+    });
+
+    await act(async () => {
+      rejectFirst(new Error('failed'));
+      await expect(firstResult).rejects.toThrow('failed');
+    });
+
+    expect(result.current[0]).toBe(true);
+
+    await act(async () => {
+      resolveSecond();
+      await second;
+    });
+
+    expect(result.current[0]).toBe(false);
+  });
 });
