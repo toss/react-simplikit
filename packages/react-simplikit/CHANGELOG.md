@@ -1,5 +1,33 @@
 # react-simplikit
 
+## 0.4.0
+
+### Minor Changes
+
+- [#574](https://github.com/toss/react-simplikit/pull/574) [`402995e`](https://github.com/toss/react-simplikit/commit/402995eea8b2db6dd99b2c0adebf07df8d5684e9) Thanks [@DongEun02](https://github.com/DongEun02)! - Pass the previous state value as the second argument to useInputState's transformValue callback.
+
+- [#571](https://github.com/toss/react-simplikit/pull/571) [`a62e7d6`](https://github.com/toss/react-simplikit/commit/a62e7d69c46287984bd67a0d9109bed2de7cd665) Thanks [@hyesungoh](https://github.com/hyesungoh)! - The emitted declarations of `usePreservedCallback`, `useDebounce`, `useThrottle` and `useCallbackOncePerRender` now name their callback parameter type `CallerTypedArgs` instead of `any[]`. It is the same type, so they accept the same callbacks. `useThrottle` also constrains the callback's return type to `unknown` instead of `any`, which accepts the same callbacks.
+
+  The throttled function returned by `useThrottle` now accepts the callback's parameters instead of `any[]`, so calling it with arguments the callback does not take is a type error. The return types of `useThrottle` and `useDebounce` are now written out in their declarations, so a consumer that emits declarations can export their result without a TS2742 error.
+
+### Patch Changes
+
+- [#572](https://github.com/toss/react-simplikit/pull/572) [`cf0dd83`](https://github.com/toss/react-simplikit/commit/cf0dd83e46dc75bec4d5535d50d8ba903d57edb6) Thanks [@GamjaIsMine02](https://github.com/GamjaIsMine02)! - Document that `useOutsideClickEffect` accepts `null` entries in container arrays, matching its existing type and behavior.
+
+- [#569](https://github.com/toss/react-simplikit/pull/569) [`8ead31d`](https://github.com/toss/react-simplikit/commit/8ead31d229ace4dd59a12ff8cfc4081518e2e29c) Thanks [@GamjaIsMine02](https://github.com/GamjaIsMine02)! - Mark `useImpressionRef`'s `rootMargin` option as optional in the JSDoc and documentation, matching its existing type.
+
+- [#575](https://github.com/toss/react-simplikit/pull/575) [`5a21c39`](https://github.com/toss/react-simplikit/commit/5a21c399616198eb48068f6095231eec73f60de6) Thanks [@GamjaIsMine02](https://github.com/GamjaIsMine02)! - Allow readonly arrays as the initial state and `setAll` input of `useList`.
+
+- [#579](https://github.com/toss/react-simplikit/pull/579) [`8828710`](https://github.com/toss/react-simplikit/commit/882871012fee6c7bd3684b57c238f0a1199a49f9) Thanks [@KooYS](https://github.com/KooYS)! - `useDoubleClick` now runs `click` immediately for clicks that carry no click count (`event.detail === 0`), such as Enter/Space on a native button or a programmatic `element.click()`. The handler only recognised `detail` 1 and 2, so these clicks were dropped, and they also cancelled a pending mouse click. `doubleClick` is still only called for `detail === 2`.
+
+- [#577](https://github.com/toss/react-simplikit/pull/577) [`89ad72e`](https://github.com/toss/react-simplikit/commit/89ad72e5663f6c9d7b00af4090136b0f81ff00a3) Thanks [@rjsgud49](https://github.com/rjsgud49)! - `useLoading` now keeps `loading` as `true` until every promise passed to `startLoading` has settled. Before, when two calls overlapped, the first promise to settle set `loading` to `false` while the other was still pending.
+
+- [#576](https://github.com/toss/react-simplikit/pull/576) [`7e8c88a`](https://github.com/toss/react-simplikit/commit/7e8c88ac92e82fbd1e1ab8a5f9b1b897b024c2d1) Thanks [@rjsgud49](https://github.com/rjsgud49)! - `useLongPress` no longer calls `onClick` twice for a tap on touch devices. After `touchend`, browsers fire emulated `mousedown`/`mouseup` events on the same element, and the hook handled them as a second, mouse press. That also called `onClick` after `onLongPressEnd` when the long press came from touch. Mouse presses that start within 1 second of a touch event are now ignored.
+
+- [#567](https://github.com/toss/react-simplikit/pull/567) [`d8e8147`](https://github.com/toss/react-simplikit/commit/d8e8147720b441f21000f46b8b618212af99d827) Thanks [@rjsgud49](https://github.com/rjsgud49)! - `useScrollDirection` no longer stops tracking scroll when `throttleMs` changes, or the component's effects re-run, while a throttle window is still open. The cleanup cleared the pending timer but left its id in the ref, so the next listener treated every scroll as throttled.
+
+- [#578](https://github.com/toss/react-simplikit/pull/578) [`4b9a4aa`](https://github.com/toss/react-simplikit/commit/4b9a4aa4d6b187390e3102b131b49962199aee9d) Thanks [@mmporong](https://github.com/mmporong)! - Mark `useMap`'s `initialState` parameter as optional in the JSDoc and documentation, matching its existing default of `new Map()`.
+
 ## 0.3.3
 
 ### Patch Changes
