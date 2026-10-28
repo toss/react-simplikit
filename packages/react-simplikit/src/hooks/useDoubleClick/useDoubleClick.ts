@@ -11,11 +11,12 @@ type UseDoubleClickProps<E extends HTMLElement> = {
 /**
  * @description
  * `useDoubleClick` is a React hook that differentiates between single and double click events.
- * It delays the single click callback execution for a specified time, and cancels it if a second click (i.e. a double click) occurs within that time.
+ * For pointer clicks, it delays the single click callback execution for a specified time, and cancels it if a second click (i.e. a double click) occurs within that time.
+ * Clicks that carry no click count (`event.detail === 0`, e.g. keyboard activation of a button) cannot be part of a double click, so `click` runs immediately for them and `doubleClick` is not called.
  *
  * @template {HTMLElement} E - The specific type of HTMLElement to be used with this hook (e.g., HTMLButtonElement, HTMLDivElement).
  * @param {Object} props - Configuration options for click handling.
- * @param {number} [props.delay=250] - The number of milliseconds to wait before triggering the single click callback. Defaults to 250ms.
+ * @param {number} [props.delay=250] - The number of milliseconds a pointer single click waits for a possible second click before `click` runs. Clicks without a click count (`event.detail === 0`) run `click` immediately and ignore `delay`. Defaults to 250ms.
  * @param {(event: MouseEvent<E>) => void} [props.click] - The callback function to be executed on a single click.
  * @param {(event: MouseEvent<E>) => void} props.doubleClick - The callback function to be executed on a double click. Required.
  *
@@ -58,6 +59,13 @@ export function useDoubleClick<E extends HTMLElement = HTMLElement>({
 
   const handleEvent = useCallback(
     (event: MouseEvent<E>) => {
+      // Clicks without a click count (e.g. keyboard activation) do not need to wait for a second click.
+      // Return before clearClickTimeout so they leave a pending mouse click alone.
+      if (event.detail === 0) {
+        click?.(event);
+        return;
+      }
+
       clearClickTimeout();
 
       if (click && event.detail === 1) {

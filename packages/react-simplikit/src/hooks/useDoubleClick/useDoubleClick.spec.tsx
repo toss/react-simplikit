@@ -33,6 +33,8 @@ describe('useDoubleClick', () => {
   });
 
   afterEach(() => {
+    // The unmount test spies on window.clearTimeout; restore it so tests added after it see the real timer API
+    vi.restoreAllMocks();
     vi.useRealTimers();
   });
 
@@ -143,5 +145,125 @@ describe('useDoubleClick', () => {
     vi.advanceTimersByTime(250);
 
     expect(clearTimeoutSpy).toHaveBeenCalled();
+  });
+
+  describe('activation without a click count (detail 0)', () => {
+    it('calls click immediately for keyboard-style activation', () => {
+      const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+      const button = getByText('Test Button');
+
+      fireEvent.click(button, { detail: 0 });
+
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(250);
+
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+      expect(doubleClickSpy).not.toHaveBeenCalled();
+    });
+
+    it('calls click for a programmatic button.click()', () => {
+      const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+
+      getByText('Test Button').click();
+
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+      expect(doubleClickSpy).not.toHaveBeenCalled();
+    });
+
+    it('forwards the original event to click', () => {
+      const received: MouseEvent<HTMLElement>[] = [];
+
+      function CaptureComponent() {
+        const handleEvent = useDoubleClick({ click: clickSpy, doubleClick: doubleClickSpy });
+
+        return (
+          <button
+            onClick={event => {
+              received.push(event);
+              handleEvent(event);
+            }}
+          >
+            Test Button
+          </button>
+        );
+      }
+
+      const { getByText } = render(<CaptureComponent />);
+
+      fireEvent.click(getByText('Test Button'), { detail: 0 });
+
+      expect(received).toHaveLength(1);
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+      expect(clickSpy.mock.calls[0][0]).toBe(received[0]);
+    });
+
+    it('does not throw if click is not provided', () => {
+      const { getByText } = render(<TestComponent onDoubleClick={doubleClickSpy} />);
+      const button = getByText('Test Button');
+
+      expect(() => fireEvent.click(button, { detail: 0 })).not.toThrow();
+
+      vi.advanceTimersByTime(250);
+
+      expect(doubleClickSpy).not.toHaveBeenCalled();
+    });
+
+    it('calls click for every repeated activation', () => {
+      const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+      const button = getByText('Test Button');
+
+      fireEvent.click(button, { detail: 0 });
+      fireEvent.click(button, { detail: 0 });
+      fireEvent.click(button, { detail: 0 });
+
+      expect(clickSpy).toHaveBeenCalledTimes(3);
+      expect(doubleClickSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not cancel a pending mouse click', () => {
+      const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+      const button = getByText('Test Button');
+
+      fireEvent.click(button, { detail: 1 });
+      vi.advanceTimersByTime(100);
+      fireEvent.click(button, { detail: 0 });
+
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+      expect(clickSpy).toHaveBeenLastCalledWith(expect.objectContaining({ detail: 0 }));
+
+      vi.advanceTimersByTime(150);
+
+      expect(clickSpy).toHaveBeenCalledTimes(2);
+      expect(clickSpy).toHaveBeenLastCalledWith(expect.objectContaining({ detail: 1 }));
+      expect(doubleClickSpy).not.toHaveBeenCalled();
+    });
+
+    it('keeps the mouse double click working after a detail 0 activation', () => {
+      const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+      const button = getByText('Test Button');
+
+      fireEvent.click(button, { detail: 0 });
+      fireEvent.click(button, { detail: 1 });
+      fireEvent.click(button, { detail: 2 });
+
+      vi.advanceTimersByTime(250);
+
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+      expect(doubleClickSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not call click after unmount', () => {
+      const { unmount, getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+      const button = getByText('Test Button');
+
+      fireEvent.click(button, { detail: 1 });
+      fireEvent.click(button, { detail: 0 });
+      unmount();
+
+      vi.advanceTimersByTime(250);
+
+      expect(clickSpy).toHaveBeenCalledTimes(1);
+    });
   });
 });
