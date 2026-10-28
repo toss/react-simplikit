@@ -2,7 +2,7 @@
 
 `useDebouncedValue` es un Hook de React que devuelve una copia con debounce del valor que proporcionas.
 Mantienes el control del estado; el Hook solo retrasa la actualización del valor devuelto para que refleje ese estado.
-El valor devuelto se actualiza `wait` milisegundos después del último cambio, lo que te resulta útil
+El valor devuelto se actualiza `debounceMs` milisegundos después del último cambio, lo que te resulta útil
 para obtener una consulta de búsqueda o un valor para validar a partir de un estado que cambia rápidamente.
 
 Las actualizaciones pendientes se cancelan cuando el componente se desmonta. El ejemplo muestra la
@@ -13,7 +13,7 @@ al montar el componente, por lo que, con `leading: true`, el primer cambio poste
 Si tanto `leading` como `trailing` son `false`, el valor devuelto nunca se actualiza.
 
 El valor se compara por referencia. Si pasas un objeto o arreglo nuevo en cada renderizado,
-el valor devuelto seguirá actualizándose cada `wait` milisegundos; estabiliza primero la referencia,
+el valor devuelto seguirá actualizándose cada `debounceMs` milisegundos; estabiliza primero la referencia,
 por ejemplo, con `usePreservedReference`.
 
 ## Interfaz
@@ -21,7 +21,7 @@ por ejemplo, con `usePreservedReference`.
 ```ts
 function useDebouncedValue<T>(
   value: T,
-  wait: number,
+  debounceMs: number,
   options?: DebounceOptions
 ): T;
 ```
@@ -37,7 +37,7 @@ function useDebouncedValue<T>(
 
 <Interface
   required
-  name="wait"
+  name="debounceMs"
   type="number"
   description="El número de milisegundos de espera desde el último cambio antes de actualizar el valor."
 />
@@ -61,7 +61,7 @@ function useDebouncedValue<T>(
       required: false,
       defaultValue: 'true',
       description:
-        'Si es <code>true</code>, el último cambio se aplica después de <code>wait</code> milisegundos.',
+        'Si es <code>true</code>, el último cambio se aplica después de <code>debounceMs</code> milisegundos.',
     },
   ]"
 />

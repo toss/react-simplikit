@@ -4,6 +4,7 @@
 
 La función invoca el callback proporcionado siempre que la altura del teclado pueda cambiar,
 incluso cuando el teclado aparece, desaparece o cambia de tamaño.
+De forma predeterminada, también lo invoca una vez con la altura actual del teclado al iniciar la suscripción.
 
 Internamente, esta función escucha los eventos `resize` y `scroll`
 del área visible (Visual Viewport):
@@ -44,7 +45,7 @@ function subscribeKeyboardHeight(
       name: 'options.immediate',
       type: 'boolean',
       required: false,
-      defaultValue: 'false',
+      defaultValue: 'true',
       description:
         'Si es true, la función invoca el callback inmediatamente con la altura actual del teclado.',
     },
@@ -82,7 +83,6 @@ const { unsubscribe } = subscribeKeyboardHeight({
   callback: height => {
     footer.style.paddingBottom = `${height}px`;
   },
-  immediate: true,
 });
 
 // Más adelante, cuando necesites realizar la limpieza

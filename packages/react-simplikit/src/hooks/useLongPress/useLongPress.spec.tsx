@@ -12,7 +12,7 @@ type PressTargetProps = {
 };
 
 function PressTarget({ onLongPress, onClick, onLongPressEnd }: PressTargetProps) {
-  const handlers = useLongPress(onLongPress, { delay: 500, onClick, onLongPressEnd });
+  const handlers = useLongPress(onLongPress, { delayMs: 500, onClick, onLongPressEnd });
 
   return <button {...handlers}>Press me</button>;
 }
@@ -97,7 +97,7 @@ describe('useLongPress', () => {
   it('should respect custom delay timing', async () => {
     const onLongPress = vi.fn();
     const TestComponent = () => {
-      const longPressHandlers = useLongPress(onLongPress, { delay: 1000 });
+      const longPressHandlers = useLongPress(onLongPress, { delayMs: 1000 });
       return (
         <button data-testid="test-button" {...longPressHandlers}>
           Press me

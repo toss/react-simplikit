@@ -19,7 +19,7 @@ function useDoubleClick<E extends HTMLElement>(
   description="用于点击处理的配置选项。"
   :nested="[
     {
-      name: 'props.delay',
+      name: 'props.delayMs',
       type: 'number',
       required: false,
       defaultValue: '250',
@@ -27,13 +27,13 @@ function useDoubleClick<E extends HTMLElement>(
         '触发单击回调之前等待的毫秒数。默认为 250 毫秒。',
     },
     {
-      name: 'props.click',
+      name: 'props.onClick',
       type: '(event: MouseEvent<E>) => void',
       required: false,
       description: '在单击时执行的回调函数。',
     },
     {
-      name: 'props.doubleClick',
+      name: 'props.onDoubleClick',
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
@@ -60,8 +60,8 @@ function GalleryCard() {
   const handleDoubleClick = () => alert('Zoom in!');
 
   const handleEvent = useDoubleClick({
-    click: handleClick,
-    doubleClick: handleDoubleClick,
+    onClick: handleClick,
+    onDoubleClick: handleDoubleClick,
   });
 
   return (

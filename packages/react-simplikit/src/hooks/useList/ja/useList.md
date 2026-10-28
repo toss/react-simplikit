@@ -2,17 +2,17 @@
 
 配列を状態として管理する React フックです。
 効率的な状態管理と、参照が安定したアクション関数を提供します。
-初期状態と `setAll` には、変更可能な配列と読み取り専用の配列の両方を渡せます。
+初期値と `setAll` には、変更可能な配列と読み取り専用の配列の両方を渡せます。
 
 ## インターフェース
 
 ```ts
-function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
+function useList<T>(initialValue: readonly T[] = []): UseListReturn<T>;
 ```
 
 ### パラメータ
 
-<Interface name="initialState" type="readonly T[]" description="配列の初期状態です。" />
+<Interface name="initialValue" type="readonly T[]" description="配列の初期値です。" />
 
 ### 戻り値
 

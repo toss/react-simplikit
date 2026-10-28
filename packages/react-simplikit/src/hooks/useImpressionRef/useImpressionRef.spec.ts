@@ -30,7 +30,7 @@ describe('useImpressionRef', () => {
   const defaultOptions: UseImpressionRefOptions = {
     onImpressionStart: mockOnImpressionStart,
     onImpressionEnd: mockOnImpressionEnd,
-    timeThreshold: 100,
+    timeThresholdMs: 100,
     rootMargin: '0px',
     areaThreshold: 0.5,
   };

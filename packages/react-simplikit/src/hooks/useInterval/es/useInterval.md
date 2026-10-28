@@ -6,33 +6,28 @@ Es útil para temporizadores, consultas periódicas de datos y otras tareas recu
 ## Interfaz
 
 ```ts
-function useInterval(
-  callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
-): void;
+function useInterval(options: Object): void;
 ```
 
 ### Parámetros
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="La función que se ejecuta periódicamente."
-/>
-
-<Interface
-  required
   name="options"
-  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
+  type="Object"
   description="Configura el comportamiento del intervalo."
   :nested="[
     {
-      name: 'options.delay',
+      name: 'options.onTick',
+      type: '() => void',
+      required: true,
+      description: 'La función que se ejecuta periódicamente.',
+    },
+    {
+      name: 'options.delayMs',
       type: 'number',
       required: true,
-      description:
-        'La duración del intervalo en milisegundos. Si es <code>null</code>, el intervalo no se ejecuta.',
+      description: 'La duración del intervalo en milisegundos.',
     },
     {
       name: 'options.immediate',
@@ -65,9 +60,10 @@ import { useState } from 'react';
 function Timer() {
   const [time, setTime] = useState(0);
 
-  useInterval(() => {
-    setTime(prev => prev + 1);
-  }, 1000);
+  useInterval({
+    onTick: () => setTime(prev => prev + 1),
+    delayMs: 1000,
+  });
 
   return (
     <div>

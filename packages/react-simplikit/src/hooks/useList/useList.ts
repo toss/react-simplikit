@@ -18,11 +18,11 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  * @description
  * A React hook that manages an array as state.
  * Provides efficient state management and stable action functions.
- * Accepts mutable and readonly arrays for the initial state and `setAll`.
+ * Accepts mutable and readonly arrays for the initial value and `setAll`.
  *
  * @template T - The type of the values held in the list.
  *
- * @param {readonly T[]} [initialState=[]] - Initial array state.
+ * @param {readonly T[]} [initialValue=[]] - Initial array value.
  *
  * @returns {UseListReturn<T>} A tuple containing the array state and actions to manipulate it.
  * - list `ReadonlyArray<T>` - The current array state;
@@ -56,10 +56,10 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
  * actions.reset();
  * ```
  */
-export function useList<T>(initialState: readonly T[] = []): UseListReturn<T> {
-  const [list, setList] = useState<readonly T[]>(initialState);
+export function useList<T>(initialValue: readonly T[] = []): UseListReturn<T> {
+  const [list, setList] = useState<readonly T[]>(initialValue);
 
-  const preservedInitialState = usePreservedReference(initialState);
+  const preservedInitialValue = usePreservedReference(initialValue);
 
   const push = usePreservedCallback((value: T) => {
     setList(prev => [...prev, value]);
@@ -94,7 +94,7 @@ export function useList<T>(initialState: readonly T[] = []): UseListReturn<T> {
   });
 
   const reset = usePreservedCallback(() => {
-    setList(preservedInitialState);
+    setList(preservedInitialValue);
   });
 
   const actions = useMemo<ListActions<T>>(

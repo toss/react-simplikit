@@ -24,18 +24,26 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
         '스로틀링할 콜백이에요. 마지막으로 전달된 값과 같은 값으로 호출하면 건너뛰어요.',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.throttleMs',
       type: 'number',
       required: true,
       description: '호출을 스로틀링할 밀리초(ms)이에요.',
     },
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        '함수가 시작점, 끝점 또는 둘 다에서 호출될지 여부를 지정하는 선택적 배열이에요.',
+        '<code>true</code>이면 스로틀 구간이 시작될 때 즉시 호출할 수 있어요.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        '<code>true</code>이면 대기 중인 호출을 지연 시간이 지난 뒤 최신 값으로 실행할 수 있어요.',
     },
   ]"
 />
@@ -58,7 +66,7 @@ function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
   const setScrollTopThrottled = useThrottledCallback({
     onChange: setScrollTop,
-    timeThreshold: 200,
+    throttleMs: 200,
   });
 
   return (

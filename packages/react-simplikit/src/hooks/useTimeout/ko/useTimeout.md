@@ -5,22 +5,31 @@
 ## 인터페이스
 
 ```ts
-function useTimeout(callback: () => void, delay: number = 0): void;
+function useTimeout(options: Object): void;
 ```
 
 ### 파라미터
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="지연 후 실행될 함수예요."
-/>
-
-<Interface
-  name="delay"
-  type="number"
-  description="콜백을 실행하기 전에 대기할 시간(밀리초)예요."
+  name="options"
+  type="Object"
+  description="타임아웃 동작을 설정해요."
+  :nested="[
+    {
+      name: 'options.onTimeout',
+      type: '() => void',
+      required: true,
+      description: '지연 후 실행될 함수예요.',
+    },
+    {
+      name: 'options.delayMs',
+      type: 'number',
+      required: false,
+      defaultValue: '0',
+      description: '<code>onTimeout</code>을 실행하기 전에 대기할 시간(밀리초)이에요.',
+    },
+  ]"
 />
 
 ### 반환 값
@@ -37,13 +46,15 @@ import { useState } from 'react';
 function Example() {
   const [title, setTitle] = useState('');
 
-  useTimeout(() => {
-    setTitle('제품을 검색 중이에요...');
-  }, 2000);
+  useTimeout({
+    onTimeout: () => setTitle('제품을 검색 중이에요...'),
+    delayMs: 2000,
+  });
 
-  useTimeout(() => {
-    setTitle('거의 완료됐어요...');
-  }, 4000);
+  useTimeout({
+    onTimeout: () => setTitle('거의 완료됐어요...'),
+    delayMs: 4000,
+  });
 
   return <div>{title}</div>;
 }

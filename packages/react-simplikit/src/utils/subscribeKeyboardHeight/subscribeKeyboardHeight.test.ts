@@ -46,6 +46,7 @@ describe('subscribeKeyboardHeight', () => {
 
     expect(typeof unsubscribe).toBe('function');
     unsubscribe(); // should not throw
+    expect(callback).not.toHaveBeenCalled();
   });
 
   it('should add resize and scroll event listeners', () => {
@@ -61,7 +62,7 @@ describe('subscribeKeyboardHeight', () => {
   it('should call callback with keyboard height on resize event', () => {
     const callback = vi.fn();
 
-    subscribeKeyboardHeight({ callback, throttleMs: 0 });
+    subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 0 });
 
     const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 
@@ -73,8 +74,8 @@ describe('subscribeKeyboardHeight', () => {
   it('should call callback with keyboard height on scroll event', () => {
     const callback = vi.fn();
 
-    // Use immediate to set lastHeight, then change height for scroll test
-    subscribeKeyboardHeight({ callback, immediate: true, throttleMs: 0 });
+    // The immediate call sets lastHeight, then change height for scroll test
+    subscribeKeyboardHeight({ callback, throttleMs: 0 });
     vi.runAllTimers();
 
     // Reset callback tracking
@@ -90,21 +91,47 @@ describe('subscribeKeyboardHeight', () => {
     expect(callback).toHaveBeenCalledWith(400);
   });
 
-  it('should not call callback immediately by default', () => {
+  it('should call callback immediately by default', () => {
     const callback = vi.fn();
 
     subscribeKeyboardHeight({ callback });
 
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith(300);
+  });
+
+  it('should not call callback immediately when immediate option is false', () => {
+    const callback = vi.fn();
+
+    subscribeKeyboardHeight({ callback, immediate: false });
+
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it('should call callback immediately when immediate option is true', () => {
+  it('should skip an event that reports the same height as the immediate call', () => {
     const callback = vi.fn();
 
-    subscribeKeyboardHeight({ callback, immediate: true });
+    subscribeKeyboardHeight({ callback, throttleMs: 0 });
+
+    const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
+
+    resizeHandler?.();
 
     expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith(300);
+  });
+
+  it('should not throttle the first event after the immediate call', () => {
+    const callback = vi.fn();
+
+    subscribeKeyboardHeight({ callback });
+
+    const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
+
+    mockVisualViewport.height = 400;
+    resizeHandler?.();
+
+    expect(callback).toHaveBeenCalledTimes(2);
+    expect(callback).toHaveBeenLastCalledWith(400);
   });
 
   it('should remove event listeners when unsubscribe is called', () => {
@@ -136,7 +163,7 @@ describe('subscribeKeyboardHeight', () => {
     it('should throttle events by default (16ms)', () => {
       const callback = vi.fn();
 
-      subscribeKeyboardHeight({ callback });
+      subscribeKeyboardHeight({ callback, immediate: false });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 
@@ -162,7 +189,7 @@ describe('subscribeKeyboardHeight', () => {
     it('should respect custom throttle time', () => {
       const callback = vi.fn();
 
-      subscribeKeyboardHeight({ callback, throttleMs: 100 });
+      subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 100 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 
@@ -187,7 +214,7 @@ describe('subscribeKeyboardHeight', () => {
     it('should handle throttleMs of 0 (no throttling)', () => {
       const callback = vi.fn();
 
-      subscribeKeyboardHeight({ callback, throttleMs: 0 });
+      subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 0 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 
@@ -207,7 +234,7 @@ describe('subscribeKeyboardHeight', () => {
     it('should skip callback when height has not changed', () => {
       const callback = vi.fn();
 
-      subscribeKeyboardHeight({ callback, throttleMs: 0 });
+      subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 0 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
       const scrollHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'scroll')?.[1];
@@ -229,7 +256,7 @@ describe('subscribeKeyboardHeight', () => {
     it('should call callback when height changes after deduplication', () => {
       const callback = vi.fn();
 
-      subscribeKeyboardHeight({ callback, throttleMs: 0 });
+      subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 0 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 
@@ -254,7 +281,7 @@ describe('subscribeKeyboardHeight', () => {
     it('should handle resize and scroll firing simultaneously with same value', () => {
       const callback = vi.fn();
 
-      subscribeKeyboardHeight({ callback, throttleMs: 0 });
+      subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 0 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
       const scrollHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'scroll')?.[1];
@@ -273,7 +300,7 @@ describe('subscribeKeyboardHeight', () => {
     it('should handle rapid events correctly with throttling', () => {
       const callback = vi.fn();
 
-      subscribeKeyboardHeight({ callback, throttleMs: 16 });
+      subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 16 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 
@@ -289,7 +316,7 @@ describe('subscribeKeyboardHeight', () => {
     it('should limit callbacks during rapid height changes', () => {
       const callback = vi.fn();
 
-      subscribeKeyboardHeight({ callback, throttleMs: 50 });
+      subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 50 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 
@@ -320,7 +347,7 @@ describe('subscribeKeyboardHeight', () => {
       const callback = vi.fn();
 
       // 50ms throttle
-      subscribeKeyboardHeight({ callback, throttleMs: 50 });
+      subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 50 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 
@@ -343,7 +370,7 @@ describe('subscribeKeyboardHeight', () => {
       const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
       const callback = vi.fn();
 
-      const { unsubscribe } = subscribeKeyboardHeight({ callback, throttleMs: 100 });
+      const { unsubscribe } = subscribeKeyboardHeight({ callback, immediate: false, throttleMs: 100 });
 
       const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
 

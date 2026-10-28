@@ -84,7 +84,7 @@ Usa [useDebouncedValue](/es/hooks/useDebouncedValue) cuando necesites un valor p
 
 - `useStorageState` usa `defaultValue` para la instantánea del servidor y la hidratación, y luego lee el almacenamiento del navegador en el cliente. Al desmontarse, elimina los listeners de almacenamiento.
 
-- `useDebounce` cancela las llamadas pendientes cuando el componente se desmonta o cambian `wait`, `leading` o `trailing`. No cancela una solicitud de red que ya haya comenzado; tu aplicación debe gestionar la cancelación o las respuestas obsoletas.
+- `useDebounce` cancela las llamadas pendientes cuando el componente se desmonta o cambian `debounceMs`, `leading` o `trailing`. No cancela una solicitud de red que ya haya comenzado; tu aplicación debe gestionar la cancelación o las respuestas obsoletas.
 
 - Las mediciones del navegador pueden cambiar después del montaje. Consulta los valores iniciales y las restricciones de plataforma en [Web móvil](/es/mobile-web) y en la referencia de cada API.
 

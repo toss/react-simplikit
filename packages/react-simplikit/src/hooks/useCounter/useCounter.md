@@ -54,7 +54,7 @@ function useCounter(
 <Interface
   name=""
   type="UseCounterReturn"
-  description="An object with count value and control functions."
+  description="A tuple containing the count and actions to change it."
   :nested="[
     {
       name: 'count',
@@ -63,29 +63,29 @@ function useCounter(
       description: 'The current count value.',
     },
     {
-      name: 'increment',
+      name: 'actions.increment',
       type: '() => void',
       required: false,
       description: 'A function to increment the count.',
     },
     {
-      name: 'decrement',
+      name: 'actions.decrement',
       type: '() => void',
       required: false,
       description: 'A function to decrement the count.',
     },
     {
-      name: 'reset',
+      name: 'actions.reset',
       type: '() => void',
       required: false,
       description: 'A function to reset the count to the initial value.',
     },
     {
-      name: 'setCount',
+      name: 'actions.setCount',
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
-        'A function to set the count to a specific value or a function that returns a new value.',
+        'A function to set the count, either to a value or with an updater function that receives the previous count and returns the next one.',
     },
   ]"
 />
@@ -96,7 +96,7 @@ function useCounter(
 import { useCounter } from 'react-simplikit';
 
 function ShoppingCart() {
-  const { count, increment, decrement, reset } = useCounter(1, {
+  const [count, { increment, decrement, reset }] = useCounter(1, {
     min: 1,
     max: 10,
   });
