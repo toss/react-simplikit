@@ -33,15 +33,20 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 export function useLoading(): [boolean, <T>(promise: Promise<T>) => Promise<T>] {
   const [loading, setLoading] = useState(false);
   const ref = useIsMountedRef();
+  // Counts the promises that have not settled yet, so that `loading` stays `true`
+  // until the last of several overlapping calls finishes.
+  const pendingCountRef = useRef(0);
 
   const startTransition = useCallback(
     async <T>(promise: Promise<T>) => {
+      pendingCountRef.current += 1;
       try {
         setLoading(true);
         const data = await promise;
         return data;
       } finally {
-        if (ref.isMounted) {
+        pendingCountRef.current -= 1;
+        if (ref.isMounted && pendingCountRef.current === 0) {
           setLoading(false);
         }
       }
