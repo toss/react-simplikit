@@ -1,13 +1,15 @@
 # useLongPress
 
 `useLongPress` is a React hook that detects when an element is pressed and held for a specified duration.
-It handles both mouse and touch events, making it work consistently across desktop and mobile devices.
+It listens to pointer events, so a mouse, touch, or pen press is one stream and the emulated mouse events after a tap do not start a second press.
+`pointercancel` cancels the press, including when the browser takes the pointer to scroll.
+A non-primary pointer and any button other than the primary button are ignored.
 
 ## Interface
 
 ```ts
 function useLongPress<E extends HTMLElement>(
-  onLongPress: (event: React.MouseEvent<E> | React.TouchEvent<E>) => void,
+  onLongPress: (event: React.PointerEvent<E>) => void,
   options?: UseLongPressOptions
 ): Object;
 ```
@@ -17,7 +19,7 @@ function useLongPress<E extends HTMLElement>(
 <Interface
   required
   name="onLongPress"
-  type="(event: React.MouseEvent<E> | React.TouchEvent<E>) => void"
+  type="(event: React.PointerEvent<E>) => void"
   description="The callback function to be executed when a long press is detected."
 />
 
@@ -54,14 +56,14 @@ function useLongPress<E extends HTMLElement>(
     },
     {
       name: 'options.onClick',
-      type: '(event) => void',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
       description:
         'Optional function to execute on a normal click (press and release before delay).',
     },
     {
       name: 'options.onLongPressEnd',
-      type: '(event) => void',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
       description: 'Optional function to execute when a long press ends.',
     },
@@ -76,48 +78,38 @@ function useLongPress<E extends HTMLElement>(
   description="Event handlers to attach to an element."
   :nested="[
     {
-      name: 'onMouseDown',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      name: 'onPointerDown',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
-      description: 'Event handler for mouse down events.',
+      description: 'Starts a press for the primary pointer\'s primary button.',
     },
     {
-      name: 'onMouseUp',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
-      required: false,
-      description: 'Event handler for mouse up events.',
-    },
-    {
-      name: 'onMouseLeave',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
-      required: false,
-      description: 'Event handler for mouse leave events.',
-    },
-    {
-      name: 'onTouchStart',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
-      required: false,
-      description: 'Event handler for touch start events.',
-    },
-    {
-      name: 'onTouchEnd',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
-      required: false,
-      description: 'Event handler for touch end events.',
-    },
-    {
-      name: 'onMouseMove',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      name: 'onPointerUp',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
       description:
-        'Event handler for mouse move events. Included if <code>moveThreshold</code> is provided.',
+        'Ends the tracked press. Calls <code>onClick</code> when released before the delay, or <code>onLongPressEnd</code> when a long press already fired.',
     },
     {
-      name: 'onTouchMove',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      name: 'onPointerLeave',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
       description:
-        'Event handler for touch move events. Included if <code>moveThreshold</code> is provided.',
+        'Cancels the tracked press when the pointer leaves the element. Does not call <code>onClick</code>. Calls <code>onLongPressEnd</code> when a long press already fired.',
+    },
+    {
+      name: 'onPointerCancel',
+      type: '(event: React.PointerEvent<E>) => void',
+      required: false,
+      description:
+        'Cancels the tracked press when the browser cancels the pointer, for example when scrolling starts. Does not call <code>onClick</code>. Calls <code>onLongPressEnd</code> when a long press already fired.',
+    },
+    {
+      name: 'onPointerMove',
+      type: '(event: React.PointerEvent<E>) => void',
+      required: false,
+      description:
+        'Cancels a pending long press when movement exceeds <code>moveThreshold</code>. Included if <code>moveThreshold</code> is provided.',
     },
   ]"
 />
