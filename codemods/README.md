@@ -2,7 +2,7 @@
 
 Each folder here is a [Codemod](https://docs.codemod.com) package: a workflow of jssg (JavaScript ast-grep) transforms that can be published to the Codemod registry and run with `npx codemod`. ESLint ([eslint/codemods](https://github.com/eslint/codemods)) and Node.js ([nodejs/userland-migrations](https://github.com/nodejs/userland-migrations)) ship their migrations the same way.
 
-`mobile-to-root` predates this folder and still lives in `../src` as the `react-simplikit-codemod` CLI.
+They live at the repository root, apart from `packages/`, because they are published to the Codemod registry, not npm. `mobile-to-root` predates this folder and still ships on npm as the `react-simplikit-codemod` CLI in `packages/codemod`.
 
 ## Layout
 
@@ -26,7 +26,7 @@ codemods/
 1. Write `scripts/<transform>.ts`. Export a default `transform(root)` that returns the new source, or `null` when nothing changed.
 2. Add fixtures under `tests/<transform>/`. Cover at least: the change itself, an aliased import, a same-named function from another module (left alone), a case that cannot be rewritten (left alone and reported), and already-migrated code (left alone).
 3. Add the script to `workflow.yaml` twice, once with `language: tsx` and once with `language: typescript`. The `tsx` grammar handles JSX, the `typescript` grammar handles `<T>value` assertions, and neither parses both.
-4. Run `yarn workspace react-simplikit-codemod test:codemods`.
+4. Run `node codemods/test.mjs`.
 
 ## Rules every transform follows
 
@@ -37,8 +37,10 @@ codemods/
 ## Testing
 
 ```bash
-yarn workspace react-simplikit-codemod test:codemods
+node codemods/test.mjs
 ```
+
+`yarn test:codemod`, which CI runs, includes it.
 
 Fixtures are compared byte for byte, so `.prettierignore` skips them. To regenerate `expected.tsx` and `metrics.json` after an intended change, run the command `test.mjs` prints with `-u` added, then review the diff.
 
@@ -49,5 +51,5 @@ The Codemod CLI is pinned in `test.mjs` and run through `npx` instead of being a
 Commit or stash first; the CLI refuses to run on files Git does not track.
 
 ```bash
-npx codemod@1.18.6 workflow run -w packages/codemod/codemods/v0-to-v1/workflow.yaml -t path/to/project
+npx codemod@1.18.6 workflow run -w codemods/v0-to-v1/workflow.yaml -t path/to/project
 ```

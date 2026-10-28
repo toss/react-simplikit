@@ -7,7 +7,7 @@ author: 'react-simplikit maintainers'
 license: 'MIT'
 workflow: 'workflow.yaml'
 category: 'migration'
-repository: 'https://github.com/toss/react-simplikit/tree/main/packages/codemod/codemods/v0-to-v1'
+repository: 'https://github.com/toss/react-simplikit/tree/main/codemods/v0-to-v1'
 
 targets:
   languages: ['typescript', 'javascript']
