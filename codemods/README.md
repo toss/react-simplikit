@@ -2,7 +2,7 @@
 
 Each folder here is a [Codemod](https://docs.codemod.com) package: a workflow of jssg (JavaScript ast-grep) transforms that can be published to the Codemod registry and run with `npx codemod`. ESLint ([eslint/codemods](https://github.com/eslint/codemods)) and Node.js ([nodejs/userland-migrations](https://github.com/nodejs/userland-migrations)) ship their migrations the same way.
 
-They live at the repository root, apart from `packages/`, because they are published to the Codemod registry, not npm. `mobile-to-root` predates this folder and still ships on npm as the `react-simplikit-codemod` CLI in `packages/codemod`.
+Every react-simplikit codemod lives here. They sit at the repository root, apart from `packages/`, because they are published to the Codemod registry, not npm. `mobile-to-root` predates this folder and still ships on npm as the `react-simplikit-codemod` CLI in `packages/codemod`; it moves here next, and that package is retired once the registry release is in place.
 
 ## Layout
 
