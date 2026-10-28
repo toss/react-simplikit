@@ -1,0 +1,12 @@
+{
+  "manual-review": [
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useDoubleClick",
+        "reason": "options-spread"
+      },
+      "count": 1
+    }
+  ]
+}

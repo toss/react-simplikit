@@ -1,0 +1,19 @@
+schema_version: '1.0'
+
+name: '@react-simplikit/v0-to-v1'
+version: '0.1.0'
+description: 'Migrate react-simplikit call sites from v0 to v1'
+author: 'react-simplikit maintainers'
+license: 'MIT'
+workflow: 'workflow.yaml'
+category: 'migration'
+repository: 'https://github.com/toss/react-simplikit/tree/main/packages/codemod/codemods/v0-to-v1'
+
+targets:
+  languages: ['typescript', 'javascript']
+
+keywords: ['upgrade', 'breaking-change', 'react', 'react-simplikit', 'v0-to-v1']
+
+registry:
+  access: 'public'
+  visibility: 'public'
