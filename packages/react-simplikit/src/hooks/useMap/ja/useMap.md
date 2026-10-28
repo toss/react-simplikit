@@ -6,13 +6,14 @@
 ## インターフェース
 
 ```ts
-function useMap<K, V>(initialState: MapOrEntries<K, V>): UseMapReturn<K, V>;
+function useMap<K, V>(
+  initialState: MapOrEntries<K, V> = new Map()
+): UseMapReturn<K, V>;
 ```
 
 ### パラメータ
 
 <Interface
-  required
   name="initialState"
   type="MapOrEntries<K, V>"
   description="Map の初期状態（Map オブジェクトまたはキーと値のペアの配列）です。"
