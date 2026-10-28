@@ -1,24 +1,21 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { SetStateAction, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
+import { SetStateAction, useInsertionEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 
 import { safeLocalStorage, Storage } from './storage.ts';
-
-type ToObject<T> = T extends unknown[] | Record<string, unknown> ? T : never;
-
-export type Serializable<T> = T extends string | number | boolean ? T : ToObject<T>;
 
 type StorageStateOptions<T> = {
   storage?: Storage;
   defaultValue?: T;
 };
 
-type StorageStateOptionsWithDefaultValue<T> = StorageStateOptions<T> & {
-  defaultValue: T;
+type StorageStateCodec<T> = {
+  serializer: (value: T) => string;
+  deserializer: (value: string) => T;
 };
 
-type StorageStateOptionsWithSerializer<T> = StorageStateOptions<T> & {
-  serializer: (value: Serializable<T>) => string;
-  deserializer: (value: string) => Serializable<T>;
+/** Rejects a lone `serializer` or `deserializer`, which would write and read in different formats. */
+type WithoutCodec = {
+  serializer?: never;
+  deserializer?: never;
 };
 
 type StorageStateActions<V> = {
@@ -26,11 +23,7 @@ type StorageStateActions<V> = {
   refresh: () => void;
 };
 
-type SerializableGuard<T extends readonly any[]> = T[0] extends any
-  ? T
-  : T[0] extends never
-    ? 'Received a non-serializable value'
-    : T;
+type StorageStateResult<V> = readonly [V, StorageStateActions<V>];
 
 const listeners = new Set<() => void>();
 
@@ -38,118 +31,160 @@ const emitListeners = () => {
   listeners.forEach(listener => listener());
 };
 
-function isPlainObject(value: unknown): value is Record<PropertyKey, any> {
-  if (typeof value !== 'object') {
-    return false;
-  }
-
-  const proto = Object.getPrototypeOf(value) as typeof Object.prototype | null;
-
-  const hasObjectPrototype = proto === Object.prototype;
-
-  if (!hasObjectPrototype) {
-    return false;
-  }
-
-  return Object.prototype.toString.call(value) === '[object Object]';
+function isUpdater<V>(value: SetStateAction<V>): value is (prevState: V) => V {
+  return typeof value === 'function';
 }
 
-const ensureSerializable = <T extends readonly any[]>(value: T): SerializableGuard<T> => {
-  if (
-    value[0] != null &&
-    !['string', 'number', 'boolean'].includes(typeof value[0]) &&
-    !(isPlainObject(value[0]) || Array.isArray(value[0]))
-  ) {
-    throw new Error('Received a non-serializable value');
+function isPlainObject(value: object): boolean {
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
+
+/**
+ * Returns the path to the first value that would not survive `JSON.stringify` and `JSON.parse` unchanged, or `null`.
+ * `undefined` is allowed only as an object property, which JSON drops just like a missing key.
+ * The path is built only on failure, so a valid value costs one walk with no string work.
+ */
+function findNonJsonPath(value: unknown): Array<string | number> | null {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') {
+    return null;
   }
 
-  return value as SerializableGuard<T>;
-};
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? null : [];
+  }
+
+  if (Array.isArray(value)) {
+    for (let index = 0; index < value.length; index++) {
+      const path = findNonJsonPath(value[index]);
+      if (path !== null) {
+        return [index, ...path];
+      }
+    }
+    return null;
+  }
+
+  if (typeof value === 'object' && isPlainObject(value)) {
+    for (const [key, item] of Object.entries(value)) {
+      const path = item === undefined ? null : findNonJsonPath(item);
+      if (path !== null) {
+        return [key, ...path];
+      }
+    }
+    return null;
+  }
+
+  return [];
+}
+
+function assertJson(value: unknown, name: string): void {
+  const path = findNonJsonPath(value);
+
+  if (path !== null) {
+    const location = path.map(part => (typeof part === 'number' ? `[${part}]` : `.${part}`)).join('');
+    throw new Error(`${name}${location} is not JSON-serializable. Pass serializer and deserializer.`);
+  }
+}
 
 /**
  * @description
  * `useStorageState` is a React hook that functions like `useState` but persists the state value in browser storage.
  * The value is retained across page reloads and can be shared between tabs when using `localStorage`.
  *
+ * Without `serializer` and `deserializer`, the value is stored as JSON and must be JSON-serializable all the way down:
+ * a `Date`, `Map`, class instance or function anywhere in it throws when it is set, and `defaultValue` is checked on mount.
+ * Pass both functions to store any other type. The stored string is not validated when it is read back.
+ * The value read back is reused until the stored string changes, so call `refresh` when `deserializer` changes what it returns.
+ *
  * @template T - The type of the stored value.
  * @param {string} key - The key used to store the value in storage.
  * @param {Object} [options] - Configuration options for storage behavior.
  * @param {Storage} [options.storage=localStorage] - The storage type (`localStorage` or `sessionStorage`). Defaults to `localStorage`.
  * @param {T} [options.defaultValue] - The initial value if no existing value is found.
- * @param {Function} [options.serializer] - A function to serialize the state value to a string.
- * @param {Function} [options.deserializer] - A function to deserialize the state value from a string.
+ * @param {(value: T) => string} [options.serializer] - Converts the value to a string. Pass it together with `deserializer`.
+ * @param {(value: string) => T} [options.deserializer] - Converts the stored string back to a value. Pass it together with `serializer`.
  *
- * @returns {readonly [state: Serializable<T> | undefined, actions: StorageStateActions<Serializable<T> | undefined>]} A tuple containing the state and actions to change it.
- * - state `Serializable<T> | undefined` - The current state value retrieved from storage;
- * - actions.setValue `(value: SetStateAction<Serializable<T> | undefined>) => void` - A function to update and persist the state;
- * - actions.refresh `() => void` - A function to refresh the state from storage;
+ * @returns {readonly [state: T | undefined, actions: StorageStateActions<T | undefined>]} A tuple containing the state and actions to change it.
+ * - state `T | undefined` - The current state value retrieved from storage. It is `T` when `defaultValue` is given;
+ * - actions.setValue `(value: SetStateAction<T | undefined>) => void` - A function to update and persist the state;
+ * - actions.refresh `() => void` - Reads the value from storage again without writing to it;
  * @example
  * // Counter with persistent state
  * import { useStorageState } from 'react-simplikit';
  *
  * function Counter() {
- *   const [count, { setValue }] = useStorageState<number>('counter', {
+ *   const [count, { setValue }] = useStorageState('counter', {
  *     defaultValue: 0,
  *   });
  *
  *   return <button onClick={() => setValue(prev => prev + 1)}>Count: {count}</button>;
  * }
  */
-export function useStorageState<T>(
-  key: string
-): SerializableGuard<readonly [Serializable<T> | undefined, StorageStateActions<Serializable<T> | undefined>]>;
+export function useStorageState<T>(key: string): StorageStateResult<T | undefined>;
 export function useStorageState<T>(
   key: string,
-  options: StorageStateOptionsWithDefaultValue<T>
-): SerializableGuard<readonly [Serializable<T>, StorageStateActions<Serializable<T>>]>;
+  options: StorageStateOptions<T> & StorageStateCodec<T> & { defaultValue: T }
+): StorageStateResult<T>;
 export function useStorageState<T>(
   key: string,
-  options: StorageStateOptions<T>
-): SerializableGuard<readonly [Serializable<T> | undefined, StorageStateActions<Serializable<T> | undefined>]>;
+  options: StorageStateOptions<T> & StorageStateCodec<T>
+): StorageStateResult<T | undefined>;
 export function useStorageState<T>(
   key: string,
-  options: StorageStateOptionsWithSerializer<T>
-): SerializableGuard<readonly [Serializable<T> | undefined, StorageStateActions<Serializable<T> | undefined>]>;
+  options: StorageStateOptions<T> & WithoutCodec & { defaultValue: T }
+): StorageStateResult<T>;
 export function useStorageState<T>(
   key: string,
-  {
-    storage = safeLocalStorage,
-    defaultValue,
-    ...options
-  }: StorageStateOptions<T> | StorageStateOptionsWithSerializer<T> = {}
-): SerializableGuard<readonly [Serializable<T> | undefined, StorageStateActions<Serializable<T> | undefined>]> {
+  options: StorageStateOptions<T> & WithoutCodec
+): StorageStateResult<T | undefined>;
+export function useStorageState<T>(
+  key: string,
+  options: StorageStateOptions<T> & Partial<StorageStateCodec<T>> = {}
+): StorageStateResult<T | undefined> {
   // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
   // because `cache.current` is read from `getSnapshot`, which `useSyncExternalStore` calls
   // during render. Belongs on this implementation signature — the overload declarations
   // above have no body to carry a directive.
   'use no memo';
 
-  const serializedDefaultValue = defaultValue as Serializable<T>;
+  const { storage = safeLocalStorage, defaultValue, serializer, deserializer } = options;
+  // Both functions are picked by one condition so a value is never written in one format and read in another.
+  const codec = serializer !== undefined && deserializer !== undefined ? { serializer, deserializer } : null;
+
+  // `data` is `undefined` on mount and after `refresh`, a value storage never returns, so the next
+  // snapshot always runs the branch below and checks `defaultValue`, even when storage holds a value.
   const cache = useRef<{
-    data: string | null;
-    parsed: Serializable<T> | undefined;
+    data: string | null | undefined;
+    parsed: T | undefined;
   }>({
-    data: null,
-    parsed: serializedDefaultValue,
+    data: undefined,
+    parsed: defaultValue,
   });
 
-  const getSnapshot = useCallback(() => {
-    const deserializer = 'deserializer' in options ? options.deserializer : JSON.parse;
+  // Runs during render, so it reads this render's options instead of a ref that effects update later.
+  const getSnapshot = () => {
     const data = storage.get(key);
 
     if (data !== cache.current.data) {
+      const isFirstRead = cache.current.data === undefined;
+      const fallsBackToDefault = data == null;
+
+      if (codec === null && defaultValue !== undefined && (isFirstRead || fallsBackToDefault)) {
+        assertJson(defaultValue, 'defaultValue');
+      }
+
       try {
-        cache.current.parsed = data != null ? deserializer(data) : defaultValue;
+        cache.current.parsed = data != null ? deserialize(data) : defaultValue;
       } catch {
-        cache.current.parsed = serializedDefaultValue;
+        cache.current.parsed = defaultValue;
       }
       cache.current.data = data;
     }
 
     return cache.current.parsed;
-  }, [defaultValue, key, storage]);
+  };
 
-  const storageState = useSyncExternalStore<Serializable<T> | undefined>(
+  const storageState = useSyncExternalStore<T | undefined>(
     onStoreChange => {
       listeners.add(onStoreChange);
 
@@ -166,38 +201,54 @@ export function useStorageState<T>(
         window.removeEventListener('storage', handler);
       };
     },
-    () => getSnapshot(),
-    () => serializedDefaultValue
+    getSnapshot,
+    () => defaultValue
   );
 
-  const setStorageState = useCallback(
-    (value: SetStateAction<Serializable<T> | undefined>) => {
-      const serializer = 'serializer' in options ? options.serializer : JSON.stringify;
+  // Insertion effects run before every layout and passive effect, so a child effect that calls
+  // `setValue` in the commit that changed `key` or the serializer already sees this render's values.
+  // `usePreservedCallback` syncs in a passive effect, which runs after the child's.
+  const latest = useRef({ writeValue });
+  useInsertionEffect(function syncLatestRender() {
+    latest.current = { writeValue };
+  });
 
-      const nextValue = typeof value === 'function' ? value(getSnapshot()) : value;
-
-      if (nextValue == null) {
-        storage.remove(key);
-      } else {
-        storage.set(key, serializer(nextValue));
-      }
-      emitListeners();
-    },
-    [getSnapshot, key, storage]
+  // Reads through `latest`, so `actions` stays stable even when the options are passed inline.
+  const actions = useMemo<StorageStateActions<T | undefined>>(
+    () => ({
+      setValue: value => latest.current.writeValue(value),
+      // Reads storage again without writing to it, so a stored function is never run as an updater
+      // and a value read with a previous deserializer is never written back.
+      refresh: () => {
+        cache.current.data = undefined;
+        emitListeners();
+      },
+    }),
+    []
   );
 
-  const refreshStorageState = useCallback(() => {
-    setStorageState(getSnapshot());
-  }, [storage, getSnapshot, setStorageState]);
+  return [storageState, actions] as const;
 
-  const actions = useMemo<StorageStateActions<Serializable<T> | undefined>>(
-    () => ({ setValue: setStorageState, refresh: refreshStorageState }),
-    [setStorageState, refreshStorageState]
-  );
+  function writeValue(value: SetStateAction<T | undefined>) {
+    const nextValue = isUpdater(value) ? value(getSnapshot()) : value;
 
-  /* eslint-disable-next-line react-hooks/refs -- the two callbacks in `actions` close over `cache`
-     through `getSnapshot`, so the rule treats handing them to any function as a possible ref read
-     during render. `ensureSerializable` only inspects element 0 — `storageState`, a plain
-     value — and never calls them. */
-  return ensureSerializable([storageState, actions] as const);
+    if (nextValue == null) {
+      storage.remove(key);
+    } else {
+      storage.set(key, serialize(nextValue));
+    }
+    emitListeners();
+  }
+
+  function serialize(value: T): string {
+    if (codec !== null) {
+      return codec.serializer(value);
+    }
+    assertJson(value, 'value');
+    return JSON.stringify(value);
+  }
+
+  function deserialize(data: string): T {
+    return codec !== null ? codec.deserializer(data) : JSON.parse(data);
+  }
 }
