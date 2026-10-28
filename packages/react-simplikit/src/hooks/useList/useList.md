@@ -2,16 +2,21 @@
 
 A React hook that manages an array as state.
 Provides efficient state management and stable action functions.
+Accepts mutable and readonly arrays for the initial value and `setAll`.
 
 ## Interface
 
 ```ts
-function useList<T>(initialValue: T[] = []): UseListReturn<T>;
+function useList<T>(initialValue: readonly T[] = []): UseListReturn<T>;
 ```
 
 ### Parameters
 
-<Interface name="initialValue" type="T[]" description="Initial array value." />
+<Interface
+  name="initialValue"
+  type="readonly T[]"
+  description="Initial array value."
+/>
 
 ### Return Value
 
@@ -52,7 +57,7 @@ function useList<T>(initialValue: T[] = []): UseListReturn<T>;
     },
     {
       name: 'actions.setAll',
-      type: '(values: T[]) => void',
+      type: '(values: readonly T[]) => void',
       required: false,
       description: 'Replaces the entire list with a new array.',
     },
@@ -68,7 +73,7 @@ function useList<T>(initialValue: T[] = []): UseListReturn<T>;
 ## Example
 
 ```tsx
-const [list, actions] = useList<string>(['apple', 'banana']);
+const [list, actions] = useList(['apple', 'banana']);
 
 // Add an item
 actions.push('cherry');

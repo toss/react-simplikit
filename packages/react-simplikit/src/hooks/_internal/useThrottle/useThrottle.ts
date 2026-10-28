@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo } from 'react';
 
+import type { CallerTypedArgs } from '../../../_internal/types.ts';
 import { usePreservedCallback } from '../../usePreservedCallback/usePreservedCallback.ts';
 
 import { throttle } from './throttle.ts';
@@ -20,7 +20,7 @@ type ThrottleOptions = {
  *
  * `.cancel()` only cancels a pending callback; it does not stop work that has already started.
  */
-export function useThrottle<F extends (...args: any[]) => any>(
+export function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,
   throttleMs: number,
   { leading = true, trailing = true }: ThrottleOptions = {}

@@ -7,7 +7,7 @@ por ejemplo, al manejar eventos de desplazamiento o de cambio de tamaño.
 ## Interfaz
 
 ```ts
-function useThrottle<F extends (...args: any[]) => any>(
+function useThrottle<F extends (...args: any[]) => unknown>(
   callback: F,
   throttleMs: number,
   options?: ThrottleOptions

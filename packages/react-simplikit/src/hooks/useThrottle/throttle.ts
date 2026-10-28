@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Simplified version of https://github.com/toss/es-toolkit/blob/main/src/function/throttle.ts
 
+import type { CallerTypedArgs } from '../../_internal/types.ts';
 import { debounce } from '../useDebounce/debounce.ts';
 
 type ThrottleOptions = {
@@ -14,12 +14,12 @@ type ThrottleOptions = {
   edges?: Array<'leading' | 'trailing'>;
 };
 
-type ThrottledFunction<F extends (...args: any[]) => void> = {
+type ThrottledFunction<F extends (...args: CallerTypedArgs) => void> = {
   (...args: Parameters<F>): void;
   cancel: () => void;
 };
 
-export function throttle<F extends (...args: any[]) => void>(
+export function throttle<F extends (...args: CallerTypedArgs) => void>(
   func: F,
   throttleMs: number,
   { edges = ['leading', 'trailing'] }: ThrottleOptions = {}

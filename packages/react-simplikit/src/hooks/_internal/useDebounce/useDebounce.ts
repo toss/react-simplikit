@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { useMemo } from 'react';
 
+import type { CallerTypedArgs } from '../../../_internal/types.ts';
 import { usePreservedCallback } from '../../usePreservedCallback/usePreservedCallback.ts';
 
 import { debounce, DebouncedFunction } from './debounce.ts';
@@ -21,7 +21,7 @@ type DebounceOptions = {
  *
  * `.cancel()` only cancels a pending callback; it does not stop work that has already started.
  */
-export function useDebounce<F extends (...args: any[]) => unknown>(
+export function useDebounce<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,
   debounceMs: number,
   options: DebounceOptions = {}

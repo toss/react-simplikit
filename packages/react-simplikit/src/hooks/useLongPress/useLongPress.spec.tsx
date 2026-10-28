@@ -389,6 +389,59 @@ describe('useLongPress', () => {
     expect(onLongPress).toHaveBeenCalledTimes(1);
   });
 
+  // Browsers follow a tap with emulated mousedown/mouseup events on the same element.
+  it('calls onClick once for a tap followed by emulated mouse events', () => {
+    const callbacks = createCallbacks();
+    const { getByRole } = render(<PressTarget {...callbacks} />);
+    const button = getByRole('button');
+
+    fireEvent.touchStart(button, { touches: [{ clientX: 0, clientY: 0 }] });
+    fireEvent.touchEnd(button);
+    fireEvent.mouseDown(button, { clientX: 0, clientY: 0 });
+    fireEvent.mouseUp(button);
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
+
+    expect(callbacks.onClick).toHaveBeenCalledTimes(1);
+    expect(callbacks.onLongPress).not.toHaveBeenCalled();
+  });
+
+  it('does not call onClick for emulated mouse events after a long press', async () => {
+    const callbacks = createCallbacks();
+    const { getByRole } = render(<PressTarget {...callbacks} />);
+    const button = getByRole('button');
+
+    fireEvent.touchStart(button, { touches: [{ clientX: 0, clientY: 0 }] });
+    await act(async () => {
+      vi.advanceTimersByTime(1500);
+    });
+    fireEvent.touchEnd(button);
+    fireEvent.mouseDown(button, { clientX: 0, clientY: 0 });
+    fireEvent.mouseUp(button);
+
+    expect(callbacks.onLongPress).toHaveBeenCalledTimes(1);
+    expect(callbacks.onLongPressEnd).toHaveBeenCalledTimes(1);
+    expect(callbacks.onClick).not.toHaveBeenCalled();
+  });
+
+  it('handles a mouse press again once the touch has ended a while ago', async () => {
+    const callbacks = createCallbacks();
+    const { getByRole } = render(<PressTarget {...callbacks} />);
+    const button = getByRole('button');
+
+    fireEvent.touchStart(button, { touches: [{ clientX: 0, clientY: 0 }] });
+    fireEvent.touchEnd(button);
+    await act(async () => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    fireEvent.mouseDown(button, { clientX: 0, clientY: 0 });
+    fireEvent.mouseUp(button);
+
+    expect(callbacks.onClick).toHaveBeenCalledTimes(2);
+  });
+
   it.each(['mouse', 'touch'] as const)('cancels a pending %s press on unmount', async input => {
     const callbacks = createCallbacks();
     const { getByRole, unmount } = render(<PressTarget {...callbacks} />);

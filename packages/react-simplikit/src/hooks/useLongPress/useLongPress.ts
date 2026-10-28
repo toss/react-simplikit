@@ -1,6 +1,11 @@
 import { type MouseEvent, type TouchEvent, useCallback, useEffect, useRef } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
+
+// After a tap, browsers fire emulated `mousedown`/`mouseup` events on the same element.
+// Mouse presses that start this soon after a touch event are treated as part of that touch.
+const EMULATED_MOUSE_EVENT_WINDOW_MS = 1000;
+
 type Handler<E extends HTMLElement> = (event: MouseEvent<E> | TouchEvent<E>) => void;
 
 export type UseLongPressOptions<E extends HTMLElement> = {
@@ -67,6 +72,7 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
   const timeoutRef = useRef<number | null>(null);
   const isLongPressActiveRef = useRef(false);
   const initialPositionRef = useRef({ x: 0, y: 0 });
+  const lastTouchTimeRef = useRef<number | null>(null);
 
   const preservedOnLongPress = usePreservedCallback(onLongPress);
   const preservedOnClick = usePreservedCallback(onClick || (() => {}));
@@ -75,7 +81,7 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
   const hasThreshold = moveThreshold?.x !== undefined || moveThreshold?.y !== undefined;
 
   const getClientPosition = useCallback((event: MouseEvent<E> | TouchEvent<E>) => {
-    if ('touches' in event.nativeEvent) {
+    if (isTouchEvent(event)) {
       const touch = event.nativeEvent.touches[0];
       return { x: touch.clientX, y: touch.clientY };
     }
@@ -115,6 +121,15 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
 
   const handlePressStart = useCallback(
     (event: MouseEvent<E> | TouchEvent<E>) => {
+      if (isTouchEvent(event)) {
+        lastTouchTimeRef.current = Date.now();
+      } else if (
+        lastTouchTimeRef.current !== null &&
+        Date.now() - lastTouchTimeRef.current < EMULATED_MOUSE_EVENT_WINDOW_MS
+      ) {
+        return;
+      }
+
       cancelLongPress();
       const position = getClientPosition(event);
 
@@ -131,6 +146,10 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
 
   const handlePressEnd = useCallback(
     (event: MouseEvent<E> | TouchEvent<E>) => {
+      if (isTouchEvent(event)) {
+        lastTouchTimeRef.current = Date.now();
+      }
+
       if (isLongPressActiveRef.current) {
         preservedOnLongPressEnd(event);
       } else if (timeoutRef.current !== null) {
@@ -160,4 +179,8 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
     onTouchEnd: handlePressEnd,
     ...(hasThreshold ? { onTouchMove: handlePressMove, onMouseMove: handlePressMove } : {}),
   };
+}
+
+function isTouchEvent<E extends HTMLElement>(event: MouseEvent<E> | TouchEvent<E>): event is TouchEvent<E> {
+  return 'touches' in event.nativeEvent;
 }

@@ -45,7 +45,7 @@ src/hooks/useHookName/
 - **No implicit boolean coercion** — `if (value)` → `if (value != null)` (enforced by `strict-boolean-expressions`)
 - **Import extensions** — Use `.ts`/`.tsx` extensions in source imports (tsdown rewrites them to `.mjs`/`.cjs` in the output)
 - **Named exports only** — No default exports
-- **No `any` types** — Full TypeScript strict mode
+- **No `any` in implementation** — Full TypeScript strict mode, and lint rejects `any`. For the parameter list of a function the caller passes in, use `CallerTypedArgs` from `src/_internal/types.ts`
 - **Zero runtime dependencies**
 
 ### Nullish Checks and Control Flow
