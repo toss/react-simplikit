@@ -399,6 +399,9 @@ describe('useLongPress', () => {
     fireEvent.touchEnd(button);
     fireEvent.mouseDown(button, { clientX: 0, clientY: 0 });
     fireEvent.mouseUp(button);
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
 
     expect(callbacks.onClick).toHaveBeenCalledTimes(1);
     expect(callbacks.onLongPress).not.toHaveBeenCalled();
