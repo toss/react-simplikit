@@ -469,20 +469,24 @@ describe('useLongPress', () => {
     expect(callbacks.onLongPressEnd).toHaveBeenCalledTimes(1);
   });
 
-  it('does not end a mouse press when another mouse button is released', async () => {
+  it('ends a mouse press on the single pointerup after a button chord', async () => {
     const callbacks = createCallbacks();
     render(<PressTarget {...callbacks} />);
     const button = screen.getByTestId('test-button');
 
-    fireEvent.pointerDown(button, pointerInit({ button: 0 }));
+    fireEvent.pointerDown(button, pointerInit({ button: 0, buttons: 1 }));
     await advance(500);
-    fireEvent.pointerUp(button, pointerInit({ button: 2 }));
+    // Chord changes fire pointermove, not pointerdown or pointerup.
+    fireEvent.pointerMove(button, pointerInit({ button: 2, buttons: 3 }));
+    fireEvent.pointerMove(button, pointerInit({ button: 0, buttons: 2 }));
+    fireEvent.pointerUp(button, pointerInit({ button: 2, buttons: 0 }));
 
-    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
-
-    fireEvent.pointerUp(button, pointerInit({ button: 0 }));
     expect(callbacks.onLongPressEnd).toHaveBeenCalledTimes(1);
-    expect(callbacks.onClick).not.toHaveBeenCalled();
+
+    fireEvent.pointerDown(button, pointerInit({ button: 0, buttons: 1 }));
+    fireEvent.pointerUp(button, pointerInit({ button: 0, buttons: 0 }));
+
+    expect(callbacks.onClick).toHaveBeenCalledTimes(1);
   });
 
   it('ignores pointerleave and pointercancel from a pointer that is not tracked', async () => {

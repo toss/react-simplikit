@@ -107,12 +107,6 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
         return;
       }
 
-      // A mouse chord can release the right button while the left button is still down.
-      // Touch and pen releases are not mouse buttons; ending those on pointerup is the whole press.
-      if (outcome === 'release' && isNonPrimaryMouseButton(event)) {
-        return;
-      }
-
       const shouldEndLongPress = isLongPressActiveRef.current;
       const shouldClick = outcome === 'release' && shouldEndLongPress === false && timeoutRef.current !== null;
 
@@ -206,8 +200,4 @@ function noop() {}
 
 function canStartPress(event: PointerEvent<HTMLElement>) {
   return event.isPrimary === true && event.button === 0;
-}
-
-function isNonPrimaryMouseButton(event: PointerEvent<HTMLElement>) {
-  return event.pointerType === 'mouse' && event.button !== 0;
 }
