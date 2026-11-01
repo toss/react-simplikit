@@ -8,6 +8,7 @@ Pending calls are cancelled when the component unmounts or when `debounceMs`, `l
 Calling `.cancel()` only cancels a pending callback, not an already-started network request.
 The example displays the query locally. To search a server, pass your application's
 search callback as the first argument to `useDebounce`.
+`useDebounce` is deprecated as of v1. Use [useDebouncedCallback](./useDebouncedCallback.md) instead.
 
 ## Interface
 

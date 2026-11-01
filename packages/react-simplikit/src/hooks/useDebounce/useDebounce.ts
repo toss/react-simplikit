@@ -21,6 +21,8 @@ type DebounceOptions = {
  * Calling `.cancel()` only cancels a pending callback, not an already-started network request.
  * The example displays the query locally. To search a server, pass your application's
  * search callback as the first argument to `useDebounce`.
+ * `useDebounce` is a deprecated hook from v1.
+ * Use {@link useDebouncedCallback} instead.
  *
  * @template {(...args: any[]) => unknown} F - The type of the callback function.
  * @param {F} callback - The function to debounce.
@@ -60,6 +62,8 @@ type DebounceOptions = {
  *     </section>
  *   );
  * }
+ *
+ * @deprecated Use `useDebouncedCallback` instead.
  */
 export function useDebounce<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,
