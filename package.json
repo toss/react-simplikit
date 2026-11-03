@@ -80,7 +80,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "fast-glob": "^3.3.3",
     "globals": "^15.13.0",
-    "jsdom": "^25.0.1",
+    "jsdom": "27.0.0",
     "listr2": "^8.2.5",
     "nanoid": "^5.1.5",
     "ora": "^8.2.0",

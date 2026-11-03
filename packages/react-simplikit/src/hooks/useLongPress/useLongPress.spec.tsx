@@ -6,10 +6,6 @@ import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
 import { useLongPress } from './useLongPress.ts';
 
-// jsdom 25 has no PointerEvent (jsdom 27+ ships one). Testing Library would otherwise
-// construct a plain Event and drop pointerId, button, and client coordinates.
-installPointerEventPolyfill();
-
 type PointerInit = {
   pointerId?: number;
   button?: number;
@@ -451,22 +447,36 @@ describe('useLongPress', () => {
     expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
   });
 
-  it('does not let a second pointer restart the press', async () => {
+  it.each(['touch', 'pen'])('starts a new %s press after the previous release was lost', async pointerType => {
     const callbacks = createCallbacks();
     render(<PressTarget {...callbacks} />);
     const button = screen.getByTestId('test-button');
 
-    fireEvent.pointerDown(button, pointerInit({ pointerId: 1 }));
-    await advance(400);
-    fireEvent.pointerDown(button, pointerInit({ pointerId: 2, isPrimary: true }));
-    fireEvent.pointerUp(button, pointerInit({ pointerId: 2 }));
-    await advance(100);
+    // The release of pointer 5 never reaches the button, e.g. the button was replaced while it was pressed.
+    fireEvent.pointerDown(button, pointerInit({ pointerType, pointerId: 5 }));
+    await advance(500);
+    fireEvent.pointerDown(button, pointerInit({ pointerType, pointerId: 6 }));
+    fireEvent.pointerUp(button, pointerInit({ pointerType, pointerId: 6 }));
 
     expect(callbacks.onLongPress).toHaveBeenCalledTimes(1);
-    expect(callbacks.onClick).not.toHaveBeenCalled();
-
-    fireEvent.pointerUp(button, pointerInit({ pointerId: 1 }));
     expect(callbacks.onLongPressEnd).toHaveBeenCalledTimes(1);
+    expect(callbacks.onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('lets a new pointer replace a pending press', async () => {
+    const callbacks = createCallbacks();
+    render(<PressTarget {...callbacks} />);
+    const button = screen.getByTestId('test-button');
+
+    fireEvent.pointerDown(button, pointerInit({ pointerType: 'mouse', pointerId: 1 }));
+    await advance(400);
+    fireEvent.pointerDown(button, pointerInit({ pointerType: 'touch', pointerId: 7 }));
+    await advance(400);
+    fireEvent.pointerUp(button, pointerInit({ pointerType: 'mouse', pointerId: 1 }));
+
+    expect(callbacks.onLongPress).not.toHaveBeenCalled();
+    expect(callbacks.onClick).not.toHaveBeenCalled();
+    expect(callbacks.onLongPressEnd).not.toHaveBeenCalled();
   });
 
   it('ends a mouse press on the single pointerup after a button chord', async () => {
@@ -535,42 +545,3 @@ describe('useLongPress', () => {
     unmount();
   });
 });
-
-function installPointerEventPolyfill() {
-  if (typeof window.PointerEvent === 'function') {
-    return;
-  }
-
-  class PointerEventPolyfill extends MouseEvent {
-    readonly pointerId: number;
-    readonly pointerType: string;
-    readonly isPrimary: boolean;
-
-    constructor(type: string, init: PointerEventInit = {}) {
-      super(type, {
-        bubbles: init.bubbles,
-        cancelable: init.cancelable,
-        composed: init.composed,
-        clientX: init.clientX,
-        clientY: init.clientY,
-        screenX: init.screenX,
-        screenY: init.screenY,
-        button: init.button,
-        buttons: init.buttons,
-        ctrlKey: init.ctrlKey,
-        shiftKey: init.shiftKey,
-        altKey: init.altKey,
-        metaKey: init.metaKey,
-      });
-      this.pointerId = init.pointerId ?? 0;
-      this.pointerType = init.pointerType ?? '';
-      this.isPrimary = init.isPrimary ?? false;
-    }
-  }
-
-  Object.defineProperty(window, 'PointerEvent', {
-    configurable: true,
-    writable: true,
-    value: PointerEventPolyfill,
-  });
-}
