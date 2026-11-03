@@ -1,13 +1,15 @@
 # useLongPress
 
 `useLongPress` は、要素が指定した時間押し続けられたことを検出する React フックです。
-マウスイベントとタッチイベントの両方を処理するため、デスクトップ端末とモバイル端末で一貫した動作を実現できます。
+ポインターイベントを受け取るので、マウス、タッチ、ペンによる押下は 1 つのストリームになり、タップのあとに続くエミュレートされたマウスイベントが 2 回目の押下を始めることはありません。
+`pointercancel` は押下をキャンセルします。ブラウザーがスクロールのためにポインターを受け取る場合も含まれます。
+主ポインターではないポインターと、主ボタン以外のボタンは無視します。
 
 ## インターフェース
 
 ```ts
 function useLongPress<E extends HTMLElement>(
-  onLongPress: (event: React.MouseEvent<E> | React.TouchEvent<E>) => void,
+  onLongPress: (event: React.PointerEvent<E>) => void,
   options?: UseLongPressOptions
 ): Object;
 ```
@@ -17,7 +19,7 @@ function useLongPress<E extends HTMLElement>(
 <Interface
   required
   name="onLongPress"
-  type="(event: React.MouseEvent<E> | React.TouchEvent<E>) => void"
+  type="(event: React.PointerEvent<E>) => void"
   description="長押しが検出されたときに実行するコールバック関数です。"
 />
 
@@ -54,14 +56,14 @@ function useLongPress<E extends HTMLElement>(
     },
     {
       name: 'options.onClick',
-      type: '(event) => void',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
       description:
         '通常のクリック（押してから delayMs が経過する前に離す操作）で実行する関数です。省略できます。',
     },
     {
       name: 'options.onLongPressEnd',
-      type: '(event) => void',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
       description: '長押しが終了したときに実行する関数です。省略できます。',
     },
@@ -76,48 +78,38 @@ function useLongPress<E extends HTMLElement>(
   description="要素に設定するイベントハンドラーです。"
   :nested="[
     {
-      name: 'onMouseDown',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      name: 'onPointerDown',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
-      description: 'マウスボタンが押されたときのイベントハンドラーです。',
+      description: '主ポインターの主ボタンで押下を開始します。',
     },
     {
-      name: 'onMouseUp',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
-      required: false,
-      description: 'マウスボタンが離されたときのイベントハンドラーです。',
-    },
-    {
-      name: 'onMouseLeave',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
-      required: false,
-      description: 'マウスポインターが要素から離れたときのイベントハンドラーです。',
-    },
-    {
-      name: 'onTouchStart',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
-      required: false,
-      description: 'タッチが開始されたときのイベントハンドラーです。',
-    },
-    {
-      name: 'onTouchEnd',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
-      required: false,
-      description: 'タッチが終了したときのイベントハンドラーです。',
-    },
-    {
-      name: 'onMouseMove',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      name: 'onPointerUp',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
       description:
-        'マウスが移動したときのイベントハンドラーです。<code>moveThreshold</code> が指定された場合に含まれます。',
+        '追跡中の押下を終了します。遅延前に離すと <code>onClick</code> を呼び出し、長押しがすでに発火している場合は <code>onLongPressEnd</code> を呼び出します。',
     },
     {
-      name: 'onTouchMove',
-      type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
+      name: 'onPointerLeave',
+      type: '(event: React.PointerEvent<E>) => void',
       required: false,
       description:
-        'タッチ位置が移動したときのイベントハンドラーです。<code>moveThreshold</code> が指定された場合に含まれます。',
+        'ポインターが要素から離れると、追跡中の押下をキャンセルします。<code>onClick</code> は呼び出しません。長押しがすでに発火している場合は <code>onLongPressEnd</code> を呼び出します。',
+    },
+    {
+      name: 'onPointerCancel',
+      type: '(event: React.PointerEvent<E>) => void',
+      required: false,
+      description:
+        'ブラウザーがポインターをキャンセルしたとき（たとえばスクロールが始まったとき）に、追跡中の押下をキャンセルします。<code>onClick</code> は呼び出しません。長押しがすでに発火している場合は <code>onLongPressEnd</code> を呼び出します。',
+    },
+    {
+      name: 'onPointerMove',
+      type: '(event: React.PointerEvent<E>) => void',
+      required: false,
+      description:
+        '移動量が <code>moveThreshold</code> を超えると、保留中の長押しをキャンセルします。<code>moveThreshold</code> が指定された場合に含まれます。',
     },
   ]"
 />
