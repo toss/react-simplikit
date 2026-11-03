@@ -132,9 +132,9 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
         return;
       }
 
-      // A second contact must not restart or replace the press already in progress.
-      if (pointerIdRef.current !== null) {
-        return;
+      // A new primary press replaces the tracked one, whose release may never reach this element.
+      if (isLongPressActiveRef.current) {
+        preservedOnLongPressEnd(event);
       }
 
       clearTimer();
@@ -148,7 +148,7 @@ export function useLongPress<E extends HTMLElement = HTMLElement>(
         preservedOnLongPress(event);
       }, delayMs);
     },
-    [clearTimer, delayMs, preservedOnLongPress]
+    [clearTimer, delayMs, preservedOnLongPress, preservedOnLongPressEnd]
   );
 
   const handlePointerUp = useCallback(
