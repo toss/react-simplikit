@@ -152,8 +152,8 @@ export function useStorageState<T>(
     return cache.current.parsed;
   }, [defaultValue, key, storage]);
 
-  const storageState = useSyncExternalStore<Serializable<T> | undefined>(
-    onStoreChange => {
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
       listeners.add(onStoreChange);
 
       const handler = (event: StorageEvent) => {
@@ -169,6 +169,11 @@ export function useStorageState<T>(
         window.removeEventListener('storage', handler);
       };
     },
+    [key]
+  );
+
+  const storageState = useSyncExternalStore<Serializable<T> | undefined>(
+    subscribe,
     () => getSnapshot(),
     () => serializedDefaultValue
   );
