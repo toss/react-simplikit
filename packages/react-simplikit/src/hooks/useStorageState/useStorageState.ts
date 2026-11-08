@@ -129,9 +129,13 @@ export function useStorageState<T>(
 
   const serializedDefaultValue = defaultValue as Serializable<T>;
   const cache = useRef<{
+    key: string;
+    defaultValue: T | undefined;
     data: string | null;
     parsed: Serializable<T> | undefined;
   }>({
+    key,
+    defaultValue,
     data: null,
     parsed: serializedDefaultValue,
   });
@@ -139,17 +143,20 @@ export function useStorageState<T>(
   const getSnapshot = useCallback(() => {
     const deserializer = 'deserializer' in options ? options.deserializer : JSON.parse;
     const data = storage.get(key);
+    const current = cache.current;
 
-    if (data !== cache.current.data) {
+    if (data !== current.data || key !== current.key || defaultValue !== current.defaultValue) {
       try {
-        cache.current.parsed = data != null ? deserializer(data) : defaultValue;
+        current.parsed = data != null ? deserializer(data) : defaultValue;
       } catch {
-        cache.current.parsed = serializedDefaultValue;
+        current.parsed = serializedDefaultValue;
       }
-      cache.current.data = data;
+      current.data = data;
+      current.key = key;
+      current.defaultValue = defaultValue;
     }
 
-    return cache.current.parsed;
+    return current.parsed;
   }, [defaultValue, key, storage]);
 
   const storageState = useSyncExternalStore<Serializable<T> | undefined>(
