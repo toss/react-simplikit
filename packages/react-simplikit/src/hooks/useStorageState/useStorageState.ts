@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { SetStateAction, useCallback, useRef, useSyncExternalStore } from 'react';
 
+import { usePreservedReference } from '../usePreservedReference/index.ts';
+
 import { safeLocalStorage, Storage } from './storage.ts';
 
 type ToObject<T> = T extends unknown[] | Record<string, unknown> ? T : never;
@@ -115,7 +117,7 @@ export function useStorageState<T>(
   key: string,
   {
     storage = safeLocalStorage,
-    defaultValue,
+    defaultValue: rawDefaultValue,
     ...options
   }: StorageStateOptions<T> | StorageStateOptionsWithSerializer<T> = {}
 ): SerializableGuard<
@@ -127,6 +129,7 @@ export function useStorageState<T>(
   // above have no body to carry a directive.
   'use no memo';
 
+  const { value: defaultValue } = usePreservedReference({ value: rawDefaultValue });
   const serializedDefaultValue = defaultValue as Serializable<T>;
   const cache = useRef<{
     key: string;

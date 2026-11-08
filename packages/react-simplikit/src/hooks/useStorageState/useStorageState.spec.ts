@@ -180,6 +180,30 @@ describe('useStorageState', () => {
       expect(result.current[0]).toBe(2);
     });
 
+    it('should keep the same reference when an inline object defaultValue is structurally equal', async () => {
+      const { result, rerender } = await renderHookSSR(() =>
+        useStorageState<{ count: number }>('test-key', { defaultValue: { count: 0 }, storage })
+      );
+      const first = result.current[0];
+
+      rerender();
+      rerender();
+      expect(result.current[0]).toBe(first);
+    });
+
+    it('should keep the same deserialized reference across renders when an inline object defaultValue is given', async () => {
+      storage.set('test-key', JSON.stringify({ count: 5 }));
+      const { result, rerender } = await renderHookSSR(() =>
+        useStorageState<{ count: number }>('test-key', { defaultValue: { count: 0 }, storage })
+      );
+      const first = result.current[0];
+      expect(first).toEqual({ count: 5 });
+
+      rerender();
+      rerender();
+      expect(result.current[0]).toBe(first);
+    });
+
     it('should read the stored value of the new key when the key changes', async () => {
       storage.set('second-key', JSON.stringify('stored'));
       const { result, rerender } = await renderHookSSR(
