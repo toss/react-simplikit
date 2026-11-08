@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { act } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -43,6 +44,57 @@ describe('useVisibilityEvent', () => {
     await renderHookSSR(() => useVisibilityEvent(mockCallback, { immediate: true }));
 
     expect(mockCallback).toHaveBeenCalledWith('visible');
+  });
+
+  it('should keep the same listener when the callback changes between renders', async () => {
+    const addEventListener = vi.spyOn(document, 'addEventListener');
+    const removeEventListener = vi.spyOn(document, 'removeEventListener');
+    const calls: Array<['visible' | 'hidden', number]> = [];
+
+    const { rerender } = await renderHookSSR(
+      ({ version }: { version: number }) =>
+        useVisibilityEvent(visibilityState => {
+          calls.push([visibilityState, version]);
+        }),
+      { initialProps: { version: 1 } }
+    );
+
+    const countVisibilityListeners = (spy: typeof addEventListener) =>
+      spy.mock.calls.filter(([type]) => type === 'visibilitychange').length;
+
+    const addedAfterMount = countVisibilityListeners(addEventListener);
+
+    rerender({ version: 2 });
+    rerender({ version: 3 });
+
+    expect(countVisibilityListeners(addEventListener)).toBe(addedAfterMount);
+    expect(countVisibilityListeners(removeEventListener)).toBe(0);
+
+    await act(async () => simulateVisibilityChange('hidden'));
+
+    expect(calls).toEqual([['hidden', 3]]);
+
+    addEventListener.mockRestore();
+    removeEventListener.mockRestore();
+  });
+
+  it('should not re-run an immediate callback that updates state on every render', async () => {
+    let renderCount = 0;
+
+    const { result } = await renderHookSSR(() => {
+      renderCount += 1;
+      if (renderCount > 10) {
+        throw new Error('useVisibilityEvent re-ran the immediate callback on every render');
+      }
+      const [log, setLog] = useState<Array<'visible' | 'hidden'>>([]);
+
+      useVisibilityEvent(visibilityState => setLog(prev => [...prev, visibilityState]), { immediate: true });
+
+      return log;
+    });
+
+    expect(result.current).toEqual([document.visibilityState]);
+    expect(renderCount).toBeLessThanOrEqual(3);
   });
 
   it('should remove the event listener on unmount', async () => {
