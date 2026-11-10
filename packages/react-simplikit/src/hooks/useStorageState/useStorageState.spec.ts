@@ -1,5 +1,5 @@
 import { act } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
@@ -156,6 +156,31 @@ describe('useStorageState', () => {
     it('should initialize without default value', async () => {
       const { result } = await renderHookSSR(() => useStorageState('test-key', { storage }));
       expect(result.current[0]).toBeUndefined();
+    });
+
+    it('should keep the same storage subscription across renders', async () => {
+      const addEventListener = vi.spyOn(window, 'addEventListener');
+      const removeEventListener = vi.spyOn(window, 'removeEventListener');
+      const countStorageListeners = (spy: typeof addEventListener) =>
+        spy.mock.calls.filter(([type]) => type === 'storage').length;
+
+      const { rerender } = await renderHookSSR(
+        ({ key }: { key: string }) => useStorageState(key, { defaultValue: 'default', storage }),
+        { initialProps: { key: 'test-key' } }
+      );
+      const addedAfterMount = countStorageListeners(addEventListener);
+
+      rerender({ key: 'test-key' });
+      rerender({ key: 'test-key' });
+      expect(countStorageListeners(addEventListener)).toBe(addedAfterMount);
+      expect(countStorageListeners(removeEventListener)).toBe(0);
+
+      rerender({ key: 'other-key' });
+      expect(countStorageListeners(addEventListener)).toBe(addedAfterMount + 1);
+      expect(countStorageListeners(removeEventListener)).toBe(1);
+
+      addEventListener.mockRestore();
+      removeEventListener.mockRestore();
     });
 
     it('should return the new defaultValue when it changes and the key is not stored', async () => {
