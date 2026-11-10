@@ -1,6 +1,6 @@
 # useList
 
-리액트 훅으로, 배열을 상태로 관리해요. 효율적인 상태 관리를 제공하고 안정적인 액션 함수를 제공해요.
+배열을 상태로 관리하는 리액트 훅이에요. 효율적인 상태 관리와 안정적인 액션 함수를 제공해요.
 초기값과 `setAll`에 일반 배열과 읽기 전용 배열을 모두 전달할 수 있어요.
 
 ## 인터페이스
@@ -36,19 +36,19 @@ function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
       name: 'actions.insertAt',
       type: '(index: number, value: T) => void',
       required: false,
-      description: '지정된 인덱스에 값을 삽입해요.',
+      description: '지정한 인덱스에 값을 삽입해요.',
     },
     {
       name: 'actions.updateAt',
       type: '(index: number, value: T) => void',
       required: false,
-      description: '지정된 인덱스의 값을 업데이트해요.',
+      description: '지정한 인덱스의 값을 업데이트해요.',
     },
     {
       name: 'actions.removeAt',
       type: '(index: number) => void',
       required: false,
-      description: '지정된 인덱스의 값을 제거해요.',
+      description: '지정한 인덱스의 값을 제거해요.',
     },
     {
       name: 'actions.setAll',

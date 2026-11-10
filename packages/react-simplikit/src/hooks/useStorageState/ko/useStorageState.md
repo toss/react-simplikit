@@ -1,6 +1,6 @@
 # useStorageState
 
-리액트 훅으로, `useState`처럼 작동하지만 상태 값을 브라우저 저장소에 저장해요. 이 값은 페이지를 새로고침해도 유지되며, `localStorage`를 사용할 경우 탭 간에 공유될 수 있어요.
+`useState`처럼 작동하지만 상태 값을 브라우저 저장소에 저장하는 리액트 훅이에요. 이 값은 페이지를 새로고침해도 유지되고, `localStorage`를 사용하면 여러 탭에서 공유할 수 있어요.
 
 ## 인터페이스
 
@@ -35,13 +35,13 @@ function useStorageState<T>(
       required: false,
       defaultValue: 'localStorage',
       description:
-        '스토리지 타입 (<code>localStorage</code> 또는 <code>sessionStorage</code>). 기본값은 <code>localStorage</code>예요.',
+        '사용할 저장소예요. <code>localStorage</code>나 <code>sessionStorage</code>를 넘길 수 있고, 기본값은 <code>localStorage</code>예요.',
     },
     {
       name: 'options.defaultValue',
       type: 'T',
       required: false,
-      description: '기존의 값을 찾을 수 없을 때의 초기 값이에요.',
+      description: '저장소에서 기존 값을 찾지 못했을 때 사용할 초기 값이에요.',
     },
     {
       name: 'options.serializer',
@@ -53,7 +53,7 @@ function useStorageState<T>(
       name: 'options.deserializer',
       type: 'Function',
       required: false,
-      description: '상태 값을 문자열에서 역직렬화하는 함수예요.',
+      description: '문자열을 상태 값으로 역직렬화하는 함수예요.',
     },
   ]"
 />
@@ -63,7 +63,7 @@ function useStorageState<T>(
 <Interface
   name=""
   type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="튜플이에요:"
+  description="다음 값을 담은 튜플이에요."
   :nested="[
     {
       name: 'state',
@@ -75,7 +75,7 @@ function useStorageState<T>(
       name: 'setState',
       type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
       required: false,
-      description: '상태를 업데이트하고 지속하는 함수예요.',
+      description: '상태를 업데이트하고 저장소에 저장하는 함수예요.',
     },
     {
       name: 'refreshState',

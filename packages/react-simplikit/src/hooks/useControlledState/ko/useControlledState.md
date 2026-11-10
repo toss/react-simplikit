@@ -1,6 +1,6 @@
 # useControlledState
 
-`useControlledState`는 제어된 상태와 비제어된 상태를 모두 제어할 수 있게 해주는 훅이에요. 상태를 `value`에 전달하면 제어된 상태가 되고, 상태를 `defaultValue`에 전달하면 비제어된 상태가 돼요. `value`와 `defaultValue`가 모두 전달되면, `value`가 우선권을 가져요.
+`useControlledState`는 제어 상태와 비제어 상태를 모두 다룰 수 있게 해주는 리액트 훅이에요. 상태를 `value`로 전달하면 제어 상태가 되고 `defaultValue`로 전달하면 비제어 상태가 돼요. `value`와 `defaultValue`를 모두 전달하면 `value`가 우선해요.
 
 ## 인터페이스
 
@@ -26,7 +26,7 @@ function useControlledState<T>(props: Object): [T, Dispatch<SetStateAction<T>>];
       name: 'props.defaultValue',
       type: 'T',
       required: false,
-      description: '상태의 기본 값이에요.',
+      description: '상태의 기본값이에요.',
     },
     {
       name: 'props.onChange',
@@ -40,7 +40,7 @@ function useControlledState<T>(props: Object): [T, Dispatch<SetStateAction<T>>];
       type: '(prev: T, next: T) => boolean',
       required: false,
       description:
-        '이전 값과 다음 값을 비교하는 데 사용되는 함수예요.',
+        '이전 값과 다음 값을 비교하는 함수예요.',
     },
   ]"
 />
@@ -50,7 +50,7 @@ function useControlledState<T>(props: Object): [T, Dispatch<SetStateAction<T>>];
 <Interface
   name=""
   type="[T, Dispatch<SetStateAction<T>>]"
-  description="상태와 설정 함수예요."
+  description="상태와 상태를 설정하는 함수예요."
 />
 
 ## 예시

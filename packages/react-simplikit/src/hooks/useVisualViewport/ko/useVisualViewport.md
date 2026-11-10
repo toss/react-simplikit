@@ -1,8 +1,8 @@
 # useVisualViewport
 
-Visual Viewport 변경사항을 추적하는 React 훅이에요.
+Visual Viewport의 변화를 추적하는 리액트 훅이에요.
 
-모바일 WebView에서 실제로 보이는 영역을 반환해요. 키보드가 나타나거나 사용자가 줌/스크롤할 때 변경돼요.
+모바일 WebView에서 실제로 보이는 영역을 반환해요. 이 영역은 키보드가 나타나거나 사용자가 화면을 확대·축소하거나 스크롤할 때 바뀌어요.
 
 ## 인터페이스
 
@@ -32,31 +32,31 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
       name: 'viewport.width',
       type: 'number',
       required: false,
-      description: '뷰포트 너비 (픽셀)',
+      description: '픽셀 단위의 뷰포트 너비예요.',
     },
     {
       name: 'viewport.height',
       type: 'number',
       required: false,
-      description: '뷰포트 높이 (픽셀)',
+      description: '픽셀 단위의 뷰포트 높이예요.',
     },
     {
       name: 'viewport.offsetLeft',
       type: 'number',
       required: false,
-      description: '레이아웃 뷰포트로부터의 왼쪽 오프셋 (픽셀). 일반적으로 0이며, 가로 스크롤이나 패닝이 발생할 때만 변경돼요',
+      description: '레이아웃 뷰포트 기준 왼쪽 오프셋(픽셀)이에요. 가로 스크롤이나 패닝이 일어나지 않으면 보통 0이에요.',
     },
     {
       name: 'viewport.offsetTop',
       type: 'number',
       required: false,
-      description: '레이아웃 뷰포트로부터의 상단 오프셋(픽셀)이에요. iOS에서는 키보드가 나타날 때 음수가 되므로(예: -300px는 키보드 높이 300px를 의미) 키보드 높이는 <code>-offsetTop</code>으로 구하세요. Android에서는 일반적으로 0으로 유지돼요.',
+      description: '레이아웃 뷰포트 기준 상단 오프셋(픽셀)이에요. iOS에서는 키보드가 나타날 때 음수가 되므로(예: -300px는 키보드 높이 300px를 의미) 키보드 높이는 <code>-offsetTop</code>으로 구하세요. Android에서는 일반적으로 0으로 유지돼요.',
     },
     {
       name: 'viewport.scale',
       type: 'number',
       required: false,
-      description: '핀치 줌 배율이에요. 1.0은 줌 없음, 1.0보다 크면 확대, 1.0보다 작으면 축소(드물며, 뷰포트 설정에 따라 달라요)예요.',
+      description: '핀치 줌 배율이에요. 1.0이면 확대하지 않은 상태, 1.0보다 크면 확대한 상태, 1.0보다 작으면 축소한 상태예요. 축소는 드물고 뷰포트 설정에 따라 달라요.',
     },
   ]"
 />
@@ -98,9 +98,9 @@ if (viewport && viewport.scale > 1.3) {
 
 ## 참고사항
 
-- **SSR 안전성**: `viewport`는 SSR 환경이나 Visual Viewport API를 지원하지 않는 브라우저에서 `null`이에요. viewport 속성에 접근하기 전에 항상 `null`인지 확인하세요.
-- **브라우저 지원**: Visual Viewport API는 최신 모바일 브라우저에서 지원돼요. 지원하지 않는 환경에서는 훅이 `null`을 반환해요.
-- **성능**: 뷰포트 변경 중 블로킹 업데이트를 방지하기 위해 React의 `startTransition`을 사용해요.
+- **SSR 안전성**: `viewport`는 SSR 환경이나 Visual Viewport API를 지원하지 않는 브라우저에서 `null`이에요. `viewport`의 속성을 읽기 전에 항상 `null`인지 확인하세요.
+- **브라우저 지원**: 최신 모바일 브라우저는 Visual Viewport API를 지원해요. 지원하지 않는 환경에서는 훅이 `null`을 반환해요.
+- **성능**: 업데이트를 리액트의 `startTransition`으로 감싸서 뷰포트가 바뀌어도 긴급한 렌더링을 막지 않아요.
 - **더 간단한 대안**: 키보드 높이만 필요하다면 더 간단한 API인 `useKeyboardHeight()`를 사용하세요.
-- **플랫폼 차이점**: iOS에서는 키보드가 나타날 때 `offsetTop`이 음수가 되고, Android에서는 일반적으로 0으로 유지돼요.
-- **사용 사례**: 키보드 나타남 감지, 핀치 줌 제스처에 반응, 뷰포트 인식 레이아웃 생성, 줌 레벨에 따른 UI 요소 표시/숨김에 쓸 수 있어요.
+- **플랫폼 차이점**: iOS에서는 키보드가 나타날 때 `offsetTop`이 음수가 되고 Android에서는 일반적으로 0으로 유지돼요.
+- **사용 사례**: 키보드 표시 감지, 핀치 줌 제스처 대응, 뷰포트에 맞춘 레이아웃 구성, 줌 레벨에 따른 UI 표시·숨김에 쓸 수 있어요.

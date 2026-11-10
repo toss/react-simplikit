@@ -26,7 +26,7 @@ function buildContext<ContextValuesType extends object>(
 <Interface
   name="defaultContextValues"
   type="ContextValuesType"
-  description="컨텍스트에 전달할 기본 값이에요."
+  description="컨텍스트에 전달할 기본값이에요."
 />
 
 ### 반환 값
@@ -34,7 +34,7 @@ function buildContext<ContextValuesType extends object>(
 <Interface
   name=""
   type="[Provider: (props: ProviderProps<ContextValuesType>) => JSX.Element, useContext: () => ContextValuesType]"
-  description="다음과 같은 형태의 튜플이에요:"
+  description="다음 형태의 튜플이에요."
   :nested="[
     {
       name: 'Provider',

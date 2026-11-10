@@ -1,6 +1,6 @@
 # useCounter
 
-`useCounter`는 증가, 감소 및 초기화 기능을 가진 숫자 카운터 상태를 관리하는 리액트 훅이에요. 선택적으로, 카운터의 범위를 제한하기 위해 최소값과 최대값을 제공할 수 있어요.
+`useCounter`는 증가, 감소, 재설정 기능이 있는 숫자 카운터 상태를 관리하는 리액트 훅이에요. 필요하면 최소값과 최대값을 지정해 카운터의 범위를 제한할 수 있어요.
 
 ## 인터페이스
 
@@ -29,21 +29,21 @@ function useCounter(
       type: 'number',
       required: false,
       description:
-        '카운터가 도달할 수 있는 최소값이에요. 제공되지 않으면, 하한선이 없어요.',
+        '카운터가 도달할 수 있는 최소값이에요. 지정하지 않으면 하한이 없어요.',
     },
     {
       name: 'options.max',
       type: 'number',
       required: false,
       description:
-        '카운터가 도달할 수 있는 최대값이에요. 제공되지 않으면, 상한선이 없어요.',
+        '카운터가 도달할 수 있는 최대값이에요. 지정하지 않으면 상한이 없어요.',
     },
     {
       name: 'options.step',
       type: 'number',
       required: false,
       defaultValue: '1',
-      description: '증가 또는 감소의 단위 값이에요. 기본값은 1이에요.',
+      description: '한 번에 증가하거나 감소하는 값이에요. 기본값은 1이에요.',
     },
   ]"
 />
@@ -53,7 +53,7 @@ function useCounter(
 <Interface
   name=""
   type="UseCounterReturn"
-  description="카운트 값과 제어 함수들을 가진 객체예요."
+  description="카운트 값과 제어 함수를 담은 객체예요."
   :nested="[
     {
       name: 'count',
@@ -84,7 +84,7 @@ function useCounter(
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
-        '카운트를 특정 값으로 설정하거나 새로운 값을 반환하는 함수예요.',
+        '카운트를 특정 값으로 설정하는 함수예요. 새 값을 반환하는 함수를 넘겨도 돼요.',
     },
   ]"
 />

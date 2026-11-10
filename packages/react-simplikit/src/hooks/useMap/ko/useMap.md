@@ -1,6 +1,6 @@
 # useMap
 
-리액트 훅으로, 상태로 키-값 쌍인 맵(Map)을 관리해요. 효율적인 상태 관리를 제공하고 안정적인 액션 함수를 제공해요.
+키-값 쌍인 맵(Map)을 상태로 관리하는 리액트 훅이에요. 효율적인 상태 관리와 안정적인 액션 함수를 제공해요.
 
 ## 인터페이스
 
@@ -15,7 +15,7 @@ function useMap<K, V>(
 <Interface
   name="initialState"
   type="MapOrEntries<K, V>"
-  description="초기 맵 상태 (맵 객체 또는 키-값 쌍의 배열)"
+  description="맵의 초기 상태예요. 맵 객체나 키-값 쌍의 배열을 받아요."
 />
 
 ### 반환 값
@@ -23,7 +23,7 @@ function useMap<K, V>(
 <Interface
   name=""
   type="UseMapReturn<K, V>"
-  description="맵 상태와 이를 조작하는 액션을 포함한 튜플이에요"
+  description="맵 상태와 이를 조작하는 액션을 담은 튜플이에요."
 />
 
 ## 예시

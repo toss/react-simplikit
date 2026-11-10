@@ -3,7 +3,7 @@
 > 출처: React 공식 문서 (react.dev)
 > 관련: [Hook Design Principles](./hook-design-principles.md)
 
-코딩 스타일이 아닌 **hooks를 올바르게 사용하는 패턴**. 16개 원칙 (U1-U17, U4 제거).
+코딩 스타일이 아니라 React 고유의 모범 사례로, **훅을 올바르게 사용하는 패턴**이에요. 원칙은 16개예요(U1-U17, U4 제거).
 
 ---
 

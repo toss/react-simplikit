@@ -8,7 +8,7 @@
 
 ### 배경
 
-react-simplikit을 운영하며 축적한 훅 설계 철학을 **하나의 공통 원칙**으로 정의한다. 훅을 리뷰할 때와 작성할 때 모두 이 원칙을 기준으로 삼는다.
+react-simplikit을 운영하며 축적한 훅 설계 철학을 **하나의 공통 원칙**으로 정의해요. 훅을 리뷰할 때와 작성할 때 모두 이 원칙을 기준으로 삼아요.
 
 ### 원칙의 두 가지 방향
 
@@ -22,7 +22,7 @@ react-simplikit을 운영하며 축적한 훅 설계 철학을 **하나의 공�
 | #   | 요구사항            | 상세                                                           |
 | --- | ------------------- | -------------------------------------------------------------- |
 | R1  | 리뷰/생성 공통 원칙 | 두 스킬이 동일한 원칙 참조                                     |
-| R2  | Why 중심            | 규칙(What)만 나열하지 않고 철학(Why)을 narrative로 설명        |
+| R2  | Why 중심            | 규칙(What)만 나열하지 않고 철학(Why)을 서술형으로 설명         |
 | R3  | Opinionated 투명성  | 🟢 Best Practice vs 🟡 Opinionated 명시                        |
 | R4  | 프로젝트 무관       | react-simplikit 경로/명령어/유틸 없이 범용 원칙만              |
 | R5  | Cross-tool          | Claude Code 플러그인 + Codex(AGENTS.md) + Cursor(.cursorrules) |
@@ -42,11 +42,11 @@ react-simplikit을 운영하며 축적한 훅 설계 철학을 **하나의 공�
 
 ## 2. 훅 코딩 원칙 (Direction 1)
 
-CLAUDE.md + AGENTS.md + 내부 스킬에서 추출한 **코딩 스타일** 원칙.
+CLAUDE.md, AGENTS.md, 내부 스킬에서 추출한 **코딩 스타일** 원칙이에요.
 
 ### 🟢 Best Practice (11개) + 🟡 Opinionated (3개: C1, C7, C14)
 
-> C1과 C7은 React 전역 베스트 프랙티스가 아니라 프로젝트 컨벤션이므로 인라인 🟡로 표기. C14는 아래 별도 🟡 섹션에 위치.
+> C1과 C7은 React 전반의 베스트 프랙티스가 아니라 프로젝트 컨벤션이라서 제목 옆에 🟡를 붙였어요. C14는 아래 별도 🟡 섹션에 있어요.
 
 #### C1. 항상 객체 반환 🟡
 
@@ -84,7 +84,9 @@ const [width, setWidth] = useState(() => {
 });
 ```
 
-#### C3. useEffect Cleanup 필수
+#### C3. 구독할 때는 useEffect Cleanup 반환
+
+effect에서 구독, 리스너, 타이머, 지속 연결을 설정하면 cleanup을 반환해요. React 문서에 따르면 cleanup은 모든 effect에 필요하지는 않지만, 외부 시스템과 동기화할 때는 반드시 반환해야 해요. cleanup을 빠뜨리면 메모리 누수가 생기고, StrictMode의 이중 마운트에서 바로 드러나요.
 
 > 📖 [react.dev — useEffect](https://react.dev/reference/react/useEffect) > _"Your setup function may also optionally return a cleanup function."_
 
@@ -114,7 +116,7 @@ useEffect(function tick() {
 
 #### C4. No `any` in Implementation
 
-제네릭 `<T>` 사용. `any`는 전파되어 타입 시스템 무력화 → 구현 코드의 `any`는 lint가 거부. 유일한 예외는 호출자가 넘기는 함수의 파라미터 목록. 함수 파라미터는 반공변적으로 비교 → `unknown[]`은 타입을 명시한 콜백을 거부. 이 자리에는 `any` 대신 `_internal/types.ts`의 공용 타입 `CallerTypedArgs` 사용.
+제네릭 `<T>`를 써요. `any`는 다른 타입으로 퍼져 타입 시스템을 무력화하므로 구현 코드의 `any`는 lint가 거부해요. 유일한 예외는 호출자가 넘기는 함수의 파라미터 목록이에요. 함수 파라미터는 반공변적으로 비교하기 때문에 `unknown[]`을 쓰면 타입을 명시한 콜백이 거부돼요. 이 자리에는 `any`를 직접 쓰지 말고 `_internal/types.ts`의 공용 타입 `CallerTypedArgs`를 써요.
 
 ```ts
 // ✅ 제네릭
@@ -132,11 +134,11 @@ type AnyFunction = (...args: any[]) => unknown;
 
 #### C5. Named Exports Only
 
-tree-shaking 보장 + import 명확성. `export default` 금지.
+tree-shaking을 보장하고 import를 명확하게 해요. `export default`는 쓰지 않아요.
 
 #### C6. Strict Boolean & Nullish Checks
 
-`if (value)` 금지 → 0, "", false falsy 버그 방지. `== null`로 null+undefined 동시 체크.
+`if (value)`처럼 암묵적으로 검사하지 않아요. `0`, `""`, `false`에서 조용히 생기는 버그를 막아요. nullish 검사는 `== null`로 null과 undefined를 함께 확인해요.
 
 ```ts
 if (ref == null) { return; }              // ✅ null + undefined
@@ -146,7 +148,7 @@ if (count) { ... }                         // ❌ count=0 통과 못함
 
 #### C7. Parameter는 객체로 받기 🟡
 
-훅의 인자를 개별 파라미터 대신 객체(props)로. 순서 무관 + 이름으로 의미 전달 + 확장 시 breaking change 없음.
+훅의 인자를 위치 기반 파라미터 대신 객체(props)로 받아요. 순서와 상관없이 이름으로 의미를 전달하고, 인자를 추가해도 breaking change가 생기지 않아요.
 
 ```ts
 // ✅ 객체
@@ -170,7 +172,7 @@ function useDebounce<T>(
 
 #### C8. Guard Clauses (Early Return)
 
-nested if-else 대신 early return. 실패 조건 먼저 걸러내고 성공 로직은 플랫하게.
+중첩된 if-else 대신 early return을 써요. 실패 조건을 먼저 걸러 내고 성공 로직은 중첩 없이 이어 가요.
 
 ```ts
 // ✅
@@ -193,7 +195,7 @@ function process(value: string | null) {
 
 #### C9. JSDoc 4-Tag
 
-모든 public API에 `@description` + `@param` + `@returns` + `@example`. AI 문서 생성 + IDE 툴팁.
+모든 public API에 `@description` + `@param` + `@returns` + `@example`을 달아요. 이 태그로 AI가 문서를 생성하고 IDE가 툴팁을 보여 줘요.
 
 ```ts
 /**
@@ -208,17 +210,17 @@ function process(value: string | null) {
 
 #### C10. Performance Patterns
 
-고빈도(30+/sec) 이벤트에만 적용. 일반 훅에는 불필요.
+초당 30회 이상 발생하는 고빈도 이벤트에만 적용해요. 일반 훅에는 필요하지 않아요.
 
 | 기법            | 적용 시점                         |
 | --------------- | --------------------------------- |
 | Throttle (16ms) | scroll, resize, pointer, keyboard |
-| Deduplicate     | 값 미변경 시 setState skip        |
+| Deduplicate     | 값이 그대로면 setState 생략       |
 | startTransition | 비긴급 파생 계산 (React 18+)      |
 
 #### C11. Function Keyword for Declarations
 
-함수 선언은 `function` 키워드. 화살표는 인라인 콜백(map, filter)에만.
+함수를 선언할 때는 `function` 키워드를 써요. 화살표 함수는 인라인 콜백(map, filter)에만 써요.
 
 ```ts
 function toggle(state: boolean) {
@@ -230,11 +232,11 @@ const toggle = (state: boolean) => !state; // ❌ 선언에 화살표
 
 #### C12. Zero Runtime Dependencies
 
-프로덕션 코드에 외부 런타임 의존성 금지. `peerDependencies`만 허용. 번들 사이즈 최소화 + 의존성 충돌 방지.
+프로덕션 코드에는 외부 런타임 의존성을 두지 않고 `peerDependencies`만 허용해요. 번들 크기를 최소화하고 의존성 충돌을 막아요.
 
 #### C13. 외부 의존성 직접 참조 지양
 
-훅 내부에서 외부 모듈을 직접 호출하지 않고 인자로 주입. 테스트 용이성 + 교체 가능성.
+훅 안에서 외부 모듈을 직접 import하지 않고 인자로 주입해요. 테스트하기 쉬워지고 의존성을 쉽게 교체할 수 있어요.
 
 ```ts
 // ✅ 의존성 주입
@@ -248,7 +250,7 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 #### C14. Named useEffect Functions
 
-`useEffect(function handleResize() {...})`. 에러 스택에서 "handleResize" vs "anonymous". Trade-off: 화살표보다 장황. cleanup 이름은 "Recommended" (필수 아님).
+`useEffect(function handleResize() {...})`처럼 effect 함수에 이름을 붙여요. 에러 스택에 "anonymous" 대신 "handleResize"가 표시돼요. 화살표 함수보다 장황하다는 단점이 있어요. cleanup 함수의 이름은 필수가 아니라 "Recommended"예요.
 
 ### 제외 (프로젝트별 결정)
 
@@ -264,11 +266,11 @@ function useFetch<T>(url: string) { const res = await axios.get(url); ... }
 
 > 별도 문서: [react-hook-usage-patterns.md](./react-hook-usage-patterns.md)
 
-React 공식 문서(react.dev)를 바탕으로 정리한 16개 패턴이에요(U1-U17, U4 제외).
+React 공식 문서(react.dev)를 바탕으로 정리한 16개 패턴(U1-U17, U4 제외)이고, 패턴마다 출처 URL과 인용문을 함께 담았어요.
 
 | 카테고리     | 개수               | 핵심                                                           |
 | ------------ | ------------------ | -------------------------------------------------------------- |
 | State Design | U1-U3, U5-U7 (6개) | 파생값 계산, props 복사 금지, useRef, union type, state 그룹화 |
 | Effect Usage | U8-U14             | effect는 외부 동기화 전용, 체인 금지, key 리셋, 비동기 cleanup |
 | Memoization  | U15-U16            | useMemo 1ms+, useCallback + memo() 조합만                      |
-| Hook Design  | U17                | lifecycle wrapper 금지, 구체적 목적 훅만                       |
+| Hook Design  | U17                | lifecycle wrapper 금지, 재사용할 상태 로직만 추출              |

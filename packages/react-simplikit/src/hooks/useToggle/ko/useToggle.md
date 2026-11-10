@@ -1,6 +1,6 @@
 # useToggle
 
-`useToggle`은 불리언 상태 관리를 간소화하는 리액트 훅이에요. 상태를 `true`와 `false` 사이에서 전환하는 함수를 제공해요.
+`useToggle`은 불리언 상태를 간단하게 관리하도록 돕는 리액트 훅이에요. 상태를 `true`와 `false`로 번갈아 바꾸는 함수를 돌려줘요.
 
 ## 인터페이스
 
@@ -23,7 +23,7 @@ function useToggle(
 <Interface
   name=""
   type="[state: boolean, toggle: () => void]"
-  description="튜플:"
+  description="다음 값을 담은 튜플이에요."
   :nested="[
     {
       name: 'state',
@@ -33,7 +33,7 @@ function useToggle(
     {
       name: 'toggle',
       type: '() => void',
-      description: '상태를 전환하는 함수예요.',
+      description: '상태를 번갈아 바꾸는 함수예요.',
     },
   ]"
 />

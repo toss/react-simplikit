@@ -1,6 +1,6 @@
 # useInterval
 
-`useInterval`는 정해진 간격으로 함수를 실행하는 리액트 훅이에요. 타이머, 데이터 폴링 및 기타 반복 작업에 유용해요.
+`useInterval`은 정해진 간격으로 함수를 실행하는 리액트 훅이에요. 타이머, 데이터 폴링 같은 반복 작업에 유용해요.
 
 ## 인터페이스
 
@@ -24,14 +24,14 @@ function useInterval(
   required
   name="options"
   type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
-  description="간격 동작을 설정해요."
+  description="인터벌 동작을 설정해요."
   :nested="[
     {
       name: 'options.delay',
       type: 'number',
       required: true,
       description:
-        '밀리초 단위의 간격 지속 시간이에요. <code>null</code>인 경우 간격이 실행되지 않아요.',
+        '밀리초 단위의 실행 간격이에요. <code>null</code>이면 인터벌이 실행되지 않아요.',
     },
     {
       name: 'options.immediate',
@@ -39,21 +39,21 @@ function useInterval(
       required: false,
       defaultValue: 'false',
       description:
-        '만약 <code>true</code>이면, 간격 시작 전에 즉시 실행돼요.',
+        '<code>true</code>이면 인터벌을 시작하기 전에 콜백을 즉시 실행해요.',
     },
     {
       name: 'options.enabled',
       type: 'boolean',
       required: false,
       defaultValue: 'true',
-      description: '<code>false</code>인 경우 간격이 실행되지 않아요.',
+      description: '<code>false</code>이면 인터벌이 실행되지 않아요.',
     },
   ]"
 />
 
 ### 반환 값
 
-이 함수는 아무 것도 반환하지 않아요.
+이 함수는 아무것도 반환하지 않아요.
 
 ## 예시
 

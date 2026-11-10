@@ -1,6 +1,6 @@
 # isKeyboardVisible
 
-`isKeyboardVisible`은 현재 화면 키보드가 표시되어 있는지를 확인하는 유틸리티 함수에요. 이 함수는 내부적으로 `getKeyboardHeight()`를 사용하고, 키보드 높이가 0보다 크면 `true`를 반환해요.
+`isKeyboardVisible`은 현재 온스크린 키보드가 표시되어 있는지를 확인하는 유틸리티 함수예요. 이 함수는 내부적으로 `getKeyboardHeight()`를 사용하고 키보드 높이가 0보다 크면 `true`를 반환해요.
 
 ## 인터페이스
 
@@ -17,7 +17,7 @@ function isKeyboardVisible(): boolean;
 <Interface
   name=""
   type="boolean"
-  description="만약 키보드가 보이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요."
+  description="키보드가 보이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요."
 />
 
 ## 예시

@@ -1,6 +1,6 @@
 # useLongPress
 
-`useLongPress`는 요소가 지정된 기간 동안 눌려지고 유지될 때를 감지하는 리액트 훅이에요. 마우스와 터치 이벤트를 모두 처리하여 데스크탑과 모바일 장치에서 일관되게 작동해요.
+`useLongPress`는 요소를 지정한 시간 동안 누르고 있는지 감지하는 리액트 훅이에요. 마우스 이벤트와 터치 이벤트를 모두 처리해서 데스크톱과 모바일 기기에서 일관되게 동작해요.
 
 ## 인터페이스
 
@@ -17,13 +17,13 @@ function useLongPress<E extends HTMLElement>(
   required
   name="onLongPress"
   type="(event: React.MouseEvent<E> | React.TouchEvent<E>) => void"
-  description="길게 누름이 감지되었을 때 실행될 콜백 함수예요."
+  description="길게 누름을 감지하면 실행할 콜백 함수예요."
 />
 
 <Interface
   name="options"
   type="UseLongPressOptions"
-  description="길게 누름 동작을 위한 설정 옵션이에요."
+  description="길게 누름 동작을 설정하는 옵션이에요."
   :nested="[
     {
       name: 'options.delay',
@@ -31,32 +31,32 @@ function useLongPress<E extends HTMLElement>(
       required: false,
       defaultValue: '500',
       description:
-        '길게 누름을 시작하기 전에 대기할 밀리초(ms) 단위의 시간이에요. 기본값은 500ms예요.',
+        '길게 누름으로 판단하기까지 기다리는 시간(ms)이에요. 기본값은 500ms예요.',
     },
     {
       name: 'options.moveThreshold',
       type: 'Object',
       required: false,
-      description: '길게 누름을 취소하기 전에 허용되는 최대 움직임이에요.',
+      description: '길게 누름이 취소되지 않고 움직일 수 있는 최대 거리예요.',
     },
     {
       name: 'options.moveThreshold.x',
       type: 'number',
       required: false,
-      description: '최대 수평 움직임을 픽셀 단위로 설정해요.',
+      description: '최대 가로 이동 거리(px)예요.',
     },
     {
       name: 'options.moveThreshold.y',
       type: 'number',
       required: false,
-      description: '최대 수직 움직임을 픽셀 단위로 설정해요.',
+      description: '최대 세로 이동 거리(px)예요.',
     },
     {
       name: 'options.onClick',
       type: '(event) => void',
       required: false,
       description:
-        '일반 클릭(지연 전에 눌렀다 놓기) 시 실행할 선택적 함수예요.',
+        '일반 클릭(지연 시간이 지나기 전에 눌렀다 놓기)을 할 때 실행할 선택적 함수예요.',
     },
     {
       name: 'options.onLongPressEnd',
@@ -78,45 +78,45 @@ function useLongPress<E extends HTMLElement>(
       name: 'onMouseDown',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
-      description: '마우스 다운 이벤트에 대한 이벤트 핸들러예요.',
+      description: '마우스 다운 이벤트 핸들러예요.',
     },
     {
       name: 'onMouseUp',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
-      description: '마우스 업 이벤트에 대한 이벤트 핸들러예요.',
+      description: '마우스 업 이벤트 핸들러예요.',
     },
     {
       name: 'onMouseLeave',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
-      description: '마우스가 요소를 벗어나는 이벤트에 대한 이벤트 핸들러예요.',
+      description: '마우스가 요소를 벗어날 때 실행하는 이벤트 핸들러예요.',
     },
     {
       name: 'onTouchStart',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
-      description: '터치 시작 이벤트에 대한 이벤트 핸들러예요.',
+      description: '터치 시작 이벤트 핸들러예요.',
     },
     {
       name: 'onTouchEnd',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
-      description: '터치 종료 이벤트에 대한 이벤트 핸들러예요.',
+      description: '터치 종료 이벤트 핸들러예요.',
     },
     {
       name: 'onMouseMove',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        '마우스 이동 이벤트에 대한 이벤트 핸들러예요. <code>moveThreshold</code>가 제공되면 포함돼요.',
+        '마우스 이동 이벤트 핸들러예요. <code>moveThreshold</code>를 지정하면 포함돼요.',
     },
     {
       name: 'onTouchMove',
       type: '(event: MouseEvent<E> | TouchEvent<E>) => void',
       required: false,
       description:
-        '터치 이동 이벤트에 대한 이벤트 핸들러예요. <code>moveThreshold</code>가 제공되면 포함돼요.',
+        '터치 이동 이벤트 핸들러예요. <code>moveThreshold</code>를 지정하면 포함돼요.',
     },
   ]"
 />
