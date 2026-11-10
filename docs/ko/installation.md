@@ -42,3 +42,5 @@ import { useToggle } from 'react-simplikit';
 모든 훅은 트리 쉐이킹이 가능해서 번들에는 사용하는 것만 포함돼요.
 
 이어서 [문제별 사용법](/ko/use-cases)에서 전체 예제를 확인하거나 [API 레퍼런스](/ko/reference)를 둘러보세요.
+
+AI 코딩 에이전트를 쓴다면 [에이전트 스킬](/ko/ai-integration)을 설정해 보세요. 에이전트가 직접 구현하는 대신 `react-simplikit`에서 알맞은 API를 골라 써요.

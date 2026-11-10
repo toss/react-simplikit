@@ -19,4 +19,8 @@ features:
     details: 모든 함수와 분기를 꼼꼼히 테스트해서 어떤 상황에서도 안정적이고 신뢰할 수 있는 코드를 보장해요.
   - title: 풍부한 문서
     details: 기능마다 명확한 JSDoc 주석, 초보자도 이해하기 쉬운 가이드, 실용적인 예제를 갖추고 있어요. 자세하고 따라 하기 쉬운 설명으로 바로 시작할 수 있어요.
+  - title: 'AI 에이전트 지원'
+    details: 에이전트 스킬을 설치하거나 llms.txt를 알려 주면 Claude Code, Codex 같은 코딩 에이전트가 직접 구현하지 않고 알맞은 훅을 골라 써요.
+    link: /ko/ai-integration
+    linkText: AI 연동
 ---

@@ -14,6 +14,7 @@ The `react-simplikit` skill is a short catalog of every hook, component and util
 
 ```sh [skills.sh]
 npx skills add toss/react-simplikit --skill react-simplikit
+npx skills add toss/react-simplikit --skill react-simplikit-codemod
 ```
 
 ```sh [Claude Code]
@@ -23,12 +24,14 @@ claude plugin install react-simplikit@react-simplikit
 
 ```sh [Codex]
 codex plugin marketplace add https://github.com/toss/react-simplikit
-# then install "react-simplikit" from the plugin UI
+codex plugin add react-simplikit@react-simplikit
 ```
 
 :::
 
 The skill is generated from these documentation pages, so it stays in sync with the library. Its source lives in [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin).
+
+The Claude Code and Codex plugins also include the `react-simplikit-codemod` skill, which guides an agent through running the upgrade codemods. With skills.sh, install it with the second command.
 
 ## llms.txt
 

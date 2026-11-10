@@ -14,6 +14,7 @@ La skill `react-simplikit` contiene un catálogo de todos los Hooks, componentes
 
 ```sh [skills.sh]
 npx skills add toss/react-simplikit --skill react-simplikit
+npx skills add toss/react-simplikit --skill react-simplikit-codemod
 ```
 
 ```sh [Claude Code]
@@ -23,12 +24,14 @@ claude plugin install react-simplikit@react-simplikit
 
 ```sh [Codex]
 codex plugin marketplace add https://github.com/toss/react-simplikit
-# then install "react-simplikit" from the plugin UI
+codex plugin add react-simplikit@react-simplikit
 ```
 
 :::
 
 La skill se genera a partir de estas páginas de documentación para mantenerse sincronizada con la biblioteca. Su código fuente está en [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin).
+
+Los plugins de Claude Code y Codex también incluyen la skill `react-simplikit-codemod`, que guía al agente para ejecutar los codemods de actualización. Con skills.sh, instálala con el segundo comando.
 
 ## llms.txt
 

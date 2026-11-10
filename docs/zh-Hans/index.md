@@ -19,4 +19,8 @@ features:
     details: 每个函数和每个分支都经过严格测试，无论在哪种使用场景下都能提供稳健可靠的代码。
   - title: 完善的文档
     details: 每个功能都配有清晰的 JSDoc 注释、面向初学者的指南和实用示例。详尽易懂的说明让你可以快速上手。
+  - title: 'AI agent 支持'
+    details: 安装 agent skill 或让 agent 读取 llms.txt，Claude Code、Codex 等编程 agent 就会使用合适的 Hook，而不是自己手写。
+    link: /zh-Hans/ai-integration
+    linkText: AI 集成
 ---

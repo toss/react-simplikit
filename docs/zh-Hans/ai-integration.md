@@ -14,6 +14,7 @@ react-simplikit 提供了多种资料，帮助 AI 编程 agent（Claude Code、C
 
 ```sh [skills.sh]
 npx skills add toss/react-simplikit --skill react-simplikit
+npx skills add toss/react-simplikit --skill react-simplikit-codemod
 ```
 
 ```sh [Claude Code]
@@ -23,12 +24,14 @@ claude plugin install react-simplikit@react-simplikit
 
 ```sh [Codex]
 codex plugin marketplace add https://github.com/toss/react-simplikit
-# then install "react-simplikit" from the plugin UI
+codex plugin add react-simplikit@react-simplikit
 ```
 
 :::
 
 Skill 由这些文档页面生成，以保持与库的内容一致。源代码位于 [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin)。
+
+Claude Code 和 Codex 插件还包含 `react-simplikit-codemod` skill，用于指导 agent 运行升级 codemod。使用 skills.sh 时，请用第二条命令安装。
 
 ## llms.txt
 

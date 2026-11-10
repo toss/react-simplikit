@@ -28,10 +28,12 @@ claude plugin install react-simplikit@react-simplikit
 ### Codex
 
 ```bash
+# 1. Add this plugin's marketplace
 codex plugin marketplace add https://github.com/toss/react-simplikit
-```
 
-Then install `react-simplikit` from the Codex plugin UI.
+# 2. Install the plugin
+codex plugin add react-simplikit@react-simplikit
+```
 
 ## Uninstall
 
