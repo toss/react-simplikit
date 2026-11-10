@@ -39,11 +39,13 @@ function buildContext<ContextValuesType extends object>(
     {
       name: 'Provider',
       type: '(props: ProviderProps<ContextValuesType>) => JSX.Element',
+      required: false,
       description: '컨텍스트를 제공하는 컴포넌트예요.',
     },
     {
       name: 'useContext',
       type: '() => ContextValuesType',
+      required: false,
       description: '컨텍스트를 사용하는 훅이에요.',
     },
   ]"

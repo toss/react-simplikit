@@ -50,7 +50,10 @@ CLAUDE.md + AGENTS.md + 내부 스킬에서 추출한 **코딩 스타일** 원�
 
 #### C1. 항상 객체 반환 🟡
 
-반환값이 1개여도 `{ value }` 형태. 객체는 순서 무관, 이름으로 의미 전달, 확장 시 breaking change 없음.
+반환값이 하나여도 `{ value }` 형태의 객체로 반환해요. 객체는 순서와 상관없이 필드 이름으로 의미를 전달하고, 필드를 추가해도 breaking change가 생기지 않아요.
+
+> 참고: 이 원칙은 **프로젝트 컨벤션**이에요. React 문서는 "Hooks may return arbitrary values"라고 하고, React의 `useState`도 튜플을 반환해요. 이 프로젝트는 확장성을 위해 객체를 선택했어요.
+> 📖 [react.dev — Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
 
 ```ts
 function useDebounce<T>(value: T, delay: number): { value: T };
@@ -60,7 +63,9 @@ function usePagination(): { page: number; next: () => void; prev: () => void };
 
 #### C2. SSR-Safe 초기화
 
-`useState(FIXED_VALUE)` + `useEffect(sync)`. 브라우저 API 초기화 금지. 서버에 `window` 없음 → 크래시 또는 hydration mismatch.
+`useState(FIXED_VALUE)` + `useEffect(sync)` 패턴을 써요. state를 브라우저 API로 초기화하지 않아요. 서버에는 `window`가 없어서 크래시나 hydration mismatch가 생겨요.
+
+> 📖 [react.dev — hydrateRoot](https://react.dev/reference/react-dom/client/hydrateRoot)
 
 ```ts
 // ✅ SSR 안전
@@ -81,7 +86,7 @@ const [width, setWidth] = useState(() => {
 
 #### C3. useEffect Cleanup 필수
 
-모든 부수효과에 cleanup 반환. 메모리 누수 방지. StrictMode 이중 마운트가 즉시 노출.
+> 📖 [react.dev — useEffect](https://react.dev/reference/react/useEffect) > _"Your setup function may also optionally return a cleanup function."_
 
 ```ts
 // 이벤트 리스너

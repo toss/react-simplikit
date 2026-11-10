@@ -36,6 +36,7 @@ function useInterval(
     {
       name: 'options.immediate',
       type: 'boolean',
+      required: false,
       defaultValue: 'false',
       description:
         '만약 <code>true</code>이면, 간격 시작 전에 즉시 실행돼요.',
@@ -43,6 +44,7 @@ function useInterval(
     {
       name: 'options.enabled',
       type: 'boolean',
+      required: false,
       defaultValue: 'true',
       description: '<code>false</code>인 경우 간격이 실행되지 않아요.',
     },

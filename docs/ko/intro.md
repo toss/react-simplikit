@@ -33,11 +33,80 @@ function Page() {
 }
 ```
 
+### 특정 구분자로 배열 렌더링하기
+
+<SplitView
+left-title="without-react-simplikit.tsx"
+right-title="with-react-simplikit.tsx">
+
+<template #left>
+
+```tsx
+// without `react-simplikit`
+const texts = ['hello', 'react', 'world'];
+
+function Page() {
+  return (
+    <>
+      {texts.map((text, idx) => (
+        <Fragment key={text}>
+          <div>{text}</div>
+          {idx < texts.length - 1 ? (
+            <Border type="padding24" />
+          ) : null}
+        </Fragment>
+      ))}
+    </>
+  );
+}
+```
+
+  </template>
+
+<template #right>
+
+```tsx
+// with `react-simplikit`
+const texts = ['hello', 'react', 'world'];
+
+function Page() {
+  return (
+    <Separated by={<Border type="padding24" />}>
+      {texts.map(text => (
+        <div key={text}>{text}</div>
+      ))}
+    </Separated>
+  );
+}
+```
+
+  </template>
+</SplitView>
+
 ## 간결한 구현으로 의도하지 않은 동작과 버그 최소화
 
 `react-simplikit`의 모든 구현체에는 숨겨진 로직이 없어요. 기능 조합이나 확장이 필요한 경우, 외부에서 주입할 수 있는 인터페이스를 제공해요. 또한 모던한 구현을 통해 깔끔한 코드를 유지하고 있어요.
 
-`react-simplikit`을 사용하면 코드의 안정성과 신뢰성을 높일 수 있는 이유예요.
+그래서 `react-simplikit`을 사용하면 코드의 안정성과 신뢰성을 높일 수 있어요.
+
+```tsx
+function Page() {
+  // useIntersectionObserver는 교차 감지에 필요한 최소한의 기능만 제공하고,
+  // 콜백과 교차 판정 옵션은 외부에서 주입받아요
+  const ref = useIntersectionObserver<HTMLDivElement>(
+    entry => {
+      if (entry.isIntersecting) {
+        console.log('Element is in view:', entry.target);
+      } else {
+        console.log('Element is out of view:', entry.target);
+      }
+    },
+    { threshold: 0.5 }
+  );
+
+  return <div ref={ref}>Observe me!</div>;
+}
+```
 
 ## 높은 신뢰성
 

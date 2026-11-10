@@ -25,12 +25,14 @@ function useLoading(): [
     {
       name: 'loading',
       type: 'boolean',
+      required: false,
       description:
         '현재 로딩 상태를 나타내요. 초기값은 <code>false</code>이에요. 비동기 작업이 진행 중일 때는 <code>true</code>로 설정돼요.',
     },
     {
       name: 'startLoading',
       type: '<T>(promise: Promise<T>) => Promise<T>',
+      required: false,
       description:
         '로딩 상태를 관리하면서 비동기 작업을 실행하는 함수예요. 이 함수는 <code>Promise</code>를 인자로 받고, <code>Promise</code>가 완료되면 <code>isLoading</code> 상태를 자동으로 <code>false</code>로 리셋해요.',
     },
