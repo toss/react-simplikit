@@ -14,7 +14,17 @@ const RENAMED_KEYS: Record<string, string> = {
 const manualReview = useMetricAtom('manual-review');
 
 export default function transform(root: SgRoot<TSX>): string | null {
-  const { locals, namespaces } = findImportedBinding(root, 'useDoubleClick');
+  const { locals, namespaces, requires, reexports } = findImportedBinding(root, 'useDoubleClick');
+  const report = (node: SgNode<TSX>, reason: string) =>
+    manualReview.increment({
+      hook: 'useDoubleClick',
+      reason,
+      file: root.relativeFilename(),
+      line: String(node.range().start.line + 1),
+    });
+
+  requires.forEach(node => report(node, 'require-not-followed'));
+  reexports.forEach(node => report(node, 're-exported'));
 
   if (locals.length === 0 && namespaces.length === 0) {
     return null;
@@ -31,7 +41,7 @@ export default function transform(root: SgRoot<TSX>): string | null {
 
     if (options?.kind() !== 'object') {
       // The options come from a variable or a spread we cannot see into.
-      manualReview.increment({ hook: 'useDoubleClick', reason: 'options-not-inline', file: root.relativeFilename() });
+      report(call, 'options-not-inline');
       continue;
     }
 
@@ -39,15 +49,11 @@ export default function transform(root: SgRoot<TSX>): string | null {
       edits.push(...renameProperty(property));
 
       if (property.kind() === 'spread_element') {
-        manualReview.increment({ hook: 'useDoubleClick', reason: 'options-spread', file: root.relativeFilename() });
+        report(property, 'options-spread');
       }
 
       if (propertyKey(property)?.kind() === 'computed_property_name') {
-        manualReview.increment({
-          hook: 'useDoubleClick',
-          reason: 'options-computed-key',
-          file: root.relativeFilename(),
-        });
+        report(property, 'options-computed-key');
       }
     }
   }

@@ -12,7 +12,7 @@ repository: 'https://github.com/toss/react-simplikit/tree/main/codemods/v0-to-v1
 targets:
   languages: ['typescript', 'javascript']
 
-keywords: ['upgrade', 'breaking-change', 'react', 'react-simplikit', 'v0-to-v1']
+keywords: ['upgrade', 'breaking-change', 'react-simplikit', 'v0-to-v1']
 
 registry:
   access: 'public'

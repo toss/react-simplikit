@@ -1,0 +1,22 @@
+{
+  "manual-review": [
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useDoubleClick",
+        "line": "1",
+        "reason": "re-exported"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useDoubleClick",
+        "line": "2",
+        "reason": "re-exported"
+      },
+      "count": 1
+    }
+  ]
+}
