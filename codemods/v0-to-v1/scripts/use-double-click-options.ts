@@ -41,6 +41,14 @@ export default function transform(root: SgRoot<TSX>): string | null {
       if (property.kind() === 'spread_element') {
         manualReview.increment({ hook: 'useDoubleClick', reason: 'options-spread', file: root.relativeFilename() });
       }
+
+      if (propertyKey(property)?.kind() === 'computed_property_name') {
+        manualReview.increment({
+          hook: 'useDoubleClick',
+          reason: 'options-computed-key',
+          file: root.relativeFilename(),
+        });
+      }
     }
   }
 
@@ -66,12 +74,14 @@ function renameProperty(property: SgNode<TSX>): Edit[] {
     return renamed === undefined ? [] : [property.replace(`${renamed}: ${property.text()}`)];
   }
 
-  if (property.kind() === 'pair') {
-    const key = property.field('key');
-    const renamed = key?.kind() === 'property_identifier' ? RENAMED_KEYS[key.text()] : undefined;
+  const key = propertyKey(property);
+  const name = key?.kind() === 'string' ? key.find({ rule: { kind: 'string_fragment' } })?.text() : key?.text();
+  const renamed = name === undefined ? undefined : RENAMED_KEYS[name];
 
-    return key === null || renamed === undefined ? [] : [key.replace(renamed)];
-  }
+  return key === null || renamed === undefined ? [] : [key.replace(renamed)];
+}
 
-  return [];
+// `{ click: fn }` and `{ 'click': fn }` keep the key in `key`, `{ click() {} }` in `name`.
+function propertyKey(property: SgNode<TSX>) {
+  return property.field('key') ?? property.field('name');
 }

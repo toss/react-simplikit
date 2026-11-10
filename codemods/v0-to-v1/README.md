@@ -25,7 +25,12 @@ Only calls that resolve to an import from `react-simplikit` are rewritten, inclu
 
 Code it cannot rewrite safely is left as is and listed under `manual-review` in the metrics printed after the run:
 
-| `reason`             | Example                                                      |
-| -------------------- | ------------------------------------------------------------ |
-| `options-not-inline` | `useDoubleClick(options)`                                    |
-| `options-spread`     | `useDoubleClick({ ...base, doubleClick })` (the spread part) |
+| `reason`               | Example                                                      |
+| ---------------------- | ------------------------------------------------------------ |
+| `options-not-inline`   | `useDoubleClick(options)`                                    |
+| `options-spread`       | `useDoubleClick({ ...base, doubleClick })` (the spread part) |
+| `options-computed-key` | `useDoubleClick({ [key]: select })`                          |
+
+## What it does not cover
+
+Calls reached through `require('react-simplikit')` are neither rewritten nor reported. Only `import` declarations are followed.
