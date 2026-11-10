@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { SetStateAction, useCallback, useRef, useSyncExternalStore } from 'react';
 
+import { usePreservedReference } from '../usePreservedReference/index.ts';
+
 import { safeLocalStorage, Storage } from './storage.ts';
 
 type ToObject<T> = T extends unknown[] | Record<string, unknown> ? T : never;
@@ -115,7 +117,7 @@ export function useStorageState<T>(
   key: string,
   {
     storage = safeLocalStorage,
-    defaultValue,
+    defaultValue: rawDefaultValue,
     ...options
   }: StorageStateOptions<T> | StorageStateOptionsWithSerializer<T> = {}
 ): SerializableGuard<
@@ -127,11 +129,16 @@ export function useStorageState<T>(
   // above have no body to carry a directive.
   'use no memo';
 
+  const { value: defaultValue } = usePreservedReference({ value: rawDefaultValue });
   const serializedDefaultValue = defaultValue as Serializable<T>;
   const cache = useRef<{
+    key: string;
+    defaultValue: T | undefined;
     data: string | null;
     parsed: Serializable<T> | undefined;
   }>({
+    key,
+    defaultValue,
     data: null,
     parsed: serializedDefaultValue,
   });
@@ -139,17 +146,20 @@ export function useStorageState<T>(
   const getSnapshot = useCallback(() => {
     const deserializer = 'deserializer' in options ? options.deserializer : JSON.parse;
     const data = storage.get(key);
+    const current = cache.current;
 
-    if (data !== cache.current.data) {
+    if (data !== current.data || key !== current.key || defaultValue !== current.defaultValue) {
       try {
-        cache.current.parsed = data != null ? deserializer(data) : defaultValue;
+        current.parsed = data != null ? deserializer(data) : defaultValue;
       } catch {
-        cache.current.parsed = serializedDefaultValue;
+        current.parsed = serializedDefaultValue;
       }
-      cache.current.data = data;
+      current.data = data;
+      current.key = key;
+      current.defaultValue = defaultValue;
     }
 
-    return cache.current.parsed;
+    return current.parsed;
   }, [defaultValue, key, storage]);
 
   const storageState = useSyncExternalStore<Serializable<T> | undefined>(
