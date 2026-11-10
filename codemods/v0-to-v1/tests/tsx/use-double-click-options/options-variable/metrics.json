@@ -4,6 +4,7 @@
       "cardinality": {
         "file": "input.tsx",
         "hook": "useDoubleClick",
+        "line": "4",
         "reason": "options-not-inline"
       },
       "count": 1

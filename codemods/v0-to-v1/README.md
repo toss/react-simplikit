@@ -13,6 +13,13 @@ Commit or stash first, then run from your project root:
 npx codemod@1.18.6 workflow run -w <path to this folder>/workflow.yaml
 ```
 
+Useful options:
+
+- `--dry-run` shows what would change without writing files.
+- `-t <path>` runs on another folder instead of the current one.
+- `--no-interactive` skips prompts, for CI and coding agents.
+- `--disable-analytics` (or `DISABLE_ANALYTICS=1`) turns off the CLI's usage analytics.
+
 ## What it changes
 
 | Breaking change                                                    | Before                                          | After                                                 |
@@ -23,14 +30,20 @@ Only calls that resolve to an import from `react-simplikit` are rewritten, inclu
 
 ## What it reports instead of changing
 
-Code it cannot rewrite safely is left as is and listed under `manual-review` in the metrics printed after the run:
+Code it cannot rewrite safely is left as is and listed under `manual-review` in the metrics printed after the run, with its `file` and `line`:
 
 | `reason`               | Example                                                      |
 | ---------------------- | ------------------------------------------------------------ |
 | `options-not-inline`   | `useDoubleClick(options)`                                    |
 | `options-spread`       | `useDoubleClick({ ...base, doubleClick })` (the spread part) |
 | `options-computed-key` | `useDoubleClick({ [key]: select })`                          |
+| `require-not-followed` | `const { useDoubleClick } = require('react-simplikit')`      |
+| `re-exported`          | `export { useDoubleClick } from 'react-simplikit'`           |
 
-## What it does not cover
+A spread is reported on every run, because the codemod cannot tell whether it still holds an old key.
 
-Calls reached through `require('react-simplikit')` are neither rewritten nor reported. Only `import` declarations are followed.
+## After running
+
+1. Review the diff, and run your formatter if the edits do not match your style.
+2. Fix each `manual-review` entry by hand. Copy the list before closing the terminal; it is not saved anywhere.
+3. Upgrade `react-simplikit` to v1.
