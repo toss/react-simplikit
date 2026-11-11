@@ -14,6 +14,7 @@ react-simplikit은 AI 코딩 에이전트(Claude Code, Codex, Cursor 등)가 훅
 
 ```sh [skills.sh]
 npx skills add toss/react-simplikit --skill react-simplikit
+npx skills add toss/react-simplikit --skill react-simplikit-codemod
 ```
 
 ```sh [Claude Code]
@@ -23,12 +24,14 @@ claude plugin install react-simplikit@react-simplikit
 
 ```sh [Codex]
 codex plugin marketplace add https://github.com/toss/react-simplikit
-# 이후 플러그인 UI에서 "react-simplikit"을 설치해요
+codex plugin add react-simplikit@react-simplikit
 ```
 
 :::
 
-스킬은 이 문서 페이지로 만들어지므로 라이브러리와 내용이 항상 일치해요. 소스는 [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin)에 있어요.
+Claude Code와 Codex 플러그인에는 `react-simplikit-codemod` 스킬도 들어 있어요. 이 스킬은 에이전트에게 업그레이드용 codemod를 실행하는 방법을 안내해요. skills.sh를 쓴다면 두 번째 명령으로 설치하세요.
+
+`react-simplikit` 스킬은 이 문서 페이지로 만들어지므로 라이브러리와 내용이 항상 일치해요. 소스는 [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin)에 있어요.
 
 ## llms.txt
 
