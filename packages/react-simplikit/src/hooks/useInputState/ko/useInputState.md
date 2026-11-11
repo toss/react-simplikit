@@ -27,7 +27,7 @@ function useInputState(
 <Interface
   name="transformValue"
   type="(nextValue: string, previousValue: string) => string"
-  description="입력 값을 변환하는 함수예요. 이전 상태 값이 두 번째 인자로 전달돼요. 기본값은 다음 입력 값을 그대로 반환하는 함수예요."
+  description="입력 값을 변환하는 함수예요. 이전 상태 값이 두 번째 인자로 전달돼요. 기본값은 새 입력 값을 그대로 반환하는 함수예요."
 />
 
 ### 반환 값
@@ -35,7 +35,7 @@ function useInputState(
 <Interface
   name=""
   type="[value: string, onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>]"
-  description="다음 항목을 포함한 튜플이에요:"
+  description="다음 항목을 담은 튜플이에요."
   :nested="[
     {
       name: 'value',

@@ -1,6 +1,6 @@
 # useSet
 
-리액트 훅으로, 상태로 Set을 관리해요. 효율적인 상태 관리를 제공하고 안정적인 액션 함수를 제공해요.
+Set을 상태로 관리하는 리액트 훅이에요. 상태를 효율적으로 관리하고 안정적인 액션 함수를 제공해요.
 
 ## 인터페이스
 
@@ -57,7 +57,7 @@ function useSet<T>(initialState: SetOrValues<T> = new Set()): UseSetReturn<T>;
       name: '[1].reset',
       type: '() => void',
       required: false,
-      description: 'Set을 초기 상태로 리셋해요.',
+      description: 'Set을 초기 상태로 되돌려요.',
     },
   ]"
 />

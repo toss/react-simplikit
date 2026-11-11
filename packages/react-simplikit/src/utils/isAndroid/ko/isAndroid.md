@@ -1,6 +1,6 @@
 # isAndroid
 
-`isAndroid`는 현재 기기가 안드로이드에서 실행 중인지 감지하는 유틸리티 함수예요.
+`isAndroid`는 현재 기기에서 안드로이드가 실행 중인지 감지하는 유틸리티 함수예요.
 
 **참고 사항**
 
@@ -17,7 +17,7 @@ function isAndroid(userAgent?: string): boolean;
 <Interface
   name="userAgent"
   type="string"
-  description="확인할 선택적 사용자 에이전트 문자열. 기본값은 <code>navigator.userAgent</code>이에요."
+  description="확인할 사용자 에이전트 문자열이에요. 넘기지 않으면 기본값으로 <code>navigator.userAgent</code>를 사용해요."
 />
 
 ### 반환 값
@@ -25,7 +25,7 @@ function isAndroid(userAgent?: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="기기가 안드로이드에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요. 서버 사이드 렌더링 환경에서는 <code>false</code>를 반환해요."
+  description="기기에서 안드로이드가 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요. 서버 사이드 렌더링 환경에서는 <code>false</code>를 반환해요."
 />
 
 ## 예시

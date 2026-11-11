@@ -1,8 +1,8 @@
 # useIsomorphicLayoutEffect
 
-`useIsomorphicLayoutEffect`는 서버 사이드 렌더링(SSR) 중에 경고를 일으키지 않고 브라우저에서 `useLayoutEffect`를 실행하는 리액트 훅이에요. SSR 환경에는 동기적으로 측정하거나 변경할 DOM이 없어서 리액트 18 이하에서는 `useLayoutEffect`를 사용하면 경고가 발생해요. effect는 브라우저에서만 실행돼요. 이 훅은 경고를 피하는 역할만 하고 서버 출력을 클라이언트와 맞춰 주지는 않아요. 리액트 19부터는 경고가 발생하지 않으므로 `useLayoutEffect`를 바로 사용해도 돼요.
+`useIsomorphicLayoutEffect`는 서버 사이드 렌더링(SSR) 중에 경고를 일으키지 않고 브라우저에서 `useLayoutEffect`를 실행하는 리액트 훅이에요. SSR 환경에는 동기적으로 측정하거나 변경할 DOM이 없어서 리액트 18 이하에서는 `useLayoutEffect`를 사용하면 경고가 발생해요. 이펙트는 브라우저에서만 실행돼요. 이 훅은 경고를 피하는 역할만 하고 서버 출력을 클라이언트와 맞춰 주지는 않아요. 리액트 19부터는 경고가 발생하지 않으므로 `useLayoutEffect`를 바로 사용해도 돼요.
 
-브라우저에서는 DOM 업데이트 후 페인트 전에 동기적으로 실행되므로 다음과 같은 상황에 적합해요.
+브라우저에서는 DOM 업데이트 후 페인트 전에 동기적으로 실행되므로 이런 상황에 적합해요.
 
 - 렌더링 후 DOM 요소 측정
 - 페인트 전 DOM 변경 적용
@@ -23,18 +23,18 @@ function useIsomorphicLayoutEffect(
   required
   name="effect"
   type="React.EffectCallback"
-  description="발생시킬 사이드이펙트 함수예요."
+  description="실행할 이펙트 함수예요."
 />
 
 <Interface
   name="deps"
   type="React.DependencyList"
-  description="선택 가능한 의존성 배열이에요."
+  description="생략할 수 있는 의존성 배열이에요."
 />
 
 ### 반환 값
 
-이 함수는 아무 것도 반환하지 않아요.
+이 함수는 아무것도 반환하지 않아요.
 
 ## 예시
 

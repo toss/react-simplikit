@@ -1,6 +1,6 @@
 # useCallbackOncePerRender
 
-리액트 훅으로, 콜백 함수가 한 번만 실행되도록 보장해요. 몇 번 호출되든 간에 단 한 번만 실행돼요. 이는 컴포넌트가 다시 렌더링되더라도 반복되지 말아야 하는 일회성 작업에 유용해요.
+`useCallbackOncePerRender`는 콜백 함수를 몇 번 호출하든 한 번만 실행되도록 보장하는 리액트 훅이에요. 컴포넌트가 다시 렌더링되어도 반복하면 안 되는 일회성 작업에 유용해요.
 
 ## 인터페이스
 
@@ -24,7 +24,7 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
   required
   name="deps"
   type="DependencyList"
-  description="변경될 때 새로운 일회성 실행을 트리거하는 의존성 배열이에요."
+  description="값이 바뀌면 콜백을 다시 한 번 실행할 수 있게 하는 의존성 배열이에요."
 />
 
 ### 반환 값
@@ -32,7 +32,7 @@ function useCallbackOncePerRender<F extends (...args: any[]) => void>(
 <Interface
   name=""
   type="(...args: any[]) => void"
-  description="의존성이 변경될 때까지 한 번만 실행될 메모이제이션된 함수예요."
+  description="의존성이 바뀔 때까지 한 번만 실행되는 메모이제이션된 함수예요."
 />
 
 ## 예시

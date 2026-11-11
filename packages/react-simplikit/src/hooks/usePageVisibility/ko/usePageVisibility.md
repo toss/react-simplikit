@@ -1,8 +1,8 @@
 # usePageVisibility
 
-페이지 가시성 변화를 감지하는 React 훅이에요.
+`usePageVisibility`는 페이지 가시성 변화를 감지하는 리액트 훅이에요.
 
-Page Visibility API를 사용하여 사용자가 탭을 전환하거나 브라우저를 최소화할 때를 감지해요. 애니메이션, 비디오, 백그라운드 작업을 일시 정지하거나 재개하여 성능과 사용자 경험을 개선하는 데 유용해요.
+Page Visibility API를 사용해 사용자가 탭을 전환하거나 브라우저를 최소화할 때를 감지해요. 애니메이션, 비디오, 백그라운드 작업을 일시 정지하거나 재개해 성능과 사용자 경험을 개선하는 데 유용해요.
 
 ## 인터페이스
 
@@ -25,13 +25,13 @@ description="페이지 가시성 상태를 담은 객체예요."
 name: 'isVisible',
 type: 'boolean',
 required: false,
-description: '페이지가 현재 사용자에게 보이면 <code>true</code>',
+description: '페이지가 현재 사용자에게 보이면 <code>true</code>예요.',
 },
 {
 name: 'visibilityState',
 type: &quot;'visible' | 'hidden'&quot;,
 required: false,
-description: '페이지의 현재 가시성 상태',
+description: '페이지의 현재 가시성 상태예요.',
 },
 ]"
 />
@@ -79,7 +79,7 @@ function Analytics() {
 
 ## 참고사항
 
-- **SSR 안전성**: 서버 사이드 렌더링 중에는 Page Visibility API를 사용할 수 없으므로, 이 훅은 안전한 기본값인 `{ isVisible: true, visibilityState: 'visible' }`을 반환해요.
+- **SSR 안전성**: 서버 사이드 렌더링 중에는 Page Visibility API를 사용할 수 없으므로 이 훅은 안전한 기본값인 `{ isVisible: true, visibilityState: 'visible' }`을 반환해요.
 - **브라우저 지원**: Page Visibility API는 모든 최신 브라우저에서 지원돼요. 자세한 내용은 [MDN 브라우저 호환성](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#browser_compatibility)을 참고해주세요.
-- **성능**: 이 훅은 네이티브 `visibilitychange` 이벤트를 구독하기 때문에 폴링을 추가하지 않으며, 오버헤드가 거의 없어요.
+- **성능**: 이 훅은 네이티브 `visibilitychange` 이벤트를 구독하고 폴링은 하지 않아서 오버헤드가 거의 없어요.
 - **가시성 상태**: 이 훅은 더 이상 사용되지 않는 `'prerender'` 상태를 제외하고 `'visible'` 또는 `'hidden'`만 반환해요.

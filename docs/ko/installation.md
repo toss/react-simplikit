@@ -4,7 +4,7 @@ description: react-simplikit 설치 방법
 
 # 설치하기
 
-좋아하는 패키지 매니저를 사용하여 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요.
+사용하는 패키지 매니저로 [npm](https://npmjs.com/package/react-simplikit)에서 `react-simplikit`을 설치할 수 있어요.
 
 ::: code-group
 
@@ -39,6 +39,6 @@ bun add react-simplikit
 import { useToggle } from 'react-simplikit';
 ```
 
-모든 훅은 트리 쉐이킹이 가능하므로, 번들에는 사용하는 것만 포함돼요.
+모든 훅은 트리 쉐이킹이 가능해서 번들에는 사용하는 것만 포함돼요.
 
-완전한 예제는 [문제별 사용법](/ko/use-cases)에서 확인하고 전체 도구는 [API 레퍼런스](/ko/reference)에서 찾아보세요.
+이어서 [문제별 사용법](/ko/use-cases)에서 전체 예제를 확인하거나 [API 레퍼런스](/ko/reference)를 둘러보세요.
