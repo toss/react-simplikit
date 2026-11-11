@@ -3,17 +3,17 @@
 Rewrites react-simplikit call sites for the breaking changes in [v1.0.0](https://github.com/toss/react-simplikit/issues/533).
 
 > [!NOTE]
-> Work in progress. Only the transforms listed below are implemented; the rest of the roadmap lands one transform at a time.
+> Work in progress. Only the transforms listed below are implemented; the rest of the roadmap lands one transform at a time. It is not on npm yet: until then, run `node codemods/cli.mjs v0-to-v1 -t <your project>` from a clone of this repository.
 
 ## Usage
 
 Commit or stash first, then run from your project root:
 
 ```bash
-npx codemod@1.18.6 workflow run -w <path to this folder>/workflow.yaml
+npx @react-simplikit/codemod v0-to-v1
 ```
 
-Useful options:
+Options after `v0-to-v1` go to the Codemod CLI. Useful ones:
 
 - `--dry-run` shows what would change without writing files.
 - `-t <path>` runs on another folder instead of the current one.

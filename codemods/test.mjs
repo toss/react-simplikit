@@ -65,4 +65,14 @@ for (const codemod of readdirSync(root, { withFileTypes: true })) {
   }
 }
 
+// The published entry point: a dry run over the fixtures has to find the workflow and report.
+const cliArgs = ['v0-to-v1', '--dry-run', '--no-interactive', '--allow-dirty', '--disable-analytics'];
+const cli = spawnSync(process.execPath, [path.join(root, 'cli.mjs'), ...cliArgs, '-t', path.join(root, 'v0-to-v1')], {
+  encoding: 'utf8',
+});
+
+if (cli.status !== 0 || !cli.stdout.includes('manual-review')) {
+  fail(`cli.mjs v0-to-v1 --dry-run failed:\n${cli.stdout}${cli.stderr}`);
+}
+
 process.exitCode = failed ? 1 : 0;
