@@ -4,7 +4,8 @@
   "type": "module",
   "workspaces": [
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "codemods"
   ],
   "homepage": "https://react-simplikit.slash.page",
   "bugs": "https://github.com/toss/react-simplikit/issues",
