@@ -1,5 +1,15 @@
 # react-simplikit
 
+## 0.4.1
+
+### Patch Changes
+
+- [#584](https://github.com/toss/react-simplikit/pull/584) [`bc52fc4`](https://github.com/toss/react-simplikit/commit/bc52fc411dbbbe63c0e40bb4bfa6a9bcd5280791) Thanks [@JeongHwan-dev](https://github.com/JeongHwan-dev)! - `useStorageState` now returns the current `defaultValue` when the key is not stored and `defaultValue` or `key` changes between renders. The snapshot cache only compared the raw stored string, so two absent keys both read as `null` and the default parsed on the first render was returned forever. `defaultValue` is compared by structure, so an inline object or array default keeps the same reference across renders.
+
+- [#585](https://github.com/toss/react-simplikit/pull/585) [`7327f02`](https://github.com/toss/react-simplikit/commit/7327f023ae9f089070aaa40e92e84a03a58d4f99) Thanks [@JeongHwan-dev](https://github.com/JeongHwan-dev)! - `useStorageState` now subscribes to storage changes once per key instead of on every render. The subscribe function handed to `useSyncExternalStore` was recreated each render, so React tore down and re-registered the internal listener and the `window` `storage` listener on every commit.
+
+- [#583](https://github.com/toss/react-simplikit/pull/583) [`245f57c`](https://github.com/toss/react-simplikit/commit/245f57cff00317b007a0c76acf9485bb48cc5c76) Thanks [@JeongHwan-dev](https://github.com/JeongHwan-dev)! - `useVisibilityEvent` now keeps one `visibilitychange` listener for the life of the component. The listener was keyed on the `callback` reference, so an inline callback removed and re-added it on every render, and with `immediate: true` a callback that updated state re-ran on every render, which could loop forever. The callback is now preserved and always sees the latest closure.
+
 ## 0.4.0
 
 ### Minor Changes
