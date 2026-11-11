@@ -20,7 +20,7 @@ features:
   - title: Comprehensive Documentation
     details: Each feature includes clear JSDoc comments, beginner-friendly guides, and practical examples. Start quickly with detailed and easy-to-follow instructions.
   - title: 'AI Agent Support'
-    details: Install the agent skill or point your agent to llms.txt, so Claude Code, Codex and other coding agents use the right hook instead of writing their own.
+    details: Plugins for both Claude Code and Codex, plus an agent skill and llms.txt for other agents, help your coding agent use the right hook instead of writing its own.
     link: /ai-integration
     linkText: AI Integration
 ---

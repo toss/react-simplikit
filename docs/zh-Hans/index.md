@@ -20,7 +20,7 @@ features:
   - title: 完善的文档
     details: 每个功能都配有清晰的 JSDoc 注释、面向初学者的指南和实用示例。详尽易懂的说明让你可以快速上手。
   - title: 'AI agent 支持'
-    details: 安装 agent skill 或让 agent 读取 llms.txt，Claude Code、Codex 等编程 agent 就会使用合适的 Hook，而不是自己手写。
+    details: 同时提供 Claude Code 和 Codex 插件，其他 agent 可以通过 agent skill 或 llms.txt 接入，帮助你的编程 agent 选用合适的 Hook，而不是自己手写。
     link: /zh-Hans/ai-integration
     linkText: AI 集成
 ---

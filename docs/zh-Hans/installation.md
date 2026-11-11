@@ -43,4 +43,4 @@ import { useToggle } from 'react-simplikit';
 
 在[常见使用场景](/zh-Hans/use-cases) 中查看完整示例，或浏览 [API 参考](/zh-Hans/reference)。
 
-如果你使用 AI 编程 agent，可以配置 [agent skill](/zh-Hans/ai-integration)，让它从 `react-simplikit` 中选用合适的 API，而不是自己手写。
+如果你使用 Claude Code 或 Codex，可以安装 [react-simplikit 插件](/zh-Hans/ai-integration)；其他编程 agent 可以使用 agent skill。安装后，agent 会从 `react-simplikit` 中选用合适的 API，而不是自己手写。

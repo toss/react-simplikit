@@ -43,4 +43,4 @@ import { useToggle } from 'react-simplikit';
 
 完全な使用例は [用途別の使い方](/ja/use-cases)、ツールの一覧は [API リファレンス](/ja/reference) をご覧ください。
 
-AI コーディングエージェントを使う場合は、[エージェントスキル](/ja/ai-integration) を設定してください。エージェントが自前で実装せずに `react-simplikit` から適切な API を選べるようになります。
+Claude Code や Codex を使う場合は、[react-simplikit プラグイン](/ja/ai-integration) をインストールしてください。ほかのコーディングエージェントではエージェントスキルを使えます。インストールすると、エージェントが自前で実装せずに `react-simplikit` から適切な API を選べるようになります。

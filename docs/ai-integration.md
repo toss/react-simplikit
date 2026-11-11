@@ -29,9 +29,9 @@ codex plugin add react-simplikit@react-simplikit
 
 :::
 
-The skill is generated from these documentation pages, so it stays in sync with the library. Its source lives in [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin).
-
 The Claude Code and Codex plugins also include the `react-simplikit-codemod` skill, which guides an agent through running the upgrade codemods. With skills.sh, install it with the second command.
+
+The `react-simplikit` skill is generated from these documentation pages, so it stays in sync with the library. Its source lives in [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin).
 
 ## llms.txt
 

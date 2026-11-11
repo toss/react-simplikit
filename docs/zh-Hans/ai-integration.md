@@ -29,9 +29,9 @@ codex plugin add react-simplikit@react-simplikit
 
 :::
 
-Skill 由这些文档页面生成，以保持与库的内容一致。源代码位于 [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin)。
-
 Claude Code 和 Codex 插件还包含 `react-simplikit-codemod` skill，用于指导 agent 运行升级 codemod。使用 skills.sh 时，请用第二条命令安装。
+
+`react-simplikit` skill 由这些文档页面生成，因此始终与库保持同步。源代码位于 [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin)。
 
 ## llms.txt
 

@@ -43,6 +43,7 @@ claude plugin uninstall react-simplikit@react-simplikit
 claude plugin marketplace remove react-simplikit
 
 # Codex
+codex plugin remove react-simplikit@react-simplikit
 codex plugin marketplace remove react-simplikit
 ```
 

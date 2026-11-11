@@ -20,7 +20,7 @@ features:
   - title: Documentación completa
     details: Cada funcionalidad incluye comentarios JSDoc claros, guías pensadas para principiantes y ejemplos prácticos. Empieza rápido con instrucciones detalladas y fáciles de seguir.
   - title: 'Compatible con agentes de IA'
-    details: Instala la skill de agente o indica a tu agente el archivo llms.txt para que Claude Code, Codex y otros agentes de programación usen el Hook adecuado en lugar de escribir el suyo.
+    details: Ofrece plugins para Claude Code y para Codex, y los demás agentes pueden usar la skill de agente o llms.txt. Así, tu agente de programación usa el Hook adecuado en lugar de escribir el suyo.
     link: /es/ai-integration
     linkText: Integración con IA
 ---

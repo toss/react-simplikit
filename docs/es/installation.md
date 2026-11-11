@@ -43,4 +43,4 @@ Todos los Hooks admiten tree shaking, así que en tu bundle solo se incluye lo q
 
 Consulta [casos de uso comunes](/es/use-cases) para ver ejemplos completos, o explora la [referencia de API](/es/reference).
 
-Si usas un agente de programación con IA, configura la [skill de agente](/es/ai-integration) para que elija la API adecuada de `react-simplikit` en lugar de escribir la suya.
+Si usas Claude Code o Codex, instala el [plugin de react-simplikit](/es/ai-integration); otros agentes de programación pueden usar la skill de agente. Así, tu agente elige la API adecuada de `react-simplikit` en lugar de escribir la suya.

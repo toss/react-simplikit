@@ -20,7 +20,7 @@ features:
   - title: 充実したドキュメント
     details: 各機能に明確な JSDoc、初心者にもわかりやすいガイド、実用的な使用例が揃っています。詳細で追いやすい説明ですぐに始められます。
   - title: 'AI エージェント対応'
-    details: エージェントスキルをインストールするか llms.txt を参照させると、Claude Code や Codex などのコーディングエージェントが自前で実装せずに適切なフックを使うようになります。
+    details: Claude Code と Codex のプラグインをどちらも提供しており、ほかのエージェントはエージェントスキルや llms.txt で利用できます。コーディングエージェントが自前で実装せずに適切なフックを使うようになります。
     link: /ja/ai-integration
     linkText: AI 連携
 ---

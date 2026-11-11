@@ -43,4 +43,4 @@ All hooks are tree-shakeable, so you only include what you use in your bundle.
 
 Continue with [common use cases](/use-cases) for complete examples, or browse the [API reference](/reference).
 
-If you use an AI coding agent, set up the [agent skill](/ai-integration) so it picks the right API from `react-simplikit` instead of writing its own.
+If you use Claude Code or Codex, install the [react-simplikit plugin](/ai-integration); other coding agents can use the agent skill. Your agent then picks the right API from `react-simplikit` instead of writing its own.
