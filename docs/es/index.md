@@ -19,8 +19,4 @@ features:
     details: Cada función y cada rama se prueban con rigor, lo que garantiza un código robusto y fiable para cualquier caso de uso.
   - title: Documentación completa
     details: Cada funcionalidad incluye comentarios JSDoc claros, guías pensadas para principiantes y ejemplos prácticos. Empieza rápido con instrucciones detalladas y fáciles de seguir.
-  - title: 'Compatible con agentes de IA'
-    details: Ofrece plugins para Claude Code y para Codex, y los demás agentes pueden usar la skill de agente o llms.txt. Así, tu agente de programación usa el Hook adecuado en lugar de escribir el suyo.
-    link: /es/ai-integration
-    linkText: Integración con IA
 ---
