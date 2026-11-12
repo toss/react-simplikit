@@ -36,6 +36,8 @@ type ThrottleOptions = {
  *     throttledScroll.cancel();
  *   };
  * }, [throttledScroll]);
+ *
+ * @deprecated Use `useThrottledCallback` instead.
  */
 export function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,
