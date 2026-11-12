@@ -295,6 +295,64 @@ describe('useGeolocation', () => {
     expect(mockGeolocation.clearWatch).toHaveBeenCalledWith(123);
   });
 
+  it('should clear loading when tracking is stopped before the first position arrives', async () => {
+    mockGeolocation.watchPosition.mockReturnValue(123);
+
+    const { result } = renderHookSSR(() => useGeolocation());
+
+    await act(async () => {
+      result.current.startTracking();
+    });
+
+    expect(result.current.loading).toBe(true);
+
+    await act(async () => {
+      result.current.stopTracking();
+    });
+
+    expect(result.current.loading).toBe(false);
+  });
+
+  it('should keep a manually started watch when a position option changes', async () => {
+    mockGeolocation.watchPosition.mockImplementation(success => {
+      success(mockPosition);
+
+      return 123;
+    });
+
+    const { result, rerender } = renderHookSSR(({ enableHighAccuracy }) => useGeolocation({ enableHighAccuracy }), {
+      initialProps: { enableHighAccuracy: false },
+    });
+
+    await act(async () => {
+      result.current.startTracking();
+    });
+
+    rerender({ enableHighAccuracy: true });
+
+    expect(mockGeolocation.clearWatch).not.toHaveBeenCalled();
+    expect(result.current.isTracking).toBe(true);
+  });
+
+  it('should restart the watch with the new options when mountBehavior is "watch"', () => {
+    mockGeolocation.watchPosition.mockReturnValue(123);
+
+    const { rerender } = renderHookSSR(
+      ({ enableHighAccuracy }) => useGeolocation({ mountBehavior: 'watch', enableHighAccuracy }),
+      { initialProps: { enableHighAccuracy: false } }
+    );
+
+    rerender({ enableHighAccuracy: true });
+
+    expect(mockGeolocation.clearWatch).toHaveBeenCalledWith(123);
+    expect(mockGeolocation.watchPosition).toHaveBeenCalledTimes(2);
+    expect(mockGeolocation.watchPosition).toHaveBeenLastCalledWith(
+      expect.any(Function),
+      expect.any(Function),
+      expect.objectContaining({ enableHighAccuracy: true })
+    );
+  });
+
   it('should clean up watchPosition when component unmounts', async () => {
     mockGeolocation.watchPosition.mockReturnValue(123);
 
