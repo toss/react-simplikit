@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { usePreservedReference } from '../usePreservedReference/usePreservedReference.ts';
+import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 /**
  * Defines the type for either a Map or an array of key-value pairs.
@@ -54,9 +54,6 @@ export function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): UseM
   // Initialize Map state
   const [map, setMap] = useState(() => new Map(initialState));
 
-  // Use usePreservedReference to maintain stable reference to initialState
-  const preservedInitialState = usePreservedReference(initialState);
-
   const set = useCallback((key: K, value: V) => {
     setMap(prev => {
       const nextMap = new Map(prev);
@@ -77,9 +74,9 @@ export function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): UseM
     });
   }, []);
 
-  const reset = useCallback(() => {
-    setMap(() => new Map(preservedInitialState));
-  }, [preservedInitialState]);
+  const reset = usePreservedCallback(() => {
+    setMap(() => new Map(initialState));
+  });
 
   const actions = useMemo<MapActions<K, V>>(() => {
     return { set, setAll, remove, reset };

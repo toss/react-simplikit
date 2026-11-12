@@ -215,4 +215,24 @@ describe('useSet', () => {
 
     expect(result.current[1]).toBe(originalActionsRef);
   });
+
+  it('should accept values that JSON cannot serialize', async () => {
+    const { result } = await renderHookSSR(() => useSet([1n]));
+
+    expect(result.current[0].has(1n)).toBe(true);
+  });
+
+  it('should reset to the latest initial state when it is a Set', async () => {
+    const { result, rerender } = await renderHookSSR(({ initialState }) => useSet(initialState), {
+      initialProps: { initialState: new Set([1]) },
+    });
+
+    rerender({ initialState: new Set([2]) });
+
+    await act(async () => {
+      result.current[1].reset();
+    });
+
+    expect(Array.from(result.current[0])).toEqual([2]);
+  });
 });

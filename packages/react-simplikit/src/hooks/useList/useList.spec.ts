@@ -246,4 +246,27 @@ describe('useList', () => {
 
     expect(result.current[1]).toBe(originalActions);
   });
+
+  it('should accept values that JSON cannot serialize', async () => {
+    const circular: { self?: unknown } = {};
+    circular.self = circular;
+
+    const { result } = await renderHookSSR(() => useList<unknown>([1n, circular]));
+
+    expect(result.current[0]).toEqual([1n, circular]);
+  });
+
+  it('should reset to the latest initial state', async () => {
+    const { result, rerender } = await renderHookSSR(({ initialState }) => useList(initialState), {
+      initialProps: { initialState: [1] },
+    });
+
+    rerender({ initialState: [2] });
+
+    await act(async () => {
+      result.current[1].reset();
+    });
+
+    expect(result.current[0]).toEqual([2]);
+  });
 });
