@@ -16,15 +16,15 @@ type DebounceOptions = {
  * `useDebounce` is a React hook that returns a debounced version of the provided callback function.
  * It helps optimize event handling by delaying function execution and grouping multiple calls into one.
  *
- * With the default options, the last call runs after `wait` milliseconds without another call.
- * Pending calls are cancelled when the component unmounts or when `wait`, `leading`, or `trailing` changes.
+ * With the default options, the last call runs after `debounceMs` milliseconds without another call.
+ * Pending calls are cancelled when the component unmounts or when `debounceMs`, `leading`, or `trailing` changes.
  * Calling `.cancel()` only cancels a pending callback, not an already-started network request.
  * The example displays the query locally. To search a server, pass your application's
  * search callback as the first argument to `useDebounce`.
  *
  * @template {(...args: any[]) => unknown} F - The type of the callback function.
  * @param {F} callback - The function to debounce.
- * @param {number} wait - The number of milliseconds to delay the function execution.
+ * @param {number} debounceMs - The number of milliseconds to delay the function execution.
  * @param {DebounceOptions} [options] - Configuration options for debounce behavior.
  * @param {boolean} [options.leading=false] - If `true`, the function is called at the start of the sequence.
  * @param {boolean} [options.trailing=true] - If `true`, the function is called at the end of the sequence.
@@ -63,7 +63,7 @@ type DebounceOptions = {
  */
 export function useDebounce<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,
-  wait: number,
+  debounceMs: number,
   options: DebounceOptions = {}
   // Written out because `DebouncedFunction` is not exported from the package entry, so consumers emitting declarations cannot name it (TS2742)
 ): { (...args: Parameters<F>): void; cancel: () => void } {
@@ -85,8 +85,8 @@ export function useDebounce<F extends (...args: CallerTypedArgs) => unknown>(
   }, [leading, trailing]);
 
   const debounced = useMemo(() => {
-    return debounce<F>(preservedCallback, wait, { edges });
-  }, [preservedCallback, wait, edges]);
+    return debounce<F>(preservedCallback, debounceMs, { edges });
+  }, [preservedCallback, debounceMs, edges]);
 
   useEffect(
     function cancelDebouncedOnUnmount() {

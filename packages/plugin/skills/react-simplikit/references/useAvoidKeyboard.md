@@ -28,7 +28,7 @@ function useAvoidKeyboard(
         'Base bottom offset in pixels when the keyboard is hidden. Useful for accounting for the iPhone home indicator area.',
     },
     {
-      name: 'options.transitionDuration',
+      name: 'options.transitionDurationMs',
       type: 'number',
       required: false,
       defaultValue: '200',

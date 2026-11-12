@@ -2,20 +2,20 @@
 
 A React hook that manages an array as state.
 Provides efficient state management and stable action functions.
-Accepts mutable and readonly arrays for the initial state and `setAll`.
+Accepts mutable and readonly arrays for the initial value and `setAll`.
 
 ## Interface
 
 ```ts
-function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
+function useList<T>(initialValue: readonly T[] = []): UseListReturn<T>;
 ```
 
 ### Parameters
 
 <Interface
-  name="initialState"
+  name="initialValue"
   type="readonly T[]"
-  description="Initial array state."
+  description="Initial array value."
 />
 
 ### Return Value

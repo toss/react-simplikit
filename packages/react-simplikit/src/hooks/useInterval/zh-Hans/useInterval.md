@@ -5,33 +5,28 @@
 ## 接口
 
 ```ts
-function useInterval(
-  callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
-): void;
+function useInterval(options: Object): void;
 ```
 
 ### 参数
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="要周期性执行的函数。"
-/>
-
-<Interface
-  required
   name="options"
-  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
+  type="Object"
   description="配置时间间隔的行为。"
   :nested="[
     {
-      name: 'options.delay',
+      name: 'options.onTick',
+      type: '() => void',
+      required: true,
+      description: '要周期性执行的函数。',
+    },
+    {
+      name: 'options.delayMs',
       type: 'number',
       required: true,
-      description:
-        '间隔的时长，单位为毫秒。如果为 <code>null</code>，则不会运行。',
+      description: '间隔的时长，单位为毫秒。',
     },
     {
       name: 'options.immediate',
@@ -64,9 +59,10 @@ import { useState } from 'react';
 function Timer() {
   const [time, setTime] = useState(0);
 
-  useInterval(() => {
-    setTime(prev => prev + 1);
-  }, 1000);
+  useInterval({
+    onTick: () => setTime(prev => prev + 1),
+    delayMs: 1000,
+  });
 
   return (
     <div>

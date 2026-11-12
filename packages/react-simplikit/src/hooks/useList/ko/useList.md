@@ -6,12 +6,12 @@
 ## 인터페이스
 
 ```ts
-function useList<T>(initialState: readonly T[] = []): UseListReturn<T>;
+function useList<T>(initialValue: readonly T[] = []): UseListReturn<T>;
 ```
 
 ### 파라미터
 
-<Interface name="initialState" type="readonly T[]" description="초기 배열 상태예요." />
+<Interface name="initialValue" type="readonly T[]" description="초기 배열 값이에요." />
 
 ### 반환 값
 

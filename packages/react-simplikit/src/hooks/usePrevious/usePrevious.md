@@ -2,13 +2,16 @@
 
 `usePrevious` is a React hook that returns the previous value of the input state.
 It preserves the previous value unchanged when re-renders occur without state changes.
-If the state is an object or requires custom change detection, a `compare` function can be provided.
-By default, state changes are detected using `prev === next`.
+If the state is an object or requires custom change detection, an `equalityFn` can be provided.
+By default, state changes are detected using `Object.is(prev, next)`.
 
 ## Interface
 
 ```ts
-function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
+function usePrevious<T>(
+  state: T,
+  equalityFn?: (prev: T, next: T) => boolean
+): T;
 ```
 
 ### Parameters
@@ -21,9 +24,9 @@ function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
 />
 
 <Interface
-  name="compare"
+  name="equalityFn"
   type="(prev: T, next: T) => boolean"
-  description="An optional comparison function to determine if the state has changed."
+  description="An optional function to determine if two states are equal. By default, it uses <code>Object.is</code> for comparison."
 />
 
 ### Return Value

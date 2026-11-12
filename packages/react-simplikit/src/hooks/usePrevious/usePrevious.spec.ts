@@ -45,6 +45,28 @@ describe('usePrevious', () => {
     expect(result.current).toBe(2);
   });
 
+  it('should keep the previous state when NaN is rendered again', async () => {
+    const { result, rerender } = await renderHookSSR(({ state }) => usePrevious(state), {
+      initialProps: { state: 1 },
+    });
+
+    rerender({ state: NaN });
+    expect(result.current).toBe(1);
+
+    rerender({ state: NaN });
+    expect(result.current).toBe(1);
+  });
+
+  it('should treat 0 and -0 as different states', async () => {
+    const { result, rerender } = await renderHookSSR(({ state }) => usePrevious(state), {
+      initialProps: { state: 0 },
+    });
+
+    rerender({ state: -0 });
+    rerender({ state: 1 });
+    expect(result.current).toBe(-0);
+  });
+
   it('should custom compare function works', async () => {
     const compareObject = (prev: Record<string, unknown> | undefined, next: Record<string, unknown>) => {
       if (prev === undefined) {

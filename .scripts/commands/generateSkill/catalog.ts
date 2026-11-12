@@ -8,12 +8,25 @@ export type CatalogEntry = {
   description: string;
 };
 
+/** A deprecated export: it has no documentation page, so it is listed by name with its `@deprecated` text. */
+export type DeprecatedEntry = {
+  name: string;
+  notice: string;
+};
+
 type RenderSkillOptions = {
   template: string;
   entries: CatalogEntry[];
+  deprecatedEntries: DeprecatedEntry[];
 };
 
 const CATALOG_PLACEHOLDER = '<!-- CATALOG -->';
+
+const DEPRECATED_HEADING = '### Deprecated';
+
+const CATALOG_ROW = /^\| \[`([^`]+)`\]\(references\/\1\.md\) \| .+ \|$/gm;
+
+const DEPRECATED_ROW = /^\| `([^`]+)` \| .+ \|$/gm;
 
 /** Catalog heading for an export: the first segment of its source path, `./hooks/x/index.ts` → `hooks`. */
 export function getCategory(sourcePath: string): Category {
@@ -66,10 +79,12 @@ export function extractDescription(markdown: string, name: string): string {
 }
 
 /**
- * Fills the template's `<!-- CATALOG -->` with one table per category. Categories keep the
- * order of `CATEGORIES`; rows keep the order they are given (sorted by name upstream).
+ * Fills the template's `<!-- CATALOG -->` with one table per category, then a Deprecated table
+ * when there are deprecated entries. Categories keep the order of `CATEGORIES`; rows keep the order
+ * they are given (sorted by name upstream). A Deprecated row links nowhere, because a deprecated
+ * export has no reference page.
  */
-export function renderSkill({ template, entries }: RenderSkillOptions): string {
+export function renderSkill({ template, entries, deprecatedEntries }: RenderSkillOptions): string {
   if (!template.includes(CATALOG_PLACEHOLDER)) {
     throw new Error(`The skill template must contain ${CATALOG_PLACEHOLDER}`);
   }
@@ -93,7 +108,46 @@ export function renderSkill({ template, entries }: RenderSkillOptions): string {
     ];
   });
 
-  return template.replace(CATALOG_PLACEHOLDER, sections.join('\n').trimEnd());
+  const deprecatedSection =
+    deprecatedEntries.length === 0
+      ? []
+      : [
+          DEPRECATED_HEADING,
+          '',
+          'These still work but are kept only for backward compatibility. Do not use them in new code; each row names the replacement.',
+          '',
+          '| Name | Notice |',
+          '| --- | --- |',
+          // A wrapped `@deprecated` text is joined into one line so it fits the table cell.
+          ...deprecatedEntries.map(
+            ({ name, notice }) => `| \`${name}\` | ${escapeTableCell(notice.replace(/\s*\n\s*/g, ' '))} |`
+          ),
+          '',
+        ];
+
+  return template.replace(CATALOG_PLACEHOLDER, [...sections, ...deprecatedSection].join('\n').trimEnd());
+}
+
+/** Names of the catalog rows of a rendered `SKILL.md`: the rows that link `references/<name>.md` from their first cell. */
+export function readCatalogNames(skill: string): string[] {
+  return [...skill.matchAll(CATALOG_ROW)].map(match => match[1]);
+}
+
+/**
+ * Names in the Deprecated table of a rendered `SKILL.md`, which `renderSkill` writes last in the
+ * catalog; empty when there is none. The section ends at the next heading, so a table further
+ * down the template is not read as part of it.
+ */
+export function readDeprecatedNames(skill: string): string[] {
+  const deprecatedStart = skill.indexOf(`\n${DEPRECATED_HEADING}\n`);
+
+  if (deprecatedStart === -1) {
+    return [];
+  }
+
+  const [section] = skill.slice(deprecatedStart + `\n${DEPRECATED_HEADING}\n`.length).split(/^#+ /m);
+
+  return [...section.matchAll(DEPRECATED_ROW)].map(match => match[1]);
 }
 
 function escapeTableCell(text: string): string {

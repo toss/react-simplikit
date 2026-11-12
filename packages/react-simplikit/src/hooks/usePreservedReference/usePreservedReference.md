@@ -9,7 +9,7 @@ It prevents unnecessary re-renders while always allowing access to the latest da
 ```ts
 function usePreservedReference<T extends NotNullishValue>(
   value: T,
-  areValuesEqual?: (a: T, b: T) => boolean
+  equalityFn?: (a: T, b: T) => boolean
 ): T;
 ```
 
@@ -23,7 +23,7 @@ function usePreservedReference<T extends NotNullishValue>(
 />
 
 <Interface
-  name="areValuesEqual"
+  name="equalityFn"
   type="(a: T, b: T) => boolean"
   description="An optional function to determine if two values are equal. By default, it uses <code>JSON.stringify</code> for comparison."
 />

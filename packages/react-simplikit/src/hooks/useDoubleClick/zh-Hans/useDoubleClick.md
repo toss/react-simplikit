@@ -1,6 +1,6 @@
 # useDoubleClick
 
-`useDoubleClick` 是一个区分单击和双击事件的 React Hook。对于指针点击，它会将单击回调的执行延迟指定的一段时间，如果在这段时间内发生了第二次点击（即双击），则取消该回调。不带点击次数的点击（`event.detail === 0`，例如通过键盘激活按钮）不可能构成双击的一部分，因此会立即执行 `click`，且不会调用 `doubleClick`。
+`useDoubleClick` 是一个区分单击和双击事件的 React Hook。对于指针点击，它会将单击回调的执行延迟指定的一段时间，如果在这段时间内发生了第二次点击（即双击），则取消该回调。不带点击次数的点击（`event.detail === 0`，例如通过键盘激活按钮）不可能构成双击的一部分，因此会立即执行 `onClick`，且不会调用 `onDoubleClick`。
 
 ## 接口
 
@@ -19,21 +19,21 @@ function useDoubleClick<E extends HTMLElement>(
   description="用于点击处理的配置选项。"
   :nested="[
     {
-      name: 'props.delay',
+      name: 'props.delayMs',
       type: 'number',
       required: false,
       defaultValue: '250',
       description:
-        '指针单击在执行 <code>click</code> 之前等待可能出现的第二次点击的毫秒数。不带点击次数的点击（<code>event.detail === 0</code>）会立即执行 <code>click</code>，并忽略 <code>delay</code>。默认为 250 毫秒。',
+        '指针单击在执行 <code>onClick</code> 之前等待可能出现的第二次点击的毫秒数。不带点击次数的点击（<code>event.detail === 0</code>）会立即执行 <code>onClick</code>，并忽略 <code>delayMs</code>。默认为 250 毫秒。',
     },
     {
-      name: 'props.click',
+      name: 'props.onClick',
       type: '(event: MouseEvent<E>) => void',
       required: false,
       description: '在单击时执行的回调函数。',
     },
     {
-      name: 'props.doubleClick',
+      name: 'props.onDoubleClick',
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
@@ -60,8 +60,8 @@ function GalleryCard() {
   const handleDoubleClick = () => alert('Zoom in!');
 
   const handleEvent = useDoubleClick({
-    click: handleClick,
-    doubleClick: handleDoubleClick,
+    onClick: handleClick,
+    onDoubleClick: handleDoubleClick,
   });
 
   return (

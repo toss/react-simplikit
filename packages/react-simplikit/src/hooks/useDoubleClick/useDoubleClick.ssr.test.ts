@@ -11,18 +11,18 @@ import { useDoubleClick } from './useDoubleClick.ts';
 
 describe('useDoubleClick SSR environment', () => {
   it('should be safe on server side rendering', () => {
-    const click = vi.fn();
-    const doubleClick = vi.fn();
+    const onClick = vi.fn();
+    const onDoubleClick = vi.fn();
 
     function Button() {
-      const handleEvent = useDoubleClick({ click, doubleClick });
+      const handleEvent = useDoubleClick({ onClick, onDoubleClick });
 
       return createElement('button', { onClick: handleEvent }, 'Test Button');
     }
 
     expect(typeof window).toBe('undefined');
     expect(renderToString(createElement(Button))).toBe('<button>Test Button</button>');
-    expect(click).not.toHaveBeenCalled();
-    expect(doubleClick).not.toHaveBeenCalled();
+    expect(onClick).not.toHaveBeenCalled();
+    expect(onDoubleClick).not.toHaveBeenCalled();
   });
 });

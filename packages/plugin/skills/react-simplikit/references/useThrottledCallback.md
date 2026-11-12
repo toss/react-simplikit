@@ -25,18 +25,26 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
         'The callback to throttle. A call with the same value as the last forwarded one is skipped.',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.throttleMs',
       type: 'number',
       required: true,
       description: 'The number of milliseconds to throttle invocations to.',
     },
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        'An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.',
+        'If <code>true</code>, allows an immediate call at the start of a throttle window.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        'If <code>true</code>, allows a pending call to run after the delay with the latest value.',
     },
   ]"
 />
@@ -59,7 +67,7 @@ function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
   const setScrollTopThrottled = useThrottledCallback({
     onChange: setScrollTop,
-    timeThreshold: 200,
+    throttleMs: 200,
   });
 
   return (

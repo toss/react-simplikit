@@ -7,8 +7,8 @@
 ```ts
 function useThrottle<F extends (...args: any[]) => unknown>(
   callback: F,
-  wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  throttleMs: number,
+  options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
 
@@ -23,23 +23,31 @@ function useThrottle<F extends (...args: any[]) => unknown>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="호출을 스로틀링할 간격(밀리초)이에요."
 />
 
 <Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
+  type="ThrottleOptions"
   description="스로틀 동작을 제어하는 옵션이에요."
   :nested="[
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        '함수를 시작점, 끝점, 또는 둘 다에서 호출할지 지정하는 배열이에요. 생략할 수 있어요.',
+        '<code>true</code>이면 스로틀 구간이 시작될 때 즉시 호출할 수 있어요.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        '<code>true</code>이면 대기 중인 호출을 지연 시간이 지난 뒤 최신 인자로 실행할 수 있어요.',
     },
   ]"
 />
@@ -60,7 +68,7 @@ const throttledScroll = useThrottle(
     console.log('Scroll event');
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { leading: true, trailing: true }
 );
 
 useEffect(() => {

@@ -26,7 +26,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
         '要被防抖的回调。携带与上一次转发的值相同的调用会被跳过。',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.debounceMs',
       type: 'number',
       required: true,
       description:
@@ -69,7 +69,7 @@ function SearchInput() {
   const [query, setQuery] = useState('');
   const setQueryDebounced = useDebouncedCallback({
     onChange: setQuery,
-    timeThreshold: 300,
+    debounceMs: 300,
   });
 
   return (

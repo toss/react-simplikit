@@ -84,7 +84,7 @@ export function FruitSearch() {
 
 - `useStorageState` 使用 `defaultValue` 作为服务端快照和 hydration 的值，随后在客户端读取浏览器存储。卸载时会移除存储监听器。
 
-- `useDebounce` 在组件卸载或 `wait`、`leading`、`trailing` 发生变化时取消待执行的调用，但不会取消已经开始的网络请求。应用需要处理请求取消或过期响应。
+- `useDebounce` 在组件卸载或 `debounceMs`、`leading`、`trailing` 发生变化时取消待执行的调用，但不会取消已经开始的网络请求。应用需要处理请求取消或过期响应。
 
 - 浏览器测量值可能在挂载后发生变化。请在[移动 Web](/zh-Hans/mobile-web) 指南和各 API 参考文档中查看初始值及平台限制。
 

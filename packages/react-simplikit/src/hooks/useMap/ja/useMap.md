@@ -7,16 +7,16 @@
 
 ```ts
 function useMap<K, V>(
-  initialState: MapOrEntries<K, V> = new Map()
+  initialValue: MapOrEntries<K, V> = new Map()
 ): UseMapReturn<K, V>;
 ```
 
 ### パラメータ
 
 <Interface
-  name="initialState"
+  name="initialValue"
   type="MapOrEntries<K, V>"
-  description="Map の初期状態（Map オブジェクトまたはキーと値のペアの配列）です。"
+  description="Map の初期値（Map オブジェクトまたはキーと値のペアの配列）です。"
 />
 
 ### 戻り値

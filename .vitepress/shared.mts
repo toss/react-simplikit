@@ -10,6 +10,6 @@ export const docsRoot = path.join(projectRoot, 'docs');
 export function listDirectories(directory: string): string[] {
   return fs
     .readdirSync(directory, { withFileTypes: true })
-    .filter(entry => entry.isDirectory())
+    .filter(entry => entry.isDirectory() && entry.name !== '_internal')
     .map(entry => entry.name);
 }

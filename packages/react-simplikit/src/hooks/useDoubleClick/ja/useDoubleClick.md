@@ -2,7 +2,7 @@
 
 `useDoubleClick` は、シングルクリックとダブルクリックのイベントを区別する React フックです。
 ポインターによるクリックでは、シングルクリックのコールバックの実行を指定時間だけ遅らせ、その間に 2 回目のクリック（つまりダブルクリック）が発生した場合は、その実行をキャンセルします。
-クリック回数を持たないクリック（`event.detail === 0`。たとえばボタンのキーボード操作による実行）はダブルクリックの一部になり得ないため、`click` をすぐに実行し、`doubleClick` は呼び出しません。
+クリック回数を持たないクリック（`event.detail === 0`。たとえばボタンのキーボード操作による実行）はダブルクリックの一部になり得ないため、`onClick` をすぐに実行し、`onDoubleClick` は呼び出しません。
 
 ## インターフェース
 
@@ -21,21 +21,21 @@ function useDoubleClick<E extends HTMLElement>(
   description="クリック処理の設定オプション。"
   :nested="[
     {
-      name: 'props.delay',
+      name: 'props.delayMs',
       type: 'number',
       required: false,
       defaultValue: '250',
       description:
-        'ポインターによるシングルクリックが 2 回目のクリックを待ってから <code>click</code> を実行するまでの時間（ミリ秒単位）です。クリック回数を持たないクリック（<code>event.detail === 0</code>）は <code>click</code> をすぐに実行し、<code>delay</code> は無視されます。デフォルトは 250 ミリ秒です。',
+        'ポインターによるシングルクリックが 2 回目のクリックを待ってから <code>onClick</code> を実行するまでの時間（ミリ秒単位）です。クリック回数を持たないクリック（<code>event.detail === 0</code>）は <code>onClick</code> をすぐに実行し、<code>delayMs</code> は無視されます。デフォルトは 250 ミリ秒です。',
     },
     {
-      name: 'props.click',
+      name: 'props.onClick',
       type: '(event: MouseEvent<E>) => void',
       required: false,
       description: 'シングルクリック時に実行するコールバック関数。',
     },
     {
-      name: 'props.doubleClick',
+      name: 'props.onDoubleClick',
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
@@ -62,8 +62,8 @@ function GalleryCard() {
   const handleDoubleClick = () => alert('Zoom in!');
 
   const handleEvent = useDoubleClick({
-    click: handleClick,
-    doubleClick: handleDoubleClick,
+    onClick: handleClick,
+    onDoubleClick: handleDoubleClick,
   });
 
   return (

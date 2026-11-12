@@ -2,7 +2,7 @@
 
 `subscribeKeyboardHeight` 是一个订阅屏幕键盘高度变化的工具函数。
 
-每当键盘高度可能变化时（包括键盘出现、消失或尺寸变化），传入的回调都会被调用。
+每当键盘高度可能变化时（包括键盘出现、消失或尺寸变化），传入的回调都会被调用。默认情况下，订阅开始时也会以当前键盘高度调用一次回调。
 
 在内部，该函数同时监听 Visual Viewport 的 `resize` 和 `scroll` 事件：
 
@@ -41,7 +41,7 @@ function subscribeKeyboardHeight(
       name: 'options.immediate',
       type: 'boolean',
       required: false,
-      defaultValue: 'false',
+      defaultValue: 'true',
       description:
         '若为 true，则注册时会立即以当前键盘高度调用一次回调。',
     },
@@ -79,7 +79,6 @@ const { unsubscribe } = subscribeKeyboardHeight({
   callback: height => {
     footer.style.paddingBottom = `${height}px`;
   },
-  immediate: true,
 });
 
 // Later, when cleanup is needed

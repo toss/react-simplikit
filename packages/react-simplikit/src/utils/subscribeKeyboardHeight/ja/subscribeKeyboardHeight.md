@@ -4,6 +4,7 @@
 
 指定したコールバックは、キーボードの表示、非表示、サイズ変更など、
 キーボードの高さが変わる可能性があるたびに呼び出されます。
+デフォルトでは、購読を開始したときにも現在のキーボードの高さを引数として一度呼び出されます。
 
 内部では、Visual Viewport の `resize` イベントと `scroll` イベントの
 両方を監視します。
@@ -44,7 +45,7 @@ function subscribeKeyboardHeight(
       name: 'options.immediate',
       type: 'boolean',
       required: false,
-      defaultValue: 'false',
+      defaultValue: 'true',
       description:
         'true の場合、現在のキーボードの高さを引数としてコールバックを即座に呼び出します。',
     },
@@ -82,7 +83,6 @@ const { unsubscribe } = subscribeKeyboardHeight({
   callback: height => {
     footer.style.paddingBottom = `${height}px`;
   },
-  immediate: true,
 });
 
 // 後でクリーンアップが必要になったときに実行します

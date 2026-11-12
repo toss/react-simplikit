@@ -677,4 +677,42 @@ export function useNoReturnValue() {}`
 
     expect(document).toContain('\nThis function does not return anything.');
   });
+
+  it('refuses an export whose JSDoc is @deprecated, because it has no page', async () => {
+    await expect(
+      render(
+        'useOld',
+        `/**
+ * @description
+ * \`useOld\` is the name \`useNew\` had before.
+ *
+ * @deprecated Use \`useNew\` instead.
+ */
+export const useOld = useNew;`
+      )
+    ).rejects.toThrow('useOld is @deprecated, and a deprecated export has no documentation page');
+  });
+
+  it('still renders a page when only an earlier comment, such as an options type, is @deprecated', async () => {
+    const document = await render(
+      'useCurrent',
+      `type Options = {
+  /** @deprecated Use \`delay\` instead. */
+  wait?: number;
+};
+
+/**
+ * @description
+ * \`useCurrent\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useCurrent();
+ */
+export function useCurrent(options: Options) {}`
+    );
+
+    expect(document.startsWith('# useCurrent\n\n`useCurrent` does something.\n')).toBe(true);
+  });
 });

@@ -38,7 +38,7 @@ describe('useThrottle', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should trigger a trailing call after wait time', async () => {
+  it('should trigger a trailing call after throttleMs time', async () => {
     vi.useFakeTimers();
 
     const callback = vi.fn();
@@ -66,7 +66,7 @@ describe('useThrottle', () => {
     expect(callback).toHaveBeenCalledWith('test', 123);
   });
 
-  it('should execute immediately if not called within wait time', async () => {
+  it('should execute immediately if not called within throttleMs time', async () => {
     vi.useFakeTimers();
 
     const callback = vi.fn();
@@ -89,7 +89,7 @@ describe('useThrottle', () => {
 
     const callback = vi.fn();
     const throttleMs = 50;
-    const { result } = await renderHookSSR(() => useThrottle(callback, throttleMs, { edges: ['leading', 'trailing'] }));
+    const { result } = await renderHookSSR(() => useThrottle(callback, throttleMs, { leading: true, trailing: true }));
 
     result.current();
 
@@ -111,6 +111,44 @@ describe('useThrottle', () => {
     await vi.advanceTimersByTimeAsync(throttleMs);
 
     expect(callback).toHaveBeenCalledTimes(4);
+
+    vi.useRealTimers();
+  });
+
+  it('should skip the leading edge when leading is false', async () => {
+    vi.useFakeTimers();
+
+    const callback = vi.fn();
+    const throttleMs = 50;
+    const { result } = await renderHookSSR(() => useThrottle(callback, throttleMs, { leading: false }));
+
+    result.current();
+
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    await vi.advanceTimersByTimeAsync(throttleMs);
+
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    vi.useRealTimers();
+  });
+
+  it('should skip the trailing edge when trailing is false', async () => {
+    vi.useFakeTimers();
+
+    const callback = vi.fn();
+    const throttleMs = 50;
+    const { result } = await renderHookSSR(() => useThrottle(callback, throttleMs, { trailing: false }));
+
+    result.current();
+
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    result.current();
+
+    await vi.advanceTimersByTimeAsync(throttleMs);
+
+    expect(callback).toHaveBeenCalledTimes(1);
 
     vi.useRealTimers();
   });
