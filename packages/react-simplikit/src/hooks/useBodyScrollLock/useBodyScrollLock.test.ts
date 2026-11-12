@@ -61,7 +61,7 @@ describe('useBodyScrollLock', () => {
     const { unmount } = renderHook(() => useBodyScrollLock());
     unmount();
 
-    expect(window.scrollTo).toHaveBeenCalledWith(0, 300);
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 300, left: 0, behavior: 'instant' });
   });
 
   it('should handle multiple mount/unmount cycles', () => {
@@ -70,13 +70,23 @@ describe('useBodyScrollLock', () => {
     const { unmount: unmount1 } = renderHook(() => useBodyScrollLock());
     expect(document.body.style.top).toBe('-100px');
     unmount1();
-    expect(window.scrollTo).toHaveBeenCalledWith(0, 100);
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 100, left: 0, behavior: 'instant' });
 
     // Second cycle with different scroll position
     Object.defineProperty(window, 'scrollY', { value: 200 });
     const { unmount: unmount2 } = renderHook(() => useBodyScrollLock());
     expect(document.body.style.top).toBe('-200px');
     unmount2();
-    expect(window.scrollTo).toHaveBeenLastCalledWith(0, 200);
+    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 200, left: 0, behavior: 'instant' });
+  });
+
+  it('should restore inline styles the body had before mount', () => {
+    document.body.style.cssText = 'overflow-y: scroll; position: relative;';
+
+    const { unmount } = renderHook(() => useBodyScrollLock());
+    unmount();
+
+    expect(document.body.style.overflowY).toBe('scroll');
+    expect(document.body.style.position).toBe('relative');
   });
 });

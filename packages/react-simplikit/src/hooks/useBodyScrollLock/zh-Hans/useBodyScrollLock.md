@@ -54,4 +54,4 @@ function App() {
 - **SSR 安全性**：锁定是在 `useEffect` 内应用的，该 effect 只在客户端运行，因此此 Hook 在服务端渲染期间是安全的。
 - **自动清理**：当组件卸载时，锁会被释放。
 - **多个模态框**：当多个模态框重叠时，应在父级锁定一次，而不是在每个模态框中分别锁定，以避免冲突并保持行为一致。
-- **锁定方式**：`enableBodyScrollLock` 将 `body` 固定在原位（`position: fixed` 配合 `overflow: hidden`），并将滚动位置保存在 data 属性中；`disableBodyScrollLock` 会移除这些样式并恢复位置。
+- **锁定方式**：`enableBodyScrollLock` 将 `body` 固定在原位（`position: fixed` 配合 `overflow: hidden`），并将滚动位置保存在 data 属性中；`disableBodyScrollLock` 会还原锁定前 `body` 上的内联样式，并立即回到保存的位置，即使页面设置了 `scroll-behavior: smooth`。

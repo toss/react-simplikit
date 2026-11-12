@@ -6,10 +6,12 @@ import { enableBodyScrollLock } from './enableBodyScrollLock.ts';
 
 describe('enableBodyScrollLock', () => {
   const SCROLL_POSITION_ATTR = 'data-simplikit-scroll-y';
+  const BODY_STYLE_ATTR = 'data-simplikit-body-style';
 
   beforeEach(() => {
     document.body.style.cssText = '';
     document.body.removeAttribute(SCROLL_POSITION_ATTR);
+    document.body.removeAttribute(BODY_STYLE_ATTR);
 
     // Mock window.scrollY
     Object.defineProperty(window, 'scrollY', {
@@ -58,6 +60,24 @@ describe('enableBodyScrollLock', () => {
     expect(document.body.style.top).toBe('-100px');
   });
 
+  it('should save the inline styles it overrides', () => {
+    document.body.style.cssText = 'position: relative; top: 10px; color: red;';
+
+    enableBodyScrollLock();
+
+    expect(document.body.getAttribute(BODY_STYLE_ATTR)).toBe('position: relative; top: 10px;');
+  });
+
+  it('should keep the first saved inline styles when called twice', () => {
+    document.body.style.position = 'relative';
+    enableBodyScrollLock();
+
+    enableBodyScrollLock();
+    disableBodyScrollLock();
+
+    expect(document.body.style.position).toBe('relative');
+  });
+
   describe('lock/unlock cycle', () => {
     it('should handle multiple lock/unlock cycles correctly', () => {
       Object.defineProperty(window, 'scrollY', { value: 100 });
@@ -73,7 +93,7 @@ describe('enableBodyScrollLock', () => {
       enableBodyScrollLock();
       expect(document.body.getAttribute(SCROLL_POSITION_ATTR)).toBe('200');
       disableBodyScrollLock();
-      expect(window.scrollTo).toHaveBeenLastCalledWith(0, 200);
+      expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 200, left: 0, behavior: 'instant' });
     });
   });
 
