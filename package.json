@@ -4,7 +4,8 @@
   "type": "module",
   "workspaces": [
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "codemods"
   ],
   "homepage": "https://react-simplikit.slash.page",
   "bugs": "https://github.com/toss/react-simplikit/issues",
@@ -39,7 +40,7 @@
     "test:type": "yarn workspaces foreach -Ap run typecheck",
     "test:docs": "vitest run --dir .scripts && tsx .scripts/verifyDocsI18n.ts && tsx .scripts/verifyDocs.ts",
     "test:skill": "tsx .scripts/verifySkill.ts",
-    "test:codemod": "yarn workspace react-simplikit-codemod run test:e2e",
+    "test:codemod": "yarn workspace react-simplikit-codemod run test:e2e && node codemods/test.mjs",
     "test:spec": "yarn workspaces foreach -Ap run test",
     "test:compiled": "yarn workspaces foreach -Ap run test:compiled",
     "test:coverage": "yarn workspaces foreach -Ap run test:coverage",

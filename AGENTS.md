@@ -8,7 +8,7 @@
 React utility hooks/components library. Two published packages and an agent plugin:
 
 - `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils
-- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today)
+- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today). It is being retired: every codemod moves to a Codemod (jssg) workflow under the root `codemods/` workspace, which ships on npm as `@react-simplikit/codemod` and is tested by fixtures with `yarn test:codemod`. Do not add transforms to `packages/codemod`
 - `packages/plugin` — agent skills for Claude Code, Codex and skills.sh. No `package.json`, so it is neither a workspace nor on npm. `yarn skill:gen` regenerates `skills/react-simplikit` from the public exports and `yarn test:skill` fails CI when the committed copy drifts; `skills/react-simplikit-codemod` is hand-written
 
 ## Architecture

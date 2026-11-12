@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/codemod/codemod/refs/heads/main/schemas/workflow.json
+
+version: '1'
+
+nodes:
+  - id: apply-transforms
+    name: Migrate react-simplikit v0 call sites to v1
+    type: automatic
+    steps:
+      # One step per breaking change, each run twice: `tsx` parses JSX, `typescript` parses `<T>value` assertions.
+      - name: 'useDoubleClick: rename click, doubleClick and delay (#535)'
+        js-ast-grep:
+          js_file: scripts/use-double-click-options.ts
+          language: tsx
+          include: ['**/*.tsx', '**/*.jsx', '**/*.js', '**/*.mjs', '**/*.cjs']
+          exclude: ['**/node_modules/**']
+      - name: 'useDoubleClick: rename click, doubleClick and delay (#535) in .ts files'
+        js-ast-grep:
+          js_file: scripts/use-double-click-options.ts
+          language: typescript
+          include: ['**/*.ts', '**/*.mts', '**/*.cts']
+          exclude: ['**/node_modules/**', '**/*.d.ts']
