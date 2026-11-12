@@ -31,7 +31,7 @@ function usePageVisibilityEffect(
       required: false,
       defaultValue: 'false',
       description:
-        'true이면, 현재 가시성 상태로 마운트 시에 즉시 콜백이 호출돼요.',
+        'true이면 마운트되자마자 현재 가시성 상태로 콜백을 호출해요.',
     },
   ]"
 />

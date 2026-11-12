@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-import { usePreservedReference } from '../usePreservedReference/usePreservedReference.ts';
 
 type ListActions<T> = {
   push: (value: T) => void;
@@ -59,8 +58,6 @@ type UseListReturn<T> = [ReadonlyArray<T>, ListActions<T>];
 export function useList<T>(initialValue: readonly T[] = []): UseListReturn<T> {
   const [list, setList] = useState<readonly T[]>(initialValue);
 
-  const preservedInitialValue = usePreservedReference(initialValue);
-
   const push = usePreservedCallback((value: T) => {
     setList(prev => [...prev, value]);
   });
@@ -94,7 +91,7 @@ export function useList<T>(initialValue: readonly T[] = []): UseListReturn<T> {
   });
 
   const reset = usePreservedCallback(() => {
-    setList(preservedInitialValue);
+    setList(initialValue);
   });
 
   const actions = useMemo<ListActions<T>>(

@@ -1,14 +1,16 @@
 # subscribeKeyboardHeight
 
-`subscribeKeyboardHeight`는 화면 키보드 높이의 변경 사항을 구독하는 유틸리티 함수에요. 제공된 콜백은 키보드 높이가 변경될 때마다 호출돼요. 키보드가 나타나거나 사라지거나 크기가 변경될 때 등이 포함돼요. 기본적으로 구독을 시작할 때에도 현재 키보드 높이로 한 번 호출돼요. 내부적으로 이 함수는 Visual Viewport에서 `resize` 및 `scroll` 이벤트를 모두 듣습니다.
+`subscribeKeyboardHeight`는 온스크린 키보드 높이의 변화를 구독하는 유틸리티 함수예요. 전달한 콜백은 키보드가 나타나거나 사라지거나 크기가 바뀌는 등 키보드 높이가 바뀔 수 있을 때마다 호출돼요. 기본적으로 구독을 시작할 때에도 현재 키보드 높이로 한 번 호출돼요.
 
-- `resize`: 시각적 뷰포트 높이가 변경될 때 트리거됨
-- `scroll`: 시각적 뷰포트 오프셋이 변경될 때 트리거됨(iOS의 경우 뷰포트가 리사이징 없이 이동할 수 있어 중요함)
+이 함수는 내부적으로 Visual Viewport의 `resize`와 `scroll` 이벤트를 모두 감지해요.
+
+- `resize`: Visual Viewport의 높이가 바뀔 때 발생해요.
+- `scroll`: Visual Viewport의 오프셋이 바뀔 때 발생해요. iOS에서는 크기가 바뀌지 않고 뷰포트만 이동할 수 있어서 이 이벤트가 중요해요.
 
 **성능 최적화**
 
-- 과도한 콜백 호출을 방지하기 위해 기본적으로 쓰로틀링(16ms, 약 60fps)
-- 높이가 변경되지 않았을 때 콜백을 건너뛰기
+- 기본적으로 16ms(약 60fps) 간격으로 스로틀링해서 콜백이 지나치게 자주 호출되지 않게 해요.
+- 높이가 그대로면 콜백을 건너뛰어요(중복 제거).
 
 ## 인터페이스
 
@@ -24,13 +26,13 @@ function subscribeKeyboardHeight(
   required
   name="options"
   type="SubscribeKeyboardHeightOptions"
-  description="구성 옵션"
+  description="설정 옵션이에요."
   :nested="[
     {
       name: 'options.callback',
       type: '(height: number) => void',
       required: true,
-      description: '업데이트된 키보드 높이(픽셀 단위)로 호출될 함수.',
+      description: '업데이트된 키보드 높이(px)를 받아 호출되는 함수예요.',
     },
     {
       name: 'options.immediate',
@@ -44,7 +46,7 @@ function subscribeKeyboardHeight(
       type: 'number',
       required: false,
       defaultValue: '16',
-      description: '밀리초 단위의 쓰로틀 간격.',
+      description: '콜백 호출을 스로틀링할 간격(밀리초)이에요.',
     },
   ]"
 />
@@ -54,13 +56,13 @@ function subscribeKeyboardHeight(
 <Interface
   name=""
   type="SubscribeKeyboardHeightResult"
-  description="언사브스크라이브 함수를 포함하는 객체."
+  description="구독 해제 함수를 담은 객체예요."
   :nested="[
     {
       name: 'unsubscribe',
       type: '() => void',
       required: false,
-      description: '모든 리스너의 구독을 해제하고 키보드 높이 업데이트를 중단해요.',
+      description: '모든 리스너를 해제하고 더 이상 키보드 높이 업데이트를 받지 않아요.',
     },
   ]"
 />

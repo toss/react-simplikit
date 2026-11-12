@@ -1,6 +1,6 @@
 # useStorageState
 
-`useStorageState`는 `useState`처럼 작동하지만 상태 값을 브라우저 저장소에 저장하는 리액트 훅이에요. 이 값은 페이지를 새로고침해도 유지되며, `localStorage`를 사용할 경우 탭 간에 공유될 수 있어요.
+`useStorageState`는 `useState`처럼 작동하지만 상태 값을 브라우저 저장소에 저장하는 리액트 훅이에요. 이 값은 페이지를 새로고침해도 유지되고, `localStorage`를 사용하면 여러 탭에서 공유할 수 있어요.
 
 `serializer`와 `deserializer`를 전달하지 않으면 값을 JSON으로 저장하므로, 값의 안쪽까지 모두 JSON으로 직렬화할 수 있어야 해요. 값 어딘가에 `Date`, `Map`, 클래스 인스턴스나 함수가 있으면 값을 설정할 때 에러가 발생하고, `defaultValue`는 마운트 시 검사해요. 다른 타입을 저장하려면 두 함수를 함께 전달하세요. 저장소에서 읽어 온 문자열은 따로 검증하지 않아요. 읽어 온 값은 저장된 문자열이 바뀔 때까지 재사용하므로, `deserializer`가 반환하는 값이 달라지면 `refresh`를 호출하세요.
 
@@ -33,13 +33,13 @@ function useStorageState<T>(
       required: false,
       defaultValue: 'localStorage',
       description:
-        '스토리지 타입 (<code>localStorage</code> 또는 <code>sessionStorage</code>). 기본값은 <code>localStorage</code>예요.',
+        '사용할 저장소예요. <code>localStorage</code>나 <code>sessionStorage</code>를 넘길 수 있고, 기본값은 <code>localStorage</code>예요.',
     },
     {
       name: 'options.defaultValue',
       type: 'T',
       required: false,
-      description: '기존의 값을 찾을 수 없을 때의 초기 값이에요.',
+      description: '저장소에서 기존 값을 찾지 못했을 때 사용할 초기 값이에요.',
     },
     {
       name: 'options.serializer',
@@ -73,7 +73,7 @@ function useStorageState<T>(
       name: 'actions.setValue',
       type: '(value: SetStateAction<T | undefined>) => void',
       required: false,
-      description: '상태를 업데이트하고 지속하는 함수예요.',
+      description: '상태를 업데이트하고 저장소에 저장하는 함수예요.',
     },
     {
       name: 'actions.refresh',

@@ -1,4 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
+
+import { usePreservedCallback } from '../usePreservedCallback/index.ts';
 
 type Options = {
   immediate?: boolean;
@@ -33,19 +35,23 @@ export function usePageVisibilityEffect(
   callback: (visibilityState: 'visible' | 'hidden') => void,
   options: Options = {}
 ) {
-  const handleVisibilityChange = useCallback(() => {
+  const handleVisibilityChange = usePreservedCallback(() => {
     callback(document.visibilityState);
-  }, [callback]);
+  });
+  const immediate = options.immediate ?? false;
 
-  useEffect(() => {
-    if (options?.immediate ?? false) {
-      handleVisibilityChange();
-    }
+  useEffect(
+    function subscribeVisibilityChange() {
+      if (immediate) {
+        handleVisibilityChange();
+      }
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+      document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [handleVisibilityChange, options?.immediate]);
+      return () => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      };
+    },
+    [handleVisibilityChange, immediate]
+  );
 }

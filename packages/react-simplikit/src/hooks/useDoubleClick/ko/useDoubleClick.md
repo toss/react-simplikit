@@ -1,6 +1,6 @@
 # useDoubleClick
 
-`useDoubleClick`는 단일 클릭과 더블 클릭 이벤트를 구분하는 리액트 훅이에요. 지정된 시간 동안 단일 클릭 콜백 실행을 지연시키고, 그 시간 안에 두 번째 클릭(즉, 더블 클릭)이 발생하면 이를 취소해요.
+`useDoubleClick`는 단일 클릭과 더블 클릭 이벤트를 구분하는 리액트 훅이에요. 포인터 클릭이면 단일 클릭 콜백을 지정한 시간만큼 늦게 실행하고, 그 시간 안에 두 번째 클릭(더블 클릭)이 발생하면 단일 클릭 콜백 실행을 취소해요. 클릭 횟수 정보가 없는 클릭(`event.detail === 0`, 예: 키보드로 버튼을 누른 경우)은 더블 클릭이 될 수 없으므로 `onClick`을 바로 실행하고 `onDoubleClick`은 호출하지 않아요.
 
 ## 인터페이스
 
@@ -16,7 +16,7 @@ function useDoubleClick<E extends HTMLElement>(
   required
   name="props"
   type="Object"
-  description="클릭 처리를 위한 설정 옵션이에요."
+  description="클릭 처리 방식을 설정하는 옵션이에요."
   :nested="[
     {
       name: 'props.delayMs',
@@ -24,7 +24,7 @@ function useDoubleClick<E extends HTMLElement>(
       required: false,
       defaultValue: '250',
       description:
-        '단일 클릭 콜백을 실행하기 전에 기다리는 밀리초 단위 수로, 기본값은 250ms예요.',
+        '포인터로 단일 클릭했을 때 <code>onClick</code>을 실행하기 전에 두 번째 클릭을 기다리는 시간(밀리초)이에요. 클릭 횟수 정보가 없는 클릭(<code>event.detail === 0</code>)은 <code>onClick</code>을 바로 실행하고 <code>delayMs</code>를 무시해요. 기본값은 250ms예요.',
     },
     {
       name: 'props.onClick',
@@ -37,7 +37,7 @@ function useDoubleClick<E extends HTMLElement>(
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
-        '더블 클릭 시 실행되는 콜백 함수로, 필수예요.',
+        '더블 클릭 시 실행되는 콜백 함수예요. 반드시 전달해야 해요.',
     },
   ]"
 />

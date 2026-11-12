@@ -1,6 +1,6 @@
 # mergeProps
 
-`mergeProps`는 여러 props 객체들을 하나의 객체로 병합하는 유틸리티 함수예요. `className`, `style`, 그리고 `function` 속성의 병합을 처리해요.
+`mergeProps`는 여러 props 객체를 하나의 객체로 병합하는 유틸리티 함수예요. `className`, `style`, `function` 속성도 병합해요.
 
 ## 인터페이스
 

@@ -1,4 +1,6 @@
-import { SetStateAction, useInsertionEffect, useMemo, useRef, useSyncExternalStore } from 'react';
+import { SetStateAction, useCallback, useInsertionEffect, useMemo, useRef, useSyncExternalStore } from 'react';
+
+import { usePreservedReference } from '../usePreservedReference/index.ts';
 
 import { safeLocalStorage, Storage } from './storage.ts';
 
@@ -147,16 +149,23 @@ export function useStorageState<T>(
   // above have no body to carry a directive.
   'use no memo';
 
-  const { storage = safeLocalStorage, defaultValue, serializer, deserializer } = options;
+  const { storage = safeLocalStorage, serializer, deserializer } = options;
   // Both functions are picked by one condition so a value is never written in one format and read in another.
   const codec = serializer !== undefined && deserializer !== undefined ? { serializer, deserializer } : null;
+  // An inline object default is a new reference on every render, so it is compared in its encoded form
+  // to keep the snapshot stable.
+  const { value: defaultValue } = usePreservedReference({ value: options.defaultValue }, isSameDefaultValue);
 
   // `data` is `undefined` on mount and after `refresh`, a value storage never returns, so the next
   // snapshot always runs the branch below and checks `defaultValue`, even when storage holds a value.
   const cache = useRef<{
+    key: string;
+    defaultValue: T | undefined;
     data: string | null | undefined;
     parsed: T | undefined;
   }>({
+    key,
+    defaultValue,
     data: undefined,
     parsed: defaultValue,
   });
@@ -164,9 +173,10 @@ export function useStorageState<T>(
   // Runs during render, so it reads this render's options instead of a ref that effects update later.
   const getSnapshot = () => {
     const data = storage.get(key);
+    const current = cache.current;
 
-    if (data !== cache.current.data) {
-      const isFirstRead = cache.current.data === undefined;
+    if (data !== current.data || key !== current.key || defaultValue !== current.defaultValue) {
+      const isFirstRead = current.data === undefined;
       const fallsBackToDefault = data == null;
 
       if (codec === null && defaultValue !== undefined && (isFirstRead || fallsBackToDefault)) {
@@ -174,18 +184,20 @@ export function useStorageState<T>(
       }
 
       try {
-        cache.current.parsed = data != null ? deserialize(data) : defaultValue;
+        current.parsed = data != null ? deserialize(data) : defaultValue;
       } catch {
-        cache.current.parsed = defaultValue;
+        current.parsed = defaultValue;
       }
-      cache.current.data = data;
+      current.data = data;
+      current.key = key;
+      current.defaultValue = defaultValue;
     }
 
-    return cache.current.parsed;
+    return current.parsed;
   };
 
-  const storageState = useSyncExternalStore<T | undefined>(
-    onStoreChange => {
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
       listeners.add(onStoreChange);
 
       const handler = (event: StorageEvent) => {
@@ -201,9 +213,10 @@ export function useStorageState<T>(
         window.removeEventListener('storage', handler);
       };
     },
-    getSnapshot,
-    () => defaultValue
+    [key]
   );
+
+  const storageState = useSyncExternalStore<T | undefined>(subscribe, getSnapshot, () => defaultValue);
 
   // Insertion effects run before every layout and passive effect, so a child effect that calls
   // `setValue` in the commit that changed `key` or the serializer already sees this render's values.
@@ -240,12 +253,22 @@ export function useStorageState<T>(
     emitListeners();
   }
 
-  function serialize(value: T): string {
+  function serialize(value: T, name = 'value'): string {
     if (codec !== null) {
       return codec.serializer(value);
     }
-    assertJson(value, 'value');
+    assertJson(value, name);
     return JSON.stringify(value);
+  }
+
+  function isSameDefaultValue(a: { value: T | undefined }, b: { value: T | undefined }): boolean {
+    if (a.value === b.value) {
+      return true;
+    }
+    if (a.value === undefined || b.value === undefined) {
+      return false;
+    }
+    return serialize(a.value, 'defaultValue') === serialize(b.value, 'defaultValue');
   }
 
   function deserialize(data: string): T {
