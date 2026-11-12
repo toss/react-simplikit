@@ -1,5 +1,13 @@
 # react-simplikit
 
+## 0.4.2
+
+### Patch Changes
+
+- [#592](https://github.com/toss/react-simplikit/pull/592) [`1ead5b0`](https://github.com/toss/react-simplikit/commit/1ead5b00c6607aafb3725af26b129af40ac51d57) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `useList`, `useSet` and `useMap` no longer serialize `initialState` with `JSON.stringify` on every render. Before, they threw on the first render when the initial values held a `BigInt` or a circular object. `reset` now always uses the latest `initialState`; for `useSet` and `useMap` it used to keep the first `Set` or `Map` it was given.
+
+- [#591](https://github.com/toss/react-simplikit/pull/591) [`8c56151`](https://github.com/toss/react-simplikit/commit/8c56151efc7c2291f5c1e81cbd542c901f35554f) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `SwitchCase` now only matches keys defined on `caseBy` itself. Before, a value such as `'toString'` or `'constructor'` matched a method inherited from `Object.prototype`, so the component rendered `[object Undefined]` or threw instead of rendering `defaultComponent`.
+
 ## 0.4.1
 
 ### Patch Changes
