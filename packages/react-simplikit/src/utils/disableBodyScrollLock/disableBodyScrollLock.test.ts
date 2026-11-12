@@ -49,7 +49,7 @@ describe('disableBodyScrollLock', () => {
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 300, left: 0, behavior: 'instant' });
   });
 
-  it('should remove scroll position attribute', () => {
+  it('should remove the saved data attributes', () => {
     enableBodyScrollLock();
     disableBodyScrollLock();
 
@@ -88,6 +88,26 @@ describe('disableBodyScrollLock', () => {
     disableBodyScrollLock();
 
     expect(document.body.style.backgroundColor).toBe('red');
+  });
+
+  it('should keep a managed inline style changed during the lock', () => {
+    enableBodyScrollLock();
+    document.body.style.top = '-50px';
+    disableBodyScrollLock();
+
+    expect(document.body.style.top).toBe('-50px');
+    expect(document.body.style.position).toBe('');
+  });
+
+  it('should not bring back a style another lock released out of order', () => {
+    // Another lock that saves and restores `overflow` opens first and closes first
+    const overflowBeforeOtherLock = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    enableBodyScrollLock();
+    document.body.style.overflow = overflowBeforeOtherLock;
+    disableBodyScrollLock();
+
+    expect(document.body.style.overflow).toBe('');
   });
 
   it('should remove lock styles when no inline styles were saved', () => {

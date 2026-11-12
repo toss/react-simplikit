@@ -42,38 +42,46 @@ export function disableBodyScrollLock(): void {
     return;
   }
 
-  restoreBodyStyles();
+  restoreBodyStyles(savedScrollY);
   restoreScrollPosition(savedScrollY);
   clearSavedScrollPosition();
 }
 
-function restoreBodyStyles(): void {
+function restoreBodyStyles(savedScrollY: string): void {
   const { body } = document;
   // Parsing the saved declarations with a detached element keeps their `!important` priority and drops anything invalid.
   // Properties that were not set before the lock come back as an empty string, which `setProperty` removes.
   const saved = document.createElement('div').style;
   saved.cssText = body.getAttribute(BODY_STYLE_ATTR) ?? '';
+  // The values the lock applied, serialized the same way the body serializes them (e.g. `-0px` becomes `0px`).
+  const locked = document.createElement('div').style;
+  locked.overflow = 'hidden';
+  locked.position = 'fixed';
+  locked.top = `-${savedScrollY}px`;
+  locked.left = '0px';
+  locked.right = '0px';
+  locked.bottom = '0px';
 
-  for (const property of LOCKED_STYLE_PROPERTIES) {
+  // A property that no longer holds the lock value was changed by other code during the lock, so it is left alone.
+  // Compare before restoring anything: restoring `overflow` also changes its longhands.
+  const untouched = LOCKED_STYLE_PROPERTIES.filter(
+    property => body.style.getPropertyValue(property) === locked.getPropertyValue(property)
+  );
+
+  for (const property of untouched) {
     body.style.setProperty(property, saved.getPropertyValue(property), saved.getPropertyPriority(property));
   }
 }
 
 function restoreScrollPosition(savedScrollY: string): void {
-  const scrollY = Number(savedScrollY);
+  let top = Number(savedScrollY);
 
-  if (Number.isNaN(scrollY)) {
+  if (Number.isNaN(top)) {
     console.warn('[react-simplikit] Invalid scroll position, defaulting to 0');
-    scrollToInstantly(0);
-    return;
+    top = 0;
   }
 
-  scrollToInstantly(scrollY);
-}
-
-// `window.scrollTo(x, y)` follows the CSS `scroll-behavior` of the page, so it animates under `scroll-behavior: smooth`.
-// `behavior: 'instant'` jumps back to the saved position whatever the page sets.
-function scrollToInstantly(top: number): void {
+  // Unlike `scrollTo(x, y)`, `behavior: 'instant'` does not follow the root element's `scroll-behavior: smooth`.
   window.scrollTo({ top, left: 0, behavior: 'instant' });
 }
 

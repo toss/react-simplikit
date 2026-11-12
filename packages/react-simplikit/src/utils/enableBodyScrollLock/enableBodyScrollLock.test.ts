@@ -65,7 +65,11 @@ describe('enableBodyScrollLock', () => {
 
     enableBodyScrollLock();
 
-    expect(document.body.getAttribute(BODY_STYLE_ATTR)).toBe('position: relative; top: 10px;');
+    const saved = document.createElement('div').style;
+    saved.cssText = document.body.getAttribute(BODY_STYLE_ATTR) ?? '';
+    expect(saved.position).toBe('relative');
+    expect(saved.top).toBe('10px');
+    expect(saved.color).toBe('');
   });
 
   it('should keep the first saved inline styles when called twice', () => {
