@@ -53,7 +53,7 @@ import { isServer } from '../../utils/isServer/index.ts';
  * }
  */
 export function useSafeAreaInset(): SafeAreaInset {
-  const [inset, setInset] = useState<SafeAreaInset>(() => getSafeAreaInset());
+  const [inset, setInset] = useState<SafeAreaInset>({ top: 0, bottom: 0, left: 0, right: 0 });
 
   const updateInset = useCallback(() => {
     startTransition(() => {
@@ -66,6 +66,8 @@ export function useSafeAreaInset(): SafeAreaInset {
       if (isServer()) {
         return;
       }
+
+      updateInset();
 
       // Listen to resize event for orientation changes
       window.addEventListener('resize', updateInset);

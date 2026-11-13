@@ -82,7 +82,7 @@ function MyComponent() {
 
 ## Notes
 
-- **SSR safety**: The hook checks `isServer()` before reading `window.scrollY`, so it is safe during server-side rendering.
+- **SSR safety**: `position` is `0` on the server and on the first client render, then syncs to `window.scrollY` after mount.
 - **Performance**: Scroll events are throttled to limit how often they are processed (default: 50ms).
 - **Passive listener**: The scroll listener is registered with `{ passive: true }` for smoother scrolling.
 - **Cleanup**: The event listener and the throttle timer are removed when the component unmounts.

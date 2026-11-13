@@ -84,7 +84,7 @@ function MyComponent() {
 
 ## Notas
 
-- **Seguridad en SSR**: El Hook comprueba `isServer()` antes de leer `window.scrollY`, por lo que es seguro durante el renderizado en el servidor.
+- **Seguridad en SSR**: `position` es `0` en el servidor y en el primer renderizado del cliente, y se sincroniza con `window.scrollY` tras el montaje.
 - **Rendimiento**: El Hook limita la frecuencia con la que procesa los eventos de desplazamiento (valor predeterminado: 50ms).
 - **Escucha pasiva**: El Hook registra la escucha de desplazamiento con `{ passive: true }` para que el desplazamiento sea más fluido.
 - **Limpieza**: Al desmontar el componente, el Hook elimina la escucha de eventos y el temporizador que limita la frecuencia.

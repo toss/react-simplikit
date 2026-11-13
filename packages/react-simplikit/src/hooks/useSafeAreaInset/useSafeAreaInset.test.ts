@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
+
 import { useSafeAreaInset } from './useSafeAreaInset.ts';
 
 const serverEnvironmentFlag = vi.hoisted(() => ({ current: false }));
@@ -302,5 +304,12 @@ describe('useSafeAreaInset', () => {
       left: 100,
       right: 100,
     });
+  });
+
+  it('should hydrate without a mismatch and then sync to the browser value', () => {
+    const { result, onRecoverableError } = renderHookSSR.hydrated(() => useSafeAreaInset());
+
+    expect(onRecoverableError).not.toHaveBeenCalled();
+    expect(result.current).toEqual({ top: 47, bottom: 34, left: 0, right: 0 });
   });
 });

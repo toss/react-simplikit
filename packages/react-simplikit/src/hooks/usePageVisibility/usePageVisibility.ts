@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { isServer } from '../../utils/isServer/index.ts';
-
 /**
  * Page visibility state derived from browser's DocumentVisibilityState.
  * Excludes 'prerender' as it is deprecated and not used in modern browsers.
@@ -66,19 +64,22 @@ export type PageVisibility = {
  * }
  *
  * @remarks
- * - **SSR safety**: The Page Visibility API is unavailable during server-side rendering, so the hook returns the safe default `{ isVisible: true, visibilityState: 'visible' }`.
+ * - **SSR safety**: The hook returns `{ isVisible: true, visibilityState: 'visible' }` on the server and on the first client render, then syncs to `document.visibilityState` after mount.
  * - **Browser support**: The Page Visibility API is supported in every modern browser. See the [MDN browser compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#browser_compatibility) for details.
  * - **Performance**: The hook listens to the native `visibilitychange` event, so it adds no polling and negligible overhead.
  * - **Visibility state**: Only `'visible'` and `'hidden'` are returned; the deprecated `'prerender'` state is excluded.
  */
 export function usePageVisibility(): PageVisibility {
-  const [pageVisibility, setPageVisibility] = useState<PageVisibility>(() => getPageVisibility());
+  const [pageVisibility, setPageVisibility] = useState<PageVisibility>(INITIAL_PAGE_VISIBILITY);
 
   useEffect(function handleVisibilityChange() {
     function updateVisibility() {
-      setPageVisibility(() => getPageVisibility());
+      const next = getPageVisibility();
+
+      setPageVisibility(prev => (prev.visibilityState === next.visibilityState ? prev : next));
     }
 
+    updateVisibility();
     document.addEventListener('visibilitychange', updateVisibility);
 
     return function cleanup() {
@@ -89,14 +90,12 @@ export function usePageVisibility(): PageVisibility {
   return pageVisibility;
 }
 
-function getPageVisibility(): PageVisibility {
-  if (isServer()) {
-    return {
-      isVisible: true,
-      visibilityState: 'visible',
-    };
-  }
+const INITIAL_PAGE_VISIBILITY: PageVisibility = {
+  isVisible: true,
+  visibilityState: 'visible',
+};
 
+function getPageVisibility(): PageVisibility {
   const visibilityState: VisibilityState = document.visibilityState;
 
   return {
