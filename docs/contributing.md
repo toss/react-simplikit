@@ -210,6 +210,19 @@ JSDoc comments must include `@description` and `@example`, and if there are para
 
 :::
 
+To deprecate an export, add `@deprecated` with its replacement in backticks, linked to its page. Its page stays and opens with a deprecation warning. To leave an export out of the docs, such as an old name kept after a rename, add `@no-docs`.
+
+```ts
+/**
+ * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+ */ // page kept, with a warning
+
+/**
+ * @no-docs
+ * @deprecated Use `useNew` instead.
+ */ // no page
+```
+
 ### Writing Test Code
 
 All implementations must include test code, written with the same name as the implementation. Test coverage must always reach 100%. Use the following command to verify coverage:

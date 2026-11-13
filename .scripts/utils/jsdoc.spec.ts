@@ -1,6 +1,53 @@
 import { describe, expect, it } from 'vitest';
 
-import { readDeprecation } from './jsdoc.ts';
+import { readDeprecation, readNoDocs } from './jsdoc.ts';
+
+describe('readNoDocs', () => {
+  it('reads @no-docs from the last comment in the file, which documents the export', () => {
+    expect(
+      readNoDocs(`/**
+ * @description Does something.
+ * @no-docs
+ */
+export function useHidden() {}`)
+    ).toBe(true);
+  });
+
+  it('reads @no-docs next to @deprecated', () => {
+    expect(
+      readNoDocs(`/**
+ * @description The old name.
+ * @no-docs
+ * @deprecated Use \`useNew\` instead.
+ */
+export const useOld = useNew;`)
+    ).toBe(true);
+  });
+
+  it('ignores @no-docs on an earlier comment, such as an options type', () => {
+    expect(
+      readNoDocs(`type Options = {
+  /** @no-docs */
+  wait?: number;
+};
+
+/**
+ * @description Does something.
+ */
+export function useCurrent(options: Options) {}`)
+    ).toBe(false);
+  });
+
+  it('is false for an export without the tag', () => {
+    expect(
+      readNoDocs(`/**
+ * @description Does something.
+ * @deprecated Use \`useNew\` instead.
+ */
+export function useOld() {}`)
+    ).toBe(false);
+  });
+});
 
 describe('readDeprecation', () => {
   it('reads @deprecated from the last comment in the file, which documents the export', () => {
@@ -11,6 +58,16 @@ describe('readDeprecation', () => {
  */
 export function useOld() {}`)
     ).toBe('Use `useNew` instead.');
+  });
+
+  it('keeps a Markdown link around the backticked replacement', () => {
+    expect(
+      readDeprecation(`/**
+ * @description Does something.
+ * @deprecated Use [\`useNew\`](https://react-simplikit.slash.page/hooks/useNew) instead.
+ */
+export function useOld() {}`)
+    ).toBe('Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.');
   });
 
   it('ignores @deprecated on an earlier comment, such as an options type', () => {

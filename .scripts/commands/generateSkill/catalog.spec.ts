@@ -43,6 +43,12 @@ into one.
     assert.equal(extractDescription(markdown, 'useX'), 'A React hook that manages a Set as state');
   });
 
+  it('skips the deprecation warning that opens the page of a deprecated export', () => {
+    const markdown = `# useX\n\n::: warning Deprecated\nUse \`useY\` instead.\n:::\n\n\`useX\` does it. Also more.\n\n## Interface\n`;
+
+    assert.equal(extractDescription(markdown, 'useX'), '`useX` does it.');
+  });
+
   it('rejects a page that does not open with a paragraph', () => {
     assert.throws(
       () => extractDescription('# useX\n\n## Interface\n', 'useX'),
@@ -90,7 +96,7 @@ describe('renderSkill', () => {
     const rendered = renderSkill({
       template: '# Skill\n\n## Catalog\n\n<!-- CATALOG -->\n\n## Learn more\n',
       entries: [{ name: 'useNew', category: 'hooks', description: 'Does it.' }],
-      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` | not this.\nIt goes away\nlater.' }],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` | not this.\nIt goes away\nlater.', hasPage: false }],
     });
 
     assert.equal(
@@ -118,6 +124,16 @@ These still work but are kept only for backward compatibility. Do not use them i
     );
   });
 
+  it('links a deprecated entry that keeps its page to its reference', () => {
+    const rendered = renderSkill({
+      template: '<!-- CATALOG -->\n',
+      entries: [],
+      deprecatedEntries: [{ name: 'useLegacy', notice: 'Use `useNew` instead.', hasPage: true }],
+    });
+
+    assert.equal(rendered.includes('| [`useLegacy`](references/useLegacy.md) | Use `useNew` instead. |'), true);
+  });
+
   it('rejects a template without the placeholder', () => {
     assert.throws(() => renderSkill({ template: '# Skill\n', entries: [], deprecatedEntries: [] }), /<!-- CATALOG -->/);
   });
@@ -131,10 +147,20 @@ describe('readCatalogNames', () => {
         { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
         { name: 'useNew', category: 'hooks', description: 'Does it.' },
       ],
-      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` instead.' }],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` instead.', hasPage: false }],
     });
 
     assert.deepEqual(readCatalogNames(skill), ['useNew', 'isIOS']);
+  });
+
+  it('does not count a linked Deprecated row as a catalog row', () => {
+    const skill = renderSkill({
+      template: '<!-- CATALOG -->\n',
+      entries: [{ name: 'useNew', category: 'hooks', description: 'Does it.' }],
+      deprecatedEntries: [{ name: 'useLegacy', notice: 'Use `useNew` instead.', hasPage: true }],
+    });
+
+    assert.deepEqual(readCatalogNames(skill), ['useNew']);
   });
 });
 
@@ -147,10 +173,23 @@ describe('readDeprecatedNames', () => {
         { name: 'isIOS', category: 'utils', description: 'Detects iOS.' },
         { name: 'useNew', category: 'hooks', description: 'Does it.' },
       ],
-      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` instead.' }],
+      deprecatedEntries: [{ name: 'useOld', notice: 'Use `useNew` instead.', hasPage: false }],
     });
 
     assert.deepEqual(readDeprecatedNames(skill), ['useOld']);
+  });
+
+  it('reads linked and unlinked Deprecated rows alike', () => {
+    const skill = renderSkill({
+      template: '# Skill\n\n<!-- CATALOG -->\n',
+      entries: [],
+      deprecatedEntries: [
+        { name: 'useLegacy', notice: 'Use `useNew` instead.', hasPage: true },
+        { name: 'useOld', notice: 'Use `useNew` instead.', hasPage: false },
+      ],
+    });
+
+    assert.deepEqual(readDeprecatedNames(skill), ['useLegacy', 'useOld']);
   });
 
   it('reports no deprecated names when the catalog has no Deprecated table', () => {

@@ -210,6 +210,19 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
 
   :::
 
+export를 deprecated로 표시하려면 대체 API를 백틱으로 감싸고 그 페이지 링크를 걸어서 `@deprecated`에 적어 주세요. 문서 페이지는 그대로 남고, 맨 위에 deprecated 경고가 붙어요. 이름을 바꾼 뒤 남겨 둔 옛 이름처럼 문서에서 빼야 하는 export에는 `@no-docs`를 추가해 주세요.
+
+```ts
+/**
+ * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+ */ // page kept, with a warning
+
+/**
+ * @no-docs
+ * @deprecated Use `useNew` instead.
+ */ // no page
+```
+
 ### 테스트 코드 작성
 
 모든 구현체에는 구현체와 같은 이름의 테스트 코드를 반드시 작성해야 해요. 테스트 커버리지는 항상 100%를 만족해야 해요. 아래 명령어로 테스트 커버리지를 확인할 수 있어요.

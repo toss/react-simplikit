@@ -210,6 +210,19 @@ JSDoc 注释必须包含 `@description` 和 `@example`；如果有参数或返�
 
 :::
 
+要将导出标记为已弃用，请添加 `@deprecated`，用反引号写出替代 API，并链接到它的页面。文档页面会保留，并在顶部显示弃用警告。对于需要从文档中移除的导出（例如重命名后保留的旧名称），请添加 `@no-docs`。
+
+```ts
+/**
+ * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+ */ // page kept, with a warning
+
+/**
+ * @no-docs
+ * @deprecated Use `useNew` instead.
+ */ // no page
+```
+
 ### 编写测试代码
 
 所有实现都必须包含测试代码，文件名与实现同名。测试覆盖率必须始终达到 100%。可以用下面的命令确认覆盖率：
