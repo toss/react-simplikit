@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { collectDeprecatedExports } from './collectDeprecatedExports.ts';
+import { collectDocTags } from './collectDocTags.ts';
 import { collectPublicExports } from './collectPublicExports.ts';
 
 type AssertLlmsOutputOptions = {
@@ -19,7 +19,7 @@ const ALLOWED_LINK = /^https:\/\/react-simplikit\.slash\.page\/(?:(?:hooks|compo
 
 /**
  * Checks the llms outputs vitepress-plugin-llms wrote into a docs build:
- * every public export that is not deprecated has a page in llms.txt, localized copies are not
+ * every public export that is not `@no-docs` has a page in llms.txt, localized copies are not
  * listed, and the per-page Markdown exists.
  */
 export async function assertLlmsOutput({ buildOutputDirectory, root }: AssertLlmsOutputOptions): Promise<void> {
@@ -37,16 +37,16 @@ export async function assertLlmsOutput({ buildOutputDirectory, root }: AssertLlm
   }
 
   const publicExports = await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE));
-  const deprecatedExports = new Set(await collectDeprecatedExports(root, publicExports));
+  const noDocsExports = new Set((await collectDocTags(root, publicExports)).noDocs);
 
-  // A deprecated export has no page. Its old URL only serves a copy of its replacement's Markdown,
-  // which must stay out of the listing or an agent would read the same page under two names.
+  // A `@no-docs` export has no page. A renamed one's old URL only serves a copy of its replacement's
+  // Markdown, which must stay out of the listing or an agent would read the same page under two names.
   for (const name of publicExports) {
     assert.equal(
       links.some(link => link.endsWith(`/${name}.md`)),
-      !deprecatedExports.has(name),
-      deprecatedExports.has(name)
-        ? `llms.txt must not link a page for ${name}, which is @deprecated`
+      !noDocsExports.has(name),
+      noDocsExports.has(name)
+        ? `llms.txt must not link a page for ${name}, which is @no-docs`
         : `llms.txt must link the documentation page of ${name}`
     );
   }

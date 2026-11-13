@@ -20,7 +20,7 @@ import { packageSourceRoot } from '../.vitepress/shared.mts';
 import { PACKAGE_INDEX_FILE } from './commands/generateSkill/index.ts';
 import { assertLlmsOutput } from './utils/assertLlmsOutput.ts';
 import { assertSeoOutput } from './utils/assertSeoOutput.ts';
-import { collectDeprecatedExports } from './utils/collectDeprecatedExports.ts';
+import { collectDocTags } from './utils/collectDocTags.ts';
 import { collectPublicExports } from './utils/collectPublicExports.ts';
 import { execWithOutput } from './utils/execWithOutput.ts';
 import { getRootPath } from './utils/getRootPath.ts';
@@ -167,14 +167,16 @@ try {
     assert.equal(stubPaths.has(expected), true, `the legacy URL ${expected} must keep a redirect`);
   }
 
-  // A deprecated export lost its page, so forgetting its redirect would turn the published URL into a 404.
+  // A deprecated `@no-docs` export is an old name that lost its page, so forgetting its redirect would
+  // turn the published URL into a 404. A `@no-docs` export that is not deprecated may never have had one.
   const publicExports = await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE));
+  const docTags = await collectDocTags(root, publicExports);
 
-  for (const name of await collectDeprecatedExports(root, publicExports)) {
+  for (const name of docTags.noDocs.filter(name => docTags.deprecated.includes(name))) {
     assert.equal(
       ['hooks', 'components', 'utils'].some(category => stubPaths.has(`${category}/${name}.html`)),
       true,
-      `${name} is @deprecated and has no page, so its old URL must redirect — add it to the renamed pages in legacyRedirects.mts`
+      `${name} is @deprecated and @no-docs, so its old URL must redirect — add it to the renamed pages in legacyRedirects.mts`
     );
   }
 

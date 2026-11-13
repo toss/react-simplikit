@@ -210,6 +210,19 @@ JSDoc コメントには `@description` と `@example` を必ず含める必要�
 
 :::
 
+export を非推奨にするには、代替 API をバッククォートで囲み、そのページへのリンクを付けて `@deprecated` に書きます。ドキュメントページはそのまま残り、先頭に非推奨の警告が表示されます。名前を変更した後に残した旧名のように、ドキュメントから外す export には `@no-docs` を追加します。
+
+```ts
+/**
+ * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+ */ // page kept, with a warning
+
+/**
+ * @no-docs
+ * @deprecated Use `useNew` instead.
+ */ // no page
+```
+
 ### テストコードを書く
 
 すべての実装には、実装と同じ名前のテストコードを必ず含める必要があります。テストカバレッジは常に 100% を満たす必要があります。以下のコマンドでカバレッジを確認できます。

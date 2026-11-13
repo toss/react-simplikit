@@ -79,7 +79,7 @@ export { useToggle } from './hooks/useToggle/index.ts';
     assert.equal((await fs.readFile(path.join(outputDirectory, 'SKILL.md'), 'utf8')).includes('isIOS'), false);
   });
 
-  it('lists an export whose JSDoc is @deprecated under Deprecated, without a page or a reference', async () => {
+  it('lists an export that is @no-docs and @deprecated under Deprecated, without a page or a reference', async () => {
     const root = await writeFixtureRoot({
       index: `
 export { useNew, useOld } from './hooks/useNew/index.ts';
@@ -91,6 +91,7 @@ export { useNew, useOld } from './hooks/useNew/index.ts';
  * @description
  * \`useOld\` is the name \`useNew\` had before.
  *
+ * @no-docs
  * @deprecated Use \`useNew\` instead.
  */
 export const useOld = useNew;
@@ -110,6 +111,57 @@ export const useOld = useNew;
     );
     assert.equal(skill.includes('| Name | Notice |\n| --- | --- |\n| `useOld` | Use `useNew` instead. |'), true);
     assert.equal(skill.includes('references/useOld.md'), false);
+    assert.deepEqual(await fs.readdir(path.join(outputDirectory, 'references')), ['useNew.md']);
+  });
+
+  it('lists a @deprecated export that keeps its page under Deprecated, linked to its reference', async () => {
+    const root = await writeFixtureRoot({
+      index: `
+export { useLegacy } from './hooks/useLegacy/index.ts';
+export { useNew } from './hooks/useNew/index.ts';
+`,
+      pages: {
+        'hooks/useLegacy/useLegacy.md':
+          '# useLegacy\n\n::: warning Deprecated\nUse `useNew` instead.\n:::\n\n`useLegacy` flips a boolean.\n',
+        'hooks/useNew/useNew.md': '# useNew\n\n`useNew` flips a boolean.\n',
+      },
+      sources: {
+        'hooks/useLegacy/useLegacy.ts':
+          '/**\n * @deprecated Use `useNew` instead.\n */\nexport function useLegacy() {}\n',
+        'hooks/useNew/useNew.ts': 'export function useNew() {}\n',
+      },
+    });
+    const outputDirectory = path.join(root, 'out');
+
+    await generateSkill({ root, outputDirectory });
+
+    const skill = await fs.readFile(path.join(outputDirectory, 'SKILL.md'), 'utf8');
+    assert.equal(skill.includes('| [`useLegacy`](references/useLegacy.md) | Use `useNew` instead. |'), true);
+    assert.equal(skill.includes('| [`useLegacy`](references/useLegacy.md) | `useLegacy` flips a boolean. |'), false);
+    assert.deepEqual((await fs.readdir(path.join(outputDirectory, 'references'))).toSorted(), [
+      'useLegacy.md',
+      'useNew.md',
+    ]);
+  });
+
+  it('leaves a @no-docs export out of the skill entirely', async () => {
+    const root = await writeFixtureRoot({
+      index: `
+export { useHidden } from './hooks/useHidden/index.ts';
+export { useNew } from './hooks/useNew/index.ts';
+`,
+      pages: { 'hooks/useNew/useNew.md': '# useNew\n\n`useNew` flips a boolean.\n' },
+      sources: {
+        'hooks/useHidden/useHidden.ts': '/**\n * @no-docs\n */\nexport function useHidden() {}\n',
+        'hooks/useNew/useNew.ts': 'export function useNew() {}\n',
+      },
+    });
+    const outputDirectory = path.join(root, 'out');
+
+    await generateSkill({ root, outputDirectory });
+
+    const skill = await fs.readFile(path.join(outputDirectory, 'SKILL.md'), 'utf8');
+    assert.equal(skill.includes('useHidden'), false);
     assert.deepEqual(await fs.readdir(path.join(outputDirectory, 'references')), ['useNew.md']);
   });
 

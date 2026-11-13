@@ -210,6 +210,19 @@ Los comentarios JSDoc deben incluir `@description` y `@example` y, si hay parám
 
 :::
 
+Para marcar una exportación como obsoleta, añade `@deprecated` con su reemplazo entre comillas invertidas y un enlace a su página. Su página se mantiene y empieza con un aviso de que está obsoleta. Para dejar una exportación fuera de la documentación, como un nombre antiguo que se conserva tras un cambio de nombre, añade `@no-docs`.
+
+```ts
+/**
+ * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+ */ // page kept, with a warning
+
+/**
+ * @no-docs
+ * @deprecated Use `useNew` instead.
+ */ // no page
+```
+
 ### Escribir el código de pruebas
 
 Todas las implementaciones deben incluir código de pruebas, con el mismo nombre que la implementación. La cobertura de pruebas debe alcanzar siempre el 100%. Usa el siguiente comando para comprobar la cobertura:

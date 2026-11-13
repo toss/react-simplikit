@@ -6,7 +6,7 @@ import path from 'path';
 import * as prettier from 'prettier';
 
 import { getRootPath } from '../../utils/getRootPath.ts';
-import { parseOptions, readDeprecation, trimBlock } from '../../utils/jsdoc.ts';
+import { parseOptions, readDeprecation, readNoDocs, trimBlock } from '../../utils/jsdoc.ts';
 import { generateSkill } from '../generateSkill/index.ts';
 
 type Spec = Pick<OriginSpec, 'type' | 'name' | 'description' | 'optional' | 'default'>;
@@ -25,8 +25,8 @@ const prettierConfig: prettier.Options = {
  * `verifyDocs.ts` compares a committed page against this, so the formatting applied here has to be
  * the same formatting the page is written with — hence prettier runs inside, not at the call site.
  *
- * Throws for an export whose JSDoc is `@deprecated`: it has no page, and the page of the export
- * that replaces it says what it was renamed from.
+ * Throws for an export whose JSDoc is `@no-docs`: it has no page. A `@deprecated` export keeps its
+ * page, which opens with the `@deprecated` text as a warning.
  */
 export async function renderEnglishDoc(name: string, sourceFilePath: string): Promise<string> {
   const documentPath = `${path.dirname(sourceFilePath)}/${name}.md`;
@@ -34,7 +34,7 @@ export async function renderEnglishDoc(name: string, sourceFilePath: string): Pr
 
   assertHasPage(name, source);
 
-  const docSource = await jsdocToMd(name, parseJSDoc(source));
+  const docSource = await jsdocToMd(name, parseJSDoc(source), readDeprecation(source));
 
   return prettier.format(docSource, {
     ...(await prettier.resolveConfig(documentPath)),
@@ -44,10 +44,15 @@ export async function renderEnglishDoc(name: string, sourceFilePath: string): Pr
 
 export async function generateDocs(names: string[]) {
   const tasks = new Listr([], { concurrent: 10 });
-  const targets = names.map(name => [name, glob.sync(`**/${name}.ts*`, { cwd: getRootPath() })[0]]);
+  // `_internal` holds implementations named after the public hooks that wrap them
+  // (`hooks/_internal/useDebounce/useDebounce.ts`), so the first match could be the wrong file.
+  const targets = names.map(name => [
+    name,
+    glob.sync(`**/${name}.ts*`, { cwd: getRootPath(), ignore: ['**/_internal/**'] })[0],
+  ]);
 
   // Checked before any task runs: the tasks below collect their errors instead of exiting, and a
-  // deprecated name has to fail the command without writing anything.
+  // `@no-docs` name has to fail the command without writing anything.
   for (const [name, sourceFilePath] of targets) {
     if (sourceFilePath !== undefined) {
       assertHasPage(name, await fs.readFile(sourceFilePath, 'utf-8'));
@@ -96,9 +101,9 @@ export async function generateDocs(names: string[]) {
 }
 
 function assertHasPage(name: string, source: string) {
-  if (readDeprecation(source) != null) {
+  if (readNoDocs(source)) {
     throw new Error(
-      `${name} is @deprecated, and a deprecated export has no documentation page — document the rename on its replacement's page instead`
+      `${name} is @no-docs, so it has no documentation page — for a rename, say so on its replacement's page instead`
     );
   }
 }
@@ -226,7 +231,7 @@ function endSentence(description: string) {
   return trimmed.endsWith('.') ? trimmed : `${trimmed}.`;
 }
 
-async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
+async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>, deprecation: string | undefined) {
   const { templates, description, remarks, examples, params, returns, nestedValueOfReturns } = jsdoc;
 
   const paramsProps = params.reduce<Array<[Spec, Spec[]]>>(
@@ -264,9 +269,11 @@ async function jsdocToMd(name: string, jsdoc: ReturnType<typeof parseJSDoc>) {
         return `${rest}${param.name}${optional}: ${type}${param.default == null ? '' : ` = ${param.default}`}`;
       });
 
+  const deprecationNotice = deprecation == null ? '' : `::: warning Deprecated\n${deprecation}\n:::\n\n`;
+
   return `# ${name}
 
-${description}
+${deprecationNotice}${description}
 
 ## Interface
 
