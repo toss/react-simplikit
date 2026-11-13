@@ -40,7 +40,7 @@ describe('useScrollDirection', () => {
     });
   });
 
-  it('should ignore scroll events that arrive while the throttle timer is pending', async () => {
+  it('should skip scroll events inside the throttle window and catch up when it ends', async () => {
     const { result } = renderHook(() => useScrollDirection());
 
     await act(async () => {
@@ -60,10 +60,10 @@ describe('useScrollDirection', () => {
       vi.runAllTimers();
     });
 
-    // The throttled second event is dropped, not deferred
+    // The position is re-checked when the throttle timer ends
     expect(result.current).toEqual({
       direction: 'down',
-      position: 100,
+      position: 999,
     });
   });
 
