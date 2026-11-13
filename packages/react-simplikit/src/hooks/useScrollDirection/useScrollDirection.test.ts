@@ -414,4 +414,13 @@ describe('useScrollDirection', () => {
     expect(result.current.direction).toBe('up');
     expect(result.current.position).toBe(-100);
   });
+
+  it('should hydrate without a mismatch and then sync to the browser value', () => {
+    Object.defineProperty(window, 'scrollY', { value: 300 });
+
+    const { result, onRecoverableError } = renderHookSSR.hydrated(() => useScrollDirection());
+
+    expect(onRecoverableError).not.toHaveBeenCalled();
+    expect(result.current).toEqual({ direction: null, position: 300 });
+  });
 });

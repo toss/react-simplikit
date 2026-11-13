@@ -24,7 +24,7 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
       type: 'VisualViewportState | null',
       required: false,
       description:
-        'Visual Viewport 状态对象，如果不支持则为 <code>null</code>（服务端渲染或没有 Visual Viewport API 的浏览器）。',
+        'Visual Viewport 状态对象，在服务端、客户端首次渲染时以及没有 Visual Viewport API 的浏览器中为 <code>null</code>。',
     },
     {
       name: 'viewport.width',
@@ -99,7 +99,7 @@ if (viewport && viewport.scale > 1.3) {
 
 ## 备注
 
-- **服务端渲染安全性**：在服务端渲染期间以及在没有 Visual Viewport API 的浏览器中，`viewport` 为 `null`。在读取其属性之前，务必检查是否为 `null`。
+- **服务端渲染安全性**：在服务端、客户端首次渲染时以及没有 Visual Viewport API 的浏览器中，`viewport` 为 `null`。挂载后会同步。在读取其属性之前，务必检查是否为 `null`。
 - **浏览器支持**：现代移动浏览器支持 Visual Viewport API。在缺少该 API 的情况下，该 Hook 返回 `null`。
 - **性能**：更新被包裹在 React 的 `startTransition` 中，因此视口变化不会阻塞紧急渲染。
 - **更简单的替代方案**：如果只需要键盘高度，可以使用 `useKeyboardHeight()`，它提供了更简单的 API。

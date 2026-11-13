@@ -26,7 +26,7 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
       type: 'VisualViewportState | null',
       required: false,
       description:
-        'Visual Viewport 상태 객체예요. 지원하지 않는 환경(SSR 또는 Visual Viewport API 미지원 브라우저)에서는 <code>null</code>이에요.',
+        'Visual Viewport 상태 객체예요. 서버, 클라이언트의 첫 렌더링, Visual Viewport API 미지원 브라우저에서는 <code>null</code>이에요.',
     },
     {
       name: 'viewport.width',
@@ -98,7 +98,7 @@ if (viewport && viewport.scale > 1.3) {
 
 ## 참고사항
 
-- **SSR 안전성**: `viewport`는 SSR 환경이나 Visual Viewport API를 지원하지 않는 브라우저에서 `null`이에요. `viewport`의 속성을 읽기 전에 항상 `null`인지 확인하세요.
+- **SSR 안전성**: `viewport`는 서버, 클라이언트의 첫 렌더링, Visual Viewport API를 지원하지 않는 브라우저에서 `null`이에요. 마운트된 뒤 동기화돼요. `viewport`의 속성을 읽기 전에 항상 `null`인지 확인하세요.
 - **브라우저 지원**: 최신 모바일 브라우저는 Visual Viewport API를 지원해요. 지원하지 않는 환경에서는 훅이 `null`을 반환해요.
 - **성능**: 업데이트를 리액트의 `startTransition`으로 감싸서 뷰포트가 바뀌어도 긴급한 렌더링을 막지 않아요.
 - **더 간단한 대안**: 키보드 높이만 필요하다면 더 간단한 API인 `useKeyboardHeight()`를 사용하세요.

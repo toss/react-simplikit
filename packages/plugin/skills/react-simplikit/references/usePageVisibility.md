@@ -80,7 +80,7 @@ function Analytics() {
 
 ## Notes
 
-- **SSR safety**: The Page Visibility API is unavailable during server-side rendering, so the hook returns the safe default `{ isVisible: true, visibilityState: 'visible' }`.
+- **SSR safety**: The hook returns `{ isVisible: true, visibilityState: 'visible' }` on the server and on the first client render, then syncs to `document.visibilityState` after mount.
 - **Browser support**: The Page Visibility API is supported in every modern browser. See the [MDN browser compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#browser_compatibility) for details.
 - **Performance**: The hook listens to the native `visibilitychange` event, so it adds no polling and negligible overhead.
 - **Visibility state**: Only `'visible'` and `'hidden'` are returned; the deprecated `'prerender'` state is excluded.

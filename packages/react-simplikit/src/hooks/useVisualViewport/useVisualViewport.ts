@@ -1,7 +1,5 @@
 import { startTransition, useCallback, useEffect, useState } from 'react';
 
-import { isServer } from '../../utils/isServer/index.ts';
-
 type VisualViewportState = {
   /** Viewport width (px) */
   width: number;
@@ -48,7 +46,7 @@ type VisualViewportState = {
  * the keyboard appears or the user zooms/scrolls.
  *
  * @returns {{ viewport: VisualViewportState | null }} An object containing the Visual Viewport state.
- * - viewport `VisualViewportState | null` - Visual Viewport state object, or `null` if not supported (SSR or browsers without the Visual Viewport API);
+ * - viewport `VisualViewportState | null` - Visual Viewport state object, or `null` on the server, on the first client render, and in browsers without the Visual Viewport API;
  * - viewport.width `number` - Viewport width in pixels;
  * - viewport.height `number` - Viewport height in pixels;
  * - viewport.offsetLeft `number` - Viewport left offset in pixels from the layout viewport. Typically 0 unless horizontal scrolling or panning occurs;
@@ -88,7 +86,7 @@ type VisualViewportState = {
  * }
  *
  * @remarks
- * - **SSR safety**: `viewport` is `null` during server-side rendering and in browsers without the Visual Viewport API. Always check for `null` before reading its properties.
+ * - **SSR safety**: `viewport` is `null` on the server, on the first client render, and in browsers without the Visual Viewport API. It syncs after mount. Always check for `null` before reading its properties.
  * - **Browser support**: The Visual Viewport API is supported in modern mobile browsers. Where it is missing the hook returns `null`.
  * - **Performance**: Updates are wrapped in React's `startTransition` so viewport changes do not block urgent rendering.
  * - **Simpler alternative**: If you only need the keyboard height, use `useKeyboardHeight()` for a simpler API.
@@ -96,11 +94,7 @@ type VisualViewportState = {
  * - **Use cases**: Detecting the keyboard, reacting to pinch-zoom gestures, building viewport-aware layouts, and showing or hiding UI by zoom level.
  */
 export function useVisualViewport(): { viewport: VisualViewportState | null } {
-  const visualViewport = isServer() ? null : window.visualViewport;
-
-  const [viewport, setViewport] = useState<VisualViewportState | null>(() =>
-    visualViewport != null ? getVisualViewportState(visualViewport) : null
-  );
+  const [viewport, setViewport] = useState<VisualViewportState | null>(null);
 
   const updateViewportState = useCallback(() => {
     startTransition(() => {
@@ -110,6 +104,8 @@ export function useVisualViewport(): { viewport: VisualViewportState | null } {
 
   useEffect(
     function handleVisualViewportChange() {
+      updateViewportState();
+
       window.visualViewport?.addEventListener('resize', updateViewportState);
       window.visualViewport?.addEventListener('scroll', updateViewportState);
 
