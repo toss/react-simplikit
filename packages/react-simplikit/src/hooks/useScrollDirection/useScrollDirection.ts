@@ -88,11 +88,16 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}): Scr
     []
   );
 
-  const startThrottle = useCallback(() => {
-    throttleTimerRef.current = setTimeout(function clearThrottle() {
-      throttleTimerRef.current = null;
-    }, throttleMs);
-  }, [throttleMs]);
+  const startThrottle = useCallback(
+    (onEnd: () => void) => {
+      throttleTimerRef.current = setTimeout(function clearThrottle() {
+        throttleTimerRef.current = null;
+        // Events inside the window were skipped, so re-check or the last position is lost.
+        onEnd();
+      }, throttleMs);
+    },
+    [throttleMs]
+  );
 
   useEffect(
     function handleScrollDirectionChange() {
@@ -104,8 +109,13 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}): Scr
         const currentScrollY = window.scrollY;
         const lastScrollY = lastScrollYRef.current;
 
+        // Also stops the re-check loop once the position settles.
+        if (currentScrollY === lastScrollY) {
+          return;
+        }
+
         lastScrollYRef.current = currentScrollY;
-        startThrottle();
+        startThrottle(handleScroll);
         updateScrollDirection({ currentScrollY, lastScrollY });
       }
 
