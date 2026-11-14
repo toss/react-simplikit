@@ -43,10 +43,10 @@ export async function collectFiles({ paths, ignore, includePackageJson, cwd }: C
 
   const base = fastGlob.convertPathToPattern(cwd);
   // Joined, not concatenated: a typed `./legacy/**` must not become `/./legacy/**`, which never matches.
-  const scoped = ignore.map(pattern => path.posix.join(base, pattern));
+  const scoped = [...DEFAULT_IGNORE, ...ignore].map(pattern => path.posix.join(base, pattern));
 
   const files = await fastGlob(patterns, {
-    ignore: [...DEFAULT_IGNORE, ...scoped],
+    ignore: scoped,
     absolute: true,
     dot: true,
     followSymbolicLinks: false,
