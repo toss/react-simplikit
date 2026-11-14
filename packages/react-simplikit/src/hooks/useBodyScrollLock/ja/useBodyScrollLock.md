@@ -56,4 +56,4 @@ function App() {
 - **SSR の安全性**：ロックはクライアントでのみ実行される `useEffect` 内で適用されるため、サーバーサイドレンダリングでも安全に使えます。
 - **自動クリーンアップ**：コンポーネントのアンマウント時にロックを解除します。
 - **複数のモーダル**：複数のモーダルが重なる場合は、競合を避けて一貫した動作を保つために、各モーダルではなく親で一度だけロックします。
-- **ロックの仕組み**：`enableBodyScrollLock` は `body` をその場に固定し（`position: fixed` と `overflow: hidden`）、スクロール位置を data 属性に保存します。`disableBodyScrollLock` はこれらのスタイルを削除し、スクロール位置を復元します。
+- **ロックの仕組み**：`enableBodyScrollLock` は `body` をその場に固定し（`position: fixed` と `overflow: hidden`）、スクロール位置を data 属性に保存します。`disableBodyScrollLock` はロック前に `body` にあったインラインスタイルを元に戻します（ロック中に他のコードが変更したスタイルはそのままにします）。ルート要素（`html`）に `scroll-behavior: smooth` が指定されていても、保存したスクロール位置へすぐに戻ります。

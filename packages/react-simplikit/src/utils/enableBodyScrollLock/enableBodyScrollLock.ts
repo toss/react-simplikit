@@ -6,6 +6,17 @@ import { isServer } from '../isServer/index.ts';
 const SCROLL_POSITION_ATTR = 'data-simplikit-scroll-y';
 
 /**
+ * Data attribute key for storing the inline styles the lock overrides
+ */
+const BODY_STYLE_ATTR = 'data-simplikit-body-style';
+
+/**
+ * Inline style properties the lock overrides.
+ * `overflow` comes first so that its longhands, which keep a value set only on one axis, are applied after it.
+ */
+const LOCKED_STYLE_PROPERTIES = ['overflow', 'overflow-x', 'overflow-y', 'position', 'top', 'left', 'right', 'bottom'];
+
+/**
  * @description
  * `enableBodyScrollLock` is a utility function that locks the body scroll.
  * It prevents the body from scrolling by applying fixed positioning.
@@ -32,6 +43,7 @@ export function enableBodyScrollLock(): void {
 
   const scrollY = window.scrollY;
   saveScrollPosition(scrollY);
+  saveBodyStyles();
   applyScrollLockStyles(scrollY);
 }
 
@@ -41,6 +53,17 @@ function isBodyScrollLocked(): boolean {
 
 function saveScrollPosition(scrollY: number): void {
   document.body.setAttribute(SCROLL_POSITION_ATTR, scrollY.toString());
+}
+
+function saveBodyStyles(): void {
+  const { body } = document;
+  const saved = document.createElement('div').style;
+
+  for (const property of LOCKED_STYLE_PROPERTIES) {
+    saved.setProperty(property, body.style.getPropertyValue(property), body.style.getPropertyPriority(property));
+  }
+
+  body.setAttribute(BODY_STYLE_ATTR, saved.cssText);
 }
 
 function applyScrollLockStyles(scrollY: number): void {
