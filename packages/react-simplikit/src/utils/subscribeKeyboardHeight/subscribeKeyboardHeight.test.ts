@@ -308,12 +308,56 @@ describe('subscribeKeyboardHeight', () => {
 
       // Wait for throttle to clear
       vi.advanceTimersByTime(50);
+      expect(callback).toHaveBeenCalledTimes(2);
+      expect(callback).toHaveBeenLastCalledWith(399);
 
       // Now trigger another event
       mockVisualViewport.height = 200;
       resizeHandler?.();
       expect(callback).toHaveBeenCalledTimes(2);
+
+      vi.advanceTimersByTime(50);
+      expect(callback).toHaveBeenCalledTimes(3);
       expect(callback).toHaveBeenLastCalledWith(600);
+    });
+
+    it('should deliver the last height after the throttle window', () => {
+      const callback = vi.fn();
+
+      subscribeKeyboardHeight({ callback, throttleMs: 50 });
+
+      const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
+
+      resizeHandler?.();
+      expect(callback).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(10);
+      mockVisualViewport.height = 400;
+      resizeHandler?.();
+      expect(callback).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(40);
+      expect(callback).toHaveBeenCalledTimes(2);
+      expect(callback).toHaveBeenLastCalledWith(400);
+
+      vi.advanceTimersByTime(50);
+      expect(callback).toHaveBeenCalledTimes(2);
+    });
+
+    it('should not deliver a pending height after unsubscribe', () => {
+      const callback = vi.fn();
+
+      const { unsubscribe } = subscribeKeyboardHeight({ callback, throttleMs: 50 });
+
+      const resizeHandler = mockVisualViewport.addEventListener.mock.calls.find(call => call[0] === 'resize')?.[1];
+
+      resizeHandler?.();
+      mockVisualViewport.height = 400;
+      resizeHandler?.();
+      unsubscribe();
+
+      vi.advanceTimersByTime(50);
+      expect(callback).toHaveBeenCalledTimes(1);
     });
 
     it('should not exceed reasonable callback count during animation simulation', () => {

@@ -78,10 +78,12 @@ export function subscribeKeyboardHeight({
 
   let lastHeight: number | null = null;
   let throttleTimer: ReturnType<typeof setTimeout> | null = null;
+  let pending = false;
 
   const handler = () => {
     // Skip if throttled
     if (throttleTimer != null) {
+      pending = true;
       return;
     }
 
@@ -98,6 +100,10 @@ export function subscribeKeyboardHeight({
     // Start throttle timer
     throttleTimer = setTimeout(() => {
       throttleTimer = null;
+      if (pending) {
+        pending = false;
+        handler();
+      }
     }, throttleMs);
   };
 
