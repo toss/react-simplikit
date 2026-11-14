@@ -49,8 +49,8 @@ export function useIntersectionObserver<Element extends HTMLElement>(
       return;
     }
 
-    return new IntersectionObserver(([entry]) => {
-      preservedCallback(entry);
+    return new IntersectionObserver(entries => {
+      preservedCallback(entries[entries.length - 1]);
     }, preservedOptions);
   }, [preservedCallback, preservedOptions]);
 
