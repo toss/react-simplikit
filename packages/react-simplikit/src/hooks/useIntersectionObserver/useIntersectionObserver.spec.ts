@@ -88,6 +88,24 @@ describe('useIntersectionObserver', () => {
     expect(mockCallback).toHaveBeenCalledWith(mockEntry);
   });
 
+  it('should call the callback with the latest entry when several arrive in one batch', async () => {
+    const mockCallback = vi.fn();
+    const { result, mockElement } = await setup(mockCallback);
+    await act(async () => {
+      result.current(mockElement);
+    });
+
+    const observerCallback = IntersectionObserverSpy.mock.calls[0][0];
+    const enterEntry = { target: mockElement, isIntersecting: true } as unknown as IntersectionObserverEntry;
+    const exitEntry = { target: mockElement, isIntersecting: false } as unknown as IntersectionObserverEntry;
+    await act(async () => {
+      observerCallback([enterEntry, exitEntry], null as unknown as IntersectionObserver);
+    });
+
+    expect(mockCallback).toHaveBeenCalledTimes(1);
+    expect(mockCallback).toHaveBeenCalledWith(exitEntry);
+  });
+
   it('should not create an observer if IntersectionObserver is undefined', async () => {
     originalIntersectionObserver = global.IntersectionObserver;
     delete (global as any).IntersectionObserver;
