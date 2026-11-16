@@ -287,6 +287,7 @@ const unregisteredLocaleFixture = {
       intro: 'Introdução',
       whyReactSimplikitMatters: 'Por que o react-simplikit importa',
       installation: 'Instalação',
+      migratingToV1: 'Migrar para a v1',
       useCases: 'Casos de uso comuns',
       aiIntegration: 'Integração com IA',
       designPrinciples: 'Princípios de design',
