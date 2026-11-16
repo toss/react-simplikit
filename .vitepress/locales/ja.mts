@@ -11,7 +11,7 @@ export const ja: LocaleThemeStrings = {
     intro: '紹介',
     whyReactSimplikitMatters: 'なぜ react-simplikit なのか',
     installation: 'インストール',
-    migratingToV1: 'v1への移行',
+    migratingToV1: 'v1 への移行',
     useCases: '用途別の使い方',
     aiIntegration: 'AI 連携',
     designPrinciples: '設計原則',
