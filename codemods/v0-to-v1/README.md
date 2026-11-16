@@ -22,9 +22,21 @@ Options after `v0-to-v1` go to the Codemod CLI. Useful ones:
 
 ## What it changes
 
-| Breaking change                                                    | Before                                          | After                                                 |
-| ------------------------------------------------------------------ | ----------------------------------------------- | ----------------------------------------------------- |
-| [#535](https://github.com/toss/react-simplikit/issues/535) options | `useDoubleClick({ click, doubleClick, delay })` | `useDoubleClick({ onClick, onDoubleClick, delayMs })` |
+| Breaking change                                                               | Before                                                                  | After                                                                       |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [#535](https://github.com/toss/react-simplikit/issues/535) options            | `useDoubleClick({ click, doubleClick, delay })`                         | `useDoubleClick({ onClick, onDoubleClick, delayMs })`                       |
+| [#536](https://github.com/toss/react-simplikit/issues/536) time options       | `useDebouncedCallback({ timeThreshold })`                               | `useDebouncedCallback({ debounceMs })`                                      |
+|                                                                               | `useThrottledCallback({ timeThreshold })`                               | `useThrottledCallback({ throttleMs })`                                      |
+|                                                                               | `useImpressionRef({ timeThreshold })`, `<ImpressionArea timeThreshold>` | `useImpressionRef({ timeThresholdMs })`, `<ImpressionArea timeThresholdMs>` |
+|                                                                               | `useLongPress(fn, { delay })`                                           | `useLongPress(fn, { delayMs })`                                             |
+|                                                                               | `useAvoidKeyboard({ transitionDuration })`                              | `useAvoidKeyboard({ transitionDurationMs })`                                |
+| [#527](https://github.com/toss/react-simplikit/issues/527) timer hooks        | `useInterval(fn, 1000)`, `useInterval(fn, { delay: 1000 })`             | `useInterval({ onTick: fn, delayMs: 1000 })`                                |
+|                                                                               | `useTimeout(fn, 1000)`                                                  | `useTimeout({ onTimeout: fn, delayMs: 1000 })`                              |
+| [#534](https://github.com/toss/react-simplikit/issues/534) throttle edges     | `useThrottle(fn, 100, { edges: ['leading'] })`                          | `useThrottle(fn, 100, { leading: true, trailing: false })`                  |
+|                                                                               | `useThrottledCallback({ edges: ['trailing'] })`                         | `useThrottledCallback({ leading: false, trailing: true })`                  |
+| [#528](https://github.com/toss/react-simplikit/issues/528) state hook returns | `const [open, setTrue, setFalse, toggle] = useBooleanState()`           | `const [open, { setTrue, setFalse, toggle }] = useBooleanState()`           |
+|                                                                               | `const [token, setToken, refresh] = useStorageState('token')`           | `const [token, { setValue: setToken, refresh }] = useStorageState('token')` |
+|                                                                               | `const { count, increment } = useCounter(0)`                            | `const [count, { increment }] = useCounter(0)`                              |
 
 Only calls that resolve to an import from `react-simplikit` are rewritten, including aliased (`import { useDoubleClick as useDbl }`) and namespace (`simplikit.useDoubleClick`) imports.
 
@@ -32,13 +44,18 @@ Only calls that resolve to an import from `react-simplikit` are rewritten, inclu
 
 Code it cannot rewrite safely is left as is and listed under `manual-review` in the metrics printed after the run, with its `file` and `line`:
 
-| `reason`               | Example                                                      |
-| ---------------------- | ------------------------------------------------------------ |
-| `options-not-inline`   | `useDoubleClick(options)`                                    |
-| `options-spread`       | `useDoubleClick({ ...base, doubleClick })` (the spread part) |
-| `options-computed-key` | `useDoubleClick({ [key]: select })`                          |
-| `require-not-followed` | `const { useDoubleClick } = require('react-simplikit')`      |
-| `re-exported`          | `export { useDoubleClick } from 'react-simplikit'`           |
+| `reason`                    | Example                                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `options-not-inline`        | `useDoubleClick(options)`                                                                                          |
+| `options-spread`            | `useDoubleClick({ ...base, doubleClick })` (the spread part)                                                       |
+| `options-computed-key`      | `useDoubleClick({ [key]: select })`                                                                                |
+| `props-spread`              | `<ImpressionArea {...props} />`                                                                                    |
+| `delay-not-inline`          | `useInterval(fn, POLL_MS)` with `POLL_MS` imported from another file, which may be a number or v0's options object |
+| `edges-not-inline`          | `useThrottle(fn, 100, { edges })`                                                                                  |
+| `return-not-destructured`   | `const counter = useCounter(0)`, `<Child state={useBooleanState()} />`                                             |
+| `return-pattern-not-simple` | `const [open, ...actions] = useBooleanState()`, `const { count = 0 } = useCounter()`                               |
+| `require-not-followed`      | `const { useDoubleClick } = require('react-simplikit')`                                                            |
+| `re-exported`               | `export { useDoubleClick } from 'react-simplikit'`                                                                 |
 
 A spread is reported on every run, because the codemod cannot tell whether it still holds an old key.
 

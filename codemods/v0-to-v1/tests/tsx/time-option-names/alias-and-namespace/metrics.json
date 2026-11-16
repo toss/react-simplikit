@@ -1,0 +1,13 @@
+{
+  "manual-review": [
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "ImpressionArea",
+        "line": "8",
+        "reason": "props-spread"
+      },
+      "count": 1
+    }
+  ]
+}

@@ -20,3 +20,51 @@ nodes:
           language: typescript
           include: ['**/*.ts', '**/*.mts', '**/*.cts']
           exclude: ['**/node_modules/**', '**/*.d.ts']
+      - name: 'Time options: add the Ms suffix (#536)'
+        js-ast-grep:
+          js_file: scripts/time-option-names.ts
+          language: tsx
+          include: ['**/*.tsx', '**/*.jsx', '**/*.js', '**/*.mjs', '**/*.cjs']
+          exclude: ['**/node_modules/**']
+      - name: 'Time options: add the Ms suffix (#536) in .ts files'
+        js-ast-grep:
+          js_file: scripts/time-option-names.ts
+          language: typescript
+          include: ['**/*.ts', '**/*.mts', '**/*.cts']
+          exclude: ['**/node_modules/**', '**/*.d.ts']
+      - name: 'useInterval, useTimeout: take one options object (#527)'
+        js-ast-grep:
+          js_file: scripts/timer-hook-options.ts
+          language: tsx
+          include: ['**/*.tsx', '**/*.jsx', '**/*.js', '**/*.mjs', '**/*.cjs']
+          exclude: ['**/node_modules/**']
+      - name: 'useInterval, useTimeout: take one options object (#527) in .ts files'
+        js-ast-grep:
+          js_file: scripts/timer-hook-options.ts
+          language: typescript
+          include: ['**/*.ts', '**/*.mts', '**/*.cts']
+          exclude: ['**/node_modules/**', '**/*.d.ts']
+      - name: 'useThrottle, useThrottledCallback: replace edges with leading and trailing (#534)'
+        js-ast-grep:
+          js_file: scripts/throttle-edges.ts
+          language: tsx
+          include: ['**/*.tsx', '**/*.jsx', '**/*.js', '**/*.mjs', '**/*.cjs']
+          exclude: ['**/node_modules/**']
+      - name: 'useThrottle, useThrottledCallback: replace edges with leading and trailing (#534) in .ts files'
+        js-ast-grep:
+          js_file: scripts/throttle-edges.ts
+          language: typescript
+          include: ['**/*.ts', '**/*.mts', '**/*.cts']
+          exclude: ['**/node_modules/**', '**/*.d.ts']
+      - name: 'useBooleanState, useStorageState, useCounter: return [value, actions] (#528)'
+        js-ast-grep:
+          js_file: scripts/state-hook-returns.ts
+          language: tsx
+          include: ['**/*.tsx', '**/*.jsx', '**/*.js', '**/*.mjs', '**/*.cjs']
+          exclude: ['**/node_modules/**']
+      - name: 'useBooleanState, useStorageState, useCounter: return [value, actions] (#528) in .ts files'
+        js-ast-grep:
+          js_file: scripts/state-hook-returns.ts
+          language: typescript
+          include: ['**/*.ts', '**/*.mts', '**/*.cts']
+          exclude: ['**/node_modules/**', '**/*.d.ts']

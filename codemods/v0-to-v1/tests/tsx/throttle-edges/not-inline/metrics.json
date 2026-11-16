@@ -1,0 +1,40 @@
+{
+  "manual-review": [
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useThrottle",
+        "line": "4",
+        "reason": "edges-not-inline"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useThrottle",
+        "line": "5",
+        "reason": "options-not-inline"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useThrottledCallback",
+        "line": "6",
+        "reason": "edges-not-inline"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useThrottledCallback",
+        "line": "6",
+        "reason": "options-spread"
+      },
+      "count": 1
+    }
+  ]
+}
