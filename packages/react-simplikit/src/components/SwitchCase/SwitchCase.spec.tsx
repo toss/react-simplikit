@@ -166,4 +166,28 @@ describe('SwitchCase', () => {
 
     expect(container.firstChild).toBeNull();
   });
+
+  it('should render the default component when the value is the name of an inherited object key', () => {
+    const getStatus = (status: string) => status;
+
+    const { rerender } = render(
+      <SwitchCase
+        value={getStatus('toString')}
+        caseBy={{ a: () => <div>A Component</div> }}
+        defaultComponent={() => <div>Default</div>}
+      />
+    );
+
+    expect(screen.getByText('Default')).toBeInTheDocument();
+
+    rerender(
+      <SwitchCase
+        value={getStatus('constructor')}
+        caseBy={{ a: () => <div>A Component</div> }}
+        defaultComponent={() => <div>Default</div>}
+      />
+    );
+
+    expect(screen.getByText('Default')).toBeInTheDocument();
+  });
 });
