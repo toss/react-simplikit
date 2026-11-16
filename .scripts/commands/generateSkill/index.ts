@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { collectPublicExportEntries } from '../../utils/collectPublicExports.ts';
 import { getRootPath } from '../../utils/getRootPath.ts';
-import { readDeprecation } from '../../utils/jsdoc.ts';
+import { readDeprecation, readNoDocs } from '../../utils/jsdoc.ts';
 
 import { CatalogEntry, DeprecatedEntry, extractDescription, getCategory, renderSkill } from './catalog.ts';
 
@@ -20,11 +20,12 @@ type GenerateSkillOptions = {
 /**
  * Writes the consumer-facing agent skill: `SKILL.md` (template + a catalog of every public export)
  * and `references/<name>.md` (a verbatim copy of each export's English documentation page).
- * The output depends only on `index.ts`, the pages and each export's `@deprecated` tag, so re-running
- * on unchanged sources changes nothing.
+ * The output depends only on `index.ts`, the pages and each export's `@deprecated` and `@no-docs`
+ * tags, so re-running on unchanged sources changes nothing.
  *
- * An export whose JSDoc is `@deprecated` has no page, so it is recognised from its source file. It
- * gets no reference page and is listed in the Deprecated table instead of its category.
+ * A `@deprecated` export is listed in the Deprecated table instead of its category, linked to its
+ * reference page unless it is also `@no-docs`. A `@no-docs` export that is not deprecated has no
+ * page and is left out entirely.
  */
 export async function generateSkill({
   root = getRootPath(),
@@ -38,24 +39,32 @@ export async function generateSkill({
   await fs.rm(referencesDirectory, { force: true, recursive: true });
   await fs.mkdir(referencesDirectory, { recursive: true });
 
-  const publicExports: Array<{ entry: CatalogEntry } | { deprecatedEntry: DeprecatedEntry }> = await Promise.all(
+  const publicExports: Array<{ entry: CatalogEntry } | { deprecatedEntry: DeprecatedEntry } | null> = await Promise.all(
     (await collectPublicExportEntries(indexFilePath)).map(async ({ name, sourcePath }) => {
       const exportDirectory = path.join(packageSourceDirectory, path.dirname(sourcePath));
-      const notice = readDeprecation(await readExportSource(exportDirectory, name));
+      const source = await readExportSource(exportDirectory, name);
+      const notice = readDeprecation(source);
+      const hasPage = !readNoDocs(source);
 
-      if (notice != null) {
-        return { deprecatedEntry: { name, notice } };
+      if (!hasPage) {
+        return notice == null ? null : { deprecatedEntry: { name, notice, hasPage } };
       }
 
       const markdown = await readDocumentationPage(path.join(exportDirectory, `${name}.md`), name);
 
       await fs.writeFile(path.join(referencesDirectory, `${name}.md`), markdown);
 
+      if (notice != null) {
+        return { deprecatedEntry: { name, notice, hasPage } };
+      }
+
       return { entry: { name, category: getCategory(sourcePath), description: extractDescription(markdown, name) } };
     })
   );
-  const entries = publicExports.flatMap(item => ('entry' in item ? [item.entry] : []));
-  const deprecatedEntries = publicExports.flatMap(item => ('deprecatedEntry' in item ? [item.deprecatedEntry] : []));
+  const entries = publicExports.flatMap(item => (item != null && 'entry' in item ? [item.entry] : []));
+  const deprecatedEntries = publicExports.flatMap(item =>
+    item != null && 'deprecatedEntry' in item ? [item.deprecatedEntry] : []
+  );
 
   const template = await fs.readFile(TEMPLATE_FILE, 'utf8');
 

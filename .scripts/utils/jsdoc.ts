@@ -27,8 +27,8 @@ export function trimBlock(text: string) {
  * `undefined` when there is none. A `@deprecated` on another comment in the file, such as an
  * options type, does not mark the export itself.
  *
- * A deprecated export has no documentation page, so this is the only place the docs and skill
- * tooling learn about it from.
+ * A deprecated export keeps its documentation page, which opens with this text as a warning.
+ * Whether the page exists at all is `readNoDocs`'s question.
  */
 export function readDeprecation(source: string): string | undefined {
   const tag = parse(source, parseOptions('preserve'))
@@ -49,4 +49,17 @@ export function readDeprecation(source: string): string | undefined {
   }
 
   return text;
+}
+
+/**
+ * Whether an export's own comment (the last one in its source file) carries `@no-docs`, which
+ * leaves the export out of the documentation site, `llms.txt` and the skill catalog. It is
+ * independent of `@deprecated`, so forgetting it keeps a page rather than losing one.
+ */
+export function readNoDocs(source: string): boolean {
+  return (
+    parse(source, parseOptions('preserve'))
+      .at(-1)
+      ?.tags.some(tag => tag.tag === 'no-docs') ?? false
+  );
 }

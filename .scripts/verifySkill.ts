@@ -6,7 +6,7 @@ import path from 'node:path';
 
 import { readCatalogNames, readDeprecatedNames } from './commands/generateSkill/catalog.ts';
 import { generateSkill, PACKAGE_INDEX_FILE, SKILL_DIRECTORY } from './commands/generateSkill/index.ts';
-import { collectDeprecatedExports } from './utils/collectDeprecatedExports.ts';
+import { collectDocTags } from './utils/collectDocTags.ts';
 import { collectPublicExports } from './utils/collectPublicExports.ts';
 import { getRootPath } from './utils/getRootPath.ts';
 
@@ -66,13 +66,14 @@ for (const [label, contents] of [
 }
 
 const publicExports = await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE));
-const deprecatedExports = await collectDeprecatedExports(root, publicExports);
-const documentedExports = publicExports.filter(name => !deprecatedExports.includes(name));
+const { deprecated: deprecatedExports, noDocs: noDocsExports } = await collectDocTags(root, publicExports);
+const catalogExports = publicExports.filter(name => !deprecatedExports.includes(name) && !noDocsExports.includes(name));
+const exportsWithPage = publicExports.filter(name => !noDocsExports.includes(name));
 
 assert.deepEqual(
   readCatalogNames(skill).toSorted(),
-  documentedExports,
-  'the catalog must link exactly the public exports that are not @deprecated — run `yarn skill:gen`'
+  catalogExports,
+  'the catalog must link exactly the public exports that are neither @deprecated nor @no-docs — run `yarn skill:gen`'
 );
 assert.deepEqual(
   readDeprecatedNames(skill).toSorted(),
@@ -80,7 +81,7 @@ assert.deepEqual(
   'the Deprecated section must list exactly the exports whose JSDoc is @deprecated — run `yarn skill:gen`'
 );
 
-for (const name of documentedExports) {
+for (const name of exportsWithPage) {
   const page = await fs.readFile(path.join(skillDirectory, 'references', `${name}.md`), 'utf8');
 
   // References are one level deep: a page that links to another local page would be read as a dead link.
@@ -105,6 +106,11 @@ for (const [, token] of commonNeeds.matchAll(/`([^`]+)`/g)) {
     deprecatedExports.includes(token),
     false,
     `"${token}" in the Common needs table is @deprecated — name its replacement in template.md`
+  );
+  assert.equal(
+    noDocsExports.includes(token),
+    false,
+    `"${token}" in the Common needs table is @no-docs, so the catalog has no row for it — name a documented export in template.md`
   );
 }
 
