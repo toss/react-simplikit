@@ -1,6 +1,6 @@
 # useKeyboardHeight
 
-온스크린 키보드의 높이를 추적하는 리액트 훅이에요. 현재 키보드 높이를 픽셀 단위로 반환하며, 키보드가 나타나거나 사라지거나 크기가 변경될 때 자동으로 업데이트돼요.
+`useKeyboardHeight`는 온스크린 키보드의 높이를 추적하는 리액트 훅이에요. 현재 키보드 높이를 픽셀 단위로 반환해요. 키보드가 나타나거나 사라지거나 크기가 변경될 때 자동으로 업데이트돼요.
 
 ## 인터페이스
 
@@ -23,7 +23,7 @@ function useKeyboardHeight(
       required: false,
       defaultValue: 'true',
       description:
-        '만약 <code>true</code>이면, 마운트 시 즉시 현재 키보드 높이를 가져와요.',
+        '<code>true</code>이면 마운트할 때 현재 키보드 높이를 바로 가져와요.',
     },
   ]"
 />

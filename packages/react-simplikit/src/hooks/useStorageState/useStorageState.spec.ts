@@ -159,6 +159,100 @@ describe('useStorageState', () => {
       expect(result.current[0]).toBeUndefined();
     });
 
+    it('should keep the same storage subscription across renders', async () => {
+      const addEventListener = vi.spyOn(window, 'addEventListener');
+      const removeEventListener = vi.spyOn(window, 'removeEventListener');
+      const countStorageListeners = (spy: typeof addEventListener) =>
+        spy.mock.calls.filter(([type]) => type === 'storage').length;
+
+      const { rerender } = await renderHookSSR(
+        ({ key }: { key: string }) => useStorageState(key, { defaultValue: 'default', storage }),
+        { initialProps: { key: 'test-key' } }
+      );
+      const addedAfterMount = countStorageListeners(addEventListener);
+
+      rerender({ key: 'test-key' });
+      rerender({ key: 'test-key' });
+      expect(countStorageListeners(addEventListener)).toBe(addedAfterMount);
+      expect(countStorageListeners(removeEventListener)).toBe(0);
+
+      rerender({ key: 'other-key' });
+      expect(countStorageListeners(addEventListener)).toBe(addedAfterMount + 1);
+      expect(countStorageListeners(removeEventListener)).toBe(1);
+
+      addEventListener.mockRestore();
+      removeEventListener.mockRestore();
+    });
+
+    it('should return the new defaultValue when it changes and the key is not stored', async () => {
+      const { result, rerender } = await renderHookSSR(
+        ({ defaultValue }: { defaultValue: string }) => useStorageState('test-key', { defaultValue, storage }),
+        { initialProps: { defaultValue: 'first' } }
+      );
+      expect(result.current[0]).toBe('first');
+
+      rerender({ defaultValue: 'second' });
+      expect(result.current[0]).toBe('second');
+    });
+
+    it('should return a defaultValue that is first passed after mount', async () => {
+      const { result, rerender } = await renderHookSSR(
+        ({ defaultValue }: { defaultValue?: string }) => useStorageState<string>('test-key', { defaultValue, storage }),
+        { initialProps: {} as { defaultValue?: string } }
+      );
+      expect(result.current[0]).toBeUndefined();
+
+      rerender({ defaultValue: 'later' });
+      expect(result.current[0]).toBe('later');
+    });
+
+    it('should return the defaultValue of the new key when switching between keys that are not stored', async () => {
+      const { result, rerender } = await renderHookSSR(
+        ({ key }: { key: string }) => useStorageState(key, { defaultValue: key === 'first-key' ? 1 : 2, storage }),
+        { initialProps: { key: 'first-key' } }
+      );
+      expect(result.current[0]).toBe(1);
+
+      rerender({ key: 'second-key' });
+      expect(result.current[0]).toBe(2);
+    });
+
+    it('should keep the same reference when an inline object defaultValue is structurally equal', async () => {
+      const { result, rerender } = await renderHookSSR(() =>
+        useStorageState<{ count: number }>('test-key', { defaultValue: { count: 0 }, storage })
+      );
+      const first = result.current[0];
+
+      rerender();
+      rerender();
+      expect(result.current[0]).toBe(first);
+    });
+
+    it('should keep the same deserialized reference across renders when an inline object defaultValue is given', async () => {
+      storage.set('test-key', JSON.stringify({ count: 5 }));
+      const { result, rerender } = await renderHookSSR(() =>
+        useStorageState<{ count: number }>('test-key', { defaultValue: { count: 0 }, storage })
+      );
+      const first = result.current[0];
+      expect(first).toEqual({ count: 5 });
+
+      rerender();
+      rerender();
+      expect(result.current[0]).toBe(first);
+    });
+
+    it('should read the stored value of the new key when the key changes', async () => {
+      storage.set('second-key', JSON.stringify('stored'));
+      const { result, rerender } = await renderHookSSR(
+        ({ key }: { key: string }) => useStorageState<string>(key, { defaultValue: 'default', storage }),
+        { initialProps: { key: 'first-key' } }
+      );
+      expect(result.current[0]).toBe('default');
+
+      rerender({ key: 'second-key' });
+      expect(result.current[0]).toBe('stored');
+    });
+
     it('should initialize with default value', async () => {
       const defaultValue = 'default';
       const { result } = await renderHookSSR(() => useStorageState('test-key', { defaultValue, storage }));
@@ -529,6 +623,38 @@ describe('useStorageState', () => {
 
       expect(storage.get('test-key')).toBe('1970-01-01T00:00:01.000Z');
       expect(result.current[0]).toEqual(new Date(1000));
+    });
+
+    it('should keep an inline defaultValue that JSON cannot serialize across renders', async () => {
+      const { result, rerender } = await renderHookSSR(() =>
+        useStorageState('test-key', {
+          storage,
+          defaultValue: { id: 1n },
+          serializer: value => String(value.id),
+          deserializer: text => ({ id: BigInt(text) }),
+        })
+      );
+      const first = result.current[0];
+
+      rerender();
+      expect(result.current[0]).toBe(first);
+    });
+
+    it('should compare an inline defaultValue with the serializer', async () => {
+      const serializer = (map: Map<string, number>) => JSON.stringify([...map]);
+      const deserializer = (text: string) => new Map<string, number>(JSON.parse(text));
+      const { result, rerender } = await renderHookSSR(
+        ({ count }: { count: number }) =>
+          useStorageState('test-key', { storage, defaultValue: new Map([['count', count]]), serializer, deserializer }),
+        { initialProps: { count: 0 } }
+      );
+      const first = result.current[0];
+
+      rerender({ count: 0 });
+      expect(result.current[0]).toBe(first);
+
+      rerender({ count: 1 });
+      expect(result.current[0]).toEqual(new Map([['count', 1]]));
     });
 
     it('should ignore a deserializer passed without a serializer', async () => {

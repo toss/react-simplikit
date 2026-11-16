@@ -5,13 +5,14 @@
 ## 接口
 
 ```ts
-function useMap<K, V>(initialValue: MapOrEntries<K, V>): UseMapReturn<K, V>;
+function useMap<K, V>(
+  initialValue: MapOrEntries<K, V> = new Map()
+): UseMapReturn<K, V>;
 ```
 
 ### 参数
 
 <Interface
-  required
   name="initialValue"
   type="MapOrEntries<K, V>"
   description="Map 的初始值（Map 对象或键值对数组）"

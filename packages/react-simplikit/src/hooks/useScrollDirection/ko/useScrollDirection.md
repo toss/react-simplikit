@@ -1,6 +1,6 @@
 # useScrollDirection
 
-스크롤 방향을 감지하는 React 훅이에요.
+스크롤 방향을 감지하는 리액트 훅이에요.
 
 스크롤 방향(위/아래)과 현재 스크롤 위치를 반환해요. 성능 최적화를 위해 기본적으로 50ms 쓰로틀이 적용되어 있어요.
 
@@ -24,7 +24,7 @@ function useScrollDirection(
       type: 'number',
       required: false,
       defaultValue: '50',
-      description: '스크롤 이벤트 처리 빈도를 제한하는 쓰로틀 간격 (밀리초)',
+      description: '스크롤 이벤트 처리 빈도를 제한하는 쓰로틀 간격(밀리초)이에요.',
     },
   ]"
 />
@@ -40,13 +40,13 @@ description="스크롤 방향과 위치를 담은 객체예요."
 name: 'direction',
 type: &quot;'up' | 'down' | null&quot;,
 required: false,
-description: '현재 스크롤 방향. 초기 렌더링 시에는 <code>null</code>',
+description: '현재 스크롤 방향이에요. 첫 렌더링에서는 <code>null</code>이에요.',
 },
 {
 name: 'position',
 type: 'number',
 required: false,
-description: '현재 세로 스크롤 위치 (픽셀 단위)',
+description: '현재 세로 스크롤 위치(px)예요.',
 },
 ]"
 />
@@ -81,8 +81,8 @@ function MyComponent() {
 
 ## 참고사항
 
-- **SSR 안전성**: `window.scrollY`에 접근하기 전에 `isServer()`를 확인하여 서버 사이드 렌더링을 안전하게 처리해요
-- **성능**: 쓰로틀을 사용하여 스크롤 이벤트 처리 빈도를 제한해요 (기본값: 50ms)
-- **Passive 리스너**: 더 나은 스크롤 성능을 위해 `{ passive: true }` 옵션으로 스크롤 이벤트 리스너를 등록해요
-- **정리(Cleanup)**: 컴포넌트 언마운트 시 이벤트 리스너와 타이머를 자동으로 제거해요
-- **브라우저 지원**: `window`와 `scrollY`를 지원하는 브라우저 환경이 필요해요
+- **SSR 안전성**: `window.scrollY`에 접근하기 전에 `isServer()`를 확인하므로 서버 사이드 렌더링 중에도 안전해요.
+- **성능**: 쓰로틀로 스크롤 이벤트 처리 빈도를 제한해요. 기본값은 50ms예요.
+- **Passive 리스너**: 스크롤이 더 부드럽도록 `{ passive: true }` 옵션으로 스크롤 이벤트 리스너를 등록해요.
+- **정리(Cleanup)**: 컴포넌트가 언마운트되면 이벤트 리스너와 쓰로틀 타이머를 제거해요.
+- **브라우저 지원**: `window`와 `scrollY`를 지원하는 브라우저 환경이 필요해요.

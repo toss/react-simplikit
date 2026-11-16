@@ -1,6 +1,6 @@
 # SwitchCase
 
-`SwitchCase`는 주어진 값에 따라 선언적으로 컴포넌트를 렌더링할 수 있는 컴포넌트예요. 이는 `switch-case` 문과 유사해요. 특정 상태에 따라 다른 컴포넌트를 조건부로 렌더링해야 할 때 유용해요.
+`SwitchCase`는 주어진 값에 따라 선언적으로 컴포넌트를 렌더링할 수 있는 컴포넌트예요. `switch-case` 문과 비슷해요. 특정 상태에 따라 다른 컴포넌트를 조건부로 렌더링해야 할 때 유용해요.
 
 ## 인터페이스
 
@@ -18,14 +18,14 @@ function SwitchCase<Case>(
   required
   name="value"
   type="Case"
-  description="비교할 값이에요. <code>caseBy</code>에서 일치하는 키와 연결된 컴포넌트가 렌더링돼요."
+  description="비교할 값이에요. <code>caseBy</code>에서 이 값과 일치하는 키에 연결된 컴포넌트를 렌더링해요."
 />
 
 <Interface
   required
   name="caseBy"
   type="Partial<{ [P in StringifiedValue<Case>]: () => ReactElement | null }>"
-  description="렌더링할 컴포넌트를 값에 매핑하는 객체예요. 키는 가능한 값을 나타내고, 값은 해당 컴포넌트를 반환하는 함수예요."
+  description="값마다 렌더링할 컴포넌트를 연결한 객체예요. 키에는 <code>value</code>가 가질 수 있는 값을, 값에는 그 컴포넌트를 반환하는 함수를 넣어요."
 />
 
 <Interface

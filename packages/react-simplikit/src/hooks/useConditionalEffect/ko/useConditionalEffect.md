@@ -1,6 +1,6 @@
 # useConditionalEffect
 
-`useConditionalEffect`는 조건에 따라 효과를 실행하는 리액트 훅이에요. 이는 단순한 의존성 변경 이상으로 효과가 실행되는 시점을 더 잘 제어할 수 있게 해줘요.
+`useConditionalEffect`는 조건 함수의 결과에 따라 효과를 실행하는 리액트 훅이에요. 단순한 의존성 변경에만 기대지 않고 효과가 실행되는 시점을 더 잘 제어할 수 있어요.
 
 ## 인터페이스
 
@@ -32,12 +32,12 @@ function useConditionalEffect<T extends DependencyList>(
   required
   name="condition"
   type="(prevDeps: T | undefined, currentDeps: T) => boolean"
-  description="이전 및 현재 의존성을 기반으로 효과를 실행할지 결정하는 함수예요. <br /> - 초기 렌더링 시, <code>prevDeps</code>는 <code>undefined</code>일 거예요. <code>condition</code> 함수는 이 경우를 처리해야 해요. <br /> - 초기 렌더링 시 효과를 실행하려면, <code>prevDeps</code>가 <code>undefined</code>일 때 <code>true</code>를 반환하면 돼요. <br /> - 초기 렌더링 시 효과를 실행하고 싶지 않다면, <code>prevDeps</code>가 <code>undefined</code>일 때 <code>false</code>를 반환하면 돼요."
+  description="이전 의존성과 현재 의존성을 보고 효과를 실행할지 정하는 함수예요. <br /> - 초기 렌더링에서는 <code>prevDeps</code>가 <code>undefined</code>예요. <code>condition</code> 함수는 이 경우를 처리해야 해요. <br /> - 초기 렌더링 시 효과를 실행하려면 <code>prevDeps</code>가 <code>undefined</code>일 때 <code>true</code>를 반환하면 돼요. <br /> - 초기 렌더링 시 효과를 실행하고 싶지 않다면 <code>prevDeps</code>가 <code>undefined</code>일 때 <code>false</code>를 반환하면 돼요."
 />
 
 ### 반환 값
 
-이 함수는 아무 것도 반환하지 않아요.
+이 함수는 아무것도 반환하지 않아요.
 
 ## 예시
 

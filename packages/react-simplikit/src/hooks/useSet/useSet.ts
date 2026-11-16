@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 
 import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-import { usePreservedReference } from '../usePreservedReference/usePreservedReference.ts';
 
 type SetOrValues<T> = Set<T> | T[];
 
@@ -54,8 +53,6 @@ type UseSetReturn<T> = [Omit<Set<T>, 'add' | 'clear' | 'delete'>, SetActions<T>]
 export function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetReturn<T> {
   const [set, setSet] = useState(() => new Set(initialValue));
 
-  const preservedInitialValue = usePreservedReference(initialValue);
-
   const add = usePreservedCallback((value: T) => {
     setSet(prev => {
       const nextSet = new Set(prev);
@@ -89,7 +86,7 @@ export function useSet<T>(initialValue: SetOrValues<T> = new Set()): UseSetRetur
   });
 
   const reset = usePreservedCallback(() => {
-    setSet(() => new Set(preservedInitialValue));
+    setSet(() => new Set(initialValue));
   });
 
   const actions = useMemo<SetActions<T>>(

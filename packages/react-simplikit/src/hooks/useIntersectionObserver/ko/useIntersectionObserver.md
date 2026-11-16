@@ -1,6 +1,6 @@
 # useIntersectionObserver
 
-`useIntersectionObserver`는 특정 DOM 요소가 화면에 보이는지를 감지하는 커스텀 훅이에요. 이 훅은 `IntersectionObserver` API를 사용하여 요소가 뷰포트에 들어오거나 나갈 때 콜백을 실행해요.
+`useIntersectionObserver`는 특정 DOM 요소가 화면에 보이는지 감지하는 리액트 훅이에요. `IntersectionObserver` API를 사용해 요소가 뷰포트에 들어오거나 나갈 때 콜백을 실행해요.
 
 ## 인터페이스
 
@@ -17,14 +17,14 @@ function useIntersectionObserver<Element extends HTMLElement>(
   required
   name="callback"
   type="(entry: IntersectionObserverEntry) => void"
-  description="요소의 가시성이 변경될 때 실행되는 콜백 함수예요. <code>entry.isIntersecting</code>를 확인하여 요소가 보이는지를 판단할 수 있어요."
+  description="요소의 가시성이 변경될 때 실행되는 콜백 함수예요. <code>entry.isIntersecting</code>을 확인하면 요소가 보이는지 알 수 있어요."
 />
 
 <Interface
   required
   name="options"
   type="IntersectionObserverInit"
-  description="<code>IntersectionObserver</code>에 대한 옵션이에요."
+  description="<code>IntersectionObserver</code>에 전달할 옵션이에요."
   :nested="[
     {
       name: 'options.root',
@@ -53,7 +53,7 @@ function useIntersectionObserver<Element extends HTMLElement>(
 <Interface
   name=""
   type="(element: Element | null) => void"
-  description="요소를 설정하는 함수예요. 이 함수를 <code>ref</code> 속성에 첨부하면, 요소의 가시성이 변경될 때마다 <code>callback</code>이 실행돼요."
+  description="요소를 설정하는 함수예요. 이 함수를 <code>ref</code> 속성에 연결하면 요소의 가시성이 변경될 때마다 <code>callback</code>이 실행돼요."
 />
 
 ## 예시

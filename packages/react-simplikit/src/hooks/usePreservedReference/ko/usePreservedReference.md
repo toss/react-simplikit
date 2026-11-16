@@ -1,6 +1,6 @@
 # usePreservedReference
 
-`usePreservedReference`는 값이 변경되지 않았을 때 그 참조를 유지하면서 최신 상태를 안전하게 사용할 수 있도록 도와주는 리액트 훅이에요. 이 훅은 불필요한 리렌더링을 방지하면서 항상 최신 데이터를 접근할 수 있도록 해줘요.
+`usePreservedReference`는 값이 변경되지 않았을 때 그 참조를 유지하면서 최신 상태를 안전하게 사용할 수 있도록 도와주는 리액트 훅이에요. 불필요한 리렌더링을 방지하면서도 항상 최신 데이터에 접근할 수 있게 해 줘요.
 
 ## 인터페이스
 
@@ -17,13 +17,13 @@ function usePreservedReference<T extends NotNullishValue>(
   required
   name="value"
   type="T"
-  description="참조를 유지할 값이에요. 상태 값이 비교 후 변경되면 새로운 참조를 반환해요."
+  description="참조를 유지할 값이에요. 비교 결과 상태 값이 바뀌었으면 새로운 참조를 반환해요."
 />
 
 <Interface
   name="equalityFn"
   type="(a: T, b: T) => boolean"
-  description="두 값이 동일한지를 결정하는 선택적 함수예요. 기본적으로는 <code>JSON.stringify</code>를 사용하여 비교해요."
+  description="두 값이 같은지 판단하는 선택적 함수예요. 기본적으로는 <code>JSON.stringify</code>로 비교해요."
 />
 
 ### 반환 값
@@ -31,7 +31,7 @@ function usePreservedReference<T extends NotNullishValue>(
 <Interface
   name=""
   type="T"
-  description="값이 이전과 동일하게 간주되면 동일한 참조를 반환하고, 그렇지 않으면 새로운 참조를 반환해요."
+  description="값이 이전 값과 같다고 판단되면 같은 참조를 반환하고, 그렇지 않으면 새로운 참조를 반환해요."
 />
 
 ## 예시

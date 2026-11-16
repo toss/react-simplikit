@@ -14,6 +14,7 @@ react-simplikit は、AI コーディングエージェント（Claude Code、Co
 
 ```sh [skills.sh]
 npx skills add toss/react-simplikit --skill react-simplikit
+npx skills add toss/react-simplikit --skill react-simplikit-codemod
 ```
 
 ```sh [Claude Code]
@@ -23,12 +24,14 @@ claude plugin install react-simplikit@react-simplikit
 
 ```sh [Codex]
 codex plugin marketplace add https://github.com/toss/react-simplikit
-# then install "react-simplikit" from the plugin UI
+codex plugin add react-simplikit@react-simplikit
 ```
 
 :::
 
-スキルはこれらのドキュメントから生成され、ライブラリとの整合性を保ちます。ソースは [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin) にあります。
+Claude Code と Codex のプラグインには、アップグレード用 codemod の実行手順をエージェントに案内する `react-simplikit-codemod` スキルも含まれています。skills.sh を使う場合は 2 つ目のコマンドでインストールします。
+
+`react-simplikit` スキルはこれらのドキュメントから生成されるため、常にライブラリと同期しています。ソースは [`packages/plugin`](https://github.com/toss/react-simplikit/tree/main/packages/plugin) にあります。
 
 ## llms.txt
 

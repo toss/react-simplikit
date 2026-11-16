@@ -1,6 +1,14 @@
 # getKeyboardHeight
 
-`getKeyboardHeight`은 현재 화면에 표시된 키보드의 높이를 픽셀로 반환하는 유틸리티 함수에요. 이 함수는 Visual Viewport API를 사용하여 키보드 높이를 계산해요. Visual Viewport가 지원되는 현대 환경(사파리 / WKWebView 14+, 크롬 / 안드로이드 WebView 80+)을 가정해요. 키보드 높이는 다음과 같이 계산돼요: `window.innerHeight - visualViewport.height - visualViewport.offsetTop` - `offsetTop`의 차감은 키보드가 나타날 때 iOS 동작을 올바르게 처리하기 위해 필요해요.
+`getKeyboardHeight`는 현재 화면에 표시된 키보드의 높이를 픽셀 단위로 반환하는 유틸리티 함수예요.
+
+이 함수는 Visual Viewport API로 키보드 높이를 계산해요. Visual Viewport를 지원하는 최신 환경(Safari / WKWebView 14+, Chrome / Android WebView 80+)을 전제로 해요.
+
+키보드 높이는 다음 식으로 계산해요.
+
+`window.innerHeight - visualViewport.height - visualViewport.offsetTop`
+
+iOS에서는 키보드가 나타날 때 Visual Viewport가 세로로 이동할 수 있어요. 이 동작을 올바르게 처리하려면 `offsetTop`을 빼야 해요.
 
 ## 인터페이스
 
@@ -17,7 +25,7 @@ function getKeyboardHeight(): number;
 <Interface
   name=""
   type="number"
-  description="픽셀 단위의 키보드 높이. 키보드가 보이지 않을 때는 0을 반환해요."
+  description="픽셀 단위의 키보드 높이예요. 키보드가 보이지 않으면 0을 반환해요."
 />
 
 ## 예시

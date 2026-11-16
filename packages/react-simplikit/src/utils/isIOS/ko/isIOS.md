@@ -1,9 +1,9 @@
 # isIOS
 
-`isIOS`는 현재 기기가 iOS 또는 iPadOS를 실행 중인지 감지하는 유틸리티 함수에요. 플랫폼에 따라 다음과 같은 차이가 있어요.
+`isIOS`는 현재 기기에서 iOS 또는 iPadOS가 실행 중인지 감지하는 유틸리티 함수예요. 다만 iPad는 iPadOS 버전에 따라 플랫폼 정보가 달라요.
 
-- iPadOS 13 이전에는 iPads가 플랫폼을 'iPad'로 보고했었어요 (또는 UA에서 /iPad/와 일치함).
-- iPadOS 13부터 Apple은 웹 사이트가 iPadOS를 데스크톱급 Safari로 취급하게하기 위해 플랫폼 문자열을 'MacIntel'로 변경했어요. 그러나 이러한 기기는 여전히 멀티터치 기능을 노출해요.
+- iPadOS 13 이전의 iPad는 플랫폼을 'iPad'로 보고하거나, 사용자 에이전트가 /iPad/와 일치했어요.
+- iPadOS 13부터 Apple은 웹사이트가 iPadOS를 데스크톱급 Safari로 취급하도록 플랫폼 문자열을 'MacIntel'로 변경했어요. 하지만 이런 기기는 여전히 멀티터치 기능을 노출해요.
 
 ## 인터페이스
 
@@ -16,7 +16,7 @@ function isIOS(userAgent?: string): boolean;
 <Interface
   name="userAgent"
   type="string"
-  description="확인할 선택적 사용자 에이전트 문자열. 기본값은 <code>navigator.userAgent</code>에요."
+  description="확인할 사용자 에이전트 문자열이에요. 넘기지 않으면 기본값으로 <code>navigator.userAgent</code>를 사용해요."
 />
 
 ### 반환 값
@@ -24,7 +24,7 @@ function isIOS(userAgent?: string): boolean;
 <Interface
   name=""
   type="boolean"
-  description="기기가 iOS 또는 iPadOS에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요. 서버 사이드 렌더링 환경에서는 <code>false</code>를 반환해요."
+  description="기기에서 iOS 또는 iPadOS가 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요. 서버 사이드 렌더링 환경에서는 <code>false</code>를 반환해요."
 />
 
 ## 예시

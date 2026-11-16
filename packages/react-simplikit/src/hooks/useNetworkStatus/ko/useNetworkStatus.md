@@ -1,6 +1,6 @@
 # useNetworkStatus
 
-Network Information API에 접근하는 React 훅이에요. 연결 타입, 품질, 속도, 사용자의 데이터 절약 모드 설정을 포함한 네트워크 연결 데이터를 제공해요. API가 지원되지 않는 브라우저(Safari, Firefox 등)에서는 모든 속성이 `undefined`로 반환돼요.
+`useNetworkStatus`는 Network Information API에 접근하는 리액트 훅이에요. 연결 타입, 품질, 속도, 사용자의 데이터 절약 모드 설정 같은 네트워크 연결 데이터를 가공하지 않고 그대로 제공해요. API를 지원하지 않는 브라우저(Safari, Firefox 등)에서는 모든 속성이 `undefined`예요.
 
 ## 인터페이스
 
@@ -23,31 +23,31 @@ description="네트워크 연결 데이터를 담은 객체예요."
 name: 'effectiveType',
 type: &quot;'slow-2g' | '2g' | '3g' | '4g' | undefined&quot;,
 required: false,
-description: '연결 품질 지표 - API가 지원되지 않으면 <code>undefined</code>',
+description: '연결 품질이에요. API를 지원하지 않으면 <code>undefined</code>를 반환해요.',
 },
 {
 name: 'type',
 type: &quot;'bluetooth' | 'cellular' | 'ethernet' | 'mixed' | 'none' | 'other' | 'unknown' | 'wifi' | 'wimax' | undefined&quot;,
 required: false,
-description: '물리적 연결 타입 - API가 지원되지 않으면 <code>undefined</code>',
+description: '물리적 연결 타입이에요. API를 지원하지 않으면 <code>undefined</code>를 반환해요.',
 },
 {
 name: 'downlink',
 type: 'number | undefined',
 required: false,
-description: 'Mbps 단위의 다운링크 속도 - API가 지원되지 않으면 <code>undefined</code>',
+description: 'Mbps 단위의 다운링크 속도예요. API를 지원하지 않으면 <code>undefined</code>를 반환해요.',
 },
 {
 name: 'rtt',
 type: 'number | undefined',
 required: false,
-description: '밀리초 단위의 왕복 시간 - API가 지원되지 않으면 <code>undefined</code>',
+description: '밀리초 단위의 왕복 시간이에요. API를 지원하지 않으면 <code>undefined</code>를 반환해요.',
 },
 {
 name: 'saveData',
 type: 'boolean | undefined',
 required: false,
-description: '사용자의 데이터 절약 모드 설정 - API가 지원되지 않으면 <code>undefined</code>',
+description: '사용자의 데이터 절약 모드 설정이에요. API를 지원하지 않으면 <code>undefined</code>를 반환해요.',
 },
 ]"
 />
@@ -93,14 +93,14 @@ function VideoPlayer() {
 
 ### SSR 안전성
 
-이 훅은 SSR 환경에서 안전하게 동작해요. 서버에서는 빈 객체 `{}`를 반환하고, 브라우저 환경에서만 네트워크 변경 사항을 구독해요.
+이 훅은 SSR 환경에서 안전하게 동작해요. 서버에서는 빈 객체 `{}`를 반환하고 브라우저 환경에서만 네트워크 변경 사항을 구독해요.
 
 ### 사용 권장사항
 
-- API가 모든 브라우저에서 지원되지 않을 수 있으므로, 사용 전에 항상 `undefined` 값을 확인하세요
-- Network Information API를 지원하지 않는 브라우저를 위한 대체 동작을 제공하세요
-- 필수 기능이 아닌 사용자 경험 향상을 위해 이 훅을 사용하세요
-- 최적의 콘텐츠 전달 결정을 위해 `effectiveType`과 `saveData`를 함께 고려하세요
+- 모든 브라우저가 이 API를 지원하지는 않으므로 값을 쓰기 전에 항상 `undefined`인지 확인하세요.
+- Network Information API를 지원하지 않는 브라우저를 위한 대체 동작을 제공하세요.
+- 이 훅은 필수 기능이 아니라 사용자 경험을 높이는 데 쓰세요.
+- 어떤 콘텐츠를 전달할지 정할 때는 `effectiveType`과 `saveData`를 함께 고려하세요.
 
 ### 참고 자료
 

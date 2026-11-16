@@ -1,6 +1,6 @@
 # useThrottledCallback
 
-`useThrottledCallback`는 제공된 콜백 함수의 스로틀링된 버전을 반환하는 리액트 훅이에요. 스로틀링된 콜백은 지정된 간격당 최대 한 번만 호출돼요.
+`useThrottledCallback`은 전달한 콜백 함수의 스로틀링된 버전을 반환하는 리액트 훅이에요. 스로틀링된 콜백은 지정한 간격마다 최대 한 번만 호출돼요.
 
 ## 인터페이스
 
@@ -27,7 +27,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
       name: 'options.throttleMs',
       type: 'number',
       required: true,
-      description: '호출을 스로틀링할 밀리초(ms)이에요.',
+      description: '호출을 스로틀링할 간격(밀리초)이에요.',
     },
     {
       name: 'options.leading',
@@ -53,7 +53,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
 <Interface
   name=""
   type="(nextValue: T) => void"
-  description="간격당 최대 한 번 값을 <code>onChange</code>에 전달하는 스로틀링된 함수예요."
+  description="간격마다 최대 한 번 <code>onChange</code>에 값을 전달하는 스로틀링된 함수예요."
 />
 
 ## 예시

@@ -1,6 +1,6 @@
 # useAvoidKeyboard
 
-하단 고정 요소가 온스크린 키보드를 자연스럽게 피할 수 있도록 도와주는 리액트 훅이에요. 키보드가 나타나면 `transform`을 사용해 요소를 위로 부드럽게 이동시켜요.
+`useAvoidKeyboard`는 하단 고정 요소가 온스크린 키보드를 자연스럽게 피하도록 돕는 React 훅이에요. `position: fixed` 요소에 적용할 CSS 스타일을 반환해요. 키보드가 나타나면 이 스타일의 `transform`이 요소를 키보드 위로 부드럽게 올려요.
 
 ## 인터페이스
 
@@ -45,7 +45,7 @@ function useAvoidKeyboard(
       type: 'boolean',
       required: false,
       defaultValue: 'true',
-      description: '만약 true이면, 마운트 시점에 초기 키보드 높이를 가져와요.',
+      description: 'true이면 마운트 시점에 초기 키보드 높이를 가져와요.',
     },
   ]"
 />

@@ -1,6 +1,6 @@
 # isServer
 
-`isServer`은 코드가 서버에서 실행되는지 확인하는 유틸리티 함수에요. `window`이 정의되지 않은 SSR (서버사이드 렌더링) 환경에서는 `true`를 반환하고, 클라이언트 사이드 환경에서는 `false`를 반환해요.
+`isServer`는 코드가 서버에서 실행되는지 확인하는 유틸리티 함수예요. `window`가 정의되지 않은 서버 사이드 렌더링(SSR) 환경에서는 `true`를, 클라이언트 사이드 환경에서는 `false`를 반환해요.
 
 ## 인터페이스
 
@@ -17,7 +17,7 @@ function isServer(): boolean;
 <Interface
   name=""
   type="boolean"
-  description="서버 환경 (SSR)에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요."/>
+  description="서버 환경(SSR)에서 실행 중이면 <code>true</code>를, 그렇지 않으면 <code>false</code>를 반환해요."/>
 
 ## 예시
 

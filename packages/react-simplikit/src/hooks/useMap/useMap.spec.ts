@@ -173,4 +173,24 @@ describe('useMap', () => {
     renderHookSSR.serverOnly(() => useMap(initialMap));
     // This shouldn't throw any errors
   });
+
+  it('should accept values that JSON cannot serialize', async () => {
+    const { result } = await renderHookSSR(() => useMap([[1n, 'a']]));
+
+    expect(result.current[0].get(1n)).toBe('a');
+  });
+
+  it('should reset to the latest initial state when it is a Map', async () => {
+    const { result, rerender } = await renderHookSSR(({ initialState }) => useMap(initialState), {
+      initialProps: { initialState: new Map([[1, 'a']]) },
+    });
+
+    rerender({ initialState: new Map([[2, 'b']]) });
+
+    await act(async () => {
+      result.current[1].reset();
+    });
+
+    expect(Array.from(result.current[0])).toEqual([[2, 'b']]);
+  });
 });

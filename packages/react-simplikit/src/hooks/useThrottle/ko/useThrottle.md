@@ -1,6 +1,6 @@
 # useThrottle
 
-콜백 함수를 제한적으로 실행하는 버전을 만들어요. 이 기능은 함수가 호출될 수 있는 빈도를 제한하는 데 유용하며, 예를 들어 스크롤이나 리사이즈 이벤트를 처리할 때 사용돼요.
+`useThrottle`은 콜백 함수의 스로틀링된 버전을 만드는 리액트 훅이에요. 스크롤이나 리사이즈 이벤트를 처리할 때처럼 함수가 호출되는 빈도를 제한해야 할 때 유용해요.
 
 ## 인터페이스
 
@@ -25,13 +25,13 @@ function useThrottle<F extends (...args: any[]) => unknown>(
   required
   name="throttleMs"
   type="number"
-  description="호출을 스로틀링할 밀리초의 수예요."
+  description="호출을 스로틀링할 간격(밀리초)이에요."
 />
 
 <Interface
   name="options"
   type="ThrottleOptions"
-  description="스로틀의 동작을 제어하기 위한 옵션이에요."
+  description="스로틀 동작을 제어하는 옵션이에요."
   :nested="[
     {
       name: 'options.leading',
@@ -57,7 +57,7 @@ function useThrottle<F extends (...args: any[]) => unknown>(
 <Interface
   name=""
   type="F & { cancel: () => void }"
-  description="<code>cancel</code> 메서드가 있는 스로틀링된 함수가 반환돼요, 이 메서드는 보류 중인 실행을 취소해요."
+  description="스로틀링된 함수를 반환해요. 이 함수에는 대기 중인 실행을 취소하는 <code>cancel</code> 메서드가 있어요."
 />
 
 ## 예시

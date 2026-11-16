@@ -1,6 +1,8 @@
 # useDebouncedCallback
 
-`useDebouncedCallback`는 제공된 콜백 함수를 디바운스된 버전으로 반환하는 리액트 훅이에요. 이는 함수 실행을 지연시키고 여러 호출을 하나로 묶어 이벤트 처리를 최적화하는 데 도움이 돼요. 'leading'과 'trailing'이 모두 포함된 경우, 함수는 지연 기간의 시작과 끝에 모두 호출돼요. 하지만 이렇게 동작하려면 디바운스 밀리초(ms) 내에 최소 두 번 호출되어야 해요, 한 번의 디바운스된 함수 호출로 함수가 두 번 호출되지 않아요.
+`useDebouncedCallback`는 전달받은 콜백 함수의 디바운스된 버전을 반환하는 리액트 훅이에요. 함수 실행을 지연시키고 여러 번의 호출을 하나로 묶어 이벤트 처리를 최적화하는 데 도움이 돼요.
+
+'leading'과 'trailing'을 모두 설정하면 지연 기간의 시작과 끝에 모두 함수를 호출해요. 다만 이렇게 동작하려면 디바운스 대기 시간 안에 디바운스된 함수를 최소 두 번 호출해야 해요. 한 번 호출해서는 함수가 두 번 실행되지 않기 때문이에요.
 
 ## 인터페이스
 
@@ -28,7 +30,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
       type: 'number',
       required: true,
       description:
-        '함수 실행을 지연할 밀리초(ms)이에요.',
+        '함수 실행을 지연할 밀리초(ms)예요.',
     },
     {
       name: 'options.leading',
@@ -36,7 +38,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
       required: false,
       defaultValue: 'false',
       description:
-        '만약 <code>true</code>이면, 함수는 시퀀스의 시작에 호출돼요.',
+        '<code>true</code>이면 연속 호출이 시작될 때 함수를 호출해요.',
     },
     {
       name: 'options.trailing',
@@ -44,7 +46,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
       required: false,
       defaultValue: 'true',
       description:
-        '만약 <code>true</code>이면, 함수는 시퀀스의 끝에 호출돼요.',
+        '<code>true</code>이면 연속 호출이 끝날 때 함수를 호출해요.',
     },
   ]"
 />

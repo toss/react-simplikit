@@ -10,17 +10,17 @@ description: 해결하려는 문제에 맞는 React 유틸리티 선택하기
 
 ## API 선택하기
 
-| 문제                          | API                                                      | 제공하는 기능                                    |
-| ----------------------------- | -------------------------------------------------------- | ------------------------------------------------ |
-| 콘텐츠를 보이거나 숨기기      | [useToggle](/ko/hooks/useToggle)                         | 불리언 상태와 토글 함수                          |
-| 입력이 멈출 때까지 기다리기   | [useDebouncedValue](/ko/hooks/useDebouncedValue)         | 입력을 즉시 반영하면서 지연 갱신되는 상태의 사본 |
-| 콜백 호출을 늦추기            | [useDebounce](/ko/hooks/useDebounce)                     | `.cancel()` 메서드가 있는 호출 가능한 함수       |
-| 콜백 호출 빈도 제한하기       | [useThrottledCallback](/ko/hooks/useThrottledCallback)   | 설정한 간격으로 호출 빈도를 제한하는 콜백        |
-| 새로고침 후에도 상태 유지하기 | [useStorageState](/ko/hooks/useStorageState)             | 브라우저 저장소에 유지되는 상태                  |
-| 요소 바깥 클릭에 반응하기     | [useOutsideClickEffect](/ko/hooks/useOutsideClickEffect) | 요소 바깥 클릭 구독                              |
-| 입력창을 키보드 위에 유지하기 | [useAvoidKeyboard](/ko/hooks/useAvoidKeyboard)           | 고정 요소의 위치를 조절하는 스타일               |
-| 자식 요소 사이에 구분자 넣기  | [Separated](/ko/components/Separated)                    | 마지막 요소 뒤에는 붙지 않는 구분자              |
-| 한 요소에 여러 ref 연결하기   | [mergeRefs](/ko/utils/mergeRefs)                         | 각 ref에 요소를 전달하는 하나의 ref 콜백         |
+| 문제                          | API                                                      | 제공하는 기능                               |
+| ----------------------------- | -------------------------------------------------------- | ------------------------------------------- |
+| 콘텐츠를 보이거나 숨기기      | [useToggle](/ko/hooks/useToggle)                         | 불리언 상태와 토글 함수                     |
+| 입력이 멈출 때까지 기다리기   | [useDebouncedValue](/ko/hooks/useDebouncedValue)         | 지연 갱신되는 상태 사본(입력창은 즉시 반응) |
+| 콜백 호출을 늦추기            | [useDebounce](/ko/hooks/useDebounce)                     | `.cancel()` 메서드가 있는 호출 가능한 함수  |
+| 콜백 호출 빈도 제한하기       | [useThrottledCallback](/ko/hooks/useThrottledCallback)   | 설정한 간격으로 호출 빈도를 제한하는 콜백   |
+| 새로고침 후에도 상태 유지하기 | [useStorageState](/ko/hooks/useStorageState)             | 브라우저 저장소에 유지되는 상태             |
+| 요소 바깥 클릭에 반응하기     | [useOutsideClickEffect](/ko/hooks/useOutsideClickEffect) | 요소 바깥 클릭 구독                         |
+| 입력창을 키보드 위에 유지하기 | [useAvoidKeyboard](/ko/hooks/useAvoidKeyboard)           | 고정 요소의 위치를 조절하는 스타일          |
+| 자식 요소 사이에 구분자 넣기  | [Separated](/ko/components/Separated)                    | 마지막 요소 뒤에는 붙지 않는 구분자         |
+| 한 요소에 여러 ref 연결하기   | [mergeRefs](/ko/utils/mergeRefs)                         | 각 ref에 요소를 전달하는 하나의 ref 콜백    |
 
 ## 상세 내용 보이거나 숨기기
 
@@ -45,7 +45,7 @@ export function Details() {
 
 ## 입력이 멈춘 뒤 필터링하기
 
-React 앱에서 `<FruitSearch />`를 렌더링하세요. `ap`를 입력하면 입력창은 즉시 갱신되고 추가 입력 없이 300ms가 지나면 목록에 Apple이 표시돼요. 로컬 데이터를 사용하므로 서버가 필요하지 않아요.
+React 앱에서 `<FruitSearch />`를 렌더링하세요. `ap`를 입력하면 입력창은 즉시 갱신돼요. 추가 입력 없이 300ms가 지나면 목록에 Apple이 표시돼요. 로컬 데이터를 사용하므로 서버가 필요하지 않아요.
 
 ```tsx
 import { useState } from 'react';
@@ -76,13 +76,13 @@ export function FruitSearch() {
 }
 ```
 
-렌더링에 사용할 값이 필요하면 [useDebouncedValue](/ko/hooks/useDebouncedValue)를 사용하세요. 이벤트에서 콜백 실행을 예약하려면 [useDebounce](/ko/hooks/useDebounce)를 사용하세요. 디바운스 자체가 무거운 계산을 빠르게 만들지는 않아요.
+렌더링에 사용할 값이 필요하면 [useDebouncedValue](/ko/hooks/useDebouncedValue)를 사용하세요. 이벤트에서 콜백 실행을 예약하려면 [useDebounce](/ko/hooks/useDebounce)를 사용하세요. 디바운스만으로는 무거운 계산이 빨라지지 않아요.
 
 ## SSR과 정리 동작
 
-- `useDebouncedValue`는 서버와 첫 렌더에서 전달받은 값을 그대로 반환해요. 서버와 클라이언트에 같은 초기값을 전달하고 그 값을 만들기 위해 렌더 도중 `window`나 저장소를 읽지 마세요.
+- `useDebouncedValue`는 서버와 첫 렌더에서 전달받은 값을 그대로 반환해요. 서버와 클라이언트에 같은 초기값을 전달하세요. 그 값을 만들려고 렌더 도중 `window`나 저장소를 읽지 마세요.
 
-- `useStorageState`는 서버 스냅샷과 hydration에 `defaultValue`를 사용한 뒤 클라이언트에서 브라우저 저장소를 읽어요. 언마운트 시 저장소 리스너를 제거해요.
+- `useStorageState`는 서버 스냅샷과 hydration에 `defaultValue`를 사용한 뒤 클라이언트에서 브라우저 저장소를 읽어요. 컴포넌트가 언마운트되면 저장소 리스너를 제거해요.
 
 - `useDebounce`는 컴포넌트가 언마운트되거나 `debounceMs`, `leading`, `trailing`이 바뀌면 대기 중인 호출을 취소해요. 이미 시작한 네트워크 요청은 취소하지 않으므로 요청 취소나 오래된 응답 처리는 애플리케이션에서 담당해야 해요.
 
