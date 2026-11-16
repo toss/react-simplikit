@@ -79,7 +79,7 @@ function Analytics() {
 
 ## 참고사항
 
-- **SSR 안전성**: 서버 사이드 렌더링 중에는 Page Visibility API를 사용할 수 없으므로 이 훅은 안전한 기본값인 `{ isVisible: true, visibilityState: 'visible' }`을 반환해요.
+- **SSR 안전성**: 이 훅은 서버와 클라이언트의 첫 렌더링에서 `{ isVisible: true, visibilityState: 'visible' }`을 반환하고, 마운트된 뒤 `document.visibilityState`와 동기화돼요.
 - **브라우저 지원**: Page Visibility API는 모든 최신 브라우저에서 지원돼요. 자세한 내용은 [MDN 브라우저 호환성](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#browser_compatibility)을 참고해주세요.
 - **성능**: 이 훅은 네이티브 `visibilitychange` 이벤트를 구독하고 폴링은 하지 않아서 오버헤드가 거의 없어요.
 - **가시성 상태**: 이 훅은 더 이상 사용되지 않는 `'prerender'` 상태를 제외하고 `'visible'` 또는 `'hidden'`만 반환해요.

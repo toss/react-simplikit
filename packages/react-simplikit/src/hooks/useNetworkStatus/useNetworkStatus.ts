@@ -103,7 +103,7 @@ type NavigatorWithConnection = {
  *
  * ### SSR safety
  *
- * The hook is safe during server-side rendering. On the server it returns an empty object `{}` and it subscribes to network changes only in the browser.
+ * The hook is safe during server-side rendering. It returns an empty object `{}` on the server and on the first client render, then reads the connection after mount. It subscribes to network changes only in the browser.
  *
  * ### Recommendations
  *
@@ -119,23 +119,20 @@ type NavigatorWithConnection = {
  *
  */
 export function useNetworkStatus(): NetworkStatus {
-  const [networkStatus, setNetworkStatus] = useState<NetworkStatus>(getNetworkStatus);
+  const [networkStatus, setNetworkStatus] = useState<NetworkStatus>({});
 
   useEffect(function subscribeToNetworkChanges() {
-    if (isServer()) {
-      return;
-    }
-
     const connection = getNavigatorConnection();
 
     if (connection == null) {
       return;
     }
 
-    function updateNetworkStatus() {
-      setNetworkStatus(getNetworkStatus());
-    }
+    const updateNetworkStatus = () => {
+      setNetworkStatus(getNetworkStatus(connection));
+    };
 
+    updateNetworkStatus();
     connection.addEventListener('change', updateNetworkStatus);
 
     return function cleanup() {
@@ -158,13 +155,7 @@ function getNavigatorConnection(): NetworkInformation | null {
   }
 }
 
-function getNetworkStatus(): NetworkStatus {
-  const connection = getNavigatorConnection();
-
-  if (connection == null) {
-    return {};
-  }
-
+function getNetworkStatus(connection: NetworkInformation): NetworkStatus {
   return {
     effectiveType: connection.effectiveType,
     type: connection.type,

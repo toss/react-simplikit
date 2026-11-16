@@ -26,7 +26,7 @@ This function does not accept any parameters.
       type: 'VisualViewportState | null',
       required: false,
       description:
-        'Visual Viewport state object, or <code>null</code> if not supported (SSR or browsers without the Visual Viewport API).',
+        'Visual Viewport state object, or <code>null</code> on the server, on the first client render, and in browsers without the Visual Viewport API.',
     },
     {
       name: 'viewport.width',
@@ -101,7 +101,7 @@ if (viewport && viewport.scale > 1.3) {
 
 ## Notes
 
-- **SSR safety**: `viewport` is `null` during server-side rendering and in browsers without the Visual Viewport API. Always check for `null` before reading its properties.
+- **SSR safety**: `viewport` is `null` on the server, on the first client render, and in browsers without the Visual Viewport API. It syncs after mount. Always check for `null` before reading its properties.
 - **Browser support**: The Visual Viewport API is supported in modern mobile browsers. Where it is missing the hook returns `null`.
 - **Performance**: Updates are wrapped in React's `startTransition` so viewport changes do not block urgent rendering.
 - **Simpler alternative**: If you only need the keyboard height, use `useKeyboardHeight()` for a simpler API.

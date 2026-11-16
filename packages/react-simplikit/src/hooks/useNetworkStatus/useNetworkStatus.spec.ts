@@ -183,5 +183,18 @@ describe('useNetworkStatus', () => {
 
       expect(result.current.effectiveType).toBe('4g');
     });
+
+    it('should hydrate without a mismatch and then sync to the browser value', () => {
+      const { result, onRecoverableError } = renderHookSSR.hydrated(() => useNetworkStatus());
+
+      expect(onRecoverableError).not.toHaveBeenCalled();
+      expect(result.current).toEqual({
+        effectiveType: '4g',
+        type: 'wifi',
+        downlink: 10,
+        rtt: 50,
+        saveData: false,
+      });
+    });
   });
 });

@@ -78,7 +78,7 @@ function Analytics() {
 
 ## 备注
 
-- **服务端渲染安全性**：Page Visibility API 在服务端渲染期间不可用，因此该 Hook 返回安全的默认值 `{ isVisible: true, visibilityState: 'visible' }`。
+- **服务端渲染安全性**：在服务端和客户端首次渲染时，该 Hook 返回 `{ isVisible: true, visibilityState: 'visible' }`，挂载后会与 `document.visibilityState` 同步。
 - **浏览器支持**：每个现代浏览器都支持 Page Visibility API。详情请参阅 [MDN 浏览器兼容性表](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#browser_compatibility)。
 - **性能**：该 Hook 监听原生的 `visibilitychange` 事件，因此不引入轮询，开销可忽略不计。
 - **可见性状态**：只返回 `'visible'` 和 `'hidden'`；已弃用的 `'prerender'` 状态被排除在外。

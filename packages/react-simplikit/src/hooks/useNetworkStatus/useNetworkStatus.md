@@ -100,7 +100,7 @@ function VideoPlayer() {
 
 ### SSR safety
 
-The hook is safe during server-side rendering. On the server it returns an empty object `{}` and it subscribes to network changes only in the browser.
+The hook is safe during server-side rendering. It returns an empty object `{}` on the server and on the first client render, then reads the connection after mount. It subscribes to network changes only in the browser.
 
 ### Recommendations
 

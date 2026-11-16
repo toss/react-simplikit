@@ -80,7 +80,7 @@ function Analytics() {
 
 ## 注意事項
 
-- **SSR の安全性**：サーバーサイドレンダリング中は Page Visibility API を利用できないため、このフックは安全なデフォルト値 `{ isVisible: true, visibilityState: 'visible' }` を返します。
+- **SSR の安全性**：このフックはサーバーとクライアントの最初のレンダリングでは `{ isVisible: true, visibilityState: 'visible' }` を返し、マウント後に `document.visibilityState` と同期します。
 - **ブラウザーの対応状況**：Page Visibility API はすべてのモダンブラウザーで利用できます。詳しくは [MDN のブラウザー互換性一覧](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#browser_compatibility)を参照してください。
 - **パフォーマンス**：このフックはネイティブの `visibilitychange` イベントを監視するため、ポーリングを行わず、オーバーヘッドもごくわずかです。
 - **表示状態**：`'visible'` と `'hidden'` のみを返します。非推奨の `'prerender'` 状態は含まれません。
