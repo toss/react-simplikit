@@ -208,20 +208,35 @@ JSDoc 주석은 `@description`과 `@example`을 반드시 포함해야 하고, �
       />
     </div>
 
+- `@deprecated`: deprecated된 API에 대체 API의 이름과 전환 방법을 작성해요.
+
+  - 대체 API의 이름은 백틱으로 감싸고, 해당 문서로 이동하는 링크를 작성해요.
+  - 문서 페이지는 유지되며, 제목 아래에 `@deprecated`의 안내가 경고로 표시돼요.
+
+    ```ts
+    /**
+     * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+     */
+    ```
+
+  - 이름을 바꾼 뒤에도 남겨 둔 옛 이름처럼 별도 문서가 필요하지 않으면 `@no-docs`와 함께 사용해요.
+
+    ```ts
+    /**
+     * @no-docs
+     * @deprecated Use `useNew` instead.
+     */
+    ```
+
+- `@no-docs`: 문서 페이지를 제공하지 않을 API에 작성해요. API는 그대로 사용할 수 있지만, 문서 생성 대상에서 제외돼요.
+
+  ```ts
+  /**
+   * @no-docs
+   */
+  ```
+
   :::
-
-export를 deprecated로 표시하려면 대체 API를 백틱으로 감싸고 그 페이지 링크를 걸어서 `@deprecated`에 적어 주세요. 문서 페이지는 그대로 남고, 맨 위에 deprecated 경고가 붙어요. 이름을 바꾼 뒤 남겨 둔 옛 이름처럼 문서에서 빼야 하는 export에는 `@no-docs`를 추가해 주세요.
-
-```ts
-/**
- * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
- */ // page kept, with a warning
-
-/**
- * @no-docs
- * @deprecated Use `useNew` instead.
- */ // no page
-```
 
 ### 테스트 코드 작성
 

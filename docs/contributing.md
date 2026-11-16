@@ -208,20 +208,35 @@ JSDoc comments must include `@description` and `@example`, and if there are para
       />
     </div>
 
+- `@deprecated`: Write the replacement and how to switch to it. Add it to an API that is deprecated.
+
+  - Wrap the replacement's name in backticks and link it to its page.
+  - The page stays and opens with the `@deprecated` text as a warning under the title.
+
+    ```ts
+    /**
+     * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+     */
+    ```
+
+  - When the API needs no page of its own, such as an old name kept after a rename, add `@no-docs` as well.
+
+    ```ts
+    /**
+     * @no-docs
+     * @deprecated Use `useNew` instead.
+     */
+    ```
+
+- `@no-docs`: Add it to an API that has no documentation page. The API still works, but no page is generated for it.
+
+  ```ts
+  /**
+   * @no-docs
+   */
+  ```
+
 :::
-
-To deprecate an export, add `@deprecated` with its replacement in backticks, linked to its page. Its page stays and opens with a deprecation warning. To leave an export out of the docs, such as an old name kept after a rename, add `@no-docs`.
-
-```ts
-/**
- * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
- */ // page kept, with a warning
-
-/**
- * @no-docs
- * @deprecated Use `useNew` instead.
- */ // no page
-```
 
 ### Writing Test Code
 

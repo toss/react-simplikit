@@ -140,7 +140,7 @@ These still work but are kept only for backward compatibility. Do not use them i
 });
 
 describe('readCatalogNames', () => {
-  it('reads the linked rows only, so a deprecated export is not counted as documented', () => {
+  it('skips the unlinked rows, whether they come from the template or from the Deprecated table', () => {
     const skill = renderSkill({
       template: '# Skill\n\n| Need | Use |\n| --- | --- |\n| Toggle | `useToggle` |\n\n<!-- CATALOG -->\n',
       entries: [

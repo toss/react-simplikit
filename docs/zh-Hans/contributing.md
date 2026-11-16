@@ -208,20 +208,35 @@ JSDoc 注释必须包含 `@description` 和 `@example`；如果有参数或返�
       />
     </div>
 
+- `@deprecated`：为已弃用的 API 写明替代 API 的名称以及迁移方式。
+
+  - 用反引号包住替代 API 的名称，并链接到它的页面。
+  - 文档页面会保留，并在标题下方以警告形式显示 `@deprecated` 的内容。
+
+    ```ts
+    /**
+     * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+     */
+    ```
+
+  - 如果该 API 不需要单独的页面（例如重命名后保留的旧名称），请同时添加 `@no-docs`。
+
+    ```ts
+    /**
+     * @no-docs
+     * @deprecated Use `useNew` instead.
+     */
+    ```
+
+- `@no-docs`：添加到不提供文档页面的 API 上。该 API 仍可正常使用，但不会为它生成页面。
+
+  ```ts
+  /**
+   * @no-docs
+   */
+  ```
+
 :::
-
-要将导出标记为已弃用，请添加 `@deprecated`，用反引号写出替代 API，并链接到它的页面。文档页面会保留，并在顶部显示弃用警告。对于需要从文档中移除的导出（例如重命名后保留的旧名称），请添加 `@no-docs`。
-
-```ts
-/**
- * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
- */ // page kept, with a warning
-
-/**
- * @no-docs
- * @deprecated Use `useNew` instead.
- */ // no page
-```
 
 ### 编写测试代码
 
