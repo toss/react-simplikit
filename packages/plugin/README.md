@@ -3,7 +3,7 @@
 Agent skills for [react-simplikit](https://react-simplikit.slash.page). Two ship in this plugin:
 
 - **`react-simplikit`** — a catalog of every hook, component and util with a one-line description, import and SSR rules, and a reference page per entry. With it installed, an agent checks the library before hand-writing debounce, throttle, click-outside, keyboard-avoidance and similar logic.
-- **`react-simplikit-codemod`** — how to run the upgrade codemods (`npx react-simplikit-codemod <transform>`) on a codebase, including the JSON report the CLI emits and what to do with each exit code.
+- **`react-simplikit-codemod`** — how to run the upgrade codemods on a codebase: `v0-to-v1` (`npx @react-simplikit/codemod v0-to-v1`) for the v1 breaking changes and `mobile-to-root` (`npx react-simplikit-codemod mobile-to-root`) for the deprecated `@react-simplikit/mobile` package, including what each one reports and what to fix by hand afterwards.
 
 ## Install
 
@@ -65,7 +65,7 @@ claude plugin marketplace remove react-design-philosophy
 
 `skills/react-simplikit-codemod/`
 
-- `SKILL.md` — preconditions, the commands and their flags, the shape of the `--json` report, the manual follow-ups to act on afterwards, and what each exit code means. It has no `references/`.
+- `SKILL.md` — which codemod to pick, then for each one the commands and their flags, what it reports, the manual follow-ups to act on afterwards, and what its exit codes mean. It has no `references/`.
 
 ## Contributing
 
@@ -77,7 +77,7 @@ The two skills are maintained differently.
 - Catalog descriptions come from each entry's documentation page (`<name>.md` next to its source), which `yarn docs:gen <name>` writes from the JSDoc.
 - Run `yarn skill:gen` to regenerate (it also runs at the end of `yarn docs:gen`), then `yarn test:skill` to check the result. CI fails if the committed skill differs from a fresh generation.
 
-**`skills/react-simplikit-codemod/` is hand-written.** It documents the CLI in `packages/codemod`, so a change to the CLI's flags, JSON report or exit codes has to be carried into it by hand. `yarn test:skill` checks its frontmatter and length but cannot tell whether it still matches the CLI.
+**`skills/react-simplikit-codemod/` is hand-written.** It documents the `v0-to-v1` workflow in `codemods/` and the CLI in `packages/codemod`, so a new transform, a new `manual-review` reason, or a change to the CLI's flags, JSON report or exit codes has to be carried into it by hand. `yarn test:skill` checks its frontmatter and length but cannot tell whether it still matches the CLI.
 
 ## License
 
