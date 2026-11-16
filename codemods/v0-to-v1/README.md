@@ -22,9 +22,14 @@ Options after `v0-to-v1` go to the Codemod CLI. Useful ones:
 
 ## What it changes
 
-| Breaking change                                                    | Before                                          | After                                                 |
-| ------------------------------------------------------------------ | ----------------------------------------------- | ----------------------------------------------------- |
-| [#535](https://github.com/toss/react-simplikit/issues/535) options | `useDoubleClick({ click, doubleClick, delay })` | `useDoubleClick({ onClick, onDoubleClick, delayMs })` |
+| Breaking change                                                         | Before                                                                  | After                                                                       |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [#535](https://github.com/toss/react-simplikit/issues/535) options      | `useDoubleClick({ click, doubleClick, delay })`                         | `useDoubleClick({ onClick, onDoubleClick, delayMs })`                       |
+| [#536](https://github.com/toss/react-simplikit/issues/536) time options | `useDebouncedCallback({ timeThreshold })`                               | `useDebouncedCallback({ debounceMs })`                                      |
+|                                                                         | `useThrottledCallback({ timeThreshold })`                               | `useThrottledCallback({ throttleMs })`                                      |
+|                                                                         | `useImpressionRef({ timeThreshold })`, `<ImpressionArea timeThreshold>` | `useImpressionRef({ timeThresholdMs })`, `<ImpressionArea timeThresholdMs>` |
+|                                                                         | `useLongPress(fn, { delay })`                                           | `useLongPress(fn, { delayMs })`                                             |
+|                                                                         | `useAvoidKeyboard({ transitionDuration })`                              | `useAvoidKeyboard({ transitionDurationMs })`                                |
 
 Only calls that resolve to an import from `react-simplikit` are rewritten, including aliased (`import { useDoubleClick as useDbl }`) and namespace (`simplikit.useDoubleClick`) imports.
 
@@ -37,6 +42,7 @@ Code it cannot rewrite safely is left as is and listed under `manual-review` in 
 | `options-not-inline`   | `useDoubleClick(options)`                                    |
 | `options-spread`       | `useDoubleClick({ ...base, doubleClick })` (the spread part) |
 | `options-computed-key` | `useDoubleClick({ [key]: select })`                          |
+| `props-spread`         | `<ImpressionArea {...props} />`                              |
 | `require-not-followed` | `const { useDoubleClick } = require('react-simplikit')`      |
 | `re-exported`          | `export { useDoubleClick } from 'react-simplikit'`           |
 
