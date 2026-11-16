@@ -323,6 +323,7 @@ assert.deepEqual((koConfig.themeConfig?.sidebar as Record<string, DefaultTheme.S
     { text: '소개', link: '/ko/intro' },
     { text: 'react-simplikit, 선택의 이유', link: '/ko/why-react-simplikit-matters' },
     { text: '설치하기', link: '/ko/installation' },
+    { text: 'v1로 업그레이드하기', link: '/ko/migrating-to-v1' },
     { text: '문제별 사용법', link: '/ko/use-cases' },
     { text: 'AI 연동', link: '/ko/ai-integration' },
     { text: '설계 원칙', link: '/ko/design-principles' },
