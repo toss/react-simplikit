@@ -204,9 +204,8 @@ export function useStorageState<T>(
     [getSnapshot, key, storage]
   );
 
-  const refreshStorageState = useCallback(() => {
-    setStorageState(getSnapshot());
-  }, [storage, getSnapshot, setStorageState]);
+  // Only notifies subscribers so they re-read storage. Writing the snapshot back would persist `defaultValue`.
+  const refreshStorageState = emitListeners;
 
   /* eslint-disable-next-line react-hooks/refs -- the two callbacks close over `cache` through
      `getSnapshot`, so the rule treats handing them to any function as a possible ref read

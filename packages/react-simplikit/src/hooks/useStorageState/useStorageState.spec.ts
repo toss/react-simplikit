@@ -286,6 +286,17 @@ describe('useStorageState', () => {
       expect(result.current[0]).toEqual({ hello: 'world' });
     });
 
+    it('should not write defaultValue to storage on refresh', async () => {
+      const { result } = await renderHookSSR(() => useStorageState('test-key', { storage, defaultValue: 'fallback' }));
+
+      await act(async () => {
+        result.current[2]();
+      });
+
+      expect(result.current[0]).toBe('fallback');
+      expect(storage.get('test-key')).toBeNull();
+    });
+
     it('should work with custom serializer and deserializer', async () => {
       const serializer = (value: any) =>
         ['string', 'number', 'boolean'].includes(typeof value) ? value : JSON.stringify(value);
