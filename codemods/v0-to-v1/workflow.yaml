@@ -44,3 +44,15 @@ nodes:
           language: typescript
           include: ['**/*.ts', '**/*.mts', '**/*.cts']
           exclude: ['**/node_modules/**', '**/*.d.ts']
+      - name: 'useThrottle, useThrottledCallback: replace edges with leading and trailing (#534)'
+        js-ast-grep:
+          js_file: scripts/throttle-edges.ts
+          language: tsx
+          include: ['**/*.tsx', '**/*.jsx', '**/*.js', '**/*.mjs', '**/*.cjs']
+          exclude: ['**/node_modules/**']
+      - name: 'useThrottle, useThrottledCallback: replace edges with leading and trailing (#534) in .ts files'
+        js-ast-grep:
+          js_file: scripts/throttle-edges.ts
+          language: typescript
+          include: ['**/*.ts', '**/*.mts', '**/*.cts']
+          exclude: ['**/node_modules/**', '**/*.d.ts']
