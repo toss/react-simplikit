@@ -87,7 +87,8 @@ function useGeolocation(options?: GeolocationOptions): Object;
       name: 'startTracking',
       type: 'Function',
       required: false,
-      description: '位置情報の変化の追跡を開始する関数。',
+      description:
+        '位置情報の変化の追跡を開始する関数。追跡中に <code>enableHighAccuracy</code>、<code>maximumAge</code>、<code>timeout</code> が変わると、新しいオプションで追跡をやり直します。',
     },
     {
       name: 'stopTracking',

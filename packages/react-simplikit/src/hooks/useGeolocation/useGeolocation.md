@@ -87,7 +87,8 @@ function useGeolocation(options?: GeolocationOptions): Object;
       name: 'startTracking',
       type: 'Function',
       required: false,
-      description: 'Function to start tracking location changes.',
+      description:
+        'Function to start tracking location changes. While tracking, the watch restarts when <code>enableHighAccuracy</code>, <code>maximumAge</code> or <code>timeout</code> changes.',
     },
     {
       name: 'stopTracking',

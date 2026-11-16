@@ -86,7 +86,8 @@ function useGeolocation(options?: GeolocationOptions): Object;
       name: 'startTracking',
       type: 'Function',
       required: false,
-      description: '开始跟踪位置变化的函数。',
+      description:
+        '开始跟踪位置变化的函数。跟踪期间，当 <code>enableHighAccuracy</code>、<code>maximumAge</code> 或 <code>timeout</code> 变化时，会使用新选项重新开始跟踪。',
     },
     {
       name: 'stopTracking',

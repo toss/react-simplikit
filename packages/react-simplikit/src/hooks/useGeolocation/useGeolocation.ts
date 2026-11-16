@@ -64,7 +64,7 @@ type GeolocationOptions = {
  *   : speed `number|null` - The speed in meters per second
  *   : timestamp `number` - The time when the position was retrieved;
  * - getCurrentPosition `Function` - Function to get the current position once;
- * - startTracking `Function` - Function to start tracking location changes;
+ * - startTracking `Function` - Function to start tracking location changes. While tracking, the watch restarts when `enableHighAccuracy`, `maximumAge` or `timeout` changes;
  * - stopTracking `Function` - Function to stop tracking location;
  * - isTracking `boolean` - Whether location tracking is currently active;
  *
@@ -215,12 +215,13 @@ export function useGeolocation(options?: GeolocationOptions) {
   }, []);
 
   useEffect(() => {
-    if (options?.mountBehavior === GeolocationMountBehavior.WATCH) {
+    // `startTracking` changes with the position options, so this also restarts a running watch with the new ones.
+    if (options?.mountBehavior === GeolocationMountBehavior.WATCH || watchIdRef.current !== null) {
+      startTracking();
+    } else if (options?.mountBehavior === GeolocationMountBehavior.GET) {
       /* eslint-disable-next-line react-hooks/set-state-in-effect -- `mountBehavior` is an
          explicit opt-in to start geolocation on mount, and the browser API can only be
          reached from an effect. The resulting state update is the requested behavior. */
-      startTracking();
-    } else if (options?.mountBehavior === GeolocationMountBehavior.GET) {
       getCurrentPosition();
     }
   }, [options?.mountBehavior, getCurrentPosition, startTracking]);

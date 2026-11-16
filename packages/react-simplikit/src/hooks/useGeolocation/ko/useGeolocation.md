@@ -86,7 +86,8 @@ function useGeolocation(options?: GeolocationOptions): Object;
       name: 'startTracking',
       type: 'Function',
       required: false,
-      description: '위치 변경 추적을 시작하는 함수예요.',
+      description:
+        '위치 변경 추적을 시작하는 함수예요. 추적 중에 <code>enableHighAccuracy</code>, <code>maximumAge</code>, <code>timeout</code>이 바뀌면 새 옵션으로 다시 시작해요.',
     },
     {
       name: 'stopTracking',
