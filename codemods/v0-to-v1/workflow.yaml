@@ -56,3 +56,15 @@ nodes:
           language: typescript
           include: ['**/*.ts', '**/*.mts', '**/*.cts']
           exclude: ['**/node_modules/**', '**/*.d.ts']
+      - name: 'useBooleanState, useStorageState, useCounter: return [value, actions] (#528)'
+        js-ast-grep:
+          js_file: scripts/state-hook-returns.ts
+          language: tsx
+          include: ['**/*.tsx', '**/*.jsx', '**/*.js', '**/*.mjs', '**/*.cjs']
+          exclude: ['**/node_modules/**']
+      - name: 'useBooleanState, useStorageState, useCounter: return [value, actions] (#528) in .ts files'
+        js-ast-grep:
+          js_file: scripts/state-hook-returns.ts
+          language: typescript
+          include: ['**/*.ts', '**/*.mts', '**/*.cts']
+          exclude: ['**/node_modules/**', '**/*.d.ts']

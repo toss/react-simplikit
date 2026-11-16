@@ -1,0 +1,49 @@
+{
+  "manual-review": [
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useBooleanState",
+        "line": "4",
+        "reason": "return-not-destructured"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useBooleanState",
+        "line": "9",
+        "reason": "return-not-destructured"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useCounter",
+        "line": "5",
+        "reason": "return-not-destructured"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useCounter",
+        "line": "7",
+        "reason": "return-pattern-not-simple"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useStorageState",
+        "line": "6",
+        "reason": "return-pattern-not-simple"
+      },
+      "count": 1
+    }
+  ]
+}
