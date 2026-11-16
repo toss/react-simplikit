@@ -210,6 +210,8 @@ export function useGeolocation(options?: GeolocationOptions) {
     navigator.geolocation.clearWatch(watchIdRef.current);
     watchIdRef.current = null;
     setIsTracking(false);
+    // The watch may be stopped before its first position arrives, and nothing else would clear `loading` then.
+    setState(prev => ({ ...prev, loading: false }));
   }, []);
 
   useEffect(() => {
@@ -221,14 +223,18 @@ export function useGeolocation(options?: GeolocationOptions) {
     } else if (options?.mountBehavior === GeolocationMountBehavior.GET) {
       getCurrentPosition();
     }
+  }, [options?.mountBehavior, getCurrentPosition, startTracking]);
 
+  // Kept apart from the effect above: its dependencies change with the position options, and a cleanup
+  // there would clear a watch started through `startTracking()` without restarting it.
+  useEffect(function clearWatchOnUnmount() {
     return () => {
       if (watchIdRef.current !== null) {
         navigator.geolocation.clearWatch(watchIdRef.current);
         watchIdRef.current = null;
       }
     };
-  }, [options?.mountBehavior, getCurrentPosition, startTracking]);
+  }, []);
 
   return {
     ...state,
