@@ -1,0 +1,31 @@
+{
+  "manual-review": [
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useInterval",
+        "line": "6",
+        "reason": "delay-not-inline"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useInterval",
+        "line": "7",
+        "reason": "delay-not-inline"
+      },
+      "count": 1
+    },
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useTimeout",
+        "line": "8",
+        "reason": "delay-not-inline"
+      },
+      "count": 1
+    }
+  ]
+}

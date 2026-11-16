@@ -1,0 +1,13 @@
+{
+  "manual-review": [
+    {
+      "cardinality": {
+        "file": "input.tsx",
+        "hook": "useInterval",
+        "line": "9",
+        "reason": "options-spread"
+      },
+      "count": 1
+    }
+  ]
+}

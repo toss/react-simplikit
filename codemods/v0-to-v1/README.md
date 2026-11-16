@@ -30,6 +30,8 @@ Options after `v0-to-v1` go to the Codemod CLI. Useful ones:
 |                                                                         | `useImpressionRef({ timeThreshold })`, `<ImpressionArea timeThreshold>` | `useImpressionRef({ timeThresholdMs })`, `<ImpressionArea timeThresholdMs>` |
 |                                                                         | `useLongPress(fn, { delay })`                                           | `useLongPress(fn, { delayMs })`                                             |
 |                                                                         | `useAvoidKeyboard({ transitionDuration })`                              | `useAvoidKeyboard({ transitionDurationMs })`                                |
+| [#527](https://github.com/toss/react-simplikit/issues/527) timer hooks  | `useInterval(fn, 1000)`, `useInterval(fn, { delay: 1000 })`             | `useInterval({ onTick: fn, delayMs: 1000 })`                                |
+|                                                                         | `useTimeout(fn, 1000)`                                                  | `useTimeout({ onTimeout: fn, delayMs: 1000 })`                              |
 
 Only calls that resolve to an import from `react-simplikit` are rewritten, including aliased (`import { useDoubleClick as useDbl }`) and namespace (`simplikit.useDoubleClick`) imports.
 
@@ -37,14 +39,15 @@ Only calls that resolve to an import from `react-simplikit` are rewritten, inclu
 
 Code it cannot rewrite safely is left as is and listed under `manual-review` in the metrics printed after the run, with its `file` and `line`:
 
-| `reason`               | Example                                                      |
-| ---------------------- | ------------------------------------------------------------ |
-| `options-not-inline`   | `useDoubleClick(options)`                                    |
-| `options-spread`       | `useDoubleClick({ ...base, doubleClick })` (the spread part) |
-| `options-computed-key` | `useDoubleClick({ [key]: select })`                          |
-| `props-spread`         | `<ImpressionArea {...props} />`                              |
-| `require-not-followed` | `const { useDoubleClick } = require('react-simplikit')`      |
-| `re-exported`          | `export { useDoubleClick } from 'react-simplikit'`           |
+| `reason`               | Example                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `options-not-inline`   | `useDoubleClick(options)`                                                                                          |
+| `options-spread`       | `useDoubleClick({ ...base, doubleClick })` (the spread part)                                                       |
+| `options-computed-key` | `useDoubleClick({ [key]: select })`                                                                                |
+| `props-spread`         | `<ImpressionArea {...props} />`                                                                                    |
+| `delay-not-inline`     | `useInterval(fn, POLL_MS)` with `POLL_MS` imported from another file, which may be a number or v0's options object |
+| `require-not-followed` | `const { useDoubleClick } = require('react-simplikit')`                                                            |
+| `re-exported`          | `export { useDoubleClick } from 'react-simplikit'`                                                                 |
 
 A spread is reported on every run, because the codemod cannot tell whether it still holds an old key.
 

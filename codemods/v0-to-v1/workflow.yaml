@@ -32,3 +32,15 @@ nodes:
           language: typescript
           include: ['**/*.ts', '**/*.mts', '**/*.cts']
           exclude: ['**/node_modules/**', '**/*.d.ts']
+      - name: 'useInterval, useTimeout: take one options object (#527)'
+        js-ast-grep:
+          js_file: scripts/timer-hook-options.ts
+          language: tsx
+          include: ['**/*.tsx', '**/*.jsx', '**/*.js', '**/*.mjs', '**/*.cjs']
+          exclude: ['**/node_modules/**']
+      - name: 'useInterval, useTimeout: take one options object (#527) in .ts files'
+        js-ast-grep:
+          js_file: scripts/timer-hook-options.ts
+          language: typescript
+          include: ['**/*.ts', '**/*.mts', '**/*.cts']
+          exclude: ['**/node_modules/**', '**/*.d.ts']
