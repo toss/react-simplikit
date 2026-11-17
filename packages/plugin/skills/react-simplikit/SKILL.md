@@ -26,8 +26,8 @@ Backticks in this table mark catalog entries only.
 
 | Need                                                                | Use                                      |
 | ------------------------------------------------------------------- | ---------------------------------------- |
-| Debounce a callback (search input, resize)                          | `useDebouncedCallback`                  |
-| Throttle a callback (scroll, pointer move)                          | `useThrottledCallback`                  |
+| Debounce a callback (search input, resize)                          | `useDebouncedCallback`                   |
+| Throttle a callback (scroll, pointer move)                          | `useThrottledCallback`                   |
 | Boolean on/off, flip only                                           | `useToggle`                              |
 | Boolean on/off with explicit set-true / set-false                   | `useBooleanState`                        |
 | Numeric state with bounds/step                                      | `useCounter`                             |
