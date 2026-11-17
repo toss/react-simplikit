@@ -52,6 +52,14 @@ describe('collectFiles', () => {
     expect(await collect()).toEqual(['src/a.ts']);
   });
 
+  it('keeps the default ignore globs inside the project root', async () => {
+    cwd = path.join(cwd, 'build', 'proj');
+    await write('src/a.ts');
+    await write('dist/b.ts');
+
+    expect(await collect()).toEqual(['src/a.ts']);
+  });
+
   it('honours an extra ignore glob', async () => {
     await write('src/a.ts');
     await write('legacy/b.ts');
