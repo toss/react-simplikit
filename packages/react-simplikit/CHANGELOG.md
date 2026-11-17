@@ -1,5 +1,25 @@
 # react-simplikit
 
+## 0.4.2
+
+### Patch Changes
+
+- [#605](https://github.com/toss/react-simplikit/pull/605) [`6a916fc`](https://github.com/toss/react-simplikit/commit/6a916fc29f0804cb3de7cb6e94b72e155ccb45bc) Thanks [@KooYS](https://github.com/KooYS)! - `disableBodyScrollLock` (and so `useBodyScrollLock` on unmount) now returns the page to the state it was in before the lock. It puts back the inline `overflow`, `position`, `top`, `left`, `right` and `bottom` styles the `body` had, including `!important`, instead of removing them; a property that other code changed while the body was locked is left as it is. It also jumps back to the saved scroll position with `behavior: 'instant'`; before, when the root element (`html`) had `scroll-behavior: smooth`, the page jumped to the top and animated back to that position.
+
+- [#592](https://github.com/toss/react-simplikit/pull/592) [`1ead5b0`](https://github.com/toss/react-simplikit/commit/1ead5b00c6607aafb3725af26b129af40ac51d57) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `useList`, `useSet` and `useMap` no longer serialize `initialState` with `JSON.stringify` on every render. Before, they threw on the first render when the initial values held a `BigInt` or a circular object. `reset` now always uses the latest `initialState`; for `useSet` and `useMap` it used to keep the first `Set` or `Map` it was given.
+
+- [#602](https://github.com/toss/react-simplikit/pull/602) [`5fa5149`](https://github.com/toss/react-simplikit/commit/5fa5149e6da96125d0a9530d40c4a4446948621f) Thanks [@JeongHwan-dev](https://github.com/JeongHwan-dev)! - `subscribeKeyboardHeight` now delivers the latest keyboard height once the throttle window ends. Before, events that fired while a window was open were dropped, so a keyboard animation that finished inside the window left the callback at an intermediate height.
+
+- [#591](https://github.com/toss/react-simplikit/pull/591) [`8c56151`](https://github.com/toss/react-simplikit/commit/8c56151efc7c2291f5c1e81cbd542c901f35554f) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `SwitchCase` now only matches keys defined on `caseBy` itself. Before, a value such as `'toString'` or `'constructor'` matched a method inherited from `Object.prototype`, so the component rendered `[object Undefined]` or threw instead of rendering `defaultComponent`.
+
+- [#594](https://github.com/toss/react-simplikit/pull/594) [`ac96b38`](https://github.com/toss/react-simplikit/commit/ac96b383a34255e7cb823f4fa38bf57e13351748) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `useGeolocation` no longer leaves `loading` stuck at `true` when `stopTracking()` is called before the first position arrives. A watch started with `startTracking()` also keeps running when a position option such as `enableHighAccuracy` changes. Before, the watch was cleared without being restarted while `isTracking` stayed `true`.
+
+- [#603](https://github.com/toss/react-simplikit/pull/603) [`a07827f`](https://github.com/toss/react-simplikit/commit/a07827fc00adc89003e1304b40572ee94b1ca9fc) Thanks [@JeongHwan-dev](https://github.com/JeongHwan-dev)! - `useIntersectionObserver` now passes the latest entry of a batch to the callback. Before, it read only the first entry, so when an element entered and left the viewport within one observer tick the callback received the stale "entered" entry and missed the exit.
+
+- [#598](https://github.com/toss/react-simplikit/pull/598) [`cd66595`](https://github.com/toss/react-simplikit/commit/cd665952b58c1c0586ad1c0bfcf4b6ea013e3c46) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `useScrollDirection` re-checks `window.scrollY` when the throttle timer ends. Before, a scroll that stopped inside the throttle window left `position` stale.
+
+- [#596](https://github.com/toss/react-simplikit/pull/596) [`d48b1eb`](https://github.com/toss/react-simplikit/commit/d48b1eb5ec445ad03ce4f96bf5adc7ae69517330) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `useStorageState`'s `refreshState` no longer writes to storage. Before, it wrote the current snapshot back, so calling it on an empty key persisted `defaultValue`.
+
 ## 0.4.1
 
 ### Patch Changes
