@@ -39,7 +39,7 @@ Claude Code と Codex のプラグインには、アップグレード用 codemo
 
 - [`llms.txt`](https://react-simplikit.slash.page/llms.txt) — 英語ドキュメントの索引と 1 行の要約
 - [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 英語ドキュメントをまとめた 1 ファイル
-- 英語ドキュメントの URL の `.html` を `.md` に置き換えると、Markdown ソースを読めます。たとえば、[`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md) を参照してください。
+- 英語ドキュメントの URL の `.html` を `.md` に置き換えると、Markdown ソースを読めます。たとえば、[`useDebouncedCallback.md`](https://react-simplikit.slash.page/hooks/useDebouncedCallback.md) を参照してください。
 
 ## Context7
 
@@ -48,7 +48,7 @@ react-simplikit は [Context7](https://context7.com/toss/react-simplikit) に `/
 ## エージェントのアクセスを確認する
 
 1. インストールしたスキルまたは [llms.txt](https://react-simplikit.slash.page/llms.txt) を使い、具体的な作業に合う API を探すようエージェントに依頼してください。たとえば、入力が止まってから 300 ms 後に検索関数を呼び出す作業です。
-2. リンク先の [useDebounce の Markdown リファレンス](https://react-simplikit.slash.page/hooks/useDebounce.md) を読み、コードを書く前に import、パラメータ、デフォルト値、クリーンアップの動作を説明するよう依頼してください。
+2. リンク先の [useDebouncedCallback の Markdown リファレンス](https://react-simplikit.slash.page/hooks/useDebouncedCallback.md) を読み、コードを書く前に import、パラメータ、デフォルト値、クリーンアップの動作を説明するよう依頼してください。
 3. `react-simplikit` の名前付き import を使い、コールバックの遅延と値の遅延を区別し、保留中のコールバックのキャンセルでは開始済みのリクエストが中止されないと説明することを確認してください。
 4. インストール済みのパッケージバージョンでその API が使えるかを確認し、プロジェクトでコードを実行してください。サイトは最新のドキュメントを提供しているため、正しい文書を見つけても古いバージョンとの互換性は保証されません。
 

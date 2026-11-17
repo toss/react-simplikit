@@ -1,5 +1,9 @@
 # useDebounce
 
+::: warning 非推奨
+このフックは v2 で削除される予定です。代わりに [`useDebouncedCallback`](/ja/hooks/useDebouncedCallback) を使用してください。
+:::
+
 `useDebounce` は、渡されたコールバック関数をデバウンスする React フックです。
 関数の実行を遅らせ、複数の呼び出しを一度にまとめることで、イベント処理を最適化します。
 

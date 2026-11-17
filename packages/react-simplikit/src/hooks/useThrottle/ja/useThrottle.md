@@ -1,5 +1,9 @@
 # useThrottle
 
+::: warning 非推奨
+このフックは v2 で削除される予定です。代わりに [`useThrottledCallback`](/ja/hooks/useThrottledCallback) を使用してください。
+:::
+
 `useThrottle` は、コールバック関数をスロットリングする React フックです。
 スクロールやリサイズのイベントを処理する場合など、関数の呼び出し頻度を制限したいときに便利です。
 

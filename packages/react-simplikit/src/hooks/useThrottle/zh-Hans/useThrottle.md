@@ -1,5 +1,9 @@
 # useThrottle
 
+::: warning 已弃用
+此 Hook 将在 v2 中移除。请改用 [`useThrottledCallback`](/zh-Hans/hooks/useThrottledCallback)。
+:::
+
 `useThrottle` 是一个创建回调函数节流版本的 React Hook。它适用于限制函数的调用频率，例如在处理滚动或调整大小事件时。
 
 ## 接口

@@ -14,7 +14,7 @@ Llama a los Hooks en el nivel superior de un componente React o de un Hook perso
 | ---------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------- |
 | Mostrar u ocultar contenido              | [useToggle](/es/hooks/useToggle)                         | Un estado booleano y una función para alternarlo                           |
 | Esperar a que termine la escritura       | [useDebouncedValue](/es/hooks/useDebouncedValue)         | Una copia del estado con retraso; el campo sigue respondiendo de inmediato |
-| Retrasar un callback                     | [useDebounce](/es/hooks/useDebounce)                     | Una función invocable con el método `.cancel()`                            |
+| Evitar el desplazamiento del fondo       | [useBodyScrollLock](/es/hooks/useBodyScrollLock)         | Bloqueo del desplazamiento de body y desbloqueo automático                 |
 | Limitar la frecuencia de un callback     | [useThrottledCallback](/es/hooks/useThrottledCallback)   | Un callback con frecuencia limitada al intervalo configurado               |
 | Conservar el estado al recargar          | [useStorageState](/es/hooks/useStorageState)             | Estado persistido en el almacenamiento del navegador                       |
 | Responder a un clic fuera de un elemento | [useOutsideClickEffect](/es/hooks/useOutsideClickEffect) | Una suscripción a clics externos                                           |
@@ -76,7 +76,7 @@ export function FruitSearch() {
 }
 ```
 
-Usa [useDebouncedValue](/es/hooks/useDebouncedValue) cuando necesites un valor para renderizar. Usa [useDebounce](/es/hooks/useDebounce) cuando un evento deba programar un callback. Aplicar debounce no acelera por sí solo un cálculo costoso.
+Usa [useDebouncedValue](/es/hooks/useDebouncedValue) cuando necesites un valor para renderizar. Usa [useDebouncedCallback](/es/hooks/useDebouncedCallback) cuando un evento deba programar un callback. Aplicar debounce no acelera por sí solo un cálculo costoso.
 
 ## SSR y limpieza
 
@@ -84,7 +84,7 @@ Usa [useDebouncedValue](/es/hooks/useDebouncedValue) cuando necesites un valor p
 
 - `useStorageState` usa `defaultValue` para la instantánea del servidor y la hidratación, y luego lee el almacenamiento del navegador en el cliente. Al desmontarse, elimina los listeners de almacenamiento.
 
-- `useDebounce` cancela las llamadas pendientes cuando el componente se desmonta o cambian `debounceMs`, `leading` o `trailing`. No cancela una solicitud de red que ya haya comenzado; tu aplicación debe gestionar la cancelación o las respuestas obsoletas.
+- `useDebouncedCallback` cancela las llamadas pendientes cuando el componente se desmonta o cambian `debounceMs`, `leading` o `trailing`. No cancela una solicitud de red que ya haya comenzado; tu aplicación debe gestionar la cancelación o las respuestas obsoletas.
 
 - Las mediciones del navegador pueden cambiar después del montaje. Consulta los valores iniciales y las restricciones de plataforma en [Web móvil](/es/mobile-web) y en la referencia de cada API.
 

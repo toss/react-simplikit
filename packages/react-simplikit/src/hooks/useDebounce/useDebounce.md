@@ -1,5 +1,9 @@
 # useDebounce
 
+::: warning Deprecated
+This hook will be removed in v2. Use [`useDebouncedCallback`](/hooks/useDebouncedCallback) instead.
+:::
+
 `useDebounce` is a React hook that returns a debounced version of the provided callback function.
 It helps optimize event handling by delaying function execution and grouping multiple calls into one.
 
@@ -8,7 +12,6 @@ Pending calls are cancelled when the component unmounts or when `debounceMs`, `l
 Calling `.cancel()` only cancels a pending callback, not an already-started network request.
 The example displays the query locally. To search a server, pass your application's
 search callback as the first argument to `useDebounce`.
-`useDebounce` is deprecated as of v1. Use [useDebouncedCallback](./useDebouncedCallback.md) instead.
 
 ## Interface
 

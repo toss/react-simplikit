@@ -1,6 +1,6 @@
 ---
 name: react-simplikit
-description: Selects and applies react-simplikit hooks, components and utils (useDebounce, useThrottle, useToggle, useBooleanState, useCounter, useList, useMap, useSet, useInterval, useTimeout, usePrevious, usePreservedCallback, useOutsideClickEffect, useIntersectionObserver, useStorageState, useLongPress, SwitchCase, Separated, mergeRefs, buildContext, ...) instead of hand-written equivalents, including the mobile-web keyboard, safe-area, visual viewport and body-scroll-lock hooks. Use when writing React state or effect logic, debouncing or throttling, boolean/counter/list/map/set state, intervals and timeouts, click-outside, long-press or double-click handling, viewport visibility or impression tracking, persisted state in localStorage/sessionStorage, conditional rendering, merging refs, React Context boilerplate, or SSR-safe browser access, and whenever the project depends on react-simplikit.
+description: Selects and applies react-simplikit hooks, components and utils (useDebouncedCallback, useThrottledCallback, useToggle, useBooleanState, useCounter, useList, useMap, useSet, useInterval, useTimeout, usePrevious, usePreservedCallback, useOutsideClickEffect, useIntersectionObserver, useStorageState, useLongPress, SwitchCase, Separated, mergeRefs, buildContext, ...) instead of hand-written equivalents, including the mobile-web keyboard, safe-area, visual viewport and body-scroll-lock hooks. Use when writing React state or effect logic, debouncing or throttling, boolean/counter/list/map/set state, intervals and timeouts, click-outside, long-press or double-click handling, viewport visibility or impression tracking, persisted state in localStorage/sessionStorage, conditional rendering, merging refs, React Context boilerplate, or SSR-safe browser access, and whenever the project depends on react-simplikit.
 license: MIT
 metadata:
   author: toss
@@ -16,7 +16,7 @@ Zero-dependency React hooks, components and utils in one package, `react-simplik
 
 - **Check the catalog before hand-writing debounce, throttle, toggle, counter, list/map/set state, interval, timeout, previous-value, stable-callback, click-outside, long-press, intersection/visibility or storage-persisted-state logic.** If a matching entry exists, use it. Reimplementing these is the most common mistake this skill exists to prevent.
 - **Never guess a signature.** Before using an entry, read `references/<name>.md` — it has the parameter table, return shape and a working example.
-- **One import path, named imports only**: `import { useDebounce, useKeyboardHeight } from 'react-simplikit'`. There is no subpath and no default export.
+- **One import path, named imports only**: `import { useDebouncedCallback, useKeyboardHeight } from 'react-simplikit'`. There is no subpath and no default export.
 - **SSR**: never branch server-rendered markup on a value that comes from a browser API hook. Use `useIsClient` for client-only rendering instead of `typeof window` checks.
 - **Do not wrap or re-export these hooks** in the consumer project just to rename them; use them directly so upgrades stay mechanical.
 
@@ -26,8 +26,8 @@ Backticks in this table mark catalog entries only.
 
 | Need                                                                | Use                                      |
 | ------------------------------------------------------------------- | ---------------------------------------- |
-| Debounce a callback (search input, resize)                          | `useDebounce` / `useDebouncedCallback`   |
-| Throttle a callback (scroll, pointer move)                          | `useThrottle` / `useThrottledCallback`   |
+| Debounce a callback (search input, resize)                          | `useDebouncedCallback`                  |
+| Throttle a callback (scroll, pointer move)                          | `useThrottledCallback`                  |
 | Boolean on/off, flip only                                           | `useToggle`                              |
 | Boolean on/off with explicit set-true / set-false                   | `useBooleanState`                        |
 | Numeric state with bounds/step                                      | `useCounter`                             |

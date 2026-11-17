@@ -14,7 +14,7 @@ description: 解決したい問題に合う React ユーティリティを選ぶ
 | ------------------------------------ | -------------------------------------------------------- | ---------------------------------------------------- |
 | コンテンツを表示・非表示にする       | [useToggle](/ja/hooks/useToggle)                         | 真偽値の状態とトグル関数                             |
 | 入力が止まるまで待つ                 | [useDebouncedValue](/ja/hooks/useDebouncedValue)         | 入力の即時反映を保ちながら、状態のコピーを遅れて更新 |
-| コールバックの呼び出しを遅らせる     | [useDebounce](/ja/hooks/useDebounce)                     | `.cancel()` メソッドを持つ呼び出し可能な関数         |
+| 背景のスクロールを防ぐ               | [useBodyScrollLock](/ja/hooks/useBodyScrollLock)         | body のスクロールロックと自動解除                    |
 | コールバックの呼び出し頻度を制限する | [useThrottledCallback](/ja/hooks/useThrottledCallback)   | 指定した間隔で呼び出し頻度を制限するコールバック     |
 | 再読み込み後も状態を保持する         | [useStorageState](/ja/hooks/useStorageState)             | ブラウザストレージに保存される状態                   |
 | 要素の外側のクリックに反応する       | [useOutsideClickEffect](/ja/hooks/useOutsideClickEffect) | 外側のクリックの購読                                 |
@@ -76,7 +76,7 @@ export function FruitSearch() {
 }
 ```
 
-レンダリングに使う値が必要なら [useDebouncedValue](/ja/hooks/useDebouncedValue) を使ってください。イベントからコールバックを予約するなら [useDebounce](/ja/hooks/useDebounce) を使ってください。デバウンス自体が重い計算を速くするわけではありません。
+レンダリングに使う値が必要なら [useDebouncedValue](/ja/hooks/useDebouncedValue) を使ってください。イベントからコールバックを予約するなら [useDebouncedCallback](/ja/hooks/useDebouncedCallback) を使ってください。デバウンス自体が重い計算を速くするわけではありません。
 
 ## SSR とクリーンアップ
 
@@ -84,7 +84,7 @@ export function FruitSearch() {
 
 - `useStorageState` はサーバースナップショットと hydration に `defaultValue` を使い、その後クライアントでブラウザストレージを読み取ります。アンマウント時にストレージのリスナーを解除します。
 
-- `useDebounce` はコンポーネントのアンマウント時、または `debounceMs`、`leading`、`trailing` の変更時に保留中の呼び出しをキャンセルします。開始済みのネットワークリクエストはキャンセルしないため、リクエストの中止や古いレスポンスの処理はアプリケーション側で行う必要があります。
+- `useDebouncedCallback` はコンポーネントのアンマウント時、または `debounceMs`、`leading`、`trailing` の変更時に保留中の呼び出しをキャンセルします。開始済みのネットワークリクエストはキャンセルしないため、リクエストの中止や古いレスポンスの処理はアプリケーション側で行う必要があります。
 
 - ブラウザの測定値はマウント後に変わることがあります。初期値とプラットフォームの制約は [モバイル Web](/ja/mobile-web) と各 API のリファレンスで確認してください。
 

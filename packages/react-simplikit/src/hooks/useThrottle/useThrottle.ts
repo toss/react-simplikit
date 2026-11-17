@@ -37,7 +37,7 @@ type ThrottleOptions = {
  *   };
  * }, [throttledScroll]);
  *
- * @deprecated Use `useThrottledCallback` instead.
+ * @deprecated This hook will be removed in v2. Use [`useThrottledCallback`](/hooks/useThrottledCallback) instead.
  */
 export function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,

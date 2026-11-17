@@ -1,5 +1,9 @@
 # useThrottle
 
+::: warning Deprecated
+This hook will be removed in v2. Use [`useThrottledCallback`](/hooks/useThrottledCallback) instead.
+:::
+
 `useThrottle` is a React hook that creates a throttled version of a callback function.
 This is useful for limiting the rate at which a function can be called,
 such as when handling scroll or resize events.
