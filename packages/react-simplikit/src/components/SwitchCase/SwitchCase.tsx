@@ -47,5 +47,10 @@ type Props<Case> = {
  */
 export function SwitchCase<Case>({ value, caseBy, defaultComponent = () => null }: Props<Case>): ReactElement | null {
   const stringifiedValue = String(value) as StringifiedValue<Case>;
-  return (caseBy[stringifiedValue] ?? defaultComponent)();
+  // Ignore keys inherited from `Object.prototype`.
+  const renderCase = Object.prototype.hasOwnProperty.call(caseBy, stringifiedValue)
+    ? caseBy[stringifiedValue]
+    : undefined;
+
+  return (renderCase ?? defaultComponent)();
 }

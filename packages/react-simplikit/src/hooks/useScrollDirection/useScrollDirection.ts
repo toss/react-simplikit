@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { isServer } from '../../utils/isServer/index.ts';
-
 type ScrollDirection = 'up' | 'down' | null;
 
 type ScrollDirectionState = {
@@ -56,7 +54,7 @@ type UseScrollDirectionOptions = {
  * }
  *
  * @remarks
- * - **SSR safety**: The hook checks `isServer()` before reading `window.scrollY`, so it is safe during server-side rendering.
+ * - **SSR safety**: `position` is `0` on the server and on the first client render, then syncs to `window.scrollY` after mount.
  * - **Performance**: Scroll events are throttled to limit how often they are processed (default: 50ms).
  * - **Passive listener**: The scroll listener is registered with `{ passive: true }` for smoother scrolling.
  * - **Cleanup**: The event listener and the throttle timer are removed when the component unmounts.
@@ -67,10 +65,10 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}): Scr
 
   const [scrollInfo, setScrollInfo] = useState<ScrollDirectionState>({
     direction: null,
-    position: isServer() ? 0 : window.scrollY,
+    position: 0,
   });
 
-  const lastScrollYRef = useRef(isServer() ? 0 : window.scrollY);
+  const lastScrollYRef = useRef(0);
   const throttleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const updateScrollDirection = useCallback(
@@ -93,6 +91,15 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}): Scr
       throttleTimerRef.current = null;
     }, throttleMs);
   }, [throttleMs]);
+
+  useEffect(function syncInitialPosition() {
+    const currentScrollY = window.scrollY;
+
+    lastScrollYRef.current = currentScrollY;
+    /* eslint-disable-next-line react-hooks/set-state-in-effect -- a fixed first value synced
+       in an effect is the SSR-safe pattern this repo documents. */
+    setScrollInfo(prev => (prev.position === currentScrollY ? prev : { ...prev, position: currentScrollY }));
+  }, []);
 
   useEffect(
     function handleScrollDirectionChange() {

@@ -80,7 +80,7 @@ function Analytics() {
 
 ## Notas
 
-- **Uso seguro durante el SSR**: La API Page Visibility no está disponible durante el renderizado en el servidor, por lo que el Hook devuelve el valor predeterminado seguro `{ isVisible: true, visibilityState: 'visible' }`.
+- **Uso seguro durante el SSR**: El Hook devuelve `{ isVisible: true, visibilityState: 'visible' }` en el servidor y en el primer renderizado del cliente, y se sincroniza con `document.visibilityState` tras el montaje.
 - **Compatibilidad con navegadores**: Todos los navegadores modernos son compatibles con la API Page Visibility. Consulta la [tabla de compatibilidad con navegadores de MDN](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#browser_compatibility) para obtener más información.
 - **Rendimiento**: El Hook escucha el evento nativo `visibilitychange`, por lo que no realiza consultas periódicas y su consumo adicional de recursos es insignificante.
 - **Estado de visibilidad**: Solo devuelve `'visible'` y `'hidden'`; el estado obsoleto `'prerender'` queda excluido.

@@ -25,7 +25,7 @@ function useVisualViewport(): { viewport: VisualViewportState | null };
       type: 'VisualViewportState | null',
       required: false,
       description:
-        'Visual Viewport の状態オブジェクト。非対応の環境（SSR、または Visual Viewport API 非対応のブラウザー）では <code>null</code> です。',
+        'Visual Viewport の状態オブジェクト。サーバー、クライアントの最初のレンダリング、Visual Viewport API 非対応のブラウザーでは <code>null</code> です。',
     },
     {
       name: 'viewport.width',
@@ -100,7 +100,7 @@ if (viewport && viewport.scale > 1.3) {
 
 ## 注意点
 
-- **SSR の安全性**：サーバーサイドレンダリング時や Visual Viewport API 非対応のブラウザーでは、`viewport` は `null` です。プロパティを読み取る前に、必ず `null` かどうかを確認してください。
+- **SSR の安全性**：サーバー、クライアントの最初のレンダリング、Visual Viewport API 非対応のブラウザーでは、`viewport` は `null` です。マウント後に同期します。プロパティを読み取る前に、必ず `null` かどうかを確認してください。
 - **ブラウザーの対応**：Visual Viewport API は、モダンなモバイルブラウザーで利用できます。API がない環境では、このフックは `null` を返します。
 - **パフォーマンス**：更新を React の `startTransition` でラップするため、ビューポートの変化が緊急のレンダリングを妨げません。
 - **よりシンプルな代替手段**：キーボードの高さだけが必要な場合は、よりシンプルな API の `useKeyboardHeight()` を使ってください。
