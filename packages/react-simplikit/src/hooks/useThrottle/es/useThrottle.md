@@ -1,7 +1,9 @@
 # useThrottle
 
 ::: warning Obsoleto
-Este Hook se eliminará en v2. Usa [`useThrottledCallback`](/es/hooks/useThrottledCallback) en su lugar.
+Este Hook se eliminará en v2.
+Usa [`useThrottledCallback`](/es/hooks/useThrottledCallback) para limitar la frecuencia de un callback, [`useThrottledState`](/es/hooks/useThrottledState) para limitar la frecuencia de una actualización de estado
+o [`useThrottledValue`](/es/hooks/useThrottledValue) para obtener un valor con frecuencia de actualización limitada.
 :::
 
 `useThrottle` es un Hook de React que crea una versión de un callback con una frecuencia de ejecución limitada.

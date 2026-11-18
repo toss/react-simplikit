@@ -1,7 +1,9 @@
 # useDebounce
 
 ::: warning 非推奨
-このフックは v2 で削除される予定です。代わりに [`useDebouncedCallback`](/ja/hooks/useDebouncedCallback) を使用してください。
+このフックは v2 で削除される予定です。
+コールバックをデバウンスするには [`useDebouncedCallback`](/ja/hooks/useDebouncedCallback)、状態の更新をデバウンスするには [`useDebouncedState`](/ja/hooks/useDebouncedState)、
+デバウンスされた値を取得するには [`useDebouncedValue`](/ja/hooks/useDebouncedValue) を使用してください。
 :::
 
 `useDebounce` は、渡されたコールバック関数をデバウンスする React フックです。

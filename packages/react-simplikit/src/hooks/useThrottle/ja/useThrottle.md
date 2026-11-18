@@ -1,7 +1,9 @@
 # useThrottle
 
 ::: warning 非推奨
-このフックは v2 で削除される予定です。代わりに [`useThrottledCallback`](/ja/hooks/useThrottledCallback) を使用してください。
+このフックは v2 で削除される予定です。
+コールバックをスロットリングするには [`useThrottledCallback`](/ja/hooks/useThrottledCallback)、状態の更新をスロットリングするには [`useThrottledState`](/ja/hooks/useThrottledState)、
+スロットリングされた値を取得するには [`useThrottledValue`](/ja/hooks/useThrottledValue) を使用してください。
 :::
 
 `useThrottle` は、コールバック関数をスロットリングする React フックです。

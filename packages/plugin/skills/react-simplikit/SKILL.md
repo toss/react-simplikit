@@ -147,8 +147,8 @@ These still work but are kept only for backward compatibility. Do not use them i
 | Name | Notice |
 | --- | --- |
 | `useCallbackOncePerRender` | Use `useCallbackOnce` instead. |
-| [`useDebounce`](references/useDebounce.md) | This hook will be removed in v2. Use [`useDebouncedCallback`](/hooks/useDebouncedCallback) instead. |
-| [`useThrottle`](references/useThrottle.md) | This hook will be removed in v2. Use [`useThrottledCallback`](/hooks/useThrottledCallback) instead. |
+| [`useDebounce`](references/useDebounce.md) | This hook will be removed in v2. Use [`useDebouncedCallback`](/hooks/useDebouncedCallback) to debounce a callback, [`useDebouncedState`](/hooks/useDebouncedState) to debounce a state update, or [`useDebouncedValue`](/hooks/useDebouncedValue) to get a debounced value. |
+| [`useThrottle`](references/useThrottle.md) | This hook will be removed in v2. Use [`useThrottledCallback`](/hooks/useThrottledCallback) to throttle a callback, [`useThrottledState`](/hooks/useThrottledState) to throttle a state update, or [`useThrottledValue`](/hooks/useThrottledValue) to get a throttled value. |
 | `useVisibilityEvent` | Use `usePageVisibilityEffect` instead. |
 
 ## Learn more

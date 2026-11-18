@@ -1,7 +1,10 @@
 # useThrottle
 
 ::: warning Deprecated
-This hook will be removed in v2. Use [`useThrottledCallback`](/hooks/useThrottledCallback) instead.
+This hook will be removed in v2.
+Use [`useThrottledCallback`](/hooks/useThrottledCallback) to throttle a callback,
+[`useThrottledState`](/hooks/useThrottledState) to throttle a state update,
+or [`useThrottledValue`](/hooks/useThrottledValue) to get a throttled value.
 :::
 
 `useThrottle` is a React hook that creates a throttled version of a callback function.

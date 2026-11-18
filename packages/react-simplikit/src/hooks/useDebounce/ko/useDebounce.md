@@ -1,7 +1,9 @@
 # useDebounce
 
 ::: warning 사용 비권장
-이 훅은 v2에서 제거될 예정이에요. 대신 [`useDebouncedCallback`](/ko/hooks/useDebouncedCallback)을 사용하세요.
+이 훅은 v2에서 제거될 예정이에요.
+콜백을 디바운스하려면 [`useDebouncedCallback`](/ko/hooks/useDebouncedCallback)을, 상태 업데이트를 디바운스하려면 [`useDebouncedState`](/ko/hooks/useDebouncedState)를,
+디바운스된 값을 얻으려면 [`useDebouncedValue`](/ko/hooks/useDebouncedValue)를 사용하세요.
 :::
 
 `useDebounce`는 전달한 콜백 함수의 디바운스 버전을 반환하는 리액트 훅이에요. 함수 실행을 지연시키고 여러 호출을 하나로 묶어 이벤트 처리를 최적화하는 데 도움이 돼요.

@@ -1,7 +1,9 @@
 # useDebounce
 
 ::: warning 已弃用
-此 Hook 将在 v2 中移除。请改用 [`useDebouncedCallback`](/zh-Hans/hooks/useDebouncedCallback)。
+此 Hook 将在 v2 中移除。
+使用 [`useDebouncedCallback`](/zh-Hans/hooks/useDebouncedCallback) 对回调进行防抖，使用 [`useDebouncedState`](/zh-Hans/hooks/useDebouncedState) 对状态更新进行防抖，
+或使用 [`useDebouncedValue`](/zh-Hans/hooks/useDebouncedValue) 获取防抖后的值。
 :::
 
 `useDebounce` 是一个返回所提供回调函数防抖版本的 React Hook。它通过延迟函数执行并将多次调用合并为一次，帮助优化事件处理。
