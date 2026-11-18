@@ -1,5 +1,11 @@
 # useDebounce
 
+::: warning 사용 비권장
+이 훅은 v2에서 제거될 예정이에요.
+콜백을 디바운스하려면 [`useDebouncedCallback`](/ko/hooks/useDebouncedCallback)을, 상태 업데이트를 디바운스하려면 [`useDebouncedState`](/ko/hooks/useDebouncedState)를,
+디바운스된 값을 얻으려면 [`useDebouncedValue`](/ko/hooks/useDebouncedValue)를 사용하세요.
+:::
+
 `useDebounce`는 전달한 콜백 함수의 디바운스 버전을 반환하는 리액트 훅이에요. 함수 실행을 지연시키고 여러 호출을 하나로 묶어 이벤트 처리를 최적화하는 데 도움이 돼요.
 
 기본 옵션에서는 추가 호출 없이 `debounceMs` 밀리초가 지나면 마지막 호출을 실행해요. 컴포넌트가 언마운트되거나 `debounceMs`, `leading`, `trailing`이 바뀌면 대기 중인 호출을 취소해요. `.cancel()`은 대기 중인 콜백만 취소하고 이미 시작한 네트워크 요청은 취소하지 않아요. 예시는 검색어를 서버로 보내지 않고 화면에 표시해요. 서버에서 검색하려면 `useDebounce`의 첫 번째 인자로 애플리케이션의 검색 콜백을 전달하세요.

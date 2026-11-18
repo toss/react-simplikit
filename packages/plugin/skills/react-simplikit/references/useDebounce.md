@@ -1,5 +1,12 @@
 # useDebounce
 
+::: warning Deprecated
+This hook will be removed in v2.
+Use [`useDebouncedCallback`](/hooks/useDebouncedCallback) to debounce a callback,
+[`useDebouncedState`](/hooks/useDebouncedState) to debounce a state update,
+or [`useDebouncedValue`](/hooks/useDebouncedValue) to get a debounced value.
+:::
+
 `useDebounce` is a React hook that returns a debounced version of the provided callback function.
 It helps optimize event handling by delaying function execution and grouping multiple calls into one.
 

@@ -39,7 +39,7 @@ Claude Code 和 Codex 插件还包含 `react-simplikit-codemod` skill，用于�
 
 - [`llms.txt`](https://react-simplikit.slash.page/llms.txt) — 英文文档的索引和一句话摘要
 - [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — 合并为单个文件的英文文档
-- 将英文文档 URL 中的 `.html` 替换为 `.md`，即可读取 Markdown 源文件。例如，你可以阅读 [`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)。
+- 将英文文档 URL 中的 `.html` 替换为 `.md`，即可读取 Markdown 源文件。例如，你可以阅读 [`useDebouncedCallback.md`](https://react-simplikit.slash.page/hooks/useDebouncedCallback.md)。
 
 ## Context7
 
@@ -48,7 +48,7 @@ react-simplikit 已在 [Context7](https://context7.com/toss/react-simplikit) 中
 ## 验证 agent 访问
 
 1. 让 agent 使用已安装的 skill 或 [llms.txt](https://react-simplikit.slash.page/llms.txt)，为具体任务查找 API，例如在用户停止输入 300 ms 后调用搜索函数。
-2. 让它读取链接中的 [useDebounce Markdown 参考](https://react-simplikit.slash.page/hooks/useDebounce.md)，并在编写代码前说明 import、参数、默认值和清理行为。
+2. 让它读取链接中的 [useDebouncedCallback Markdown 参考](https://react-simplikit.slash.page/hooks/useDebouncedCallback.md)，并在编写代码前说明 import、参数、默认值和清理行为。
 3. 确认它从 `react-simplikit` 使用具名导入，能够区分延迟回调与延迟值，并说明取消待执行回调不会中止已经开始的请求。
 4. 检查已安装的包版本是否提供该 API，并在项目中运行代码。网站提供最新文档；查找正确并不代表与旧版本兼容。
 

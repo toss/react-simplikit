@@ -60,6 +60,11 @@ type DebounceOptions = {
  *     </section>
  *   );
  * }
+ *
+ * @deprecated This hook will be removed in v2.
+ * Use [`useDebouncedCallback`](/hooks/useDebouncedCallback) to debounce a callback,
+ * [`useDebouncedState`](/hooks/useDebouncedState) to debounce a state update,
+ * or [`useDebouncedValue`](/hooks/useDebouncedValue) to get a debounced value.
  */
 export function useDebounce<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,

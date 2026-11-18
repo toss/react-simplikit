@@ -39,7 +39,7 @@ The English documentation is also published in formats agents can read directly.
 
 - [`llms.txt`](https://react-simplikit.slash.page/llms.txt) — an index of English documentation pages with one-line summaries
 - [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt) — the English documentation in one file
-- Replace `.html` in an English documentation URL with `.md` to read the Markdown source. For example, see [`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md).
+- Replace `.html` in an English documentation URL with `.md` to read the Markdown source. For example, see [`useDebouncedCallback.md`](https://react-simplikit.slash.page/hooks/useDebouncedCallback.md).
 
 ## Context7
 
@@ -48,7 +48,7 @@ react-simplikit is indexed on [Context7](https://context7.com/toss/react-simplik
 ## Verify agent access
 
 1. Ask the agent to find an API for a concrete task, such as calling a search function after the user stops typing for 300 ms, using the installed skill or [llms.txt](https://react-simplikit.slash.page/llms.txt).
-2. Have it read the linked [useDebounce Markdown reference](https://react-simplikit.slash.page/hooks/useDebounce.md), then report the import, parameters, defaults and cleanup behavior before writing code.
+2. Have it read the linked [useDebouncedCallback Markdown reference](https://react-simplikit.slash.page/hooks/useDebouncedCallback.md), then report the import, parameters, defaults and cleanup behavior before writing code.
 3. Confirm that it uses a named import from `react-simplikit`, distinguishes a delayed callback from a delayed value, and explains that cancelling a pending callback does not abort an already-started request.
 4. Check the API against your installed package version and run the resulting code in your project. The website follows the latest documentation; a correct lookup does not prove compatibility with an older installation.
 

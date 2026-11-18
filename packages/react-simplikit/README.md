@@ -28,19 +28,22 @@ pnpm add react-simplikit
 
 ## Quick Start
 
-Use `useDebounce` to call your search function after the user stops typing for 300 ms. In this example, `searchAPI` is the search function provided by your application.
+Use `useDebouncedCallback` to call your search function after the user stops typing for 300 ms. In this example, `searchAPI` is the search function provided by your application.
 
 ```tsx
 import { useState } from 'react';
-import { useDebounce } from 'react-simplikit';
+import { useDebouncedCallback } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
 
-  const debouncedSearch = useDebounce((value: string) => {
-    // Actual API call
-    searchAPI(value);
-  }, 300);
+  const debouncedSearch = useDebouncedCallback({
+    onChange: (value: string) => {
+      // Actual API call
+      searchAPI(value);
+    },
+    debounceMs: 300,
+  });
 
   return (
     <input
@@ -55,11 +58,11 @@ function SearchInput() {
 }
 ```
 
-The debounced function exposes `.cancel()`, and pending calls are cancelled automatically when the component unmounts.
+Pending calls are cancelled automatically when the component unmounts. A value equal to the last value forwarded to the search function is not forwarded again.
 
 ## What's Included
 
-- **Hooks** — state and logic (`useToggle`, `useDebounce`, `useList`, …), browser events (`useIntersectionObserver`, `useOutsideClickEffect`, …) and mobile web (`useAvoidKeyboard`, `useSafeAreaInset`, `useVisualViewport`, …)
+- **Hooks** — state and logic (`useToggle`, `useDebouncedState`, `useList`, …), browser events (`useIntersectionObserver`, `useOutsideClickEffect`, …) and mobile web (`useAvoidKeyboard`, `useSafeAreaInset`, `useVisualViewport`, …)
 - **Components** — `SwitchCase`, `Separated`, `ImpressionArea`
 - **Utils** — `buildContext`, `mergeProps`, `mergeRefs`, and mobile web helpers such as `isIOS` and `getKeyboardHeight`
 

@@ -1,5 +1,11 @@
 # useThrottle
 
+::: warning 사용 비권장
+이 훅은 v2에서 제거될 예정이에요.
+콜백을 스로틀링하려면 [`useThrottledCallback`](/ko/hooks/useThrottledCallback)을, 상태 업데이트를 스로틀링하려면 [`useThrottledState`](/ko/hooks/useThrottledState)를,
+스로틀링된 값을 얻으려면 [`useThrottledValue`](/ko/hooks/useThrottledValue)를 사용하세요.
+:::
+
 `useThrottle`은 콜백 함수의 스로틀링된 버전을 만드는 리액트 훅이에요. 스크롤이나 리사이즈 이벤트를 처리할 때처럼 함수가 호출되는 빈도를 제한해야 할 때 유용해요.
 
 ## 인터페이스
