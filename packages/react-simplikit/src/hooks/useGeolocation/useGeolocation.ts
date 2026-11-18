@@ -64,7 +64,7 @@ type GeolocationOptions = {
  *   : speed `number|null` - The speed in meters per second
  *   : timestamp `number` - The time when the position was retrieved;
  * - getCurrentPosition `Function` - Function to get the current position once;
- * - startTracking `Function` - Function to start tracking location changes. While tracking, the watch restarts when `enableHighAccuracy`, `maximumAge` or `timeout` changes;
+ * - startTracking `Function` - Function to start tracking location changes;
  * - stopTracking `Function` - Function to stop tracking location;
  * - isTracking `boolean` - Whether location tracking is currently active;
  *

@@ -87,8 +87,7 @@ function useGeolocation(options?: GeolocationOptions): Object;
       name: 'startTracking',
       type: 'Function',
       required: false,
-      description:
-        'Función para iniciar el seguimiento de los cambios de ubicación. Durante el seguimiento, se reinicia con las nuevas opciones cuando cambian <code>enableHighAccuracy</code>, <code>maximumAge</code> o <code>timeout</code>.',
+      description: 'Función para iniciar el seguimiento de los cambios de ubicación.',
     },
     {
       name: 'stopTracking',
