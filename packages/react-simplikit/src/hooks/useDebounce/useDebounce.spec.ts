@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 
 import { renderHookSSR } from '../../_internal/test-utils/renderHookSSR.tsx';
 
-import { DebouncedFunction } from './debounce.ts';
 import { useDebounce } from './useDebounce.ts';
 
 describe('useDebounce', () => {
@@ -83,7 +82,7 @@ describe('useDebounce', () => {
 
     const { result } = renderHookSSR(() => useDebounce(callback, 100));
 
-    expectTypeOf(result.current).toEqualTypeOf<DebouncedFunction<typeof callback>>();
+    expectTypeOf(result.current).toEqualTypeOf<{ (value: string): void; cancel: () => void }>();
   });
 
   it('should cleanup on unmount', async () => {

@@ -1,14 +1,4 @@
-import { useEffect, useMemo } from 'react';
-
-import type { CallerTypedArgs } from '../../_internal/types.ts';
-import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-
-import { throttle } from './throttle.ts';
-
-type ThrottleOptions = {
-  leading?: boolean;
-  trailing?: boolean;
-};
+import { useThrottle as internalUseThrottle } from '../_internal/useThrottle/useThrottle.ts';
 
 /**
  * @description
@@ -42,37 +32,4 @@ type ThrottleOptions = {
  * [`useThrottledState`](/hooks/useThrottledState) to throttle a state update,
  * or [`useThrottledValue`](/hooks/useThrottledValue) to get a throttled value.
  */
-export function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
-  callback: F,
-  throttleMs: number,
-  { leading = true, trailing = true }: ThrottleOptions = {}
-  // Written out because the inferred type names `CallerTypedArgs`, which consumers emitting declarations cannot import (TS2742)
-): { (...args: Parameters<F>): void; cancel: () => void } {
-  const preservedCallback = usePreservedCallback(callback);
-
-  const edges = useMemo(() => {
-    const _edges: Array<'leading' | 'trailing'> = [];
-    if (leading) {
-      _edges.push('leading');
-    }
-
-    if (trailing) {
-      _edges.push('trailing');
-    }
-
-    return _edges;
-  }, [leading, trailing]);
-
-  const throttledCallback = useMemo(
-    () => throttle(preservedCallback, throttleMs, { edges }),
-    [preservedCallback, throttleMs, edges]
-  );
-
-  useEffect(() => {
-    return () => {
-      throttledCallback.cancel();
-    };
-  }, [throttledCallback]);
-
-  return throttledCallback;
-}
+export const useThrottle = internalUseThrottle;

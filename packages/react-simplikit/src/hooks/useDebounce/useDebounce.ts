@@ -1,15 +1,4 @@
-import { useEffect } from 'react';
-import { useMemo } from 'react';
-
-import type { CallerTypedArgs } from '../../_internal/types.ts';
-import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-
-import { debounce } from './debounce.ts';
-
-type DebounceOptions = {
-  leading?: boolean;
-  trailing?: boolean;
-};
+import { useDebounce as internalUseDebounce } from '../_internal/useDebounce/useDebounce.ts';
 
 /**
  * @description
@@ -66,41 +55,4 @@ type DebounceOptions = {
  * [`useDebouncedState`](/hooks/useDebouncedState) to debounce a state update,
  * or [`useDebouncedValue`](/hooks/useDebouncedValue) to get a debounced value.
  */
-export function useDebounce<F extends (...args: CallerTypedArgs) => unknown>(
-  callback: F,
-  debounceMs: number,
-  options: DebounceOptions = {}
-  // Written out because `DebouncedFunction` is not exported from the package entry, so consumers emitting declarations cannot name it (TS2742)
-): { (...args: Parameters<F>): void; cancel: () => void } {
-  const preservedCallback = usePreservedCallback(callback) as F;
-
-  const { leading = false, trailing = true } = options;
-
-  const edges = useMemo(() => {
-    const _edges: Array<'leading' | 'trailing'> = [];
-    if (leading) {
-      _edges.push('leading');
-    }
-
-    if (trailing) {
-      _edges.push('trailing');
-    }
-
-    return _edges;
-  }, [leading, trailing]);
-
-  const debounced = useMemo(() => {
-    return debounce<F>(preservedCallback, debounceMs, { edges });
-  }, [preservedCallback, debounceMs, edges]);
-
-  useEffect(
-    function cancelDebouncedOnUnmount() {
-      return () => {
-        debounced.cancel();
-      };
-    },
-    [debounced]
-  );
-
-  return debounced;
-}
+export const useDebounce = internalUseDebounce;

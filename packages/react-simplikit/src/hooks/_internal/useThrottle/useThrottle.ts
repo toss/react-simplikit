@@ -24,7 +24,10 @@ export function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
   callback: F,
   throttleMs: number,
   { leading = true, trailing = true }: ThrottleOptions = {}
-) {
+): {
+  (...args: Parameters<F>): void;
+  cancel: () => void;
+} {
   const preservedCallback = usePreservedCallback(callback);
 
   const edges = useMemo(() => {
