@@ -39,7 +39,7 @@ function SearchInput() {
   const [query, setQuery] = useState('');
 
   const debouncedSearch = useDebouncedCallback({
-    onChange: (value: string) => {
+    callback: (value: string) => {
       // 실제 API 호출
       searchAPI(value);
     },
