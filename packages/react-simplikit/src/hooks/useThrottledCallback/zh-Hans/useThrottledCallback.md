@@ -1,11 +1,15 @@
 # useThrottledCallback
 
-`useThrottledCallback` 是一个返回所提供回调函数节流版本的 React Hook。节流后的回调在指定的时间间隔内最多只会被调用一次。
+`useThrottledCallback` 是一个返回所提供回调函数节流版本的 React Hook。节流后的回调在指定的时间间隔内最多只会被调用一次。节流函数接收与 `callback` 相同的参数，在延迟结束后执行的调用会使用最近一次调用的参数。
+
+当组件卸载，或 `throttleMs`、`leading`、`trailing` 发生变化时，待执行的调用会被取消。调用 `.cancel()` 只会取消待执行的调用，不会停止 `callback` 已经开始的工作。`.cancel()` 之后的下一次调用会开始新的时间间隔，因此当 `leading` 为 `true` 时会立即执行。
 
 ## 接口
 
 ```ts
-function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
+function useThrottledCallback<F extends (...args: any[]) => unknown>(
+  options: Object
+): ((...args: Parameters<F>) => void) & { cancel: () => void };
 ```
 
 ### 参数
@@ -17,11 +21,10 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
   description="选项对象。"
   :nested="[
     {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
+      name: 'options.callback',
+      type: 'F',
       required: true,
-      description:
-        '要被节流的回调。携带与上一次转发的值相同的调用会被跳过。',
+      description: '要被节流的函数。',
     },
     {
       name: 'options.throttleMs',
@@ -43,7 +46,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
       required: false,
       defaultValue: 'true',
       description:
-        '如果为 <code>true</code>，则允许待执行的调用在延迟结束后以最新值运行。',
+        '如果为 <code>true</code>，则允许待执行的调用在延迟结束后以最新参数运行。',
     },
   ]"
 />
@@ -52,8 +55,8 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
 
 <Interface
   name=""
-  type="(nextValue: T) => void"
-  description="一个节流后的函数，在每次时间间隔内至多将值转发给 <code>onChange</code> 一次。"
+  type="((...args: Parameters<F>) => void) & { cancel: () => void }"
+  description="一个接收与 <code>callback</code> 相同参数的节流函数。它还包含一个用于取消待执行节流调用的 <code>cancel</code> 方法。"
 />
 
 ## 示例
@@ -65,7 +68,7 @@ import { useState } from 'react';
 function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
   const setScrollTopThrottled = useThrottledCallback({
-    onChange: setScrollTop,
+    callback: setScrollTop,
     throttleMs: 200,
   });
 

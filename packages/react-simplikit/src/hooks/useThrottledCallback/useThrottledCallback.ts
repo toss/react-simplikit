@@ -1,34 +1,32 @@
-import { useRef } from 'react';
-
+import type { CallerTypedArgs } from '../../_internal/types.ts';
 import { useThrottle } from '../_internal/useThrottle/useThrottle.ts';
 
-type ThrottleOptions = {
+type UseThrottledCallbackOptions<F extends (...args: CallerTypedArgs) => unknown> = {
+  callback: F;
+  throttleMs: number;
   leading?: boolean;
   trailing?: boolean;
 };
 
 /**
- * Marks that no value has been forwarded to `onChange` yet.
- *
- * The hook skips redundant invocations by comparing against the last forwarded value, but it
- * receives no initial value from the caller. Seeding that comparison with `false` would treat the
- * first `false` as redundant and swallow it, so an unreachable sentinel is used instead.
- */
-const NOT_INVOKED = Symbol('NOT_INVOKED');
-
-/**
  * @description
  * `useThrottledCallback` is a React hook that returns a throttled version of the provided callback function.
  * The throttled callback will only be invoked at most once per specified interval.
+ * The throttled function takes the same arguments as `callback`, and a trailing call uses the arguments from the latest call.
  *
- * @template T - The type of the value passed to `onChange`.
+ * Pending calls are cancelled when the component unmounts or when `throttleMs`, `leading`, or `trailing` changes.
+ * Calling `.cancel()` only cancels a pending call; it does not stop work that `callback` has already started.
+ * The next call after `.cancel()` starts a new window, so it runs immediately when `leading` is `true`.
+ *
+ * @template {(...args: any[]) => unknown} F - The type of the callback function.
  * @param {Object} options - The options object.
- * @param {(newValue: T) => void} options.onChange - The callback to throttle. A call with the same value as the last forwarded one is skipped.
+ * @param {F} options.callback - The function to throttle.
  * @param {number} options.throttleMs - The number of milliseconds to throttle invocations to.
  * @param {boolean} [options.leading=true] - If `true`, allows an immediate call at the start of a throttle window.
- * @param {boolean} [options.trailing=true] - If `true`, allows a pending call to run after the delay with the latest value.
+ * @param {boolean} [options.trailing=true] - If `true`, allows a pending call to run after the delay with the latest arguments.
  *
- * @returns {(nextValue: T) => void} A throttled function that forwards the value to `onChange` at most once per interval.
+ * @returns {((...args: Parameters<F>) => void) & { cancel: () => void }} A throttled function that takes the same arguments as `callback`.
+ *   It also includes a `cancel` method to cancel any pending throttled execution.
  *
  * @example
  * import { useThrottledCallback } from 'react-simplikit';
@@ -36,7 +34,7 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  *
  * function ScrollPosition() {
  *   const [scrollTop, setScrollTop] = useState(0);
- *   const setScrollTopThrottled = useThrottledCallback({ onChange: setScrollTop, throttleMs: 200 });
+ *   const setScrollTopThrottled = useThrottledCallback({ callback: setScrollTop, throttleMs: 200 });
  *
  *   return (
  *     <div onScroll={e => setScrollTopThrottled(e.currentTarget.scrollTop)}>
@@ -45,28 +43,14 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  *   );
  * }
  */
-export function useThrottledCallback<T>({
-  onChange,
+export function useThrottledCallback<F extends (...args: CallerTypedArgs) => unknown>({
+  callback,
   throttleMs,
   leading = true,
   trailing = true,
-}: ThrottleOptions & {
-  onChange: (newValue: T) => void;
-  throttleMs: number;
-}): (nextValue: T) => void {
-  const lastForwardedRef = useRef<T | typeof NOT_INVOKED>(NOT_INVOKED);
-
-  return useThrottle(
-    (nextValue: T) => {
-      if (nextValue === lastForwardedRef.current) {
-        return;
-      }
-
-      onChange(nextValue);
-
-      lastForwardedRef.current = nextValue;
-    },
-    throttleMs,
-    { leading, trailing }
-  );
+}: UseThrottledCallbackOptions<F>): {
+  (...args: Parameters<F>): void;
+  cancel: () => void;
+} {
+  return useThrottle(callback, throttleMs, { leading, trailing });
 }

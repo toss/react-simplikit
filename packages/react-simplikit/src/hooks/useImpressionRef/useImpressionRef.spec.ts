@@ -83,6 +83,32 @@ describe('useImpressionRef', () => {
     expect(mockOnImpressionEnd).toHaveBeenCalledTimes(1);
   });
 
+  it('should not call onImpressionStart again when the element returns before the end is delivered', async () => {
+    const { observerCallback } = await setup();
+    await act(async () => {
+      observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
+      vi.advanceTimersByTime(50);
+      observerCallback([{ isIntersecting: false, intersectionRatio: 0 }], null);
+      vi.advanceTimersByTime(20);
+      observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
+      vi.runAllTimers();
+    });
+
+    expect(mockOnImpressionStart).toHaveBeenCalledTimes(1);
+    expect(mockOnImpressionEnd).not.toHaveBeenCalled();
+  });
+
+  it('should call onImpressionStart once when the observer reports intersecting twice in a row', async () => {
+    const { observerCallback } = await setup();
+    await act(async () => {
+      observerCallback([{ isIntersecting: true, intersectionRatio: 0.6 }], null);
+      observerCallback([{ isIntersecting: true, intersectionRatio: 0.8 }], null);
+      vi.runAllTimers();
+    });
+
+    expect(mockOnImpressionStart).toHaveBeenCalledTimes(1);
+  });
+
   it('should handle default options without errors', async () => {
     const { observerCallback } = await setup({});
     await act(async () => {

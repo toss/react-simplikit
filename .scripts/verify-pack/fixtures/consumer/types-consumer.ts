@@ -1,4 +1,11 @@
-import { useDebounce, useNetworkStatus, useThrottle, useToggle } from 'react-simplikit';
+import {
+  useDebounce,
+  useDebouncedCallback,
+  useNetworkStatus,
+  useThrottle,
+  useThrottledCallback,
+  useToggle,
+} from 'react-simplikit';
 
 type UseToggleReturn = ReturnType<typeof useToggle>;
 const toggleReturn: [boolean, () => void] = undefined as unknown as UseToggleReturn;
@@ -14,5 +21,13 @@ function useDebouncedLog() {
   return useDebounce((query: string) => console.log(query), 300);
 }
 
-export { toggleReturn, useDebouncedLog, useThrottledLog };
+function useDebouncedCallbackLog() {
+  return useDebouncedCallback({ callback: (query: string) => console.log(query), debounceMs: 300 });
+}
+
+function useThrottledCallbackLog() {
+  return useThrottledCallback({ callback: (y: number) => console.log(y), throttleMs: 16 });
+}
+
+export { toggleReturn, useDebouncedCallbackLog, useDebouncedLog, useThrottledCallbackLog, useThrottledLog };
 export type { NetworkStatusReturn };

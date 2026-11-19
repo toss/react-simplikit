@@ -2,11 +2,18 @@
 
 `useThrottledCallback` es un Hook de React que devuelve una versión del callback proporcionado con una frecuencia de ejecución limitada.
 El callback se ejecuta como máximo una vez por intervalo especificado.
+La función resultante recibe los mismos argumentos que `callback`, y la llamada que se ejecuta al terminar la espera usa los argumentos de la llamada más reciente.
+
+Las llamadas pendientes se cancelan cuando el componente se desmonta o cuando cambia `throttleMs`, `leading` o `trailing`.
+Cuando llamas a `.cancel()`, solo cancelas la llamada pendiente; no detienes el trabajo que `callback` ya haya comenzado.
+La siguiente llamada después de `.cancel()` inicia un nuevo intervalo, así que se ejecuta de inmediato si `leading` es `true`.
 
 ## Interfaz
 
 ```ts
-function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
+function useThrottledCallback<F extends (...args: any[]) => unknown>(
+  options: Object
+): ((...args: Parameters<F>) => void) & { cancel: () => void };
 ```
 
 ### Parámetros
@@ -18,11 +25,10 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
   description="El objeto de opciones."
   :nested="[
     {
-      name: 'options.onChange',
-      type: '(newValue: T) => void',
+      name: 'options.callback',
+      type: 'F',
       required: true,
-      description:
-        'El callback cuya frecuencia de ejecución quieres limitar. El Hook omite las llamadas con el mismo valor que el último que transmitió.',
+      description: 'La función cuya frecuencia de ejecución quieres limitar.',
     },
     {
       name: 'options.throttleMs',
@@ -44,7 +50,7 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
       required: false,
       defaultValue: 'true',
       description:
-        'Si es <code>true</code>, permite ejecutar una llamada pendiente después de la espera con el valor más reciente.',
+        'Si es <code>true</code>, permite ejecutar una llamada pendiente después de la espera con los argumentos más recientes.',
     },
   ]"
 />
@@ -53,8 +59,8 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
 
 <Interface
   name=""
-  type="(nextValue: T) => void"
-  description="Una función con frecuencia limitada que transmite el valor a <code>onChange</code> como máximo una vez por intervalo."
+  type="((...args: Parameters<F>) => void) & { cancel: () => void }"
+  description="Una función con frecuencia limitada que recibe los mismos argumentos que <code>callback</code>. También incluye un método <code>cancel</code> para cancelar cualquier ejecución pendiente."
 />
 
 ## Ejemplo
@@ -66,7 +72,7 @@ import { useState } from 'react';
 function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
   const setScrollTopThrottled = useThrottledCallback({
-    onChange: setScrollTop,
+    callback: setScrollTop,
     throttleMs: 200,
   });
 

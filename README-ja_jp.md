@@ -39,7 +39,7 @@ function SearchInput() {
   const [query, setQuery] = useState('');
 
   const debouncedSearch = useDebouncedCallback({
-    onChange: (value: string) => {
+    callback: (value: string) => {
       // 実際の API 呼び出し
       searchAPI(value);
     },

@@ -15,7 +15,7 @@ These option keys are renamed, so existing calls need to be updated:
 // before
 useDebouncedCallback({ onChange: setQuery, timeThreshold: 300 });
 // after
-useDebouncedCallback({ onChange: setQuery, debounceMs: 300 });
+useDebouncedCallback({ callback: setQuery, debounceMs: 300 });
 ```
 
 The positional `wait` parameter of `useDebounce`, `useDebouncedValue`, `useThrottle` and `useThrottledValue` is now `debounceMs` / `throttleMs`. Calls like `useDebounce(fn, 300)` keep working.
