@@ -1,10 +1,4 @@
-import { useEffect, useMemo } from 'react';
-
-import type { CallerTypedArgs } from '../../_internal/types.ts';
-import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-import { usePreservedReference } from '../usePreservedReference/index.ts';
-
-import { throttle } from './throttle.ts';
+import { useThrottle as internalUseThrottle } from '../_internal/useThrottle/useThrottle.ts';
 
 /**
  * @description
@@ -14,15 +8,16 @@ import { throttle } from './throttle.ts';
  *
  * @template {(...args: any[]) => unknown} F - The type of the callback function.
  * @param {F} callback - The function to be throttled.
- * @param {number} wait - The number of milliseconds to throttle invocations to.
- * @param {{ edges?: Array<'leading' | 'trailing'> }} [options] - Options to control the behavior of the throttle.
- * @param {Array<'leading' | 'trailing'>} [options.edges=['leading', 'trailing']] - An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.
+ * @param {number} throttleMs  - The number of milliseconds to throttle invocations to.
+ * @param {ThrottleOptions} [options] - Options to control the behavior of the throttle.
+ * @param {boolean} [options.leading=true] - If `true`, allows an immediate call at the start of a throttle window.
+ * @param {boolean} [options.trailing=true] - If `true`, allows a pending call to run after the delay with the latest arguments.
  * @returns {F & { cancel: () => void }} - Returns the throttled function with a `cancel` method to cancel pending executions.
  *
  * @example
  * const throttledScroll = useThrottle(() => {
  *   console.log('Scroll event');
- * }, 200, { edges: ['leading', 'trailing'] });
+ * }, 200, { leading: true, trailing: true });
  *
  * useEffect(() => {
  *   window.addEventListener('scroll', throttledScroll);
@@ -31,26 +26,10 @@ import { throttle } from './throttle.ts';
  *     throttledScroll.cancel();
  *   };
  * }, [throttledScroll]);
+ *
+ * @deprecated This hook will be removed in v2.
+ * Use [`useThrottledCallback`](/hooks/useThrottledCallback) to throttle a callback,
+ * [`useThrottledState`](/hooks/useThrottledState) to throttle a state update,
+ * or [`useThrottledValue`](/hooks/useThrottledValue) to get a throttled value.
  */
-export function useThrottle<F extends (...args: CallerTypedArgs) => unknown>(
-  callback: F,
-  wait: number,
-  options?: Parameters<typeof throttle>[2]
-  // Written out because the inferred type names `CallerTypedArgs`, which consumers emitting declarations cannot import (TS2742)
-): { (...args: Parameters<F>): void; cancel: () => void } {
-  const preservedCallback = usePreservedCallback(callback);
-  const preservedOptions = usePreservedReference(options ?? {});
-
-  const throttledCallback = useMemo(
-    () => throttle(preservedCallback, wait, preservedOptions),
-    [preservedOptions, preservedCallback, wait]
-  );
-
-  useEffect(() => {
-    return () => {
-      throttledCallback.cancel();
-    };
-  }, [throttledCallback]);
-
-  return throttledCallback;
-}
+export const useThrottle = internalUseThrottle;

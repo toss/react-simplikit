@@ -8,12 +8,7 @@
 ```ts
 function useBooleanState(
   initialValue: boolean | (() => boolean) = false
-): readonly [
-  state: boolean,
-  setTrue: () => void,
-  setFalse: () => void,
-  toggle: () => void,
-];
+): readonly [state: boolean, actions: BooleanStateActions];
 ```
 
 ### パラメータ
@@ -28,8 +23,8 @@ function useBooleanState(
 
 <Interface
   name=""
-  type="readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
-  description="以下を含むタプル。"
+  type="readonly [state: boolean, actions: BooleanStateActions]"
+  description="状態と、状態を変更するアクションを含むタプル。"
   :nested="[
     {
       name: 'state',
@@ -38,19 +33,19 @@ function useBooleanState(
       description: '現在の状態の値。',
     },
     {
-      name: 'setTrue',
+      name: 'actions.setTrue',
       type: '() => void',
       required: false,
       description: '状態を <code>true</code> にする関数。',
     },
     {
-      name: 'setFalse',
+      name: 'actions.setFalse',
       type: '() => void',
       required: false,
       description: '状態を <code>false</code> にする関数。',
     },
     {
-      name: 'toggle',
+      name: 'actions.toggle',
       type: '() => void',
       required: false,
       description: '状態を切り替える関数。',
@@ -61,6 +56,6 @@ function useBooleanState(
 ## 使用例
 
 ```tsx
-const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
+const [open, { setTrue: openBottomSheet, setFalse: closeBottomSheet }] =
   useBooleanState(false);
 ```

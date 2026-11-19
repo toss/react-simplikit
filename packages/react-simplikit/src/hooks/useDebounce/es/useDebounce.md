@@ -1,10 +1,16 @@
 # useDebounce
 
+::: warning Obsoleto
+Este Hook se eliminará en v2.
+Usa [`useDebouncedCallback`](/es/hooks/useDebouncedCallback) para aplicar debounce a un callback, [`useDebouncedState`](/es/hooks/useDebouncedState) para aplicar debounce a una actualización de estado
+o [`useDebouncedValue`](/es/hooks/useDebouncedValue) para obtener un valor con debounce.
+:::
+
 `useDebounce` es un Hook de React que devuelve una versión con debounce del callback que proporcionas.
 Te ayuda a optimizar la gestión de eventos al retrasar la ejecución de la función y agrupar varias llamadas en una sola.
 
-Con las opciones predeterminadas, la última llamada se ejecuta después de que transcurran `wait` milisegundos sin otra llamada.
-Las llamadas pendientes se cancelan cuando el componente se desmonta o cuando cambia `wait`, `leading` o `trailing`.
+Con las opciones predeterminadas, la última llamada se ejecuta después de que transcurran `debounceMs` milisegundos sin otra llamada.
+Las llamadas pendientes se cancelan cuando el componente se desmonta o cuando cambia `debounceMs`, `leading` o `trailing`.
 Cuando llamas a `.cancel()`, solo cancelas un callback pendiente, no una solicitud de red que ya haya comenzado.
 El ejemplo muestra la consulta de forma local. Para buscar en un servidor, pasa el callback
 de búsqueda de tu aplicación como primer argumento a `useDebounce`.
@@ -14,7 +20,7 @@ de búsqueda de tu aplicación como primer argumento a `useDebounce`.
 ```ts
 function useDebounce<F extends (...args: any[]) => unknown>(
   callback: F,
-  wait: number,
+  debounceMs: number,
   options?: DebounceOptions
 ): F & { cancel: () => void };
 ```
@@ -30,7 +36,7 @@ function useDebounce<F extends (...args: any[]) => unknown>(
 
 <Interface
   required
-  name="wait"
+  name="debounceMs"
   type="number"
   description="El número de milisegundos que debe retrasarse la ejecución de la función."
 />

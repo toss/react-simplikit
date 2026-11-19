@@ -136,5 +136,14 @@ describe('usePageVisibility', () => {
       expect(result1.current).toEqual(result2.current);
       expect(result1.current.isVisible).toBe(false);
     });
+
+    it('should hydrate without a mismatch and then sync to the browser value', () => {
+      visibilityState = 'hidden';
+
+      const { result, onRecoverableError } = renderHookSSR.hydrated(() => usePageVisibility());
+
+      expect(onRecoverableError).not.toHaveBeenCalled();
+      expect(result.current).toEqual({ isVisible: false, visibilityState: 'hidden' });
+    });
   });
 });

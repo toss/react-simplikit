@@ -6,16 +6,16 @@
 
 ```ts
 function useMap<K, V>(
-  initialState: MapOrEntries<K, V> = new Map()
+  initialValue: MapOrEntries<K, V> = new Map()
 ): UseMapReturn<K, V>;
 ```
 
 ### 파라미터
 
 <Interface
-  name="initialState"
+  name="initialValue"
   type="MapOrEntries<K, V>"
-  description="맵의 초기 상태예요. 맵 객체나 키-값 쌍의 배열을 받아요."
+  description="맵의 초기 값이에요. 맵 객체나 키-값 쌍의 배열을 받아요."
 />
 
 ### 반환 값

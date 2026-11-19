@@ -14,7 +14,7 @@ description: 해결하려는 문제에 맞는 React 유틸리티 선택하기
 | ----------------------------- | -------------------------------------------------------- | ------------------------------------------- |
 | 콘텐츠를 보이거나 숨기기      | [useToggle](/ko/hooks/useToggle)                         | 불리언 상태와 토글 함수                     |
 | 입력이 멈출 때까지 기다리기   | [useDebouncedValue](/ko/hooks/useDebouncedValue)         | 지연 갱신되는 상태 사본(입력창은 즉시 반응) |
-| 콜백 호출을 늦추기            | [useDebounce](/ko/hooks/useDebounce)                     | `.cancel()` 메서드가 있는 호출 가능한 함수  |
+| 외부 스크롤 막기              | [useBodyScrollLock](/ko/hooks/useBodyScrollLock)         | body 스크롤 잠금 및 자동 해제               |
 | 콜백 호출 빈도 제한하기       | [useThrottledCallback](/ko/hooks/useThrottledCallback)   | 설정한 간격으로 호출 빈도를 제한하는 콜백   |
 | 새로고침 후에도 상태 유지하기 | [useStorageState](/ko/hooks/useStorageState)             | 브라우저 저장소에 유지되는 상태             |
 | 요소 바깥 클릭에 반응하기     | [useOutsideClickEffect](/ko/hooks/useOutsideClickEffect) | 요소 바깥 클릭 구독                         |
@@ -76,7 +76,7 @@ export function FruitSearch() {
 }
 ```
 
-렌더링에 사용할 값이 필요하면 [useDebouncedValue](/ko/hooks/useDebouncedValue)를 사용하세요. 이벤트에서 콜백 실행을 예약하려면 [useDebounce](/ko/hooks/useDebounce)를 사용하세요. 디바운스만으로는 무거운 계산이 빨라지지 않아요.
+렌더링에 사용할 값이 필요하면 [useDebouncedValue](/ko/hooks/useDebouncedValue)를 사용하세요. 이벤트에서 콜백 실행을 예약하려면 [useDebouncedCallback](/ko/hooks/useDebouncedCallback)을 사용하세요. 디바운스만으로는 무거운 계산이 빨라지지 않아요.
 
 ## SSR과 정리 동작
 
@@ -84,7 +84,7 @@ export function FruitSearch() {
 
 - `useStorageState`는 서버 스냅샷과 hydration에 `defaultValue`를 사용한 뒤 클라이언트에서 브라우저 저장소를 읽어요. 컴포넌트가 언마운트되면 저장소 리스너를 제거해요.
 
-- `useDebounce`는 컴포넌트가 언마운트되거나 `wait`, `leading`, `trailing`이 바뀌면 대기 중인 호출을 취소해요. 이미 시작한 네트워크 요청은 취소하지 않으므로 요청 취소나 오래된 응답 처리는 애플리케이션에서 담당해야 해요.
+- `useDebouncedCallback`은 컴포넌트가 언마운트되거나 `debounceMs`, `leading`, `trailing`이 바뀌면 대기 중인 호출을 취소해요. 이미 시작한 네트워크 요청은 취소하지 않으므로 요청 취소나 오래된 응답 처리는 애플리케이션에서 담당해야 해요.
 
 - 브라우저 측정값은 마운트 후에 바뀔 수 있어요. 초기값과 플랫폼 제약은 [모바일 웹](/ko/mobile-web) 가이드와 개별 API 레퍼런스에서 확인하세요.
 

@@ -14,7 +14,7 @@ Call hooks at the top level of a React component or custom hook. In a framework 
 | ----------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------- |
 | Show or hide content                | [useToggle](/hooks/useToggle)                         | A boolean and a toggle function                            |
 | Wait for typing to pause            | [useDebouncedValue](/hooks/useDebouncedValue)         | A delayed copy of state; the input itself stays responsive |
-| Delay a callback                    | [useDebounce](/hooks/useDebounce)                     | A callable function with a `.cancel()` method              |
+| Prevent background scrolling        | [useBodyScrollLock](/hooks/useBodyScrollLock)         | Body scroll locking and automatic unlocking                |
 | Limit callback frequency            | [useThrottledCallback](/hooks/useThrottledCallback)   | A callback limited to the configured interval              |
 | Keep state across reloads           | [useStorageState](/hooks/useStorageState)             | State persisted in browser storage                         |
 | React to a click outside an element | [useOutsideClickEffect](/hooks/useOutsideClickEffect) | An outside-click subscription                              |
@@ -76,7 +76,7 @@ export function FruitSearch() {
 }
 ```
 
-Use [useDebouncedValue](/hooks/useDebouncedValue) when you need a value for rendering. Use [useDebounce](/hooks/useDebounce) when an event should schedule a callback. Debouncing alone does not make an expensive calculation faster.
+Use [useDebouncedValue](/hooks/useDebouncedValue) when you need a value for rendering. Use [useDebouncedCallback](/hooks/useDebouncedCallback) when an event should schedule a callback. Debouncing alone does not make an expensive calculation faster.
 
 ## SSR and cleanup
 
@@ -84,7 +84,7 @@ Use [useDebouncedValue](/hooks/useDebouncedValue) when you need a value for rend
 
 - `useStorageState` uses `defaultValue` for the server snapshot and hydration, then reads browser storage on the client. Its storage listeners are removed on unmount.
 
-- `useDebounce` cancels pending calls when the component unmounts or when `wait`, `leading`, or `trailing` changes. It does not cancel a network request that has already started; the application must handle request cancellation or stale responses.
+- `useDebouncedCallback` cancels pending calls when the component unmounts or when `debounceMs`, `leading`, or `trailing` changes. It does not cancel a network request that has already started; the application must handle request cancellation or stale responses.
 
 - Browser measurements can change after mount. Check the initial values and platform constraints in [Mobile Web](/mobile-web) and the individual API reference.
 

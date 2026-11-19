@@ -27,7 +27,7 @@ function useDebouncedCallback<T>(options: Object): (nextValue: T) => void;
         'The callback to debounce. A call with the same value as the last forwarded one is skipped.',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.debounceMs',
       type: 'number',
       required: true,
       description:
@@ -70,7 +70,7 @@ function SearchInput() {
   const [query, setQuery] = useState('');
   const setQueryDebounced = useDebouncedCallback({
     onChange: setQuery,
-    timeThreshold: 300,
+    debounceMs: 300,
   });
 
   return (

@@ -19,7 +19,7 @@ type NotNullishValue = {};
  *
  * @param {T} value - The value to maintain the reference for. It returns a new reference
  *   if the state value changes after comparison.
- * @param {(a: T, b: T) => boolean} [areValuesEqual] - An optional function to determine
+ * @param {(a: T, b: T) => boolean} [equalityFn] - An optional function to determine
  *   if two values are equal. By default, it uses `JSON.stringify` for comparison.
  *
  * @returns {T} Returns the same reference if the value is considered equal to the previous one,
@@ -51,7 +51,7 @@ type NotNullishValue = {};
  */
 export function usePreservedReference<T extends NotNullishValue>(
   value: T,
-  areValuesEqual: (a: T, b: T) => boolean = areDeeplyEqual
+  equalityFn: (a: T, b: T) => boolean = areDeeplyEqual
 ): T {
   // Without `'use no memo'`, React Compiler throws when `panicThreshold` is not `'none'`
   // because this hook intentionally reads and updates refs during render, inside `useMemo`.
@@ -60,11 +60,11 @@ export function usePreservedReference<T extends NotNullishValue>(
   const ref = useRef(value);
 
   return useMemo(() => {
-    if (!areValuesEqual(ref.current, value)) {
+    if (!equalityFn(ref.current, value)) {
       ref.current = value;
     }
     return ref.current;
-  }, [areValuesEqual, value]);
+  }, [equalityFn, value]);
 }
 
 function areDeeplyEqual<T extends NotNullishValue>(x: T, y: T) {

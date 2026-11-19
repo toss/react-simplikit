@@ -39,7 +39,7 @@ Claude Code와 Codex 플러그인에는 `react-simplikit-codemod` 스킬도 들�
 
 - [`llms.txt`](https://react-simplikit.slash.page/llms.txt): 영어 문서 목록과 한 줄 요약
 - [`llms-full.txt`](https://react-simplikit.slash.page/llms-full.txt): 영어 문서를 하나로 합친 파일
-- 영어 문서 URL의 `.html`을 `.md`로 바꾸면 원본 Markdown을 읽을 수 있어요. 예를 들어 [`useDebounce.md`](https://react-simplikit.slash.page/hooks/useDebounce.md)를 읽어 보세요.
+- 영어 문서 URL의 `.html`을 `.md`로 바꾸면 원본 Markdown을 읽을 수 있어요. 예를 들어 [`useDebouncedCallback.md`](https://react-simplikit.slash.page/hooks/useDebouncedCallback.md)를 읽어 보세요.
 
 ## Context7
 
@@ -48,7 +48,7 @@ react-simplikit은 [Context7](https://context7.com/toss/react-simplikit)에 `/to
 ## 에이전트 접근 확인하기
 
 1. 설치한 스킬이나 [llms.txt](https://react-simplikit.slash.page/llms.txt)를 사용해 구체적인 작업에 맞는 API를 찾도록 요청하세요. 예를 들어 검색 입력이 멈춘 뒤 300ms가 지나면 검색 함수를 호출하는 작업을 요청할 수 있어요.
-2. 에이전트에게 연결된 [useDebounce Markdown 레퍼런스](https://react-simplikit.slash.page/hooks/useDebounce.md)를 읽게 한 뒤, 코드를 쓰기 전에 import, 파라미터, 기본값, 정리 동작을 설명하도록 요청하세요.
+2. 에이전트에게 연결된 [useDebouncedCallback Markdown 레퍼런스](https://react-simplikit.slash.page/hooks/useDebouncedCallback.md)를 읽게 한 뒤, 코드를 쓰기 전에 import, 파라미터, 기본값, 정리 동작을 설명하도록 요청하세요.
 3. `react-simplikit`의 named import를 사용하는지, 콜백을 늦추는 것과 값을 늦추는 것을 구분하는지, 대기 중인 콜백을 취소해도 이미 시작한 요청은 중단되지 않는다고 설명하는지 확인하세요.
 4. 설치한 패키지 버전에서 해당 API를 제공하는지 확인하고, 에이전트가 작성한 코드를 프로젝트에서 실행하세요. 웹사이트는 최신 문서를 제공하므로 문서를 정확하게 찾았더라도 더 이전 버전을 설치했다면 호환된다고 보장할 수 없어요.
 

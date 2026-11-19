@@ -28,19 +28,22 @@ pnpm add react-simplikit
 
 ## Inicio rápido
 
-Usa `useDebounce` para llamar a tu función de búsqueda cuando el usuario deje de escribir durante 300 ms. En este ejemplo, `searchAPI` es la función de búsqueda que proporciona tu aplicación.
+Usa `useDebouncedCallback` para llamar a tu función de búsqueda cuando el usuario deje de escribir durante 300 ms. En este ejemplo, `searchAPI` es la función de búsqueda que proporciona tu aplicación.
 
 ```tsx
 import { useState } from 'react';
-import { useDebounce } from 'react-simplikit';
+import { useDebouncedCallback } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
 
-  const debouncedSearch = useDebounce((value: string) => {
-    // Llamada real a la API
-    searchAPI(value);
-  }, 300);
+  const debouncedSearch = useDebouncedCallback({
+    onChange: (value: string) => {
+      // Llamada real a la API
+      searchAPI(value);
+    },
+    debounceMs: 300,
+  });
 
   return (
     <input
@@ -55,11 +58,11 @@ function SearchInput() {
 }
 ```
 
-La función con debounce expone `.cancel()`, y las llamadas pendientes se cancelan automáticamente cuando el componente se desmonta.
+Las llamadas pendientes se cancelan automáticamente cuando el componente se desmonta. Si el valor es igual al último que se pasó a la función de búsqueda, no se vuelve a pasar.
 
 ## Lo que incluye
 
-- **Hooks** — estado y lógica (`useToggle`, `useDebounce`, `useList`, …), eventos del navegador (`useIntersectionObserver`, `useOutsideClickEffect`, …) y web móvil (`useAvoidKeyboard`, `useSafeAreaInset`, `useVisualViewport`, …)
+- **Hooks** — estado y lógica (`useToggle`, `useDebouncedState`, `useList`, …), eventos del navegador (`useIntersectionObserver`, `useOutsideClickEffect`, …) y web móvil (`useAvoidKeyboard`, `useSafeAreaInset`, `useVisualViewport`, …)
 - **Componentes** — `SwitchCase`, `Separated`, `ImpressionArea`
 - **Utilidades** — `buildContext`, `mergeProps`, `mergeRefs` y funciones auxiliares para la web móvil como `isIOS` y `getKeyboardHeight`
 

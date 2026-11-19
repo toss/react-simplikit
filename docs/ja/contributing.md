@@ -208,6 +208,34 @@ JSDoc コメントには `@description` と `@example` を必ず含める必要�
       />
     </div>
 
+- `@deprecated`: 非推奨の API に、代替 API の名前と移行方法を書きます。
+
+  - 代替 API の名前はバッククォートで囲み、そのページへのリンクを付けます。
+  - ドキュメントページは残り、タイトルの下に `@deprecated` の内容が警告として表示されます。
+
+    ```ts
+    /**
+     * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+     */
+    ```
+
+  - 名前の変更後も残している旧名のように、専用のページが不要な場合は `@no-docs` も追加します。
+
+    ```ts
+    /**
+     * @no-docs
+     * @deprecated Use `useNew` instead.
+     */
+    ```
+
+- `@no-docs`: ドキュメントページを提供しない API に付けます。API はそのまま使えますが、ページは生成されません。
+
+  ```ts
+  /**
+   * @no-docs
+   */
+  ```
+
 :::
 
 ### テストコードを書く

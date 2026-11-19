@@ -56,7 +56,7 @@ describe('useAvoidKeyboard', () => {
     });
 
     it('should apply custom transition duration', () => {
-      const { result } = renderHook(() => useAvoidKeyboard({ transitionDuration: 300 }));
+      const { result } = renderHook(() => useAvoidKeyboard({ transitionDurationMs: 300 }));
 
       expect(result.current.style.transition).toBe('transform 300ms ease-out');
     });
@@ -75,7 +75,7 @@ describe('useAvoidKeyboard', () => {
       const { result } = renderHook(() =>
         useAvoidKeyboard({
           safeAreaBottom: 30,
-          transitionDuration: 150,
+          transitionDurationMs: 150,
           transitionTimingFunction: 'linear',
         })
       );

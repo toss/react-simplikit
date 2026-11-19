@@ -2,7 +2,7 @@
 
 `useDebouncedValue` is a React hook that returns a debounced copy of the given value.
 The caller keeps owning the state; the hook only delays how quickly the returned value follows it.
-The returned value updates `wait` milliseconds after the last change, which is useful for
+The returned value updates `debounceMs` milliseconds after the last change, which is useful for
 deriving a search query or a validation input from fast-changing state.
 
 Pending updates are cancelled when the component unmounts. The example displays the
@@ -13,7 +13,7 @@ on mount, so with `leading: true` the first change after mount is applied immedi
 If both `leading` and `trailing` are `false`, the returned value never updates.
 
 The value is compared by reference. Passing a new object or array on every render keeps
-the returned value updating every `wait` milliseconds; stabilize the reference first, for
+the returned value updating every `debounceMs` milliseconds; stabilize the reference first, for
 example with `usePreservedReference`.
 
 ## Interface
@@ -21,7 +21,7 @@ example with `usePreservedReference`.
 ```ts
 function useDebouncedValue<T>(
   value: T,
-  wait: number,
+  debounceMs: number,
   options?: DebounceOptions
 ): T;
 ```
@@ -37,7 +37,7 @@ function useDebouncedValue<T>(
 
 <Interface
   required
-  name="wait"
+  name="debounceMs"
   type="number"
   description="The number of milliseconds to wait after the last change before updating."
 />
@@ -61,7 +61,7 @@ function useDebouncedValue<T>(
       required: false,
       defaultValue: 'true',
       description:
-        'If <code>true</code>, the last change is applied after <code>wait</code> milliseconds.',
+        'If <code>true</code>, the last change is applied after <code>debounceMs</code> milliseconds.',
     },
   ]"
 />

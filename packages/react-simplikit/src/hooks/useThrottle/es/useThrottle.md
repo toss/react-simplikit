@@ -1,5 +1,11 @@
 # useThrottle
 
+::: warning Obsoleto
+Este Hook se eliminará en v2.
+Usa [`useThrottledCallback`](/es/hooks/useThrottledCallback) para limitar la frecuencia de un callback, [`useThrottledState`](/es/hooks/useThrottledState) para limitar la frecuencia de una actualización de estado
+o [`useThrottledValue`](/es/hooks/useThrottledValue) para obtener un valor con frecuencia de actualización limitada.
+:::
+
 `useThrottle` es un Hook de React que crea una versión de un callback con una frecuencia de ejecución limitada.
 Te permite limitar la frecuencia con la que llamas a una función,
 por ejemplo, al manejar eventos de desplazamiento o de cambio de tamaño.
@@ -9,8 +15,8 @@ por ejemplo, al manejar eventos de desplazamiento o de cambio de tamaño.
 ```ts
 function useThrottle<F extends (...args: any[]) => unknown>(
   callback: F,
-  wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  throttleMs: number,
+  options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
 
@@ -25,23 +31,31 @@ function useThrottle<F extends (...args: any[]) => unknown>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="El intervalo en milisegundos que limita la frecuencia de las llamadas."
 />
 
 <Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
+  type="ThrottleOptions"
   description="Opciones para controlar la limitación de frecuencia."
   :nested="[
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        'Un arreglo opcional que especifica si la función debe ejecutarse al inicio del intervalo, al final o en ambos momentos.',
+        'Si es <code>true</code>, permite una llamada inmediata al inicio del intervalo de limitación de frecuencia.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        'Si es <code>true</code>, permite ejecutar una llamada pendiente después de la espera con los argumentos más recientes.',
     },
   ]"
 />
@@ -62,7 +76,7 @@ const throttledScroll = useThrottle(
     console.log('Evento de desplazamiento');
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { leading: true, trailing: true }
 );
 
 useEffect(() => {

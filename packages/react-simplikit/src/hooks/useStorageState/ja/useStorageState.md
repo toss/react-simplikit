@@ -3,17 +3,15 @@
 `useStorageState` は、`useState` と同様に動作し、状態の値をブラウザーのストレージに永続化する React フックです。
 ページを再読み込みしても値が保持され、`localStorage` を使う場合はタブ間で共有できます。
 
+`serializer` と `deserializer` を渡さない場合、値は JSON として保存されるため、内側まですべて JSON にシリアライズできる必要があります。値のどこかに `Date`、`Map`、クラスのインスタンス、関数があると、値を設定したときにエラーになります。`defaultValue` はマウント時に検査されます。ほかの型を保存するには、両方の関数を渡してください。ストレージから読み戻した文字列は検証しません。読み戻した値は保存された文字列が変わるまで再利用されるため、`deserializer` が返す値を変えた場合は `refresh` を呼び出してください。
+
 ## インターフェース
 
 ```ts
 function useStorageState<T>(
   key: string,
   options?: Object
-): readonly [
-  state: Serializable<T> | undefined,
-  setState: (value: SetStateAction<Serializable<T> | undefined>) => void,
-  refreshState: () => void,
-];
+): readonly [state: T | undefined, actions: StorageStateActions<T | undefined>];
 ```
 
 ### パラメータ
@@ -46,15 +44,15 @@ function useStorageState<T>(
     },
     {
       name: 'options.serializer',
-      type: 'Function',
+      type: '(value: T) => string',
       required: false,
-      description: '状態の値を文字列にシリアライズする関数。',
+      description: '値を文字列に変換する関数。<code>deserializer</code> と一緒に渡します。',
     },
     {
       name: 'options.deserializer',
-      type: 'Function',
+      type: '(value: string) => T',
       required: false,
-      description: '文字列から状態の値をデシリアライズする関数。',
+      description: '保存された文字列を値に戻す関数。<code>serializer</code> と一緒に渡します。',
     },
   ]"
 />
@@ -63,26 +61,26 @@ function useStorageState<T>(
 
 <Interface
   name=""
-  type="readonly [state: Serializable<T> | undefined, setState: (value: SetStateAction<Serializable<T> | undefined>) => void, refreshState: () => void]"
-  description="次の要素を含むタプル。"
+  type="readonly [state: T | undefined, actions: StorageStateActions<T | undefined>]"
+  description="状態と、状態を変更するアクションを含むタプル。"
   :nested="[
     {
       name: 'state',
-      type: 'Serializable<T> | undefined',
+      type: 'T | undefined',
       required: false,
-      description: 'ストレージから取得した現在の状態の値。',
+      description: 'ストレージから取得した現在の状態の値。<code>defaultValue</code> を渡した場合は <code>T</code> です。',
     },
     {
-      name: 'setState',
-      type: '(value: SetStateAction<Serializable<T> | undefined>) => void',
+      name: 'actions.setValue',
+      type: '(value: SetStateAction<T | undefined>) => void',
       required: false,
       description: '状態を更新し、永続化する関数。',
     },
     {
-      name: 'refreshState',
+      name: 'actions.refresh',
       type: '() => void',
       required: false,
-      description: 'ストレージから状態を再取得する関数。',
+      description: 'ストレージに書き込まずに、ストレージから値を再取得する関数。',
     },
   ]"
 />
@@ -94,12 +92,12 @@ function useStorageState<T>(
 import { useStorageState } from 'react-simplikit';
 
 function Counter() {
-  const [count, setCount] = useStorageState<number>('counter', {
+  const [count, { setValue }] = useStorageState('counter', {
     defaultValue: 0,
   });
 
   return (
-    <button onClick={() => setCount(prev => prev + 1)}>Count: {count}</button>
+    <button onClick={() => setValue(prev => prev + 1)}>Count: {count}</button>
   );
 }
 ```

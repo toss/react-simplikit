@@ -1,11 +1,14 @@
 # usePrevious
 
-`usePrevious` 是一个返回输入状态之前值的 React Hook。当发生未伴随状态变化的重复渲染时，它会原样保留之前的值。如果该状态是对象或需要自定义变化检测，则可以提供 `compare` 函数。默认情况下，状态变化通过 `prev === next` 来检测。
+`usePrevious` 是一个返回输入状态之前值的 React Hook。当发生未伴随状态变化的重复渲染时，它会原样保留之前的值。如果该状态是对象或需要自定义变化检测，则可以提供 `equalityFn` 函数。默认情况下，状态变化通过 `Object.is(prev, next)` 来检测。
 
 ## 接口
 
 ```ts
-function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
+function usePrevious<T>(
+  state: T,
+  equalityFn?: (prev: T, next: T) => boolean
+): T;
 ```
 
 ### 参数
@@ -18,9 +21,9 @@ function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
 />
 
 <Interface
-  name="compare"
+  name="equalityFn"
   type="(prev: T, next: T) => boolean"
-  description="用于判断状态是否发生变化的可选比较函数。"
+  description="一个用于判断两个状态是否相等的可选函数。默认情况下，它使用 <code>Object.is</code> 进行比较。"
 />
 
 ### 返回值
