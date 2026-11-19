@@ -1,36 +1,34 @@
-import { useRef } from 'react';
-
+import type { CallerTypedArgs } from '../../_internal/types.ts';
 import { useDebounce } from '../_internal/useDebounce/useDebounce.ts';
 
-type DebounceOptions = {
+type UseDebouncedCallbackOptions<F extends (...args: CallerTypedArgs) => unknown> = {
+  callback: F;
+  debounceMs: number;
   leading?: boolean;
   trailing?: boolean;
 };
 
 /**
- * Marks that no value has been forwarded to `onChange` yet.
- *
- * The hook skips redundant invocations by comparing against the last forwarded value, but it
- * receives no initial value from the caller. Seeding that comparison with a real value would treat
- * the first call of that value as redundant and swallow it, so an unreachable sentinel is used instead.
- */
-const NOT_INVOKED = Symbol('NOT_INVOKED');
-
-/**
  * @description
  * `useDebouncedCallback` is a React hook that returns a debounced version of the provided callback function.
  * It helps optimize event handling by delaying function execution and grouping multiple calls into one.
+ * The debounced function takes the same arguments as `callback` and forwards the ones from the last call.
  *
  * Note that if both 'leading' and 'trailing' are set, the function will be called at both the start and end of the delay period. However, it must be called at least twice within debounceMs interval for this to happen, since one debounced function call cannot trigger the function twice.
  *
- * @template T - The type of the value passed to `onChange`.
+ * Pending calls are cancelled when the component unmounts or when `debounceMs`, `leading`, or `trailing` changes.
+ * Calling `.cancel()` only cancels a pending call; it does not stop work that `callback` has already started.
+ * The next call after `.cancel()` starts a new sequence, so it runs immediately when `leading` is `true`.
+ *
+ * @template {(...args: any[]) => unknown} F - The type of the callback function.
  * @param {Object} options - The options object.
- * @param {(newValue: T) => void} options.onChange - The callback to debounce. A call with the same value as the last forwarded one is skipped.
+ * @param {F} options.callback - The function to debounce.
  * @param {number} options.debounceMs - The number of milliseconds to delay the function execution.
  * @param {boolean} [options.leading=false] - If `true`, the function is called at the start of the sequence.
  * @param {boolean} [options.trailing=true] - If `true`, the function is called at the end of the sequence.
  *
- * @returns {(nextValue: T) => void} A debounced function that forwards the value to `onChange`.
+ * @returns {((...args: Parameters<F>) => void) & { cancel: () => void }} A debounced function that takes the same arguments as `callback`.
+ *   It also includes a `cancel` method to cancel any pending debounced execution.
  *
  * @example
  * import { useDebouncedCallback } from 'react-simplikit';
@@ -38,38 +36,27 @@ const NOT_INVOKED = Symbol('NOT_INVOKED');
  *
  * function SearchInput() {
  *   const [query, setQuery] = useState('');
- *   const setQueryDebounced = useDebouncedCallback({ onChange: setQuery, debounceMs: 300 });
+ *   const setQueryDebounced = useDebouncedCallback({ callback: setQuery, debounceMs: 300 });
  *
  *   return (
  *     <>
  *       <input onChange={e => setQueryDebounced(e.target.value)} />
+ *       <button type="button" onClick={() => setQueryDebounced.cancel()}>
+ *         Cancel pending update
+ *       </button>
  *       <p>Searching for: {query}</p>
  *     </>
  *   );
  * }
  */
-export function useDebouncedCallback<T>({
-  onChange,
+export function useDebouncedCallback<F extends (...args: CallerTypedArgs) => unknown>({
+  callback,
   debounceMs,
   leading = false,
   trailing = true,
-}: DebounceOptions & {
-  onChange: (newValue: T) => void;
-  debounceMs: number;
-}): (nextValue: T) => void {
-  const lastForwardedRef = useRef<T | typeof NOT_INVOKED>(NOT_INVOKED);
-
-  return useDebounce(
-    (nextValue: T) => {
-      if (nextValue === lastForwardedRef.current) {
-        return;
-      }
-
-      onChange(nextValue);
-
-      lastForwardedRef.current = nextValue;
-    },
-    debounceMs,
-    { leading, trailing }
-  );
+}: UseDebouncedCallbackOptions<F>): {
+  (...args: Parameters<F>): void;
+  cancel: () => void;
+} {
+  return useDebounce(callback, debounceMs, { leading, trailing });
 }
