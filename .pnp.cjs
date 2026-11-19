@@ -15,6 +15,10 @@ const RAW_RUNTIME_STATE =
       "reference": "workspace:."\
     },\
     {\
+      "name": "@react-simplikit/codemod",\
+      "reference": "workspace:codemods"\
+    },\
+    {\
       "name": "@examples/shared",\
       "reference": "workspace:examples/shared"\
     },\
@@ -40,6 +44,7 @@ const RAW_RUNTIME_STATE =
   "pnpZipBackend": "libzip",\
   "fallbackExclusionList": [\
     ["@examples/shared", ["virtual:4859486b80a38e1e55778596b129478b56d21224c49a057e6f204bd0ef112f450c0ab6db41bd028bc885a6d06a104f1faffa30cd30b973c26726b0fe33e03341#workspace:examples/shared", "workspace:examples/shared"]],\
+    ["@react-simplikit/codemod", ["workspace:codemods"]],\
     ["@react-simplikit/root", ["workspace:."]],\
     ["react-simplikit", ["virtual:f9522faed4c7e558462ef89aa232afe8b28f40173b914f756ee38b21c9ce10bf830de8334e264bc007ff37043ac2a4f134dac81249be2bcb7033ff024ce27466#workspace:packages/react-simplikit", "workspace:packages/react-simplikit"]],\
     ["react-simplikit-codemod", ["workspace:packages/codemod"]],\
@@ -5488,6 +5493,15 @@ const RAW_RUNTIME_STATE =
           "react"\
         ],\
         "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@react-simplikit/codemod", [\
+      ["workspace:codemods", {\
+        "packageLocation": "./codemods/",\
+        "packageDependencies": [\
+          ["@react-simplikit/codemod", "workspace:codemods"]\
+        ],\
+        "linkType": "SOFT"\
       }]\
     ]],\
     ["@react-simplikit/root", [\
