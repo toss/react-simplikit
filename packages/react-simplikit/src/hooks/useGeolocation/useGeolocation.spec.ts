@@ -313,7 +313,7 @@ describe('useGeolocation', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('should keep a manually started watch when a position option changes', async () => {
+  it('should restart a manually started watch with the new options when a position option changes', async () => {
     mockGeolocation.watchPosition.mockImplementation(success => {
       success(mockPosition);
 
@@ -330,8 +330,34 @@ describe('useGeolocation', () => {
 
     rerender({ enableHighAccuracy: true });
 
-    expect(mockGeolocation.clearWatch).not.toHaveBeenCalled();
+    expect(mockGeolocation.clearWatch).toHaveBeenCalledWith(123);
+    expect(mockGeolocation.watchPosition).toHaveBeenCalledTimes(2);
+    expect(mockGeolocation.watchPosition).toHaveBeenLastCalledWith(
+      expect.any(Function),
+      expect.any(Function),
+      expect.objectContaining({ enableHighAccuracy: true })
+    );
     expect(result.current.isTracking).toBe(true);
+  });
+
+  it('should not start a watch when a position option changes after tracking is stopped', async () => {
+    mockGeolocation.watchPosition.mockReturnValue(123);
+
+    const { result, rerender } = renderHookSSR(({ enableHighAccuracy }) => useGeolocation({ enableHighAccuracy }), {
+      initialProps: { enableHighAccuracy: false },
+    });
+
+    await act(async () => {
+      result.current.startTracking();
+    });
+    await act(async () => {
+      result.current.stopTracking();
+    });
+
+    rerender({ enableHighAccuracy: true });
+
+    expect(mockGeolocation.watchPosition).toHaveBeenCalledTimes(1);
+    expect(result.current.isTracking).toBe(false);
   });
 
   it('should restart the watch with the new options when mountBehavior is "watch"', () => {

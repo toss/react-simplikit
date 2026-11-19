@@ -215,12 +215,13 @@ export function useGeolocation(options?: GeolocationOptions) {
   }, []);
 
   useEffect(() => {
-    if (options?.mountBehavior === GeolocationMountBehavior.WATCH) {
+    // `startTracking` changes with the position options, so this also restarts a running watch with the new ones.
+    if (options?.mountBehavior === GeolocationMountBehavior.WATCH || watchIdRef.current !== null) {
+      startTracking();
+    } else if (options?.mountBehavior === GeolocationMountBehavior.GET) {
       /* eslint-disable-next-line react-hooks/set-state-in-effect -- `mountBehavior` is an
          explicit opt-in to start geolocation on mount, and the browser API can only be
          reached from an effect. The resulting state update is the requested behavior. */
-      startTracking();
-    } else if (options?.mountBehavior === GeolocationMountBehavior.GET) {
       getCurrentPosition();
     }
   }, [options?.mountBehavior, getCurrentPosition, startTracking]);
