@@ -2,7 +2,7 @@
 
 import type { CallerTypedArgs } from '../../../_internal/types.ts';
 
-export type DebouncedFunction<F extends (...args: CallerTypedArgs) => void> = {
+type DebouncedFunction<F extends (...args: CallerTypedArgs) => void> = {
   (...args: Parameters<F>): void;
   cancel: () => void;
 };
