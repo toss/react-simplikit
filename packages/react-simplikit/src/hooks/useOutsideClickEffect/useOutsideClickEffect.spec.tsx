@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -111,6 +112,41 @@ describe('useOutsideClickEffect', () => {
 
     fireEvent.click(screen.getByTestId('target'));
     expect(onOutsideClick).not.toHaveBeenCalled();
+  });
+
+  it('should not call callback for the click that mounted it', () => {
+    const onOutsideClick = vi.fn();
+
+    const Popup = () => {
+      const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
+
+      useOutsideClickEffect(containerRef, onOutsideClick);
+
+      return <div ref={setContainerRef}>Popup</div>;
+    };
+
+    const PopupTrigger = () => {
+      const [isOpen, setIsOpen] = useState(false);
+
+      return (
+        <>
+          {/* In a browser, React renders a click's update and runs its effects before the click reaches `document`.
+              `flushSync` does the same here. */}
+          <button data-testid="trigger" onClick={() => flushSync(() => setIsOpen(true))}>
+            Open
+          </button>
+          {isOpen && <Popup />}
+        </>
+      );
+    };
+
+    render(<PopupTrigger />);
+
+    fireEvent.click(screen.getByTestId('trigger'));
+    expect(onOutsideClick).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByTestId('trigger'));
+    expect(onOutsideClick).toHaveBeenCalledTimes(1);
   });
 
   it('should handle null target event', () => {

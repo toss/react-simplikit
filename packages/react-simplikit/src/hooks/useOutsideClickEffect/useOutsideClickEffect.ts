@@ -51,10 +51,23 @@ export function useOutsideClickEffect(container: OneOrMore<HTMLElement | null>, 
   }, [container]);
 
   useEffect(() => {
-    document.addEventListener('click', handleDocumentClick);
+    // React runs the effects of a click's update before that click reaches `document`, so the click that
+    // mounted this hook (e.g. the one that opened a popup) would arrive here as an outside click.
+    // `window.event` is that click while the effect runs.
+    const mountingEvent = window.event;
+
+    function handleClick(event: MouseEvent) {
+      if (event === mountingEvent) {
+        return;
+      }
+
+      handleDocumentClick(event);
+    }
+
+    document.addEventListener('click', handleClick);
 
     return () => {
-      document.removeEventListener('click', handleDocumentClick);
+      document.removeEventListener('click', handleClick);
     };
   }, [handleDocumentClick]);
 }
