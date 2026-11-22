@@ -8,10 +8,10 @@
 
 ## パッケージ
 
-| パッケージ                                    | 説明                                                                                                                                     | バージョン                                                                                                                |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | React のフック、コンポーネント、ユーティリティ: 状態とロジック、ブラウザイベント、モバイル Web（キーボード、セーフエリア、ビューポート） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [react-simplikit-codemod](./packages/codemod) | `react-simplikit` のアップグレードに合わせてコードベースを書き換える codemod                                                             | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
+| パッケージ                                       | 説明                                                                                                                                     | バージョン                                                                                                                    |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit)    | React のフック、コンポーネント、ユーティリティ: 状態とロジック、ブラウザイベント、モバイル Web（キーボード、セーフエリア、ビューポート） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                     |
+| [@react-simplikit/codemods](./packages/codemods) | `react-simplikit` のアップグレードに合わせてコードベースを書き換える codemod                                                             | [![npm](https://img.shields.io/npm/v/@react-simplikit/codemods.svg)](https://www.npmjs.com/package/@react-simplikit/codemods) |
 
 ## 特長
 
@@ -97,7 +97,7 @@ npx skills add toss/react-simplikit --skill react-simplikit
 ```
 packages/
 ├── react-simplikit/    # ライブラリ本体
-├── codemod/            # react-simplikit-codemod
+├── codemods/           # @react-simplikit/codemods
 └── plugin/             # AI コーディングアシスタント向けのエージェントスキル
 ```
 

@@ -8,10 +8,10 @@ A collection of lightweight, zero-dependency React utilities for building robust
 
 ## Packages
 
-| Package                                       | Description                                                                                                        | Version                                                                                                                   |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | React hooks, components and utils: state and logic, browser events, and mobile web (keyboard, safe area, viewport) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [react-simplikit-codemod](./packages/codemod) | Codemods that rewrite a codebase for a `react-simplikit` upgrade                                                   | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
+| Package                                          | Description                                                                                                        | Version                                                                                                                       |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit)    | React hooks, components and utils: state and logic, browser events, and mobile web (keyboard, safe area, viewport) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                     |
+| [@react-simplikit/codemods](./packages/codemods) | Codemods that rewrite a codebase for a `react-simplikit` upgrade                                                   | [![npm](https://img.shields.io/npm/v/@react-simplikit/codemods.svg)](https://www.npmjs.com/package/@react-simplikit/codemods) |
 
 ## Features
 
@@ -97,7 +97,7 @@ Visit [react-simplikit.slash.page](https://react-simplikit.slash.page) for full 
 ```
 packages/
 ├── react-simplikit/    # the library
-├── codemod/            # react-simplikit-codemod
+├── codemods/           # @react-simplikit/codemods
 └── plugin/             # agent skill for AI coding assistants
 ```
 

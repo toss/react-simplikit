@@ -5,7 +5,7 @@
 React utility hooks/components library. Two published packages and an agent plugin:
 
 - `react-simplikit` (`packages/react-simplikit`) — React hooks, components and utils
-- `react-simplikit-codemod` (`packages/codemod`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today). The rules below describe the library; the exceptions that apply to the CLI are called out where they differ
+- `@react-simplikit/codemods` (`packages/codemods`) — bin-only CLI that runs upgrade codemods on consumer codebases (`mobile-to-root` today). The rules below describe the library; the exceptions that apply to the CLI are called out where they differ
 - `packages/plugin` — agent skills for Claude Code (the root `.claude-plugin/marketplace.json` points here), Codex and skills.sh. No `package.json`, so it is neither a workspace nor on npm. `yarn skill:gen` regenerates `skills/react-simplikit` from the public exports and `yarn test:skill` fails CI when the committed copy drifts; `skills/react-simplikit-codemod` is hand-written
 
 ## Development Quick Start
@@ -67,9 +67,9 @@ src/
 - **Import extensions** — Use `.ts`/`.tsx` extensions in source imports (tsdown rewrites them to `.mjs`/`.cjs` in the output)
 - **useEffect cleanup** — Always return cleanup to remove listeners/subscriptions
 - **`"use client"` banner** — tsdown adds this to every emitted file for RSC compatibility
-- **Named exports only** — No default exports
+- **Named exports only** — No default exports. The one exception is a codemod transform in `packages/codemods/src/transforms/`, which jscodeshift loads through its default export
 - **No `any` in implementation** — Full TypeScript strict mode, and lint rejects `any`. The only exception is `CallerTypedArgs` in `src/_internal/types.ts`, the parameter list of a function the caller passes in
-- **Zero dependencies** — No runtime dependencies in `react-simplikit`. `react-simplikit-codemod` is a dev-time CLI and declares `commander`, `detect-indent`, `fast-glob`, `semver` and `typescript` in `dependencies`
+- **Zero dependencies** — No runtime dependencies in `react-simplikit`. `@react-simplikit/codemods` is a dev-time CLI and declares `commander`, `execa`, `jscodeshift`, `prompts` and `semver` in `dependencies`
 
 ### SSR-Safe Coding Pattern
 
@@ -101,7 +101,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 ## Testing
 
-- **100% coverage mandatory** — Enforced by Vitest coverage threshold. The codemod excludes two files: `src/cli.ts`, because its e2e suite runs the built bin in a child process where v8 cannot attribute the lines back, and `src/constants.ts`, which holds no executable statements. An excluded file still needs its behaviour covered somewhere — `cli.ts`'s exit codes and `--debug` output are asserted by the e2e suite
+- **100% coverage mandatory** — Enforced by Vitest coverage threshold. The codemods package excludes `src/bin/codemods.ts`, because its e2e suite runs the built bin in a child process where v8 cannot attribute the lines back, and `constants.ts`, which holds no executable statements. An excluded file still needs its behaviour covered somewhere — the bin's `-v`, `-h` and exit codes are asserted by the e2e suite
 - **SSR tests required** — All hooks accessing browser APIs must have `.ssr.test.ts`
 - **Test file name**: `<name>.test.ts`; older folders still use `<name>.spec.ts` — keep whichever the folder has
 - **SSR pattern**:
@@ -163,7 +163,7 @@ PR with changeset merged → release.yml triggers
 - `changeset publish` v3 calls `yarn npm publish` for Yarn Berry, but manifests must stay valid for plain `npm pack` (`verify-pack`)
 - Therefore: **always declare `main`/`types`/`module`/`exports` at the top level** of package.json
 - `publishConfig` should only contain `access: "public"`
-- A bin-only package declares `bin` instead and has no `main`/`types`/`module`/`exports`. `packages/codemod` is one; `bin` must point at the built `dist/cli.mjs`, and changing it requires re-running `yarn install` because `yarn.lock` records the value
+- A bin-only package declares `bin` instead and has no `main`/`types`/`module`/`exports`. `packages/codemods` is one; `bin` must point at the built `dist/bin/codemods.cjs`, and changing it requires re-running `yarn install` because `yarn.lock` records the value
 
 ### OIDC Trusted Publishing
 
@@ -189,8 +189,8 @@ packages/
 │   ├── src/           # Source (hooks, components, utils)
 │   ├── dist/          # Build output (per-module, mirrors src/)
 │   └── package.json
-├── codemod/           # react-simplikit-codemod — bin-only CLI
-│   ├── src/           # cli.ts plus runner/ and mobileToRoot/
+├── codemods/          # @react-simplikit/codemods — bin-only CLI
+│   ├── src/           # bin/ (CLI, jscodeshift runner) and transforms/ (one file per transform)
 │   ├── test/          # e2e suite that spawns the built bin
 │   └── package.json   # declares `bin`, no main/types/module/exports
 └── plugin/            # agent plugin — no package.json, not a workspace, not on npm

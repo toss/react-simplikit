@@ -16,102 +16,54 @@ Do **not** run this when the project has no `@react-simplikit/mobile` dependency
 
 ## Preconditions
 
-- The working tree is committed or stashed. This command rewrites files in place and has no undo of its own.
+- Node.js 20 or later.
+- The working tree is committed or stashed. This command rewrites files in place and has no undo of its own, so outside `--dry` it refuses to run on uncommitted changes and exits `1`. Pass `--force` only when the user has said to run on a dirty tree.
 
 ## Commands
+
+Always pass both the transform and the path. Without a terminal to ask in, the CLI exits `1` when either is missing.
 
 Preview first — this writes nothing:
 
 ```bash
-npx react-simplikit-codemod mobile-to-root --dry-run --json
+npx @react-simplikit/codemods mobile-to-root . --dry
 ```
 
 Apply:
 
 ```bash
-npx react-simplikit-codemod mobile-to-root
+npx @react-simplikit/codemods mobile-to-root .
 ```
 
 Limit it to one directory:
 
 ```bash
-npx react-simplikit-codemod mobile-to-root src
+npx @react-simplikit/codemods mobile-to-root src
 ```
 
-Skip paths, or leave manifests alone:
+`--print` also writes each transformed file to stdout. To skip extra paths, hand jscodeshift its own option: `--jscodeshift="--ignore-pattern=**/legacy/**"`. There is no flag to leave `package.json` alone; narrow the path argument instead. `node_modules`, `dist`, `build`, `out`, `coverage`, `.next`, `.yarn`, `.git` and `.pnp.*` are always skipped. The command is safe to run twice.
 
-```bash
-npx react-simplikit-codemod mobile-to-root --ignore 'legacy/**' --ignore '**/e2e/**'
-npx react-simplikit-codemod mobile-to-root --no-package-json
-```
+## Reading the output
 
-`--debug` puts stack traces in the report and on stderr, including for files that could not be processed. The command never prompts and is safe to run twice, so it fits non-interactive and CI use.
+The run is jscodeshift's, so its lines follow jscodeshift's format:
 
-## JSON output
-
-`--json` writes only this object to stdout. Everything else goes to stderr.
-
-```json
-{
-  "transform": "mobile-to-root",
-  "dryRun": false,
-  "scanned": 128,
-  "changed": [
-    {
-      "kind": "source",
-      "file": "src/a.tsx",
-      "changes": [{ "line": 3, "kind": "import" }]
-    },
-    {
-      "kind": "manifest",
-      "file": "package.json",
-      "dependencies": [
-        {
-          "field": "dependencies",
-          "removed": "@react-simplikit/mobile",
-          "added": "^0.2.0"
-        }
-      ]
-    }
-  ],
-  "manual": [
-    {
-      "file": "src/a.tsx",
-      "line": 4,
-      "reason": "Left on its own line: `isIOS` already refers to a different import here..."
-    },
-    {
-      "file": "package.json",
-      "reason": "\"overrides\" still pins @react-simplikit/mobile..."
-    }
-  ],
-  "failed": []
-}
-```
-
-The object always carries these six keys.
-
-`changed[].kind` is `source` or `manifest`, and it decides the rest of the entry: a `source` entry carries `changes`, a `manifest` entry carries `dependencies`. Neither key appears on the other kind, so branch on `kind` rather than testing an array for emptiness.
-
-`changes[].kind` is one of `import`, `export`, `require`, `dynamic-import`, `import-type`, `mock`, `merge`.
-
-`dependencies[].added` is `null` in two cases: the existing `react-simplikit` range already satisfies the floor and was left as it was, or no registry range could be written at all because the old dependency was pinned by a `workspace:`/`catalog:`/`file:` protocol. The second case always carries a `manual` note naming the field.
-
-`manual[].line` is present only for a note about a specific import; manifest notes have no line.
-
-`failed[]` holds the files that could not be read, parsed, or written. It is always present and usually empty.
+- ` ERR <file> Transformation error (...)` — the file could not be parsed or transformed. It was left untouched
+- ` REP <file> <message>` — a manual follow-up. In a source file the message starts with `line <n>:` and names either an import the codemod deliberately left on its own or a mention of the package it could not rewrite, such as a `moduleNameMapper` entry. In a `package.json` it names a field to check by hand: an `overrides` or `resolutions` entry it did not edit, or a dependency whose `workspace:`/`catalog:`/`file:` spec it could not check
+- `Results:` with counts of `errors`, `unmodified`, `skipped` and `ok` — `ok` is the number of files rewritten
+- `Next steps:` — printed after a run that wrote files. It repeats the steps under **After the run** below
 
 ## After the run
 
-1. Act on every entry in `manual` by hand. Entries with a `line` mark an import the codemod deliberately left on its own — read the reason before merging it yourself, because merging it by hand can change what a name binds.
+1. Act on every `REP` line by hand. Read the reason first: merging an import the codemod left on its own can strand the comment that sits on it.
 2. Run a bare `npm install` (or the equivalent) so the lockfile drops the old package. Do not run `npm install react-simplikit` — it would overwrite the range the codemod just wrote.
 3. Run the project's formatter or linter fix (`eslint --fix`, say) on the changed files. Import-order rules place `react-simplikit` differently from `@react-simplikit/mobile`, so a sorted import block is usually out of order after the run.
 4. Require `react-simplikit@0.2.0` or newer — the first release re-exporting the `SafeAreaInset` type from the root entry. An existing range below that floor is raised automatically; a `workspace:`/`catalog:`/`file:` protocol is kept and reported instead.
 
 ## Failure handling
 
-| Exit code | What to do                                                                                                                                               |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `2`       | The invocation was wrong. stderr names the bad path or flag. Fix it and rerun                                                                            |
-| `1`       | Some files could not be processed. They are listed in `failed` (or under **Could not be processed**); every other file was migrated. Fix those and rerun |
-| `0`       | Done. Review the diff                                                                                                                                    |
+| Exit code | What to do                                                                                                                                                                                                                                |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `1`       | The transform name or the path was wrong, or the working tree has uncommitted changes — stderr says which. Otherwise some files could not be processed — they are the `ERR` lines, and every other file was migrated. Fix those and rerun |
+| `0`       | Done. Review the diff                                                                                                                                                                                                                     |
+
+A file that imports the same name twice — once from each package, say — fails to parse. Remove the duplicate import and rerun.

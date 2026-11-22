@@ -8,10 +8,10 @@
 
 ## 패키지
 
-| 패키지                                        | 설명                                                                                             | 버전                                                                                                                      |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | React 훅, 컴포넌트, 유틸리티: 상태와 로직, 브라우저 이벤트, 모바일 웹(키보드, 안전 영역, 뷰포트) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [react-simplikit-codemod](./packages/codemod) | `react-simplikit` 업그레이드에 맞춰 코드베이스를 고쳐 쓰는 codemod                               | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
+| 패키지                                           | 설명                                                                                             | 버전                                                                                                                          |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit)    | React 훅, 컴포넌트, 유틸리티: 상태와 로직, 브라우저 이벤트, 모바일 웹(키보드, 안전 영역, 뷰포트) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                     |
+| [@react-simplikit/codemods](./packages/codemods) | `react-simplikit` 업그레이드에 맞춰 코드베이스를 고쳐 쓰는 codemod                               | [![npm](https://img.shields.io/npm/v/@react-simplikit/codemods.svg)](https://www.npmjs.com/package/@react-simplikit/codemods) |
 
 ## 특징
 
@@ -97,7 +97,7 @@ npx skills add toss/react-simplikit --skill react-simplikit
 ```
 packages/
 ├── react-simplikit/    # 라이브러리
-├── codemod/            # react-simplikit-codemod
+├── codemods/           # @react-simplikit/codemods
 └── plugin/             # AI 코딩 어시스턴트용 에이전트 스킬
 ```
 
