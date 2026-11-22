@@ -44,16 +44,21 @@ try {
 const skill = await readVerifiedSkill(skillDirectory, 'react-simplikit');
 const codemodSkill = await readVerifiedSkill(codemodSkillDirectory, 'react-simplikit-codemod');
 
-const constants = await fs.readFile(path.join(root, 'packages/codemod/src/constants.ts'), 'utf8');
+const constants = await fs.readFile(
+  path.join(root, 'packages/codemods/src/transforms/utils/mobileToRoot/constants.ts'),
+  'utf8'
+);
 const floor = /MIN_RUNTIME_VERSION = '(.*)'/.exec(constants)?.[1];
 
 if (floor === undefined) {
-  throw new Error('MIN_RUNTIME_VERSION is missing from packages/codemod/src/constants.ts');
+  throw new Error(
+    'MIN_RUNTIME_VERSION is missing from packages/codemods/src/transforms/utils/mobileToRoot/constants.ts'
+  );
 }
 
 for (const [label, contents] of [
   ['the react-simplikit-codemod skill', codemodSkill],
-  ['packages/codemod/README.md', await fs.readFile(path.join(root, 'packages/codemod/README.md'), 'utf8')],
+  ['packages/codemods/README.md', await fs.readFile(path.join(root, 'packages/codemods/README.md'), 'utf8')],
 ] as const) {
   // The prose form, not a bare version: the JSON sample carries that and would stay green.
   assert.equal(

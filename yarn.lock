@@ -4340,6 +4340,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-simplikit/codemods@workspace:packages/codemods":
+  version: 0.0.0-use.local
+  resolution: "@react-simplikit/codemods@workspace:packages/codemods"
+  dependencies:
+    "@types/jscodeshift": "npm:^17.3.0"
+    "@types/node": "npm:^24.13.3"
+    "@types/prompts": "npm:^2.4.9"
+    "@types/semver": "npm:^7.8.0"
+    "@vitest/coverage-v8": "npm:^2.1.8"
+    commander: "npm:^13.1.0"
+    detect-indent: "npm:^7.0.2"
+    eslint: "npm:^9.39.3"
+    execa: "npm:^5.1.1"
+    fast-check: "npm:^4.9.0"
+    jscodeshift: "npm:^17.3.0"
+    prompts: "npm:^2.4.2"
+    rimraf: "npm:^6.0.1"
+    semver: "npm:^7.8.5"
+    tsdown: "npm:^0.22.14"
+    typescript: "npm:^5.7.2"
+    vitest: "npm:^2.1.8"
+  bin:
+    codemods: ./dist/bin/codemods.cjs
+  languageName: unknown
+  linkType: soft
+
 "@react-simplikit/root@workspace:.":
   version: 0.0.0-use.local
   resolution: "@react-simplikit/root@workspace:."
@@ -11156,33 +11182,6 @@ __metadata:
   checksum: 10c0/abde366f716cb3961a5a390c278375c0591bace5773e1b4420001f0a913b4dd53d490e7dea866acebcac2c0fa07378aa83702769d449449027406ed517a8ea00
   languageName: node
   linkType: hard
-
-"react-simplikit-codemod@workspace:packages/codemod":
-  version: 0.0.0-use.local
-  resolution: "react-simplikit-codemod@workspace:packages/codemod"
-  dependencies:
-    "@types/jscodeshift": "npm:^17.3.0"
-    "@types/node": "npm:^24.13.3"
-    "@types/prompts": "npm:^2.4.9"
-    "@types/semver": "npm:^7.8.0"
-    "@vitest/coverage-v8": "npm:^2.1.8"
-    commander: "npm:^13.1.0"
-    detect-indent: "npm:^7.0.2"
-    eslint: "npm:^9.39.3"
-    execa: "npm:^5.1.1"
-    fast-check: "npm:^4.9.0"
-    fast-glob: "npm:^3.3.3"
-    jscodeshift: "npm:^17.3.0"
-    prompts: "npm:^2.4.2"
-    rimraf: "npm:^6.0.1"
-    semver: "npm:^7.8.5"
-    tsdown: "npm:^0.22.14"
-    typescript: "npm:^5.7.2"
-    vitest: "npm:^2.1.8"
-  bin:
-    react-simplikit-codemod: ./dist/cli.mjs
-  languageName: unknown
-  linkType: soft
 
 "react-simplikit@workspace:*, react-simplikit@workspace:^, react-simplikit@workspace:packages/react-simplikit":
   version: 0.0.0-use.local
