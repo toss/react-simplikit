@@ -128,12 +128,17 @@ export async function transformRunner(transform?: string, path?: string, options
   const cwd = stats.isDirectory() ? target : dirname(target);
 
   if (options?.dry !== true) {
-    // A folder outside any git repository, or a machine without git, fails here and has nothing to check.
     const git = await execa('git', ['status', '--porcelain'], { cwd, reject: false });
+    // Without git, or in a folder outside any repository, there is nothing to check.
+    const outsideRepository = git.exitCode === undefined || git.stderr.includes('not a git repository');
 
-    if (!git.failed && git.stdout !== '') {
+    if (!outsideRepository && (git.failed || git.stdout !== '')) {
       if (options?.force !== true) {
-        console.error('Before we continue, please stash or commit your git changes.');
+        console.error(
+          git.failed
+            ? `Could not read the git status: ${git.stderr.trim()}`
+            : 'Before we continue, please stash or commit your git changes.'
+        );
         console.error('You may use the --force flag to override this safety check.');
         process.exit(1);
       }

@@ -7,13 +7,13 @@ Codemods for `react-simplikit`, run with [jscodeshift](https://github.com/facebo
 
 ## Usage
 
-Requires Node.js 20 or later. In your terminal, navigate into your project's folder, then run:
+Requires Node.js 22 or later. In your terminal, navigate into your project's folder, then run:
 
 ```shell
 npx @react-simplikit/codemods <transform> <path>
 ```
 
-Leave out `<transform>` or `<path>` and the CLI asks for it in a terminal; anywhere else, such as CI, it exits `1`. The command rewrites files in place, so **commit or stash your work first**, then review the diff. Outside a dry run it stops when the git working tree has uncommitted changes; `--force` runs anyway.
+Leave out `<transform>` or `<path>` and the CLI asks for it in a terminal; anywhere else, such as CI, it exits `1`. The command rewrites files in place, so **commit or stash your work first**, then review the diff. Outside a dry run it stops when the git repository holding the path has uncommitted changes anywhere, or when git cannot read its status; `--force` runs anyway.
 
 | Option                        | Meaning                                                                                                |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -24,9 +24,9 @@ Leave out `<transform>` or `<path>` and the CLI asks for it in a terminal; anywh
 | `-v, --version`               | Print the version                                                                                      |
 | `-h, --help`                  | Print the help                                                                                         |
 
-`node_modules`, `dist`, `build`, `out`, `coverage`, `.next`, `.yarn`, `.git` and `.pnp.*` are always skipped.
+Folders named `node_modules`, `dist`, `build`, `out`, `coverage`, `.next`, `.yarn` or `.git`, and `.pnp.*` files, are skipped wherever they sit inside the path.
 
-`--help` lists every transform. jscodeshift prints one line per file it could not transform (`ERR`) and one per manual follow-up (`REP`), then a summary, and a run that wrote files ends with the transform's next steps. The command exits `1` when any file failed, on an unknown transform or a path that does not exist, on uncommitted changes without `--force`, or when a prompt is cancelled. Every other file is still migrated, and running it twice is safe.
+`--help` lists every transform. jscodeshift prints one line per file it could not transform (`ERR`) and one per manual follow-up (`REP`), then a summary. Every run except a dry run ends with the transform's next steps. The command exits `1` when any file failed, on an unknown transform or a path that does not exist, on uncommitted changes or an unreadable git status without `--force`, or when a prompt is cancelled. Every other file is still migrated, and running it twice is safe.
 
 ## `mobile-to-root`
 
@@ -53,7 +53,7 @@ Source files are parsed with Babel — TypeScript and JSX, with Flow as a fallba
 - A source file that names the package where no import could be rewritten — a `moduleNameMapper` entry, say. It is reported so you can check it by hand
 - `resolutions` and `overrides` in `package.json` — reported, not edited, because their meaning differs per package manager
 - Imports it will not fold into an existing `react-simplikit` import — the specifier is rewritten in place instead:
-  - a comment sits on the import's own line, where merging would strand it — **reported**
+  - a comment sits on the import's own line, or a line comment such as `// @ts-expect-error` sits right above it, where merging would strand it — **reported**
   - the import sits inside a `declare module` block, or binds a default or namespace — not reported, because merging it by hand fails to compile rather than passing quietly
 - A file that imports one name twice, from either package. Babel refuses to parse it, so it is reported as an error. Remove the duplicate and run again
 - Your lockfile. Reinstall after the run

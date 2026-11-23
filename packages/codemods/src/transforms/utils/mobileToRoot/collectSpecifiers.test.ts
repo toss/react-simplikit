@@ -2,119 +2,273 @@ import { describe, expect, it } from 'vitest';
 
 import { collectSpecifiers, lineOf, parseSource } from './collectSpecifiers.ts';
 
-function kindsOf(code: string, fileName = 'input.tsx'): string[] {
-  return collectSpecifiers(parseSource(code, fileName)).map(hit => hit.kind);
+// The source text of every specifier found, quotes included, so a test shows exactly what would be rewritten.
+function specifiersIn(code: string, fileName = 'input.tsx') {
+  return collectSpecifiers(parseSource(code, fileName)).map(hit => code.slice(hit.literal.start, hit.literal.end));
 }
 
 describe('parseSource', () => {
-  it('parses angle-bracket casts in .ts files and JSX in .js files', () => {
-    expect(() => parseSource('const a = <number>b;', 'a.ts')).not.toThrow();
-    expect(() => parseSource('const a = <div />;', 'a.js')).not.toThrow();
+  it('parses an angle-bracket cast in a .ts file', () => {
+    const code = 'const a = <number>b;';
+
+    expect(() => parseSource(code, 'a.ts')).not.toThrow();
   });
 
-  it('throws on syntax the parser cannot read', () => {
-    expect(() => parseSource(`import broken from someIdentifier;`, 'input.ts')).toThrow();
+  it('parses JSX in a .js file', () => {
+    const code = 'const a = <div />;';
+
+    expect(() => parseSource(code, 'a.js')).not.toThrow();
   });
 
-  it('reads a CommonJS file without import or export as sloppy-mode script', () => {
+  it('reads a file without import or export as a sloppy-mode script', () => {
     const code = `var m = require('@react-simplikit/mobile');\nvar octal = 010;\n`;
 
-    expect(kindsOf(code, 'legacy.js')).toEqual(['require']);
+    expect(specifiersIn(code, 'legacy.js')).toEqual([`'@react-simplikit/mobile'`]);
   });
 
   it('reads the deprecated import assertion syntax', () => {
     const code = `import data from './a.json' assert { type: 'json' };\nimport { isIOS } from '@react-simplikit/mobile';\n`;
 
-    expect(kindsOf(code, 'input.ts')).toEqual(['import']);
+    expect(specifiersIn(code, 'input.ts')).toEqual([`'@react-simplikit/mobile'`]);
   });
 
   it('falls back to Flow for a .js file the TSX parser rejects', () => {
     const code = `// @flow\nimport { isIOS } from '@react-simplikit/mobile';\ntype Props = {| name: string |};\n`;
 
-    expect(kindsOf(code, 'flow.js')).toEqual(['import']);
+    expect(specifiersIn(code, 'flow.js')).toEqual([`'@react-simplikit/mobile'`]);
   });
 
   it('does not fall back to Flow outside JavaScript files', () => {
-    expect(() => parseSource(`type Props = {| name: string |};`, 'flow.tsx')).toThrow();
+    const code = `type Props = {| name: string |};`;
+
+    expect(() => parseSource(code, 'flow.tsx')).toThrow(SyntaxError);
   });
 
-  it('reports the TSX error when the Flow fallback fails too', () => {
-    expect(() => parseSource(`import broken from someIdentifier;`, 'input.js')).toThrow(SyntaxError);
+  it('throws on syntax no parser can read in a .ts file', () => {
+    const code = `import broken from someIdentifier;`;
+
+    expect(() => parseSource(code, 'input.ts')).toThrow(SyntaxError);
+  });
+
+  it('throws the TSX error when the Flow fallback fails too', () => {
+    const code = `import broken from someIdentifier;`;
+
+    expect(() => parseSource(code, 'input.js')).toThrow(SyntaxError);
   });
 });
 
 describe('lineOf', () => {
-  it('reports 1-based line numbers', () => {
+  it('reports line 1 for the first character', () => {
     const code = 'const a = 1;\nconst b = 2;\n';
 
     expect(lineOf(code, 0)).toBe(1);
-    expect(lineOf(code, code.indexOf('const b'))).toBe(2);
+  });
+
+  it('counts the lines before the position', () => {
+    const code = 'const a = 1;\nconst b = 2;\n';
+
+    expect(lineOf(code, 13)).toBe(2);
   });
 });
 
-describe('collectSpecifiers', () => {
-  it('finds every import form', () => {
-    expect(kindsOf(`import { useKeyboardHeight } from '@react-simplikit/mobile';`)).toEqual(['import']);
-    expect(kindsOf(`import type { SafeAreaInset } from '@react-simplikit/mobile';`)).toEqual(['import']);
-    expect(kindsOf(`import * as mobile from '@react-simplikit/mobile';`)).toEqual(['import']);
-    expect(kindsOf(`import '@react-simplikit/mobile';`)).toEqual(['import']);
+describe('collectSpecifiers — what it finds', () => {
+  it('finds a named import', () => {
+    const code = `import { useKeyboardHeight } from '@react-simplikit/mobile';`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
   });
 
-  it('finds re-exports', () => {
-    expect(kindsOf(`export { isIOS } from '@react-simplikit/mobile';`)).toEqual(['export']);
-    expect(kindsOf(`export * from '@react-simplikit/mobile';`)).toEqual(['export']);
+  it('finds a type-only import', () => {
+    const code = `import type { SafeAreaInset } from '@react-simplikit/mobile';`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
   });
 
-  it('finds require and dynamic import', () => {
-    expect(kindsOf(`const m = require('@react-simplikit/mobile');`, 'input.cjs')).toEqual(['require']);
-    expect(kindsOf(`const m = await import('@react-simplikit/mobile');`)).toEqual(['dynamic-import']);
+  it('finds a namespace import', () => {
+    const code = `import * as mobile from '@react-simplikit/mobile';`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
   });
 
-  it('finds an import type node in type position', () => {
-    expect(kindsOf(`type I = import('@react-simplikit/mobile').SafeAreaInset;`, 'input.ts')).toEqual(['import-type']);
+  it('finds a side-effect import', () => {
+    const code = `import '@react-simplikit/mobile';`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
   });
 
-  it('finds vitest and jest module mocks', () => {
-    expect(kindsOf(`vi.mock('@react-simplikit/mobile');`)).toEqual(['mock']);
-    expect(kindsOf(`jest.mock('@react-simplikit/mobile');`)).toEqual(['mock']);
-    expect(kindsOf(`jest.requireActual('@react-simplikit/mobile');`)).toEqual(['mock']);
+  it('finds a named re-export', () => {
+    const code = `export { isIOS } from '@react-simplikit/mobile';`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
   });
 
-  it('attaches the declaration only for import declarations', () => {
-    const hits = collectSpecifiers(
-      parseSource(
-        [
-          `import { isIOS } from '@react-simplikit/mobile';`,
-          `export { isAndroid } from '@react-simplikit/mobile';`,
-        ].join('\n'),
-        'input.ts'
-      )
-    );
+  it('finds a star re-export', () => {
+    const code = `export * from '@react-simplikit/mobile';`;
 
-    expect(hits[0]?.declaration).toBeDefined();
-    expect(hits[1]?.declaration).toBeUndefined();
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
   });
 
-  it('ignores anything that is not a specifier for the old package', () => {
-    expect(kindsOf(`import { useToggle } from 'react-simplikit';`)).toEqual([]);
-    expect(kindsOf(`import { x } from '@react-simplikit/mobile/extra';`)).toEqual([]);
-    expect(kindsOf(`type X = import('react').FC;`, 'input.ts')).toEqual([]);
+  it('finds require', () => {
+    const code = `const m = require('@react-simplikit/mobile');`;
 
-    expect(kindsOf(`const label = '@react-simplikit/mobile';`)).toEqual([]);
-    expect(kindsOf(`describe('@react-simplikit/mobile', () => {});`)).toEqual([]);
-
-    expect(kindsOf(`const foo = 1;\nexport { foo };`)).toEqual([]);
-
-    expect(kindsOf(`other.mock('@react-simplikit/mobile');`)).toEqual([]);
-    expect(kindsOf(`vi.spyOn('@react-simplikit/mobile');`)).toEqual([]);
-    expect(kindsOf(`a.b.mock('@react-simplikit/mobile');`)).toEqual([]);
-    expect(kindsOf(`noArgs();`)).toEqual([]);
-    expect(kindsOf(`vi['mock']('@react-simplikit/mobile');`)).toEqual([]);
-    expect(kindsOf(`require(\`\${prefix}/mobile\`);`, 'input.cjs')).toEqual([]);
+    expect(specifiersIn(code, 'input.cjs')).toEqual([`'@react-simplikit/mobile'`]);
   });
 
-  it('finds a template literal specifier without substitutions', () => {
-    expect(kindsOf(`const m = require(\`@react-simplikit/mobile\`);`, 'input.cjs')).toEqual(['require']);
-    expect(kindsOf(`const m = require(\`react-simplikit\`);`, 'input.cjs')).toEqual([]);
+  it('finds require with a template literal that has no substitutions', () => {
+    const code = 'const m = require(`@react-simplikit/mobile`);';
+
+    expect(specifiersIn(code, 'input.cjs')).toEqual(['`@react-simplikit/mobile`']);
+  });
+
+  it('finds a dynamic import', () => {
+    const code = `const m = await import('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds an import type node', () => {
+    const code = `type I = import('@react-simplikit/mobile').SafeAreaInset;`;
+
+    expect(specifiersIn(code, 'input.ts')).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds vi.mock', () => {
+    const code = `vi.mock('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds jest.mock', () => {
+    const code = `jest.mock('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds jest.requireActual', () => {
+    const code = `jest.requireActual('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds vi.doUnmock', () => {
+    const code = `vi.doUnmock('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds jest.setMock', () => {
+    const code = `jest.setMock('@react-simplikit/mobile', {});`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds jest.createMockFromModule', () => {
+    const code = `jest.createMockFromModule('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds jest.genMockFromModule', () => {
+    const code = `jest.genMockFromModule('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('finds jest.deepUnmock', () => {
+    const code = `jest.deepUnmock('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([`'@react-simplikit/mobile'`]);
+  });
+
+  it('attaches the declaration to an import and not to a re-export', () => {
+    const code = [
+      `import { isIOS } from '@react-simplikit/mobile';`,
+      `export { isAndroid } from '@react-simplikit/mobile';`,
+    ].join('\n');
+
+    const [importHit, exportHit] = collectSpecifiers(parseSource(code, 'input.ts'));
+
+    expect(importHit?.declaration).toBeDefined();
+    expect(exportHit?.declaration).toBeUndefined();
+  });
+});
+
+describe('collectSpecifiers — what it leaves alone', () => {
+  it('ignores the root package', () => {
+    const code = `import { useToggle } from 'react-simplikit';`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores a subpath of the old package', () => {
+    const code = `import { x } from '@react-simplikit/mobile/extra';`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores an import type node for another package', () => {
+    const code = `type X = import('react').FC;`;
+
+    expect(specifiersIn(code, 'input.ts')).toEqual([]);
+  });
+
+  it('ignores the name in a plain string', () => {
+    const code = `const label = '@react-simplikit/mobile';`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores the name as an argument to an unrelated function', () => {
+    const code = `describe('@react-simplikit/mobile', () => {});`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores a local re-export without a source', () => {
+    const code = `const foo = 1;\nexport { foo };`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores mock on another object', () => {
+    const code = `other.mock('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores a vi method that does not take a module', () => {
+    const code = `vi.spyOn('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores a nested member call', () => {
+    const code = `a.b.mock('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores a computed member call', () => {
+    const code = `vi['mock']('@react-simplikit/mobile');`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores a call without arguments', () => {
+    const code = `noArgs();`;
+
+    expect(specifiersIn(code)).toEqual([]);
+  });
+
+  it('ignores a template literal with substitutions', () => {
+    const code = 'require(`${prefix}/mobile`);';
+
+    expect(specifiersIn(code, 'input.cjs')).toEqual([]);
+  });
+
+  it('ignores a template literal naming another package', () => {
+    const code = 'const m = require(`react-simplikit`);';
+
+    expect(specifiersIn(code, 'input.cjs')).toEqual([]);
   });
 });

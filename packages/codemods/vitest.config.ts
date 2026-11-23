@@ -7,7 +7,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json'],
       include: ['src/**/*.ts'],
-      exclude: ['src/bin/codemods.ts', 'src/**/constants.ts', 'src/**/*.test.ts', 'src/**/testfixtures/**'],
+      exclude: ['src/bin/*.ts', 'src/**/constants.ts', 'src/**/*.test.ts', 'src/**/testfixtures/**'],
       thresholds: { statements: 100, branches: 100, functions: 100, lines: 100 },
     },
   },

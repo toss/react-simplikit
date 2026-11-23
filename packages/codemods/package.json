@@ -20,11 +20,11 @@
     "dist/**/*"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "build": "tsdown",
-    "prepublish": "yarn build",
+    "prepack": "yarn build",
     "clean": "rimraf ./dist",
     "lint": "eslint src test",
     "typecheck": "tsc --noEmit",

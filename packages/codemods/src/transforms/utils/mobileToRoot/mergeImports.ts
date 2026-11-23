@@ -2,11 +2,10 @@ import j, { type ImportDeclaration, type ImportSpecifier } from 'jscodeshift';
 
 import { lineOf, type ParsedSource, spanOf, type SpecifierHit } from './collectSpecifiers.ts';
 import { ROOT_PACKAGE_NAME } from './constants.ts';
-import type { SourceChange, SourceNote, Splice } from './types.ts';
+import type { SourceNote, Splice } from './types.ts';
 
 export type MergeResult = {
   splices: Splice[];
-  changes: SourceChange[];
   notes: SourceNote[];
   mergedDeclarations: Set<ImportDeclaration>;
 };
@@ -46,19 +45,34 @@ function deletionRange(code: string, statement: ImportDeclaration): Splice {
   return ownsLine ? { start: lineStart, end: lineEnd, text: '' } : { start, end, text: '' };
 }
 
+function lineStartOf(code: string, position: number) {
+  return code.lastIndexOf('\n', position - 1) + 1;
+}
+
+// A comment on the import's own line, or a line comment right above it such as `// @ts-expect-error`,
+// would end up on another statement once the import is removed.
 function losesComment({ code, comments }: ParsedSource, statement: ImportDeclaration) {
   const { start, end } = spanOf(statement);
   const newlineIndex = code.indexOf('\n', end);
   const lineEnd = newlineIndex === -1 ? code.length : newlineIndex;
+  const previousLineStart = lineStartOf(code, lineStartOf(code, start) - 1);
 
-  return comments.some(comment => comment.start >= start && comment.start < lineEnd);
+  return comments.some(
+    comment =>
+      (comment.start >= start && comment.start < lineEnd) ||
+      (comment.type === 'CommentLine' &&
+        comment.start >= previousLineStart &&
+        comment.end < start &&
+        code.slice(lineStartOf(code, comment.start), comment.start).trim() === '')
+  );
 }
 
 function elementSeparator(code: string, last: ImportSpecifier) {
   const lastStart = spanOf(last).start;
-  const lead = code.slice(code.lastIndexOf('\n', lastStart - 1) + 1, lastStart);
+  const lead = code.slice(lineStartOf(code, lastStart), lastStart);
+  const newline = code.includes('\r\n') ? '\r\n' : '\n';
 
-  return lead.trim() === '' ? `,\n${lead}` : ', ';
+  return lead.trim() === '' ? `,${newline}${lead}` : ', ';
 }
 
 function insertIntoNamedImports(code: string, target: PlainNamedImport, appended: readonly string[]): Splice {
@@ -86,7 +100,6 @@ export function buildMergeSplices(parsed: ParsedSource, hits: readonly Specifier
     .map(statement => plainNamedImportOf(code, statement))
     .filter(target => target !== undefined);
   const splices: Splice[] = [];
-  const changes: SourceChange[] = [];
   const notes: SourceNote[] = [];
   const mergedDeclarations = new Set<ImportDeclaration>();
   const appendedByTarget = new Map<PlainNamedImport, string[]>();
@@ -97,9 +110,14 @@ export function buildMergeSplices(parsed: ParsedSource, hits: readonly Specifier
     }
 
     const source = plainNamedImportOf(code, declaration);
-    const target = targets.find(candidate => candidate.isTypeOnly === source?.isTypeOnly);
 
-    if (source === undefined || target === undefined) {
+    if (source === undefined) {
+      continue;
+    }
+
+    const target = targets.find(candidate => candidate.isTypeOnly === source.isTypeOnly);
+
+    if (target === undefined) {
       continue;
     }
 
@@ -108,7 +126,7 @@ export function buildMergeSplices(parsed: ParsedSource, hits: readonly Specifier
     if (losesComment(parsed, declaration)) {
       notes.push({
         line,
-        reason: 'Left on its own line: a comment sits on it, and merging would strand that comment.',
+        reason: 'Left on its own line: a comment sits on it or right above it, and merging would strand that comment.',
       });
       continue;
     }
@@ -117,7 +135,6 @@ export function buildMergeSplices(parsed: ParsedSource, hits: readonly Specifier
 
     appendedByTarget.set(target, [...(appendedByTarget.get(target) ?? []), ...additions]);
     splices.push(deletionRange(code, declaration));
-    changes.push({ line, kind: 'merge' });
     mergedDeclarations.add(declaration);
   }
 
@@ -127,5 +144,5 @@ export function buildMergeSplices(parsed: ParsedSource, hits: readonly Specifier
     }
   }
 
-  return { splices, changes, notes, mergedDeclarations };
+  return { splices, notes, mergedDeclarations };
 }

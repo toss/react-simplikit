@@ -5,17 +5,16 @@ import babylon from 'jscodeshift/parser/babylon';
 import tsOptions from 'jscodeshift/parser/tsOptions';
 
 import { MOBILE_PACKAGE_NAME } from './constants.ts';
-import type { ChangeKind, Span } from './types.ts';
+import type { Comment, Span } from './types.ts';
 
 export type ParsedSource = {
   code: string;
   root: Collection<File>;
-  comments: Span[];
+  comments: Comment[];
 };
 
 export type SpecifierHit = {
   literal: Span;
-  kind: ChangeKind;
   declaration: ImportDeclaration | undefined;
 };
 
@@ -30,9 +29,14 @@ const MOCK_METHODS = new Set([
   'requireMock',
   'importActual',
   'importMock',
+  'doUnmock',
+  'deepUnmock',
+  'setMock',
+  'createMockFromModule',
+  'genMockFromModule',
 ]);
 
-type Parser = { parse: (code: string) => File & { comments: object[] } };
+type Parser = { parse: (code: string) => File & { comments: Comment[] } };
 
 // `unambiguous` reads a file without import or export as a script, so sloppy-mode CommonJS still parses.
 // `deprecatedAssertSyntax` keeps `import data from './a.json' assert { type: 'json' }` readable.
@@ -68,7 +72,7 @@ function parseFile(code: string, fileName: string) {
 export function parseSource(code: string, fileName: string): ParsedSource {
   const file = parseFile(code, fileName);
 
-  return { code, root: j(file), comments: file.comments.map(spanOf) };
+  return { code, root: j(file), comments: file.comments };
 }
 
 // Babel records the offsets on every node; ast-types leaves them out of its types.
@@ -92,14 +96,13 @@ function mobileSpecifierOf(node: object | null | undefined): Span | undefined {
   return undefined;
 }
 
-// The return annotation stays: without it the string literals below widen to `string`.
-function callKind(callee: CallExpression['callee']): ChangeKind | undefined {
+function takesModuleSpecifier(callee: CallExpression['callee']) {
   if (callee.type === 'Import') {
-    return 'dynamic-import';
+    return true;
   }
 
   if (j.Identifier.check(callee)) {
-    return callee.name === 'require' ? 'require' : undefined;
+    return callee.name === 'require';
   }
 
   if (
@@ -108,42 +111,36 @@ function callKind(callee: CallExpression['callee']): ChangeKind | undefined {
     !j.Identifier.check(callee.object) ||
     !j.Identifier.check(callee.property)
   ) {
-    return undefined;
+    return false;
   }
 
   const object = callee.object.name;
   const method = callee.property.name;
 
-  if (object === 'require' && method === 'resolve') {
-    return 'require';
-  }
-
-  return MOCK_OBJECTS.has(object) && MOCK_METHODS.has(method) ? 'mock' : undefined;
+  return (object === 'require' && method === 'resolve') || (MOCK_OBJECTS.has(object) && MOCK_METHODS.has(method));
 }
 
 export function collectSpecifiers({ root }: ParsedSource): SpecifierHit[] {
   const hits: SpecifierHit[] = [];
 
-  function add(node: object | null | undefined, kind: ChangeKind, declaration?: ImportDeclaration) {
+  function add(node: object | null | undefined, declaration?: ImportDeclaration) {
     const literal = mobileSpecifierOf(node);
 
     if (literal !== undefined) {
-      hits.push({ literal, kind, declaration });
+      hits.push({ literal, declaration });
     }
   }
 
-  root.find(j.ImportDeclaration).forEach(path => add(path.node.source, 'import', path.node));
-  root.find(j.ExportNamedDeclaration).forEach(path => add(path.node.source, 'export'));
-  root.find(j.ExportAllDeclaration).forEach(path => add(path.node.source, 'export'));
-  root.find(j.TSImportType).forEach(path => add(path.node.argument, 'import-type'));
-  root.find(j.TSExternalModuleReference).forEach(path => add(path.node.expression, 'require'));
+  root.find(j.ImportDeclaration).forEach(path => add(path.node.source, path.node));
+  root.find(j.ExportNamedDeclaration).forEach(path => add(path.node.source));
+  root.find(j.ExportAllDeclaration).forEach(path => add(path.node.source));
+  root.find(j.TSImportType).forEach(path => add(path.node.argument));
+  root.find(j.TSExternalModuleReference).forEach(path => add(path.node.expression));
   root.find(j.CallExpression).forEach(path => {
-    const kind = callKind(path.node.callee);
-
-    if (kind !== undefined) {
-      add(path.node.arguments[0], kind);
+    if (takesModuleSpecifier(path.node.callee)) {
+      add(path.node.arguments[0]);
     }
   });
 
-  return hits.toSorted((a, b) => a.literal.start - b.literal.start);
+  return hits;
 }
