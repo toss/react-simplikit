@@ -1,6 +1,6 @@
 ---
 name: react-simplikit
-description: Selects and applies react-simplikit hooks, components and utils (useDebouncedCallback, useThrottledCallback, useToggle, useBooleanState, useCounter, useList, useMap, useSet, useInterval, useTimeout, usePrevious, usePreservedCallback, useOutsideClickEffect, useIntersectionObserver, useStorageState, useLongPress, SwitchCase, Separated, mergeRefs, buildContext, ...) instead of hand-written equivalents, including the mobile-web keyboard, safe-area, visual viewport and body-scroll-lock hooks. Use when writing React state or effect logic, debouncing or throttling, boolean/counter/list/map/set state, intervals and timeouts, click-outside, long-press or double-click handling, viewport visibility or impression tracking, persisted state in localStorage/sessionStorage, conditional rendering, merging refs, React Context boilerplate, or SSR-safe browser access, and whenever the project depends on react-simplikit.
+description: Selects and applies react-simplikit hooks, components and utils (useDebouncedCallback, useThrottledCallback, useToggle, useBooleanState, useCounter, useList, useMap, useSet, useInterval, useTimeout, usePrevious, usePreservedCallback, useOutsideClickEffect, useOutsideClickRef, useIntersectionObserver, useStorageState, useLongPress, SwitchCase, Separated, mergeRefs, buildContext, ...) instead of hand-written equivalents, including the mobile-web keyboard, safe-area, visual viewport and body-scroll-lock hooks. Use when writing React state or effect logic, debouncing or throttling, boolean/counter/list/map/set state, intervals and timeouts, click-outside, long-press or double-click handling, viewport visibility or impression tracking, persisted state in localStorage/sessionStorage, conditional rendering, merging refs, React Context boilerplate, or SSR-safe browser access, and whenever the project depends on react-simplikit.
 license: MIT
 metadata:
   author: toss
@@ -40,6 +40,7 @@ Backticks in this table mark catalog entries only.
 | Effect that runs only when a condition holds                        | `useConditionalEffect`                   |
 | Side effect tied to a DOM ref (attach/detach)                       | `useRefEffect`                           |
 | Click / tap outside an element (close menu, modal)                  | `useOutsideClickEffect`                  |
+| Click / tap outside a trigger and its menu sharing one ref          | `useOutsideClickRef`                     |
 | Long press / double click                                           | `useLongPress` / `useDoubleClick`        |
 | Element enters or leaves the viewport                               | `useIntersectionObserver`                |
 | How long an element stayed visible (impression tracking)            | `useImpressionRef` / `ImpressionArea`    |
@@ -98,6 +99,7 @@ Backticks in this table mark catalog entries only.
 | [`useMap`](references/useMap.md) | A React hook that manages a key-value Map as state. |
 | [`useNetworkStatus`](references/useNetworkStatus.md) | `useNetworkStatus` is a React hook that provides access to the Network Information API. |
 | [`useOutsideClickEffect`](references/useOutsideClickEffect.md) | `useOutsideClickEffect` is a React hook that triggers a callback when a click event occurs outside the specified container(s). |
+| [`useOutsideClickRef`](references/useOutsideClickRef.md) | `useOutsideClickRef` is a React hook that returns a callback ref and calls `onOutsideClick` when a click happens outside every element the ref is attached to. |
 | [`usePageVisibility`](references/usePageVisibility.md) | `usePageVisibility` is a React hook that detects page visibility changes. |
 | [`usePageVisibilityEffect`](references/usePageVisibilityEffect.md) | `usePageVisibilityEffect` is a React hook that listens to changes in the document's visibility state and triggers a callback. |
 | [`usePreservedCallback`](references/usePreservedCallback.md) | `usePreservedCallback` is a React hook that maintains a stable reference to a callback function while ensuring it always has access to the latest state or props. |

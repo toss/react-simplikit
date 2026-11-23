@@ -18,6 +18,7 @@ description: 解決したい問題に合う React ユーティリティを選ぶ
 | コールバックの呼び出し頻度を制限する | [useThrottledCallback](/ja/hooks/useThrottledCallback)   | 指定した間隔で呼び出し頻度を制限するコールバック     |
 | 再読み込み後も状態を保持する         | [useStorageState](/ja/hooks/useStorageState)             | ブラウザストレージに保存される状態                   |
 | 要素の外側のクリックに反応する       | [useOutsideClickEffect](/ja/hooks/useOutsideClickEffect) | 外側のクリックの購読                                 |
+| 外側のクリックでメニューを閉じる     | [useOutsideClickRef](/ja/hooks/useOutsideClickRef)       | トリガーとメニューで共有する 1 つの ref              |
 | 入力欄をキーボードの上に保つ         | [useAvoidKeyboard](/ja/hooks/useAvoidKeyboard)           | 固定要素の位置を調整するスタイル                     |
 | 子要素の間に区切りを入れる           | [Separated](/ja/components/Separated)                    | 末尾には付かない区切り                               |
 | 1 つの要素に複数の ref を接続する    | [mergeRefs](/ja/utils/mergeRefs)                         | 各 ref に要素を渡す 1 つの ref コールバック          |

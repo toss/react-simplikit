@@ -18,6 +18,7 @@ description: 해결하려는 문제에 맞는 React 유틸리티 선택하기
 | 콜백 호출 빈도 제한하기       | [useThrottledCallback](/ko/hooks/useThrottledCallback)   | 설정한 간격으로 호출 빈도를 제한하는 콜백   |
 | 새로고침 후에도 상태 유지하기 | [useStorageState](/ko/hooks/useStorageState)             | 브라우저 저장소에 유지되는 상태             |
 | 요소 바깥 클릭에 반응하기     | [useOutsideClickEffect](/ko/hooks/useOutsideClickEffect) | 요소 바깥 클릭 구독                         |
+| 바깥 클릭으로 메뉴 닫기       | [useOutsideClickRef](/ko/hooks/useOutsideClickRef)       | 트리거와 메뉴가 함께 쓰는 하나의 ref        |
 | 입력창을 키보드 위에 유지하기 | [useAvoidKeyboard](/ko/hooks/useAvoidKeyboard)           | 고정 요소의 위치를 조절하는 스타일          |
 | 자식 요소 사이에 구분자 넣기  | [Separated](/ko/components/Separated)                    | 마지막 요소 뒤에는 붙지 않는 구분자         |
 | 한 요소에 여러 ref 연결하기   | [mergeRefs](/ko/utils/mergeRefs)                         | 각 ref에 요소를 전달하는 하나의 ref 콜백    |

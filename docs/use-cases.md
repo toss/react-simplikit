@@ -18,6 +18,7 @@ Call hooks at the top level of a React component or custom hook. In a framework 
 | Limit callback frequency            | [useThrottledCallback](/hooks/useThrottledCallback)   | A callback limited to the configured interval              |
 | Keep state across reloads           | [useStorageState](/hooks/useStorageState)             | State persisted in browser storage                         |
 | React to a click outside an element | [useOutsideClickEffect](/hooks/useOutsideClickEffect) | An outside-click subscription                              |
+| Close a menu on an outside click    | [useOutsideClickRef](/hooks/useOutsideClickRef)       | One ref shared by the trigger and its menu                 |
 | Keep an input above the keyboard    | [useAvoidKeyboard](/hooks/useAvoidKeyboard)           | A style for positioning a fixed element                    |
 | Insert separators between children  | [Separated](/components/Separated)                    | Separators without a trailing separator                    |
 | Attach multiple refs to one element | [mergeRefs](/utils/mergeRefs)                         | One ref callback that passes the element to each ref       |

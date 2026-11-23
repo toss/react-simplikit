@@ -33,6 +33,7 @@ export {
   useNetworkStatus,
 } from './hooks/useNetworkStatus/index.ts';
 export { useOutsideClickEffect } from './hooks/useOutsideClickEffect/index.ts';
+export { useOutsideClickRef, type UseOutsideClickRefOptions } from './hooks/useOutsideClickRef/index.ts';
 export { type PageVisibility, usePageVisibility, type VisibilityState } from './hooks/usePageVisibility/index.ts';
 export { usePageVisibilityEffect, useVisibilityEvent } from './hooks/usePageVisibilityEffect/index.ts';
 export { usePreservedCallback } from './hooks/usePreservedCallback/index.ts';

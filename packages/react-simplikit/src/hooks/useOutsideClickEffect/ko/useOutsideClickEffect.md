@@ -1,6 +1,6 @@
 # useOutsideClickEffect
 
-`useOutsideClickEffect`는 지정한 컨테이너 외부에서 클릭 이벤트가 발생하면 콜백을 실행하는 리액트 훅이에요. 외부를 클릭했을 때 모달, 드롭다운, 툴팁 같은 UI 컴포넌트를 닫는 데 유용해요.
+`useOutsideClickEffect`는 지정한 컨테이너 외부에서 클릭 이벤트가 발생하면 콜백을 실행하는 리액트 훅이에요. 외부를 클릭했을 때 모달, 드롭다운, 툴팁 같은 UI 컴포넌트를 닫는 데 유용해요. 여러 요소를 각각 상태로 관리하지 않고 내부로 취급하려면 모든 요소에 연결할 ref 하나를 반환하는 [`useOutsideClickRef`](/ko/hooks/useOutsideClickRef)를 사용하세요.
 
 ## 인터페이스
 
