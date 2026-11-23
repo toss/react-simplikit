@@ -29,8 +29,13 @@ type OneOrMore<T> = T | T[];
  */
 export function useOutsideClickEffect(container: OneOrMore<HTMLElement | null>, callback: () => void) {
   const containers = useRef<HTMLElement[]>([]);
+  const isActive = useRef(true);
 
   const handleDocumentClick = usePreservedCallback(({ target }: MouseEvent | TouchEvent) => {
+    if (!isActive.current) {
+      return;
+    }
+
     if (target === null) {
       return;
     }
@@ -46,28 +51,42 @@ export function useOutsideClickEffect(container: OneOrMore<HTMLElement | null>, 
     callback();
   });
 
-  useEffect(() => {
-    containers.current = [container].flat(1).filter(item => item != null);
-  }, [container]);
+  useEffect(
+    function updateContainers() {
+      const nextContainers = [container].flat(1).filter(item => item != null);
 
-  useEffect(() => {
-    // React runs the effects of a click's update before that click reaches `document`, so the click that
-    // mounted this hook (e.g. the one that opened a popup) would arrive here as an outside click.
-    // `window.event` is that click while the effect runs.
-    const mountingEvent = window.event;
+      // React can run this effect while the click that rendered a container (e.g. the one that opened a popup)
+      // is still on its way to `document`. Ignore clicks until that dispatch is over, so the same click is not
+      // treated as an outside click.
+      if (nextContainers.some(item => !containers.current.includes(item))) {
+        isActive.current = false;
+      }
 
-    function handleClick(event: MouseEvent) {
-      if (event === mountingEvent) {
+      containers.current = nextContainers;
+
+      if (isActive.current) {
         return;
       }
 
-      handleDocumentClick(event);
-    }
+      const timeoutId = setTimeout(function activate() {
+        isActive.current = true;
+      });
 
-    document.addEventListener('click', handleClick);
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    },
+    [container]
+  );
 
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, [handleDocumentClick]);
+  useEffect(
+    function listenToDocumentClick() {
+      document.addEventListener('click', handleDocumentClick);
+
+      return () => {
+        document.removeEventListener('click', handleDocumentClick);
+      };
+    },
+    [handleDocumentClick]
+  );
 }

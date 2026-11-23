@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { flushSync } from 'react-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useOutsideClickEffect } from './useOutsideClickEffect.ts';
+
+// A newly rendered container ignores clicks until the current task ends, so wait for that before clicking.
+async function waitForActivation() {
+  await act(() => new Promise(resolve => setTimeout(resolve, 0)));
+}
 
 describe('useOutsideClickEffect', () => {
   const TestComponent = ({ onOutsideClick }: { onOutsideClick: () => void }) => {
@@ -43,6 +48,7 @@ describe('useOutsideClickEffect', () => {
   it('should call callback when clicking outside', async () => {
     const onOutsideClick = vi.fn();
     render(<TestComponent onOutsideClick={onOutsideClick} />);
+    await waitForActivation();
 
     fireEvent.click(screen.getByTestId('outside'));
     expect(onOutsideClick).toHaveBeenCalledTimes(1);
@@ -59,9 +65,10 @@ describe('useOutsideClickEffect', () => {
     expect(onOutsideClick).not.toHaveBeenCalled();
   });
 
-  it('should handle multiple containers', () => {
+  it('should handle multiple containers', async () => {
     const onOutsideClick = vi.fn();
     render(<MultipleContainers onOutsideClick={onOutsideClick} />);
+    await waitForActivation();
 
     // 외부 요소 클릭
     fireEvent.click(screen.getByTestId('outside'));
@@ -74,9 +81,10 @@ describe('useOutsideClickEffect', () => {
     expect(onOutsideClick).toHaveBeenCalledTimes(1);
   });
 
-  it('should cleanup event listeners', () => {
+  it('should cleanup event listeners', async () => {
     const onOutsideClick = vi.fn();
     const { unmount } = render(<TestComponent onOutsideClick={onOutsideClick} />);
+    await waitForActivation();
 
     fireEvent.click(screen.getByTestId('outside'));
     expect(onOutsideClick).toHaveBeenCalledTimes(1);
@@ -114,7 +122,7 @@ describe('useOutsideClickEffect', () => {
     expect(onOutsideClick).not.toHaveBeenCalled();
   });
 
-  it('should not call callback for the click that mounted it', () => {
+  it('should not call callback for the click that mounted it', async () => {
     const onOutsideClick = vi.fn();
 
     const Popup = () => {
@@ -145,13 +153,76 @@ describe('useOutsideClickEffect', () => {
     fireEvent.click(screen.getByTestId('trigger'));
     expect(onOutsideClick).not.toHaveBeenCalled();
 
+    await waitForActivation();
+
     fireEvent.click(screen.getByTestId('trigger'));
     expect(onOutsideClick).toHaveBeenCalledTimes(1);
   });
 
-  it('should handle null target event', () => {
+  it('should not call callback for the click that renders the container of an already mounted hook', async () => {
+    const onOutsideClick = vi.fn();
+
+    const Menu = () => {
+      const [isOpen, setIsOpen] = useState(false);
+      const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
+
+      useOutsideClickEffect(containerRef, onOutsideClick);
+
+      return (
+        <>
+          <button data-testid="trigger" onClick={() => flushSync(() => setIsOpen(true))}>
+            Open
+          </button>
+          {isOpen && <div ref={setContainerRef}>Menu</div>}
+        </>
+      );
+    };
+
+    render(<Menu />);
+    await waitForActivation();
+
+    fireEvent.click(screen.getByTestId('trigger'));
+    expect(onOutsideClick).not.toHaveBeenCalled();
+
+    await waitForActivation();
+
+    fireEvent.click(screen.getByTestId('trigger'));
+    expect(onOutsideClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call callback for an outside click that re-renders with the same containers', async () => {
+    const onOutsideClick = vi.fn();
+
+    const Counter = () => {
+      const [count, setCount] = useState(0);
+      const [container1Ref, setContainer1Ref] = useState<HTMLDivElement | null>(null);
+      const [container2Ref, setContainer2Ref] = useState<HTMLDivElement | null>(null);
+
+      // A new array on every render, with the same elements.
+      useOutsideClickEffect([container1Ref, container2Ref], onOutsideClick);
+
+      return (
+        <>
+          <button data-testid="outside" onClick={() => flushSync(() => setCount(count + 1))}>
+            {count}
+          </button>
+          <div ref={setContainer1Ref}>Container 1</div>
+          <div ref={setContainer2Ref}>Container 2</div>
+        </>
+      );
+    };
+
+    render(<Counter />);
+    await waitForActivation();
+
+    fireEvent.click(screen.getByTestId('outside'));
+    expect(onOutsideClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle null target event', async () => {
     const onOutsideClick = vi.fn();
     render(<TestComponent onOutsideClick={onOutsideClick} />);
+    await waitForActivation();
 
     const nullTargetEvent = new MouseEvent('click', {
       bubbles: true,
