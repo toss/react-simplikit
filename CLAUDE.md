@@ -101,7 +101,7 @@ Never initialize state with browser API calls (causes hydration mismatch).
 
 ## Testing
 
-- **100% coverage mandatory** — Enforced by Vitest coverage threshold. The codemods package excludes `src/bin/codemods.ts`, because its e2e suite runs the built bin in a child process where v8 cannot attribute the lines back, and `constants.ts`, which holds no executable statements. An excluded file still needs its behaviour covered somewhere — the bin's `-v`, `-h` and exit codes are asserted by the e2e suite
+- **100% coverage mandatory** — Enforced by Vitest coverage threshold. The codemods package excludes `src/bin/*.ts`, because its e2e suite runs the built bin in a child process where v8 cannot attribute the lines back, and `constants.ts`, which holds no executable statements. An excluded file still needs its behaviour covered somewhere — the bin's `-v`, `-h` and exit codes are asserted by the e2e suite
 - **SSR tests required** — All hooks accessing browser APIs must have `.ssr.test.ts`
 - **Test file name**: `<name>.test.ts`; older folders still use `<name>.spec.ts` — keep whichever the folder has
 - **SSR pattern**:

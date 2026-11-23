@@ -16,7 +16,7 @@ Do **not** run this when the project has no `@react-simplikit/mobile` dependency
 
 ## Preconditions
 
-- Node.js 20 or later.
+- Node.js 22 or later.
 - The working tree is committed or stashed. This command rewrites files in place and has no undo of its own, so outside `--dry` it refuses to run on uncommitted changes and exits `1`. Pass `--force` only when the user has said to run on a dirty tree.
 
 ## Commands
@@ -47,10 +47,10 @@ npx @react-simplikit/codemods mobile-to-root src
 
 The run is jscodeshift's, so its lines follow jscodeshift's format:
 
-- ` ERR <file> Transformation error (...)` — the file could not be parsed or transformed. It was left untouched
-- ` REP <file> <message>` — a manual follow-up. In a source file the message starts with `line <n>:` and names either an import the codemod deliberately left on its own or a mention of the package it could not rewrite, such as a `moduleNameMapper` entry. In a `package.json` it names a field to check by hand: an `overrides` or `resolutions` entry it did not edit, or a dependency whose `workspace:`/`catalog:`/`file:` spec it could not check
+- ` ERR <file> Transformation error (...)`, followed by the error's stack — the file could not be parsed or transformed. It was left untouched
+- ` REP <file> <message>` — a manual follow-up. In a source file the message starts with `line <n>:` and names either an import the codemod deliberately left on its own (a comment sits on it or right above it) or a mention of the package it could not rewrite, such as a `moduleNameMapper` entry or a subpath import. In a `package.json` it names a field to check by hand: an `overrides` or `resolutions` entry it did not edit, a dependency whose `workspace:`/`catalog:`/`file:` spec it could not check, or a mention outside the dependency fields
 - `Results:` with counts of `errors`, `unmodified`, `skipped` and `ok` — `ok` is the number of files rewritten
-- `Next steps:` — printed after a run that wrote files. It repeats the steps under **After the run** below
+- `Next steps:` — printed after every run except a dry run. It repeats the steps under **After the run** below
 
 ## After the run
 
@@ -61,9 +61,9 @@ The run is jscodeshift's, so its lines follow jscodeshift's format:
 
 ## Failure handling
 
-| Exit code | What to do                                                                                                                                                                                                                                |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `1`       | The transform name or the path was wrong, or the working tree has uncommitted changes — stderr says which. Otherwise some files could not be processed — they are the `ERR` lines, and every other file was migrated. Fix those and rerun |
-| `0`       | Done. Review the diff                                                                                                                                                                                                                     |
+| Exit code | What to do                                                                                                                                                                                                                                                          |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `1`       | The transform name or the path was wrong, or the git repository has uncommitted changes or an unreadable status — stderr says which. Otherwise some files could not be processed — they are the `ERR` lines, and every other file was migrated. Fix those and rerun |
+| `0`       | Done. Review the diff                                                                                                                                                                                                                                               |
 
 A file that imports the same name twice — once from each package, say — fails to parse. Remove the duplicate import and rerun.
