@@ -1,0 +1,2 @@
+# Codemod fixtures are compared byte for byte, CRLF and BOM included.
+packages/codemods/src/transforms/testfixtures/** -text

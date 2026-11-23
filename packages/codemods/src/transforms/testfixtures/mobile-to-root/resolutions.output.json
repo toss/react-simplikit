@@ -1,0 +1,5 @@
+{
+  "name": "monorepo",
+  "workspaces": ["apps/*", "packages/*"],
+  "resolutions": { "@react-simplikit/mobile": "0.1.0" }
+}
