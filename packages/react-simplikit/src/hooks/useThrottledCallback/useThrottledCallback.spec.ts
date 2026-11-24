@@ -302,21 +302,25 @@ describe('useThrottledCallback', () => {
     expect(result.current).not.toBe(throttled);
   });
 
-  it('drops a pending call and returns a new function when leading or trailing changes', () => {
-    const callback = vi.fn();
-    const { result, rerender } = renderHookSSR(
-      ({ trailing }) => useThrottledCallback({ callback, throttleMs: 100, leading: false, trailing }),
-      { initialProps: { trailing: true } }
-    );
-    const throttled = result.current;
+  it.each(['leading', 'trailing'] as const)(
+    'drops a pending call and returns a new function when %s changes',
+    option => {
+      const callback = vi.fn();
+      const initialProps = { leading: false, trailing: true };
+      const { result, rerender } = renderHookSSR(
+        ({ leading, trailing }) => useThrottledCallback({ callback, throttleMs: 100, leading, trailing }),
+        { initialProps }
+      );
+      const throttled = result.current;
 
-    throttled('pending');
-    rerender({ trailing: false });
-    vi.advanceTimersByTime(100);
+      throttled('pending');
+      rerender({ ...initialProps, [option]: !initialProps[option] });
+      vi.advanceTimersByTime(100);
 
-    expect(callback).not.toBeCalled();
-    expect(result.current).not.toBe(throttled);
-  });
+      expect(callback).not.toBeCalled();
+      expect(result.current).not.toBe(throttled);
+    }
+  );
 
   it('keeps working under StrictMode', () => {
     const callback = vi.fn();

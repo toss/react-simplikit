@@ -246,21 +246,25 @@ describe('useDebouncedCallback', () => {
     expect(result.current).not.toBe(debounced);
   });
 
-  it('drops a pending call and returns a new function when leading or trailing changes', () => {
-    const callback = vi.fn();
-    const { result, rerender } = renderHookSSR(
-      ({ leading }) => useDebouncedCallback({ callback, debounceMs: 100, leading }),
-      { initialProps: { leading: false } }
-    );
-    const debounced = result.current;
+  it.each(['leading', 'trailing'] as const)(
+    'drops a pending call and returns a new function when %s changes',
+    option => {
+      const callback = vi.fn();
+      const initialProps = { leading: false, trailing: true };
+      const { result, rerender } = renderHookSSR(
+        ({ leading, trailing }) => useDebouncedCallback({ callback, debounceMs: 100, leading, trailing }),
+        { initialProps }
+      );
+      const debounced = result.current;
 
-    debounced('pending');
-    rerender({ leading: true });
-    vi.advanceTimersByTime(100);
+      debounced('pending');
+      rerender({ ...initialProps, [option]: !initialProps[option] });
+      vi.advanceTimersByTime(100);
 
-    expect(callback).not.toBeCalled();
-    expect(result.current).not.toBe(debounced);
-  });
+      expect(callback).not.toBeCalled();
+      expect(result.current).not.toBe(debounced);
+    }
+  );
 
   it('forwards the updater function of a state setter', () => {
     const { result } = renderHookSSR(() => {
