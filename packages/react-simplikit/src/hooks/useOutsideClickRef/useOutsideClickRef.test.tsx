@@ -610,6 +610,34 @@ describe('useOutsideClickRef', () => {
     expect(onOutsideClick).toHaveBeenCalledTimes(1);
   });
 
+  // Documents a known limit: `ref(null)` cannot tell which element left, so an element the ref moves away from
+  // stays attached while it is still rendered. A ref cleanup would fix it, but React 18 ignores the cleanup and
+  // React 19 also runs it when Suspense hides content (see the test above). Revisit once only React 19+ is supported.
+  it('keeps an element the ref moved away from as attached while it stays rendered', () => {
+    const onOutsideClick = vi.fn();
+
+    function List({ selected }: { selected: number }) {
+      const ref = useOutsideClickRef({ onOutsideClick });
+
+      return (
+        <ul>
+          {[0, 1].map(i => (
+            <li key={i} ref={i === selected ? ref : undefined} data-testid={`item-${i}`}>
+              Item {i}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    const { rerender } = render(<List selected={0} />);
+    rerender(<List selected={1} />);
+
+    pointerClick(screen.getByTestId('item-0'));
+
+    expect(onOutsideClick).not.toHaveBeenCalled();
+  });
+
   it('ignores a click event without a target', () => {
     const onOutsideClick = vi.fn();
     render(<Container onOutsideClick={onOutsideClick} />);
