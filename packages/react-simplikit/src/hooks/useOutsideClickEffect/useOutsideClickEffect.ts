@@ -68,9 +68,9 @@ export function useOutsideClickEffect(container: OneOrMore<HTMLElement | null>, 
         return;
       }
 
-      const timeoutId = setTimeout(function activate() {
+      const timeoutId = setTimeout(() => {
         isActive.current = true;
-      });
+      }, 0);
 
       return () => {
         clearTimeout(timeoutId);
