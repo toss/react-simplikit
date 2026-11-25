@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { isServer } from '../../utils/isServer/index.ts';
+import { throttle } from '../useThrottle/throttle.ts';
 
 type ScrollDirection = 'up' | 'down' | null;
 
@@ -71,7 +72,6 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}): Scr
   });
 
   const lastScrollYRef = useRef(isServer() ? 0 : window.scrollY);
-  const throttleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const updateScrollDirection = useCallback(
     ({ currentScrollY, lastScrollY }: { currentScrollY: number; lastScrollY: number }) => {
@@ -88,39 +88,25 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}): Scr
     []
   );
 
-  const startThrottle = useCallback(() => {
-    throttleTimerRef.current = setTimeout(function clearThrottle() {
-      throttleTimerRef.current = null;
-    }, throttleMs);
-  }, [throttleMs]);
-
   useEffect(
     function handleScrollDirectionChange() {
-      function handleScroll() {
-        if (throttleTimerRef.current != null) {
-          return;
-        }
-
+      // The trailing edge re-checks the position, so a scroll that stops inside the window is not lost.
+      const handleScroll = throttle(function updateFromScrollY() {
         const currentScrollY = window.scrollY;
         const lastScrollY = lastScrollYRef.current;
 
         lastScrollYRef.current = currentScrollY;
-        startThrottle();
         updateScrollDirection({ currentScrollY, lastScrollY });
-      }
+      }, throttleMs);
 
       window.addEventListener('scroll', handleScroll, { passive: true });
 
       return function cleanup() {
         window.removeEventListener('scroll', handleScroll);
-        if (throttleTimerRef.current != null) {
-          clearTimeout(throttleTimerRef.current);
-          // The cleared timer never resets the ref, so reset it here or the next listener ignores every scroll.
-          throttleTimerRef.current = null;
-        }
+        handleScroll.cancel();
       };
     },
-    [startThrottle, updateScrollDirection]
+    [throttleMs, updateScrollDirection]
   );
 
   return scrollInfo;

@@ -29,8 +29,13 @@ type OneOrMore<T> = T | T[];
  */
 export function useOutsideClickEffect(container: OneOrMore<HTMLElement | null>, callback: () => void) {
   const containers = useRef<HTMLElement[]>([]);
+  const isActive = useRef(true);
 
   const handleDocumentClick = usePreservedCallback(({ target }: MouseEvent | TouchEvent) => {
+    if (!isActive.current) {
+      return;
+    }
+
     if (target === null) {
       return;
     }
@@ -46,15 +51,42 @@ export function useOutsideClickEffect(container: OneOrMore<HTMLElement | null>, 
     callback();
   });
 
-  useEffect(() => {
-    containers.current = [container].flat(1).filter(item => item != null);
-  }, [container]);
+  useEffect(
+    function updateContainers() {
+      const nextContainers = [container].flat(1).filter(item => item != null);
 
-  useEffect(() => {
-    document.addEventListener('click', handleDocumentClick);
+      // React can run this effect while the click that rendered a container (e.g. the one that opened a popup)
+      // is still on its way to `document`. Ignore clicks until that dispatch is over, so the same click is not
+      // treated as an outside click.
+      if (nextContainers.some(item => !containers.current.includes(item))) {
+        isActive.current = false;
+      }
 
-    return () => {
-      document.removeEventListener('click', handleDocumentClick);
-    };
-  }, [handleDocumentClick]);
+      containers.current = nextContainers;
+
+      if (isActive.current) {
+        return;
+      }
+
+      const timeoutId = setTimeout(() => {
+        isActive.current = true;
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    },
+    [container]
+  );
+
+  useEffect(
+    function listenToDocumentClick() {
+      document.addEventListener('click', handleDocumentClick);
+
+      return () => {
+        document.removeEventListener('click', handleDocumentClick);
+      };
+    },
+    [handleDocumentClick]
+  );
 }
