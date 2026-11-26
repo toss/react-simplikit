@@ -38,7 +38,7 @@ function SearchInput() {
   const [query, setQuery] = useState('');
 
   const debouncedSearch = useDebouncedCallback({
-    onChange: (value: string) => {
+    callback: (value: string) => {
       // Llamada real a la API
       searchAPI(value);
     },

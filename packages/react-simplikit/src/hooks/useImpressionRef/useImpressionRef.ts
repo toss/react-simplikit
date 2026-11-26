@@ -56,22 +56,26 @@ export function useImpressionRef<Element extends HTMLElement>({
   // The last value handed to the debounced handler, which is not the same as the last one delivered.
   // The unmount effect below needs to know an end was requested even while it is still on the timer.
   const requestedImpressionRef = useRef(false);
-  // An element that was never impressed can still report `false` (it starts outside the viewport,
-  // or the tab is hidden before it ever intersects); an end without a start must not be emitted.
+  // Whether the last emitted event was a start. The debounce runs every settled call, including one that
+  // lands back on the side already emitted (an element that leaves and returns before the end is delivered),
+  // so a start is not emitted twice in a row. An element that was never impressed can still report `false`
+  // (it starts outside the viewport, or the tab is hidden before it ever intersects), so an end needs a start.
   const hasImpressionStartedRef = useRef(false);
   const impressionEventHandler = useDebouncedCallback({
     debounceMs: timeThresholdMs,
-    onChange: (impressed: boolean) => {
+    callback: (impressed: boolean) => {
+      if (impressed === hasImpressionStartedRef.current) {
+        return;
+      }
+
+      hasImpressionStartedRef.current = impressed;
+
       if (impressed) {
-        hasImpressionStartedRef.current = true;
         impressionStartHandler();
         return;
       }
 
-      if (hasImpressionStartedRef.current) {
-        hasImpressionStartedRef.current = false;
-        impressionEndHandler();
-      }
+      impressionEndHandler();
     },
     leading: true,
   });
