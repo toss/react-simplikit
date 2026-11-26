@@ -1,5 +1,132 @@
 # react-simplikit
 
+## 1.0.0-rc.0
+
+### Major Changes
+
+- [#549](https://github.com/toss/react-simplikit/pull/549) [`4ee9b53`](https://github.com/toss/react-simplikit/commit/4ee9b53e4361e6083e314b5e01bc54e8b1cd9d72) Thanks [@Antoliny0919](https://github.com/Antoliny0919)! - Rename the useDoubleClick options click, doubleClick, and delay to onClick, onDoubleClick, and delayMs, respectively.
+
+  Rename the initial value parameter of useList, useMap, and useSet from initialState to initialValue.
+
+- [#552](https://github.com/toss/react-simplikit/pull/552) [`d5a46be`](https://github.com/toss/react-simplikit/commit/d5a46be97000eaa8612c3660f5aa966aacbb6fd6) Thanks [@Antoliny0919](https://github.com/Antoliny0919)! - Time-related options and parameters now include `Ms` in their names.
+  These option keys are renamed, so existing calls need to be updated:
+
+  - `useDebouncedCallback`: `timeThreshold` → `debounceMs`
+  - `useThrottledCallback`: `timeThreshold` → `throttleMs`
+  - `useImpressionRef`, `ImpressionArea`: `timeThreshold` → `timeThresholdMs`
+  - `useLongPress`: `delay` → `delayMs`
+  - `useAvoidKeyboard`: `transitionDuration` → `transitionDurationMs`
+
+  ```ts
+  // before
+  useDebouncedCallback({ onChange: setQuery, timeThreshold: 300 });
+  // after
+  useDebouncedCallback({ onChange: setQuery, debounceMs: 300 });
+  ```
+
+  The positional `wait` parameter of `useDebounce`, `useDebouncedValue`, `useThrottle` and `useThrottledValue` is now `debounceMs` / `throttleMs`. Calls like `useDebounce(fn, 300)` keep working.
+
+- [#599](https://github.com/toss/react-simplikit/pull/599) [`144948e`](https://github.com/toss/react-simplikit/commit/144948eb1fb457f238db8b7204afa60bded86549) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `useScrollDirection`, `useVisualViewport`, `useNetworkStatus`, `usePageVisibility` and `useSafeAreaInset` no longer initialize state from browser APIs. The first client render now returns the same value as the server, and the browser value arrives after mount. Before, rendering the value caused a hydration mismatch.
+
+  The first render changes in client-only apps too:
+
+  | Hook                 | First render                                      |
+  | -------------------- | ------------------------------------------------- |
+  | `useScrollDirection` | `position: 0`                                     |
+  | `useVisualViewport`  | `viewport: null`                                  |
+  | `useNetworkStatus`   | `{}`                                              |
+  | `usePageVisibility`  | `{ isVisible: true, visibilityState: 'visible' }` |
+  | `useSafeAreaInset`   | `{ top: 0, bottom: 0, left: 0, right: 0 }`        |
+
+- [#561](https://github.com/toss/react-simplikit/pull/561) [`cf2626b`](https://github.com/toss/react-simplikit/commit/cf2626b8457c4986b3f8c7fa050992eb84caf32b) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `subscribeKeyboardHeight` now defaults `immediate` to `true`, matching `useKeyboardHeight`. The callback runs once with the current keyboard height right after subscribing. Pass `immediate: false` to keep the previous behavior. `useKeyboardHeight` and `useAvoidKeyboard` are unaffected.
+
+  ```ts
+  // before: the callback waits for the first resize or scroll event
+  subscribeKeyboardHeight({ callback });
+
+  // after: the callback also runs once right after subscribing
+  subscribeKeyboardHeight({ callback });
+
+  // to keep the previous behavior
+  subscribeKeyboardHeight({ callback, immediate: false });
+  ```
+
+- [#548](https://github.com/toss/react-simplikit/pull/548) [`15aea8a`](https://github.com/toss/react-simplikit/commit/15aea8a81b788353889c9a941ef5f545cc5f07e8) Thanks [@Antoliny0919](https://github.com/Antoliny0919)! - Replace the `edges` option in `useThrottle` and `useThrottledCallback` with optional `leading` and `trailing` booleans. Both default to `true`, preserving the behavior when options are omitted.
+
+- [#532](https://github.com/toss/react-simplikit/pull/532) [`78788e2`](https://github.com/toss/react-simplikit/commit/78788e2d70b74fa7eeca2bec2eb297ee4027dfbc) Thanks [@mnxmnz](https://github.com/mnxmnz)! - `useBooleanState`, `useStorageState` and `useCounter` now return `[value, actions]`, matching `useList`, `useMap` and `useSet`. The actions object keeps the same reference across renders.
+
+  ```ts
+  // before
+  const [isOpen, setTrue, setFalse, toggle] = useBooleanState(false);
+  const [token, setToken, refreshToken] = useStorageState<string>('token');
+  const { count, increment, decrement, reset, setCount } = useCounter(0);
+
+  // after
+  const [isOpen, { setTrue, setFalse, toggle }] = useBooleanState(false);
+  const [token, { setValue, refresh }] = useStorageState<string>('token');
+  const [count, { increment, decrement, reset, setCount }] = useCounter(0);
+  ```
+
+  `useToggle` keeps its `[value, toggle]` signature and now declares its return type, so React 18 consumers no longer see the React 19 `ActionDispatch` type.
+
+- [#564](https://github.com/toss/react-simplikit/pull/564) [`1a0a491`](https://github.com/toss/react-simplikit/commit/1a0a491517903f554f0963d95efb16943edde446) Thanks [@hyesungoh](https://github.com/hyesungoh)! - `useStorageState` now types its state as `T` instead of `Serializable<T>`, so `null` in a union and `interface` types are kept. With `<string | null>`, the state was typed `string` and is now `string | null`.
+
+  Without `serializer` and `deserializer`, the value is stored as JSON and is now checked all the way down. Setting a value with a `Date`, `Map`, class instance, function, `NaN` or `Infinity` anywhere in it throws with its path. Before, such a nested value was silently changed or dropped: a `Date` became a string, a `Map` became `{}`, `NaN` became `null`, and a function disappeared. `defaultValue` is checked on mount, even when storage already holds a value.
+
+  `serializer` and `deserializer` must be passed together. A lone one is a type error and is ignored at runtime. When both are passed, the value is not checked, so a `Date` default works, and the callback parameters are typed from `defaultValue`.
+
+  `refresh` now reads storage again without writing to it. Before, it wrote the current value back: an empty key got `defaultValue`, an unreadable value was replaced with `defaultValue` or removed, and a function stored with `serializer` and `deserializer` was run as an updater. Call `refresh` when `deserializer` changes what it returns for the same stored string.
+
+  ```ts
+  // before: the state was typed `string`, though it can be `null`
+  const [token] = useStorageState<string | null>('token', {
+    defaultValue: null,
+  });
+
+  // after: the state is typed `string | null`
+  const [token] = useStorageState<string | null>('token', {
+    defaultValue: null,
+  });
+
+  // before: stored as `{"at":"2026-01-01T00:00:00.000Z"}` and read back as a string
+  setValue({ at: new Date() });
+
+  // after: throws "value.at is not JSON-serializable", so store a Date with both functions
+  useStorageState('at', {
+    defaultValue: new Date(),
+    serializer: date => date.toISOString(),
+    deserializer: text => new Date(text),
+  });
+  ```
+
+- [#530](https://github.com/toss/react-simplikit/pull/530) [`c6511ef`](https://github.com/toss/react-simplikit/commit/c6511efd855b43607ee8c512aca9104819585800) Thanks [@mnxmnz](https://github.com/mnxmnz)! - `useInterval` and `useTimeout` now take a single options object, with the callback as `onTick` and `onTimeout` and the delay as `delayMs`. `useInterval` no longer accepts a bare number as its delay.
+
+  ```ts
+  // before
+  useInterval(poll, 1000);
+  useInterval(poll, { delay: 1000, immediate: true });
+  useTimeout(close, 3000);
+
+  // after
+  useInterval({ onTick: poll, delayMs: 1000 });
+  useInterval({ onTick: poll, delayMs: 1000, immediate: true });
+  useTimeout({ onTimeout: close, delayMs: 3000 });
+  ```
+
+- [#609](https://github.com/toss/react-simplikit/pull/609) [`30b781d`](https://github.com/toss/react-simplikit/commit/30b781d2e8b23f69f996e2f3dab451f5fa153156) Thanks [@Choi-Jung-Hyeon](https://github.com/Choi-Jung-Hyeon)! - `useGeolocation` now restarts a watch started with `startTracking()` when `enableHighAccuracy`, `maximumAge` or `timeout` changes, the same way `mountBehavior: 'watch'` already did. Before, the watch kept its original options until `stopTracking()` and `startTracking()` were called again. A stopped watch is not started again by an option change.
+
+### Minor Changes
+
+- [#545](https://github.com/toss/react-simplikit/pull/545) [`9d16479`](https://github.com/toss/react-simplikit/commit/9d16479f53552bc1d4acad4af26ef1a2c9484a45) Thanks [@hyesungoh](https://github.com/hyesungoh)! - Add `useCallbackOnce`, which runs a callback only once until its `deps` change and has the same signature and behavior as `useCallbackOncePerRender`. `useCallbackOncePerRender` is now deprecated in favor of `useCallbackOnce` and still works as an alias of it. The second example now lists `userId` in the effect's dependencies, because the returned function keeps the same reference and an effect keyed only on it does not run again when `deps` change.
+
+- [#558](https://github.com/toss/react-simplikit/pull/558) [`71c1a07`](https://github.com/toss/react-simplikit/commit/71c1a078b6a2018479841b48254e4a8a3cc14454) Thanks [@Antoliny0919](https://github.com/Antoliny0919)! - Add `useDebouncedState` and `useThrottledState`, which manage state and return debounced and throttled setters, respectively. Both hooks support `leading` and `trailing` options and cancel pending updates on unmount or when timing options change.
+
+- [#546](https://github.com/toss/react-simplikit/pull/546) [`83ae1a3`](https://github.com/toss/react-simplikit/commit/83ae1a3aef35d0ce47872e8312fe9923b6fadcd0) Thanks [@hyesungoh](https://github.com/hyesungoh)! - Add `usePageVisibilityEffect`, which runs a callback when the page visibility changes and pairs by name with `usePageVisibility`, which returns the same value as state. `useVisibilityEvent` is deprecated in favor of `usePageVisibilityEffect` and still works as before, since it is now the same function under its old name. This reverses the note from [#435](https://github.com/toss/react-simplikit/issues/435) that `useVisibilityEvent` is no longer deprecated. It is deprecated again because of the rename, not because it is going away: it keeps working throughout v1 and may be removed in a later major version.
+
+### Patch Changes
+
+- [#544](https://github.com/toss/react-simplikit/pull/544) [`917b09b`](https://github.com/toss/react-simplikit/commit/917b09bcb46ba11df420a6a292a0379f0d149987) Thanks [@hyesungoh](https://github.com/hyesungoh)! - Rename the comparison parameter of `usePrevious` and `usePreservedReference` to `equalityFn`, matching `useControlledState`. `usePrevious` now compares with `Object.is` by default, so rendering `NaN` again no longer overwrites the previous value, and a change between `0` and `-0` is detected.
+
 ## 0.4.2
 
 ### Patch Changes
