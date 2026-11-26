@@ -271,4 +271,13 @@ describe('useVisualViewport', () => {
     expect(result.current.viewport?.scale).toBe(0.5);
     expect(result.current.viewport?.width).toBe(750);
   });
+
+  it('should hydrate without a mismatch and then sync to the browser value', () => {
+    const { result, onRecoverableError } = renderHookSSR.hydrated(() => useVisualViewport());
+
+    expect(onRecoverableError).not.toHaveBeenCalled();
+    expect(result.current).toEqual({
+      viewport: { width: 375, height: 667, offsetLeft: 0, offsetTop: 0, scale: 1 },
+    });
+  });
 });

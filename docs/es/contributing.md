@@ -208,6 +208,34 @@ Los comentarios JSDoc deben incluir `@description` y `@example` y, si hay parám
       />
     </div>
 
+- `@deprecated`: escribe el reemplazo y cómo pasar a él. Añádela a una API obsoleta.
+
+  - Escribe el nombre del reemplazo entre comillas invertidas y enlázalo a su página.
+  - La página se mantiene y muestra el texto de `@deprecated` como un aviso bajo el título.
+
+    ```ts
+    /**
+     * @deprecated Use [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.
+     */
+    ```
+
+  - Si la API no necesita una página propia, como un nombre antiguo que se conserva tras un cambio de nombre, añade también `@no-docs`.
+
+    ```ts
+    /**
+     * @no-docs
+     * @deprecated Use `useNew` instead.
+     */
+    ```
+
+- `@no-docs`: añádela a una API que no tiene página de documentación. La API sigue funcionando, pero no se genera ninguna página para ella.
+
+  ```ts
+  /**
+   * @no-docs
+   */
+  ```
+
 :::
 
 ### Escribir el código de pruebas

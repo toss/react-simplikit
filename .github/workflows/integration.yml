@@ -10,6 +10,9 @@ on:
       - main
       - v1-base
 
+env:
+  INTERNAL_HOOKS_PATH: 'packages/*/src/hooks/_internal/*'
+
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -227,6 +230,9 @@ jobs:
       - name: Check for JSDoc comments
         run: |
           for file in ${{ needs.check-changes.outputs.changed_files }}; do
+            case "$file" in
+              $INTERNAL_HOOKS_PATH) continue ;;
+            esac
             dir_name=$(basename $(dirname "$file"))
             base_name=$(basename $dir_name)
             implementation="$(dirname "$file")/$base_name.ts"
@@ -279,6 +285,9 @@ jobs:
       - name: Check JSDoc structure
         run: |
           for file in ${{ needs.check-changes.outputs.changed_files }}; do
+            case "$file" in
+              $INTERNAL_HOOKS_PATH) continue ;;
+            esac
             directory=$(basename "$(dirname "$file")")
             filename=$(basename $file)
             filename="${filename%%.*}"
@@ -356,6 +365,10 @@ jobs:
                 if [ ! -d "$impl_dir" ]; then
                   continue
                 fi
+
+                case "$impl_dir" in
+                  $INTERNAL_HOOKS_PATH) continue ;;
+                esac
 
                 impl_name=$(basename "$impl_dir")
                 impl_index="$impl_dir/index.ts"

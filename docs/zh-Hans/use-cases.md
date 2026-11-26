@@ -14,7 +14,7 @@ description: 根据要解决的问题选择 React 工具函数
 | ---------------------- | ------------------------------------------------------------- | -------------------------------------- |
 | 显示或隐藏内容         | [useToggle](/zh-Hans/hooks/useToggle)                         | 布尔状态和切换函数                     |
 | 等待用户停止输入       | [useDebouncedValue](/zh-Hans/hooks/useDebouncedValue)         | 延迟更新的状态副本，输入框仍然即时响应 |
-| 延迟调用回调           | [useDebounce](/zh-Hans/hooks/useDebounce)                     | 带有 `.cancel()` 方法的可调用函数      |
+| 阻止背景滚动           | [useBodyScrollLock](/zh-Hans/hooks/useBodyScrollLock)         | 锁定 body 滚动并自动解除               |
 | 限制回调频率           | [useThrottledCallback](/zh-Hans/hooks/useThrottledCallback)   | 按设定间隔限制调用频率的回调           |
 | 刷新后保留状态         | [useStorageState](/zh-Hans/hooks/useStorageState)             | 保存在浏览器存储中的状态               |
 | 响应元素外部的点击     | [useOutsideClickEffect](/zh-Hans/hooks/useOutsideClickEffect) | 元素外部点击订阅                       |
@@ -76,7 +76,7 @@ export function FruitSearch() {
 }
 ```
 
-需要用于渲染的值时，使用 [useDebouncedValue](/zh-Hans/hooks/useDebouncedValue)。需要通过事件安排回调时，使用 [useDebounce](/zh-Hans/hooks/useDebounce)。防抖本身不会加快耗时计算。
+需要用于渲染的值时，使用 [useDebouncedValue](/zh-Hans/hooks/useDebouncedValue)。需要通过事件安排回调时，使用 [useDebouncedCallback](/zh-Hans/hooks/useDebouncedCallback)。防抖本身不会加快耗时计算。
 
 ## SSR 与清理
 
@@ -84,7 +84,7 @@ export function FruitSearch() {
 
 - `useStorageState` 使用 `defaultValue` 作为服务端快照和 hydration 的值，随后在客户端读取浏览器存储。卸载时会移除存储监听器。
 
-- `useDebounce` 在组件卸载或 `wait`、`leading`、`trailing` 发生变化时取消待执行的调用，但不会取消已经开始的网络请求。应用需要处理请求取消或过期响应。
+- `useDebouncedCallback` 在组件卸载或 `debounceMs`、`leading`、`trailing` 发生变化时取消待执行的调用，但不会取消已经开始的网络请求。应用需要处理请求取消或过期响应。
 
 - 浏览器测量值可能在挂载后发生变化。请在[移动 Web](/zh-Hans/mobile-web) 指南和各 API 参考文档中查看初始值及平台限制。
 

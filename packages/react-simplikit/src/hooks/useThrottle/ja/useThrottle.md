@@ -1,5 +1,11 @@
 # useThrottle
 
+::: warning 非推奨
+このフックは v2 で削除される予定です。
+コールバックをスロットリングするには [`useThrottledCallback`](/ja/hooks/useThrottledCallback)、状態の更新をスロットリングするには [`useThrottledState`](/ja/hooks/useThrottledState)、
+スロットリングされた値を取得するには [`useThrottledValue`](/ja/hooks/useThrottledValue) を使用してください。
+:::
+
 `useThrottle` は、コールバック関数をスロットリングする React フックです。
 スクロールやリサイズのイベントを処理する場合など、関数の呼び出し頻度を制限したいときに便利です。
 
@@ -8,8 +14,8 @@
 ```ts
 function useThrottle<F extends (...args: any[]) => unknown>(
   callback: F,
-  wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  throttleMs: number,
+  options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
 
@@ -24,23 +30,31 @@ function useThrottle<F extends (...args: any[]) => unknown>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="呼び出しを制限する間隔（ミリ秒単位）。"
 />
 
 <Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
+  type="ThrottleOptions"
   description="スロットリングの動作を制御するオプション。"
   :nested="[
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        '関数を区間の開始時、終了時、またはその両方で呼び出すかを指定する省略可能な配列。',
+        '<code>true</code> の場合、スロットリング区間の開始時に即座に呼び出せます。',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        '<code>true</code> の場合、遅延時間の経過後に、待機中の呼び出しを最新の引数で実行できます。',
     },
   ]"
 />
@@ -61,7 +75,7 @@ const throttledScroll = useThrottle(
     console.log('Scroll event');
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { leading: true, trailing: true }
 );
 
 useEffect(() => {

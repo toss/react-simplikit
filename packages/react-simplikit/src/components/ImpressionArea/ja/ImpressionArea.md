@@ -11,7 +11,7 @@ function ImpressionArea<T extends ElementType>(
   as: T = 'div',
   rootMargin?: string,
   areaThreshold?: number,
-  timeThreshold?: number,
+  timeThresholdMs?: number,
   onImpressionStart?: () => void,
   onImpressionEnd?: () => void,
   ref?: Ref<Element<T>>,
@@ -41,7 +41,7 @@ function ImpressionArea<T extends ElementType>(
 />
 
 <Interface
-  name="timeThreshold"
+  name="timeThresholdMs"
   type="number"
   description="要素が表示されている必要がある最小の時間（ミリ秒）。"
 />
@@ -92,7 +92,7 @@ function App() {
     <ImpressionArea
       onImpressionStart={() => console.log('要素が表示領域に入りました')}
       onImpressionEnd={() => console.log('要素が表示領域から出ました')}
-      timeThreshold={1000}
+      timeThresholdMs={1000}
       areaThreshold={0.5}
     >
       <div>この要素を追跡してください！</div>

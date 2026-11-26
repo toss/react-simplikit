@@ -7,12 +7,7 @@
 ```ts
 function useBooleanState(
   initialValue: boolean | (() => boolean) = false
-): readonly [
-  state: boolean,
-  setTrue: () => void,
-  setFalse: () => void,
-  toggle: () => void,
-];
+): readonly [state: boolean, actions: BooleanStateActions];
 ```
 
 ### 参数
@@ -27,8 +22,8 @@ function useBooleanState(
 
 <Interface
   name=""
-  type="readonly [state: boolean, setTrue: () => void, setFalse: () => void, toggle: () => void]"
-  description="包含以下内容的元组："
+  type="readonly [state: boolean, actions: BooleanStateActions]"
+  description="包含状态和状态修改操作的元组。"
   :nested="[
     {
       name: 'state',
@@ -37,19 +32,19 @@ function useBooleanState(
       description: '当前的状态值。',
     },
     {
-      name: 'setTrue',
+      name: 'actions.setTrue',
       type: '() => void',
       required: false,
       description: '将状态设置为 <code>true</code> 的函数。',
     },
     {
-      name: 'setFalse',
+      name: 'actions.setFalse',
       type: '() => void',
       required: false,
       description: '将状态设置为 <code>false</code> 的函数。',
     },
     {
-      name: 'toggle',
+      name: 'actions.toggle',
       type: '() => void',
       required: false,
       description: '切换状态的函数。',
@@ -60,6 +55,6 @@ function useBooleanState(
 ## 示例
 
 ```tsx
-const [open, openBottomSheet, closeBottomSheet, toggleBottomSheet] =
+const [open, { setTrue: openBottomSheet, setFalse: closeBottomSheet }] =
   useBooleanState(false);
 ```

@@ -2,7 +2,7 @@
 
 `useDoubleClick` is a React hook that differentiates between single and double click events.
 For pointer clicks, it delays the single click callback execution for a specified time, and cancels it if a second click (i.e. a double click) occurs within that time.
-Clicks that carry no click count (`event.detail === 0`, e.g. keyboard activation of a button) cannot be part of a double click, so `click` runs immediately for them and `doubleClick` is not called.
+Clicks that carry no click count (`event.detail === 0`, e.g. keyboard activation of a button) cannot be part of a double click, so `onClick` runs immediately for them and `onDoubleClick` is not called.
 
 ## Interface
 
@@ -21,21 +21,21 @@ function useDoubleClick<E extends HTMLElement>(
   description="Configuration options for click handling."
   :nested="[
     {
-      name: 'props.delay',
+      name: 'props.delayMs',
       type: 'number',
       required: false,
       defaultValue: '250',
       description:
-        'The number of milliseconds a pointer single click waits for a possible second click before <code>click</code> runs. Clicks without a click count (<code>event.detail === 0</code>) run <code>click</code> immediately and ignore <code>delay</code>. Defaults to 250ms.',
+        'The number of milliseconds a pointer single click waits for a possible second click before <code>onClick</code> runs. Clicks without a click count (<code>event.detail === 0</code>) run <code>onClick</code> immediately and ignore <code>delayMs</code>. Defaults to 250ms.',
     },
     {
-      name: 'props.click',
+      name: 'props.onClick',
       type: '(event: MouseEvent<E>) => void',
       required: false,
       description: 'The callback function to be executed on a single click.',
     },
     {
-      name: 'props.doubleClick',
+      name: 'props.onDoubleClick',
       type: '(event: MouseEvent<E>) => void',
       required: true,
       description:
@@ -62,8 +62,8 @@ function GalleryCard() {
   const handleDoubleClick = () => alert('Zoom in!');
 
   const handleEvent = useDoubleClick({
-    click: handleClick,
-    doubleClick: handleDoubleClick,
+    onClick: handleClick,
+    onDoubleClick: handleDoubleClick,
   });
 
   return (

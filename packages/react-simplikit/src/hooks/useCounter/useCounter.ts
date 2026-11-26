@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 type UseCounterOptions = {
   min?: number;
@@ -6,13 +6,14 @@ type UseCounterOptions = {
   step?: number;
 };
 
-type UseCounterReturn = {
-  count: number;
+type CounterActions = {
   increment: () => void;
   decrement: () => void;
   reset: () => void;
   setCount: (value: number | ((prev: number) => number)) => void;
 };
+
+type UseCounterReturn = readonly [number, CounterActions];
 
 const validateValue = (value: number, { min, max }: Omit<UseCounterOptions, 'step'>): number => {
   if (min !== undefined && value < min) {
@@ -37,18 +38,18 @@ const validateValue = (value: number, { min, max }: Omit<UseCounterOptions, 'ste
  * @param {number} [options.max] - Maximum value the counter can reach. If not provided, there is no upper limit.
  * @param {number} [options.step=1] - Value to increment or decrement by. Defaults to 1.
  *
- * @returns {UseCounterReturn} An object with count value and control functions.
+ * @returns {UseCounterReturn} A tuple containing the count and actions to change it.
  * - count `number` - The current count value;
- * - increment `() => void` - A function to increment the count;
- * - decrement `() => void` - A function to decrement the count;
- * - reset `() => void` - A function to reset the count to the initial value;
- * - setCount `(value: number | ((prev: number) => number)) => void` - A function to set the count to a specific value or a function that returns a new value;
+ * - actions.increment `() => void` - A function to increment the count;
+ * - actions.decrement `() => void` - A function to decrement the count;
+ * - actions.reset `() => void` - A function to reset the count to the initial value;
+ * - actions.setCount `(value: number | ((prev: number) => number)) => void` - A function to set the count, either to a value or with an updater function that receives the previous count and returns the next one;
  *
  * @example
  * import { useCounter } from 'react-simplikit';
  *
  * function ShoppingCart() {
- *   const { count, increment, decrement, reset } = useCounter(1, {
+ *   const [count, { increment, decrement, reset }] = useCounter(1, {
  *     min: 1,
  *     max: 10,
  *   });
@@ -89,11 +90,10 @@ export function useCounter(initialValue = 0, { min, max, step = 1 }: UseCounterO
     setCount(initialValue);
   }, [setCount, initialValue]);
 
-  return {
-    count,
-    increment,
-    decrement,
-    reset,
-    setCount,
-  };
+  const actions = useMemo<CounterActions>(
+    () => ({ increment, decrement, reset, setCount }),
+    [increment, decrement, reset, setCount]
+  );
+
+  return [count, actions] as const;
 }

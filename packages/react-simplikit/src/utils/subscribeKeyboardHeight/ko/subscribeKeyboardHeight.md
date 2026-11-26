@@ -1,6 +1,6 @@
 # subscribeKeyboardHeight
 
-`subscribeKeyboardHeight`는 온스크린 키보드 높이의 변화를 구독하는 유틸리티 함수예요. 전달한 콜백은 키보드가 나타나거나 사라지거나 크기가 바뀌는 등 키보드 높이가 바뀔 수 있을 때마다 호출돼요.
+`subscribeKeyboardHeight`는 온스크린 키보드 높이의 변화를 구독하는 유틸리티 함수예요. 전달한 콜백은 키보드가 나타나거나 사라지거나 크기가 바뀌는 등 키보드 높이가 바뀔 수 있을 때마다 호출돼요. 기본적으로 구독을 시작할 때에도 현재 키보드 높이로 한 번 호출돼요.
 
 이 함수는 내부적으로 Visual Viewport의 `resize`와 `scroll` 이벤트를 모두 감지해요.
 
@@ -38,7 +38,7 @@ function subscribeKeyboardHeight(
       name: 'options.immediate',
       type: 'boolean',
       required: false,
-      defaultValue: 'false',
+      defaultValue: 'true',
       description: '<code>true</code>이면 현재 키보드 높이로 콜백을 즉시 호출해요.',
     },
     {
@@ -74,7 +74,6 @@ const { unsubscribe } = subscribeKeyboardHeight({
   callback: height => {
     footer.style.paddingBottom = `${height}px`;
   },
-  immediate: true,
 });
 
 // 나중에 정리가 필요할 때

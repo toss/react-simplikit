@@ -7,16 +7,16 @@ Provides efficient state management and stable action functions.
 
 ```ts
 function useMap<K, V>(
-  initialState: MapOrEntries<K, V> = new Map()
+  initialValue: MapOrEntries<K, V> = new Map()
 ): UseMapReturn<K, V>;
 ```
 
 ### Parameters
 
 <Interface
-  name="initialState"
+  name="initialValue"
   type="MapOrEntries<K, V>"
-  description="Initial Map state (Map object or array of key-value pairs)"
+  description="Initial Map value (Map object or array of key-value pairs)"
 />
 
 ### Return Value

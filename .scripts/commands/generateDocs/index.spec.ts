@@ -677,4 +677,104 @@ export function useNoReturnValue() {}`
 
     expect(document).toContain('\nThis function does not return anything.');
   });
+
+  it('opens the page of a @deprecated export with its notice as a warning, right under the title', async () => {
+    const document = await render(
+      'useLegacy',
+      `/**
+ * @description
+ * \`useLegacy\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useLegacy();
+ *
+ * @deprecated Use \`useNew\` instead.
+ */
+export function useLegacy() {}`
+    );
+
+    expect(
+      document.startsWith(
+        '# useLegacy\n\n::: warning Deprecated\nUse `useNew` instead.\n:::\n\n`useLegacy` does something.\n'
+      )
+    ).toBe(true);
+  });
+
+  it('keeps the link the @deprecated text puts on its replacement', async () => {
+    const document = await render(
+      'useLegacy',
+      `/**
+ * @description
+ * \`useLegacy\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useLegacy();
+ *
+ * @deprecated Use [\`useNew\`](https://react-simplikit.slash.page/hooks/useNew) instead.
+ */
+export function useLegacy() {}`
+    );
+
+    expect(document).toContain(
+      '::: warning Deprecated\nUse [`useNew`](https://react-simplikit.slash.page/hooks/useNew) instead.\n:::'
+    );
+  });
+
+  it('refuses an export whose JSDoc is @no-docs, because it has no page', async () => {
+    await expect(
+      render(
+        'useHidden',
+        `/**
+ * @description
+ * \`useHidden\` does something.
+ *
+ * @no-docs
+ */
+export function useHidden() {}`
+      )
+    ).rejects.toThrow('useHidden is @no-docs, so it has no documentation page');
+  });
+
+  it('refuses an export that is both @no-docs and @deprecated, such as an old name kept after a rename', async () => {
+    await expect(
+      render(
+        'useOld',
+        `/**
+ * @description
+ * \`useOld\` is the name \`useNew\` had before.
+ *
+ * @no-docs
+ * @deprecated Use \`useNew\` instead.
+ */
+export const useOld = useNew;`
+      )
+    ).rejects.toThrow('useOld is @no-docs, so it has no documentation page');
+  });
+
+  it('still renders a page when only an earlier comment, such as an options type, is @deprecated', async () => {
+    const document = await render(
+      'useCurrent',
+      `type Options = {
+  /** @deprecated Use \`delay\` instead. */
+  wait?: number;
+};
+
+/**
+ * @description
+ * \`useCurrent\` does something.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useCurrent();
+ */
+export function useCurrent(options: Options) {}`
+    );
+
+    expect(document.startsWith('# useCurrent\n\n`useCurrent` does something.\n')).toBe(true);
+  });
 });

@@ -103,7 +103,7 @@ function VideoPlayer() {
 
 ### Uso seguro durante el SSR
 
-Puedes usar el Hook de forma segura durante el renderizado en el servidor. En el servidor devuelve un objeto vacío `{}` y solo se suscribe a los cambios de red en el navegador.
+Puedes usar el Hook de forma segura durante el renderizado en el servidor. Devuelve un objeto vacío `{}` en el servidor y en el primer renderizado del cliente, y lee la conexión tras el montaje. Solo se suscribe a los cambios de red en el navegador.
 
 ### Recomendaciones
 

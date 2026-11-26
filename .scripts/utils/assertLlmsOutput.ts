@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 
+import { collectDocTags } from './collectDocTags.ts';
 import { collectPublicExports } from './collectPublicExports.ts';
 
 type AssertLlmsOutputOptions = {
@@ -18,8 +19,8 @@ const ALLOWED_LINK = /^https:\/\/react-simplikit\.slash\.page\/(?:(?:hooks|compo
 
 /**
  * Checks the llms outputs vitepress-plugin-llms wrote into a docs build:
- * every public export has a page in llms.txt, localized copies are not listed,
- * and the per-page Markdown exists.
+ * every public export that is not `@no-docs` has a page in llms.txt, localized copies are not
+ * listed, and the per-page Markdown exists.
  */
 export async function assertLlmsOutput({ buildOutputDirectory, root }: AssertLlmsOutputOptions): Promise<void> {
   const llmsTxt = await fs.readFile(path.join(buildOutputDirectory, 'llms.txt'), 'utf8');
@@ -35,11 +36,18 @@ export async function assertLlmsOutput({ buildOutputDirectory, root }: AssertLlm
     );
   }
 
-  for (const name of await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE))) {
+  const publicExports = await collectPublicExports(path.join(root, PACKAGE_INDEX_FILE));
+  const noDocsExports = new Set((await collectDocTags(root, publicExports)).noDocs);
+
+  // A `@no-docs` export has no page. A renamed one's old URL only serves a copy of its replacement's
+  // Markdown, which must stay out of the listing or an agent would read the same page under two names.
+  for (const name of publicExports) {
     assert.equal(
       links.some(link => link.endsWith(`/${name}.md`)),
-      true,
-      `llms.txt must link the documentation page of ${name}`
+      !noDocsExports.has(name),
+      noDocsExports.has(name)
+        ? `llms.txt must not link a page for ${name}, which is @no-docs`
+        : `llms.txt must link the documentation page of ${name}`
     );
   }
 

@@ -43,8 +43,17 @@ const RETIRED_MOBILE_PAGES = new Set([
   'subscribeKeyboardHeight',
 ]);
 
+// A renamed export keeps no page under its old name, so its old URLs point at the new page: the
+// current one and the pre-flattening one its folder used to produce.
+const RENAMED_REFERENCE_REDIRECTS: RedirectPair[] = [
+  { from: 'hooks/useCallbackOncePerRender.html', to: 'hooks/useCallbackOnce.html' },
+  { from: 'core/hooks/useCallbackOncePerRender.html', to: 'hooks/useCallbackOnce.html' },
+  { from: 'hooks/useVisibilityEvent.html', to: 'hooks/usePageVisibilityEffect.html' },
+  { from: 'core/hooks/useVisibilityEvent.html', to: 'hooks/usePageVisibilityEffect.html' },
+];
+
 export function collectLegacyRedirects(): RedirectPair[] {
-  return [...GUIDE_REDIRECTS, ...collectReferenceRedirects()].flatMap(pair => [
+  return [...GUIDE_REDIRECTS, ...collectReferenceRedirects(), ...RENAMED_REFERENCE_REDIRECTS].flatMap(pair => [
     pair,
     ...localeDirectories.map(locale => ({ from: `${locale}/${pair.from}`, to: `${locale}/${pair.to}` })),
   ]);
@@ -52,10 +61,12 @@ export function collectLegacyRedirects(): RedirectPair[] {
 
 function collectReferenceRedirects(): RedirectPair[] {
   return ['hooks', 'components', 'utils'].flatMap(category =>
-    listDirectories(path.join(packageSourceRoot, category)).map(name => ({
-      from: `${RETIRED_MOBILE_PAGES.has(name) ? 'mobile' : 'core'}/${category}/${name}.html`,
-      to: `${category}/${name}.html`,
-    }))
+    listDirectories(path.join(packageSourceRoot, category))
+      .filter(name => name !== '_internal')
+      .map(name => ({
+        from: `${RETIRED_MOBILE_PAGES.has(name) ? 'mobile' : 'core'}/${category}/${name}.html`,
+        to: `${category}/${name}.html`,
+      }))
   );
 }
 

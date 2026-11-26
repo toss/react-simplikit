@@ -26,7 +26,7 @@ function useAvoidKeyboard(
         '键盘隐藏时的基础底部偏移量（像素）。用于考虑 iPhone 主页指示器区域。',
     },
     {
-      name: 'options.transitionDuration',
+      name: 'options.transitionDurationMs',
       type: 'number',
       required: false,
       defaultValue: '200',

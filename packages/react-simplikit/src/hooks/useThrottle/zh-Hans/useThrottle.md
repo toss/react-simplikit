@@ -1,5 +1,11 @@
 # useThrottle
 
+::: warning 已弃用
+此 Hook 将在 v2 中移除。
+使用 [`useThrottledCallback`](/zh-Hans/hooks/useThrottledCallback) 对回调进行节流，使用 [`useThrottledState`](/zh-Hans/hooks/useThrottledState) 对状态更新进行节流，
+或使用 [`useThrottledValue`](/zh-Hans/hooks/useThrottledValue) 获取节流后的值。
+:::
+
 `useThrottle` 是一个创建回调函数节流版本的 React Hook。它适用于限制函数的调用频率，例如在处理滚动或调整大小事件时。
 
 ## 接口
@@ -7,8 +13,8 @@
 ```ts
 function useThrottle<F extends (...args: any[]) => unknown>(
   callback: F,
-  wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  throttleMs: number,
+  options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
 
@@ -23,23 +29,31 @@ function useThrottle<F extends (...args: any[]) => unknown>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="将调用节流到的毫秒数。"
 />
 
 <Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
+  type="ThrottleOptions"
   description="用于控制节流行为的选项。"
   :nested="[
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        '一个可选的数组，用于指定应在领先边缘、落后边缘或两者处调用该函数。',
+        '如果为 <code>true</code>，则允许在节流时间窗口开始时立即调用。',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        '如果为 <code>true</code>，则允许待执行的调用在延迟结束后以最新参数运行。',
     },
   ]"
 />
@@ -60,7 +74,7 @@ const throttledScroll = useThrottle(
     console.log('Scroll event');
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { leading: true, trailing: true }
 );
 
 useEffect(() => {

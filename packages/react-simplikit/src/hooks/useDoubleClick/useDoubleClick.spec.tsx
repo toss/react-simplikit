@@ -5,18 +5,18 @@ import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { useDoubleClick } from './useDoubleClick.ts';
 
 function TestComponent({
-  delay = 250,
+  delayMs = 250,
   onClick,
   onDoubleClick,
 }: {
-  delay?: number;
+  delayMs?: number;
   onClick?: (event: MouseEvent<HTMLElement>) => void;
   onDoubleClick: (event: MouseEvent<HTMLElement>) => void;
 }) {
   const handleEvent = useDoubleClick({
-    delay,
-    click: onClick,
-    doubleClick: onDoubleClick,
+    delayMs,
+    onClick,
+    onDoubleClick,
   });
 
   return <button onClick={handleEvent}>Test Button</button>;
@@ -66,7 +66,7 @@ describe('useDoubleClick', () => {
     expect(doubleClickSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('does not throw if click is not provided', () => {
+  it('does not throw if onClick is not provided', () => {
     const { getByText } = render(<TestComponent onDoubleClick={doubleClickSpy} />);
     const button = getByText('Test Button');
 
@@ -104,7 +104,7 @@ describe('useDoubleClick', () => {
   });
 
   it('respects custom delay time', () => {
-    const { getByText } = render(<TestComponent delay={500} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+    const { getByText } = render(<TestComponent delayMs={500} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
     const button = getByText('Test Button');
 
     fireEvent.click(button, { detail: 1 });
@@ -118,8 +118,8 @@ describe('useDoubleClick', () => {
     expect(clickSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('does not call click if doubleClick is triggered before delay', () => {
-    const { getByText } = render(<TestComponent delay={300} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
+  it('does not call onClick if onDoubleClick is triggered before delayMs', () => {
+    const { getByText } = render(<TestComponent delayMs={300} onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
     const button = getByText('Test Button');
 
     fireEvent.click(button, { detail: 1 });
@@ -148,7 +148,7 @@ describe('useDoubleClick', () => {
   });
 
   describe('activation without a click count (detail 0)', () => {
-    it('calls click immediately for keyboard-style activation', () => {
+    it('calls onClick immediately for keyboard-style activation', () => {
       const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
       const button = getByText('Test Button');
 
@@ -162,7 +162,7 @@ describe('useDoubleClick', () => {
       expect(doubleClickSpy).not.toHaveBeenCalled();
     });
 
-    it('calls click for a programmatic button.click()', () => {
+    it('calls onClick for a programmatic button.click()', () => {
       const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
 
       getByText('Test Button').click();
@@ -171,11 +171,11 @@ describe('useDoubleClick', () => {
       expect(doubleClickSpy).not.toHaveBeenCalled();
     });
 
-    it('forwards the original event to click', () => {
+    it('forwards the original event to onClick', () => {
       const received: MouseEvent<HTMLElement>[] = [];
 
       function CaptureComponent() {
-        const handleEvent = useDoubleClick({ click: clickSpy, doubleClick: doubleClickSpy });
+        const handleEvent = useDoubleClick({ onClick: clickSpy, onDoubleClick: doubleClickSpy });
 
         return (
           <button
@@ -198,7 +198,7 @@ describe('useDoubleClick', () => {
       expect(clickSpy.mock.calls[0][0]).toBe(received[0]);
     });
 
-    it('does not throw if click is not provided', () => {
+    it('does not throw if onClick is not provided', () => {
       const { getByText } = render(<TestComponent onDoubleClick={doubleClickSpy} />);
       const button = getByText('Test Button');
 
@@ -209,7 +209,7 @@ describe('useDoubleClick', () => {
       expect(doubleClickSpy).not.toHaveBeenCalled();
     });
 
-    it('calls click for every repeated activation', () => {
+    it('calls onClick for every repeated activation', () => {
       const { getByText } = render(<TestComponent onClick={clickSpy} onDoubleClick={doubleClickSpy} />);
       const button = getByText('Test Button');
 

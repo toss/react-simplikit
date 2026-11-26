@@ -34,7 +34,7 @@ type UseMapReturn<K, V> = [Omit<Map<K, V>, 'set' | 'clear' | 'delete'>, MapActio
  *
  * @template K - The type of the Map keys.
  * @template V - The type of the Map values.
- * @param {MapOrEntries<K, V>} [initialState=new Map()] - Initial Map state (Map object or array of key-value pairs)
+ * @param {MapOrEntries<K, V>} [initialValue=new Map()] - Initial Map value (Map object or array of key-value pairs)
  * @returns {UseMapReturn<K, V>} A tuple containing the Map state and actions to manipulate it
  *
  * @example
@@ -50,9 +50,9 @@ type UseMapReturn<K, V> = [Omit<Map<K, V>, 'set' | 'clear' | 'delete'>, MapActio
  * actions.set('user2', { name: 'Jane', age: 25 });
  * ```
  */
-export function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): UseMapReturn<K, V> {
+export function useMap<K, V>(initialValue: MapOrEntries<K, V> = new Map()): UseMapReturn<K, V> {
   // Initialize Map state
-  const [map, setMap] = useState(() => new Map(initialState));
+  const [map, setMap] = useState(() => new Map(initialValue));
 
   const set = useCallback((key: K, value: V) => {
     setMap(prev => {
@@ -75,7 +75,7 @@ export function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): UseM
   }, []);
 
   const reset = usePreservedCallback(() => {
-    setMap(() => new Map(initialState));
+    setMap(() => new Map(initialValue));
   });
 
   const actions = useMemo<MapActions<K, V>>(() => {

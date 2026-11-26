@@ -1,7 +1,7 @@
 # useThrottledValue
 
 `useThrottledValue` は、渡された値をスロットリングして返す React フックです。
-状態は引き続き呼び出し元が管理し、戻り値は `wait` ミリ秒につき最大 1 回、その状態に追従します。
+状態は引き続き呼び出し元が管理し、戻り値は `throttleMs` ミリ秒につき最大 1 回、その状態に追従します。
 スクロール位置、ポインターの位置、リサイズ時の要素サイズに応じて、負荷の高いレンダリングを行う場合に便利です。
 
 初回レンダリング時とサーバー上では、値をそのまま返します。マウント時には変更を予約しないため、
@@ -9,14 +9,14 @@
 `leading` と `trailing` が両方とも `false` の場合、戻り値は更新されません。
 
 値は参照で比較します。レンダリングのたびに新しいオブジェクトや配列を渡すと、
-戻り値が `wait` ミリ秒ごとに更新され続けます。まず `usePreservedReference` などを使って参照を安定させてください。
+戻り値が `throttleMs` ミリ秒ごとに更新され続けます。まず `usePreservedReference` などを使って参照を安定させてください。
 
 ## インターフェース
 
 ```ts
 function useThrottledValue<T>(
   value: T,
-  wait: number,
+  throttleMs: number,
   options?: ThrottleOptions
 ): T;
 ```
@@ -32,7 +32,7 @@ function useThrottledValue<T>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="スロットリングの区間の長さ（ミリ秒単位）。"
 />
@@ -56,7 +56,7 @@ function useThrottledValue<T>(
       required: false,
       defaultValue: 'true',
       description:
-        '<code>true</code> の場合、区間内の最後の変更を、その変更から <code>wait</code> ミリ秒後に反映します。',
+        '<code>true</code> の場合、区間内の最後の変更を、その変更から <code>throttleMs</code> ミリ秒後に反映します。',
     },
   ]"
 />

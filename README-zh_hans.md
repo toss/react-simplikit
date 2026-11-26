@@ -29,19 +29,22 @@ npm install react-simplikit
 
 ## 快速开始
 
-使用 `useDebounce`，在用户停止输入 300 ms 后调用搜索函数。此示例中的 `searchAPI` 是由你的应用提供的搜索函数。
+使用 `useDebouncedCallback`，在用户停止输入 300 ms 后调用搜索函数。此示例中的 `searchAPI` 是由你的应用提供的搜索函数。
 
 ```tsx
 import { useState } from 'react';
-import { useDebounce } from 'react-simplikit';
+import { useDebouncedCallback } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
 
-  const debouncedSearch = useDebounce((value: string) => {
-    // 实际的 API 调用
-    searchAPI(value);
-  }, 300);
+  const debouncedSearch = useDebouncedCallback({
+    onChange: (value: string) => {
+      // 实际的 API 调用
+      searchAPI(value);
+    },
+    debounceMs: 300,
+  });
 
   return (
     <input
@@ -56,7 +59,7 @@ function SearchInput() {
 }
 ```
 
-防抖后的函数会提供 `.cancel()`，并且在组件卸载时自动取消待执行的调用。
+组件卸载时会自动取消待执行的调用。如果值与上次传给搜索函数的值相同，则不会再次传递。
 
 ### 让固定元素始终位于软键盘上方
 

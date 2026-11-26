@@ -25,18 +25,26 @@ function useThrottledCallback<T>(options: Object): (nextValue: T) => void;
         'El callback cuya frecuencia de ejecución quieres limitar. El Hook omite las llamadas con el mismo valor que el último que transmitió.',
     },
     {
-      name: 'options.timeThreshold',
+      name: 'options.throttleMs',
       type: 'number',
       required: true,
       description: 'El intervalo en milisegundos que limita la frecuencia de las llamadas.',
     },
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        'Un arreglo opcional que especifica si la función debe ejecutarse al inicio del intervalo, al final o en ambos momentos.',
+        'Si es <code>true</code>, permite una llamada inmediata al inicio del intervalo de limitación de frecuencia.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        'Si es <code>true</code>, permite ejecutar una llamada pendiente después de la espera con el valor más reciente.',
     },
   ]"
 />
@@ -59,7 +67,7 @@ function ScrollPosition() {
   const [scrollTop, setScrollTop] = useState(0);
   const setScrollTopThrottled = useThrottledCallback({
     onChange: setScrollTop,
-    timeThreshold: 200,
+    throttleMs: 200,
   });
 
   return (

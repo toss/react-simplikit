@@ -2,13 +2,16 @@
 
 `usePrevious` は、渡された状態の前の値を返す React フックです。
 状態が変わらずに再レンダリングされた場合、前の値をそのまま保持します。
-状態がオブジェクトの場合や、変更の検出方法をカスタマイズしたい場合は、`compare` 関数を指定できます。
-デフォルトでは、`prev === next` を使って状態の変化を検出します。
+状態がオブジェクトの場合や、変更の検出方法をカスタマイズしたい場合は、`equalityFn` 関数を指定できます。
+デフォルトでは、`Object.is(prev, next)` を使って状態の変化を検出します。
 
 ## インターフェース
 
 ```ts
-function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
+function usePrevious<T>(
+  state: T,
+  equalityFn?: (prev: T, next: T) => boolean
+): T;
 ```
 
 ### パラメータ
@@ -21,9 +24,9 @@ function usePrevious<T>(state: T, compare?: (prev: T, next: T) => boolean): T;
 />
 
 <Interface
-  name="compare"
+  name="equalityFn"
   type="(prev: T, next: T) => boolean"
-  description="状態が変わったかを判定する省略可能な比較関数。"
+  description="2 つの状態が等しいかを判定する省略可能な関数。デフォルトでは <code>Object.is</code> で比較します。"
 />
 
 ### 戻り値

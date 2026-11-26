@@ -28,19 +28,22 @@ pnpm add react-simplikit
 
 ## クイックスタート
 
-`useDebounce` を使うと、ユーザーが入力を止めてから 300 ms 後に検索関数を呼び出せます。この例の `searchAPI` は、アプリケーション側で用意する検索関数です。
+`useDebouncedCallback` を使うと、ユーザーが入力を止めてから 300 ms 後に検索関数を呼び出せます。この例の `searchAPI` は、アプリケーション側で用意する検索関数です。
 
 ```tsx
 import { useState } from 'react';
-import { useDebounce } from 'react-simplikit';
+import { useDebouncedCallback } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
 
-  const debouncedSearch = useDebounce((value: string) => {
-    // 実際の API 呼び出し
-    searchAPI(value);
-  }, 300);
+  const debouncedSearch = useDebouncedCallback({
+    onChange: (value: string) => {
+      // 実際の API 呼び出し
+      searchAPI(value);
+    },
+    debounceMs: 300,
+  });
 
   return (
     <input
@@ -55,11 +58,11 @@ function SearchInput() {
 }
 ```
 
-デバウンスされた関数は `.cancel()` を提供し、コンポーネントがアンマウントされると保留中の呼び出しは自動的にキャンセルされます。
+コンポーネントがアンマウントされると、保留中の呼び出しは自動的にキャンセルされます。検索関数に最後に渡した値と同じ値は、再度渡されません。
 
 ## 提供している機能
 
-- **フック** — 状態とロジック（`useToggle`、`useDebounce`、`useList` など）、ブラウザイベント（`useIntersectionObserver`、`useOutsideClickEffect` など）、モバイル Web（`useAvoidKeyboard`、`useSafeAreaInset`、`useVisualViewport` など）
+- **フック** — 状態とロジック（`useToggle`、`useDebouncedState`、`useList` など）、ブラウザイベント（`useIntersectionObserver`、`useOutsideClickEffect` など）、モバイル Web（`useAvoidKeyboard`、`useSafeAreaInset`、`useVisualViewport` など）
 - **コンポーネント** — `SwitchCase`、`Separated`、`ImpressionArea`
 - **ユーティリティ** — `buildContext`、`mergeProps`、`mergeRefs`、および `isIOS` や `getKeyboardHeight` のようなモバイル Web 向けヘルパー
 

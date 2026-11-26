@@ -1,5 +1,12 @@
 # useThrottle
 
+::: warning Deprecated
+This hook will be removed in v2.
+Use [`useThrottledCallback`](/hooks/useThrottledCallback) to throttle a callback,
+[`useThrottledState`](/hooks/useThrottledState) to throttle a state update,
+or [`useThrottledValue`](/hooks/useThrottledValue) to get a throttled value.
+:::
+
 `useThrottle` is a React hook that creates a throttled version of a callback function.
 This is useful for limiting the rate at which a function can be called,
 such as when handling scroll or resize events.
@@ -9,8 +16,8 @@ such as when handling scroll or resize events.
 ```ts
 function useThrottle<F extends (...args: any[]) => unknown>(
   callback: F,
-  wait: number,
-  options?: { edges?: Array<'leading' | 'trailing'> }
+  throttleMs: number,
+  options?: ThrottleOptions
 ): F & { cancel: () => void };
 ```
 
@@ -25,23 +32,31 @@ function useThrottle<F extends (...args: any[]) => unknown>(
 
 <Interface
   required
-  name="wait"
+  name="throttleMs"
   type="number"
   description="The number of milliseconds to throttle invocations to."
 />
 
 <Interface
   name="options"
-  type="{ edges?: Array<'leading' | 'trailing'> }"
+  type="ThrottleOptions"
   description="Options to control the behavior of the throttle."
   :nested="[
     {
-      name: 'options.edges',
-      type: 'Array<\'leading\' | \'trailing\'>',
+      name: 'options.leading',
+      type: 'boolean',
       required: false,
-      defaultValue: '[\'leading\', \'trailing\']',
+      defaultValue: 'true',
       description:
-        'An optional array specifying whether the function should be invoked on the leading edge, trailing edge, or both.',
+        'If <code>true</code>, allows an immediate call at the start of a throttle window.',
+    },
+    {
+      name: 'options.trailing',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'true',
+      description:
+        'If <code>true</code>, allows a pending call to run after the delay with the latest arguments.',
     },
   ]"
 />
@@ -62,7 +77,7 @@ const throttledScroll = useThrottle(
     console.log('Scroll event');
   },
   200,
-  { edges: ['leading', 'trailing'] }
+  { leading: true, trailing: true }
 );
 
 useEffect(() => {

@@ -27,7 +27,7 @@ function useLongPress<E extends HTMLElement>(
   description="長押しの動作を設定するオプションです。"
   :nested="[
     {
-      name: 'options.delay',
+      name: 'options.delayMs',
       type: 'number',
       required: false,
       defaultValue: '500',
@@ -57,7 +57,7 @@ function useLongPress<E extends HTMLElement>(
       type: '(event) => void',
       required: false,
       description:
-        '通常のクリック（押してから delay が経過する前に離す操作）で実行する関数です。省略できます。',
+        '通常のクリック（押してから delayMs が経過する前に離す操作）で実行する関数です。省略できます。',
     },
     {
       name: 'options.onLongPressEnd',
@@ -131,7 +131,7 @@ function ContextMenu() {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const longPressHandlers = useLongPress(() => setMenuVisible(true), {
-    delay: 400,
+    delayMs: 400,
     onClick: () => console.log('Normal click'),
     onLongPressEnd: () => console.log('Long press completed'),
   });

@@ -54,7 +54,7 @@ function useCounter(
 <Interface
   name=""
   type="UseCounterReturn"
-  description="カウンターの値と操作用の関数を含むオブジェクト。"
+  description="カウンターの値と、値を変更するアクションを含むタプル。"
   :nested="[
     {
       name: 'count',
@@ -63,29 +63,29 @@ function useCounter(
       description: '現在のカウンターの値。',
     },
     {
-      name: 'increment',
+      name: 'actions.increment',
       type: '() => void',
       required: false,
       description: 'カウンターの値を増やす関数。',
     },
     {
-      name: 'decrement',
+      name: 'actions.decrement',
       type: '() => void',
       required: false,
       description: 'カウンターの値を減らす関数。',
     },
     {
-      name: 'reset',
+      name: 'actions.reset',
       type: '() => void',
       required: false,
       description: 'カウンターを初期値にリセットする関数。',
     },
     {
-      name: 'setCount',
+      name: 'actions.setCount',
       type: '(value: number | ((prev: number) => number)) => void',
       required: false,
       description:
-        '特定の値、または新しい値を返す関数を渡して、カウンターの値を設定する関数。',
+        '特定の値、または前のカウントを受け取って次の値を返す関数を渡して、カウンターの値を設定する関数。',
     },
   ]"
 />
@@ -96,7 +96,7 @@ function useCounter(
 import { useCounter } from 'react-simplikit';
 
 function ShoppingCart() {
-  const { count, increment, decrement, reset } = useCounter(1, {
+  const [count, { increment, decrement, reset }] = useCounter(1, {
     min: 1,
     max: 10,
   });

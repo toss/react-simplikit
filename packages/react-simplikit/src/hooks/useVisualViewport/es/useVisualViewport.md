@@ -26,7 +26,7 @@ Esta función no acepta parámetros.
       type: 'VisualViewportState | null',
       required: false,
       description:
-        'Objeto de estado del área visible, o <code>null</code> si no está disponible (SSR o navegadores sin la API Visual Viewport).',
+        'Objeto de estado del área visible, o <code>null</code> en el servidor, en el primer renderizado del cliente y en navegadores sin la API Visual Viewport.',
     },
     {
       name: 'viewport.width',
@@ -101,7 +101,7 @@ if (viewport && viewport.scale > 1.3) {
 
 ## Notas
 
-- **Seguridad en SSR**: `viewport` es `null` durante el renderizado en el servidor y en navegadores sin la API Visual Viewport. Comprueba siempre si es `null` antes de leer sus propiedades.
+- **Seguridad en SSR**: `viewport` es `null` en el servidor, en el primer renderizado del cliente y en navegadores sin la API Visual Viewport. Se sincroniza tras el montaje. Comprueba siempre si es `null` antes de leer sus propiedades.
 - **Compatibilidad con navegadores**: Los navegadores móviles modernos son compatibles con la API Visual Viewport. Cuando no está disponible, el Hook devuelve `null`.
 - **Rendimiento**: Las actualizaciones usan `startTransition` de React para que los cambios del área de visualización no bloqueen los renderizados urgentes.
 - **Alternativa más sencilla**: Si solo necesitas la altura del teclado, usa `useKeyboardHeight()` para disponer de una API más sencilla.

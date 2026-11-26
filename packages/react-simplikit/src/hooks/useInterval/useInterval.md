@@ -6,33 +6,28 @@ It is useful for timers, polling data, and other recurring tasks.
 ## Interface
 
 ```ts
-function useInterval(
-  callback: () => void,
-  options: number | { delay: number; enabled?: boolean; immediate?: boolean }
-): void;
+function useInterval(options: Object): void;
 ```
 
 ### Parameters
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="The function to be executed periodically."
-/>
-
-<Interface
-  required
   name="options"
-  type="number | { delay: number; enabled?: boolean; immediate?: boolean }"
+  type="Object"
   description="Configures the interval behavior."
   :nested="[
     {
-      name: 'options.delay',
+      name: 'options.onTick',
+      type: '() => void',
+      required: true,
+      description: 'The function to be executed periodically.',
+    },
+    {
+      name: 'options.delayMs',
       type: 'number',
       required: true,
-      description:
-        'The interval duration in milliseconds. If <code>null</code>, the interval will not run.',
+      description: 'The interval duration in milliseconds.',
     },
     {
       name: 'options.immediate',
@@ -65,9 +60,10 @@ import { useState } from 'react';
 function Timer() {
   const [time, setTime] = useState(0);
 
-  useInterval(() => {
-    setTime(prev => prev + 1);
-  }, 1000);
+  useInterval({
+    onTick: () => setTime(prev => prev + 1),
+    delayMs: 1000,
+  });
 
   return (
     <div>

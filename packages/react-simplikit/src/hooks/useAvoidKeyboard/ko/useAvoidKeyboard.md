@@ -26,7 +26,7 @@ function useAvoidKeyboard(
         '키보드가 숨겨져 있을 때 기본 하단 오프셋(px)이에요. iPhone의 홈 인디케이터 영역을 고려할 때 유용해요.',
     },
     {
-      name: 'options.transitionDuration',
+      name: 'options.transitionDurationMs',
       type: 'number',
       required: false,
       defaultValue: '200',

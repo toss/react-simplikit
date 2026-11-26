@@ -1,30 +1,19 @@
-import { useEffect } from 'react';
-import { useMemo } from 'react';
-
-import type { CallerTypedArgs } from '../../_internal/types.ts';
-import { usePreservedCallback } from '../usePreservedCallback/index.ts';
-
-import { debounce } from './debounce.ts';
-
-type DebounceOptions = {
-  leading?: boolean;
-  trailing?: boolean;
-};
+import { useDebounce as internalUseDebounce } from '../_internal/useDebounce/useDebounce.ts';
 
 /**
  * @description
  * `useDebounce` is a React hook that returns a debounced version of the provided callback function.
  * It helps optimize event handling by delaying function execution and grouping multiple calls into one.
  *
- * With the default options, the last call runs after `wait` milliseconds without another call.
- * Pending calls are cancelled when the component unmounts or when `wait`, `leading`, or `trailing` changes.
+ * With the default options, the last call runs after `debounceMs` milliseconds without another call.
+ * Pending calls are cancelled when the component unmounts or when `debounceMs`, `leading`, or `trailing` changes.
  * Calling `.cancel()` only cancels a pending callback, not an already-started network request.
  * The example displays the query locally. To search a server, pass your application's
  * search callback as the first argument to `useDebounce`.
  *
  * @template {(...args: any[]) => unknown} F - The type of the callback function.
  * @param {F} callback - The function to debounce.
- * @param {number} wait - The number of milliseconds to delay the function execution.
+ * @param {number} debounceMs - The number of milliseconds to delay the function execution.
  * @param {DebounceOptions} [options] - Configuration options for debounce behavior.
  * @param {boolean} [options.leading=false] - If `true`, the function is called at the start of the sequence.
  * @param {boolean} [options.trailing=true] - If `true`, the function is called at the end of the sequence.
@@ -60,42 +49,10 @@ type DebounceOptions = {
  *     </section>
  *   );
  * }
+ *
+ * @deprecated This hook will be removed in v2.
+ * Use [`useDebouncedCallback`](/hooks/useDebouncedCallback) to debounce a callback,
+ * [`useDebouncedState`](/hooks/useDebouncedState) to debounce a state update,
+ * or [`useDebouncedValue`](/hooks/useDebouncedValue) to get a debounced value.
  */
-export function useDebounce<F extends (...args: CallerTypedArgs) => unknown>(
-  callback: F,
-  wait: number,
-  options: DebounceOptions = {}
-  // Written out because `DebouncedFunction` is not exported from the package entry, so consumers emitting declarations cannot name it (TS2742)
-): { (...args: Parameters<F>): void; cancel: () => void } {
-  const preservedCallback = usePreservedCallback(callback) as F;
-
-  const { leading = false, trailing = true } = options;
-
-  const edges = useMemo(() => {
-    const _edges: Array<'leading' | 'trailing'> = [];
-    if (leading) {
-      _edges.push('leading');
-    }
-
-    if (trailing) {
-      _edges.push('trailing');
-    }
-
-    return _edges;
-  }, [leading, trailing]);
-
-  const debounced = useMemo(() => {
-    return debounce<F>(preservedCallback, wait, { edges });
-  }, [preservedCallback, wait, edges]);
-
-  useEffect(
-    function cancelDebouncedOnUnmount() {
-      return () => {
-        debounced.cancel();
-      };
-    },
-    [debounced]
-  );
-
-  return debounced;
-}
+export const useDebounce = internalUseDebounce;

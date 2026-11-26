@@ -6,22 +6,31 @@ Gestiona `setTimeout` de acuerdo con el ciclo de vida de React y garantiza la li
 ## Interfaz
 
 ```ts
-function useTimeout(callback: () => void, delay: number = 0): void;
+function useTimeout(options: Object): void;
 ```
 
 ### Parámetros
 
 <Interface
   required
-  name="callback"
-  type="() => void"
-  description="La función que el Hook ejecuta tras el tiempo de espera."
-/>
-
-<Interface
-  name="delay"
-  type="number"
-  description="El tiempo en milisegundos que debe transcurrir antes de ejecutar el callback."
+  name="options"
+  type="Object"
+  description="Configura el comportamiento del tiempo de espera."
+  :nested="[
+    {
+      name: 'options.onTimeout',
+      type: '() => void',
+      required: true,
+      description: 'La función que el Hook ejecuta tras el tiempo de espera.',
+    },
+    {
+      name: 'options.delayMs',
+      type: 'number',
+      required: false,
+      defaultValue: '0',
+      description: 'El tiempo en milisegundos que debe transcurrir antes de ejecutar <code>onTimeout</code>.',
+    },
+  ]"
 />
 
 ### Valor de retorno
@@ -38,13 +47,15 @@ import { useState } from 'react';
 function Example() {
   const [title, setTitle] = useState('');
 
-  useTimeout(() => {
-    setTitle('Buscando productos...');
-  }, 2000);
+  useTimeout({
+    onTimeout: () => setTitle('Buscando productos...'),
+    delayMs: 2000,
+  });
 
-  useTimeout(() => {
-    setTitle('Casi listo...');
-  }, 4000);
+  useTimeout({
+    onTimeout: () => setTitle('Casi listo...'),
+    delayMs: 4000,
+  });
 
   return <div>{title}</div>;
 }

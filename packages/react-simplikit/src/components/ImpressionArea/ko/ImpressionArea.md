@@ -9,7 +9,7 @@ function ImpressionArea<T extends ElementType>(
   as: T = 'div',
   rootMargin?: string,
   areaThreshold?: number,
-  timeThreshold?: number,
+  timeThresholdMs?: number,
   onImpressionStart?: () => void,
   onImpressionEnd?: () => void,
   ref?: Ref<Element<T>>,
@@ -39,7 +39,7 @@ function ImpressionArea<T extends ElementType>(
 />
 
 <Interface
-  name="timeThreshold"
+  name="timeThresholdMs"
   type="number"
   description="요소가 보여야 하는 최소 시간(밀리초)이에요."
 />
@@ -90,7 +90,7 @@ function App() {
     <ImpressionArea
       onImpressionStart={() => console.log('요소가 보여요')}
       onImpressionEnd={() => console.log('요소가 사라졌어요')}
-      timeThreshold={1000}
+      timeThresholdMs={1000}
       areaThreshold={0.5}
     >
       <div>저를 추적해 보세요!</div>

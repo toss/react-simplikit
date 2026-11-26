@@ -29,19 +29,22 @@ npm install react-simplikit
 
 ## 빠른 시작
 
-`useDebounce`를 사용하면 사용자가 입력을 멈춘 뒤 300ms 후에 검색 함수를 호출할 수 있어요. 아래 예제의 `searchAPI`는 애플리케이션에서 제공하는 검색 함수예요.
+`useDebouncedCallback`을 사용하면 사용자가 입력을 멈춘 뒤 300ms 후에 검색 함수를 호출할 수 있어요. 아래 예제의 `searchAPI`는 애플리케이션에서 제공하는 검색 함수예요.
 
 ```tsx
 import { useState } from 'react';
-import { useDebounce } from 'react-simplikit';
+import { useDebouncedCallback } from 'react-simplikit';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
 
-  const debouncedSearch = useDebounce((value: string) => {
-    // 실제 API 호출
-    searchAPI(value);
-  }, 300);
+  const debouncedSearch = useDebouncedCallback({
+    onChange: (value: string) => {
+      // 실제 API 호출
+      searchAPI(value);
+    },
+    debounceMs: 300,
+  });
 
   return (
     <input
@@ -56,7 +59,7 @@ function SearchInput() {
 }
 ```
 
-디바운스된 함수는 `.cancel()` 메서드를 제공하고, 컴포넌트가 언마운트되면 대기 중인 호출을 자동으로 취소해요.
+컴포넌트가 언마운트되면 대기 중인 호출을 자동으로 취소해요. 마지막으로 검색 함수에 전달한 값과 같은 값은 다시 전달하지 않아요.
 
 ### 고정 요소를 온스크린 키보드 위에 유지하기
 
