@@ -18,6 +18,7 @@ description: 根据要解决的问题选择 React 工具函数
 | 限制回调频率           | [useThrottledCallback](/zh-Hans/hooks/useThrottledCallback)   | 按设定间隔限制调用频率的回调           |
 | 刷新后保留状态         | [useStorageState](/zh-Hans/hooks/useStorageState)             | 保存在浏览器存储中的状态               |
 | 响应元素外部的点击     | [useOutsideClickEffect](/zh-Hans/hooks/useOutsideClickEffect) | 元素外部点击订阅                       |
+| 点击外部时关闭菜单     | [useOutsideClickRef](/zh-Hans/hooks/useOutsideClickRef)       | 触发按钮和菜单共用的一个 ref           |
 | 让输入框保持在键盘上方 | [useAvoidKeyboard](/zh-Hans/hooks/useAvoidKeyboard)           | 用于定位固定元素的样式                 |
 | 在子元素之间插入分隔符 | [Separated](/zh-Hans/components/Separated)                    | 末尾没有分隔符                         |
 | 为一个元素连接多个 ref | [mergeRefs](/zh-Hans/utils/mergeRefs)                         | 将元素传递给各个 ref 的单个 ref 回调   |

@@ -2,6 +2,7 @@
 
 `useOutsideClickEffect` es un Hook de React que ejecuta un callback cuando ocurre un evento de clic fuera de los contenedores especificados.
 Es útil para cerrar modales, menús desplegables, descripciones emergentes y otros componentes de la interfaz cuando haces clic fuera de ellos.
+Para que varios elementos cuenten como interiores sin guardar cada uno de ellos en el estado, usa [`useOutsideClickRef`](/es/hooks/useOutsideClickRef), que devuelve una única ref que conectas a todos ellos.
 
 ## Interfaz
 

@@ -18,6 +18,7 @@ Llama a los Hooks en el nivel superior de un componente React o de un Hook perso
 | Limitar la frecuencia de un callback     | [useThrottledCallback](/es/hooks/useThrottledCallback)   | Un callback con frecuencia limitada al intervalo configurado               |
 | Conservar el estado al recargar          | [useStorageState](/es/hooks/useStorageState)             | Estado persistido en el almacenamiento del navegador                       |
 | Responder a un clic fuera de un elemento | [useOutsideClickEffect](/es/hooks/useOutsideClickEffect) | Una suscripción a clics externos                                           |
+| Cerrar un menú con un clic externo       | [useOutsideClickRef](/es/hooks/useOutsideClickRef)       | Una única ref compartida por el activador y su menú                        |
 | Mantener un campo sobre el teclado       | [useAvoidKeyboard](/es/hooks/useAvoidKeyboard)           | Un estilo para posicionar un elemento fijo                                 |
 | Insertar separadores entre hijos         | [Separated](/es/components/Separated)                    | Separadores sin uno al final                                               |
 | Conectar varias refs a un elemento       | [mergeRefs](/es/utils/mergeRefs)                         | Un único callback de ref que pasa el elemento a cada ref                   |
