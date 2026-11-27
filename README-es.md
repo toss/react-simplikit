@@ -8,10 +8,10 @@ Una colección de utilidades de React ligeras y sin dependencias para crear apli
 
 ## Paquetes
 
-| Paquete                                       | Descripción                                                                                                                   | Versión                                                                                                                   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | Hooks, componentes y utilidades de React: estado y lógica, eventos del navegador y web móvil (teclado, área segura, viewport) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [react-simplikit-codemod](./packages/codemod) | Codemods que reescriben una base de código para actualizar `react-simplikit`                                                  | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
+| Paquete                                          | Descripción                                                                                                                   | Versión                                                                                                                       |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit)    | Hooks, componentes y utilidades de React: estado y lógica, eventos del navegador y web móvil (teclado, área segura, viewport) | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                     |
+| [@react-simplikit/codemods](./packages/codemods) | Codemods que reescriben una base de código para actualizar `react-simplikit`                                                  | [![npm](https://img.shields.io/npm/v/@react-simplikit/codemods.svg)](https://www.npmjs.com/package/@react-simplikit/codemods) |
 
 ## Características
 
@@ -97,7 +97,7 @@ Consulta la documentación completa en [react-simplikit.slash.page](https://reac
 ```
 packages/
 ├── react-simplikit/    # la biblioteca
-├── codemod/            # react-simplikit-codemod
+├── codemods/           # @react-simplikit/codemods
 └── plugin/             # skill de agente para asistentes de programación con IA
 ```
 

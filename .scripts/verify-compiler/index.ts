@@ -12,7 +12,7 @@ import { getRootPath } from '../utils/getRootPath.ts';
 const REACT_COMPILER = createRequire(import.meta.url).resolve('babel-plugin-react-compiler');
 
 const SOURCE_GLOBS = ['packages/*/src/**/*.ts', 'packages/*/src/**/*.tsx'];
-const IGNORED_GLOBS = ['**/*.spec.*', '**/*.test.*', '**/test/**', '**/test-utils/**'];
+const IGNORED_GLOBS = ['**/*.spec.*', '**/*.test.*', '**/test/**', '**/test-utils/**', '**/testfixtures/**'];
 
 // Both `'18'` and `'19'` produce identical diagnostics for this codebase, so the newer
 // target is used. Revisit if the compatibility surface ever diverges between majors.

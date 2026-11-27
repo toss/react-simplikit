@@ -1,0 +1,7 @@
+{
+    "name": "web",
+    "dependencies": {
+        "react": "^18.3.1",
+        "react-simplikit": "^0.2.0"
+    }
+}

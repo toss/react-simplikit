@@ -1,0 +1,9 @@
+{
+  "name": "ui",
+  "peerDependencies": {
+    "react-simplikit": ">=0.2.0"
+  },
+  "devDependencies": {
+    "react-simplikit": "workspace:*"
+  }
+}

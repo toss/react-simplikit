@@ -8,10 +8,10 @@
 
 ## 包
 
-| 包                                            | 说明                                                                                       | 版本                                                                                                                      |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| [react-simplikit](./packages/react-simplikit) | React Hook、组件和工具函数：状态与逻辑、浏览器事件，以及移动端 Web（键盘、安全区域、视口） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                 |
-| [react-simplikit-codemod](./packages/codemod) | 为升级 `react-simplikit` 而改写代码库的 codemod                                            | [![npm](https://img.shields.io/npm/v/react-simplikit-codemod.svg)](https://www.npmjs.com/package/react-simplikit-codemod) |
+| 包                                               | 说明                                                                                       | 版本                                                                                                                          |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| [react-simplikit](./packages/react-simplikit)    | React Hook、组件和工具函数：状态与逻辑、浏览器事件，以及移动端 Web（键盘、安全区域、视口） | [![npm](https://img.shields.io/npm/v/react-simplikit.svg)](https://www.npmjs.com/package/react-simplikit)                     |
+| [@react-simplikit/codemods](./packages/codemods) | 为升级 `react-simplikit` 而改写代码库的 codemod                                            | [![npm](https://img.shields.io/npm/v/@react-simplikit/codemods.svg)](https://www.npmjs.com/package/@react-simplikit/codemods) |
 
 ## 特性
 
@@ -97,7 +97,7 @@ npx skills add toss/react-simplikit --skill react-simplikit
 ```
 packages/
 ├── react-simplikit/    # 库本身
-├── codemod/            # react-simplikit-codemod
+├── codemods/           # @react-simplikit/codemods
 └── plugin/             # 面向 AI 编程助手的 agent skill
 ```
 

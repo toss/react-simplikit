@@ -24,7 +24,7 @@ node_modules
 coverage
 
 # fake consumer projects the codemod e2e suite writes and rewrites in place
-packages/codemod/test/__fixtures__/
+packages/codemods/test/__fixtures__/
 
 # vitepress
 .vitepress/cache

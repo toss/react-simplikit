@@ -26,6 +26,8 @@ export default defineConfig(
       // Consumer fixture is typechecked by its own tsconfig against the installed
       // tarball, not the workspace graph — the root project can't resolve its imports.
       '.scripts/verify-pack/fixtures/**',
+      // Codemod fixtures import packages the workspace does not install, and their layout is the expected output.
+      'packages/codemods/src/transforms/testfixtures/**',
       'coverage',
       'docs',
       'node_modules',

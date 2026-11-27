@@ -14,7 +14,7 @@
     "types": ["@testing-library/jest-dom"]
   },
   "include": ["packages/**/src", ".scripts/**/*"],
-  "exclude": [".scripts/verify-pack/fixtures/**"],
+  "exclude": [".scripts/verify-pack/fixtures/**", "packages/codemods/src/transforms/testfixtures/**"],
   "vueCompilerOptions": {
     "vitePressExtensions": [".md"]
   }

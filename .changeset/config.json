@@ -2,7 +2,7 @@
   "$schema": "https://unpkg.com/@changesets/config@4.0.0/schema.json",
   "changelog": ["./changelog.mjs", { "repo": "toss/react-simplikit" }],
   "commit": false,
-  "fixed": [],
+  "fixed": [["react-simplikit", "@react-simplikit/codemods"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
